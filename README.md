@@ -1,4 +1,4 @@
-# pyxscat
+# PyFAI_batch
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat.git
+git remote add origin https://gitlab.esrf.fr/xmas/pyfai_batch.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.esrf.fr/xmas/pyfai_batch/-/settings/integrations)
 
 ## Collaborate with your team
 

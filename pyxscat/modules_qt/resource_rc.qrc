@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="xmas_icon">
+    <file>xmas_logo.png</file>
+    <file>xmas.png</file>
+  </qresource>
+</RCC>
