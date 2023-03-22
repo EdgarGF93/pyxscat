@@ -1,10 +1,10 @@
 from datetime import datetime
-from .setup_methods import get_dict_setup
+from setup_methods import get_dict_setup
 from os.path import basename, dirname, exists, getctime, splitext
-from .other_functions import np_weak_lims
+from other_functions import np_weak_lims
 from pandas import DataFrame
 from pygix.transform import Transform
-from .units import *
+from units import *
 import fabio
 import matplotlib.pyplot as plt
 import numpy as np

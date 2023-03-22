@@ -1,18 +1,18 @@
-import modules_qt.widget_methods.lineedit_methods as le
-import modules_qt.widget_methods.combobox_methods as cb
-import modules_qt.widget_methods.listwidget_methods as lt
-import modules_qt.widget_methods.table_methods as tm
-import modules_qt.widget_methods.graph_methods as gm
 
-import modules_qt.directory_methods as dm
-from modules_qt.main_window import Ui_MainWindow
 
-from module_edf.edf import EdfClass
-from module_geometry.geometry import Geometry
-from module_integrator.integrator import Integrator
-from modules_other.other_functions import np_weak_lims, dict_to_str
-from module_integrator.search_functions import search_files_recursively, list_files_to_dict, create_folder, get_subfolder
-from modules_other.plots import *
+from .widget_methods import lineedit_methods as le
+from .widget_methods import combobox_methods as cb
+from .widget_methods import listwidget_methods as lt
+from .widget_methods import table_methods as tm
+from .widget_methods import graph_methods as gm
+from .directory_methods import *
+from .main_window import Ui_MainWindow
+
+from pyxscat.edf import EdfClass
+from pyxscat.integrator import Integrator
+from pyxscat.other_functions import np_weak_lims, dict_to_str
+from pyxscat.search_functions import search_files_recursively, list_files_to_dict, get_subfolder
+from pyxscat.plots import *
 
 from os.path import join, dirname
 import os

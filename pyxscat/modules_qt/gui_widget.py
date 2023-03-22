@@ -8,7 +8,7 @@ import json
 import subprocess
 import sys
 import os
-from module_edf.setup_methods import get_dict_setup_info
+from pyxscat.setup_methods import get_dict_setup
 from pathlib import Path
 
 
@@ -327,7 +327,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         # Search for a .json file with the name_setup string
         if name_setup:
-            new_dict_setup = get_dict_setup_info(
+            new_dict_setup = get_dict_setup(
                 name_setup=name_setup,
             )
         elif new_dict:

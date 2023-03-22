@@ -5,7 +5,7 @@ from modules_qt.gui_widget_setup import GUIPyX_Widget_setupform
 
 import modules_qt.widget_methods.lineedit_methods as le
 import modules_qt.widget_methods.listwidget_methods as lt
-from modules_other.decorators import try_or_continue
+from pyxscat.decorators import try_or_continue
 from . import DIRECTORY_SETUPS
 
 

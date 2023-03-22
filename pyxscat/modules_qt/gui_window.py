@@ -8,7 +8,8 @@ from modules_qt.widget_methods import combobox_methods as cb
 from PyQt5 import QtGui, QtCore
 from os.path import join
 import os
-from . import DIRECTORY_INTEGRATIONS, DIRECTORY_SETUPS
+from pyxscat.setup_methods import DIRECTORY_SETUPS
+from pyxscat.integrator_methods import DIRECTORY_INTEGRATIONS
 
 
 class GUIPyX_Window(QMainWindow):
