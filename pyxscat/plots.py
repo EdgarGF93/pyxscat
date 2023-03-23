@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 from other_functions import np_log, np_roi, np_weak_lims
+from units import *
 
-def plot_image(Edf_data, title='', log=False, weak_lims=True):
+def plot_image(data, title='', log=False, weak_lims=True):
     fig = plt.figure(figsize=(7,7), dpi=100)
-    data = np_log(Edf_data, log)
+    data = np_log(data, log)
     plt.imshow(data)
     plt.colorbar()
     plt.clim(np_weak_lims(data, weak_lims))
@@ -47,3 +48,39 @@ def plot_images_overlap(edf1_data, edf2_data, title='', log=False, weak_lims=Tru
     )
     plt.title(title)
     plt.show()
+
+
+def plot_mesh(mesh_horz, mesh_vert, data, unit='q_nm^-1', auto_lims=True, **kwargs):
+    """
+        Plot the 2D map using pcolormesh from matplotlib
+    """
+    DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
+
+    try:
+        fig, ax = plt.subplots(figsize=(7,7), dpi=100, constrained_layout=True)
+        ax.set_aspect('equal')
+        plt.pcolormesh(
+            mesh_horz,
+            mesh_vert,
+            data, 
+            shading='nearest', 
+            cmap='viridis',
+        )
+        plt.clim(np_weak_lims(data=data))
+        plt.colorbar()
+        plt.xlabel(kwargs.get('xlabel', DICT_PLOT['X_LABEL']), fontsize=20)
+        plt.ylabel(kwargs.get('ylabel', DICT_PLOT['Y_LABEL']), fontsize=20)
+        if not auto_lims:
+            plt.xlim(kwargs.get('xlim', DICT_PLOT['X_LIMS']))
+            plt.ylim(kwargs.get('ylim', DICT_PLOT['Y_LIMS']))                
+            plt.xticks(kwargs.get('xticks', DICT_PLOT['X_TICKS']), fontsize=15)
+            plt.yticks(kwargs.get('yticks', DICT_PLOT['Y_TICKS']), fontsize=15)
+        else:
+            plt.xticks(ax.get_xticks(), fontsize=15)
+            plt.yticks(ax.get_yticks(), fontsize=15)
+
+        ax.tick_params(direction='out', length=6, width=2)
+        plt.show()
+
+    except:
+        return

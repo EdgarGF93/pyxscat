@@ -1,7 +1,7 @@
 from os.path import join, basename, splitext,dirname
 from os import listdir
 
-DIRECTORY_SETUPS = join(dirname(__file__), 'setup_dictionaries')
+DIRECTORY_SETUPS = join(dirname(__file__))
 SETUP_EXTENSION = ('.json', '.yaml')
 NO_SETUP_INFORMATION = "Edf instance was created without any setup information."
 

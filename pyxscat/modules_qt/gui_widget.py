@@ -8,7 +8,7 @@ import json
 import subprocess
 import sys
 import os
-from pyxscat.setup_methods import get_dict_setup
+from pyxscat.setup_dictionaries.setup_methods import get_dict_setup
 from pathlib import Path
 
 

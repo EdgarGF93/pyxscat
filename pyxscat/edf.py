@@ -1,17 +1,17 @@
 from datetime import datetime
-from setup_methods import get_dict_setup
+from setup.setup_methods import get_dict_setup
 from os.path import basename, dirname, exists, getctime, splitext
 from other_functions import np_weak_lims
-from pandas import DataFrame
+from plots import plot_mesh, plot_image
 from pygix.transform import Transform
 from units import *
 import fabio
-import matplotlib.pyplot as plt
 import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
 
 PATH_EDF = dirname(__file__)
+
 #########
 # Message errors
 ########
@@ -25,7 +25,6 @@ NO_SETUP_INFORMATION = "Edf instance was created without any setup information."
 ########
 ## DEFAULT AND UNACCEPTABLE VALUES
 #######
-
 NORMALIZATION_UNACCEPTABLE_VALUES = [0.0]
 RETURN_ERROR_GENERIC = None
 RETURN_ERROR_NORMALIZATION = 1.0
@@ -56,7 +55,7 @@ class EdfClass(Transform):
         dict_setup=dict(),
         transform_q=None,
         ponifile_path=str(),
-        rotated=False,
+        # rotated=False,
         qz_parallel=True,
         qr_parallel=True,
     ):
@@ -77,11 +76,7 @@ class EdfClass(Transform):
             name_setup=name_setup
         )
         
-        # Update orientation attributes
-        self._transform_q = transform_q
-        self._rotated = rotated
-        self._qz_parallel = qz_parallel
-        self._qr_parallel = qr_parallel
+
 
         # Get timestamps
         self.epoch = getctime(self.filename)
@@ -92,6 +87,15 @@ class EdfClass(Transform):
             transform_q=transform_q,
             ponifile_path=ponifile_path,
         )
+
+        # Update orientation attributes
+        self.update_orientations(
+            # rotated=rotated,
+            qz_parallel=qz_parallel,
+            qr_parallel=qr_parallel,
+        )
+        self._transform_q = transform_q
+
 
     def update_names(self, filename=str()) -> None:
         """
@@ -104,6 +108,7 @@ class EdfClass(Transform):
             self.name = splitext(self.basename)[0]
         except:
             return
+
 
     def update_q_properties(self, transform_q=None, ponifile_path=str()) -> None:
         """
@@ -160,7 +165,6 @@ class EdfClass(Transform):
             self.set_default_incident_angle()
             self.set_default_tilt_angle()
 
-
     def set_default_incident_angle(self) -> None:
         """
             Set incident angle to 0.0
@@ -183,6 +187,28 @@ class EdfClass(Transform):
         except:
             pass
 
+
+    def update_orientations(self, rotated=False, qz_parallel=True, qr_parallel=True) -> None:
+        """
+            Update the three parameters of orientations
+            IMPORTANT: change PONI1, PONI2 AND SHAPE upon rotated bool
+        """
+        # self._rotated = rotated
+        self._qz_parallel = qz_parallel
+        self._qr_parallel = qr_parallel
+        self.set_sample_orientation(
+            sample_orientation=self.sample_orientation_edf
+        )
+        # if self._rotated:
+        #     try:
+        #         old_poni = [self._poni1, self._poni2].copy()
+        #         self._poni1, self._poni2 = self.detector.shape[1]*self.pixel2 - old_poni[1], old_poni[0]
+        #         old_detector_shape = self.detector.shape.copy()
+        #         self.detector.shape = [old_detector_shape[1], old_detector_shape[0]]
+        #     except:
+        #         pass
+
+
     def update_ponifile(self, ponifile_path=str()) -> None:
         """
             Get, update the ponifile path
@@ -197,11 +223,11 @@ class EdfClass(Transform):
         else:
             self._ponifile_path = ''
 
-    def set_rotated(self, rotated=False) -> None:
-        """
-            Set the rotation state of the collected intensity matrix
-        """
-        self._rotated = rotated
+    # def set_rotated(self, rotated=False) -> None:
+    #     """
+    #         Set the rotation state of the collected intensity matrix
+    #     """
+    #     self._rotated = rotated
 
     def set_qz_parallel(self, qz_parallel=True) -> None:
         """
@@ -238,10 +264,10 @@ class EdfClass(Transform):
         """
             Return an array with detector shape and rotated, according to self._rotated
         """
+        # shape = self.get_shape()
+        # if self._rotated:
+        #     shape = [shape[1], shape[0]]
         shape = self.get_shape()
-        if self._rotated:
-            shape = [shape[1], shape[0]]
-
         d2,d1 = np.meshgrid(
             np.linspace(1,shape[1],shape[1]),
             np.linspace(1,shape[0],shape[0]),
@@ -250,17 +276,17 @@ class EdfClass(Transform):
         out = np.array([d1,d2])
         return out
 
-    def plot_data(self, normalized=True) -> None:
+    def plot_data(self, log=False, weak_lims=True) -> None:
         """
             Plot the pixel map
         """
-        plt.figure(figsize=(10,10), dpi=100)
-        clims = self.weak_lims()
-        plt.imshow(self.get_data(normalized), vmin=clims[0], vmax=clims[1])
-        plt.colorbar()
-        plt.show()
+        plot_image(
+            data=self.get_data(),
+            log=log,
+            weak_lims=weak_lims,
+        )
 
-    def plot_Qmesh(self, data=None, unit='q_nm^-1', **kwargs) -> None:
+    def plot_Qmesh(self, data=None, unit='q_nm^-1', auto_lims=True, **kwargs) -> None:
         """
             Plot the Q map only if the EdfClass instance contains a Geometry instance (with ponifile information)
         """
@@ -317,32 +343,21 @@ class EdfClass(Transform):
             data = self.get_data()
             if unit in UNITS_Q:
                 ind = np.unravel_index(np.argmin(abs(scat_x), axis=None), scat_z.shape)
-                data[:, ind[1] - 2: ind[1] + 2] = np.nan
+                if self.sample_orientation_edf in (1,3):
+                    data[:, ind[1] - 2: ind[1] + 2] = np.nan
+                elif self.sample_orientation_edf in (2,4):
+                    data[ind[0] - 2: ind[0] + 2, :] = np.nan
+                else:
+                    return
 
-            try:
-                fig, ax = plt.subplots(figsize=(7,7), dpi=100, constrained_layout=True)
-                ax.set_aspect('equal')
-                plt.pcolormesh(
-                    scat_x,
-                    scat_z,
-                    data, 
-                    shading='nearest', 
-                    cmap='viridis',
-                )
-                plt.clim(self.weak_lims())
-                plt.colorbar()
-
-                plt.xlabel(kwargs.get('xlabel', DICT_PLOT['X_LABEL']), fontsize=20)
-                plt.ylabel(kwargs.get('ylabel', DICT_PLOT['Y_LABEL']), fontsize=20)
-                plt.xlim(kwargs.get('xlim', DICT_PLOT['X_LIMS']))
-                plt.ylim(kwargs.get('ylim', DICT_PLOT['Y_LIMS']))                
-                plt.xticks(kwargs.get('xticks', DICT_PLOT['X_TICKS']), fontsize=15)
-                plt.yticks(kwargs.get('yticks', DICT_PLOT['Y_TICKS']), fontsize=15)
-                ax.tick_params(direction='out', length=6, width=2)
-                plt.show()
-
-            except:
-                return
+            plot_mesh(
+                mesh_horz=scat_x,
+                mesh_vert=scat_z,
+                data=data,
+                unit=unit,
+                auto_lims=auto_lims,
+                **kwargs,
+            )
         else:
             return
 
