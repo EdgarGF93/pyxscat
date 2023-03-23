@@ -55,7 +55,6 @@ class EdfClass(Transform):
         dict_setup=dict(),
         transform_q=None,
         ponifile_path=str(),
-        # rotated=False,
         qz_parallel=True,
         qr_parallel=True,
     ):
@@ -70,13 +69,12 @@ class EdfClass(Transform):
             filename=filename,
         )
 
+
         # Update the dictionary with setup information
         self._dict_setup = get_dict_setup(
             dict_setup=dict_setup,
             name_setup=name_setup
         )
-        
-
 
         # Get timestamps
         self.epoch = getctime(self.filename)
@@ -119,73 +117,87 @@ class EdfClass(Transform):
         if transform_q and isinstance(transform_q, Transform):
             try:
                 self._transform_q = transform_q
+                self.tranform_bool = True
                 return
             except:
                 self._transform_q = None
+                self.tranform_bool = False
                 pass
 
         # Most likely option, inherit from Transform using ponifile_path
         elif ponifile_path:
-            self.update_ponifile(
-                ponifile_path=ponifile_path,
-            )
-            if self._ponifile_path:
-                super().load(self._ponifile_path)
-                self.useqx = True
-
-                # Define the incident angle
-                try:
-                    self.set_incident_angle(
-                        incident_angle=self.incident_angle_edf,
-                    )
-                except:
-                    self.set_default_incident_angle()
-
-                # Define the tilting angle
-                try:
-                    self.set_tilt_angle(
-                        tilt_angle=self.tilt_angle_edf,
-                    )
-                except:
-                    self.set_default_tilt_angle()                   
-            else:
-                self.set_default_incident_angle()
-                self.set_default_tilt_angle()
-
-            # Define the sample orientation
             try:
-                self.set_sample_orientation(
-                    sample_orientation=DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)],
+                self.update_ponifile(
+                    ponifile_path=ponifile_path,
                 )
+                if self._ponifile_path:
+                    super().load(self._ponifile_path)
+                    self.useqx = True
+                    self.tranform_bool = True
+
+                    # Define the incident angle
+                    try:
+                        self.set_incident_angle(
+                            incident_angle=self.incident_angle_edf,
+                        )
+                    except:
+                        self.set_default_incident_angle()
+
+                    # Define the tilting angle
+                    try:
+                        self.set_tilt_angle(
+                            tilt_angle=self.tilt_angle_edf,
+                        )
+                    except:
+                        self.set_default_tilt_angle()                   
+                else:
+                    self.set_default_incident_angle()
+                    self.set_default_tilt_angle()
+
+                # Define the sample orientation
+                try:
+                    self.set_sample_orientation(
+                        sample_orientation=DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)],
+                    )
+                except:
+                    self.set_sample_orientation(
+                        sample_orientation=DICT_SAMPLE_ORIENTATIONS[(True, True)],
+                    )
+   
             except:
-                self.set_sample_orientation(
-                    sample_orientation=DICT_SAMPLE_ORIENTATIONS[(True, True)],
-                )
+                self.tranform_bool = False
+                pass
         else:
-            self.set_default_incident_angle()
-            self.set_default_tilt_angle()
+            self.tranform_bool = False
+            pass
 
     def set_default_incident_angle(self) -> None:
         """
             Set incident angle to 0.0
         """
-        try:
-            self.set_incident_angle(
-            incident_angle=0.0,
-        )
-        except:
-            pass
+        if self.tranform_bool:
+            try:
+                self.set_incident_angle(
+                incident_angle=0.0,
+            )
+            except:
+                pass
+        else:
+            return
 
     def set_default_tilt_angle(self) -> None:
         """
             Set tilt angle to 0.0
         """
-        try:
-            self.set_tilt_angle(
-            incident_angle=0.0,
-        )
-        except:
-            pass
+        if self.tranform_bool:
+            try:
+                self.set_tilt_angle(
+                incident_angle=0.0,
+            )
+            except:
+                pass
+        else:
+            return
 
 
     def update_orientations(self, rotated=False, qz_parallel=True, qr_parallel=True) -> None:
@@ -196,9 +208,15 @@ class EdfClass(Transform):
         # self._rotated = rotated
         self._qz_parallel = qz_parallel
         self._qr_parallel = qr_parallel
-        self.set_sample_orientation(
-            sample_orientation=self.sample_orientation_edf
-        )
+        if self.tranform_bool:
+            try:
+                self.set_sample_orientation(
+                    sample_orientation=self.sample_orientation_edf
+                )
+            except:
+                pass
+        else:
+            pass
         # if self._rotated:
         #     try:
         #         old_poni = [self._poni1, self._poni2].copy()
@@ -267,97 +285,106 @@ class EdfClass(Transform):
         # shape = self.get_shape()
         # if self._rotated:
         #     shape = [shape[1], shape[0]]
-        shape = self.get_shape()
-        d2,d1 = np.meshgrid(
-            np.linspace(1,shape[1],shape[1]),
-            np.linspace(1,shape[0],shape[0]),
-        )
+        try:
+            shape = self.get_shape()
+            d2,d1 = np.meshgrid(
+                np.linspace(1,shape[1],shape[1]),
+                np.linspace(1,shape[0],shape[0]),
+            )
 
-        out = np.array([d1,d2])
-        return out
+            out = np.array([d1,d2])
+            return out
+        except:
+            return None
 
     def plot_data(self, log=False, weak_lims=True) -> None:
         """
             Plot the pixel map
         """
-        plot_image(
-            data=self.get_data(),
-            log=log,
-            weak_lims=weak_lims,
-        )
+        try:
+            plot_image(
+                data=self.get_data(),
+                log=log,
+                weak_lims=weak_lims,
+            )
+        except:
+            pass
 
     def plot_Qmesh(self, data=None, unit='q_nm^-1', auto_lims=True, **kwargs) -> None:
         """
             Plot the Q map only if the EdfClass instance contains a Geometry instance (with ponifile information)
         """
-        unit = get_pyfai_unit(unit)
-        det_array = self.get_detector_array()
+        if self.tranform_bool:
+            unit = get_pyfai_unit(unit)
+            det_array = self.get_detector_array()
 
-        if unit in UNITS_Q:
-            # scat_z, scat_x = qz, qxy
-            if self._transform_q:
-                try:
-                    scat_z, scat_x = self._transform_q.calc_q(
-                        d1=det_array[0,:,:],
-                        d2=det_array[1,:,:],
-                    )
-                except:
-                    scat_z, scat_x = None, None
-            else:
-                try:
-                    scat_z, scat_x = self.calc_q(
-                        d1=det_array[0,:,:],
-                        d2=det_array[1,:,:],
-                    )
-                except:
-                    scat_z, scat_x = None, None
-
-        elif unit in UNITS_THETA:
-            # scat_z, scat_x = alpha, tth
-            if self._transform_q:
-                try:
-                    scat_z, scat_x = self._transform_q.calc_angles(
-                        d1=det_array[0,:,:],
-                        d2=det_array[1,:,:],
-                    )
-                except:
-                    scat_z, scat_x = None, None
-            else:
-                try:
-                    scat_z, scat_x = self.calc_angles(
-                        d1=det_array[0,:,:],
-                        d2=det_array[1,:,:],
-                    )
-                except:
-                    scat_z, scat_x = None, None
-        else:
-            return
-
-        if (scat_z is not None) and (scat_x is not None):
-
-            # Transform units
-            DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
-            scat_z *= DICT_PLOT['SCALE']
-            scat_x *= DICT_PLOT['SCALE']
-
-            data = self.get_data()
             if unit in UNITS_Q:
-                ind = np.unravel_index(np.argmin(abs(scat_x), axis=None), scat_z.shape)
-                if self.sample_orientation_edf in (1,3):
-                    data[:, ind[1] - 2: ind[1] + 2] = np.nan
-                elif self.sample_orientation_edf in (2,4):
-                    data[ind[0] - 2: ind[0] + 2, :] = np.nan
+                # scat_z, scat_x = qz, qxy
+                if self._transform_q:
+                    try:
+                        scat_z, scat_x = self._transform_q.calc_q(
+                            d1=det_array[0,:,:],
+                            d2=det_array[1,:,:],
+                        )
+                    except:
+                        scat_z, scat_x = None, None
                 else:
-                    return
+                    try:
+                        scat_z, scat_x = self.calc_q(
+                            d1=det_array[0,:,:],
+                            d2=det_array[1,:,:],
+                        )
+                    except:
+                        scat_z, scat_x = None, None
 
-            plot_mesh(
-                mesh_horz=scat_x,
-                mesh_vert=scat_z,
-                data=data,
-                unit=unit,
-                auto_lims=auto_lims,
-                **kwargs,
-            )
+            elif unit in UNITS_THETA:
+                # scat_z, scat_x = alpha, tth
+                if self._transform_q:
+                    try:
+                        scat_z, scat_x = self._transform_q.calc_angles(
+                            d1=det_array[0,:,:],
+                            d2=det_array[1,:,:],
+                        )
+                    except:
+                        scat_z, scat_x = None, None
+                else:
+                    try:
+                        scat_z, scat_x = self.calc_angles(
+                            d1=det_array[0,:,:],
+                            d2=det_array[1,:,:],
+                        )
+                    except:
+                        scat_z, scat_x = None, None
+            else:
+                return
+
+            if (scat_z is not None) and (scat_x is not None):
+
+                # Transform units
+                DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
+                scat_z *= DICT_PLOT['SCALE']
+                scat_x *= DICT_PLOT['SCALE']
+
+                data = self.get_data()
+                if unit in UNITS_Q:
+                    ind = np.unravel_index(np.argmin(abs(scat_x), axis=None), scat_z.shape)
+                    if self.sample_orientation_edf in (1,3):
+                        data[:, ind[1] - 2: ind[1] + 2] = np.nan
+                    elif self.sample_orientation_edf in (2,4):
+                        data[ind[0] - 2: ind[0] + 2, :] = np.nan
+                    else:
+                        return
+
+                plot_mesh(
+                    mesh_horz=scat_x,
+                    mesh_vert=scat_z,
+                    data=data,
+                    unit=unit,
+                    auto_lims=auto_lims,
+                    **kwargs,
+                )
+            else:
+                return
         else:
             return
 
@@ -517,7 +544,7 @@ class EdfClass(Transform):
             Return the tilt angle of the sample, called chi angle, roll, etc
         """
         try:
-            return self.get_value_header(keys=self._dict_setup['Tilt Angle'], return_error=RETURN_ERROR_TILT_ANGLE)
+            return self.get_value_header(keys=self._dict_setup['Tilt angle'], return_error=RETURN_ERROR_TILT_ANGLE)
         except:
             return RETURN_ERROR_INCIDENT_ANGLE
 

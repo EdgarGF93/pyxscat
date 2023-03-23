@@ -2,6 +2,8 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QGridLayout, QListWidget, QLabel, QLineEdit
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSize
+from os.path import join
+from . import GLOBAL_PATH_QT
 
 class GUIPyX_Widget_setupform(QWidget):
 
@@ -10,8 +12,12 @@ class GUIPyX_Widget_setupform(QWidget):
         self._build()
         self.setWindowTitle("Setup tool")
         app_icon = QIcon()
-        app_icon.addFile("modules_qt\pisto.png", QSize(256,256))
+        app_icon.addFile(join(GLOBAL_PATH_QT, "pyxscat_icon.png"), QSize(256,256))
         self.setWindowIcon(app_icon)
+
+    # def closeEvent(self, event):
+    #     self.kk()
+        
 
     def _build(self):
         # Build the global widget, which is a Grid

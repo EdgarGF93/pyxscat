@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-import os
-from setup_methods import get_dict_setup
+from setup.setup_methods import get_dict_setup
+from integration.integrator_methods import *
 import pandas as pd
 import warnings
 warnings.filterwarnings("ignore")
@@ -14,7 +14,7 @@ from decorators import *
 from other_functions import *
 from edf import EdfClass
 from search_functions import dict_from_conditions, check_subfolder, list_files_to_dict, search_files_recursively
-from integrator_methods import *
+from integration.integrator_methods import get_dict_integration
 
 PATH_INTEGRATOR = dirname(__file__)
 
@@ -23,9 +23,7 @@ ERROR_INIT_FILES = "The dictionary of files could not be init."
 ERROR_INIT_FILES_REF = "The dictionary of reference files could not be init."
 NO_SETUP_INFORMATION = "Integrator instance was created without any setup information."
 
-
-
-dict_sample_orientations = {
+DICT_SAMPLE_ORIENTATIONS = {
     (True,True) : 1,
     (True,False) : 2,
     (False,True) : 3,
@@ -99,7 +97,7 @@ class Integrator(Transform):
         dict_setup=dict(),
         name_setup=str(),
         ponifile_path=str(),
-        rotated=False, 
+        # rotated=False, 
         qz_parallel=True, 
         qr_parallel=True,
         search_files=True,
@@ -144,7 +142,6 @@ class Integrator(Transform):
 
         # Update rotation, orientation parameters
         self.update_orientation(
-            rotated=rotated,
             qz_parallel=qz_parallel,
             qr_parallel=qr_parallel,
         )
@@ -281,16 +278,16 @@ class Integrator(Transform):
         else:
             pass
 
-    def update_orientation(self, rotated=False, qz_parallel=True, qr_parallel=True) -> None:
+    def update_orientation(self, qz_parallel=True, qr_parallel=True) -> None:
         """
             Update three parameters to define the rotation of the detector and the orientation of the sample axis
         """
-        self._rotated = rotated
+        # self._rotated = rotated
         self._qz_parallel = qz_parallel
         self._qr_parallel = qr_parallel
         try:
             self.set_sample_orientation(
-                sample_orientation=dict_sample_orientations[(self._qz_parallel, self._qr_parallel)]
+                sample_orientation=DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
             )
         except:
             pass
@@ -325,7 +322,7 @@ class Integrator(Transform):
                 yield EdfClass(
                         filename=file,
                         dict_setup=self._dict_setup,
-                        rotated=self._rotated,
+                        # rotated=self._rotated,
                         qz_parallel=self._qz_parallel,
                         qr_parallel=self._qr_parallel,
                 )
@@ -341,7 +338,7 @@ class Integrator(Transform):
                 yield item
             elif isinstance(item, str):
                 try:
-                    yield self.get_dict_integration(
+                    yield get_dict_integration(
                         name_integration=item,
                     )
                 except:
@@ -382,7 +379,7 @@ class Integrator(Transform):
             )[0],
             dict_setup=self._dict_setup,
             ponifile_path=self._ponifile_path,
-            rotated=self._rotated,
+            # rotated=self._rotated,
             qz_parallel=self._qz_parallel,
             qr_parallel=self._qr_parallel,
         )
@@ -397,7 +394,7 @@ class Integrator(Transform):
                     filename=file,
                     dict_setup=self._dict_setup,
                     ponifile_path=self._ponifile_path,
-                    rotated=self._rotated,
+                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
@@ -421,13 +418,13 @@ class Integrator(Transform):
         """
             Yield a dataframe with the integration using raw_integration
         """
+
         df_unified = pd.DataFrame([])
         dict_unified = {}
         if list_data:
             index_integration = 0
             for data in list_data:
                 data_cache = None
-
                 for dict_integration in self.integrations_iterator(list_integration=list_integrations):
                     if dummy_integration:
                         yield None, data, dict_integration
@@ -464,16 +461,20 @@ class Integrator(Transform):
                                     if dataframe.iloc[:,0].equals(df_unified.loc[:,[x_label]].iloc[:,-1]):
                                         dataframe = dataframe.drop(columns=[x_label])
                                 # Add the new DataFrame
-                                df_unified = pd.concat(
-                                    [df_unified, dataframe],
-                                    axis=1
-                                )
-                                # Add the new dictionary
-                                for key, value in dict_integration.items():
-                                    dict_unified[key].append(value)
+                                try:
+                                    df_unified = pd.concat(
+                                        [df_unified, dataframe],
+                                        axis=1
+                                    )
+                                    # Add the new dictionary
+                                    for key, value in dict_integration.items():
+                                        dict_unified[key].append(value)
+                                except:
+                                    pass
 
                 yield df_unified, data, dict_unified, f"Data_{index_integration:03}_{title}"
-        else:
+
+        elif list_files:
             for Edf in self.edf_iterator(list_files=list_files):
                 Edf_cache = None
                 for dict_integration in self.integrations_iterator(list_integration=list_integrations):
@@ -522,6 +523,8 @@ class Integrator(Transform):
                                     dict_unified[key].append(value)
                                 Edf_cache = Edf
                 yield df_unified, Edf_cache, dict_unified, f"{Edf_cache.name}_{title}"
+        else:
+            return
 
     @random_message
     @timer
@@ -610,18 +613,7 @@ class Integrator(Transform):
     #                 )
     #     return list_dicts
 
-    def get_dict_integration(self, dict_integration=dict(), name_integration=str()) -> dict:
-        """
-            Return a dictionary of integration giving a name
-        """
-        # Get the dictionary with the integration parameters
-        if dict_integration and isinstance(dict_integration, dict):
-            return dict_integration
-        elif name_integration and isinstance(name_integration, str):
-            for d in self.get_dictionaries_integration():
-                if name_integration == d['Name']:
-                    return d
-        return
+
 
     def update_incident_tilt_angles(self, Edf=EdfClass, filename=str()) -> None:
         """
@@ -647,7 +639,7 @@ class Integrator(Transform):
                 Edf = EdfClass(
                     filename=filename,
                     dict_setup=self._dict_setup,
-                    rotated=self._rotated,
+                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
@@ -696,7 +688,7 @@ class Integrator(Transform):
                 Edf = EdfClass(
                     filename=filename,
                     dict_setup=self._dict_setup,
-                    rotated=self._rotated,
+                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
@@ -776,7 +768,7 @@ class Integrator(Transform):
                 Edf = EdfClass(
                     filename=filename,
                     dict_setup=self._dict_setup,
-                    rotated=self._rotated,
+                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
@@ -795,7 +787,7 @@ class Integrator(Transform):
             return
 
         # Get the dictionary with the integration parameters
-        dict_integration = self.get_dict_integration(
+        dict_integration = get_dict_integration(
             dict_integration=dict_integration,
             name_integration=name_integration,
         )
@@ -855,7 +847,7 @@ class Integrator(Transform):
                 Edf = EdfClass(
                     filename=filename,
                     dict_setup=self._dict_setup,
-                    rotated=self._rotated,
+                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
@@ -874,7 +866,7 @@ class Integrator(Transform):
             return
 
         # Get the dictionary with the integration parameters
-        dict_integration = self.get_dict_integration(
+        dict_integration = get_dict_integration(
             dict_integration=dict_integration,
             name_integration=name_integration,
         )
@@ -931,7 +923,7 @@ class Integrator(Transform):
                 Edf = EdfClass(
                     filename=filename,
                     dict_setup=self._dict_setup,
-                    rotated=self._rotated,
+                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
@@ -950,7 +942,7 @@ class Integrator(Transform):
             return
 
         # Get the dictionary with the integration parameters
-        dict_integration = self.get_dict_integration(
+        dict_integration = get_dict_integration(
             dict_integration=dict_integration,
             name_integration=name_integration,
         )

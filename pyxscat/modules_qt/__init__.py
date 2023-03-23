@@ -1,4 +1,4 @@
-
+from pyxscat.edf import EdfClass
 
 from .widget_methods import lineedit_methods as le
 from .widget_methods import combobox_methods as cb
@@ -6,9 +6,9 @@ from .widget_methods import listwidget_methods as lt
 from .widget_methods import table_methods as tm
 from .widget_methods import graph_methods as gm
 from .directory_methods import *
-from .main_window import Ui_MainWindow
+# from .main_window import Ui_MainWindow
 
-from pyxscat.edf import EdfClass
+
 from pyxscat.integrator import Integrator
 from pyxscat.other_functions import np_weak_lims, dict_to_str
 from pyxscat.search_functions import search_files_recursively, list_files_to_dict, get_subfolder
@@ -17,9 +17,9 @@ from pyxscat.plots import *
 from os.path import join, dirname
 import os
 
-GLOBAL_PATH = dirname(dirname(__file__))
-DIRECTORY_SETUPS = join(GLOBAL_PATH, 'module_edf', 'setup_dictionaries')
-DIRECTORY_INTEGRATIONS = join(GLOBAL_PATH, 'module_integrator', 'integration_dictionaries')
+GLOBAL_PATH_QT = dirname(__file__)
+# DIRECTORY_SETUPS = join(GLOBAL_PATH, 'module_edf', 'setup_dictionaries')
+# DIRECTORY_INTEGRATIONS = join(GLOBAL_PATH, 'module_integrator', 'integration_dictionaries')
 
 
 SYMBOL_CHECK = '\u2705'

@@ -1,17 +1,11 @@
 
 from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QGridLayout, QListWidget, QTableWidget, QLabel, QComboBox, QCheckBox, QLineEdit, QDoubleSpinBox, QPlainTextEdit, QTabWidget
 from PyQt5.QtGui import QFont, QIcon
-from PyQt5.QtCore import Qt
 from silx.gui.plot.PlotWindow import Plot1D, Plot2D
 from os.path import join
-from . import GLOBAL_PATH
-
-# xx = QFontDatabase.addApplicationFont("avenir.ttf")
-
+from . import GLOBAL_PATH_QT
 
 ERROR_OUTPUT = "Something went wrong with the output message..."
-
-
 
 def set_bstyle(qlabels=[]):
     myFont=QFont("avenir.otf")
@@ -58,17 +52,13 @@ class GUIPyX_Widget_layout(QWidget):
         self.widget_input_data = QWidget()
         self.grid_input_info = QGridLayout()
         self.widget_input_info = QWidget()
-        self.grid_orientation = QGridLayout()
-        self.widget_orientation = QWidget()
 
         self.tab_input_data = QTabWidget()
         self.tab_input_data.addTab(self.widget_input_data, "Folders and files")
         self.tab_input_data.addTab(self.widget_input_info, "Setup information")
-        self.tab_input_data.addTab(self.widget_orientation, "Sample orientation")
 
         self.widget_input_data.setLayout(self.grid_input_data)
         self.widget_input_info.setLayout(self.grid_input_info)
-        self.widget_orientation.setLayout(self.grid_orientation)
 
         self.listwidget_folders = QListWidget()
         self.grid_input_files = QGridLayout()
@@ -100,20 +90,16 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_conditions = QGridLayout()
         self.grid_input_ponifile = QGridLayout()
         self.grid_input_reference = QGridLayout()
+        self.grid_input_orientations = QGridLayout()
         self.grid_input_buttons = QGridLayout()
         self.grid_input_data.addLayout(self.grid_input_maindir,1,1)
         self.grid_input_data.addLayout(self.grid_input_conditions,2,1)
         self.grid_input_data.addLayout(self.grid_input_ponifile,3,1)
         self.grid_input_data.addLayout(self.grid_input_reference,4,1)
-        self.grid_input_data.addLayout(self.grid_input_buttons,5,1)
+        self.grid_input_data.addLayout(self.grid_input_orientations,5,1)
+        self.grid_input_data.addLayout(self.grid_input_buttons,6,1)
 
         self.grid_input_info.addLayout(self.grid_input_setup,1,1)
-
-        # self.grid_input_setup.setColumnStretch(1,1)
-        # self.grid_input_setup.setColumnStretch(2,2)
-        # self.grid_input_setup.setColumnStretch(3,1)
-        # self.grid_input_setup.setColumnStretch(4,1)
-        # self.grid_input_setup.setColumnStretch(5,1)
 
         self.grid_input_maindir.setColumnStretch(1,1)
         self.grid_input_maindir.setColumnStretch(2,15)
@@ -135,17 +121,13 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_buttons.setColumnStretch(1,1)
         self.grid_input_buttons.setColumnStretch(2,1)
 
-
         self.label_maindir = QLabel("Main directory:")
         self.lineedit_maindir = QLineEdit("Type here the path or pick it")
         self.button_pick_maindir = QPushButton(" Pick a directory ")
-        self.button_pick_maindir.setIcon(QIcon(join(GLOBAL_PATH, 'modules_qt', "folder.png")))        
-        
-
-
-
-
-        
+        self.button_pick_maindir.setIcon(QIcon(join(GLOBAL_PATH_QT, "folder.png")))        
+        self.checkbox_rotated = QCheckBox("Rotated")
+        self.button_qz = QPushButton("qz \u2191\u2191")
+        self.button_qr = QPushButton("qr \u2191\u2191")
 
         self.label_extension = QLabel("File extension:")
         self.combobox_extension = QComboBox()
@@ -160,18 +142,19 @@ class GUIPyX_Widget_layout(QWidget):
         self.combobox_ponifile = QComboBox()
 
         self.button_add_ponifile = QPushButton(" Pick new ponifile ")
-        self.button_add_ponifile.setIcon(QIcon(join(GLOBAL_PATH, 'modules_qt', "file.png")))  
+        self.button_add_ponifile.setIcon(QIcon(join(GLOBAL_PATH_QT, "file.png")))  
            
         self.button_add_reference = QPushButton(" Pick a reference file ")
-        self.button_add_reference.setIcon(QIcon(join(GLOBAL_PATH, 'modules_qt', "file.png")))  
+        self.button_add_reference.setIcon(QIcon(join(GLOBAL_PATH_QT, "file.png")))  
         self.label_reffolder = QLabel("Reference folder:")
         self.combobox_reffolder = QComboBox()
+        self.label_sample_orientation = QLabel("Sample orientation:")
         self.button_pyfaicalib = QPushButton(" pyFAI calibration GUI ")
-        self.button_pyfaicalib.setIcon(QIcon(join(GLOBAL_PATH, 'modules_qt', "pyfai.png"))) 
+        self.button_pyfaicalib.setIcon(QIcon(join(GLOBAL_PATH_QT, "pyfai.png"))) 
         self.button_start = QPushButton(" Update data ")
-        self.button_start.setIcon(QIcon(join(GLOBAL_PATH, 'modules_qt', "refresh.png"))) 
+        self.button_start.setIcon(QIcon(join(GLOBAL_PATH_QT, "refresh.png"))) 
 
-        set_bstyle([self.label_maindir, self.label_extension, self.label_conditions, self.label_ponifile, self.label_reffolder])
+        set_bstyle([self.label_maindir, self.label_extension, self.label_conditions, self.label_ponifile, self.label_reffolder, self.label_sample_orientation])
 
         self.grid_input_maindir.addWidget(self.label_maindir, 1, 1)
         self.grid_input_maindir.addWidget(self.lineedit_maindir, 1, 2)
@@ -190,6 +173,12 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_reference.addWidget(self.label_reffolder, 1, 1)
         self.grid_input_reference.addWidget(self.combobox_reffolder, 1, 2)
         self.grid_input_reference.addWidget(self.button_add_reference, 1, 3)
+
+        self.grid_input_orientations.addWidget(self.label_sample_orientation, 1, 1)
+        self.grid_input_orientations.addWidget(self.button_qz, 1, 2)
+        self.grid_input_orientations.addWidget(self.button_qr, 1, 3)
+
+
 
         self.grid_input_buttons.addWidget(self.button_pyfaicalib, 1, 1)
         self.grid_input_buttons.addWidget(self.button_start, 1, 2)
@@ -339,8 +328,6 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_savefolder.addWidget(self.label_savefolder, 1, 1)
         self.grid_savefolder.addWidget(self.lineedit_savefolder, 1, 2)
 
-
-
         ### Tab for setup information
         self.grid_input_setup.setRowStretch(1,1)
         self.grid_input_setup.setRowStretch(1,2)
@@ -368,7 +355,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_setup_name = QLabel("Setup name:")
         self.lineedit_setup_name = QLineEdit()   
         self.button_setup_save = QPushButton("Save .json file")
-        self.button_setup_save.setIcon(QIcon(join(GLOBAL_PATH, 'modules_qt', "save.png"))) 
+        self.button_setup_save.setIcon(QIcon(join(GLOBAL_PATH_QT, "save.png"))) 
 
 
 
@@ -390,17 +377,3 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_setup.addWidget(self.label_setup_name, 6, 1)
         self.grid_input_setup.addWidget(self.lineedit_setup_name, 6, 2)
         self.grid_input_setup.addWidget(self.button_setup_save, 6, 3)
-
-        ### Tab for sample orientation
-        self.grid_orientation.setColumnStretch(1,1)
-        self.grid_orientation.setColumnStretch(2,1)
-        self.map_orientation = QWidget()
-        self.grid_orientation_data = QGridLayout()
-        self.grid_orientation.addWidget(self.map_orientation,1,1)
-        self.grid_orientation.addLayout(self.grid_orientation_data,1,2)
-        self.checkbox_rotated = QCheckBox("Rotated")
-        self.button_qz = QPushButton("qz \u2191\u2191")
-        self.button_qr = QPushButton("qr \u2191\u2191")
-        self.grid_orientation_data.addWidget(self.checkbox_rotated,1,1,alignment=Qt.AlignCenter)
-        self.grid_orientation_data.addWidget(self.button_qz,2,1,alignment=Qt.AlignCenter)
-        self.grid_orientation_data.addWidget(self.button_qr,3,1,alignment=Qt.AlignCenter)

@@ -5,7 +5,7 @@ from modules_qt.gui_widget_integration import GUIPyX_Widget_integrationform
 import modules_qt.widget_methods.lineedit_methods as le
 import modules_qt.widget_methods.listwidget_methods as lt
 import modules_qt.widget_methods.combobox_methods as cb
-from . import DIRECTORY_INTEGRATIONS
+from integration.integrator_methods import DIRECTORY_INTEGRATIONS
 
 
 
@@ -208,8 +208,11 @@ class IntegrationForm(GUIPyX_Widget_integrationform):
             Updates the integration form with a dictionary
         """
         import json
-        with open(join(DIRECTORY_INTEGRATIONS, f"{name_dict}.json"), 'r') as fp:
-            dict_integration = json.load(fp)
+        try:
+            with open(join(DIRECTORY_INTEGRATIONS, f"{name_dict}.json"), 'r') as fp:
+                dict_integration = json.load(fp)
+        except:
+            return
 
         if dict_integration['Type'] in ('Azimuthal', 'Radial'):
             le.substitute(

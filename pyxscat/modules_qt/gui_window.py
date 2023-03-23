@@ -8,9 +8,9 @@ from modules_qt.widget_methods import combobox_methods as cb
 from PyQt5 import QtGui, QtCore
 from os.path import join
 import os
-from pyxscat.setup_dictionaries.setup_methods import DIRECTORY_SETUPS
-from pyxscat.integration_dictionaries.integrator_methods import DIRECTORY_INTEGRATIONS
-
+from setup.setup_methods import DIRECTORY_SETUPS, get_dictionaries_setup
+from integration.integrator_methods import DIRECTORY_INTEGRATIONS
+from . import GLOBAL_PATH_QT
 
 class GUIPyX_Window(QMainWindow):
     def __init__(self, *args):
@@ -21,7 +21,7 @@ class GUIPyX_Window(QMainWindow):
         self.setWindowTitle("PyXScat")
 
         app_icon = QtGui.QIcon()
-        app_icon.addFile("modules_qt\pisto.png", QtCore.QSize(256,256))
+        app_icon.addFile(join(GLOBAL_PATH_QT, "pyxscat_icon.png"), QtCore.QSize(256,256))
         self.setWindowIcon(app_icon)
 
         self.update_combobox_setups()
@@ -62,17 +62,25 @@ class GUIPyX_Window(QMainWindow):
 
         self.setMenuBar(menubar)
 
+
+
+
     def _open_setup_form(self):
         self.setup_form = SetUpForm()
         self.setup_form.show()
+        self.setup_form.button_input_setup.clicked.connect(self.update_combobox_setups) 
 
     def _open_integration_form(self):
         self.integration_form = IntegrationForm()
         self.integration_form.show()
+        self.integration_form.button_azrad_add.clicked.connect(self.update_combobox_integrations)
+        self.integration_form.button_proj_add.clicked.connect(self.update_combobox_integrations) 
+              
 
     def _open_about_form(self):
         self.about_form = AboutForm()
         self.about_form.show()
+        
 
 
     def update_combobox_setups(self):
@@ -82,25 +90,10 @@ class GUIPyX_Window(QMainWindow):
         cb.insert_list(
             combobox=self._guiwidget.combobox_setup,
             list_items=[
-                d['Name'] for d in self.get_dictionaries_setup()
+                d['Name'] for d in get_dictionaries_setup()
             ],
             reset=True,
         )
-
-    def get_dictionaries_setup(self) -> list:
-        """
-            Return a list with the dictionaries of all the available setups
-        """
-        import json
-        list_dicts = []
-        for file in os.listdir(DIRECTORY_SETUPS):
-            if file.endswith('json'):
-                with open(join(DIRECTORY_SETUPS, file), 'r') as fp:
-                    list_dicts.append(
-                        json.load(fp)
-                    )
-        return list_dicts
-
 
     def update_combobox_integrations(self):
         """

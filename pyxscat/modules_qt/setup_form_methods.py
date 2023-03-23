@@ -6,7 +6,7 @@ from modules_qt.gui_widget_setup import GUIPyX_Widget_setupform
 import modules_qt.widget_methods.lineedit_methods as le
 import modules_qt.widget_methods.listwidget_methods as lt
 from pyxscat.decorators import try_or_continue
-from . import DIRECTORY_SETUPS
+from setup.setup_methods import DIRECTORY_SETUPS
 
 
 class SetUpForm(GUIPyX_Widget_setupform):
@@ -43,7 +43,7 @@ class SetUpForm(GUIPyX_Widget_setupform):
         return {
             'Name':le.text(self.lineedit_setup),
             'Angle':le.text(self.lineedit_incidentangle),
-            'Tilt Angle':le.text(self.lineedit_tiltangle),
+            'Tilt angle':le.text(self.lineedit_tiltangle),
             'Norm':le.text(self.lineedit_normfactor),
             'Exposure':le.text(self.lineedit_exposure),
         }
@@ -90,7 +90,7 @@ class SetUpForm(GUIPyX_Widget_setupform):
 
         le.substitute(
             lineedit=self.lineedit_tiltangle,
-            new_text=dict_integration['Tilt Angle'],
+            new_text=dict_integration['Tilt angle'],
         )
 
     def update_setup_dictionaries(self):

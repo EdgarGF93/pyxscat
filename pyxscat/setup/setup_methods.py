@@ -1,5 +1,7 @@
 from os.path import join, basename, splitext,dirname
 from os import listdir
+import json
+import yaml
 
 DIRECTORY_SETUPS = join(dirname(__file__))
 SETUP_EXTENSION = ('.json', '.yaml')
@@ -52,7 +54,6 @@ def get_dict_fromjson(json_file=str()) -> dict:
     """
         Import a json file and returns its dictionary
     """
-    import json
     try:
         with open(join(DIRECTORY_SETUPS, json_file), 'r') as fp:
             return json.load(fp)
@@ -64,7 +65,6 @@ def get_dict_fromyaml(yaml_file=str()) -> dict:
     """
         Import a yaml file and returns its dictionary
     """
-    import yaml
     try:
         with open(join(DIRECTORY_SETUPS, yaml_file), 'r') as fp:
             return yaml.safe_load(fp)
@@ -79,3 +79,22 @@ def get_setup_info_files():
     return [
         join(DIRECTORY_SETUPS, file) for file in listdir(DIRECTORY_SETUPS) if file.endswith(SETUP_EXTENSION)
     ]
+
+
+def get_dictionaries_setup() -> list:
+    """
+        Return a list with the dictionaries of all the available setups
+    """
+    list_dicts = []
+    for file in listdir(DIRECTORY_SETUPS):
+        if file.endswith('json'):
+            list_dicts.append(
+                get_dict_fromjson(
+                    json_file=file,
+                )
+            )
+            # with open(join(DIRECTORY_SETUPS, file), 'r') as fp:
+            #     list_dicts.append(
+            #         json.load(fp)
+            #     )
+    return list_dicts

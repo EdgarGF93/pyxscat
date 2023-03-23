@@ -1,8 +1,21 @@
 from os.path import join, dirname
 import os
 
-DIRECTORY_INTEGRATIONS = join(dirname(__file__), 'integration_dictionaries')
+DIRECTORY_INTEGRATIONS = join(dirname(__file__))
 
+
+def get_dict_integration(dict_integration=dict(), name_integration=str()) -> dict:
+    """
+        Return a dictionary of integration giving a name
+    """
+    # Get the dictionary with the integration parameters
+    if dict_integration and isinstance(dict_integration, dict):
+        return dict_integration
+    elif name_integration and isinstance(name_integration, str):
+        for d in get_dictionaries_integration():
+            if name_integration == d['Name']:
+                return d
+    return
 
 
 def get_dictionaries_integration() -> list:

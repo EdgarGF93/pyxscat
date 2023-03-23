@@ -3,13 +3,19 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QFileDialog, QSplashScreen
 from PyQt5.QtGui import QPixmap
 from modules_qt import *
+import numpy as np
 from os.path import basename, dirname, exists, getctime, join
 import json
 import subprocess
 import sys
 import os
-from pyxscat.setup_dictionaries.setup_methods import get_dict_setup
+from setup.setup_methods import get_dict_setup
 from pathlib import Path
+from setup.setup_methods import DIRECTORY_SETUPS, get_dictionaries_setup
+from integration.integrator_methods import DIRECTORY_INTEGRATIONS
+from edf import DICT_SAMPLE_ORIENTATIONS
+
+from . import GLOBAL_PATH_QT
 
 
 MSG_SETUP_UPDATED = "New setup dictionary was updated."
@@ -44,7 +50,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         super(GUIPyX_Widget, self).__init__()
 
         # Splash screen
-        pixmap = QPixmap(r"C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\modules_qt\splash.jpg")
+        pixmap = QPixmap(join(GLOBAL_PATH_QT, 'pyxscat_logo_thumb.png'))
         splash = QSplashScreen(pixmap)
         splash.show()
         splash.finish(self)
@@ -79,13 +85,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.lineedit_exposure.returnPressed.connect(self.update_setup_parameter)
         self.button_setup_save.clicked.connect(self.save_new_setup)
         self.button_setup.clicked.connect(self.pick_json_file)
+        # self.combobox_setup.highlighted.connect(self.update_combobox_setups)
 
         #########################
         # Callbacks for rotation and parallel/antiparallel axis
         #########################
-        self.checkbox_rotated.stateChanged.connect(
-            self.update_rotated,
-        )
+        # self.checkbox_rotated.stateChanged.connect(
+        #     self.update_rotated,
+        # )
         self.button_qz.clicked.connect(
             self.update_qz,
         )
@@ -266,9 +273,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.update_ponifile()
         self._extension = '.edf'
         self._wildcards = '*'
-        self._rotated = False
+        # self._rotated = False
         self._qz_parallel = True
         self._qr_parallel = True
+        self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
 
         self._dict_files = {}
         self._dict_files_reference = {}    
@@ -309,7 +317,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             le.text(self.lineedit_exposure),
         ]
 
-    def get_dict_setup(self) -> dict:
+    def read_dict_setup(self) -> dict:
         """
             Return a dict setup with the values from the lineedits
         """
@@ -388,7 +396,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Update the dictionary of setup information from changing the lineedits
         """
-        new_dict_info = self.get_dict_setup()
+        new_dict_info = self.read_dict_setup()
         for key, value in new_dict_info.items():
             if self._dict_setup[key] != value:
                 self._dict_setup[key] = value
@@ -400,7 +408,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Collect the dictionary and save a .json file
         """
-        new_dict_info = self.get_dict_setup()
+        new_dict_info = self.read_dict_setup()
         file_json = join(DIRECTORY_SETUPS, f"{new_dict_info['Name']}.json")
         with open(file_json, 'w+') as fp:
             json.dump(new_dict_info, fp)
@@ -421,17 +429,17 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         except:
             pass
 
-    def update_rotated(self, state:int=0) -> None:
-        """
-            Update the rotated boolean
-        """
-        self._rotated = False if state == 0 else True
-        self._write_output(MSG_ROTATED_UPDATED)
-        msg = 'rotated' if self._rotated else 'not rotated'
-        self._write_output(f"Now, the state is {msg}")
+    # def update_rotated(self, state:int=0) -> None:
+    #     """
+    #         Update the rotated boolean
+    #     """
+    #     self._rotated = False if state == 0 else True
+    #     self._write_output(MSG_ROTATED_UPDATED)
+    #     msg = 'rotated' if self._rotated else 'not rotated'
+    #     self._write_output(f"Now, the state is {msg}")
 
-        if self._integrator:
-            self._integrator.rotated = self._rotated
+    #     if self._integrator:
+    #         self._integrator.rotated = self._rotated
 
     def update_qz(self) -> None:
         """
@@ -441,15 +449,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self._qz_parallel = False
             self.button_qz.setText("qz \u2191\u2193")
             self._write_output(MSG_QZ_DIRECTION_UPDATED)
-            self._write_output(f"Now, the qz positive goes with PONI1")
+            self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
         else:
             self._qz_parallel = True
             self.button_qz.setText("qz \u2191\u2191")
             self._write_output(MSG_QZ_DIRECTION_UPDATED)
-            self._write_output(f"Now, the qz positive goes with PONI2")
+            self._write_output(f"Now, the qz negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
 
         if self._integrator:
-            self._integrator._qz_parallel = self._qz_parallel
+            self._integrator.update_orientation(
+                qz_parallel=self._qz_parallel,
+                qr_parallel=self._qr_parallel,
+            )
 
     def update_qr(self) -> None:
         """
@@ -459,15 +470,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self._qr_parallel = False       
             self.button_qr.setText("qr \u2191\u2193")
             self._write_output(MSG_QR_DIRECTION_UPDATED)
-            self._write_output(f"Now, the qr positive goes with PONI2")
+            self._write_output(f"Now, the qr positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
         else:
-            setattr(self, 'qr_parallel', True)             
+            self._qr_parallel = True            
             self.button_qr.setText("qr \u2191\u2191")
             self._write_output(MSG_QR_DIRECTION_UPDATED)
-            self._write_output(f"Now, the qr positive goes with PONI1")         
+            self._write_output(f"Now, the qr negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")        
 
         if self._integrator:
-            self._integrator._qr_parallel = self._qr_parallel
+            self._integrator.update_orientation(
+                qz_parallel=self._qz_parallel,
+                qr_parallel=self._qr_parallel,
+            )
 
     def update_maindir(self, main_dir_text=str()) -> None:
         """
@@ -647,7 +661,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                         )
                     )
                     self._write_output(MSG_REFERENCE_FILES_UPDATED)
-                    self._write_output(str(self._dict_files_reference))
+                    # self._write_output(str(self._dict_files_reference))
                 else:
                     self._write_output(MSG_REFERENCE_FILES_ERROR)
                     self._dict_files_reference = dict()
@@ -777,7 +791,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     ponifile_path=self._ponifile,
                     extension=self._extension,
                     wildcards=self._wildcards,
-                    rotated=self._rotated,
+                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                     search_files=False,
@@ -951,9 +965,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             ) for item in new_folders
         ]
 
+
         lt.insert_list(
             listwidget=self.listwidget_folders,
             item_list=subfolder_list,
+            reset=True,
         )
 
         cb.insert_list(
@@ -988,12 +1004,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         if data is not None:
             self.sample_data_cache = data
-        else:
+        elif filename:
             try:
                 self.Edf_sample_cache = EdfClass(
                     filename=filename,
+                    ponifile_path=self._ponifile,
                     dict_setup=self._dict_setup,
-                    rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
@@ -1001,6 +1017,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 self.sample_data_cache = self.Edf_sample_cache.get_data()
             except:
                 pass
+        else:
+            return
 
         if self.checkbox_sub.isChecked():
             # if le.text(lineedit=self.lineedit_reffile):
@@ -1081,7 +1099,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                         lineedit=self.lineedit_integrations
                     )
                 ):
-                pass
                 self.update_chart_widget(
                     chart_widget=self.chart_widget,
                     dataframe=df,
@@ -1178,17 +1195,19 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             ymin=chart_widget.getGraphYLimits()[0],
             ymax=chart_widget.getGraphYLimits()[1],
         )
-
-        for index,(x,y) in enumerate(zip([*range(0,len(dataframe.columns),2)],[*range(1,len(dataframe.columns),2)])):
-            try:          
-                chart_widget.addCurve(
-                    x=dataframe.iloc[:, x],
-                    y=dataframe.iloc[:, y],
-                    legend=f"{index}",
-                    resetzoom=True,
-                )
-            except:
-                pass
+        if dataframe is not None:
+            for index,(x,y) in enumerate(zip([*range(0,len(dataframe.columns),2)],[*range(1,len(dataframe.columns),2)])):
+                try:          
+                    chart_widget.addCurve(
+                        x=dataframe.iloc[:, x],
+                        y=dataframe.iloc[:, y],
+                        legend=f"{index}",
+                        resetzoom=True,
+                    )
+                except:
+                    pass
+        else:
+            return
 
     def save_df_chart(self):
         """
