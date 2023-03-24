@@ -30,11 +30,9 @@ DICT_SAMPLE_ORIENTATIONS = {
     (False,False) : 4,
 }
 
-dict_box_orientation = {
-    ('Horizontal', False) : 'ipbox',
-    ('Horizontal', True) : 'opbox',
-    ('Vertical', False) : 'opbox',
-    ('Vertical', True) : 'ipbox',
+DICT_BOX_ORIENTATION = {
+    'Horizontal' : 'ipbox',
+    'Vertical' : 'opbox',
 }
 
 OUTPUT_FOLDER = 'PyXScat'
@@ -418,7 +416,6 @@ class Integrator(Transform):
         """
             Yield a dataframe with the integration using raw_integration
         """
-
         df_unified = pd.DataFrame([])
         dict_unified = {}
         if list_data:
@@ -948,8 +945,7 @@ class Integrator(Transform):
         )
 
         # Get the direction of the box
-        process = dict_box_orientation.get((dict_integration["Type"], self._rotated))
-
+        process = DICT_BOX_ORIENTATION[dict_integration['Type']]
         try:
             if process == 'opbox':
                 p0_range, p1_range = dict_integration['Oop_range'], dict_integration['Ip_range']

@@ -1,16 +1,16 @@
 
-from PyQt5.QtWidgets import QMainWindow, QMenu, QMenuBar, QAction
+from . import GLOBAL_PATH_QT
+from integration.integrator_methods import DIRECTORY_INTEGRATIONS
 from modules_qt.gui_widget import GUIPyX_Widget
-from modules_qt.setup_form_methods import SetUpForm
-from modules_qt.integration_form_methods import IntegrationForm
 from modules_qt.gui_widget_about import AboutForm
-from modules_qt.widget_methods import combobox_methods as cb
+from modules_qt.integration_form_methods import IntegrationForm
+from modules_qt.setup_form_methods import SetUpForm
+from modules_qt import combobox_methods as cb
+from PyQt5.QtWidgets import QMainWindow, QMenu, QMenuBar, QAction
 from PyQt5 import QtGui, QtCore
 from os.path import join
+from setup.setup_methods import get_dictionaries_setup
 import os
-from setup.setup_methods import DIRECTORY_SETUPS, get_dictionaries_setup
-from integration.integrator_methods import DIRECTORY_INTEGRATIONS
-from . import GLOBAL_PATH_QT
 
 class GUIPyX_Window(QMainWindow):
     def __init__(self, *args):
@@ -59,11 +59,7 @@ class GUIPyX_Window(QMainWindow):
         toolsmenu.addAction(setupaction)
         toolsmenu.addAction(integrationaction)
         aboutmenu.addAction(aboutaction)
-
         self.setMenuBar(menubar)
-
-
-
 
     def _open_setup_form(self):
         self.setup_form = SetUpForm()
@@ -81,8 +77,6 @@ class GUIPyX_Window(QMainWindow):
         self.about_form = AboutForm()
         self.about_form.show()
         
-
-
     def update_combobox_setups(self):
         """
             Feed the combobox of setups with all the available (previously declared) dictionaries of setups

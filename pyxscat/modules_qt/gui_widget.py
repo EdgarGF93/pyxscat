@@ -1,22 +1,36 @@
+
+from . import *
+from edf import DICT_SAMPLE_ORIENTATIONS
 from modules_qt.gui_layout import GUIPyX_Widget_layout
-from PyQt5 import QtCore
+from os.path import basename, dirname, exists, getctime, join
+from pathlib import Path
+from plots import plot_mesh
+
+from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QFileDialog, QSplashScreen
 from PyQt5.QtGui import QPixmap
-from modules_qt import *
-import numpy as np
-from os.path import basename, dirname, exists, getctime, join
+
+from pyxscat.edf import EdfClass
+from pyxscat.integrator import Integrator
+from pyxscat.other_functions import np_weak_lims, dict_to_str, create_folder
+from pyxscat.plots import *
+from pyxscat.search_functions import search_files_recursively, list_files_to_dict, get_subfolder
+
+from integration.integrator_methods import DIRECTORY_INTEGRATIONS
+from setup.setup_methods import DIRECTORY_SETUPS
+from setup.setup_methods import get_dict_setup
+
+from modules_qt import lineedit_methods as le
+from modules_qt import combobox_methods as cb
+from modules_qt import listwidget_methods as lt
+from modules_qt import table_methods as tm
+from modules_qt import graph_methods as gm
+
 import json
+import numpy as np
 import subprocess
 import sys
 import os
-from setup.setup_methods import get_dict_setup
-from pathlib import Path
-from setup.setup_methods import DIRECTORY_SETUPS, get_dictionaries_setup
-from integration.integrator_methods import DIRECTORY_INTEGRATIONS
-from edf import DICT_SAMPLE_ORIENTATIONS
-
-from . import GLOBAL_PATH_QT
-
 
 MSG_SETUP_UPDATED = "New setup dictionary was updated."
 MSG_SETUP_ERROR = "The setup dictionary could not be updated."
@@ -42,8 +56,6 @@ MSG_NEW_DETECTED_FILES = "New files were detected."
 MSG_CLICKED_FLODER_ERROR = "File table could not be updated."
 
 
-
-
 class GUIPyX_Widget(GUIPyX_Widget_layout):
 
     def __init__(self):
@@ -62,6 +74,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.init_callbacks()        
         self.init_attributes()
         self.update_setup_info()
+        self.update_lims_ticks(text=DEFAULT_UNIT)
 
     def init_callbacks(self) -> None:
         """
@@ -85,14 +98,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.lineedit_exposure.returnPressed.connect(self.update_setup_parameter)
         self.button_setup_save.clicked.connect(self.save_new_setup)
         self.button_setup.clicked.connect(self.pick_json_file)
-        # self.combobox_setup.highlighted.connect(self.update_combobox_setups)
 
         #########################
         # Callbacks for rotation and parallel/antiparallel axis
         #########################
-        # self.checkbox_rotated.stateChanged.connect(
-        #     self.update_rotated,
-        # )
         self.button_qz.clicked.connect(
             self.update_qz,
         )
@@ -130,9 +139,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.button_add_ponifile.clicked.connect(
             self.pick_new_ponifile,
         )
-        # self.lineedit_ponifile_path.returnPressed.connect(
-        #     self.update_ponifile_path,
-        # )
 
         #########################
         # Reference callbacks
@@ -140,9 +146,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.combobox_reffolder.currentTextChanged.connect(
             self.update_reference_files,
         )
-        # self.lineedit_reffile.returnPressed.connect(
-        #     self.update_reference_file,
-        # )
+        self.button_add_reference.clicked.connect(
+            self.pick_new_reference,
+        )
 
         #####################################################################
         ##################  MAIN BUTTONS CALLBACKS  #########################
@@ -191,7 +197,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.update_header_items,
         )
 
-
         # Click on the table updates the chart
         self.table_files.clicked.connect(
             lambda: self.update_cache(
@@ -223,7 +228,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.plot_data_cache,
         )
 
-        # Callback for subtraction double spin box
+        # Callback for subtraction widgets
+        # self.checkbox_sub.stateChanged.connect(
+        #     lambda: self.update_cache(
+        #         filename = self.selected_filename_table(),
+        #         plot=PLOT_SELECTED_TABLE,
+        #     )
+        # )
+
         self.spinbox_sub.valueChanged.connect(
             lambda: self.update_cache(
                 filename = self.selected_filename_table(),
@@ -237,15 +249,19 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 show=True,
             )
         )
+        
+        self.combobox_units.currentTextChanged.connect(
+            self.update_lims_ticks,
+        )
 
         # Button to save the generated map
         self.button_savemap.clicked.connect(
-            self.save_popup_map
+            self.save_popup_map,
         )
 
         # Button to save the dataframe in the chart
         self.button_saveplot.clicked.connect(
-            self.save_df_chart
+            self.save_df_chart,
         )
 
         # Combobox_title, updates its lineedit
@@ -257,10 +273,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
         # Button to visually check the integration parameters
-        self.button_checkmap.clicked.connect(
-            lambda : (
-                self.check_integration(),
-            )
+        # self.button_checkmap.clicked.connect(
+        #     lambda : (
+        #         self.check_integration(),
+        #     )
+        # )
+        self.button_savefit.clicked.connect(
+            self.open_fitting_form,
         )
 
     def init_attributes(self) -> None:
@@ -273,7 +292,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.update_ponifile()
         self._extension = '.edf'
         self._wildcards = '*'
-        # self._rotated = False
         self._qz_parallel = True
         self._qr_parallel = True
         self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
@@ -287,6 +305,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         
         self.filename_cache = ''
         self.sample_data_cache = None
+        self._reference_file = ''
         self.reference_data_cache = None
         self.Edf_sample_cache = None
         self.Edf_reference_cache = None
@@ -421,25 +440,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Open a browser to pick a .json file with setup information
         """
-        json_file = QFileDialog.getOpenFileNames(self, 'Pick a .json file', GLOBAL_PATH, "*.json")[0][0]
+        json_file = QFileDialog.getOpenFileNames(self, 'Pick a .json file', DIRECTORY_SETUPS, "*.json")[0][0]
         try:
             with open(json_file) as jf:
                 new_dict_setup = json.load(jf)
             self.update_setup_info(new_dict=new_dict_setup)
         except:
             pass
-
-    # def update_rotated(self, state:int=0) -> None:
-    #     """
-    #         Update the rotated boolean
-    #     """
-    #     self._rotated = False if state == 0 else True
-    #     self._write_output(MSG_ROTATED_UPDATED)
-    #     msg = 'rotated' if self._rotated else 'not rotated'
-    #     self._write_output(f"Now, the state is {msg}")
-
-    #     if self._integrator:
-    #         self._integrator.rotated = self._rotated
 
     def update_qz(self) -> None:
         """
@@ -449,15 +456,25 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self._qz_parallel = False
             self.button_qz.setText("qz \u2191\u2193")
             self._write_output(MSG_QZ_DIRECTION_UPDATED)
-            self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+            self._write_output(f"Now, the qz negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
         else:
             self._qz_parallel = True
             self.button_qz.setText("qz \u2191\u2191")
             self._write_output(MSG_QZ_DIRECTION_UPDATED)
-            self._write_output(f"Now, the qz negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+            self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
 
         if self._integrator:
             self._integrator.update_orientation(
+                qz_parallel=self._qz_parallel,
+                qr_parallel=self._qr_parallel,
+            )
+        if self.Edf_sample_cache:
+            self.Edf_sample_cache.update_orientations(
+                qz_parallel=self._qz_parallel,
+                qr_parallel=self._qr_parallel,
+            )
+        if self.Edf_reference_cache:
+            self.Edf_reference_cache.update_orientations(
                 qz_parallel=self._qz_parallel,
                 qr_parallel=self._qr_parallel,
             )
@@ -470,15 +487,25 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self._qr_parallel = False       
             self.button_qr.setText("qr \u2191\u2193")
             self._write_output(MSG_QR_DIRECTION_UPDATED)
-            self._write_output(f"Now, the qr positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+            self._write_output(f"Now, the qr negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
         else:
             self._qr_parallel = True            
             self.button_qr.setText("qr \u2191\u2191")
             self._write_output(MSG_QR_DIRECTION_UPDATED)
-            self._write_output(f"Now, the qr negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")        
+            self._write_output(f"Now, the qr positiveS axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")        
 
         if self._integrator:
             self._integrator.update_orientation(
+                qz_parallel=self._qz_parallel,
+                qr_parallel=self._qr_parallel,
+            )
+        if self.Edf_sample_cache:
+            self.Edf_sample_cache.update_orientations(
+                qz_parallel=self._qz_parallel,
+                qr_parallel=self._qr_parallel,
+            )
+        if self.Edf_reference_cache:
+            self.Edf_reference_cache.update_orientations(
                 qz_parallel=self._qz_parallel,
                 qr_parallel=self._qr_parallel,
             )
@@ -524,9 +551,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             Pick a folder as main directory
         """
         main_dir = Path(QFileDialog.getExistingDirectory(self, 'Choose main directory', "."))
-        if main_dir:
+        if main_dir and (main_dir != Path(".")):
             self.update_maindir(rf"{main_dir}")
         else:
+            self._main_directory = ''
             pass
         
     def update_combobox_ponifile(self) -> None:
@@ -589,23 +617,27 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Update the ponifile from the combobox
         """
-        if ponifile_path and self._main_directory:
-            ponifile_path = join(self._main_directory, ponifile_path)
-            try:
+        try:
+            if ponifile_path:
                 if exists(ponifile_path):
                     self._ponifile = ponifile_path
-                    self._write_output(MSG_PONIFILE_UPDATED)
-                    self._write_output(f"New ponifile: {self._ponifile}")
-
-                    if self._integrator:
-                        self.reset_integrator()
+                elif self._main_directory and exists(join(self._main_directory, ponifile_path)):
+                    self._ponifile = join(self._main_directory, ponifile_path)
                 else:
                     self._ponifile = ''
-            except:
+                    self._write_output(MSG_PONIFILE_ERROR)
+                    return
+                self._write_output(MSG_PONIFILE_UPDATED)
+                self._write_output(f"New ponifile: {self._ponifile}")
+                if self._integrator:
+                    self.reset_integrator()
+                return
+            else:
                 self._ponifile = ''
                 self._write_output(MSG_PONIFILE_ERROR)
-        else:
-            pass
+        except:
+            self._ponifile = ''
+            self._write_output(MSG_PONIFILE_ERROR)
 
     def pick_new_ponifile(self) -> None:
         """
@@ -614,11 +646,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if self._main_directory:
             ponifile_path = QFileDialog.getOpenFileNames(self, 'Pick .poni file', self._main_directory, "*.poni")
         else:
-            ponifile_path = QFileDialog.getOpenFileNames(self, 'Pick .poni file', GLOBAL_PATH, "*.poni")
+            ponifile_path = QFileDialog.getOpenFileNames(self, 'Pick .poni file', '.', "*.poni")
 
         if ponifile_path:
             try:
-                self.update_ponifile(ponifile_path)
+                self.update_ponifile(ponifile_path[0][0])
             except:
                 pass
         else:
@@ -645,7 +677,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         except:
             pass
         
-    def update_reference_files(self, reference_folder=str()) -> None:
+    def update_reference_files(self, reference_folder=str(), list_files=[]) -> None:
         """
             Search inside the reference folder and take reference files
         """
@@ -661,10 +693,16 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                         )
                     )
                     self._write_output(MSG_REFERENCE_FILES_UPDATED)
-                    # self._write_output(str(self._dict_files_reference))
                 else:
                     self._write_output(MSG_REFERENCE_FILES_ERROR)
                     self._dict_files_reference = dict()
+            except:
+                self._write_output(MSG_REFERENCE_FILES_ERROR)
+                self._dict_files_reference = dict()
+        elif list_files:
+            try:
+                self._dict_files_reference = list_files_to_dict(list_files)
+                self._write_output(MSG_REFERENCE_FILES_UPDATED)
             except:
                 self._write_output(MSG_REFERENCE_FILES_ERROR)
                 self._dict_files_reference = dict()
@@ -685,7 +723,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             if reference_path and exists(reference_path):
                 self._reference_file = reference_path
                 self._write_output(MSG_REFERENCE_FILE_UPDATED)
-                self._write_output(f"New reference file: {self._reference_file}")
+                
 
                 if self._integrator:
                     # Update the reference attribute of the self.integrator
@@ -695,6 +733,30 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 pass
         except:
             pass
+
+    def pick_new_reference(self) -> None:
+        """
+            Pick a file as a new reference file
+        """
+        extension = f"*{cb.value(self.combobox_extension)}"
+        try:
+            if self._main_directory:
+                ref_file = QFileDialog.getOpenFileNames(self, 'Pick reference file', self._main_directory, extension)
+            else:
+                ref_file = QFileDialog.getOpenFileNames(self, 'Pick reference file', '.', extension)
+        except:
+            return
+
+        if ref_file:
+            try:
+                self._reference_file = ref_file[0][0]
+                self.update_reference_files(list_files=[self._reference_file])
+                self._write_output(f"New reference file: {self._reference_file}")
+            except:
+                self._reference_file = ''
+                return
+        else:
+            return
 
     def open_pyFAI_calib2(self) -> None:
         """
@@ -791,7 +853,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     ponifile_path=self._ponifile,
                     extension=self._extension,
                     wildcards=self._wildcards,
-                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                     search_files=False,
@@ -836,7 +897,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         # If live is on, start the live searching engine, only for Linux
         if self.checkbox_live.isChecked() and ('linux' in sys.platform):
-            self.timer_data = QtCore.QTimer()
+            self.timer_data = QTimer()
             self.timer_data.timeout.connect(
                 lambda: self.update_files(
                     new_files=self.search_live_files(),
@@ -904,8 +965,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     combobox=self.combobox_headeritems,
                     text='Filename',
                 )
-
-
 
             # Update the global sets of files and folders
             self.set_files += new_files
@@ -1020,23 +1079,31 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         else:
             return
 
-        if self.checkbox_sub.isChecked():
-            # if le.text(lineedit=self.lineedit_reffile):
-            #     try:
-            #         self.Edf_reference_cache = EdfClass(
-            #             filename=le.text(lineedit=self.lineedit_reffile),
-            #             dict_setup=self._dict_setup,
-            #         )
-            #     except:
-            #         pass
-            # else:
-            #     self.Edf_reference_cache = self.search_reference_file(self.Edf_sample_cache)
+        if self.spinbox_sub.value() != 0.0:
+        # if self.checkbox_sub.isChecked():
+            # Try to create an Edf instance of a reference file
+            if self._reference_file:
+                self.Edf_reference_cache = EdfClass(
+                    filename=self._reference_file,
+                    ponifile_path=self._ponifile,
+                    dict_setup=self._dict_setup,
+                    qz_parallel=self._qz_parallel,
+                    qr_parallel=self._qr_parallel,
+                )
+            else:
+                try:
+                    self.Edf_reference_cache = self.search_reference_file(self.Edf_sample_cache)
+                except:
+                    self.Edf_reference_cache = None
+
+            # If a reference instance has been created, do the subtraction
             if self.Edf_reference_cache:
                 try:
                     self.sample_data_cache = self.sample_data_cache - \
                     self.spinbox_sub.value() * self.Edf_reference_cache.get_data()
                 except:
                     pass
+
         self.filename_cache = filename
         if plot:
             self.plot_data_cache()
@@ -1164,8 +1231,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
         return [float(tick) for tick in x_ticks], [float(tick) for tick in y_ticks]
 
-
-    # @try_or_continue('Check the integration box')
     def integrate_data(self, data, dicts_integration=[]):
         """
             Generate a dataframe for every integration
@@ -1184,7 +1249,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
             yield dataframe
 
-    # @try_or_continue('Wrong ponifile? Failed integration?')
     def update_chart_widget(self, chart_widget, dataframe):
         """
             Update the chart window (integrations)
@@ -1195,6 +1259,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             ymin=chart_widget.getGraphYLimits()[0],
             ymax=chart_widget.getGraphYLimits()[1],
         )
+        print(dataframe)
         if dataframe is not None:
             for index,(x,y) in enumerate(zip([*range(0,len(dataframe.columns),2)],[*range(1,len(dataframe.columns),2)])):
                 try:          
@@ -1236,16 +1301,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.df_cache.to_csv(filename_out, sep='\t', mode='a', index=False, header=True)
         except:
             pass
-     
 
     def get_clean_lineedit(self, lineedit_widget, separator=','):
         return [item for item in lineedit_widget.text().strip().split(separator) if item]
-
-
-
-
-
-
 
     def init_table_and_cbs(self, list_files=[]):
         """
@@ -1323,20 +1381,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 list_items=new_header_keys,
                 reset=True,
             )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         else:
             return
 
@@ -1442,131 +1486,82 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         except:
             pass
 
-    def check_integration(self):
-        """
-            Launch a popup map to visualize the integration parameters
-        """
-        if self._integrator:
-            try:
-                self._integrator.check_integration(
-                    Edf=self.Edf_sample_cache,
-                    dict_integration=self.get_dict_integration(
-                        name=cb.value(
-                            combobox=self.combobox_integration,
-                        ),
-                    ),
-                )
-            except:
-                return
-        else:
-            return
+    # def check_integration(self):
+    #     """
+    #         Launch a popup map to visualize the integration parameters
+    #     """
+    #     if self._integrator:
+    #         try:
+    #             self._integrator.check_integration(
+    #                 Edf=self.Edf_sample_cache,
+    #                 dict_integration=self.get_dict_integration(
+    #                     name=cb.value(
+    #                         combobox=self.combobox_integration,
+    #                     ),
+    #                 ),
+    #             )
+    #         except:
+    #             return
+    #     else:
+    #         return
 
     def popup_map(self, show=True):
         """
             Generates a pop-up window with a map of the pattern in cache
         """
         unit = cb.value(self.combobox_units)
-        dict_mesh = {
-            '2theta':DICT_DEFAULT_2THETA,
-            'q (nm-1)':DICT_DEFAULT_QNM,
-            'q (A-1)':DICT_DEFAULT_QA,
-        }[unit]
-
-        if unit == '2theta':
+        unit = get_pyfai_unit(unit)
+        if self._integrator and self.Edf_sample_cache:
             try:
                 data = gm.get_array(self.graph_widget)
-                Y_mesh, Z_mesh = self._integrator.psi(
-                    incident_angle=self.Edf_sample_cache.incident_angle,
-                    degree=True,
-                ), self._integrator.beta(degree=True)
+                scat_x, scat_z, data = self.Edf_sample_cache.get_mesh_matrix(unit=unit, data=data)
             except:
                 return
-        elif unit in ('q (nm-1)', 'q (A-1)'):
-            try:
-                data = self._integrator.get_data_corrected(
-                    data = gm.get_array(self.graph_widget),
-                )
-                Y_mesh, Z_mesh = self._integrator.Q_mesh(unit=dict_mesh['UNIT'])
-            except:
-                return
-        else:
-            return
-        
-        x_lims, y_lims = self.get_map_limits()       
-        if '' in x_lims:
-            x_lims = dict_mesh['XLIM']
-        if '' in y_lims:
-            y_lims = dict_mesh['YLIM']
-
-        x_ticks, y_ticks = self.get_map_ticks()
-        if not x_ticks:
-            x_ticks = dict_mesh['XTICKS']
-        if not y_ticks:
-            y_ticks = dict_mesh['YTICKS']
-        z_lims = gm.get_zlims(self.graph_widget)
-        x_label = dict_mesh['XLABEL']
-        y_label = dict_mesh['YLABEL']
-    
-        # Check dimensions of the three matrix
-        # if np.shape(data) == np.shape(Y_mesh):
-        #     pass
-        # elif (np.shape(data)[1], np.shape(data)[0]) == np.shape(Y_mesh):
-        #     data = np.transpose(data)
-
-        # Go to pcolormesh method
-        self.plot_mesh(
-            data=data,
-            Y_mesh=Y_mesh,
-            Z_mesh=Z_mesh,
-            x_lims=x_lims,
-            y_lims=y_lims,
-            z_lims=z_lims,
-            x_ticks=x_ticks,
-            y_ticks=y_ticks,
-            x_label=x_label,
-            y_label=y_label,
-            show=show,
-        )
-
-    def plot_mesh(self, data, Y_mesh, Z_mesh, x_lims, y_lims, z_lims, x_ticks, y_ticks, x_label, y_label, show=True):
-        """
-            Plot the Q map only if the EdfClass instance contains a Geometry instance (with ponifile information)
-        """
-        import matplotlib.pyplot as plt
-        import matplotlib.colors as colors
-        fig, ax = plt.subplots(figsize=(7,7), dpi=100)
-        ax.set_aspect('equal')
-        try:
-            plt.pcolormesh(
-                Y_mesh,
-                Z_mesh,
-                data,
-                shading='nearest', 
-                cmap='viridis',
-                # vmin=z_lims[0],
-                # vmax=z_lims[1],
-                norm = colors.LogNorm(
-                    vmin=z_lims[0],
-                    vmax=z_lims[1],
-                    # clip=True,
-                )
+            x_lims, y_lims = self.get_map_limits()
+            x_ticks, y_ticks = self.get_map_ticks()
+            plot_mesh(
+                mesh_horz=scat_x,
+                mesh_vert=scat_z,
+                data=data, 
+                unit=unit,
+                auto_lims=False,
+                xlim=x_lims,
+                ylim=y_lims,
+                xticks=x_ticks,
+                yticks=y_ticks,
             )
-        except:
-            print(ROTATED_ERROR)
-            pass
 
-        plt.xlabel(x_label, fontsize=20)
-        plt.ylabel(y_label, fontsize=20)
-        plt.xticks(x_ticks, fontsize=15)
-        plt.yticks(y_ticks, fontsize=15)
-        plt.xlim(x_lims)
-        plt.ylim(y_lims)
-        ax.tick_params(direction='out', length=6, width=2)
-        value_titles = [f"{key}={self.Edf_sample_cache.get_header()[key]}" for key in self.get_clean_lineedit(self.lineedit_headeritems_title)]
-        plt.title(str(value_titles).strip('[]'))
-        # plt.colorbar()
-        if show:
-            plt.show()
+    def update_lims_ticks(self, text=str()):
+        """
+            Update the values of the lineedits with lims and ticks for the graph widget
+        """
+        unit = text
+        unit = get_pyfai_unit(unit)
+        dict_units = DICT_UNIT_PLOTS[unit]
+        le.substitute(
+            lineedit=self.lineedit_xmin,
+            new_text=dict_units['X_LIMS'][0],
+        )
+        le.substitute(
+            lineedit=self.lineedit_xmax,
+            new_text=dict_units['X_LIMS'][1],
+        )
+        le.substitute(
+            lineedit=self.lineedit_ymin,
+            new_text=dict_units['Y_LIMS'][0],
+        )
+        le.substitute(
+            lineedit=self.lineedit_ymax,
+            new_text=dict_units['Y_LIMS'][1],
+        )
+        le.substitute(
+            lineedit=self.lineedit_xticks,
+            new_text=str(dict_units['X_TICKS'])[1:-1],
+        )
+        le.substitute(
+            lineedit=self.lineedit_yticks,
+            new_text=str(dict_units['Y_TICKS'])[1:-1],
+        )
 
     def save_popup_map(self):
         """
@@ -1600,7 +1595,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             If CheckBox_sub is True, search the reference file with the same exposition time as Edf
         """
-        if self.checkbox_sub.isChecked() and self._dict_files_reference:
+        if (self.spinbox_sub.value() != 0.0) and self._dict_files_reference:
             for folder_ref in self._dict_files_reference.keys():
                 for Edf_ref in self._integrator.edf_iterator(self._dict_files_reference[folder_ref]):
                     if Edf_ref.exposure == Edf.exposure:
@@ -1632,3 +1627,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             if name == d['Name']:
                 return d
         return
+
+    def open_fitting_form(self):
+        self._write_output("Fitting form not available for the moment.")

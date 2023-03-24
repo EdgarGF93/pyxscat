@@ -1,14 +1,11 @@
-import os
-from os.path import join
-# from .integration_form import Ui_IntegrationForm
-from modules_qt.gui_widget_integration import GUIPyX_Widget_integrationform
-import modules_qt.widget_methods.lineedit_methods as le
-import modules_qt.widget_methods.listwidget_methods as lt
-import modules_qt.widget_methods.combobox_methods as cb
+
 from integration.integrator_methods import DIRECTORY_INTEGRATIONS
-
-
-
+from os.path import join
+from modules_qt.gui_widget_integration import GUIPyX_Widget_integrationform
+from modules_qt import combobox_methods as cb
+from modules_qt import lineedit_methods as le
+from modules_qt import listwidget_methods as lt
+import os
 
 class IntegrationForm(GUIPyX_Widget_integrationform):
 
@@ -40,11 +37,11 @@ class IntegrationForm(GUIPyX_Widget_integrationform):
             )
         )
 
-        self.button_azrad_check.clicked.connect(
-            lambda : (
-            self.check_integration_azrad(),
-            )
-        )
+        # self.button_azrad_check.clicked.connect(
+        #     lambda : (
+        #     self.check_integration_azrad(),
+        #     )
+        # )
 
         # Callback for add a new integration rad/azimut
         self.button_azrad_add.clicked.connect(
@@ -60,11 +57,11 @@ class IntegrationForm(GUIPyX_Widget_integrationform):
             )           
         )
 
-        self.button_proj_check.clicked.connect(
-            lambda : (
-                self.check_integration_projs(),
-            )
-        )
+        # self.button_proj_check.clicked.connect(
+        #     lambda : (
+        #         self.check_integration_projs(),
+        #     )
+        # )
 
 
     def get_radaz_attributes(self) -> dict:
@@ -312,38 +309,38 @@ class IntegrationForm(GUIPyX_Widget_integrationform):
         else:
             return
 
-    def check_integration_azrad(self):
-        """
-            Updates the graph to check the shape of the integration (radial or azimuthal)
-        """
-        if self.integrator:
-            try:
-                self.integrator.check_integration(
-                    dict_integration=self.get_dict_integration(
-                        name=lt.click_values(
-                            listwidget=self.list_azrad
-                        )[0]
-                    ),
-                )
-            except:
-                return
-        else:
-            return
+    # def check_integration_azrad(self):
+    #     """
+    #         Updates the graph to check the shape of the integration (radial or azimuthal)
+    #     """
+    #     if self.integrator:
+    #         try:
+    #             self.integrator.check_integration(
+    #                 dict_integration=self.get_dict_integration(
+    #                     name=lt.click_values(
+    #                         listwidget=self.list_azrad
+    #                     )[0]
+    #                 ),
+    #             )
+    #         except:
+    #             return
+    #     else:
+    #         return
 
-    def check_integration_projs(self):
-        """
-            Updates the graph to check the shape of the integration (projection)
-        """
-        if self.integrator:
-            try:
-                self.integrator.check_integration(
-                    dict_integration=self.get_dict_integration(
-                        name=lt.click_values(
-                            listwidget=self.list_proj
-                        )[0]
-                    ),
-                )
-            except:
-                return
-        else:
-            return
+    # def check_integration_projs(self):
+    #     """
+    #         Updates the graph to check the shape of the integration (projection)
+    #     """
+    #     if self.integrator:
+    #         try:
+    #             self.integrator.check_integration(
+    #                 dict_integration=self.get_dict_integration(
+    #                     name=lt.click_values(
+    #                         listwidget=self.list_proj
+    #                     )[0]
+    #                 ),
+    #             )
+    #         except:
+    #             return
+    #     else:
+    #         return

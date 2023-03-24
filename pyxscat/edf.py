@@ -200,12 +200,11 @@ class EdfClass(Transform):
             return
 
 
-    def update_orientations(self, rotated=False, qz_parallel=True, qr_parallel=True) -> None:
+    def update_orientations(self, qz_parallel=True, qr_parallel=True) -> None:
         """
             Update the three parameters of orientations
             IMPORTANT: change PONI1, PONI2 AND SHAPE upon rotated bool
         """
-        # self._rotated = rotated
         self._qz_parallel = qz_parallel
         self._qr_parallel = qr_parallel
         if self.tranform_bool:
@@ -217,15 +216,6 @@ class EdfClass(Transform):
                 pass
         else:
             pass
-        # if self._rotated:
-        #     try:
-        #         old_poni = [self._poni1, self._poni2].copy()
-        #         self._poni1, self._poni2 = self.detector.shape[1]*self.pixel2 - old_poni[1], old_poni[0]
-        #         old_detector_shape = self.detector.shape.copy()
-        #         self.detector.shape = [old_detector_shape[1], old_detector_shape[0]]
-        #     except:
-        #         pass
-
 
     def update_ponifile(self, ponifile_path=str()) -> None:
         """
@@ -240,12 +230,6 @@ class EdfClass(Transform):
                 self._ponifile_path = ''
         else:
             self._ponifile_path = ''
-
-    # def set_rotated(self, rotated=False) -> None:
-    #     """
-    #         Set the rotation state of the collected intensity matrix
-    #     """
-    #     self._rotated = rotated
 
     def set_qz_parallel(self, qz_parallel=True) -> None:
         """
@@ -310,9 +294,9 @@ class EdfClass(Transform):
         except:
             pass
 
-    def plot_Qmesh(self, data=None, unit='q_nm^-1', auto_lims=True, **kwargs) -> None:
+    def get_mesh_matrix(self, unit='q_nm^-1', data=None):
         """
-            Plot the Q map only if the EdfClass instance contains a Geometry instance (with ponifile information)
+            Return both horizontal and vertical mesh matrix, ready to plot, returns also the corrected data without the missing wedge
         """
         if self.tranform_bool:
             unit = get_pyfai_unit(unit)
@@ -356,35 +340,41 @@ class EdfClass(Transform):
                     except:
                         scat_z, scat_x = None, None
             else:
-                return
-
+                scat_z, scat_x = None, None
+            
+            # Transform units
             if (scat_z is not None) and (scat_x is not None):
-
-                # Transform units
                 DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
                 scat_z *= DICT_PLOT['SCALE']
                 scat_x *= DICT_PLOT['SCALE']
 
-                data = self.get_data()
+                if data is None:
+                    data = self.get_data()
+
                 if unit in UNITS_Q:
                     ind = np.unravel_index(np.argmin(abs(scat_x), axis=None), scat_z.shape)
                     if self.sample_orientation_edf in (1,3):
                         data[:, ind[1] - 2: ind[1] + 2] = np.nan
                     elif self.sample_orientation_edf in (2,4):
                         data[ind[0] - 2: ind[0] + 2, :] = np.nan
-                    else:
-                        return
 
-                plot_mesh(
-                    mesh_horz=scat_x,
-                    mesh_vert=scat_z,
-                    data=data,
-                    unit=unit,
-                    auto_lims=auto_lims,
-                    **kwargs,
-                )
-            else:
-                return
+            return scat_x, scat_z, data
+
+    def plot_Qmesh(self, data=None, unit='q_nm^-1', auto_lims=True, **kwargs) -> None:
+        """
+            Plot the Q map only if the EdfClass instance contains a Geometry instance (with ponifile information)
+        """
+        unit = get_pyfai_unit(unit)
+        if self.tranform_bool:
+            scat_x, scat_z, data = self.get_mesh_matrix(unit=unit)
+            plot_mesh(
+                mesh_horz=scat_x,
+                mesh_vert=scat_z,
+                data=data,
+                unit=unit,
+                auto_lims=auto_lims,
+                **kwargs,
+            )
         else:
             return
 
@@ -495,19 +485,20 @@ class EdfClass(Transform):
                     pass
         return return_error
 
-    # def get_dict(self) -> dict:
-    #     """
-    #         Return a dictionary with information of edf file
-    #     """
-    #     return {'Date':self.date,
-    #             'Epoch':self.epoch,
-    #             'Folder': self.folder,
-    #             'Filename':self.basename,
-    #             'Fullname':self.filename,
-    #             'Monitor':self.normfactor,
-    #             'Exposition':self.exposure,
-    #             'Pitch':self.incident_angle_edf,
-    #     }
+    def get_dict(self) -> dict:
+        """
+            Return a dictionary with information of edf file
+        """
+        return {'Date':self.date,
+                'Epoch':self.epoch,
+                'Folder': self.folder,
+                'Filename':self.basename,
+                'Fullname':self.filename,
+                'Monitor':self.normfactor,
+                'Exposition':self.exposure,
+                'Pitch':self.incident_angle_edf,
+                'Tilt':self.tilt_angle_edf,
+        }
 
     # def get_dataframe(self) -> DataFrame:
     #     """

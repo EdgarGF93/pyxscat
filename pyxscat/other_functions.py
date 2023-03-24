@@ -2,11 +2,12 @@ import json
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-from os.path import join, exists
+from os.path import join, exists, dirname
 from os import mkdir
 from os.path import getmtime as gettm
 from datetime import datetime
 
+ERROR_MAIN_DIRECTORY = "The main directory does not exist. Check the path."
 messages = ['ALL ANIMALS CAN SCREAM',
             'EN ESTE PUEBLO HAY VERDADERA DEVOCIÓN POR FULKNER',
             'HOY TENGO CUERPO DE GÓNGORA',
@@ -136,12 +137,6 @@ def save_run_parameters(main_dir, conditions=['.edf'], ponifile='', reference=''
 def date_prefix():
     return f"{(now := datetime.now()).year}_{now.month}_{now.day}_{now.hour}_{now.minute}_{now.second}"
 
-def create_folder(folder_name):
-    if exists(folder_name):
-        return
-    else:
-        mkdir(folder_name)
-
 def add_value_ifnot(value, default_value):
     if value:
         return value
@@ -157,3 +152,43 @@ def open_json(json_file=str()) -> dict:
         return json.load(json_file)
     else:
         return
+
+
+
+
+def get_fulldirectory(maindir='', subfolder='', cwd_default=True):
+    """
+        Build, search, create and returns the main directory
+    """
+    if cwd_default and (exists(maindir) is False):
+        maindir = os.getcwd()
+
+    assert exists(maindir), ERROR_MAIN_DIRECTORY
+
+    # Check if the subfolder string is a full path
+    full_directory = subfolder if maindir in dirname(subfolder) else join(maindir, subfolder)
+
+    # Check if the folder exists, if not, create
+    create_folder(full_directory)
+
+    return full_directory
+
+
+def create_folder(folder=str()) -> None:
+    """
+        Create a folder if it does not exist
+    """
+    if exists(folder):
+        pass
+    else:
+        os.mkdir(folder)
+
+
+def join_directory(maindir='', subfolder=''):
+    """
+        Join or full directory
+    """
+    # Check if the subfolder string is a full path
+    full_directory = subfolder if maindir in dirname(subfolder) else join(maindir, subfolder)
+
+    return full_directory

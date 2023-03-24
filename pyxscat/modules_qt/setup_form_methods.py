@@ -1,13 +1,11 @@
-import os
-from os.path import join
-# from .setup_form import Ui_SetUpForm
-from modules_qt.gui_widget_setup import GUIPyX_Widget_setupform
 
-import modules_qt.widget_methods.lineedit_methods as le
-import modules_qt.widget_methods.listwidget_methods as lt
+from modules_qt.gui_widget_setup import GUIPyX_Widget_setupform
+from modules_qt import lineedit_methods as le
+from modules_qt import listwidget_methods as lt
+from os.path import join
 from pyxscat.decorators import try_or_continue
 from setup.setup_methods import DIRECTORY_SETUPS
-
+import os
 
 class SetUpForm(GUIPyX_Widget_setupform):
 
