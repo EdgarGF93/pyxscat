@@ -1,0 +1,19 @@
+****************************************************************************************************
+Date = 2023-03-22 22:50:19 
+Epoch = 1679521819.0985909 
+Folder = C:\Users\Lenovo\Documents\Python\pyxscat\pyxscat\test\test_NCD\A1 
+Filename = rayonix_A1_spitch_0.15_000_0000.edf 
+Fullname = C:\Users\Lenovo\Documents\Python\pyxscat\pyxscat\test\test_NCD\A1\rayonix_A1_spitch_0.15_000_0000.edf 
+Monitor = 2018.734167944 
+Exposition = 10.0 
+Pitch = 0.15 
+Tilt = 0.0 
+Name = ['complete'] 
+Type = ['Azimuthal'] 
+Suffix = ['complete'] 
+Azimuth_range = [[0, 85]] 
+Radial_range = [[0, 30]] 
+Unit = ['q_nm^-1'] 
+Bins_azimut = [''] 
+****************************************************************************************************
+

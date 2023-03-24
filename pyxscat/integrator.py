@@ -485,6 +485,7 @@ class Integrator(Transform):
                         )
 
                         # Get the dataframe from pygix/pyFAI integration
+             
                         dataframe = self.raw_integration(
                             data=Edf.get_data(),
                             dict_integration=dict_integration,
@@ -765,7 +766,6 @@ class Integrator(Transform):
                 Edf = EdfClass(
                     filename=filename,
                     dict_setup=self._dict_setup,
-                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
@@ -805,6 +805,8 @@ class Integrator(Transform):
                 polarization_factor=POLARIZATION_FACTOR,
                 method='bbox',
             )
+            print(y_vector)
+            print(x_label)
         except:
             return
 
@@ -844,7 +846,6 @@ class Integrator(Transform):
                 Edf = EdfClass(
                     filename=filename,
                     dict_setup=self._dict_setup,
-                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
@@ -920,7 +921,6 @@ class Integrator(Transform):
                 Edf = EdfClass(
                     filename=filename,
                     dict_setup=self._dict_setup,
-                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )

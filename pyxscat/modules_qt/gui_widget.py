@@ -440,13 +440,21 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Open a browser to pick a .json file with setup information
         """
-        json_file = QFileDialog.getOpenFileNames(self, 'Pick a .json file', DIRECTORY_SETUPS, "*.json")[0][0]
-        try:
-            with open(json_file) as jf:
-                new_dict_setup = json.load(jf)
-            self.update_setup_info(new_dict=new_dict_setup)
-        except:
-            pass
+        if self._main_directory:
+            json_file = QFileDialog.getOpenFileNames(self, 'Pick .json file', self._main_directory, "*.json")
+        else:
+            json_file = QFileDialog.getOpenFileNames(self, 'Pick .json file', '.', "*.json")
+
+        if json_file:
+            try:
+                json_file = json_file[0][0]
+                with open(json_file) as jf:
+                    new_dict_setup = json.load(jf)
+                self.update_setup_info(new_dict=new_dict_setup)
+            except:
+                pass
+        else:
+            return
 
     def update_qz(self) -> None:
         """

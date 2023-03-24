@@ -226,7 +226,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.combobox_extension = QComboBox()
         self.combobox_extension.addItem(".edf")
         self.combobox_extension.addItem(".tiff")
-        self.combobox_extension.addItem(".hdf5")
+        # self.combobox_extension.addItem(".hdf5")
 
         self.label_conditions = QLabel("Wildcards(*):")
         self.lineedit_wildcards = QLineEdit('*')
