@@ -1071,6 +1071,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         if data is not None:
             self.sample_data_cache = data
+            self._write_output(f"Updated cache with new file: {filename}")
         elif filename:
             try:
                 self.Edf_sample_cache = EdfClass(
@@ -1267,7 +1268,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             ymin=chart_widget.getGraphYLimits()[0],
             ymax=chart_widget.getGraphYLimits()[1],
         )
-        print(dataframe)
         if dataframe is not None:
             for index,(x,y) in enumerate(zip([*range(0,len(dataframe.columns),2)],[*range(1,len(dataframe.columns),2)])):
                 try:          
@@ -1485,7 +1485,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.update_cache(
                 data=sum(
                     [
-                        Edf.get_data() for Edf in self.iterator_edf_data(list_files)
+                        Edf.get_data() for Edf in self._integrator.edf_iterator(list_files)
                     ]
                 ) / len(list_files),
                 filename=list_files[-1].replace('.edf', '_average.edf'),
@@ -1493,6 +1493,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         except:
             pass
+
+
+
+
+
+
 
     # def check_integration(self):
     #     """

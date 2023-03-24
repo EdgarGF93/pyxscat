@@ -524,7 +524,7 @@ class Integrator(Transform):
         else:
             return
 
-    @random_message
+    # @random_message
     @timer
     @st_end_message(st_msg=f'Batch processing started.', end_msg=f'Batch processing is over.')
     def integration(
@@ -805,8 +805,6 @@ class Integrator(Transform):
                 polarization_factor=POLARIZATION_FACTOR,
                 method='bbox',
             )
-            print(y_vector)
-            print(x_label)
         except:
             return
 
