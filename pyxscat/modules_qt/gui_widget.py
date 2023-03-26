@@ -54,6 +54,7 @@ MSG_INTEGRATOR_NEW_FILES = "New files were added to the integrator instance."
 MSG_RESET_INTEGRATOR = "Reset integrator, a new integrator was generated."
 MSG_NEW_DETECTED_FILES = "New files were detected."
 MSG_CLICKED_FLODER_ERROR = "File table could not be updated."
+MSG_RESET_DATA = "The data parameters were reinitialized."
 
 
 class GUIPyX_Widget(GUIPyX_Widget_layout):
@@ -291,15 +292,17 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         # Attributes to init the Integrator instance
 
-        self.update_maindir()
-        self.update_ponifile()
+        # self.update_maindir()
+        # self.update_ponifile()
+        self._main_directory = ''
+        self._ponifile = ''
         self._extension = '.edf'
         self._wildcards = '*'
         self._qz_parallel = True
         self._qr_parallel = True
         self._auto_lims = True
         self._terminal_visible = True
-        self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+        # self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
 
         self._dict_files = {}
         self._dict_files_reference = {}    
@@ -540,6 +543,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if main_dir_text:
             try:
                 if exists(main_dir_text):
+
+                    # Check if it exists already, in that case, reset every data to avoid overlap between setups
+                    if self._main_directory:
+                        self.init_attributes()
+                        self._write_output(MSG_RESET_DATA)
+
+
                     self._main_directory = main_dir_text
                     self._write_output(MSG_MAIN_DIRECTORY)
                     self._write_output(f"New main directory: {self._main_directory}")
