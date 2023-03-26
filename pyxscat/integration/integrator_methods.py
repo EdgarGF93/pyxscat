@@ -1,7 +1,7 @@
 from os.path import join, dirname
 import os
 
-DIRECTORY_INTEGRATIONS = join(dirname(__file__))
+DIRECTORY_INTEGRATIONS = dirname(__file__)
 
 
 def get_dict_integration(dict_integration=dict(), name_integration=str()) -> dict:

@@ -3,7 +3,7 @@ from os import listdir
 import json
 import yaml
 
-DIRECTORY_SETUPS = join(dirname(__file__))
+DIRECTORY_SETUPS = dirname(__file__)
 SETUP_EXTENSION = ('.json', '.yaml')
 NO_SETUP_INFORMATION = "Edf instance was created without any setup information."
 

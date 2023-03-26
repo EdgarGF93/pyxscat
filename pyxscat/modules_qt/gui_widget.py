@@ -227,6 +227,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.button_plot.clicked.connect(
             self.plot_data_cache,
         )
+        self.button_plot_2.clicked.connect(
+            self.plot_data_cache,
+        )
 
         self.spinbox_sub.valueChanged.connect(
             lambda: self.update_cache(
@@ -278,6 +281,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.open_fitting_form,
         )
 
+        self.button_hide_terminal.clicked.connect(
+            self.hide_show_plaintext,
+        )
+
     def init_attributes(self) -> None:
         """
             Initialize main attributes to control to the GUI.
@@ -291,6 +298,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self._qz_parallel = True
         self._qr_parallel = True
         self._auto_lims = True
+        self._terminal_visible = True
         self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
 
         self._dict_files = {}
@@ -300,6 +308,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.set_files = []
         self.set_folders = []        
         
+        self.header_keys = list()
         self.filename_cache = ''
         self.sample_data_cache = None
         self._reference_file = ''
@@ -1363,39 +1372,49 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 new_header_keys.insert(0,'')
             except:
                 return
-                
-            cb.insert_list(
-                combobox=self.combobox_headeritems,
-                list_items=new_header_keys,
-                reset=True,
-            )
+            
+            if self.header_keys != new_header_keys:
+                self.header_keys = new_header_keys
+                lt.clear(self.lineedit_headeritems)
+                lt.clear(self.lineedit_headeritems_title)
+                cb.insert_list(
+                    combobox=self.combobox_headeritems,
+                    list_items=new_header_keys,
+                    reset=True,
+                )
 
-            cb.insert_list(
-                combobox=self.combobox_headeritems_title,
-                list_items=new_header_keys,
-                reset=True,
-            )
+                # Add default columns
+                cb.set_text(self.combobox_headeritems, self._dict_setup['Angle'])
+                cb.set_text(self.combobox_headeritems, self._dict_setup['Tilt angle'])
+                cb.set_text(self.combobox_headeritems, self._dict_setup['Exposure'])
+                cb.set_text(self.combobox_headeritems, self._dict_setup['Norm'])
 
-            cb.insert_list(
-                combobox=self.combobox_angle,
-                list_items=new_header_keys,
-                reset=True,
-            )
-            cb.insert_list(
-                combobox=self.combobox_tilt_angle,
-                list_items=new_header_keys,
-                reset=True,
-            )
-            cb.insert_list(
-                combobox=self.combobox_normfactor,
-                list_items=new_header_keys,
-                reset=True,
-            )
-            cb.insert_list(
-                combobox=self.combobox_exposure,
-                list_items=new_header_keys,
-                reset=True,
-            )
+                cb.insert_list(
+                    combobox=self.combobox_headeritems_title,
+                    list_items=new_header_keys,
+                    reset=True,
+                )
+
+                cb.insert_list(
+                    combobox=self.combobox_angle,
+                    list_items=new_header_keys,
+                    reset=True,
+                )
+                cb.insert_list(
+                    combobox=self.combobox_tilt_angle,
+                    list_items=new_header_keys,
+                    reset=True,
+                )
+                cb.insert_list(
+                    combobox=self.combobox_normfactor,
+                    list_items=new_header_keys,
+                    reset=True,
+                )
+                cb.insert_list(
+                    combobox=self.combobox_exposure,
+                    list_items=new_header_keys,
+                    reset=True,
+                )
         else:
             return
 
@@ -1688,3 +1707,26 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
     def open_fitting_form(self):
         self._write_output("Fitting form not available for the moment.")
+
+    def hide_show_plaintext(self):
+        """
+            Hide/show the output terminal
+        """
+        if self._terminal_visible:
+            self._terminal_visible = False
+            self.button_hide_terminal.setText("SHOW TERMINAL")
+            self.plaintext_output.setVisible(False)
+            self.grid_right.setRowStretch(1,1)
+            self.grid_right.setRowStretch(2,1)
+            self.grid_right.setRowStretch(3,20)
+            self.grid_right.setRowStretch(4,1)
+            self.grid_right.setRowStretch(5,0)
+        else:
+            self._terminal_visible = True
+            self.button_hide_terminal.setText("HIDE TERMINAL")
+            self.plaintext_output.setVisible(True)
+            self.grid_right.setRowStretch(1,1)
+            self.grid_right.setRowStretch(2,1)
+            self.grid_right.setRowStretch(3,20)
+            self.grid_right.setRowStretch(4,1)
+            self.grid_right.setRowStretch(5,3)

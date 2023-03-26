@@ -153,8 +153,10 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_left.setRowStretch(3,1)
         self.grid_left.setRowStretch(4,4)
         self.grid_right.setRowStretch(1,1)
-        self.grid_right.setRowStretch(2,15)
-        self.grid_right.setRowStretch(3,2)
+        self.grid_right.setRowStretch(2,1)
+        self.grid_right.setRowStretch(3,20)
+        self.grid_right.setRowStretch(4,1)
+        self.grid_right.setRowStretch(5,4)
 
         self.grid_input_data = QGridLayout()
         self.widget_input_data = QWidget()
@@ -178,14 +180,34 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_left.addWidget(self.table_files,4,1)
         
         self.grid_live_title = QGridLayout()
+        self.grid_save = QGridLayout()
+
+        self.label_savefolder = QLabel("Save folder:")
+        self.lineedit_savefolder = QLineEdit()
+
+        self.grid_save.addWidget(self.label_savefolder,1,1)
+        self.grid_save.addWidget(self.lineedit_savefolder,1,2)
+
         self.grid_input_and_graphs = QGridLayout()
+        self.grid_label_terminal = QGridLayout()
+        self.label_plaintext = QLabel("====== Output terminal ======")
+        self.label_plaintext.setStyleSheet("background-color: white;border: 1px solid black;")
+        self.label_plaintext.setAlignment(Qt.AlignCenter)
+        self.button_hide_terminal = QPushButton("HIDE TERMINAL")
+        self.button_hide_terminal.setStyleSheet(button_on)
+        self.grid_label_terminal.setColumnStretch(1,6)
+        self.grid_label_terminal.setColumnStretch(1,1)
+        self.grid_label_terminal.addWidget(self.label_plaintext, 1, 1)
+        self.grid_label_terminal.addWidget(self.button_hide_terminal, 1, 2)
+
         self.plaintext_output = QPlainTextEdit()
         self.plaintext_output.setReadOnly(True)
         self.grid_right.addLayout(self.grid_live_title,1,1)
-        self.grid_right.addLayout(self.grid_input_and_graphs,2,1)
-        self.grid_right.addWidget(self.plaintext_output,3,1)
-        self.label_savefolder = QLabel("Save folder:")
-        self.lineedit_savefolder = QLineEdit()
+        self.grid_right.addLayout(self.grid_save,2,1)
+        self.grid_right.addLayout(self.grid_input_and_graphs,3,1)
+        self.grid_right.addLayout(self.grid_label_terminal,4,1)
+        self.grid_right.addWidget(self.plaintext_output,5,1)
+
 
         # Build the grid of input data
         self.grid_input_data.setRowStretch(1,1)
@@ -236,10 +258,6 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_buttons.setColumnStretch(2,1)
 
         self.label_maindir = QLabel("Main directory:")
-
-        # self.label_maindir.setStyleSheet("border: 1px solid black;")
-
-
 
         self.lineedit_maindir = QLineEdit("Type here the path or pick it")
         self.button_pick_maindir = QPushButton(" Pick a directory ")
@@ -301,8 +319,6 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_orientations.addWidget(self.button_qz, 1, 2)
         self.grid_input_orientations.addWidget(self.button_qr, 1, 3)
 
-
-
         self.grid_input_buttons.addWidget(self.button_pyfaicalib, 1, 1)
         self.grid_input_buttons.addWidget(self.button_start, 1, 2)
         self.grid_header_items = QGridLayout()
@@ -363,15 +379,26 @@ class GUIPyX_Widget_layout(QWidget):
         self.lineedit_ymax = QLineEdit()
         self.lineedit_xticks = QLineEdit()
         self.lineedit_yticks = QLineEdit()
-        self.label_sub = QLabel("Subtraction scale factor (0.0 - 1.0):")
-        self.spinbox_sub = QDoubleSpinBox()
-        self.spinbox_sub.setSingleStep(STEP_SUB_SPINBOX)
+
         self.lineedit_xmin.setEnabled(False)
         self.lineedit_xmax.setEnabled(False)
         self.lineedit_ymin.setEnabled(False)
         self.lineedit_ymax.setEnabled(False)
         self.lineedit_xticks.setEnabled(False)
         self.lineedit_yticks.setEnabled(False)
+
+        self.label_sub = QLabel("Subtraction scale factor (0.0 - 1.0):")
+        self.spinbox_sub = QDoubleSpinBox()
+        self.spinbox_sub.setSingleStep(STEP_SUB_SPINBOX)
+        self.button_plot_2 = QPushButton("UPDATE PLOT")
+        self.button_plot_2.setStyleSheet(button_style_thin)
+
+        self.grid_sub = QGridLayout()
+        self.grid_sub.addWidget(self.label_sub, 1, 1)
+        self.grid_sub.addWidget(self.spinbox_sub, 1, 2)
+        self.grid_sub.addWidget(self.button_plot_2, 1, 3)
+
+
         self.button_clearplot = QPushButton("CLEAR PLOT")
         self.button_saveplot = QPushButton("SAVE INTEGRATIONS")
         self.button_savefit = QPushButton("OPEN FITTING FORM")
@@ -383,8 +410,6 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_integrations = QLabel("Integrations:")
         self.combobox_integration = QComboBox()
         self.lineedit_integrations = QLineEdit()
-        self.label_savefolder = QLabel("Save folder:")
-        self.lineedit_savefolder = QLineEdit()
 
         self.grid_live_title.addWidget(self.checkbox_live, 1, 1)
         self.grid_live_title.addWidget(self.lineedit_filename, 1, 2)
@@ -392,7 +417,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_and_graphs.setColumnStretch(1,1)
         self.grid_input_and_graphs.setColumnStretch(2,1)
         self.grid_input_and_graphs.setRowStretch(1,1)
-        self.grid_input_and_graphs.setRowStretch(2,5)
+        self.grid_input_and_graphs.setRowStretch(2,3)
         self.grid_input_and_graphs.setRowStretch(3,20)
 
 
@@ -418,13 +443,11 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_units_graph = QGridLayout()
         self.grid_input_graph_buttons = QGridLayout()
         self.grid_input_graph_lims = QGridLayout()
-        self.grid_input_graph_ticks = QGridLayout()
 
         self.grid_input_graph.addLayout(self.grid_units_graph, 1, 1)
-        self.grid_input_graph.addLayout(self.grid_input_graph_buttons, 4, 1)
         self.grid_input_graph.addLayout(self.grid_input_graph_lims, 2, 1)
-        self.grid_input_graph.addLayout(self.grid_input_graph_ticks, 3, 1)
-
+        self.grid_input_graph.addLayout(self.grid_input_graph_buttons, 3, 1)
+        
         self.grid_units_graph.addWidget(self.label_units, 1, 1)
         self.grid_units_graph.addWidget(self.combobox_units, 1, 2)
         self.grid_units_graph.addWidget(self.button_default_graph, 1, 3)
@@ -435,59 +458,51 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_graph_buttons.addWidget(self.button_map, 1, 4)
         self.grid_input_graph_buttons.addWidget(self.button_savemap, 1, 5)
 
+
+        self.grid_input_graph_lims.setColumnStretch(1,1)
+        self.grid_input_graph_lims.setColumnStretch(2,1)
+        self.grid_input_graph_lims.setColumnStretch(3,1)
+        self.grid_input_graph_lims.setColumnStretch(4,1)
+        self.grid_input_graph_lims.setColumnStretch(5,3)
+        self.grid_input_graph_lims.setColumnStretch(6,1)
+        self.grid_input_graph_lims.setColumnStretch(7,1)
+        self.grid_input_graph_lims.setColumnStretch(8,1)
+        self.grid_input_graph_lims.setColumnStretch(9,1)
+        self.grid_input_graph_lims.setColumnStretch(10,3)
+
+
         self.grid_input_graph_lims.addWidget(self.xlims, 1, 1)
         self.grid_input_graph_lims.addWidget(self.lineedit_xmin, 1, 2)
         self.grid_input_graph_lims.addWidget(self.lineedit_xmax, 1, 3)
-        self.grid_input_graph_lims.addWidget(self.ylims, 1, 4)
-        self.grid_input_graph_lims.addWidget(self.lineedit_ymin, 1, 5)
-        self.grid_input_graph_lims.addWidget(self.lineedit_ymax, 1, 6)
-
-        self.grid_input_graph_ticks.setColumnStretch(1,1)
-        self.grid_input_graph_ticks.setColumnStretch(2,4)
-        self.grid_input_graph_ticks.setColumnStretch(3,1)
-        self.grid_input_graph_ticks.setColumnStretch(4,4)
-
-        self.grid_input_graph_ticks.addWidget(self.xticks, 1, 1)
-        self.grid_input_graph_ticks.addWidget(self.lineedit_xticks, 1, 2)
-        self.grid_input_graph_ticks.addWidget(self.yticks, 1, 3)
-        self.grid_input_graph_ticks.addWidget(self.lineedit_yticks, 1, 4)
+        self.grid_input_graph_lims.addWidget(self.xticks, 1, 4)
+        self.grid_input_graph_lims.addWidget(self.lineedit_xticks, 1, 5)
+        self.grid_input_graph_lims.addWidget(self.ylims, 1, 6)
+        self.grid_input_graph_lims.addWidget(self.lineedit_ymin, 1, 7)
+        self.grid_input_graph_lims.addWidget(self.lineedit_ymax, 1, 8)
+        self.grid_input_graph_lims.addWidget(self.yticks, 1, 9)
+        self.grid_input_graph_lims.addWidget(self.lineedit_yticks, 1, 10)
 
         self.grid_input_chart.setRowStretch(1,1)
         self.grid_input_chart.setRowStretch(2,1)
         self.grid_input_chart.setRowStretch(3,1)
-        self.grid_input_chart_1 = QGridLayout()
-        self.grid_input_chart_2 = QGridLayout()
         self.grid_input_chart_integrations = QGridLayout()
-        self.grid_savefolder = QGridLayout()
-        self.grid_input_chart.addLayout(self.grid_input_chart_1, 1, 1)
-        self.grid_input_chart.addLayout(self.grid_input_chart_2, 4, 1)
-        self.grid_input_chart.addLayout(self.grid_input_chart_integrations, 2, 1)
-        self.grid_input_chart.addLayout(self.grid_savefolder, 3, 1)
-        # self.grid_input_chart_sub.setColumnStretch(1,1)
-        # self.grid_input_chart_sub.setColumnStretch(2,1)
-        # self.grid_input_chart_sub.setColumnStretch(3,1)
-        # self.grid_input_chart_sub.setColumnStretch(4,1)
-        # self.grid_input_chart_sub.setColumnStretch(5,1)
+        self.grid_chart_buttons = QGridLayout()
+        self.grid_input_chart.addLayout(self.grid_input_chart_integrations, 1, 1)
+        self.grid_input_chart.addLayout(self.grid_sub, 2, 1)
+        self.grid_input_chart.addLayout(self.grid_chart_buttons, 3, 1)
+
         self.grid_input_chart_integrations.setColumnStretch(1,1)
         self.grid_input_chart_integrations.setColumnStretch(2,2)
         self.grid_input_chart_integrations.setColumnStretch(3,2)
-        self.grid_savefolder.setColumnStretch(1,1)
-        self.grid_savefolder.setColumnStretch(2,10)
 
-        self.grid_input_chart_1.addWidget(self.label_sub, 1, 1)
-        self.grid_input_chart_1.addWidget(self.spinbox_sub, 1, 2)
-        self.grid_input_chart_2.addWidget(self.button_clearplot, 1, 1)
-        self.grid_input_chart_2.addWidget(self.button_saveplot, 1, 2)
-        self.grid_input_chart_2.addWidget(self.button_savefit, 1, 3)
+        self.grid_chart_buttons.addWidget(self.button_clearplot, 1, 1)
+        self.grid_chart_buttons.addWidget(self.button_saveplot, 1, 2)
+        self.grid_chart_buttons.addWidget(self.button_savefit, 1, 3)
 
 
         self.grid_input_chart_integrations.addWidget(self.label_integrations, 1, 1)
         self.grid_input_chart_integrations.addWidget(self.combobox_integration, 1, 2)
-        # self.grid_input_chart_integrations.addWidget(self.button_checkmap, 1, 2)
         self.grid_input_chart_integrations.addWidget(self.lineedit_integrations, 1, 3)
-
-        self.grid_savefolder.addWidget(self.label_savefolder, 1, 1)
-        self.grid_savefolder.addWidget(self.lineedit_savefolder, 1, 2)
 
         ### Tab for setup information
         self.grid_input_setup.setRowStretch(1,1)
@@ -518,8 +533,6 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_setup_save = QPushButton("Save .json file")
         self.button_setup_save.setIcon(QIcon(join(GLOBAL_PATH_QT, "save.png"))) 
 
-
-
         self.grid_input_setup.addWidget(self.label_setup, 1, 1)
         self.grid_input_setup.addWidget(self.combobox_setup, 1, 2)
         self.grid_input_setup.addWidget(self.button_setup, 1, 3)
@@ -539,4 +552,4 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_setup.addWidget(self.lineedit_setup_name, 6, 2)
         self.grid_input_setup.addWidget(self.button_setup_save, 6, 3)
 
-        set_bstyle([self.label_headeritems, self.xlims, self.ylims, self.label_units, self.xticks, self.yticks, self.label_savefolder, self.label_integrations, self.label_sub, self.label_title,self.label_input_graph,self.label_input_chart])
+        set_bstyle([self.label_headeritems, self.label_plaintext, self.xlims, self.ylims, self.label_units, self.xticks, self.yticks, self.label_savefolder, self.label_integrations, self.label_sub, self.label_title,self.label_input_graph,self.label_input_chart])
