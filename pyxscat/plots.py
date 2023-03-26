@@ -49,7 +49,7 @@ def plot_images_overlap(edf1_data, edf2_data, title='', log=False, weak_lims=Tru
     plt.show()
 
 
-def plot_mesh(mesh_horz, mesh_vert, data, unit='q_nm^-1', auto_lims=True, **kwargs):
+def plot_mesh(mesh_horz, mesh_vert, data, unit='q_nm^-1', auto_lims=True, title='', **kwargs):
     """
         Plot the 2D map using pcolormesh from matplotlib
     """
@@ -96,6 +96,7 @@ def plot_mesh(mesh_horz, mesh_vert, data, unit='q_nm^-1', auto_lims=True, **kwar
             plt.yticks(ax.get_yticks(), fontsize=15)
 
         ax.tick_params(direction='out', length=6, width=2)
+        plt.title(title)
         plt.show()
 
     except:

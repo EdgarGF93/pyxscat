@@ -1,1 +1,1 @@
-{"Name": "qz", "Type": "Vertical", "Suffix": "qz", "Unit_input": "q_nm^-1", "Ip_range": [-5, 5], "Oop_range": [0, 30], "Unit": "q_nm^-1"}
+{"Name": "qz", "Type": "Vertical", "Suffix": "qz", "Unit_input": "2th_deg", "Ip_range": [-0.005, 0.005], "Oop_range": [-0.2, 5], "Unit": "q_nm^-1"}

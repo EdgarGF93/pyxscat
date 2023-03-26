@@ -114,7 +114,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         self.lineedit_maindir.returnPressed.connect(
             self.update_maindir,
-        )
+            )
 
         self.button_pick_maindir.clicked.connect(
             self.pick_folder,
@@ -228,14 +228,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.plot_data_cache,
         )
 
-        # Callback for subtraction widgets
-        # self.checkbox_sub.stateChanged.connect(
-        #     lambda: self.update_cache(
-        #         filename = self.selected_filename_table(),
-        #         plot=PLOT_SELECTED_TABLE,
-        #     )
-        # )
-
         self.spinbox_sub.valueChanged.connect(
             lambda: self.update_cache(
                 filename = self.selected_filename_table(),
@@ -248,6 +240,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             lambda: self.popup_map(
                 show=True,
             )
+        )
+
+        self.button_default_graph.clicked.connect(
+            self.update_auto_lims,
         )
         
         self.combobox_units.currentTextChanged.connect(
@@ -294,6 +290,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self._wildcards = '*'
         self._qz_parallel = True
         self._qr_parallel = True
+        self._auto_lims = True
         self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
 
         self._dict_files = {}
@@ -537,7 +534,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     self._main_directory = main_dir_text
                     self._write_output(MSG_MAIN_DIRECTORY)
                     self._write_output(f"New main directory: {self._main_directory}")
-
+                    
                     # Feed the combobox of ponifiles
                     self.update_combobox_ponifile()
 
@@ -547,6 +544,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
                 if self._integrator:
                     self.reset_integrator()
+                else:
+                    self.create_integrator()
+                    self.search_and_update_files()
             except:
                 self._main_directory = ''
                 self._write_output(MSG_MAIN_DIRECTORY_ERROR)
@@ -1074,6 +1074,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self._write_output(f"Updated cache with new file: {filename}")
         elif filename:
             try:
+                # Create the Edf instance
                 self.Edf_sample_cache = EdfClass(
                     filename=filename,
                     ponifile_path=self._ponifile,
@@ -1081,6 +1082,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
+
+                # Update the incident/tilt angles
+                if self._integrator:
+                    self._integrator.update_incident_tilt_angles(
+                        Edf=self.Edf_sample_cache,
+                    )
                 self._write_output(f"Updated cache with new file: {filename}")
                 self.sample_data_cache = self.Edf_sample_cache.get_data()
             except:
@@ -1531,6 +1538,17 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 scat_x, scat_z, data = self.Edf_sample_cache.get_mesh_matrix(unit=unit, data=data)
             except:
                 return
+            
+            try:
+                title_items = le.get_clean_list(
+                    lineedit=self.lineedit_headeritems_title,
+                )
+                title_str = ''
+                for item in title_items:
+                    title_str += f"{item}={self.Edf_sample_cache.get_header()[item]}; "
+            except:
+                title_str = ''
+            
             x_lims, y_lims = self.get_map_limits()
             x_ticks, y_ticks = self.get_map_ticks()
             plot_mesh(
@@ -1538,12 +1556,38 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 mesh_vert=scat_z,
                 data=data, 
                 unit=unit,
-                auto_lims=False,
+                auto_lims=self._auto_lims,
                 xlim=x_lims,
                 ylim=y_lims,
                 xticks=x_ticks,
                 yticks=y_ticks,
+                title=title_str,
             )
+
+    def update_auto_lims(self):
+        """
+            Updates the lims, in auto mode or not, also updates the style of the button itself
+        """
+        if self._auto_lims:
+            self._auto_lims = False
+            self.button_default_graph.setText("AUTO LIMITS OFF")
+            self._write_output(f"Now the auto limits are disabled.")
+            self.lineedit_xmin.setEnabled(True)
+            self.lineedit_xmax.setEnabled(True)
+            self.lineedit_ymin.setEnabled(True)
+            self.lineedit_ymax.setEnabled(True)
+            self.lineedit_xticks.setEnabled(True)
+            self.lineedit_yticks.setEnabled(True)
+        else:
+            self._auto_lims = True
+            self.button_default_graph.setText("AUTO LIMITS ON")
+            self._write_output(f"Now the auto limits are enabled.")
+            self.lineedit_xmin.setEnabled(False)
+            self.lineedit_xmax.setEnabled(False)
+            self.lineedit_ymin.setEnabled(False)
+            self.lineedit_ymax.setEnabled(False)
+            self.lineedit_xticks.setEnabled(False)
+            self.lineedit_yticks.setEnabled(False)
 
     def update_lims_ticks(self, text=str()):
         """

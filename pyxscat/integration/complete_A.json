@@ -1,1 +1,1 @@
-{"Name": "complete_A", "Type": "Azimuthal", "Suffix": "complete_A", "Azimuth_range": [0, 85], "Radial_range": [0, 30], "Unit": "q_A^-1", "Bins_azimut": ""}
+{"Name": "complete_A", "Type": "Azimuthal", "Suffix": "complete_A", "Azimuth_range": [0, 85], "Radial_range": [0, 3], "Unit": "q_A^-1", "Bins_azimut": ""}

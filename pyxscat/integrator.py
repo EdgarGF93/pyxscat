@@ -637,7 +637,6 @@ class Integrator(Transform):
                 Edf = EdfClass(
                     filename=filename,
                     dict_setup=self._dict_setup,
-                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
@@ -686,7 +685,6 @@ class Integrator(Transform):
                 Edf = EdfClass(
                     filename=filename,
                     dict_setup=self._dict_setup,
-                    # rotated=self._rotated,
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
@@ -965,12 +963,14 @@ class Integrator(Transform):
         # Transform input units if necessary
         p0_range = [self.get_q_nm(
             value=position,
-            input_unit=dict_integration['Unit_input']
+            input_unit=dict_integration['Unit_input'],
+            direction=dict_integration['Type'],
         ) for position in p0_range]
 
         p1_range = [self.get_q_nm(
             value=position,
-            input_unit=dict_integration['Unit_input']
+            input_unit=dict_integration['Unit_input'],
+            direction=dict_integration['Type'],
         ) for position in p1_range]
 
         try:
@@ -1085,9 +1085,6 @@ class Integrator(Transform):
             return Edf_sample.get_data() - scalar * Edf_reference.get_data()
         else:
             return Edf_sample.get_data()
-   
-    # def average_negative_values(self, data):
-    #     return abs(np.average([k for k in data.ravel() if k <= 0]) )
 
     def search_reference_from_cache(self, Edf):
         """
@@ -1349,20 +1346,37 @@ class Integrator(Transform):
             return
         return np.rad2deg(twotheta) if degree else twotheta
 
-    def twotheta_to_q(self, twotheta=0.0, deg=True) -> float:
+    def twotheta_to_q(self, twotheta=0.0, direction='Vertical', deg=True) -> float:
         """
             Returns the q(nm-1) from the 2theta value
         """
         if deg:
-            return 4*np.pi / self._wavelength * np.sin(np.radians(twotheta) / 2) / 1e9
+            twotheta = np.radians(twotheta)
+        try:
+            wavelength_nm = self._wavelength * 1e9
+        except:
+            return
+        
+        try:
+            alpha_inc = np.radians(self.incident_angle)
+        except:
+            alpha_inc = 0.0
+        
+        q_horz = 2 * np.pi / wavelength_nm * (np.cos(alpha_inc) * np.sin(twotheta))
+        q_vert = 2 * np.pi / wavelength_nm * (np.sin(twotheta) + np.sin(alpha_inc))
+
+        if direction == 'Vertical':
+            return q_horz
+        elif direction == 'Horizontal':
+            return q_vert
         else:
-            return 4*np.pi / self._wavelength * np.sin(twotheta / 2) / 1e9
+            return
 
     def calculate_bins(self,radial_range=[], unit='q_nm^-1') -> int:
         """
         Calculate the bins between two q values
         """
-        if unit in ('q_nm^-1' or 'q_A^-1'):
+        if unit in ('q_nm^-1', 'q_A^-1'):
             twotheta1 = self.q_to_twotheta(
                 q=radial_range[0],
                 unit=unit,
@@ -1381,7 +1395,7 @@ class Integrator(Transform):
 
         return int(round(self._dist / self.get_pixel1() * (np.tan(twotheta2) - np.tan(twotheta1))))
 
-    def get_q_nm(self, value=0.0, input_unit='q_nm^-1') -> float:
+    def get_q_nm(self, value=0.0, direction='Vertical', input_unit='q_nm^-1') -> float:
         """
             Return a q(nm-1) value from another unit
         """
@@ -1390,7 +1404,7 @@ class Integrator(Transform):
         elif input_unit == 'q_A^-1':
             return value * 10
         elif input_unit == '2th_deg':
-            return self.twotheta_to_q(twotheta=value, deg=True)
+            return self.twotheta_to_q(twotheta=value, direction=direction, deg=True)
         elif input_unit == '2th_rad':
             return self.twotheta_to_q(twotheta=value, deg=False)
         else:

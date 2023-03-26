@@ -8,7 +8,32 @@ from . import GLOBAL_PATH_QT
 
 STEP_SUB_SPINBOX = 0.01
 ERROR_OUTPUT = "Something went wrong with the output message..."
-
+button_on = """
+QPushButton {
+    font-weight: bold;
+    color : white;
+    background-color: #009150;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+QPushButton:hover  {
+    font-weight: bold;
+    color : white;
+    background-color: #3cb371;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+QPushButton:pressed  {
+    font-weight: bold;
+    color : white;
+    background-color: #93c572;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+"""
 button_style_plot = """
 QPushButton {
     font-weight: bold;
@@ -252,19 +277,14 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_add_reference.setStyleSheet(button_style_input)
         self.button_qz.setStyleSheet(button_style_input)
         self.button_qr.setStyleSheet(button_style_input)
-
-
-
-
+        self.button_pyfaicalib.setStyleSheet(button_style_input)
+        self.button_start.setStyleSheet(button_style_input)
 
         set_bstyle([self.label_maindir, self.label_extension, self.label_conditions, self.label_ponifile, self.label_reffolder, self.label_sample_orientation, self.title_input])
 
         self.grid_input_maindir.addWidget(self.label_maindir, 1, 1)
         self.grid_input_maindir.addWidget(self.lineedit_maindir, 1, 2)
         self.grid_input_maindir.addWidget(self.button_pick_maindir, 1, 3)
-
-
-
         self.grid_input_conditions.addWidget(self.label_extension, 1, 1)
         self.grid_input_conditions.addWidget(self.combobox_extension, 1, 2)
         self.grid_input_conditions.addWidget(self.label_conditions, 1, 3)
@@ -317,6 +337,9 @@ class GUIPyX_Widget_layout(QWidget):
         self.lineedit_filename = QLineEdit()
         self.lineedit_filename.setEnabled(False)
         self.combobox_units = QComboBox()
+        self.button_default_graph = QPushButton("AUTO LIMITS ON")
+
+        self.button_default_graph.setStyleSheet(button_on)
         self.combobox_units.addItem("q_nm^-1")
         self.combobox_units.addItem("q_A^-1")
         self.combobox_units.addItem("2th_deg")
@@ -327,6 +350,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_map.setStyleSheet(button_style_thin)
         self.button_savemap.setStyleSheet(button_style_thin)
         self.label_title = QLabel("Map titles:")
+        self.label_units = QLabel("Units for 2D map:")
         self.combobox_headeritems_title = QComboBox()
         self.lineedit_headeritems_title = QLineEdit()
         self.xlims = QLabel("x-lims:")
@@ -342,7 +366,12 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_sub = QLabel("Subtraction scale factor (0.0 - 1.0):")
         self.spinbox_sub = QDoubleSpinBox()
         self.spinbox_sub.setSingleStep(STEP_SUB_SPINBOX)
-
+        self.lineedit_xmin.setEnabled(False)
+        self.lineedit_xmax.setEnabled(False)
+        self.lineedit_ymin.setEnabled(False)
+        self.lineedit_ymax.setEnabled(False)
+        self.lineedit_xticks.setEnabled(False)
+        self.lineedit_yticks.setEnabled(False)
         self.button_clearplot = QPushButton("CLEAR PLOT")
         self.button_saveplot = QPushButton("SAVE INTEGRATIONS")
         self.button_savefit = QPushButton("OPEN FITTING FORM")
@@ -360,12 +389,11 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_live_title.addWidget(self.checkbox_live, 1, 1)
         self.grid_live_title.addWidget(self.lineedit_filename, 1, 2)
 
+        self.grid_input_and_graphs.setColumnStretch(1,1)
+        self.grid_input_and_graphs.setColumnStretch(2,1)
         self.grid_input_and_graphs.setRowStretch(1,1)
         self.grid_input_and_graphs.setRowStretch(2,5)
         self.grid_input_and_graphs.setRowStretch(3,20)
-        self.grid_input_and_graphs.setColumnStretch(1,1)
-        self.grid_input_and_graphs.setColumnStretch(2,1)
-
 
 
         self.label_input_graph = QLabel("====== 2D Map Parameters ======")
@@ -382,41 +410,30 @@ class GUIPyX_Widget_layout(QWidget):
 
         self.grid_input_and_graphs.addWidget(self.label_input_graph,1,1)
         self.grid_input_and_graphs.addWidget(self.label_input_chart,1,2)
-
         self.grid_input_and_graphs.addLayout(self.grid_input_graph,2,1)
         self.grid_input_and_graphs.addLayout(self.grid_input_chart,2,2)
         self.grid_input_and_graphs.addWidget(self.graph_widget,3,1)
         self.grid_input_and_graphs.addWidget(self.chart_widget,3,2)
 
-        self.grid_input_graph.setRowStretch(1,1)
-        self.grid_input_graph.setRowStretch(2,1)
-        self.grid_input_graph.setRowStretch(3,1)
+        self.grid_units_graph = QGridLayout()
         self.grid_input_graph_buttons = QGridLayout()
         self.grid_input_graph_lims = QGridLayout()
         self.grid_input_graph_ticks = QGridLayout()
-        self.grid_input_graph.addLayout(self.grid_input_graph_buttons, 1, 1)
+
+        self.grid_input_graph.addLayout(self.grid_units_graph, 1, 1)
+        self.grid_input_graph.addLayout(self.grid_input_graph_buttons, 4, 1)
         self.grid_input_graph.addLayout(self.grid_input_graph_lims, 2, 1)
         self.grid_input_graph.addLayout(self.grid_input_graph_ticks, 3, 1)
 
-        self.grid_input_graph_buttons.setColumnStretch(1,1)
-        self.grid_input_graph_buttons.setColumnStretch(2,1)
-        self.grid_input_graph_buttons.setColumnStretch(3,1)
-        self.grid_input_graph_buttons.setColumnStretch(4,1)
-        self.grid_input_graph_buttons.setColumnStretch(5,1)
+        self.grid_units_graph.addWidget(self.label_units, 1, 1)
+        self.grid_units_graph.addWidget(self.combobox_units, 1, 2)
+        self.grid_units_graph.addWidget(self.button_default_graph, 1, 3)
 
-        self.grid_input_graph_buttons.addWidget(self.combobox_units, 1, 1)
-        self.grid_input_graph_buttons.addWidget(self.button_map, 1, 2)
-        self.grid_input_graph_buttons.addWidget(self.button_savemap, 1, 3)
-        self.grid_input_graph_buttons.addWidget(self.label_title, 1, 4)
-        self.grid_input_graph_buttons.addWidget(self.combobox_headeritems_title, 1, 5)
-        self.grid_input_graph_buttons.addWidget(self.lineedit_headeritems_title, 1, 6)
-
-        self.grid_input_graph_lims.setColumnStretch(1,1)
-        self.grid_input_graph_lims.setColumnStretch(2,2)
-        self.grid_input_graph_lims.setColumnStretch(3,2)
-        self.grid_input_graph_lims.setColumnStretch(4,1)
-        self.grid_input_graph_lims.setColumnStretch(5,2)
-        self.grid_input_graph_lims.setColumnStretch(6,2)
+        self.grid_input_graph_buttons.addWidget(self.label_title, 1, 1)
+        self.grid_input_graph_buttons.addWidget(self.combobox_headeritems_title, 1, 2)
+        self.grid_input_graph_buttons.addWidget(self.lineedit_headeritems_title, 1, 3)
+        self.grid_input_graph_buttons.addWidget(self.button_map, 1, 4)
+        self.grid_input_graph_buttons.addWidget(self.button_savemap, 1, 5)
 
         self.grid_input_graph_lims.addWidget(self.xlims, 1, 1)
         self.grid_input_graph_lims.addWidget(self.lineedit_xmin, 1, 2)
@@ -438,28 +455,30 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_chart.setRowStretch(1,1)
         self.grid_input_chart.setRowStretch(2,1)
         self.grid_input_chart.setRowStretch(3,1)
-        self.grid_input_chart_sub = QGridLayout()
+        self.grid_input_chart_1 = QGridLayout()
+        self.grid_input_chart_2 = QGridLayout()
         self.grid_input_chart_integrations = QGridLayout()
         self.grid_savefolder = QGridLayout()
-        self.grid_input_chart.addLayout(self.grid_input_chart_sub, 1, 1)
+        self.grid_input_chart.addLayout(self.grid_input_chart_1, 1, 1)
+        self.grid_input_chart.addLayout(self.grid_input_chart_2, 4, 1)
         self.grid_input_chart.addLayout(self.grid_input_chart_integrations, 2, 1)
         self.grid_input_chart.addLayout(self.grid_savefolder, 3, 1)
-        self.grid_input_chart_sub.setColumnStretch(1,1)
-        self.grid_input_chart_sub.setColumnStretch(2,1)
-        self.grid_input_chart_sub.setColumnStretch(3,1)
-        self.grid_input_chart_sub.setColumnStretch(4,1)
-        self.grid_input_chart_sub.setColumnStretch(5,1)
+        # self.grid_input_chart_sub.setColumnStretch(1,1)
+        # self.grid_input_chart_sub.setColumnStretch(2,1)
+        # self.grid_input_chart_sub.setColumnStretch(3,1)
+        # self.grid_input_chart_sub.setColumnStretch(4,1)
+        # self.grid_input_chart_sub.setColumnStretch(5,1)
         self.grid_input_chart_integrations.setColumnStretch(1,1)
         self.grid_input_chart_integrations.setColumnStretch(2,2)
         self.grid_input_chart_integrations.setColumnStretch(3,2)
         self.grid_savefolder.setColumnStretch(1,1)
         self.grid_savefolder.setColumnStretch(2,10)
 
-        self.grid_input_chart_sub.addWidget(self.label_sub, 1, 1)
-        self.grid_input_chart_sub.addWidget(self.spinbox_sub, 1, 2)
-        self.grid_input_chart_sub.addWidget(self.button_clearplot, 1, 3)
-        self.grid_input_chart_sub.addWidget(self.button_saveplot, 1, 4)
-        self.grid_input_chart_sub.addWidget(self.button_savefit, 1, 5)
+        self.grid_input_chart_1.addWidget(self.label_sub, 1, 1)
+        self.grid_input_chart_1.addWidget(self.spinbox_sub, 1, 2)
+        self.grid_input_chart_2.addWidget(self.button_clearplot, 1, 1)
+        self.grid_input_chart_2.addWidget(self.button_saveplot, 1, 2)
+        self.grid_input_chart_2.addWidget(self.button_savefit, 1, 3)
 
 
         self.grid_input_chart_integrations.addWidget(self.label_integrations, 1, 1)
@@ -520,4 +539,4 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_setup.addWidget(self.lineedit_setup_name, 6, 2)
         self.grid_input_setup.addWidget(self.button_setup_save, 6, 3)
 
-        set_bstyle([self.label_headeritems, self.xlims, self.ylims, self.xticks, self.yticks, self.label_savefolder, self.label_integrations, self.label_sub, self.label_title,self.label_input_graph,self.label_input_chart])
+        set_bstyle([self.label_headeritems, self.xlims, self.ylims, self.label_units, self.xticks, self.yticks, self.label_savefolder, self.label_integrations, self.label_sub, self.label_title,self.label_input_graph,self.label_input_chart])
