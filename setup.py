@@ -16,4 +16,14 @@ setup(
     keywords = "visualization browsing reduction pygix pyFAI",
     # url = "https://gitlab.esrf.fr/xmas-bm28/pyxscat/pyxscat",
     long_description=read('README.md'),
+    install_requires=[
+        'PyYAML',
+        'pandas',
+        'numpy',
+        'matplotlib',
+        'jupyter',
+        'pygix',
+        'pyFAI',
+        'PyQt5',
+    ]
 )
