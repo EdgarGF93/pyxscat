@@ -10,7 +10,6 @@ from PyQt5.QtWidgets import QMainWindow, QMenu, QMenuBar, QAction
 from PyQt5 import QtGui, QtCore
 from os.path import join
 import os
-from pyFAI
 
 class GUIPyX_Window(QMainWindow):
     def __init__(self, *args):
