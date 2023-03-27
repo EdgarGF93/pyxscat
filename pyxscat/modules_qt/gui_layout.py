@@ -148,10 +148,13 @@ class GUIPyX_Widget_layout(QWidget):
         self.gridlayout.addLayout(self.grid_left,1,1)
         self.gridlayout.addLayout(self.grid_right,1,2)
 
-        self.grid_left.setRowStretch(1,2)
-        self.grid_left.setRowStretch(2,4)
-        self.grid_left.setRowStretch(3,1)
-        self.grid_left.setRowStretch(4,4)
+        self.grid_left.setRowStretch(1,6)
+        self.grid_left.setRowStretch(2,1)
+        self.grid_left.setRowStretch(3,9)
+        self.grid_left.setRowStretch(4,1)
+        self.grid_left.setRowStretch(5,2)
+        self.grid_left.setRowStretch(6,9)
+
         self.grid_right.setRowStretch(1,1)
         self.grid_right.setRowStretch(2,1)
         self.grid_right.setRowStretch(3,20)
@@ -169,15 +172,21 @@ class GUIPyX_Widget_layout(QWidget):
 
         self.widget_input_data.setLayout(self.grid_input_data)
         self.widget_input_info.setLayout(self.grid_input_info)
-
+        self.label_folders = QLabel("====== List of folders ======")
+        self.label_folders.setStyleSheet("background-color: white;border: 1px solid black;")
+        self.label_folders.setAlignment(Qt.AlignCenter)
+        self.label_files = QLabel("====== List of files ======")
+        self.label_files.setStyleSheet("background-color: white;border: 1px solid black;")
+        self.label_files.setAlignment(Qt.AlignCenter)
         self.listwidget_folders = QListWidget()
         self.grid_input_files = QGridLayout()
         self.table_files = QTableWidget()
         self.grid_left.addWidget(self.tab_input_data,1,1)
-        
-        self.grid_left.addWidget(self.listwidget_folders,2,1)
-        self.grid_left.addLayout(self.grid_input_files,3,1)
-        self.grid_left.addWidget(self.table_files,4,1)
+        self.grid_left.addWidget(self.label_folders,2,1)
+        self.grid_left.addWidget(self.listwidget_folders,3,1)
+        self.grid_left.addWidget(self.label_files,4,1)
+        self.grid_left.addLayout(self.grid_input_files,5,1)
+        self.grid_left.addWidget(self.table_files,6,1)
         
         self.grid_live_title = QGridLayout()
         self.grid_save = QGridLayout()
@@ -298,7 +307,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_pyfaicalib.setStyleSheet(button_style_input)
         self.button_start.setStyleSheet(button_style_input)
 
-        set_bstyle([self.label_maindir, self.label_extension, self.label_conditions, self.label_ponifile, self.label_reffolder, self.label_sample_orientation, self.title_input])
+        set_bstyle([self.label_maindir, self.label_folders, self.label_files, self.label_extension, self.label_conditions, self.label_ponifile, self.label_reffolder, self.label_sample_orientation, self.title_input])
 
         self.grid_input_maindir.addWidget(self.label_maindir, 1, 1)
         self.grid_input_maindir.addWidget(self.lineedit_maindir, 1, 2)
