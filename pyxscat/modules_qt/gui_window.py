@@ -9,7 +9,6 @@ from modules_qt import combobox_methods as cb
 from PyQt5.QtWidgets import QMainWindow, QMenu, QMenuBar, QAction
 from PyQt5 import QtGui, QtCore
 from os.path import join
-from setup.setup_methods import get_dictionaries_setup
 import os
 
 class GUIPyX_Window(QMainWindow):
@@ -24,7 +23,7 @@ class GUIPyX_Window(QMainWindow):
         app_icon.addFile(join(GLOBAL_PATH_QT, "pyxscat_icon.png"), QtCore.QSize(256,256))
         self.setWindowIcon(app_icon)
 
-        self.update_combobox_setups()
+        self._guiwidget.update_combobox_setups()
         self.update_combobox_integrations()
 
     def _build_menubar(self):
@@ -77,17 +76,17 @@ class GUIPyX_Window(QMainWindow):
         self.about_form = AboutForm()
         self.about_form.show()
         
-    def update_combobox_setups(self):
-        """
-            Feed the combobox of setups with all the available (previously declared) dictionaries of setups
-        """
-        cb.insert_list(
-            combobox=self._guiwidget.combobox_setup,
-            list_items=[
-                d['Name'] for d in get_dictionaries_setup()
-            ],
-            reset=True,
-        )
+    # def update_combobox_setups(self):
+    #     """
+    #         Feed the combobox of setups with all the available (previously declared) dictionaries of setups
+    #     """
+    #     cb.insert_list(
+    #         combobox=self._guiwidget.combobox_setup,
+    #         list_items=[
+    #             d['Name'] for d in get_dictionaries_setup()
+    #         ],
+    #         reset=True,
+    #     )
 
     def update_combobox_integrations(self):
         """

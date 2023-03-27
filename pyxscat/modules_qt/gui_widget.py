@@ -17,8 +17,7 @@ from pyxscat.plots import *
 from pyxscat.search_functions import search_files_recursively, list_files_to_dict, get_subfolder
 
 from integration.integrator_methods import DIRECTORY_INTEGRATIONS
-from setup.setup_methods import DIRECTORY_SETUPS
-from setup.setup_methods import get_dict_setup
+from setup.setup_methods import DIRECTORY_SETUPS, get_dict_setup, get_dictionaries_setup
 
 from modules_qt import lineedit_methods as le
 from modules_qt import combobox_methods as cb
@@ -292,38 +291,53 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         # Attributes to init the Integrator instance
 
-        # self.update_maindir()
-        # self.update_ponifile()
-        self._main_directory = ''
-        self._ponifile = ''
+        self.update_maindir()
+        self.update_ponifile()
+        # self._main_directory = ''
+        # self._ponifile = ''
         self._extension = '.edf'
         self._wildcards = '*'
         self._qz_parallel = True
         self._qr_parallel = True
         self._auto_lims = True
         self._terminal_visible = True
-        # self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+        self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+        self.reset_attributes()
 
-        self._dict_files = {}
-        self._dict_files_reference = {}    
-
-        # Variables for data processing
-        self.set_files = []
-        self.set_folders = []        
-        
+    def reset_attributes(self):
+        """
+            Reset data attributes after changing main directory
+        """
+        self._main_directory = str()
+        self._ponifile = str()
+        self._dict_files = dict()
+        self._dict_files_reference = dict()
+        self.set_files = list()
+        self.set_folders = list()      
         self.header_keys = list()
-        self.filename_cache = ''
+        self.filename_cache = str()
         self.sample_data_cache = None
-        self._reference_file = ''
+        self._reference_file = str()
         self.reference_data_cache = None
         self.Edf_sample_cache = None
         self.Edf_reference_cache = None
-        self.dict_cache = {}
+        self.dict_cache = dict()
         self.chart_df_cache = None
 
     # #########################
     # # Update self attributes
     # #########################
+    def update_combobox_setups(self):
+        """
+            Feed the combobox of setups with all the available (previously declared) dictionaries of setups
+        """
+        cb.insert_list(
+            combobox=self.combobox_setup,
+            list_items=[
+                d['Name'] for d in get_dictionaries_setup()
+            ],
+            reset=True,
+        )
 
     def get_empty_dict_setup(self) -> dict:
         """
@@ -440,10 +454,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         file_json = join(DIRECTORY_SETUPS, f"{new_dict_info['Name']}.json")
         with open(file_json, 'w+') as fp:
             json.dump(new_dict_info, fp)
-        cb.insert(
-            combobox=self.combobox_setup,
-            item=new_dict_info['Name'],
-        )
+        self.update_combobox_setups()
 
     def pick_json_file(self) -> None:
         """
@@ -546,9 +557,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
                     # Check if it exists already, in that case, reset every data to avoid overlap between setups
                     if self._main_directory:
-                        self.init_attributes()
+                        self.reset_attributes()
                         self._write_output(MSG_RESET_DATA)
-
 
                     self._main_directory = main_dir_text
                     self._write_output(MSG_MAIN_DIRECTORY)
@@ -1529,12 +1539,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         except:
             pass
-
-
-
-
-
-
 
     # def check_integration(self):
     #     """
