@@ -950,6 +950,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 )
             )
             self.timer_data.start(INTERVAL_SEARCH_DATA)
+            self._write_output("LIVE ON: Now, the script is looking for new files...")
 
     def search_static_files(self) -> list:
         """
@@ -987,6 +988,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             new_files = list()
             self.timer_data.stop()
             self._write_output(MSG_ERROR_BASH)
+            self._write_output("LIVE OFF. The script now is static.")
 
         if new_files:
             return new_files
