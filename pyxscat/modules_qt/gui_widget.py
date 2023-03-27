@@ -982,7 +982,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             new_files = list(set(list_files_1s).difference(self.set_files))
         except:
             new_files = list()
-            self.timer_data.stop
+            self.timer_data.stop()
             self._write_output(MSG_ERROR_BASH)
 
         if new_files:
