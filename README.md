@@ -10,8 +10,10 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ## Clone the project into your directory (e.g. /user/Python/)
 
+```
 cd /user/Python
 git clone https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat.git
+```
 
 ## Once you have clone the project into your directory, install the module into your environment (conda, etc):
 pip install .
