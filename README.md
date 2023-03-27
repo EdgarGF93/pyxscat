@@ -11,11 +11,13 @@ The main tool of PyXScat is its Graphical User Interface. The philosophy of PyXS
     - Live, tunable and quick subtraction of reference data.<br />
     - Bridge between data collection and deep data analysis.<br />
 
-
+<br /><br />
 ![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot.png)
+<br /><br />
 ![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot_3.png)
+<br /><br />
 ![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot_2.png)
-
+<br />
 ## 1) Clone the project into your directory (e.g. /user/Python/)
 
 ```
