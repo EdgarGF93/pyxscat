@@ -15,10 +15,6 @@ class GUIPyX_Widget_setupform(QWidget):
         app_icon.addFile(join(GLOBAL_PATH_QT, "pyxscat_icon.png"), QSize(256,256))
         self.setWindowIcon(app_icon)
 
-    # def closeEvent(self, event):
-    #     self.kk()
-        
-
     def _build(self):
         # Build the global widget, which is a Grid
         self.gridlayout = QGridLayout()

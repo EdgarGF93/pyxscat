@@ -63,7 +63,7 @@ class GUIPyX_Window(QMainWindow):
     def _open_setup_form(self):
         self.setup_form = SetUpForm()
         self.setup_form.show()
-        self.setup_form.button_input_setup.clicked.connect(self.update_combobox_setups) 
+        self.setup_form.button_input_setup.clicked.connect(self._guiwidget.update_combobox_setups) 
 
     def _open_integration_form(self):
         self.integration_form = IntegrationForm()
@@ -75,18 +75,6 @@ class GUIPyX_Window(QMainWindow):
     def _open_about_form(self):
         self.about_form = AboutForm()
         self.about_form.show()
-        
-    # def update_combobox_setups(self):
-    #     """
-    #         Feed the combobox of setups with all the available (previously declared) dictionaries of setups
-    #     """
-    #     cb.insert_list(
-    #         combobox=self._guiwidget.combobox_setup,
-    #         list_items=[
-    #             d['Name'] for d in get_dictionaries_setup()
-    #         ],
-    #         reset=True,
-    #     )
 
     def update_combobox_integrations(self):
         """
