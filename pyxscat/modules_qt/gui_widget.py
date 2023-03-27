@@ -54,7 +54,7 @@ MSG_RESET_INTEGRATOR = "Reset integrator, a new integrator was generated."
 MSG_NEW_DETECTED_FILES = "New files were detected."
 MSG_CLICKED_FLODER_ERROR = "File table could not be updated."
 MSG_RESET_DATA = "The data parameters were reinitialized."
-
+MSG_ERROR_BASH = "There was an error during some bash file running. Allow permission with > chmod 777 -R pyxscat-directory"
 
 class GUIPyX_Widget(GUIPyX_Widget_layout):
 
@@ -976,9 +976,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Run bash script to find newly created files
         """
-        list_files_1s = subprocess.run([join(GLOBAL_PATH_QT, 'bash_files', BASH_FILE_1S), self._main_directory, f"{self._wildcards}{self._extension}"],
-                                stdout=subprocess.PIPE).stdout.decode().strip().split('\n')
-        new_files = list(set(list_files_1s).difference(self.set_files))
+        try:
+            list_files_1s = subprocess.run([join(GLOBAL_PATH_QT, 'bash_files', BASH_FILE_1S), self._main_directory, f"{self._wildcards}{self._extension}"],
+                                    stdout=subprocess.PIPE).stdout.decode().strip().split('\n')
+            new_files = list(set(list_files_1s).difference(self.set_files))
+        except:
+            new_files = list()
+            self._write_output(MSG_ERROR_BASH)
         if new_files:
             return new_files
         else:
