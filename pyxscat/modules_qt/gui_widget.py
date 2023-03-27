@@ -323,6 +323,15 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.Edf_reference_cache = None
         self.dict_cache = dict()
         self.chart_df_cache = None
+        cb.clear(self.combobox_ponifile)
+        cb.clear(self.combobox_reffolder)
+        cb.clear(self.combobox_headeritems)
+        cb.clear(self.combobox_headeritems_title)
+        cb.clear(self.combobox_angle)
+        cb.clear(self.combobox_tilt_angle)
+        cb.clear(self.combobox_exposure)
+        cb.clear(self.combobox_normfactor)
+
 
     # #########################
     # # Update self attributes
