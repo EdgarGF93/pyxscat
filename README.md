@@ -12,9 +12,9 @@ The main tool of PyXScat is its Graphical User Interface. The philosophy of PyXS
     - Bridge between data collection and deep data analysis.<br />
 
 <br /><br />
-![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot_4.png)
-<br /><br />
 ![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot.png)
+<br /><br />
+![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot_4.png)
 <br /><br />
 ![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot_3.png)
 <br /><br />
