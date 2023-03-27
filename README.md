@@ -19,8 +19,10 @@ git remote add origin https://gitlab.esrf.fr/xmas/pyfai_batch.git
 git branch -M main
 git push -uf origin main
 
-## To install the module and run the GUI
+## Once you have clone the project into your directory, install the module into your environment (conda, etc):
 pip install .
+
+## To open the GUI:
 python pyxscat/gui.py
 
 ```
