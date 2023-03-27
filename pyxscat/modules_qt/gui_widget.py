@@ -979,7 +979,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         try:
             list_files_1s = subprocess.run([join(GLOBAL_PATH_QT, 'bash_files', BASH_FILE_1S), self._main_directory, f"{self._wildcards}{self._extension}"],
                                     stdout=subprocess.PIPE).stdout.decode().strip().split('\n')
+            # Clean empty items
+            list_files_1s = [item for item in list_files_1s if item]
             new_files = list(set(list_files_1s).difference(self.set_files))
+
         except:
             new_files = list()
             self.timer_data.stop()
