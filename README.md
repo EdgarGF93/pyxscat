@@ -18,6 +18,11 @@ cd existing_repo
 git remote add origin https://gitlab.esrf.fr/xmas/pyfai_batch.git
 git branch -M main
 git push -uf origin main
+
+## To install the module and run the GUI
+pip install .
+python pyxscat/gui.py
+
 ```
 
 ## Integrate with your tools
