@@ -6,10 +6,11 @@
 
 PyXScat is a module that allows a quick, straightforward visualization and reduction of 2D scattering patterns.
 The main tool of PyXScat is its Graphical User Interface. The philosophy of PyXScat matches the following point:<br />
+    - Abstraction of FabIO, pyFAI and pygix. Visualization of 2D patterns, 1D integrations, transform to reciprocal (Q) maps.<br />
     - Minimum learning curve for non-experienced users.<br />
     - Live, tunable and quick subtraction of reference data.<br />
     - Bridge between data collection and deep data analysis.<br />
-    - Abstraction of FabIO, pyFAI and pygix.<br />
+
 
 ![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot.png)
 
