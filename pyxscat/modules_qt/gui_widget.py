@@ -824,12 +824,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         if self._main_directory and exists(self._main_directory):
             try:
-                subprocess.run([join(os.getcwd(), 'modules_qt', 'bash_files', 'open_calib2.sh'), self._main_directory])
+                subprocess.run([join(GLOBAL_PATH_QT, 'bash_files', 'open_calib2.sh'), self._main_directory])
             except:
                 pass
         else:
             try:
-                subprocess.run([join(os.getcwd(), 'modules_qt', 'bash_files', 'open_calib2.sh'), os.getcwd()])
+                subprocess.run([join(GLOBAL_PATH_QT, 'bash_files', 'open_calib2.sh'), os.getcwd()])
             except:
                 pass
 
@@ -976,7 +976,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Run bash script to find newly created files
         """
-        list_files_1s = subprocess.run([join(os.getcwd(), 'modules_qt', 'bash_files', BASH_FILE_1S), self._main_directory, f"{self._wildcards}{self._extension}"],
+        list_files_1s = subprocess.run([join(GLOBAL_PATH_QT, 'bash_files', BASH_FILE_1S), self._main_directory, f"{self._wildcards}{self._extension}"],
                                 stdout=subprocess.PIPE).stdout.decode().strip().split('\n')
         new_files = list(set(list_files_1s).difference(self.set_files))
         if new_files:
