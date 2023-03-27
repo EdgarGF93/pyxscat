@@ -4,7 +4,7 @@
 
 ## Getting started
 
-![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/blob/main/PyXScat_screenshot.png)
+![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot.png)
 
 
 PyXScat is a module that allows a quick, straightforward visualization and reduction of 2D scattering patterns.
