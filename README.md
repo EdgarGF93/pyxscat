@@ -12,13 +12,13 @@ The main tool of PyXScat is its Graphical User Interface. The philosophy of PyXS
     - Bridge between data collection and deep data analysis.<br />
 
 <br />
-![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot.png)
+![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/Tutorial/PyXScat_screenshot.png)
 <br /><br />
-![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot_4.png)
+![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/Tutorial/PyXScat_screenshot_4.png)
 <br /><br />
-![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot_3.png)
+![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/Tutorial/PyXScat_screenshot_3.png)
 <br /><br />
-![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/PyXScat_screenshot_2.png)
+![alt text](https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat/-/raw/main/Tutorial/PyXScat_screenshot_2.png)
 
 <br />
 
@@ -42,8 +42,8 @@ python pyxscat/gui.py
 
 ## 4) Tutorial of the GUI. You have a .ppt file in the PyXScat folder, to learn a minimum set of steps to start handlind your data:
 ```
-pyxscat/pyxscat_tutorial.ppt
+Tutorial/pyxscat_tutorial.ppt
 ```
 ## 5) The fundamental steps are summarized in the following video:
 
-![](PyXSCat_steps.mp4)
+![](Tutorial/PyXSCat_steps.mp4)
