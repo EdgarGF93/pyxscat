@@ -46,7 +46,4 @@ pyxscat/pyxscat_tutorial.ppt
 ```
 ## 5) The fundamental steps are summarized in the following video:
 
-<figure class="video_container">
-  <iframe src="PyXSCat_steps.mp4" frameborder="0" allowfullscreen="true"> 
-</iframe>
-</figure>
+![](PyXSCat_steps.mp4)
