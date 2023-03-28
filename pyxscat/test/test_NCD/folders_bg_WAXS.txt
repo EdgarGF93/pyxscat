@@ -1,3 +1,0 @@
-C:\Users\opd28\Documents\Python\PyXScat\test\test_NCD\Reference\10s
-C:\Users\opd28\Documents\Python\PyXScat\test\test_NCD\Reference\1s
-C:\Users\opd28\Documents\Python\PyXScat\test\test_NCD\Reference\5s

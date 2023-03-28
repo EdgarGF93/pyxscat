@@ -1,3 +1,0 @@
-C:\Users\opd28\Documents\Python\PyXScat\test\test_NCD\Reference\10s\rayonix_10s_spitch_0.12_000_0000.edf
-C:\Users\opd28\Documents\Python\PyXScat\test\test_NCD\Reference\1s\rayonix_1s_000_0000.edf
-C:\Users\opd28\Documents\Python\PyXScat\test\test_NCD\Reference\5s\rayonix_5s_spitch_0.12_000_0000.edf
