@@ -1214,7 +1214,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         # Update the label with displayed file
         self.update_label_display(
-            filename=self.filename_cache
+            filename=f"Displayed file: {self.filename_cache}",
         )
 
         # Update the graph pattern plot

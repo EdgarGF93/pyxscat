@@ -123,7 +123,7 @@ class GUIPyX_Widget_integrationform(QWidget):
         self.grid_proj_left.setRowStretch(2,5)
         self.grid_proj_left.setRowStretch(3,1)
         self.grid_proj_left.setRowStretch(4,1)
-        self.label_title_proj = QLabel("Integration type: projection")
+        self.label_title_proj = QLabel("Integration type: Box")
         self.grid_proj_input = QGridLayout()
         self.button_proj_add = QPushButton("Add Integration")
         # self.button_proj_check = QPushButton("Check")
