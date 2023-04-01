@@ -14,4 +14,3 @@ ERROR_OS = "Unkown operating system."
 PLOT_SELECTED_TABLE = False
 ROTATED_ERROR = 'Error on arrays shape correspondende. Check rotation.'
 DEFAULT_UNIT = 'q_nm^-1'
-

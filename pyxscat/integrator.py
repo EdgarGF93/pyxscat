@@ -405,6 +405,7 @@ class Integrator(Transform):
         self, 
         list_files=[], 
         list_data=[], 
+        norm_factor=None,
         list_integrations=[], 
         title=date_prefix(),
         x_label='x', 
@@ -432,6 +433,7 @@ class Integrator(Transform):
                         try:
                             dataframe = self.raw_integration(
                                 data=data,
+                                norm_factor=norm_factor,
                                 dict_integration=dict_integration,
                                 x_label=x_label,
                                 y_label=y_label,
@@ -488,6 +490,7 @@ class Integrator(Transform):
              
                         dataframe = self.raw_integration(
                             data=Edf.get_data(),
+                            norm_factor=norm_factor,
                             dict_integration=dict_integration,
                             x_label=x_label,
                             y_label=y_label,
@@ -670,13 +673,14 @@ class Integrator(Transform):
         self, 
         filename=str(), 
         data=None,
+        norm_factor=None,
         dict_integration=dict(), 
         name_integration=str(), 
         x_label='x',
         y_label='y',
     ) -> pd.DataFrame:
         """
-            Decide which integration is going to be performed: azimuthal (pyFAI), radial (pyFAI) or projection (self method)
+            Decide which integration is going to be performed: azimuthal (pyFAI), radial (pyFAI) or box (self method)
         """
             
         # Get the data
@@ -690,6 +694,7 @@ class Integrator(Transform):
                 )
                 # Take the data
                 data = Edf.get_data()
+                norm_factor = Edf.normfactor
                 
                 # Define the incident/tilt angles
                 self.update_incident_tilt_angles(
@@ -699,6 +704,7 @@ class Integrator(Transform):
                 pass
         elif data is not None:
             data = data
+            norm_factor = norm_factor
         else:
             return
 
@@ -711,10 +717,11 @@ class Integrator(Transform):
             )
         else:
             return
-    
+ 
         if dict_integration['Type'] == AZIMUTH_NAME:
             df = self.raw_integration_azimuthal(
                 data=data,
+                norm_factor=norm_factor,
                 dict_integration=dict_integration,
                 x_label=x_label,
                 y_label=y_label,
@@ -723,15 +730,17 @@ class Integrator(Transform):
         elif dict_integration['Type'] == RADIAL_NAME:
             df = self.raw_integration_radial(
                 data=data,
+                norm_factor=norm_factor,
                 dict_integration=dict_integration,
                 x_label=x_label,
                 y_label=y_label,
             )
 
         elif dict_integration['Type'] in (HORIZONTAL_NAME, VERTICAL_NAME):
-            df = self.raw_integration_projection(
+            df = self.raw_integration_box(
                 filename=filename,
                 data=data,
+                norm_factor=norm_factor,
                 dict_integration=dict_integration,
                 x_label=x_label,
                 y_label=y_label,
@@ -747,13 +756,13 @@ class Integrator(Transform):
     def raw_integration_azimuthal(
         self, 
         filename=str(),
-        data=None, 
+        data=None,
+        norm_factor=None,
         dict_integration=dict(), 
         name_integration=str(), 
         x_label='x', 
         y_label='y',
     ) -> pd.DataFrame:
-
         """
         Launch the azimuthal integration of PyFAI
         Returns a pandas dataframe
@@ -769,6 +778,7 @@ class Integrator(Transform):
                 )
                 # Take the data
                 data = Edf.get_data()
+                norm_factor = Edf.normfactor
                 
                 # Define the incident/tilt angles
                 self.update_incident_tilt_angles(
@@ -778,6 +788,7 @@ class Integrator(Transform):
                 pass
         elif data is not None:
             data=data
+            norm_factor=norm_factor
         else:
             return
 
@@ -799,10 +810,12 @@ class Integrator(Transform):
                 p0_range=dict_integration['Radial_range'],
                 p1_range=dict_integration['Azimuth_range'],
                 unit=dict_integration['Unit'],
-                normalization_factor=None,
+                normalization_factor=norm_factor,
                 polarization_factor=POLARIZATION_FACTOR,
-                method='bbox',
+                # method='lut',
+                # dummy=0.0,
             )
+
         except:
             return
 
@@ -827,6 +840,7 @@ class Integrator(Transform):
         self, 
         filename=str(),
         data=None,
+        norm_factor=None,
         dict_integration=dict(),
         name_integration=str(),
         x_label='x', 
@@ -847,6 +861,7 @@ class Integrator(Transform):
                 )
                 # Take the data
                 data = Edf.get_data()
+                norm_factor = Edf.normfactor
                 
                 # Define the incident/tilt angles
                 self.update_incident_tilt_angles(
@@ -874,9 +889,9 @@ class Integrator(Transform):
                 p0_range=dict_integration['Azimuth_range'],
                 p1_range=dict_integration['Radial_range'],
                 unit=dict_integration['Unit'],
-                normalization_factor=None,
+                normalization_factor=norm_factor,
                 polarization_factor=POLARIZATION_FACTOR,
-                method='bbox',
+                # method='bbox',
             )
         except:
             return
@@ -898,17 +913,18 @@ class Integrator(Transform):
             }
         )
 
-    def raw_integration_projection(
+    def raw_integration_box(
         self, 
         filename=str(),
         data=None, 
+        norm_factor=None,
         dict_integration=dict(),
         name_integration=str(),
         x_label='x', 
         y_label='',
     ) -> pd.DataFrame:
         """
-            Start the protocol for horizontal or vertical integration (projection)
+            Start the protocol for horizontal or vertical integration (box)
         """
         # Take data and incident angle
         # Take the array of intensity
@@ -922,6 +938,7 @@ class Integrator(Transform):
                 )
                 # Take the data
                 data = Edf.get_data()
+                norm_factor = Edf.normfactor
                 
                 # Define the incident/tilt angles
                 self.update_incident_tilt_angles(
@@ -981,7 +998,7 @@ class Integrator(Transform):
                 p0_range=p0_range,
                 p1_range=p1_range,
                 unit=dict_integration['Unit'],
-                normalization_factor=None,
+                normalization_factor=norm_factor,
                 polarization_factor=POLARIZATION_FACTOR,
                 method='bbox',
             )
@@ -1278,61 +1295,61 @@ class Integrator(Transform):
         
             ('No Edf was found in the json database. Try to change the name.')
 
-    def new_Edfdata(self, Edf, dict_parameters):
-        if dict_parameters['Type'] in (AZIMUTH_NAME, RADIAL_NAME):
-            return self.new_Edfdata_cake(Edf=Edf, dict_parameters=dict_parameters)
-        elif dict_parameters['Type'] in (HORIZONTAL_NAME, VERTICAL_NAME):
-            return self.new_Edfdata_projection(Edf=Edf, dict_integration=dict_parameters)
+    # def new_Edfdata(self, Edf, dict_parameters):
+    #     if dict_parameters['Type'] in (AZIMUTH_NAME, RADIAL_NAME):
+    #         return self.new_Edfdata_cake(Edf=Edf, dict_parameters=dict_parameters)
+    #     elif dict_parameters['Type'] in (HORIZONTAL_NAME, VERTICAL_NAME):
+    #         return self.new_Edfdata_box(Edf=Edf, dict_integration=dict_parameters)
 
-    def new_Edfdata_cake(self, Edf, dict_parameters) -> np.array:
-        """
-            Return an intensity array only with the values within the integration parameters
-        """
-        # Create new list
-        new_list = []
+    # def new_Edfdata_cake(self, Edf, dict_parameters) -> np.array:
+    #     """
+    #         Return an intensity array only with the values within the integration parameters
+    #     """
+    #     # Create new list
+    #     new_list = []
 
-        # Azimuth to radians
-        azimuth_range = np.radians(dict_parameters['Azimuth_range'])
+    #     # Azimuth to radians
+    #     azimuth_range = np.radians(dict_parameters['Azimuth_range'])
         
-        # Iterate through all numpy array
-        for ind1,row in enumerate(Edf.get_data()):
-            for ind2,num in enumerate(row):
-                cond1 = dict_parameters['Radial_range'][0] < self.calibrant.qArray()[ind1,ind2] < dict_parameters['Radial_range'][1]
-                cond2 = azimuth_range[0] < self.calibrant.chiArray()[ind1,ind2] < azimuth_range[1]
-                if (cond1 and cond2):
-                    new_list.append(num)
-                else:
-                    new_list.append(np.nan)
+    #     # Iterate through all numpy array
+    #     for ind1,row in enumerate(Edf.get_data()):
+    #         for ind2,num in enumerate(row):
+    #             cond1 = dict_parameters['Radial_range'][0] < self.calibrant.qArray()[ind1,ind2] < dict_parameters['Radial_range'][1]
+    #             cond2 = azimuth_range[0] < self.calibrant.chiArray()[ind1,ind2] < azimuth_range[1]
+    #             if (cond1 and cond2):
+    #                 new_list.append(num)
+    #             else:
+    #                 new_list.append(np.nan)
 
-        return np.array(new_list).reshape(np.shape(Edf.get_data()))
+    #     return np.array(new_list).reshape(np.shape(Edf.get_data()))
 
-    def new_Edfdata_projection(self, Edf=None, dict_integration=dict()):
-        """
-            Return an array modified according to parameters of integration (projection)
-        """
-        # Get the limits to cut the matrix
-        projection_limits = self.get_projection_limits(
-            dict_integration=dict_integration,
-            incident_angle=Edf.incident_angle_edf,
-        )
+    # def new_Edfdata_box(self, Edf=None, dict_integration=dict()):
+    #     """
+    #         Return an array modified according to parameters of integration (box)
+    #     """
+    #     # Get the limits to cut the matrix
+    #     box_limits = self.get_box_limits(
+    #         dict_integration=dict_integration,
+    #         incident_angle=Edf.incident_angle_edf,
+    #     )
 
-        type_cut = dict_integration['Type']
+    #     type_cut = dict_integration['Type']
 
-        # if (dict_integration['Type'] == HORIZONTAL_NAME and self.rotated) or (dict_integration['Type'] == VERTICAL_NAME and not self.rotated):
-        #     type_cut = VERTICAL_NAME
-        # elif (dict_integration['Type'] == VERTICAL_NAME and self.rotated) or (dict_integration['Type'] == HORIZONTAL_NAME and not self.rotated):
-        #     type_cut = HORIZONTAL_NAME
-        # else:
-        #     return
+    #     # if (dict_integration['Type'] == HORIZONTAL_NAME and self.rotated) or (dict_integration['Type'] == VERTICAL_NAME and not self.rotated):
+    #     #     type_cut = VERTICAL_NAME
+    #     # elif (dict_integration['Type'] == VERTICAL_NAME and self.rotated) or (dict_integration['Type'] == HORIZONTAL_NAME and not self.rotated):
+    #     #     type_cut = HORIZONTAL_NAME
+    #     # else:
+    #     #     return
 
-        data = Edf.get_data()
-        if type_cut == HORIZONTAL_NAME:
-            data[0:min(projection_limits)] = np.nan
-            data[max(projection_limits)::] = np.nan
-        elif type_cut == VERTICAL_NAME:
-            data[:, 0:min(projection_limits)] = np.nan
-            data[:, max(projection_limits)::] = np.nan
-        return data
+    #     data = Edf.get_data()
+    #     if type_cut == HORIZONTAL_NAME:
+    #         data[0:min(box_limits)] = np.nan
+    #         data[max(box_limits)::] = np.nan
+    #     elif type_cut == VERTICAL_NAME:
+    #         data[:, 0:min(box_limits)] = np.nan
+    #         data[:, max(box_limits)::] = np.nan
+    #     return data
 
     def q_to_twotheta(self, q, unit='q_nm^-1', degree=False) -> float:
         """

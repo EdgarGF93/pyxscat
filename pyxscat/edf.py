@@ -250,15 +250,12 @@ class EdfClass(Transform):
         """
         return DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
 
-    def get_data(self, normalized=True) -> np.array:
+    def get_data(self) -> np.array:
         """
             Return the numpy array of data opened with Fabio, already normalized or not
         """
         try:
-            if normalized:
-                return np.divide(fabio.open(self.filename).data.astype(np.int32), self.normfactor)
-            else:
-                return fabio.open(self.filename).data.astype(np.int32)
+            return fabio.open(self.filename).data.astype(np.int32)
         except:
             return None
 

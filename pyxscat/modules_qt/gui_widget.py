@@ -139,6 +139,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.button_add_ponifile.clicked.connect(
             self.pick_new_ponifile,
         )
+        self.button_update_ponifile.clicked.connect(
+            self.update_combobox_ponifile,
+        )
 
         #########################
         # Reference callbacks
@@ -245,6 +248,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         )
 
+        self.button_log.clicked.connect(
+            self.update_graph_log,
+        )
+
+        self.button_colorbar.clicked.connect(
+            self.update_graph_colorbar,
+        )
+
         self.button_default_graph.clicked.connect(
             self.update_auto_lims,
         )
@@ -300,6 +311,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self._qz_parallel = True
         self._qr_parallel = True
         self._auto_lims = True
+        self._graph_log = True
+        self._colorbar = False
         self._terminal_visible = True
         self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
         self.reset_attributes()
@@ -317,6 +330,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.header_keys = list()
         self.filename_cache = str()
         self.sample_data_cache = None
+        self.normfactor_cache = None
         self._reference_file = str()
         self.reference_data_cache = None
         self.Edf_sample_cache = None
@@ -567,6 +581,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     # Check if it exists already, in that case, reset every data to avoid overlap between setups
                     if self._main_directory:
                         self.reset_attributes()
+                        tm.reset(self.table_files)
                         self._write_output(MSG_RESET_DATA)
 
                     self._main_directory = main_dir_text
@@ -582,6 +597,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
                 if self._integrator:
                     self.reset_integrator()
+                    self.search_and_update_files()
                 else:
                     self.create_integrator()
                     self.search_and_update_files()
@@ -1042,6 +1058,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 last_file = self.get_last_file(new_files)
                 self.update_cache(
                     filename=last_file,
+
                     plot=True,
                 )
                 self.update_table(
@@ -1114,12 +1131,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self._write_output(MSG_CLICKED_FLODER_ERROR)
             pass
 
-    def update_cache(self, data=None, filename='', plot=False):
+    def update_cache(self, data=None, filename='', norm_factor=None, plot=False):
         """
             Update attributes and widgets with the last detected file
         """
         if data is not None:
             self.sample_data_cache = data
+            self.normfactor_cache = norm_factor
             self._write_output(f"Updated cache with new file: {filename}")
         elif filename:
             try:
@@ -1131,7 +1149,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
-
+            
                 # Update the incident/tilt angles
                 if self._integrator:
                     self._integrator.update_incident_tilt_angles(
@@ -1139,6 +1157,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     )
                 self._write_output(f"Updated cache with new file: {filename}")
                 self.sample_data_cache = self.Edf_sample_cache.get_data()
+                self.normfactor_cache = self.Edf_sample_cache.normfactor
             except:
                 pass
         else:
@@ -1218,15 +1237,28 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
         # Update the graph pattern plot
-        self.update_graph_widget(
-            graph_widget=self.graph_widget,
-            data=self.sample_data_cache,
-        )
+        if self.normfactor_cache:
+            try:
+                self.update_graph_widget(
+                    graph_widget=self.graph_widget,
+                    data=np.divide(self.sample_data_cache, self.normfactor_cache),
+                )
+            except:
+                self.update_graph_widget(
+                    graph_widget=self.graph_widget,
+                    data=self.sample_data_cache,
+                )
+        else:
+            self.update_graph_widget(
+                graph_widget=self.graph_widget,
+                data=self.sample_data_cache,
+            )   
 
         # Update the chart plot
         if self._integrator:
             for df in self.integrate_data(
                     data=self.sample_data_cache,
+                    norm_factor=self.normfactor_cache,
                     dicts_integration=le.get_clean_list(
                         lineedit=self.lineedit_integrations
                     )
@@ -1263,6 +1295,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         data=np.nan_to_num(data, nan=1e-9)
         data[data==0] = 1e-9
+        data[data<0] = 1e-9
 
         graph_widget.addImage(
                 data=np.nan_to_num(data, nan=1e-9),
@@ -1294,14 +1327,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         y_ticks = self.get_clean_lineedit(
             lineedit_widget=self.lineedit_yticks
         )
-        return [float(tick) for tick in x_ticks], [float(tick) for tick in y_ticks]
+        try:
+            return [float(tick) for tick in x_ticks], [float(tick) for tick in y_ticks]
+        except:
+            return
 
-    def integrate_data(self, data, dicts_integration=[]):
+    def integrate_data(self, data, norm_factor=None, dicts_integration=[]):
         """
             Generate a dataframe for every integration
         """
         for index, (dataframe, data, dict_integration, name) in enumerate(self._integrator.raw_integration_iterator(
             list_data=[data],
+            norm_factor=norm_factor,
             list_integrations=dicts_integration,
             title='',
             x_label='Unit',
@@ -1554,6 +1591,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                         Edf.get_data() for Edf in self._integrator.edf_iterator(list_files)
                     ]
                 ) / len(list_files),
+                norm_factor = sum(
+                    [
+                        Edf.normfactor for Edf in self._integrator.edf_iterator(list_files)
+                    ]
+                ) / len(list_files),
                 filename=list_files[-1].replace('.edf', '_average.edf'),
                 plot=True
             )
@@ -1604,6 +1646,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             
             x_lims, y_lims = self.get_map_limits()
             x_ticks, y_ticks = self.get_map_ticks()
+
             plot_mesh(
                 mesh_horz=scat_x,
                 mesh_vert=scat_z,
@@ -1615,7 +1658,33 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 xticks=x_ticks,
                 yticks=y_ticks,
                 title=title_str,
+                log=self._graph_log,
+                colorbar=self._colorbar,
+                color_lims=gm.get_zlims(self.graph_widget),
+                show=show,
             )
+
+    def update_graph_log(self):
+        """
+            Change the colorbar norm from log-linear
+        """
+        if self._graph_log:
+            self._graph_log = False
+            self.button_log.setText("LINEAR")
+        else:
+            self._graph_log = True
+            self.button_log.setText("LOG")
+
+    def update_graph_colorbar(self):
+        """
+            Make the colorbar visible/unvisible in the popup map
+        """
+        if self._colorbar:
+            self._colorbar = False
+            self.button_colorbar.setText("COLORBAR OFF")
+        else:
+            self._colorbar = True
+            self.button_colorbar.setText("COLORBAR ON")
 
     def update_auto_lims(self):
         """
@@ -1694,13 +1763,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         try:
-            plt.savefig(filename_out)
-        except:
-            self.popup_map(
-                show=False,
-            )
+            self.popup_map(show=False)
             plt.savefig(filename_out)
             plt.close()
+        except:
+            pass
 
     def search_reference_file(self, Edf):
         """
@@ -1715,6 +1782,19 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                         pass
         else:
             return
+
+
+    def update_combobox_integrations(self):
+        """
+            Feed the combobox with the dictionary of integrations
+        """
+        cb.insert_list(
+            combobox=self.combobox_integration,
+            list_items=[
+                d['Name'] for d in self.get_dictionaries_integration()
+            ],
+            reset=True,
+        )
 
     def get_dictionaries_integration(self) -> list:
         """

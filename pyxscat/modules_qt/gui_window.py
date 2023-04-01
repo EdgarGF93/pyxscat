@@ -24,7 +24,7 @@ class GUIPyX_Window(QMainWindow):
         self.setWindowIcon(app_icon)
 
         self._guiwidget.update_combobox_setups()
-        self.update_combobox_integrations()
+        self._guiwidget.update_combobox_integrations()
 
     def _build_menubar(self):
         menubar = QMenuBar()
@@ -68,25 +68,25 @@ class GUIPyX_Window(QMainWindow):
     def _open_integration_form(self):
         self.integration_form = IntegrationForm()
         self.integration_form.show()
-        self.integration_form.button_azrad_add.clicked.connect(self.update_combobox_integrations)
-        self.integration_form.button_proj_add.clicked.connect(self.update_combobox_integrations) 
+        self.integration_form.button_azrad_add.clicked.connect(self._guiwidget.update_combobox_integrations)
+        self.integration_form.button_proj_add.clicked.connect(self._guiwidget.update_combobox_integrations) 
               
 
     def _open_about_form(self):
         self.about_form = AboutForm()
         self.about_form.show()
 
-    def update_combobox_integrations(self):
-        """
-            Feed the combobox with the dictionary of integrations
-        """
-        cb.insert_list(
-            combobox=self._guiwidget.combobox_integration,
-            list_items=[
-                d['Name'] for d in self.get_dictionaries_integration()
-            ],
-            reset=True,
-        )
+    # def update_combobox_integrations(self):
+    #     """
+    #         Feed the combobox with the dictionary of integrations
+    #     """
+    #     cb.insert_list(
+    #         combobox=self._guiwidget.combobox_integration,
+    #         list_items=[
+    #             d['Name'] for d in self.get_dictionaries_integration()
+    #         ],
+    #         reset=True,
+    #     )
 
     def get_dictionaries_integration(self) -> list:
         """

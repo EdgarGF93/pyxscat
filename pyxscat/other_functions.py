@@ -104,7 +104,7 @@ def np_log(data, log=False) -> np.array:
 # Return the weak peak limits of a numpy array
 def np_weak_lims(data, min=0, max=3, weak_lims=True) -> np.array:
     if weak_lims:
-        data[data < 0] = np.nan
+        # data[data < 0] = np.nan
         mn = np.nanmean(data)
         sd = np.nanstd(data)
     else:

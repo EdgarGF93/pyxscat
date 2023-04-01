@@ -287,7 +287,9 @@ class GUIPyX_Widget_layout(QWidget):
         self.combobox_ponifile = QComboBox()
 
         self.button_add_ponifile = QPushButton(" Pick new ponifile ")
-        self.button_add_ponifile.setIcon(QIcon(join(GLOBAL_PATH_QT, "file.png")))  
+        self.button_add_ponifile.setIcon(QIcon(join(GLOBAL_PATH_QT, "file.png")))
+        self.button_update_ponifile = QPushButton()
+        self.button_update_ponifile.setIcon(QIcon(join(GLOBAL_PATH_QT, "refresh.png")))
            
         self.button_add_reference = QPushButton(" Pick a reference file ")
         self.button_add_reference.setIcon(QIcon(join(GLOBAL_PATH_QT, "file.png")))  
@@ -301,6 +303,7 @@ class GUIPyX_Widget_layout(QWidget):
 
         self.button_pick_maindir.setStyleSheet(button_style_input)
         self.button_add_ponifile.setStyleSheet(button_style_input)
+        self.button_update_ponifile.setStyleSheet(button_style_input)
         self.button_add_reference.setStyleSheet(button_style_input)
         self.button_qz.setStyleSheet(button_style_input)
         self.button_qr.setStyleSheet(button_style_input)
@@ -320,6 +323,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_ponifile.addWidget(self.label_ponifile, 1, 1)
         self.grid_input_ponifile.addWidget(self.combobox_ponifile, 1, 2)
         self.grid_input_ponifile.addWidget(self.button_add_ponifile, 1, 3)
+        self.grid_input_ponifile.addWidget(self.button_update_ponifile, 1, 4)
         self.grid_input_reference.addWidget(self.label_reffolder, 1, 1)
         self.grid_input_reference.addWidget(self.combobox_reffolder, 1, 2)
         self.grid_input_reference.addWidget(self.button_add_reference, 1, 3)
@@ -362,8 +366,11 @@ class GUIPyX_Widget_layout(QWidget):
         self.lineedit_filename = QLineEdit()
         self.lineedit_filename.setEnabled(False)
         self.combobox_units = QComboBox()
+        self.button_log = QPushButton("LOG")
+        self.button_colorbar = QPushButton("COLORBAR OFF")
         self.button_default_graph = QPushButton("AUTO LIMITS ON")
-
+        self.button_log.setStyleSheet(button_on)
+        self.button_colorbar.setStyleSheet(button_on)
         self.button_default_graph.setStyleSheet(button_on)
         self.combobox_units.addItem("q_nm^-1")
         self.combobox_units.addItem("q_A^-1")
@@ -459,7 +466,9 @@ class GUIPyX_Widget_layout(QWidget):
         
         self.grid_units_graph.addWidget(self.label_units, 1, 1)
         self.grid_units_graph.addWidget(self.combobox_units, 1, 2)
-        self.grid_units_graph.addWidget(self.button_default_graph, 1, 3)
+        self.grid_units_graph.addWidget(self.button_log, 1, 3)
+        self.grid_units_graph.addWidget(self.button_colorbar, 1, 4)
+        self.grid_units_graph.addWidget(self.button_default_graph, 1, 5)
 
         self.grid_input_graph_buttons.addWidget(self.label_title, 1, 1)
         self.grid_input_graph_buttons.addWidget(self.combobox_headeritems_title, 1, 2)

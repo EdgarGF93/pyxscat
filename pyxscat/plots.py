@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors
 from other_functions import np_log, np_roi, np_weak_lims
 from units import *
 
@@ -49,7 +50,18 @@ def plot_images_overlap(edf1_data, edf2_data, title='', log=False, weak_lims=Tru
     plt.show()
 
 
-def plot_mesh(mesh_horz, mesh_vert, data, unit='q_nm^-1', auto_lims=True, title='', **kwargs):
+def plot_mesh(
+    mesh_horz, 
+    mesh_vert, 
+    data, 
+    unit='q_nm^-1', 
+    auto_lims=True, 
+    title='', 
+    log=True, 
+    colorbar=False,
+    color_lims=[], 
+    show=True, 
+    **kwargs):
     """
         Plot the 2D map using pcolormesh from matplotlib
     """
@@ -58,15 +70,31 @@ def plot_mesh(mesh_horz, mesh_vert, data, unit='q_nm^-1', auto_lims=True, title=
     try:
         fig, ax = plt.subplots(figsize=(7,7), dpi=100, constrained_layout=True)
         ax.set_aspect('equal')
+
+        color_lims = color_lims if color_lims else [None, None]
+
+        if log:
+            norm = colors.LogNorm(
+                vmax=color_lims[1],
+                vmin=color_lims[0],
+            )
+        else:
+            norm = colors.Normalize(
+                vmax=color_lims[1],
+                vmin=color_lims[0],
+            )
+
         plt.pcolormesh(
             mesh_horz,
             mesh_vert,
             data, 
             shading='nearest', 
             cmap='viridis',
+            norm=norm,
         )
-        plt.clim(np_weak_lims(data=data))
-        plt.colorbar()
+
+        if colorbar:
+            plt.colorbar()
         plt.xlabel(kwargs.get('xlabel', DICT_PLOT['X_LABEL']), fontsize=20)
         plt.ylabel(kwargs.get('ylabel', DICT_PLOT['Y_LABEL']), fontsize=20)
         if not auto_lims:
@@ -97,7 +125,8 @@ def plot_mesh(mesh_horz, mesh_vert, data, unit='q_nm^-1', auto_lims=True, title=
 
         ax.tick_params(direction='out', length=6, width=2)
         plt.title(title)
-        plt.show()
+        if show:
+            plt.show()
 
     except:
         return
