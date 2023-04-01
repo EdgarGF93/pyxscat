@@ -1313,24 +1313,36 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Get the limits from the lineedits
         """
-        x_lims = [le.text(lineedit=self.lineedit_xmin), le.text(lineedit=self.lineedit_xmax)]
-        y_lims = [le.text(lineedit=self.lineedit_ymin), le.text(lineedit=self.lineedit_ymax)]
+        try:
+            x_lims = [le.text(lineedit=self.lineedit_xmin), le.text(lineedit=self.lineedit_xmax)]
+        except:
+            x_lims = None
+        try:
+            y_lims = [le.text(lineedit=self.lineedit_ymin), le.text(lineedit=self.lineedit_ymax)]
+        except:
+            y_lims = None
         return x_lims, y_lims
 
     def get_map_ticks(self):
         """
             Get the ticks from the lineedits
         """
-        x_ticks = self.get_clean_lineedit(
-            lineedit_widget=self.lineedit_xticks
-        )
-        y_ticks = self.get_clean_lineedit(
-            lineedit_widget=self.lineedit_yticks
-        )
+        try:
+            x_ticks = self.get_clean_lineedit(
+                lineedit_widget=self.lineedit_xticks
+            )
+        except:
+            x_ticks = None
+        try:
+            y_ticks = self.get_clean_lineedit(
+                lineedit_widget=self.lineedit_yticks
+            )
+        except:
+            y_ticks = None
         try:
             return [float(tick) for tick in x_ticks], [float(tick) for tick in y_ticks]
         except:
-            return
+            return None, None
 
     def integrate_data(self, data, norm_factor=None, dicts_integration=[]):
         """
