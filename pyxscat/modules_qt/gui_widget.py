@@ -905,7 +905,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if self._integrator:
             return
         
-        if self._main_directory and self._ponifile:
+        if self._main_directory:
             try:
                 self._integrator = Integrator(
                     main_dir=self._main_directory,
@@ -934,7 +934,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         if self._integrator:
             try:
-                self._integrator.dict_files = self._dict_files
+                self._integrator._dict_files = self._dict_files
                 self._write_output(MSG_INTEGRATOR_NEW_FILES)
             except:
                 return
@@ -1098,11 +1098,15 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             ) for item in new_folders
         ]
 
+        if self._main_directory != le.text(self.lineedit_maindir):
+            reset = True
+        else:
+            reset = False
 
         lt.insert_list(
             listwidget=self.listwidget_folders,
             item_list=subfolder_list,
-            reset=True,
+            reset=reset,
         )
 
         cb.insert_list(
@@ -1149,13 +1153,50 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     qz_parallel=self._qz_parallel,
                     qr_parallel=self._qr_parallel,
                 )
-            
+         
                 # Update the incident/tilt angles
                 if self._integrator:
-                    self._integrator.update_incident_tilt_angles(
-                        Edf=self.Edf_sample_cache,
-                    )
+                    try:
+                        self._integrator.update_incident_tilt_angles(
+                            Edf=self.Edf_sample_cache,
+                        )
+                    except:
+                        pass
+
                 self._write_output(f"Updated cache with new file: {filename}")
+
+                # Feed two comboboxes with the headers of these files
+                try:
+                    new_header_keys = list(self.Edf_sample_cache.get_header().keys())
+                    new_header_keys.insert(0,'')
+
+                    if self.header_keys != new_header_keys:
+                        self.header_keys = new_header_keys
+                        lt.clear(self.lineedit_headeritems)
+                        lt.clear(self.lineedit_headeritems_title)
+                        cb.insert_list(
+                            combobox=self.combobox_headeritems,
+                            list_items=new_header_keys,
+                            reset=True,
+                        )
+
+                        # Add default columns
+                        cb.set_text(self.combobox_headeritems, self._dict_setup['Angle'])
+                        cb.set_text(self.combobox_headeritems, self._dict_setup['Tilt angle'])
+                        cb.set_text(self.combobox_headeritems, self._dict_setup['Exposure'])
+                        cb.set_text(self.combobox_headeritems, self._dict_setup['Norm'])
+
+                        cb.insert_list(
+                            combobox=self.combobox_headeritems_title,
+                            list_items=new_header_keys,
+                            reset=True,
+                        )
+                except:
+                    pass
+
+
+
+
                 self.sample_data_cache = self.Edf_sample_cache.get_data()
                 self.normfactor_cache = self.Edf_sample_cache.normfactor
             except:
@@ -1373,6 +1414,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             ymin=chart_widget.getGraphYLimits()[0],
             ymax=chart_widget.getGraphYLimits()[1],
         )
+
+
+
         if dataframe is not None:
             for index,(x,y) in enumerate(zip([*range(0,len(dataframe.columns),2)],[*range(1,len(dataframe.columns),2)])):
                 try:          
@@ -1381,7 +1425,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                         y=dataframe.iloc[:, y],
                         legend=f"{index}",
                         resetzoom=True,
+                        # xlabel=dataframe.columns[0],
+                        # ylabel='',
                     )
+                    chart_widget.setGraphXLabel(label=dataframe.columns[0]),
+                    chart_widget.setGraphYLabel(label='Intensity (arb. units)'),
                 except:
                     pass
         else:
@@ -1453,57 +1501,58 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     pass
 
             # Feed two comboboxes with the headers of these files
-            try:
-                new_header_keys = list(EdfClass(
-                    filename=list_files[0],
-                    dict_setup=self._dict_setup,
-                ).get_header().keys())
-                new_header_keys.insert(0,'')
-            except:
-                return
-            
-            if self.header_keys != new_header_keys:
-                self.header_keys = new_header_keys
-                lt.clear(self.lineedit_headeritems)
-                lt.clear(self.lineedit_headeritems_title)
-                cb.insert_list(
-                    combobox=self.combobox_headeritems,
-                    list_items=new_header_keys,
-                    reset=True,
-                )
+            if not self.header_keys:
+                try:
+                    new_header_keys = list(EdfClass(
+                        filename=list_files[0],
+                        dict_setup=self._dict_setup,
+                    ).get_header().keys())
+                    new_header_keys.insert(0,'')
+                except:
+                    return
+                
+                if self.header_keys != new_header_keys:
+                    self.header_keys = new_header_keys
+                    lt.clear(self.lineedit_headeritems)
+                    lt.clear(self.lineedit_headeritems_title)
+                    cb.insert_list(
+                        combobox=self.combobox_headeritems,
+                        list_items=new_header_keys,
+                        reset=True,
+                    )
 
-                # Add default columns
-                cb.set_text(self.combobox_headeritems, self._dict_setup['Angle'])
-                cb.set_text(self.combobox_headeritems, self._dict_setup['Tilt angle'])
-                cb.set_text(self.combobox_headeritems, self._dict_setup['Exposure'])
-                cb.set_text(self.combobox_headeritems, self._dict_setup['Norm'])
+                    # Add default columns
+                    cb.set_text(self.combobox_headeritems, self._dict_setup['Angle'])
+                    cb.set_text(self.combobox_headeritems, self._dict_setup['Tilt angle'])
+                    cb.set_text(self.combobox_headeritems, self._dict_setup['Exposure'])
+                    cb.set_text(self.combobox_headeritems, self._dict_setup['Norm'])
 
-                cb.insert_list(
-                    combobox=self.combobox_headeritems_title,
-                    list_items=new_header_keys,
-                    reset=True,
-                )
+                    cb.insert_list(
+                        combobox=self.combobox_headeritems_title,
+                        list_items=new_header_keys,
+                        reset=True,
+                    )
 
-                cb.insert_list(
-                    combobox=self.combobox_angle,
-                    list_items=new_header_keys,
-                    reset=True,
-                )
-                cb.insert_list(
-                    combobox=self.combobox_tilt_angle,
-                    list_items=new_header_keys,
-                    reset=True,
-                )
-                cb.insert_list(
-                    combobox=self.combobox_normfactor,
-                    list_items=new_header_keys,
-                    reset=True,
-                )
-                cb.insert_list(
-                    combobox=self.combobox_exposure,
-                    list_items=new_header_keys,
-                    reset=True,
-                )
+                    cb.insert_list(
+                        combobox=self.combobox_angle,
+                        list_items=new_header_keys,
+                        reset=True,
+                    )
+                    cb.insert_list(
+                        combobox=self.combobox_tilt_angle,
+                        list_items=new_header_keys,
+                        reset=True,
+                    )
+                    cb.insert_list(
+                        combobox=self.combobox_normfactor,
+                        list_items=new_header_keys,
+                        reset=True,
+                    )
+                    cb.insert_list(
+                        combobox=self.combobox_exposure,
+                        list_items=new_header_keys,
+                        reset=True,
+                    )
         else:
             return
 
