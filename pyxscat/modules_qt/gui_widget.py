@@ -189,16 +189,25 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Combobox header items updates its lineedit
         #########################
         self.combobox_headeritems.currentTextChanged.connect(
-            lambda: le.insert(
-                self.lineedit_headeritems,
-                cb.value(self.combobox_headeritems)
-            )
+            lambda: (
+                le.insert(
+                    self.lineedit_headeritems,
+                    cb.value(self.combobox_headeritems)
+                ),
+                self.update_table(
+                    list_keys=[
+                        cb.value(
+                            self.combobox_headeritems,
+                        )
+                    ],
+                ),
+            )  
         )
 
         # Updates the columns on the table upon changes in the lineedit_headeritems
-        self.combobox_headeritems.currentTextChanged.connect(
-            self.update_header_items,
-        )
+        # self.combobox_headeritems.currentTextChanged.connect(
+        #     self.update_header_items,
+        # )
 
 
         #########################
@@ -1667,11 +1676,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
 
 
+
+
+
     def update_table(self, list_files=list(), list_keys=list(), reset=True):
         """
             Update the table with new files (rows) and keys (columns)
         """
-        print('hola')
         if reset:
             # Clear the table
             tm.reset(
