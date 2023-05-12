@@ -1604,10 +1604,16 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         header_keys = set()
 
+
         for filename in list_files:
+            print(self.get_Edf_instance(
+                        filename=filename,
+                    ).get_header_keys())
+
+
+
             header_keys = header_keys.union(
                 set(
-
                     self.get_Edf_instance(
                         filename=filename,
                     ).get_header_keys()
