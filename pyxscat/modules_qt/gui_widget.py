@@ -1169,8 +1169,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     lineedit=self.lineedit_headeritems,
                 )
 
-                print(list_keys_from_lineedit)
-
                 # Send the information to update the table
                 self.update_table(
                     list_files=list_files_from_dict,
@@ -1634,6 +1632,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
 
             # Add the columns for filename and the header keys
+            print(list_keys.insert(0, 'Filename'))
             tm.insert_columns(
                 table=self.table_files,
                 num=len(list_keys) + 1,
