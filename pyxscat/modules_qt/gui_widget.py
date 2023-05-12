@@ -441,6 +441,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             le.substitute(self.lineedit_normfactor, self._dict_setup['Norm'])
             le.substitute(self.lineedit_exposure, self._dict_setup['Exposure'])
 
+            # Fill the lineedits of items
+            le.insert(self.lineedit_headeritems,self._dict_setup['Angle'])
+            le.insert(self.lineedit_headeritems,self._dict_setup['Tilt angle'])
+            le.insert(self.lineedit_headeritems,self._dict_setup['Norm'])
+            le.insert(self.lineedit_headeritems,self._dict_setup['Exposure'])
+
             # Reset integrator
             if self._integrator:
                 self.reset_integrator()
@@ -1626,6 +1632,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
 
             # Add the columns for filename and the header keys
+            print(list_files)
+            print(list_keys)
             tm.insert_columns(
                 table=self.table_files,
                 num=len(list_keys) + 1,
