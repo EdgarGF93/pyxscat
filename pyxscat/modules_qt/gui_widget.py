@@ -1168,6 +1168,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 self.header_keys = self.get_header_keys(
                     list_files=list_files_from_dict,
                 )
+                print(self.header_keys)
                 self.update_combobox_items(
                     list_keys=self.self.header_keys,
                 )
@@ -1608,7 +1609,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 set(
                     self.get_Edf_instance(
                         filename=filename,
-                    ).get_header().keys(),
+                    ).get_header().keys()
                 )
             )
 
