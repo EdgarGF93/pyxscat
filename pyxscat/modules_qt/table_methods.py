@@ -4,6 +4,8 @@ def insert_columns(table, num=1, labels=[]):
     """
         Insert new column at the last position of the table
     """
+    print(num)
+    print(labels)
     if labels:
         for item in labels:
             table.insertColumn(table.columnCount())
