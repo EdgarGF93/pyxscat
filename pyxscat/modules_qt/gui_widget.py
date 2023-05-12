@@ -1168,9 +1168,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 self.header_keys = self.get_header_keys(
                     list_files=list_files_from_dict,
                 )
-                print(self.header_keys)
+
                 self.update_combobox_items(
-                    list_keys=self.self.header_keys,
+                    list_keys=self.header_keys,
                 )
 
                 # Get the list of keys from the lineedit
