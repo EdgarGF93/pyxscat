@@ -1671,6 +1671,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Update the table with new files (rows) and keys (columns)
         """
+        print('hola')
         if reset:
             # Clear the table
             tm.reset(
