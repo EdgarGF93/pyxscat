@@ -92,8 +92,8 @@ class EdfClass(Transform):
             qz_parallel=qz_parallel,
             qr_parallel=qr_parallel,
         )
+        
         self._transform_q = transform_q
-
 
     def update_names(self, filename=str()) -> None:
         """
@@ -349,11 +349,13 @@ class EdfClass(Transform):
                     data = self.get_data()
 
                 if unit in UNITS_Q:
+                    NUMBER_COLUMNS_REMOVED = 10
+                    HALF_NUMBER = int(NUMBER_COLUMNS_REMOVED/2)
                     ind = np.unravel_index(np.argmin(abs(scat_x), axis=None), scat_z.shape)
                     if self.sample_orientation_edf in (1,3):
-                        data[:, ind[1] - 2: ind[1] + 2] = np.nan
+                        data[:, ind[1] - HALF_NUMBER: ind[1] + HALF_NUMBER] = np.nan
                     elif self.sample_orientation_edf in (2,4):
-                        data[ind[0] - 2: ind[0] + 2, :] = np.nan
+                        data[ind[0] - HALF_NUMBER: ind[0] + HALF_NUMBER, :] = np.nan
 
             return scat_x, scat_z, data
 
@@ -394,7 +396,6 @@ class EdfClass(Transform):
         if search_nmemonics:
             nemonic_keys = self.search_keys_in_header(header, MNE_NAME)
             position_keys = self.search_keys_in_header(header, POS_NAME)
-
             if nemonic_keys:
                 header = self.get_header_with_nmemonics(header, nemonic_keys, position_keys, remove=True)
         else:
@@ -436,6 +437,7 @@ class EdfClass(Transform):
         else:
             pass
 
+
         return header
 
     def header_extract_nemonics(self, header={}, nemonic_keys=[], position_keys=[]) -> dict:
@@ -446,12 +448,14 @@ class EdfClass(Transform):
 
         new_dict = {}
 
+
         for nm_key, pos_key in zip(nemonic_keys, position_keys):
             for nm_key_name, pos_key_value in zip(header[nm_key].split(' '), header[pos_key].split(' ')):
                 try:
                     new_dict[nm_key_name] = float(pos_key_value)
                 except:
                     new_dict[nm_key_name] = str(pos_key_value)
+
 
         return new_dict
 
