@@ -200,6 +200,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                             self.combobox_headeritems,
                         )
                     ],
+                    reset=False,
                 ),
             )  
         )
@@ -1614,9 +1615,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         for filename in list_files:
             header_keys = header_keys.union(
                 set(
+
                     self.get_Edf_instance(
                         filename=filename,
-                    ).get_header().keys()
+                    ).get_header_keys()
                 )
             )
 

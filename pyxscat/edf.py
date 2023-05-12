@@ -413,6 +413,21 @@ class EdfClass(Transform):
 
         return header
 
+    def get_header_keys(self, search_nmemonics=True, to_float=True) -> list:
+        """
+            Return a list with the keys of the header
+        """
+        list_header = list(
+            self.get_header(
+                search_nmemonics=search_nmemonics,
+                to_float=to_float,
+            ).keys()
+        )
+        return list_header.sort()
+
+
+
+
     def search_keys_in_header(self, header={}, key_list=[]) -> list:
         """
             Returns a list with the keys of the header that matches some string in key_list
