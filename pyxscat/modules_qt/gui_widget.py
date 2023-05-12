@@ -190,17 +190,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         self.combobox_headeritems.currentTextChanged.connect(
             lambda: (
-                # le.insert(
-                #     self.lineedit_headeritems,
-                #     cb.value(self.combobox_headeritems)
-                # ),
-                self.update_table(
-                    list_keys=[
-                        cb.value(
-                            self.combobox_headeritems,
-                        )
-                    ],
-                    reset=False,
+                le.insert(
+                    self.lineedit_headeritems,
+                    cb.value(self.combobox_headeritems)
                 ),
             )  
         )
