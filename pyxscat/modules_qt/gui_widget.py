@@ -1716,84 +1716,141 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             new_files_in_table = set(list_files).difference(set(self.files_in_table))
             news_keys_in_table = set(list_keys).difference(set(self.keys_in_table))
 
-            # First case: No new files but new keys
-            if news_keys_in_table and not new_files_in_table:
+            # Add the rows for the new files
+            tm.insert_rows(
+                table=self.table_files,
+                num=len(new_files_in_table)
+            )
 
-                # Add new columns for new header keys
-                tm.insert_columns(
-                    table=self.table_files,
-                    num=len(news_keys_in_table),
-                    labels=news_keys_in_table,
-                )
+            # Add the key values for the new rows
+            for ind_row, Edf in enumerate(self._integrator.edf_iterator(new_files_in_table)):
+                header_edf = Edf.get_header()
+                for ind_column, key in enumerate(self.keys_in_table):
+                    try:
+                        tm.update_cell(
+                            table=self.table_files,
+                            row_ind=len(self.files_in_table) + ind_row,
+                            column_ind=ind_column,
+                            st=header_edf[key],
+                        )
+                    except:
+                        pass
 
-                for ind_row, filename in enumerate(self._integrator.edf_iterator(self.files_in_table)):
+            self.files_in_table += new_files_in_table
 
-                    header_edf = Edf.get_header()
-                    for ind_column, key in enumerate(news_keys_in_table):
-                        try:
-                            tm.update_cell(
-                                table=self.table_files,
-                                row_ind=ind_row,
-                                column_ind=len(self.keys_in_table) + ind_column,
-                                st=header_edf[key],
-                            )
-                        except:
-                            pass
+            # Add the new columns for new header keys
+            tm.insert_columns(
+                table=self.table_files,
+                num=len(news_keys_in_table) + 1,
+                labels=news_keys_in_table,
+            )
 
-                self.keys_in_table += news_keys_in_table
+            # Add the new key values for every file
+            for ind_row, Edf in enumerate(self._integrator.edf_iterator(self.files_in_table)):
+                header_edf = Edf.get_header()
+                for ind_column, key in enumerate(news_keys_in_table):
+                    try:
+                        tm.update_cell(
+                            table=self.table_files,
+                            row_ind=ind_row,
+                            column_ind=len(self.keys_in_table) + ind_column,
+                            st=header_edf[key],
+                        )
+                    except:
+                        pass
 
-            # Second case: New files but not new keys
-            elif new_files_in_table and not news_keys_in_table:
-                tm.insert_rows(
-                    table=self.table_files,
-                    num=len(new_files_in_table)
-                )
+            self.keys_in_table += news_keys_in_table
 
-                for ind_row, filename in enumerate(self._integrator.edf_iterator(new_files_in_table)):
 
-                    header_edf = Edf.get_header()
-                    for ind_column, key in enumerate(self.keys_in_table):
-                        try:
-                            tm.update_cell(
-                                table=self.table_files,
-                                row_ind=len(self.files_in_table) + ind_row,
-                                column_ind=ind_column,
-                                st=header_edf[key],
-                            )
-                        except:
-                            pass
 
-                self.files_in_table += new_files_in_table
 
-            elif new_files_in_table and news_keys_in_table:
+            # self.files_in_table = list_files
+            # self.keys_in_table = list_keys
 
-                tm.insert_columns(
-                    table=self.table_files,
-                    num=len(news_keys_in_table),
-                    labels=news_keys_in_table,
-                )
+            # # ADD THE VALUES IN COLUMNS AND ROWS
+            # for ind_row, filename in enumerate(self._integrator.edf_iterator(new_files_in_table)):
 
-                tm.insert_rows(
-                    table=self.table_files,
-                    num=len(new_files_in_table)
-                )
 
-                self.files_in_table += new_files_in_table
-                self.keys_in_table += news_keys_in_table
 
-                for ind_row, filename in enumerate(self._integrator.edf_iterator(self.files_in_table)):
 
-                    header_edf = Edf.get_header()
-                    for ind_column, key in enumerate(self.keys_in_table):
-                        try:
-                            tm.update_cell(
-                                table=self.table_files,
-                                row_ind=ind_row,
-                                column_ind=ind_column,
-                                st=header_edf[key],
-                            )
-                        except:
-                            pass
+            # # First case: No new files but new keys
+            # if news_keys_in_table and not new_files_in_table:
+
+            #     # Add new columns for new header keys
+            #     tm.insert_columns(
+            #         table=self.table_files,
+            #         num=len(news_keys_in_table),
+            #         labels=news_keys_in_table,
+            #     )
+
+            #     for ind_row, filename in enumerate(self._integrator.edf_iterator(self.files_in_table)):
+
+            #         header_edf = Edf.get_header()
+            #         for ind_column, key in enumerate(news_keys_in_table):
+            #             try:
+            #                 tm.update_cell(
+            #                     table=self.table_files,
+            #                     row_ind=ind_row,
+            #                     column_ind=len(self.keys_in_table) + ind_column,
+            #                     st=header_edf[key],
+            #                 )
+            #             except:
+            #                 pass
+
+            #     self.keys_in_table += news_keys_in_table
+
+            # # Second case: New files but not new keys
+            # elif new_files_in_table and not news_keys_in_table:
+            #     tm.insert_rows(
+            #         table=self.table_files,
+            #         num=len(new_files_in_table)
+            #     )
+
+            #     for ind_row, filename in enumerate(self._integrator.edf_iterator(new_files_in_table)):
+
+            #         header_edf = Edf.get_header()
+            #         for ind_column, key in enumerate(self.keys_in_table):
+            #             try:
+            #                 tm.update_cell(
+            #                     table=self.table_files,
+            #                     row_ind=len(self.files_in_table) + ind_row,
+            #                     column_ind=ind_column,
+            #                     st=header_edf[key],
+            #                 )
+            #             except:
+            #                 pass
+
+            #     self.files_in_table += new_files_in_table
+
+            # elif new_files_in_table and news_keys_in_table:
+
+            #     tm.insert_columns(
+            #         table=self.table_files,
+            #         num=len(news_keys_in_table),
+            #         labels=news_keys_in_table,
+            #     )
+
+            #     tm.insert_rows(
+            #         table=self.table_files,
+            #         num=len(new_files_in_table)
+            #     )
+
+            #     self.files_in_table += new_files_in_table
+            #     self.keys_in_table += news_keys_in_table
+
+            #     for ind_row, filename in enumerate(self._integrator.edf_iterator(self.files_in_table)):
+
+            #         header_edf = Edf.get_header()
+            #         for ind_column, key in enumerate(self.keys_in_table):
+            #             try:
+            #                 tm.update_cell(
+            #                     table=self.table_files,
+            #                     row_ind=ind_row,
+            #                     column_ind=ind_column,
+            #                     st=header_edf[key],
+            #                 )
+            #             except:
+            #                 pass
 
 
 
