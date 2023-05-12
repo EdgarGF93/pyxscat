@@ -494,10 +494,18 @@ def get_subfolder(full_directory=str(), main_directory=str()) -> str:
     """
         Return the subfolder of a full_directory
     """
-    if full_directory and exists(full_directory):
-        if full_directory == main_directory:
-            return full_directory
-        subfolder_list = [item for item in full_directory.split(os.sep) if item not in main_directory.split(os.sep)]
-        return os.path.join(*subfolder_list)
-    else:
-        return
+    return str(Path(full_directory).relative_to(Path(main_directory)))
+
+
+
+
+
+
+
+    # if full_directory and exists(full_directory):
+    #     if full_directory == main_directory:
+    #         return full_directory
+    #     subfolder_list = [item for item in full_directory.split(os.sep) if item not in main_directory.split(os.sep)]
+    #     return os.path.join(*subfolder_list)
+    # else:
+    #     return

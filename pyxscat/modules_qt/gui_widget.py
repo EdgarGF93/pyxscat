@@ -194,6 +194,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     self.lineedit_headeritems,
                     cb.value(self.combobox_headeritems)
                 ),
+                self.update_table(
+                    list_keys=[
+                        cb.value(
+                            self.combobox_headeritems,
+                        )
+                    ],
+                    reset=False,
+                )
             )  
         )
 
@@ -610,6 +618,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     if self._main_directory:
                         self.reset_attributes()
                         tm.reset(self.table_files)
+                        lt.clear(self.listwidget_folders)
                         self._write_output(MSG_RESET_DATA)
 
                     self._main_directory = main_dir_text
@@ -1185,14 +1194,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     reset=reset_table,
                 )
                 
-
-
-                # self.update_table_upon_clicked_folder(
-                #     clicked_folder=self.clicked_folder,
-                #     reset=reset,
-                # )
-
-
             except:
                 self._write_output(MSG_CLICKED_FLODER_ERROR)
         else:
@@ -1267,38 +1268,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
                 self._write_output(f"Updated cache with new file: {filename}")
 
-                # Feed two comboboxes with the headers of these files
-                try:
-                    new_header_keys = list(self.Edf_sample_cache.get_header().keys())
-                    new_header_keys.insert(0,'')
-
-                    if self.header_keys != new_header_keys:
-                        self.header_keys = new_header_keys
-                        lt.clear(self.lineedit_headeritems)
-                        lt.clear(self.lineedit_headeritems_title)
-                        cb.insert_list(
-                            combobox=self.combobox_headeritems,
-                            list_items=new_header_keys,
-                            reset=True,
-                        )
-
-                        # Add default columns
-                        cb.set_text(self.combobox_headeritems, self._dict_setup['Angle'])
-                        cb.set_text(self.combobox_headeritems, self._dict_setup['Tilt angle'])
-                        cb.set_text(self.combobox_headeritems, self._dict_setup['Exposure'])
-                        cb.set_text(self.combobox_headeritems, self._dict_setup['Norm'])
-
-                        cb.insert_list(
-                            combobox=self.combobox_headeritems_title,
-                            list_items=new_header_keys,
-                            reset=True,
-                        )
-                except:
-                    pass
-
-
-
-
                 self.sample_data_cache = self.Edf_sample_cache.get_data()
                 self.normfactor_cache = self.Edf_sample_cache.normfactor
             except:
@@ -1307,7 +1276,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         if self.spinbox_sub.value() != 0.0:
-        # if self.checkbox_sub.isChecked():
             # Try to create an Edf instance of a reference file
             if self._reference_file:
                 self.Edf_reference_cache = EdfClass(
@@ -1604,27 +1572,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         header_keys = set()
 
-
         for filename in list_files:
-            print(self.get_Edf_instance(
-                        filename=filename,
-                    ).get_header_keys())
-
-
+            Edf = self.get_Edf_instance(filename=filename)
+            list_keys_edf = Edf.get_header_keys()
 
             header_keys = header_keys.union(
-                set(
-                    self.get_Edf_instance(
-                        filename=filename,
-                    ).get_header_keys()
-                )
+                set(list_keys_edf)
             )
 
+        header_keys = list(header_keys)
+        header_keys.sort()
+
         return header_keys
-
-
-
-
 
     def update_combobox_items(self, list_keys=[], reset=False):
         """
@@ -1637,6 +1596,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         else:
             new_keys = set(list_keys).difference(set(self.header_keys))
             self.header_keys += new_keys
+            self.header_keys.sort()
+        
 
         # Combobox for table columns
         cb.insert_list(
@@ -1675,10 +1636,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
 
-
-
-
-
     def update_table(self, list_files=list(), list_keys=list(), reset=True):
         """
             Update the table with new files (rows) and keys (columns)
@@ -1691,6 +1648,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
             # Add the columns for filename and the header keys
             list_keys.insert(0, 'Filename')
+
+            # Filter the items
+            list_keys = [item for item in list_keys if item in self.get_header_keys(list_files)]
 
             tm.insert_columns(
                 table=self.table_files,
@@ -1772,399 +1732,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                         pass
 
             self.keys_in_table += news_keys_in_table
-
-
-
-
-            # self.files_in_table = list_files
-            # self.keys_in_table = list_keys
-
-            # # ADD THE VALUES IN COLUMNS AND ROWS
-            # for ind_row, filename in enumerate(self._integrator.edf_iterator(new_files_in_table)):
-
-
-
-
-            # # First case: No new files but new keys
-            # if news_keys_in_table and not new_files_in_table:
-
-            #     # Add new columns for new header keys
-            #     tm.insert_columns(
-            #         table=self.table_files,
-            #         num=len(news_keys_in_table),
-            #         labels=news_keys_in_table,
-            #     )
-
-            #     for ind_row, filename in enumerate(self._integrator.edf_iterator(self.files_in_table)):
-
-            #         header_edf = Edf.get_header()
-            #         for ind_column, key in enumerate(news_keys_in_table):
-            #             try:
-            #                 tm.update_cell(
-            #                     table=self.table_files,
-            #                     row_ind=ind_row,
-            #                     column_ind=len(self.keys_in_table) + ind_column,
-            #                     st=header_edf[key],
-            #                 )
-            #             except:
-            #                 pass
-
-            #     self.keys_in_table += news_keys_in_table
-
-            # # Second case: New files but not new keys
-            # elif new_files_in_table and not news_keys_in_table:
-            #     tm.insert_rows(
-            #         table=self.table_files,
-            #         num=len(new_files_in_table)
-            #     )
-
-            #     for ind_row, filename in enumerate(self._integrator.edf_iterator(new_files_in_table)):
-
-            #         header_edf = Edf.get_header()
-            #         for ind_column, key in enumerate(self.keys_in_table):
-            #             try:
-            #                 tm.update_cell(
-            #                     table=self.table_files,
-            #                     row_ind=len(self.files_in_table) + ind_row,
-            #                     column_ind=ind_column,
-            #                     st=header_edf[key],
-            #                 )
-            #             except:
-            #                 pass
-
-            #     self.files_in_table += new_files_in_table
-
-            # elif new_files_in_table and news_keys_in_table:
-
-            #     tm.insert_columns(
-            #         table=self.table_files,
-            #         num=len(news_keys_in_table),
-            #         labels=news_keys_in_table,
-            #     )
-
-            #     tm.insert_rows(
-            #         table=self.table_files,
-            #         num=len(new_files_in_table)
-            #     )
-
-            #     self.files_in_table += new_files_in_table
-            #     self.keys_in_table += news_keys_in_table
-
-            #     for ind_row, filename in enumerate(self._integrator.edf_iterator(self.files_in_table)):
-
-            #         header_edf = Edf.get_header()
-            #         for ind_column, key in enumerate(self.keys_in_table):
-            #             try:
-            #                 tm.update_cell(
-            #                     table=self.table_files,
-            #                     row_ind=ind_row,
-            #                     column_ind=ind_column,
-            #                     st=header_edf[key],
-            #                 )
-            #             except:
-            #                 pass
-
-
-
-
-
-
-            # if new_files_in_table:
-
-            #     # Add new rows for new displayed files
-            #     tm.insert_rows(
-            #         table=self.table_files,
-            #         num=len(new_files_in_table)
-            #     )
-
-            # if news_keys_in_table:
-                
-
-            # for ind_row, Edf in enumerate(self._integrator.edf_iterator(list_files)):
-
-            #     header_edf = Edf.get_header()
-                
-            
-            # self.files_in_table = list_files
-            # self.keys_in_table = list_keys
-
-
-
-
-
-            #     # Display the filenames
-                
-
-            # if news_keys_in_table:
-
-            
-            # self.files_in_table += new_files_in_table
-
-            # # Fill the table with all the filenames and header values
-            # for ind_row, Edf in enumerate(self._integrator.edf_iterator(self.files_in_table)):
-
-            #     header_edf = Edf.get_header()
-            #     for ind_column, key in enumerate(news_keys_in_table):
-            #         try:
-            #             tm.update_cell(
-            #                 table=self.table_files,
-            #                 row_ind=ind_row,
-            #                 column_ind=ind_column + 1,
-            #                 st=header_edf[key],
-            #             )
-            #         except:
-            #             pass
-
-            # self.keys_in_table += news_keys_in_table
-
-
-
-
-
-
-            # for ind_row, file in enumerate(list_files):
-            #     try:
-            #         edf = 
-
-            #     try:
-            #         tm.update_cell(
-            #             table=self.table_files,
-            #             row_ind=ind_row,
-            #             column_ind=0,
-            #             st=basename(file),
-            #         )
-            #     except:
-            #         pass
-
-
-
-
-
-
-            # # Fill the table with the filenames
-            # for ind_row, file in enumerate(list_files):
-            #     try:
-            #         tm.update_cell(
-            #             table=self.table_files,
-            #             row_ind=ind_row,
-            #             column_ind=0,
-            #             st=basename(file),
-            #         )
-            #     except:
-            #         pass
-
-            # # Fill the table with the rest of the header values
-            # for ind_row, Edf in enumerate(self._integrator.edf_iterator(list_files)):
-            #     header_edf = Edf.get_header()
-            #     for ind_column, label in enumerate(labels_header):
-            #         try:
-            #             tm.update_cell(
-            #                 table=self.table_files,
-            #                 row_ind=ind_row,
-            #                 column_ind=ind_column+1,
-            #                 st=header_edf[label],
-            #             )
-            #         except:
-            #             pass
-
-
-                    
-
-        
-
-
-
-
-
-    # def update_table_upon_clicked_folder(self, clicked_folder=str(), reset=True):
-    #     """
-    #         Update table with new rows(files) after clicking on folder from listwidget_folder
-    #     """
-    #     self.update_table(
-    #         list_files=self._dict_files[clicked_folder],
-    #         list_keys=le.get_clean_list(
-    #             lineedit=self.lineedit_headeritems,
-    #         ),
-    #         reset=reset,
-    #     )
-
-
-
-
-
-
-    #     list_files = self._dict_files[clicked_folder]
-
-    #     if list_files == self.files_in_table:
-    #         return
-    #     else:
-    #         # Get the new files located in clicked folder
-    #         new_files = set(list_files).difference(set(self.files_in_table))
-    #         self.files_in_table += new_files
-
-    #         # Insert new rows for new files
-    #         tm.insert_rows(
-    #             table=self.table_files,
-    #             num=len(new_files)
-    #         )
-
-    #         for ind_col, file in enumerate(new_files):
-
-    #             tm.update_cell(
-    #                 table=self.table_files,
-    #                 row_ind=len(self.files_in_table) - len(new_files) + ind_col,
-    #                 column_ind=0,
-    #                 st=basename(file),
-    #             )
-                
-    #     # Feed the table
-    #     if self._integrator:
-    #         for ind_row, Edf in enumerate(self._integrator.edf_iterator(list_files)):
-    #             header_edf = Edf.get_header()
-    #             for ind_column, label in enumerate(labels_header):
-    #                 try:
-    #                     tm.update_cell(
-    #                         table=self.table_files,
-    #                         row_ind=ind_row,
-    #                         column_ind=ind_column+1,
-    #                         st=header_edf[label],
-    #                     )
-    #                 except:
-    #                     pass
-
-
-
-
-
-
-    # def init_table_and_cbs(self, list_files=[]):
-    #     """
-    #         Reset and initiate the table with a first column of filenames and two comboboxes
-    #     """
-    #     if list_files:
-    #         # Reset the table
-    #         tm.reset(
-    #             table=self.table_files
-    #         )
-
-    #         # Then, introduce all the needed rows for the files
-    #         tm.insert_rows(
-    #             table=self.table_files,
-    #             num=len(list_files)
-    #         )
-
-    #         # Add one column
-    #         tm.insert_columns(
-    #             table=self.table_files,
-    #             num=1,
-    #             labels=['Filename'],
-    #         )
-
-    #         for row_ind, file in enumerate(list_files):
-    #             try:
-    #                 tm.update_cell(
-    #                     table=self.table_files,
-    #                     row_ind=row_ind,
-    #                     column_ind=0,
-    #                     st=basename(file),
-    #                 )
-    #             except:
-    #                 pass
-
-    #         # Feed two comboboxes with the headers of these files
-    #         if not self.header_keys:
-    #             try:
-    #                 new_header_keys = list(EdfClass(
-    #                     filename=list_files[0],
-    #                     dict_setup=self._dict_setup,
-    #                 ).get_header().keys())
-    #                 new_header_keys.insert(0,'')
-    #             except:
-    #                 return
-                
-    #             if self.header_keys != new_header_keys:
-    #                 self.header_keys = new_header_keys
-    #                 lt.clear(self.lineedit_headeritems)
-    #                 lt.clear(self.lineedit_headeritems_title)
-    #                 cb.insert_list(
-    #                     combobox=self.combobox_headeritems,
-    #                     list_items=new_header_keys,
-    #                     reset=True,
-    #                 )
-
-    #                 # Add default columns
-    #                 cb.set_text(self.combobox_headeritems, self._dict_setup['Angle'])
-    #                 cb.set_text(self.combobox_headeritems, self._dict_setup['Tilt angle'])
-    #                 cb.set_text(self.combobox_headeritems, self._dict_setup['Exposure'])
-    #                 cb.set_text(self.combobox_headeritems, self._dict_setup['Norm'])
-
-    #                 cb.insert_list(
-    #                     combobox=self.combobox_headeritems_title,
-    #                     list_items=new_header_keys,
-    #                     reset=True,
-    #                 )
-
-    #                 cb.insert_list(
-    #                     combobox=self.combobox_angle,
-    #                     list_items=new_header_keys,
-    #                     reset=True,
-    #                 )
-    #                 cb.insert_list(
-    #                     combobox=self.combobox_tilt_angle,
-    #                     list_items=new_header_keys,
-    #                     reset=True,
-    #                 )
-    #                 cb.insert_list(
-    #                     combobox=self.combobox_normfactor,
-    #                     list_items=new_header_keys,
-    #                     reset=True,
-    #                 )
-    #                 cb.insert_list(
-    #                     combobox=self.combobox_exposure,
-    #                     list_items=new_header_keys,
-    #                     reset=True,
-    #                 )
-    #     else:
-    #         return
-
-    # def update_table(self, list_files=[], reset=False):
-    #     """
-    #         Update the table upon the selected folders in the list
-    #     """
-    #     if reset:
-    #         self.init_table_and_cbs(
-    #             list_files=list_files,
-    #         )
-
-    #     labels_header = list(
-    #         set(
-    #             le.get_list(
-    #                 lineedit=self.lineedit_headeritems,
-    #             )
-    #         )
-    #     )
-
-    #     # Add new columns upon labels_header
-    #     tm.insert_columns(
-    #         table=self.table_files,
-    #         num=len(labels_header),
-    #         labels=labels_header,
-    #     )
-
-    #     # Feed the table
-    #     if self._integrator:
-    #         for ind_row, Edf in enumerate(self._integrator.edf_iterator(list_files)):
-    #             header_edf = Edf.get_header()
-    #             for ind_column, label in enumerate(labels_header):
-    #                 try:
-    #                     tm.update_cell(
-    #                         table=self.table_files,
-    #                         row_ind=ind_row,
-    #                         column_ind=ind_column+1,
-    #                         st=header_edf[label],
-    #                     )
-    #                 except:
-    #                     pass
 
     def selected_list_filename_table(self):
         """

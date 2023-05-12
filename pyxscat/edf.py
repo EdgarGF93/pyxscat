@@ -417,13 +417,17 @@ class EdfClass(Transform):
         """
             Return a list with the keys of the header
         """
-        list_header = list(
-            self.get_header(
-                search_nmemonics=search_nmemonics,
-                to_float=to_float,
-            ).keys()
+        header = self.get_header(
+            search_nmemonics=search_nmemonics,
+            to_float=to_float,
         )
-        return list_header.sort()
+
+        header_keys = list(header.keys())
+        header_keys.sort()
+        header_keys.insert(0,'')
+
+        return header_keys
+
 
 
 
