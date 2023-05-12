@@ -1165,12 +1165,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 list_files_from_dict = self._dict_files[clicked_folder]
                 
                 # Updates the combobox bounded to header_items
-                self.header_keys = self.get_header_keys(
-                    list_files=list_files_from_dict,
-                )
-
                 self.update_combobox_items(
-                    list_keys=self.header_keys,
+                    list_keys=self.get_header_keys(
+                        list_files=list_files_from_dict,
+                    ),
                 )
 
                 # Get the list of keys from the lineedit
@@ -1623,7 +1621,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Feed the combobox of items with header keys, init or update
         """
-        print(list_keys)
 
         # Is there are not different keys, do not change anything
         if list_keys == self.header_keys:
