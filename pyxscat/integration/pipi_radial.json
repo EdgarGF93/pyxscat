@@ -1,1 +1,1 @@
-{"Name": "pipi_radial", "Type": "Radial", "Suffix": "pipi_radial", "Azimuth_range": [-10, 90], "Radial_range": [3, 5], "Unit": "q_nm^-1", "Bins_azimut": 90}
+{"Name": "pipi_radial", "Type": "Radial", "Suffix": "pipi_radial", "Azimuth_range": [7, 87], "Radial_range": [12, 16], "Unit": "q_nm^-1", "Bins_azimut": 90}

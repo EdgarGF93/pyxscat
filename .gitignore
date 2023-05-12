@@ -234,3 +234,6 @@ $RECYCLE.BIN/
 
 # Jupyter files
 # *.ipynb
+
+# json files
+.json
