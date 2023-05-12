@@ -1632,12 +1632,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
 
             # Add the columns for filename and the header keys
-            print(list_keys)
-            print(list_keys.insert(0, 'Filename'))
+            list_keys.insert(0, 'Filename')
             tm.insert_columns(
                 table=self.table_files,
                 num=len(list_keys) + 1,
-                labels=list_keys.insert(0, 'Filename'),
+                labels=list_keys,
             )
 
             # Add the rows for all the files
