@@ -1648,28 +1648,30 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             # Fill the table with all the filenames and header values
             if self._integrator:
                 for ind_row, Edf in enumerate(self._integrator.edf_iterator(list_files)):
-                    try:
-                        tm.update_cell(
-                            table=self.table_files,
-                            row_ind=ind_row,
-                            column_ind=0,
-                            st=Edf.basename,
-                        )
-                    except:
-                        pass
 
                     header_edf = Edf.get_header()
-
                     for ind_column, key in enumerate(list_keys):
                         try:
                             tm.update_cell(
                                 table=self.table_files,
                                 row_ind=ind_row,
-                                column_ind=ind_column+1,
+                                column_ind=ind_column,
                                 st=header_edf[key],
                             )
                         except:
                             pass
+
+                
+                    # for ind_column, key in enumerate(list_keys):
+                    #     try:
+                    #         tm.update_cell(
+                    #             table=self.table_files,
+                    #             row_ind=ind_row,
+                    #             column_ind=ind_column+1,
+                    #             st=,
+                    #         )
+                    #     except:
+                    #         pass
                 
                 self.files_in_table = list_files
                 self.keys_in_table = list_keys
