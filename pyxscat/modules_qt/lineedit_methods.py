@@ -38,3 +38,9 @@ def substitute(lineedit, new_text):
 
 def get_clean_list(lineedit, separator=','):
     return [item for item in lineedit.text().strip().split(separator) if item]
+
+def clear(lineedit):
+    """
+        Clear and insert the new text
+    """
+    lineedit.clear()
