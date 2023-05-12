@@ -1623,6 +1623,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Feed the combobox of items with header keys, init or update
         """
+        print(list_keys)
 
         # Is there are not different keys, do not change anything
         if list_keys == self.header_keys:
