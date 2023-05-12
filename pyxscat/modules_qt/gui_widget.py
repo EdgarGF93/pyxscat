@@ -1163,6 +1163,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
                 # Get the list of files that it's already in the dictionary
                 list_files_from_dict = self._dict_files[clicked_folder]
+                
+                # Updates the combobox bounded to header_items
+                self.header_keys = self.get_header_keys(
+                    list_files=list_files_from_dict,
+                )
+                self.update_combobox_items(
+                    list_keys=self.self.header_keys,
+                )
 
                 # Get the list of keys from the lineedit
                 list_keys_from_lineedit = le.get_clean_list(
@@ -1210,6 +1218,23 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # else:
         #     self._write_output(MSG_CLICKED_FLODER_ERROR)
         #     pass
+
+    def get_Edf_instance(self, filename=str()):
+        """
+            Return the Edf instance using all the attributes stored in GUI
+        """
+        return EdfClass(
+            filename=filename,
+            ponifile_path=self._ponifile,
+            dict_setup=self._dict_setup,
+            qz_parallel=self._qz_parallel,
+            qr_parallel=self._qr_parallel,
+        )
+
+
+
+
+
 
     def update_cache(self, data=None, filename='', norm_factor=None, plot=False):
         """
@@ -1570,6 +1595,28 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                         lineedit=self.lineedit_headeritems,
                         new_text=key,
                     )
+
+    
+    def get_header_keys(self, list_files=list()):
+        """
+            Get the full list of header keys from a list of files
+        """
+        header_keys = set()
+
+        for filename in list_files:
+            header_keys = header_keys.union(
+                set(
+                    self.get_Edf_instance(
+                        filename=filename,
+                    ).get_header().keys(),
+                )
+            )
+
+        return header_keys
+
+
+
+
 
     def update_combobox_items(self, list_keys=[], reset=False):
         """
