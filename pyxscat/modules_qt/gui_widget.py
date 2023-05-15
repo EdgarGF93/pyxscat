@@ -1081,13 +1081,24 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             # Do the updates regarding last file (or not)
             if self.checkbox_live.isChecked() and ('linux' in sys.platform):
 
+                last_file = self.get_last_file(new_files)
+
+                folder_last_file = basename(last_file)
+
+                if self.clicked_folder == folder_last_file:
+                    reset = False
+                    list_files_to_display = new_files
+                else:
+                    reset = True
+                    list_files_to_display = self._dict_files[folder_last_file]
+
                 self.update_table(
-                    list_files=new_files,
-                    reset=True,
+                    list_files=list_files_to_display,
+                    list_keys=le.get_clean_list(self.lineedit_headeritems),
+                    reset=reset,
                 )
 
-                last_file = self.get_last_file(new_files)
-                
+            
                 self.update_cache(
                     filename=last_file,
                     plot=True,
