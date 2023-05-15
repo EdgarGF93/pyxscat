@@ -215,12 +215,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )  
         )
 
-        # Updates the columns on the table upon changes in the lineedit_headeritems
-        # self.combobox_headeritems.currentTextChanged.connect(
-        #     self.update_header_items,
-        # )
-
-
         #########################
         # Lineedit_items header updates the table of files
         #########################
@@ -233,7 +227,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 reset=False,
             )
         )
-
 
         # Click on the table updates the chart
         self.table_files.clicked.connect(
@@ -250,10 +243,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 cb.value(self.combobox_integration)
             )
         )
+
         # Button clear plot clears the chart
         self.button_clearplot.clicked.connect(
             lambda: self.chart_widget.clear()
         )
+
         # Click on average button to generate average data
         self.button_average.clicked.connect(
             lambda: self.average_data(
@@ -323,6 +318,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #         self.check_integration(),
         #     )
         # )
+
         self.button_savefit.clicked.connect(
             self.open_fitting_form,
         )
@@ -339,8 +335,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         self.update_maindir()
         self.update_ponifile()
-        # self._main_directory = ''
-        # self._ponifile = ''
         self._extension = '.edf'
         self._wildcards = '*'
         self._qz_parallel = True
@@ -521,7 +515,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 self._dict_setup[key] = value
                 self._write_output(MSG_SETUP_UPDATED)
                 self._write_output(self._dict_setup)
-
 
     def save_new_setup(self) -> None:
         """
