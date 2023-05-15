@@ -1093,6 +1093,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     self.clicked_folder = folder_last_file
                     list_files_to_display = self._dict_files[folder_last_file]
 
+                print(list_files_to_display)
                 self.update_table(
                     list_files=list_files_to_display,
                     list_keys=le.get_clean_list(self.lineedit_headeritems),
