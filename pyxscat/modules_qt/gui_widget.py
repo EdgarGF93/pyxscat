@@ -1660,6 +1660,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             tm.reset(
                 table=self.table_files,
             )
+            self.files_in_table, self.keys_in_table = [], []
 
             # Add the columns for filename and the header keys
             list_keys.insert(0, 'Filename')
@@ -1696,8 +1697,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                         except:
                             pass
                 
-                self.files_in_table = list_files
-                self.keys_in_table = list_keys
+                self.files_in_table += list_files
+                self.keys_in_table += list_keys
 
         # If not reset, update after the current cursor of the table
         else:
