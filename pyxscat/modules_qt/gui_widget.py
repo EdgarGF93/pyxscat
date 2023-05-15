@@ -1109,15 +1109,24 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 if self.clicked_folder == folder_last_file:
                     reset = False
                     list_files_to_display += new_files
+
+                    self.update_table(
+                        list_files=list_files_to_display,
+                        reset=reset,
+                    )
+
                 else:
                     reset = True
                     self.clicked_folder = folder_last_file
                     list_files_to_display += self._dict_files[folder_last_file]
 
-                self.update_table(
-                    list_files=list_files_to_display,
-                    reset=reset,
-                )
+                    self.update_table(
+                        list_files=list_files_to_display,
+                        list_keys=le.get_clean_list(
+                            lineedit=self.lineedit_headeritems,
+                        ),
+                        reset=reset,
+                    )
 
                 self.update_cache(
                     filename=last_file,
@@ -1221,28 +1230,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         else:
             pass
 
-                
-           
-
-
-
-
-
-        # clicked_folder = lt.click_values(self.listwidget_folders)[0]
-        
-        #     try:
-        #         self.clicked_folder = join(self._main_directory, clicked_folder)
-        #         if exists(self.clicked_folder):
-        #             self._write_output(F"Clicked folder: {clicked_folder}")
-        #             self.update_table_upon_clicked_folder(
-        #                 clicked_folder=self.clicked_folder,
-        #             )
-        #     except:
-        #         self._write_output(MSG_CLICKED_FLODER_ERROR)
-        # else:
-        #     self._write_output(MSG_CLICKED_FLODER_ERROR)
-        #     pass
-
     def get_Edf_instance(self, filename=str()):
         """
             Return the Edf instance using all the attributes stored in GUI
@@ -1254,11 +1241,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             qz_parallel=self._qz_parallel,
             qr_parallel=self._qr_parallel,
         )
-
-
-
-
-
 
     def update_cache(self, data=None, filename='', norm_factor=None, plot=False):
         """
