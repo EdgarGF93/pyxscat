@@ -1070,29 +1070,19 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.set_files += new_files
             self.set_folders += new_folders
 
-            print(self.files_in_table)
-
             # Update the global dictionary of folders-files
             self.update_dictionary_files(
                 new_folders=new_folders,
                 new_files=new_files,
             )
 
-            print(self.files_in_table)
-
             self.update_integrator_files()
-
-            
-
-
 
             if new_folders:
                 self.updatings_new_folders(list(new_folders))
                     
             # Do the updates regarding last file (or not)
             if self.checkbox_live.isChecked() and ('linux' in sys.platform):
-
-                
 
                 last_file = self.get_last_file(new_files)
 
@@ -1106,13 +1096,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     self.clicked_folder = folder_last_file
                     list_files_to_display += self._dict_files[folder_last_file]
 
-                
                 self.update_table(
                     list_files=list_files_to_display,
                     reset=reset,
                 )
 
-            
                 self.update_cache(
                     filename=last_file,
                     plot=True,
@@ -1705,12 +1693,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             new_files_in_table = [item for item in set(list_files) if item not in set(self.files_in_table)]
             news_keys_in_table = [item for item in set(list_keys) if item not in set(self.keys_in_table)]
 
-            # new_files_in_table = set(list_files) ^ set(self.files_in_table)
-            # news_keys_in_table = set(list_keys) ^ set(self.keys_in_table)
-
-            # new_files_in_table = set(list_files).difference(set(self.files_in_table))
-            # news_keys_in_table = set(list_keys).difference(set(self.keys_in_table))
-
             # Add the rows for the new files
             tm.insert_rows(
                 table=self.table_files,
@@ -1736,7 +1718,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             # Add the new columns for new header keys
             tm.insert_columns(
                 table=self.table_files,
-                num=len(news_keys_in_table) + 1,
+                num=len(news_keys_in_table),
                 labels=news_keys_in_table,
             )
 
