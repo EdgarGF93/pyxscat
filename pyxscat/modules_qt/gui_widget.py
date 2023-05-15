@@ -1065,16 +1065,16 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             sorted(new_folders)
 
             # If they are the first detected values, initialize the table with the header keys of the first file
-            if not self.set_files:
-                cb.set_text(
-                    combobox=self.combobox_headeritems,
-                    text='Folder',
-                )
+            # if not self.set_files:
+            #     cb.set_text(
+            #         combobox=self.combobox_headeritems,
+            #         text='Folder',
+            #     )
 
-                cb.set_text(
-                    combobox=self.combobox_headeritems,
-                    text='Filename',
-                )
+            #     cb.set_text(
+            #         combobox=self.combobox_headeritems,
+            #         text='Filename',
+            #     )
 
             # Update the global sets of files and folders
             self.set_files += new_files
@@ -1095,11 +1095,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 last_file = self.get_last_file(new_files)
                 self.update_cache(
                     filename=last_file,
-
                     plot=True,
                 )
                 self.update_table(
                     list_files=self._dict_files[dirname(last_file)],
+                    reset=False,
                 )
             else:
                 return
