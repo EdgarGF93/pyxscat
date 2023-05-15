@@ -1093,10 +1093,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     self.clicked_folder = folder_last_file
                     list_files_to_display = self._dict_files[folder_last_file]
 
-                print(list_files_to_display)
                 self.update_table(
                     list_files=list_files_to_display,
-                    list_keys=le.get_clean_list(self.lineedit_headeritems),
                     reset=reset,
                 )
 
@@ -1692,6 +1690,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             new_files_in_table = [item for item in set(list_files) if item not in set(self.files_in_table)]
             news_keys_in_table = [item for item in set(list_keys) if item not in set(self.keys_in_table)]
 
+            print(new_files_in_table)
 
             # new_files_in_table = set(list_files) ^ set(self.files_in_table)
             # news_keys_in_table = set(list_keys) ^ set(self.keys_in_table)
