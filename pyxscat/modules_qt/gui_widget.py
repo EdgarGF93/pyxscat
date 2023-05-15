@@ -1689,6 +1689,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # If not reset, update after the current cursor of the table
         else:
             print(list_files)
+            print(self.files_in_table)
             new_files_in_table = [item for item in set(list_files) if item not in set(self.files_in_table)]
             news_keys_in_table = [item for item in set(list_keys) if item not in set(self.keys_in_table)]
             print(new_files_in_table)
