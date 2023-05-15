@@ -174,6 +174,16 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         )
 
+        #########################
+        # Checkbox to start live data searching
+        #########################
+        self.checkbox_live.stateChanged.connect(
+            lambda : (
+                self.create_integrator(),
+                self.search_and_update_files(),
+            )
+        ) 
+
         #####################################################################
         ##################  BROWSER CALLBACKS  ##############################
         #####################################################################
@@ -451,7 +461,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             le.substitute(self.lineedit_normfactor, self._dict_setup['Norm'])
             le.substitute(self.lineedit_exposure, self._dict_setup['Exposure'])
 
-            # Fill the lineedits of items
+            # Reset and fill the lineedits of items
+            le.clear(self.lineedit_headeritems)
             le.insert(self.lineedit_headeritems,self._dict_setup['Angle'])
             le.insert(self.lineedit_headeritems,self._dict_setup['Tilt angle'])
             le.insert(self.lineedit_headeritems,self._dict_setup['Norm'])
