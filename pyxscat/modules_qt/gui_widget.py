@@ -1069,16 +1069,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.set_files += new_files
             self.set_folders += new_folders
 
-            
+            print(self.files_in_table)
 
             # Update the global dictionary of folders-files
             self.update_dictionary_files(
                 new_folders=new_folders,
                 new_files=new_files,
             )
+
+            
             self.update_integrator_files()
 
-            print(self.files_in_table)
+            
 
 
 
