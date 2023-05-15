@@ -1669,7 +1669,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
             tm.insert_columns(
                 table=self.table_files,
-                num=len(list_keys) + 1,
+                num=len(list_keys),
                 labels=list_keys,
             )
 
