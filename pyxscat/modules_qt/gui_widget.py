@@ -1059,6 +1059,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         
         if new_files:
             print(self.files_in_table)
+
             self._write_output(MSG_NEW_DETECTED_FILES)
             sorted(new_files)
 
@@ -1069,6 +1070,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             # Update the global sets of files and folders
             self.set_files += new_files
             self.set_folders += new_folders
+
+            print(self.files_in_table)
 
             # Update the global dictionary of folders-files
             self.update_dictionary_files(
