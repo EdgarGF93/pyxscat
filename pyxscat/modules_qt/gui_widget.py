@@ -1663,6 +1663,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
             # Add the columns for filename and the header keys
             list_keys.insert(0, 'Filename')
+            self.keys_in_table += ['Filename']
 
             # Filter the items
             list_keys = [item for item in list_keys if item in self.get_header_keys(list_files)]
