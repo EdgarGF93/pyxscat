@@ -1056,6 +1056,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Search the list of detected files and update the widgets
         """
+        print(self.files_in_table)
         if new_files:
             self._write_output(MSG_NEW_DETECTED_FILES)
             sorted(new_files)
