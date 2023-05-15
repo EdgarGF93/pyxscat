@@ -1056,7 +1056,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
             Search the list of detected files and update the widgets
         """
-        
+        list_files_to_display = []
+
         if new_files:
             self._write_output(MSG_NEW_DETECTED_FILES)
             sorted(new_files)
@@ -1078,6 +1079,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
 
             print(self.files_in_table)
+
             self.update_integrator_files()
 
             
@@ -1098,11 +1100,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
                 if self.clicked_folder == folder_last_file:
                     reset = False
-                    list_files_to_display = new_files
+                    list_files_to_display += new_files
                 else:
                     reset = True
                     self.clicked_folder = folder_last_file
-                    list_files_to_display = self._dict_files[folder_last_file]
+                    list_files_to_display += self._dict_files[folder_last_file]
 
                 
                 self.update_table(
