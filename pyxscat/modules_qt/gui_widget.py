@@ -469,7 +469,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             le.insert(self.lineedit_headeritems,self._dict_setup['Exposure'])
             self.update_table(
                 list_files=self.files_in_table,
-                list_keys=self.keys_in_table,
                 reset=True,
             )
 
