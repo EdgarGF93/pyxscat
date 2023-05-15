@@ -1689,8 +1689,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         # If not reset, update after the current cursor of the table
         else:
-            new_files_in_table = set(list_files).difference(set(self.files_in_table))
-            news_keys_in_table = set(list_keys).difference(set(self.keys_in_table))
+            # Symmetric differences between sets
+            new_files_in_table = set(list_files) ^ set(self.files_in_table)
+            news_keys_in_table = set(list_keys) ^ set(self.keys_in_table)
+
+            # new_files_in_table = set(list_files).difference(set(self.files_in_table))
+            # news_keys_in_table = set(list_keys).difference(set(self.keys_in_table))
 
             # Add the rows for the new files
             tm.insert_rows(
