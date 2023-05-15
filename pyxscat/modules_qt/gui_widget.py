@@ -1081,6 +1081,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             # Do the updates regarding last file (or not)
             if self.checkbox_live.isChecked() and ('linux' in sys.platform):
 
+                print(self.files_in_table)
+
                 last_file = self.get_last_file(new_files)
 
                 folder_last_file = dirname(last_file)
