@@ -1063,31 +1063,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             # Check if the new files come from new folders
             new_folders = sorted(list(set([dirname(file) for file in new_files]).difference(self.set_folders)))
             sorted(new_folders)
-
-            # If they are the first detected values, initialize the table with the header keys of the first file
-            if self.files_in_table:
-                reset = False
-            else:
-                reset = True
-
-            self.update_table(
-                list_files=new_files,
-                reset=reset,
-            )
-
-
-
-            # if not self.set_files:
-            #     cb.set_text(
-            #         combobox=self.combobox_headeritems,
-            #         text='Folder',
-            #     )
-
-            #     cb.set_text(
-            #         combobox=self.combobox_headeritems,
-            #         text='Filename',
-            #     )
-
+           
             # Update the global sets of files and folders
             self.set_files += new_files
             self.set_folders += new_folders
@@ -1104,15 +1080,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     
             # Do the updates regarding last file (or not)
             if self.checkbox_live.isChecked() and ('linux' in sys.platform):
+
+                self.update_table(
+                    list_files=new_files,
+                    reset=True,
+                )
+
                 last_file = self.get_last_file(new_files)
+                
                 self.update_cache(
                     filename=last_file,
                     plot=True,
                 )
-                # self.update_table(
-                #     list_files=self._dict_files[dirname(last_file)],
-                #     reset=False,
-                # )
             else:
                 return
         else:
