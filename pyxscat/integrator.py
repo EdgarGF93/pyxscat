@@ -95,7 +95,6 @@ class Integrator(Transform):
         dict_setup=dict(),
         name_setup=str(),
         ponifile_path=str(),
-        # rotated=False, 
         qz_parallel=True, 
         qr_parallel=True,
         search_files=True,
@@ -128,7 +127,7 @@ class Integrator(Transform):
         # Get the dictionary, information of the setup
         self._dict_setup = get_dict_setup(
             dict_setup=dict_setup,
-            name_setup=name_setup
+            name_dict_setup=name_setup,
         )
 
         # Get a ponifile

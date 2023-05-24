@@ -1,100 +1,149 @@
-from os.path import join, basename, splitext,dirname
-from os import listdir
+from search_functions import search_files_recursively
+from os.path import dirname, exists
+from collections import defaultdict
 import json
-import yaml
 
 DIRECTORY_SETUPS = dirname(__file__)
-SETUP_EXTENSION = ('.json', '.yaml')
-NO_SETUP_INFORMATION = "Edf instance was created without any setup information."
+KEYS_SETUP_DICTIONARY = ['Name', 'Angle', 'Tilt angle', 'Norm', 'Exposure']
 
-def get_dict_setup(dict_setup=dict(), name_setup=str()) -> None:
+def get_empty_setup_dict(list_keys=KEYS_SETUP_DICTIONARY) -> defaultdict:
     """
-        Return a dictionary with the setup information
+    Returns a default dict with the keys of a setup dictionary, default item = str
+
+    Parameters:
+    list_keys (list, set) : strings to be the keys of a dictionary that will identify important metadata during data processing
+
+    Returns:
+    defaultdict : default value (string)
     """
-    # Introduce the setup information through dictionary or importing its .json file
+    new_dict = defaultdict(str)
+    for key in list_keys:
+        new_dict[key] = ''
+    return new_dict
+
+def filter_dict_setup(dictionary=dict()):
+    """
+    Takes a dictionary (or defaultdict), returns a default_dict with only the correct keys of a setup_dictionary
+
+    Parameters:
+    dictionary (dict, defaultdict) : dictionary with (in principle) the correct keys of a setup dictionary
+
+    Returns:
+    defaultdict : defaultdict with the correct keys and values of a setup dictionary, if there is an error with the key, the value is empty string
+    """
     try:
-        if dict_setup and isinstance(dict_setup, dict):
-            return dict_setup
-        elif name_setup and isinstance(name_setup, str):
-            return import_dict_setup(name_setup=name_setup)
-        else:
-            return dict()
-    except:
-        return dict()
+        input_dict_setup = defaultdict(str, dictionary)
+    except TypeError:
+        return get_empty_setup_dict()
 
-def import_dict_setup(name_setup=str()) -> dict:
-    """
-        Search a setup_info file and return a dictionary with the setup information
-    """
-    if name_setup:
-        # Get the list of stored setup_info files
-        list_setup_info_files = get_setup_info_files()
+    new_dict_setup = get_empty_setup_dict()
 
-        # Search for a match in the name
-        for setup_file in list_setup_info_files:
-            if name_setup == splitext(basename(setup_file))[0]:
-                return {
-                    '.json' : get_dict_fromjson(
-                        json_file=setup_file
-                    ),
-                    '.yaml' : get_dict_fromyaml(
-                        yaml_file=setup_file
-                    ),
-                }.get(
-                    splitext(setup_file)[1],
-                    NO_SETUP_INFORMATION,
+    for key in KEYS_SETUP_DICTIONARY:
+        new_dict_setup[key] = input_dict_setup[key]
+
+    return new_dict_setup
+
+def get_dict_setup_from_json(json_path=str()) -> defaultdict:
+    """
+    Reads a .json file, returns a defaultdict with the correct keys and values of a setup dictionary (with empty strings if error)
+
+    Parameters:
+    json_path(string) : path for the json_file
+
+    Returns:
+    defaultdict : with the correct keys and values, already filtered. None if error.
+    """
+    if exists(json_path):
+        try:
+            with open(json_path, 'r') as fp:
+                imported_dict = json.load(fp)
+                filtered_dict = filter_dict_setup(
+                    dictionary=imported_dict,
                 )
-        print(NO_SETUP_INFORMATION)
-        return dict()
+                return filtered_dict
+
+        except OSError:
+            return
     else:
-        print(NO_SETUP_INFORMATION)
-        return dict()
+        return
 
-def get_dict_fromjson(json_file=str()) -> dict:
+def get_dict_setup_from_name(name=str()) -> defaultdict:
     """
-        Import a json file and returns its dictionary
-    """
-    try:
-        with open(join(DIRECTORY_SETUPS, json_file), 'r') as fp:
-            return json.load(fp)
-    except:
-        print(NO_SETUP_INFORMATION)
-        return dict()
+    Finds a .json file that matches with the key value 'Name'
+    Returns a defaultdict with the correct keys and values for setup dictionary. None if there is no match.
 
-def get_dict_fromyaml(yaml_file=str()) -> dict:
-    """
-        Import a yaml file and returns its dictionary
-    """
-    try:
-        with open(join(DIRECTORY_SETUPS, yaml_file), 'r') as fp:
-            return yaml.safe_load(fp)
-    except:
-        print(NO_SETUP_INFORMATION)
-        return dict()
+    Parameters:
+    name(str) : value of the key 'Name' for the desired setup dictionary
 
-def get_setup_info_files():
+    Returns:
+    defaultdict : matched defaultdict with the key 'Name', None if there is no match
     """
-        Return a list with all the stored files with setup information
-    """
-    return [
-        join(DIRECTORY_SETUPS, file) for file in listdir(DIRECTORY_SETUPS) if file.endswith(SETUP_EXTENSION)
-    ]
-
-
-def get_dictionaries_setup() -> list:
-    """
-        Return a list with the dictionaries of all the available setups
-    """
-    list_dicts = []
-    for file in listdir(DIRECTORY_SETUPS):
-        if file.endswith('json'):
-            list_dicts.append(
-                get_dict_fromjson(
-                    json_file=file,
+    list_dict_setups = search_dictionaries_setup()
+    for d in list_dict_setups:
+        if d['Name'] == name:
+            filtered_dict = filter_dict_setup(
+                    dictionary=d,
                 )
-            )
-            # with open(join(DIRECTORY_SETUPS, file), 'r') as fp:
-            #     list_dicts.append(
-            #         json.load(fp)
-            #     )
-    return list_dicts
+            return filtered_dict
+    return
+
+def get_dict_setup(dict_setup=defaultdict, name_dict_setup=str(), path_json=str()) -> defaultdict:
+    """
+    Returns a defaultdict with correct keys/values for a setup dictionary searching the name of loading a .json file
+    
+    Parameters:
+    dict(defaultdict) : (may) contains the correct pairs of key-values
+    name_dict(str) : 'Name' key value to search
+    path_json(str) : path of the json file to load a setup dictionary
+
+    Returns:
+    defaultdict : contains the correct pairs of key-value for a setup dictionary, empty if nothing works
+    """
+    if dict_setup:
+        dict_setup = filter_dict_setup(
+            dictionary=dict_setup,
+        )
+        return dict_setup
+
+    if name_dict_setup:
+        dict_setup = get_dict_setup_from_name(
+            name=name_dict_setup,
+        )
+
+        if dict_setup:
+            return dict_setup
+
+    if path_json:
+        dict_setup = get_dict_setup_from_json(
+            json_path=path_json,
+        )
+
+        if dict_setup:
+            return dict_setup
+
+    return get_empty_setup_dict()
+
+def search_dictionaries_setup(directory_setups=DIRECTORY_SETUPS) -> list:
+    """
+    Return a list with the dictionaries of all the available setups
+
+    Parameters:
+    directory_setups(str) : the path to find .json files
+
+    Returns:
+    list : contains the defaultdict with only correct keys and keys (already filtered)
+    """
+    list_dict_setups = []
+
+    list_json_files = search_files_recursively(
+        directory=directory_setups,
+        extension='.json',
+    )
+
+    for json_file in list_json_files:
+        dict_setup = get_dict_setup_from_json(json_file)
+
+        if dict_setup:
+            list_dict_setups.append(dict_setup)
+
+    return list_dict_setups

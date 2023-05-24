@@ -1,5 +1,6 @@
 
 from . import *
+from collections import defaultdict
 from edf import DICT_SAMPLE_ORIENTATIONS
 from modules_qt.gui_layout import GUIPyX_Widget_layout
 from os.path import basename, dirname, exists, getctime, join
@@ -12,12 +13,12 @@ from PyQt5.QtGui import QPixmap
 
 from pyxscat.edf import EdfClass
 from pyxscat.integrator import Integrator
-from pyxscat.other_functions import np_weak_lims, dict_to_str, create_folder
+from pyxscat.other_functions import np_weak_lims, dict_to_str, create_folder, date_prefix
 from pyxscat.plots import *
-from pyxscat.search_functions import search_files_recursively, list_files_to_dict, get_subfolder
+from pyxscat.search_functions import search_files_recursively, list_files_to_dict, get_subfolder, makedir
 
 from integration.integrator_methods import DIRECTORY_INTEGRATIONS
-from setup.setup_methods import DIRECTORY_SETUPS, get_dict_setup, get_dictionaries_setup
+from setup.setup_methods import DIRECTORY_SETUPS, search_dictionaries_setup, get_empty_setup_dict, get_dict_setup_from_name, filter_dict_setup
 
 from modules_qt import lineedit_methods as le
 from modules_qt import combobox_methods as cb
@@ -26,6 +27,7 @@ from modules_qt import table_methods as tm
 from modules_qt import graph_methods as gm
 
 import json
+import logging
 import numpy as np
 import subprocess
 import sys
@@ -56,6 +58,24 @@ MSG_CLICKED_FLODER_ERROR = "File table could not be updated."
 MSG_RESET_DATA = "The data parameters were reinitialized."
 MSG_ERROR_BASH = "There was an error during some bash file running. Allow permission with > chmod 777 -R pyxscat-directory"
 
+
+MSG_LOGGER_INIT = "Logger was initialized."
+MSG_LOGGER_UPDATE_CB_SETUPS = "The combobox of setups was updated."
+
+
+
+
+# logging.basicConfig(
+#     level=logging.DEBUG,
+#     format='%(asctime)s - %(levelname)s - %(message)s',
+#     datefmt='%Y-%m-%d %H:%M:%S',
+# )
+
+
+
+
+
+
 class GUIPyX_Widget(GUIPyX_Widget_layout):
 
     def __init__(self):
@@ -75,6 +95,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.init_attributes()
         self.update_setup_info()
         self.update_lims_ticks(text=DEFAULT_UNIT)
+
+        # Initialize logger
+        # logger_file = join(GLOBAL_PATH, 'pyxscat_logger')
+        # self._logger = logging.getLogger(logger_file)
+        # self._logger.debug(MSG_LOGGER_INIT)
 
     def init_callbacks(self) -> None:
         """
@@ -319,8 +344,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #     )
         # )
 
-        self.button_savefit.clicked.connect(
-            self.open_fitting_form,
+        self.button_batch.clicked.connect(
+            self.batch_and_save,
         )
 
         self.button_hide_terminal.clicked.connect(
@@ -384,97 +409,118 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
     # #########################
     # # Update self attributes
     # #########################
-    def update_combobox_setups(self):
+
+    def update_combobox_setups(self) -> None:
         """
-            Feed the combobox of setups with all the available (previously declared) dictionaries of setups
+        Take the .json files from the setup directory and feed the combobox_setups
+
+        Parameters:
+        None
+
+        Returns:
+        None
+
+        Raises:
+
+
         """
+        combobox_setup = self.combobox_setup
+        list_dict_setups = search_dictionaries_setup()
+        list_name_setups = [d['Name'] for d in list_dict_setups]
+
+        # self._logger(MSG_LOGGER_UPDATE_CB_SETUPS)
+
         cb.insert_list(
-            combobox=self.combobox_setup,
-            list_items=[
-                d['Name'] for d in get_dictionaries_setup()
-            ],
+            combobox=combobox_setup,
+            list_items=list_name_setups,
             reset=True,
         )
 
-    def get_empty_dict_setup(self) -> dict:
-        """
-            Return an emtpy setup dictionary
-        """
-        return {
-            "Name":str(), "Angle":str(), "Tilt angle":str(), "Norm":str(), "Exposure":str(),
-        }
 
-    def collect_setup_parameters(self) -> list:
+    def read_dict_setup(self) -> defaultdict:
         """
-            Retrieve four names from the lineedits of setup information tab
+        Retrieves the values for the setup dictionary from the correct lineedits and returns a defaultdict
+
+        Parameters:
+        None
+
+        Returns:
+        defaultdict: with the correct keys for setup dictionary and values read from lineedits in GUI
         """
-        return [
-            le.text(self.lineedit_setup_name),
-            le.text(self.lineedit_angle),
-            le.text(self.lineedit_tilt_angle),
-            le.text(self.lineedit_normfactor),
-            le.text(self.lineedit_exposure),
+        new_setup_dict = get_empty_setup_dict()
+
+        list_lineedits = [
+            self.lineedit_setup_name,
+            self.lineedit_angle,
+            self.lineedit_tilt_angle,
+            self.lineedit_normfactor,
+            self.lineedit_exposure,
         ]
 
-    def read_dict_setup(self) -> dict:
-        """
-            Return a dict setup with the values from the lineedits
-        """
-        dict_setup = self.get_empty_dict_setup()
-        values_setup = self.collect_setup_parameters()
+        for key, lineedit in zip(new_setup_dict.keys(), list_lineedits):
+            new_setup_dict[key] = le.text(lineedit)
 
-        for key, value in zip(dict_setup.keys(), values_setup):
-            dict_setup[key] = value
+        return new_setup_dict
 
-        return dict_setup
+    def update_setup_info(self, new_name_setup=str(), new_dict=defaultdict) -> None:
+        """
+        Declare the setup dictionary of the GUI searching by name (string) or declaring a new one
 
-    def update_setup_info(self, name_setup=str(), new_dict=dict()) -> None:
+        Parameters:
+        new_name_setup(str) : key 'Name' of the (already saved) setup dictionary in a .json file
+        new_dict(defaultdict) : contains the new values for the setup dictionary
+
+        Returns:
+        None
         """
-            Declare the dictionary with the counter/motor names used for data visualization/reduction
-        """
+
         # Search for a .json file with the name_setup string
-        if name_setup:
-            new_dict_setup = get_dict_setup(
-                name_setup=name_setup,
+        if new_name_setup:
+            new_dict_setup = get_dict_setup_from_name(
+                name=new_name_setup,
             )
+        # Directly update with a defaultdict  
         elif new_dict:
             new_dict_setup = new_dict
         else:
-            self._dict_setup = dict()
-            return
+            new_dict_setup = get_empty_setup_dict()
 
-        try:
-            self._dict_setup = new_dict_setup
-            self._write_output(MSG_SETUP_UPDATED)
-            self._write_output(self._dict_setup)
+        new_dict_setup = filter_dict_setup(
+            dictionary=new_dict_setup,
+        )
 
-            # Fill the lineedits
-            le.substitute(self.lineedit_setup_name, self._dict_setup['Name'])
-            le.substitute(self.lineedit_angle, self._dict_setup['Angle'])
-            le.substitute(self.lineedit_tilt_angle, self._dict_setup['Tilt angle'])
-            le.substitute(self.lineedit_normfactor, self._dict_setup['Norm'])
-            le.substitute(self.lineedit_exposure, self._dict_setup['Exposure'])
+        # Updates the instance variable
+        self._dict_setup = new_dict_setup
 
-            # Reset and fill the lineedits of items
-            le.clear(self.lineedit_headeritems)
-            le.insert(self.lineedit_headeritems,self._dict_setup['Angle'])
-            le.insert(self.lineedit_headeritems,self._dict_setup['Tilt angle'])
-            le.insert(self.lineedit_headeritems,self._dict_setup['Norm'])
-            le.insert(self.lineedit_headeritems,self._dict_setup['Exposure'])
-            self.update_table(
-                list_files=self.files_in_table,
-                list_keys=le.get_clean_list(
-                    lineedit=self.lineedit_headeritems,
-                ),
-                reset=True,
-            )
+        self._write_output(MSG_SETUP_UPDATED)
+        self._write_output(self._dict_setup)
 
-            # Reset integrator
-            if self._integrator:
-                self.reset_integrator()
-        except:
-            self._dict_setup = dict()
-            self._write_output(MSG_SETUP_ERROR)
+        # Fill the lineedits
+        le.substitute(self.lineedit_setup_name, self._dict_setup['Name'])
+        le.substitute(self.lineedit_angle, self._dict_setup['Angle'])
+        le.substitute(self.lineedit_tilt_angle, self._dict_setup['Tilt angle'])
+        le.substitute(self.lineedit_normfactor, self._dict_setup['Norm'])
+        le.substitute(self.lineedit_exposure, self._dict_setup['Exposure'])
+
+        # Reset and fill the lineedits of items
+        le.clear(self.lineedit_headeritems)
+        le.insert(self.lineedit_headeritems,self._dict_setup['Angle'])
+        le.insert(self.lineedit_headeritems,self._dict_setup['Tilt angle'])
+        le.insert(self.lineedit_headeritems,self._dict_setup['Norm'])
+        le.insert(self.lineedit_headeritems,self._dict_setup['Exposure'])
+
+        # Update the table, do not change the files but change the keys in table
+        self.update_table(
+            list_files=self.files_in_table,
+            list_keys=le.get_clean_list(
+                lineedit=self.lineedit_headeritems,
+            ),
+            reset=True,
+        )
+
+        # Reset integrator
+        if self._integrator:
+            self.reset_integrator()
 
     def update_angle_parameter(self, text=str()) -> None:
         """
@@ -2019,6 +2065,54 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
     def open_fitting_form(self):
         self._write_output("Fitting form not available for the moment.")
+
+
+    def batch_and_save(self):
+        """
+            Apply the integration that is in the chart to all the files in selected folder and save the files
+        """
+        files_in_selected_folder = []
+        files_in_selected_folder += self._dict_files[self.clicked_folder]
+
+        # Create folder to save the files
+        dateprefix = date_prefix()
+        if le.text(self.lineedit_savefolder):
+            folder_output = join(
+                le.text(self.lineedit_savefolder),
+                f"{basename(self.clicked_folder)}_fittings_{dateprefix}",
+            )
+            makedir(folder_output)
+        else:
+            return
+
+        for file in files_in_selected_folder:
+
+            edf = self.get_Edf_instance(filename=file)
+
+            for df in self.integrate_data(
+                data=edf.get_data(),
+                norm_factor=edf.normfactor,
+                dicts_integration=le.get_clean_list(
+                    lineedit=self.lineedit_integrations
+                ),
+            ):
+                # Dict to string
+                str_header = dict_to_str(dictionary= edf.get_dict() | self.dict_cache)
+
+                filename_out = join(
+                    folder_output, 
+                    edf.basename.replace('.edf', f"_{le.text(lineedit=self.lineedit_integrations).replace(',','_')}.dat",
+                    ),
+                )
+
+                mode = 'w' if exists(filename_out) else 'a'
+
+                with open(filename_out, mode) as f:
+                    f.write(f'{str_header}\n')
+                df.to_csv(filename_out, sep='\t', mode='a', index=False, header=True)
+
+
+
 
     def hide_show_plaintext(self):
         """

@@ -51,8 +51,9 @@ class EdfClass(Transform):
     def __init__(
         self,
         filename=str(),
-        name_setup=str(),
         dict_setup=dict(),
+        name_setup=str(),
+        json_file_setup=str(),
         transform_q=None,
         ponifile_path=str(),
         qz_parallel=True,
@@ -69,11 +70,11 @@ class EdfClass(Transform):
             filename=filename,
         )
 
-
         # Update the dictionary with setup information
         self._dict_setup = get_dict_setup(
             dict_setup=dict_setup,
-            name_setup=name_setup
+            name_dict_setup=name_setup,
+            path_json=json_file_setup,
         )
 
         # Get timestamps

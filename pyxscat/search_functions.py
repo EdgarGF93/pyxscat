@@ -3,8 +3,13 @@ from os.path import join, exists, splitext
 from pathlib import Path
 import json
 import os
+from datetime import datetime
 
 ERROR_NOFOUND_FOLDER = 'No directory was found, check the name.'
+
+def date_prefix():
+    return f"{(now := datetime.now()).year}_{now.month}_{now.day}_{now.hour}_{now.minute}_{now.second}"
+
 
 
 
@@ -17,6 +22,10 @@ def search_files_recursively(directory=str(), extension='', wildcards='*') -> li
         if str(path).endswith(extension):
             list_files.append(str(path))
     return list_files
+
+
+
+
 
 def search_files_directory(directory=str(), name_conds=['.edf']) -> list:
     """

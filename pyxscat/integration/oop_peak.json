@@ -1,1 +1,1 @@
-{"Name": "oop_peak", "Type": "Azimuthal", "Suffix": "oop_peak", "Azimuth_range": [0, 30], "Radial_range": [10, 25], "Unit": "q_nm^-1", "Bins_azimut": ""}
+{"Name": "oop_peak", "Type": "Azimuthal", "Suffix": "oop_peak", "Azimuth_range": [-9.5, 9.5], "Radial_range": [9, 20], "Unit": "q_nm^-1", "Bins_azimut": ""}

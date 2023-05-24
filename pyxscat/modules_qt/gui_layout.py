@@ -417,11 +417,11 @@ class GUIPyX_Widget_layout(QWidget):
 
         self.button_clearplot = QPushButton("CLEAR PLOT")
         self.button_saveplot = QPushButton("SAVE INTEGRATIONS")
-        self.button_savefit = QPushButton("OPEN FITTING FORM")
+        self.button_batch = QPushButton("BATCH INTEGRATION & SAVE")
 
         self.button_clearplot.setStyleSheet(button_style_thin)
         self.button_saveplot.setStyleSheet(button_style_thin)
-        self.button_savefit.setStyleSheet(button_style_thin)
+        self.button_batch.setStyleSheet(button_style_thin)
 
         self.label_integrations = QLabel("Integrations:")
         self.combobox_integration = QComboBox()
@@ -515,7 +515,7 @@ class GUIPyX_Widget_layout(QWidget):
 
         self.grid_chart_buttons.addWidget(self.button_clearplot, 1, 1)
         self.grid_chart_buttons.addWidget(self.button_saveplot, 1, 2)
-        self.grid_chart_buttons.addWidget(self.button_savefit, 1, 3)
+        self.grid_chart_buttons.addWidget(self.button_batch, 1, 3)
 
 
         self.grid_input_chart_integrations.addWidget(self.label_integrations, 1, 1)
