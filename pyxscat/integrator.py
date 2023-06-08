@@ -1,20 +1,21 @@
+from pyxscat.decorators import *
+from pyxscat.edf import EdfClass
+from pyxscat.integrator_methods import *
+from pyxscat.other_functions import *
+from pyxscat.setup_methods import get_dict_setup
+
+import numpy as np
+import json
 import matplotlib.pyplot as plt
-from setup.setup_methods import get_dict_setup
-from integration.integrator_methods import *
 import pandas as pd
 import warnings
 warnings.filterwarnings("ignore")
-from pygix.transform import Transform
-import numpy as np
-import json
+
 from os.path import exists, join, dirname
-from save import *
 from plots import *
-from decorators import *
-from other_functions import *
-from edf import EdfClass
-from search_functions import dict_from_conditions, check_subfolder, list_files_to_dict, search_files_recursively
-from integration.integrator_methods import get_dict_integration
+from pygix.transform import Transform
+from save import *
+from search_functions import check_subfolder, list_files_to_dict, search_files_recursively
 
 PATH_INTEGRATOR = dirname(__file__)
 
@@ -573,7 +574,7 @@ class Integrator(Transform):
                 folder_name= join(Edf.folder, OUTPUT_FOLDER)
             )
             
-            filename_out = join(Edf.folder, OUTPUT_FOLDER, f"{name}.dat")
+            filename_out = join(Edf.folder, OUTPUT_FOLDER, f"{name}.csv")
             save_dat(
                 dataframe=dataframe,
                 header=dict_to_str(

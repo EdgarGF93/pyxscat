@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
-from other_functions import np_log, np_roi, np_weak_lims
-from units import *
+
+from pyxscat.other_functions import np_log, np_roi, np_weak_lims
+from pyxscat.units import *
 
 def plot_image(data, title='', log=False, weak_lims=True):
     fig = plt.figure(figsize=(7,7), dpi=100)

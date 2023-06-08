@@ -1,4 +1,4 @@
-from search_functions import search_files_recursively
+from .search_functions import search_files_recursively
 from os.path import dirname, exists
 from collections import defaultdict
 import json

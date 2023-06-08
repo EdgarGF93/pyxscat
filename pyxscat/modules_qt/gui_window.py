@@ -1,11 +1,11 @@
 
 from . import GLOBAL_PATH_QT
-from integration.integrator_methods import DIRECTORY_INTEGRATIONS
-from modules_qt.gui_widget import GUIPyX_Widget
-from modules_qt.gui_widget_about import AboutForm
-from modules_qt.integration_form_methods import IntegrationForm
-from modules_qt.setup_form_methods import SetUpForm
-from modules_qt import combobox_methods as cb
+from pyxscat.integrator_methods import DIRECTORY_INTEGRATIONS
+from pyxscat.modules_qt.gui_widget import GUIPyX_Widget
+from pyxscat.modules_qt.gui_widget_about import AboutForm
+from pyxscat.modules_qt.integration_form_methods import IntegrationForm
+from pyxscat.modules_qt.setup_form_methods import SetUpForm
+from pyxscat.modules_qt import combobox_methods as cb
 from PyQt5.QtWidgets import QMainWindow, QMenu, QMenuBar, QAction
 from PyQt5 import QtGui, QtCore
 from os.path import join

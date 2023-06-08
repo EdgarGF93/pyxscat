@@ -4,7 +4,7 @@ from modules_qt import lineedit_methods as le
 from modules_qt import listwidget_methods as lt
 from os.path import join
 from pyxscat.decorators import try_or_continue
-from setup.setup_methods import DIRECTORY_SETUPS
+from pyxscat.setup_methods import DIRECTORY_SETUPS
 import os
 
 class SetUpForm(GUIPyX_Widget_setupform):

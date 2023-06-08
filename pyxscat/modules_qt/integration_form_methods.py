@@ -1,10 +1,10 @@
 
-from integration.integrator_methods import DIRECTORY_INTEGRATIONS
+from pyxscat.integrator_methods import DIRECTORY_INTEGRATIONS
 from os.path import join
-from modules_qt.gui_widget_integration import GUIPyX_Widget_integrationform
-from modules_qt import combobox_methods as cb
-from modules_qt import lineedit_methods as le
-from modules_qt import listwidget_methods as lt
+from pyxscat.modules_qt.gui_widget_integration import GUIPyX_Widget_integrationform
+from pyxscat.modules_qt import combobox_methods as cb
+from pyxscat.modules_qt import lineedit_methods as le
+from pyxscat.modules_qt import listwidget_methods as lt
 import os
 
 class IntegrationForm(GUIPyX_Widget_integrationform):

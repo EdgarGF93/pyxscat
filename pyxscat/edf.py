@@ -1,14 +1,17 @@
-from datetime import datetime
-from setup.setup_methods import get_dict_setup
-from os.path import basename, dirname, exists, getctime, splitext
-from other_functions import np_weak_lims
-from plots import plot_mesh, plot_image
-from pygix.transform import Transform
-from units import *
-import fabio
-import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
+
+from datetime import datetime
+from os.path import basename, dirname, exists, getctime, splitext
+from pygix.transform import Transform
+
+from pyxscat.setup_methods import get_dict_setup
+from pyxscat.other_functions import np_weak_lims
+from pyxscat.plots import plot_mesh, plot_image
+from pyxscat.units import *
+
+import fabio
+import numpy as np
 
 PATH_EDF = dirname(__file__)
 
@@ -80,7 +83,6 @@ class EdfClass(Transform):
         # Get timestamps
         self.epoch = getctime(self.filename)
         self.date = datetime.fromtimestamp(self.epoch).strftime('%Y-%m-%d %H:%M:%S')
-
         # Update Transform instance from pygix-pyFAI modules
         self.update_q_properties(
             transform_q=transform_q,
@@ -89,7 +91,6 @@ class EdfClass(Transform):
 
         # Update orientation attributes
         self.update_orientations(
-            # rotated=rotated,
             qz_parallel=qz_parallel,
             qr_parallel=qr_parallel,
         )

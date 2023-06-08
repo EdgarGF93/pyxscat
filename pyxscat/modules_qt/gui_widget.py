@@ -1,11 +1,8 @@
 
 from . import *
 from collections import defaultdict
-from edf import DICT_SAMPLE_ORIENTATIONS
-from modules_qt.gui_layout import GUIPyX_Widget_layout
 from os.path import basename, dirname, exists, getctime, join
 from pathlib import Path
-from plots import plot_mesh
 
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QFileDialog, QSplashScreen
@@ -16,15 +13,16 @@ from pyxscat.integrator import Integrator
 from pyxscat.other_functions import np_weak_lims, dict_to_str, create_folder, date_prefix
 from pyxscat.plots import *
 from pyxscat.search_functions import search_files_recursively, list_files_to_dict, get_subfolder, makedir
-
-from integration.integrator_methods import DIRECTORY_INTEGRATIONS
-from setup.setup_methods import DIRECTORY_SETUPS, search_dictionaries_setup, get_empty_setup_dict, get_dict_setup_from_name, filter_dict_setup
-
-from modules_qt import lineedit_methods as le
-from modules_qt import combobox_methods as cb
-from modules_qt import listwidget_methods as lt
-from modules_qt import table_methods as tm
-from modules_qt import graph_methods as gm
+from pyxscat.integrator_methods import DIRECTORY_INTEGRATIONS
+from pyxscat.setup_methods import DIRECTORY_SETUPS, search_dictionaries_setup, get_empty_setup_dict, get_dict_setup_from_name, filter_dict_setup
+from pyxscat.modules_qt import lineedit_methods as le
+from pyxscat.modules_qt import combobox_methods as cb
+from pyxscat.modules_qt import listwidget_methods as lt
+from pyxscat.modules_qt import table_methods as tm
+from pyxscat.modules_qt import graph_methods as gm
+from pyxscat.plots import plot_mesh
+from pyxscat.edf import DICT_SAMPLE_ORIENTATIONS
+from pyxscat.modules_qt.gui_layout import GUIPyX_Widget_layout
 
 import json
 import logging
@@ -83,6 +81,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         # Splash screen
         pixmap = QPixmap(join(GLOBAL_PATH_QT, 'pyxscat_logo_thumb.png'))
+        print(join(GLOBAL_PATH_QT, 'pyxscat_logo_thumb.png'))
         splash = QSplashScreen(pixmap)
         splash.show()
         splash.finish(self)
@@ -1565,7 +1564,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             create_folder(folder_output)
 
             filename_out = join(folder_output, basename(self.filename_cache).replace(
-                '.edf', f"_{le.text(lineedit=self.lineedit_integrations).replace(',','_')}.dat"
+                '.edf', f"_{le.text(lineedit=self.lineedit_integrations).replace(',','_')}.csv"
                 )
             )
 
@@ -2101,7 +2100,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
                 filename_out = join(
                     folder_output, 
-                    edf.basename.replace('.edf', f"_{le.text(lineedit=self.lineedit_integrations).replace(',','_')}.dat",
+                    edf.basename.replace('.edf', f"_{le.text(lineedit=self.lineedit_integrations).replace(',','_')}.csv",
                     ),
                 )
 
