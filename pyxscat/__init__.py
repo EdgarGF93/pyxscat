@@ -14,7 +14,7 @@ Created on Thu Aug 19 14:31:00 2022
 
 __author__ = "E. Gutierrez-Fernandez"
 __contact__ = "edgar.gutierrez-fernandez@esrf.fr"
-__license__ = ""
+__license__ = "GPLv3+"
 __copyright__ = "European Synchrotron Radiation Facility, Grenoble, France"
 __version__ = "0.1"
 
