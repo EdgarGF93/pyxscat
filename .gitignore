@@ -6,6 +6,14 @@
 # gitignore template for Jupyter Notebooks
 # website: http://jupyter.org/
 
+# kk files
+**kk**
+
+# Logger files
+logger/*.txt
+kk/
+dist/
+
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 

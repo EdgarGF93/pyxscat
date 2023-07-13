@@ -1,0 +1,23 @@
+[project]
+name = "pyscat"
+version = "0.2"
+authors = [
+    {name = "Edgar", email = "edgar.gutierrez-fernandez@esrf.fr"},
+]
+readme = "README.md"
+
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "pygix",
+    "pyFAI",
+    "PyQt5",
+    "pandas",
+]
+
+[tool.setuptools.packages.find]
+where = ["pyxscat"]
+include = ["*"]
+
+[project.scripts]
+pyxscat-gui = "gui.run:run"

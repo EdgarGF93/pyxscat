@@ -5,10 +5,16 @@ from datetime import datetime
 from os.path import basename, dirname, exists, getctime, splitext
 from pygix.transform import Transform
 
-from pyxscat.setup_methods import get_dict_setup
-from pyxscat.other_functions import np_weak_lims
-from pyxscat.plots import plot_mesh, plot_image
-from pyxscat.units import *
+from other.setup_methods import get_dict_setup
+from other.other_functions import np_weak_lims
+from other.plots import plot_mesh, plot_image
+from other.units import *
+
+# from pyxscat.other.setup_methods import get_dict_setup
+# from pyxscat.other.other_functions import np_weak_lims
+# from pyxscat.other.plots import plot_mesh, plot_image
+# from pyxscat.other.units import *
+
 
 import fabio
 import numpy as np
@@ -265,9 +271,6 @@ class EdfClass(Transform):
         """
             Return an array with detector shape and rotated, according to self._rotated
         """
-        # shape = self.get_shape()
-        # if self._rotated:
-        #     shape = [shape[1], shape[0]]
         try:
             shape = self.get_shape()
             d2,d1 = np.meshgrid(
@@ -391,8 +394,8 @@ class EdfClass(Transform):
             return
 
         # Include folder and filename in the header
-        header['Folder'] = self.folder
-        header['Filename'] = self.basename
+        # header['Folder'] = self.folder
+        # header['Filename'] = self.basename
 
         # Check for nemonic values (list/strings inside keys)
         if search_nmemonics:
