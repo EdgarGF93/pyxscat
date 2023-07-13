@@ -1032,16 +1032,21 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             h5_file = QFileDialog.getOpenFileNames(self, 'Pick .hdf5 file', '.', "*.h5")
 
         if h5_file:
-            h5_file = h5_file[0][0]
+            try:
+                h5_file = h5_file[0][0]
 
-            self.append_h5_file(
-                h5_file=h5_file,
-            )
+                self.append_h5_file(
+                    h5_file=h5_file,
+                )
 
-            cb.set_text(
-                combobox=self.combobox_h5_files,
-                text=h5_file,
-            )
+                cb.set_text(
+                    combobox=self.combobox_h5_files,
+                    text=h5_file,
+                )
+            except:
+                logger.info("No .h5 file was picked.")
+        else:
+            return
 
 
 
