@@ -71,6 +71,9 @@ JSON_FILE_H5 = SRC_PATH.joinpath("h5_files.json")
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+if not Path(LOGGER_PATH).exists():
+    Path(LOGGER_PATH).mkdir()
+
 logger_file = LOGGER_PATH.joinpath(f'pyxscat_logger_{date_prefix()}.txt')
 file_handler = logging.FileHandler(logger_file)
 file_handler.setLevel(logging.INFO)

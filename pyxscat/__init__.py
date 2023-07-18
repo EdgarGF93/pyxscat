@@ -16,7 +16,7 @@ __author__ = "E. Gutierrez-Fernandez"
 __contact__ = "edgar.gutierrez-fernandez@esrf.fr"
 __license__ = ""
 __copyright__ = "European Synchrotron Radiation Facility, Grenoble, France"
-__version__ = "0.2"
+__version__ = "0.3"
 
 @property
 def version():
