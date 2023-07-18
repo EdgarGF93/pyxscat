@@ -1,4 +1,3 @@
-from . import LOGG
 from collections import defaultdict
 from pathlib import Path
 from pygix.transform import Transform
@@ -7,7 +6,7 @@ from os.path import getctime
 
 from edf import EdfClass
 from other.other_functions import date_prefix, float_str, get_dict_files
-from gui import GLOBAL_PATH
+from gui import GLOBAL_PATH, LOGGER_PATH
 from other.units import *
 
 import functools
