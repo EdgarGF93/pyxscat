@@ -1,5 +1,4 @@
 
-from . import *
 from collections import defaultdict
 from os.path import dirname, exists, join
 from pathlib import Path
@@ -14,6 +13,7 @@ from other.plots import *
 from other.search_functions import makedir
 from other.integrator_methods import search_integration_names, open_json, get_dict_from_name
 from other.setup_methods import search_dictionaries_setup, get_empty_setup_dict, get_dict_setup_from_name, filter_dict_setup
+from gui import LOGGER_PATH
 from gui import lineedit_methods as le
 from gui import combobox_methods as cb
 from gui import listwidget_methods as lt

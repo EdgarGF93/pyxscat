@@ -1,3 +1,4 @@
+from . import LOGG
 from collections import defaultdict
 from pathlib import Path
 from pygix.transform import Transform
@@ -58,7 +59,10 @@ MSG_LOGGER_INIT = "Logger was initialized."
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-logger_file = Path(GLOBAL_PATH).joinpath('logger', f'pyxscat_h5_logger_{date_prefix()}.txt')
+if not Path(LOGGER_PATH).exists():
+    Path(LOGGER_PATH).mkdir()
+
+logger_file = Path(LOGGER_PATH).joinpath(f'pyxscat_h5_logger_{date_prefix()}.txt')
 file_handler = logging.FileHandler(logger_file)
 file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
