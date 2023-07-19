@@ -13,6 +13,62 @@ def date_prefix():
 
 
 
+def search_files(root_directory='', wildcards='*edf', generator=True, as_str=False, recursively=False):
+    """Searches files inside the root directory filtering using the wildcards, can be recursively
+
+    Args:
+        root_directory (str, Path): path of the folder where to search
+        wildcards (str): filtering wildcards, search by name
+        generator (bool): if True, returns generator of Path instances
+        as_str (bool): if True, returns list of strings 
+        recursively (bool): if True, searches recursively in subfolders inside root_directory
+
+    Raises:
+        FileNotFoundError: _description_
+
+    Returns:
+        list, generator: contains the searched files
+    """
+    root_directory = Path(root_directory)
+
+    if not root_directory.exists():
+        raise FileNotFoundError
+    
+    if recursively:
+        generator_files = root_directory.rglob(wildcards)
+        list_files = sorted(root_directory.rglob(wildcards))
+    else:
+        generator_files = root_directory.glob(wildcards)
+
+    if generator:
+        return generator_files
+    else:
+        list_files = sorted(generator_files)
+
+    if as_str:
+        list_files = [str(item) for item in list_files]
+
+    return list_files
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def search_files_recursively(directory=str(), extension='', wildcards='*') -> list:
     """
         Search files recursively in folder and subfolders, according to extension and wildcards

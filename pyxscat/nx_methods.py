@@ -1,6 +1,6 @@
 from pathlib import Path
 from silx.io import fabioh5, convert
-
+from other.search_functions import search_files
 
 EXTENSION_H5 = '.h5'
 
@@ -26,45 +26,6 @@ def create_h5_from_folder(folder='', wildcards='*.edf', h5_file=''):
         mode='a',
         overwrite_data=True,
     )
-
-def search_files(root_directory='', wildcards='*edf', generator=True, as_str=False, recursively=False):
-    """Searches files inside the root directory filtering using the wildcards, can be recursively
-
-    Args:
-        root_directory (str, Path): path of the folder where to search
-        wildcards (str): filtering wildcards, search by name
-        generator (bool): if True, returns generator of Path instances
-        as_str (bool): if True, returns list of strings 
-        recursively (bool): if True, searches recursively in subfolders inside root_directory
-
-    Raises:
-        FileNotFoundError: _description_
-
-    Returns:
-        list, generator: contains the searched files
-    """
-    root_directory = Path(root_directory)
-
-    if not root_directory.exists():
-        raise FileNotFoundError
-    
-    if recursively:
-        generator_files = root_directory.rglob(wildcards)
-        list_files = sorted(root_directory.rglob(wildcards))
-    else:
-        generator_files = root_directory.glob(wildcards)
-
-    if generator:
-        return generator_files
-    else:
-        list_files = sorted(generator_files)
-
-    if as_str:
-        list_files = [str(item) for item in list_files]
-
-    return list_files
-
-
 
 def get_fabio_serie_from_folder(folder=str(), wildcards='*.edf'):
     """

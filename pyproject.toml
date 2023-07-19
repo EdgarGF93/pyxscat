@@ -1,6 +1,6 @@
 [project]
 name = "pyscat"
-version = "0.2"
+version = "0.3"
 authors = [
     {name = "Edgar", email = "edgar.gutierrez-fernandez@esrf.fr"},
 ]
@@ -13,11 +13,13 @@ dependencies = [
     "pyFAI",
     "PyQt5",
     "pandas",
+    "h5py",
 ]
 
 [tool.setuptools.packages.find]
 where = ["pyxscat"]
 include = ["*"]
 
+
 [project.scripts]
-pyxscat-gui = "gui.run:run"
+pyxscat = "gui.run:run"
