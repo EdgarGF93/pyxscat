@@ -15,7 +15,6 @@ from other.units import *
 # from pyxscat.other.plots import plot_mesh, plot_image
 # from pyxscat.other.units import *
 
-
 import fabio
 import numpy as np
 
