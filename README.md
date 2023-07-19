@@ -26,7 +26,7 @@ The main tool of PyXScat is its Graphical User Interface. The philosophy of PyXS
 
 ```
 cd /user/Python
-git clone https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat.git
+git clone -b h5_based https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat.git
 ```
 
 ## 2) Once you have clone the project into your directory, install the module into your environment (conda, etc):
@@ -37,7 +37,7 @@ pip install -e .
 
 ## 3) Once the module is installed in the path of your environment, open the GUI:
 ```
-pyxscat-gui
+pyxscat
 ```
 
 ## 4) Tutorial of the GUI. You have a .ppt file in the PyXScat folder, to learn a minimum set of steps to start handlind your data:
