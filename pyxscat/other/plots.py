@@ -92,8 +92,8 @@ def plot_mesh(
         norm = None
 
     try:
-        if data.shape[::-1] == mesh_horz.shape:
-            data = data.T
+        # if data.shape[::-1] == mesh_horz.shape:
+        #     data = data.T
 
         plt.pcolormesh(
             mesh_horz,
