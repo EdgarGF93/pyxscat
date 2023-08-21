@@ -14,6 +14,9 @@ DICT_UNIT_ALIAS = {
     DEG_ALIAS : '2th_deg',
 }
 
+CAKE_INTEGRATIONS = ("Azimuthal", "Radial")
+BOX_INTEGRATIONS = ("Horizontal", "Vertical")
+
 def get_pyfai_unit(unit='nm'):
     """
         Identify the correct unit for pyFAI from alias

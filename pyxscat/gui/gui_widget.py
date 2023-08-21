@@ -62,6 +62,24 @@ MSG_H5_FOUNDFILE = "Imported .hdf5 file"
 MSG_H5Integrator = "HDF5 container was created."
 MSG_H5Integrator_ERROR = "HDF5 container could not be created."
 
+ERROR_H5_FILENOTFOUND = "The .h5 could not be found."
+ERROR_H5_FILECREATION = "The .h5 file could not be created."
+ERROR_H5_INSTANCE = "The h5 instance could not be created."
+ERROR_H5_UPDATED = "The H5 could not be updated."
+
+ERROR_MAINDIR = "Main directory could not be set."
+ERROR_MAINDIR_DONTEXIST = "Main directory does not exists."
+ERROR_PICK_FOLDER = "No folder detected."
+ERROR_H5DIR = "There is no new address for the .h5 file. Cancel everything."
+ERROR_APPEND_H5 = "The .h5 file could not be appended to the combobox."
+
+INFO_NEW_MAINDIR = "New main directory set."
+INFO_H5_CREATION = "New .h5 file was created successfully."
+INFO_H5_UPDATED = "The .h5 file was updated."
+
+MSG_H5FILE_CHOICE = "An .h5 file will be created. Do you want to save it in the same directory?"
+MSG_H5FILE_OVERWRITE = "There is an h5 file with the same name. Do you want to overwite it?"
+
 DESCRIPTION_HDF5 = "HDF5_XMaS_Beamline"
 COMMENT_NEW_FILE = ""
 
@@ -114,7 +132,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         # Initialize attributes and callbacks
         self.h5 = None
-        self._h5_path = str()
+        # self._h5_path = str()
         self.main_directory = Path()
         self.active_ponifile = str()
         self.clicked_folder = str()
@@ -169,8 +187,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         self.combobox_h5_files.currentTextChanged.connect(
             lambda : (
-                self.read_h5_file(filename_h5=cb.value(self.combobox_h5_files)),
-                self.update_h5(),
+                self.set_h5_instance(filename_h5=cb.value(self.combobox_h5_files)),
+                self.update_h5_poni_and_files(),
                 self.update_widgets(),
                 self.update_setup_info(),
             )
@@ -322,17 +340,17 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         self.button_pick_maindir.clicked.connect(
             lambda : (
-                self.pick_folder(),
-                self.generate_hdf5(),
-                self.update_h5(),
-                self.append_and_activate_h5_file(self._h5_path),
+                self.create_h5_file(),
+                self.update_h5_poni_and_files(),
+                self.append_h5file(),
+                self.activate_h5file(),
             )
         )
 
         self.button_pick_hdf5.clicked.connect(
             lambda : (
                 self.pick_and_activate_hdf5_file(),
-                self.update_h5(),
+                self.update_h5_poni_and_files(),
                 self.update_widgets(),   
                 self.update_setup_info(),             
             )
@@ -388,7 +406,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         self.button_start.clicked.connect(
             lambda : (
-                self.update_h5(),
+                self.update_h5_poni_and_files(),
                 self.update_widgets(),
             )
         )
@@ -398,7 +416,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         self.checkbox_live.stateChanged.connect(
             lambda : (
-                self.update_h5(),
+                self.update_h5_poni_and_files(),
                 self.update_widgets(),
                 self.update_live_searching(),
             )
@@ -593,12 +611,21 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         None
         """
         if not JSON_FILE_H5.is_file():
-            with open(JSON_FILE_H5, 'w+') as fp:
-                dict_h5 = {'H5_recent_files':[""]}
-                json.dump(dict_h5, fp)
+            self.write_terminal_and_logger("No .h5 files detected.")
+            return
+        else:
+            try:
+                with open(JSON_FILE_H5, 'r') as fp:
+                    dict_h5 = json.load(fp)
+            except FileNotFoundError:
+                self.write_terminal_and_logger("Not found")
+                return
 
-        with open(JSON_FILE_H5, 'r') as fp:
-            dict_h5 = json.load(fp)
+        #         dict_h5 = {'H5_recent_files':[""]}
+        #         json.dump(dict_h5, fp)
+
+        # with open(JSON_FILE_H5, 'r') as fp:
+        #     dict_h5 = json.load(fp)
 
         h5_in_folder = [item for item in dict_h5['H5_recent_files'] if Path(item).is_file()]
         h5_in_folder.sort()
@@ -933,76 +960,119 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 qr_parallel=self._qr_parallel,
             )
 
+
     @log_info
-    def generate_hdf5(self):
+    def create_h5_file(self, main_directory=str()):
         """
         Creates an .h5 file as a container of the data within the directory
 
         Parameters:
-        directory (str, Path) : path of the root directory where all the data/metadata will be located recursively
+        main_directory (str, Path) : path of the root directory where all the data/metadata will be located recursively
 
         Return:
         None
         """
+        if not main_directory:
+            main_directory = self.pick_main_directory()
+
+        # It has to be a Path where to search the data files
         if not self.main_directory:
+            self.write_terminal_and_logger(ERROR_MAINDIR_DONTEXIST)
             return
-
-        choice_hdf5 = QMessageBox.question(self, 'MessageBox', "An .h5 file will be created. Do you want to save it in the same directory?", QMessageBox.Yes | QMessageBox.No)
+        if not Path(main_directory).exists():
+            self.write_terminal_and_logger(ERROR_MAINDIR_DONTEXIST)
+            return
         
+        # Save the .h5 file in the same main_directory root or not
+        choice_hdf5 = QMessageBox.question(self, 'MessageBox', MSG_H5FILE_CHOICE, QMessageBox.Yes | QMessageBox.No)
         if choice_hdf5 == QMessageBox.Yes:
-            h5_dir = self.main_directory
+            h5_filename = main_directory
+        elif choice_hdf5 == QMessageBox.No:
+            h5_filename = self.pick_hdf5_folder()
         else:
-            h5_dir = self.pick_hdf5_folder()
+            self.write_terminal_and_logger(ERROR_H5_FILECREATION)
+            return
+        
+        # If there is no defined path for the future .h5 file, returns without creating the h5 file
+        if not h5_filename:
+            self.write_terminal_and_logger(ERROR_H5_FILECREATION)
+            return
+        
+        # Full filename for the .h5 file
+        h5_filename = Path(h5_filename)
+        main_directory = Path(main_directory)
+        h5_filename = h5_filename.joinpath(f"{main_directory.name}.h5")
 
-        h5_filename = h5_dir.joinpath(f"{self.main_directory.name}.h5")
-        self._h5_path = h5_filename
-
-        if Path(h5_filename).is_file():
-            choice_hdf5_overwrite = QMessageBox.question(self, 'MessageBox', "There is an h5 file with the same name. Do you want to overwite it?", QMessageBox.Yes | QMessageBox.No)
+        # Check if it is going to be overwritten
+        if h5_filename.is_file():
+            choice_hdf5_overwrite = QMessageBox.question(self, 'MessageBox', MSG_H5FILE_OVERWRITE, QMessageBox.Yes | QMessageBox.No)
             if choice_hdf5_overwrite == QMessageBox.Yes:
                 overwrite = True
-            else:
+            elif choice_hdf5_overwrite == QMessageBox.No:
                 overwrite = False
-                h5_filename = h5_dir.joinpath(f"{self.main_directory.name}_{date_prefix()}.h5")
+            else:
+                self.write_terminal_and_logger(ERROR_H5_FILECREATION)
+                return
         else:
             overwrite = True
 
-        if self.main_directory or self.h5:
-            self.reset_attributes_and_widgets()
+        # Join date_prefix if no overwriting
+        if not overwrite:
+            h5_filename = h5_filename.joinpath(f"{main_directory.name}_{date_prefix()}.h5")
 
+        # Create the H5 instance, which will create the .h5 file
         self.h5 = H5Integrator(
-            filename_h5=h5_filename,
-            main_directory=str(self.main_directory),
+            filename_h5=str(h5_filename),
+            main_directory=str(main_directory),
             setup_keys_metadata=self._dict_setup,
             qz_parallel=self._qz_parallel,
             qr_parallel=self._qr_parallel,
             overwrite=overwrite,
         )
-        
-        logger.info(f"h5 instance created. Filename: {h5_filename}. Ponifile: {self.active_ponifile}. Keys_metadata: {self._dict_setup}. qz:{self._qz_parallel}, qr:{self._qr_parallel}")
 
-    @log_info
-    def pick_folder(self) -> None:
-        """
-            Pick a folder as main directory
-        """
-        main_dir = Path(QFileDialog.getExistingDirectory(self, 'Choose main directory', "."))
-        if main_dir and (main_dir != Path(".")):
-            if Path(main_dir).exists():
-                if self.main_directory or self.h5:
-                    self.reset_attributes_and_widgets()
-
-                self.main_directory = Path(main_dir)
-                self.label_maindir.setText('Main directory:')
-                # self.lineedit_maindir.setText(str(self.main_directory))
-                self.write_terminal_and_logger(MSG_MAIN_DIRECTORY)
-                self.write_terminal_and_logger(f"New main directory: {str(self.main_directory)}")              
+        # If there was an error, register it
+        if not self.h5:
+            self.write_terminal_and_logger(ERROR_H5_FILECREATION)
+            logger.info(h5_filename)
+            logger.info(str(self.main_directory))
+            logger.info(self._dict_setup)
+            logger.info(self._qz_parallel)
+            logger.info(self._qr_parallel)
+            logger.info(overwrite)
+            return
         else:
-            self.main_directory = ''
-            self.write_terminal_and_logger(MSG_MAIN_DIRECTORY_ERROR)
+            self.write_terminal_and_logger(INFO_H5_CREATION)
+            logger.info(f"sPonifile: {self.active_ponifile}. Keys_metadata: {self._dict_setup}. qz:{self._qz_parallel}, qr:{self._qr_parallel}")
+            self.reset_attributes_and_widgets()
 
     @log_info
-    def pick_hdf5_folder(self) -> None:
+    def pick_main_directory(self) -> Path:
+        """
+        Picks a folder as main directory, the root where the data files are searched recursively
+
+        Parameters:
+        None
+
+        Returns:
+        Path: path instance of the root directory to search data files
+        """
+        # Pick the folder after pop-up browser window
+        dialog_maindir = QFileDialog.getExistingDirectory(self, 'Choose main directory', ".")
+
+        # Returns if is not valid, or the dialog was cancelled
+        if not dialog_maindir:
+            main_directory = ""
+            self.write_terminal_and_logger(ERROR_PICK_FOLDER)
+        else:
+            try:
+                main_directory = Path(dialog_maindir)
+            except NotImplementedError:
+                main_directory = ""
+                self.write_terminal_and_logger(ERROR_PICK_FOLDER)
+        return main_directory
+
+    @log_info
+    def pick_hdf5_folder(self) -> Path:
         """
         Picks a folder to save the .h5 file
 
@@ -1010,13 +1080,26 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         None
 
         Returns:
-        None
+        Path: path for the new .h5
         """
-        h5_dir = Path(QFileDialog.getExistingDirectory(self, 'Choose main directory', "."))
-        if h5_dir and (h5_dir != Path(".")):
-            return h5_dir
+        # It has to be a Path where to search the data files
+        if not self.main_directory:
+            self.write_terminal_and_logger(ERROR_MAINDIR_DONTEXIST)
+            return
+        
+        dialog_h5_dir = QFileDialog.getExistingDirectory(self, 'Choose main directory', ".")
+
+        if not dialog_h5_dir:
+            self.write_terminal_and_logger(ERROR_H5DIR)
+            h5_dir = ""
         else:
-            return ''
+            try:
+                h5_dir = Path(dialog_h5_dir)
+            except NotImplementedError:
+                h5_dir = ""
+                self.write_terminal_and_logger(ERROR_H5DIR)
+
+        return h5_dir
 
     @log_info
     def pick_and_activate_hdf5_file(self) -> None:
@@ -1081,30 +1164,96 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #     return
 
     @log_info
-    def read_h5_file(self, filename_h5=str()):
-        if not Path(filename_h5).is_file():
+    def set_h5_instance(self, filename_h5=str()):
+        """
+        Creates an instance of H5Integrator after the name of the file
+
+        Parameters:
+        filename_h5(str, Path) : path of the .h5 file
+
+        Returns:
+        None
+        """
+
+        # Check if the file exists
+        if Path(filename_h5).is_file():
+            filename_h5 = str(filename_h5)
+            parent_h5 = Path(filename_h5).parent
+        else:
+            self.write_terminal_and_logger(ERROR_H5_FILENOTFOUND)
+            return
+        
+        # Create the H5Integrator instance
+        self.h5 = H5Integrator(
+            filename_h5=filename_h5,
+            setup_keys_metadata=self._dict_setup,
+            qz_parallel=self._qz_parallel,
+            qr_parallel=self._qr_parallel,
+        )
+        
+        # If self.h5 is None, register
+        if not self.h5:
+            self.write_terminal_and_logger(ERROR_H5_INSTANCE)
+            logger.info(filename_h5)
+            logger.info(self._dict_setup)
+            logger.info(self._qz_parallel)
+            logger.info(self._qr_parallel)
             return
 
-        if self.main_directory or self.h5:
-            self.reset_attributes_and_widgets()
-        
-        self._h5_file = str(filename_h5)
-        try:
-            self.h5 = H5Integrator(
-                filename_h5=self._h5_file,
-                setup_keys_metadata=self._dict_setup,
-                qz_parallel=self._qz_parallel,
-                qr_parallel=self._qr_parallel,
-            )
-            self.main_directory = self.h5.get_main_directory()
-            self.label_maindir.setText('H5 file:')
+        # If new h5 instance was created, reset GUI
+        self.reset_attributes_and_widgets()
 
-            self.write_terminal_and_logger(MSG_H5_FOUNDFILE)
-            self.write_terminal_and_logger(self._h5_file)                
-            self.write_terminal_and_logger(MSG_H5Integrator)
-        except:
-            self.write_terminal_and_logger(MSG_H5Integrator_ERROR)
-            pass
+        # New main directory
+        self.set_main_directory(
+            new_main_directory=parent_h5,
+        )
+
+        # self.write_terminal_and_logger(MSG_H5_FOUNDFILE)
+        # if self.main_directory or self.h5:
+            
+
+        # Name of the h5_file
+        
+        # self._h5_file = str(filename_h5)
+
+
+
+        #     self.main_directory = self.h5.get_main_directory()
+        #     self.label_maindir.setText('H5 file:')
+
+        #     self.write_terminal_and_logger(MSG_H5_FOUNDFILE)
+        #     self.write_terminal_and_logger(self._h5_file)                
+        #     self.write_terminal_and_logger(MSG_H5Integrator)
+        # except:
+        #     self.write_terminal_and_logger(MSG_H5Integrator_ERROR)
+        #     pass
+
+    @log_info
+    def set_main_directory(self, new_main_directory=str()):
+        """
+        Returns the new main directory, which is the path where the H5 instance is searching files
+
+        Parameters:
+        new_main_directory(str, Path) : directory of the new h5 file
+
+        Return:
+        None
+        """
+        # Try to set the new string
+        try:
+            self.main_directory = Path(new_main_directory)
+        except NotImplementedError:
+            self.main_directory = ""
+            self.write_terminal_and_logger(ERROR_MAINDIR)
+            logger.info(str(new_main_directory))
+            return
+
+        self.write_terminal_and_logger(INFO_NEW_MAINDIR)
+        self.write_terminal_and_logger(str(new_main_directory))
+        # self.label_maindir.setText('H5 file:')
+
+
+
 
 
     ##################################################
@@ -1321,7 +1470,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
     @log_info
-    def update_h5(self) -> None:
+    def update_h5_poni_and_files(self) -> None:
         """
         Searches new files and updates the data/metadata files in the h5 file
 
@@ -1331,7 +1480,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         None
         """
-        
         if self.h5:
             # Search ponifiles and updates them in the .h5 file
             self.search_and_update_ponifiles_widgets()
@@ -1340,54 +1488,172 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.h5.search_and_update_new_files(
                 pattern=self._pattern,
             )
-            self.write_terminal_and_logger(f"The H5 was updated. Not the Widgets yet.")
-
+            self.write_terminal_and_logger(INFO_H5_UPDATED)
         else:
-            self.write_terminal_and_logger(f"The H5 could not be updated.")
+            self.write_terminal_and_logger(ERROR_H5_UPDATED)
 
 
-
-    @log_info
-    def append_h5_file(self, h5_file=str()):
-        """
+    # @log_info
+    # def append_h5_file(self, h5_file=str()):
+    #     """
         
-        """
-        h5_file = str(h5_file)
-        if not JSON_FILE_H5.is_file():
-            with open(JSON_FILE_H5, 'w+') as fp:
-                dict_h5 = {'H5_recent_files':[""]}
-                json.dump(dict_h5, fp)
+    #     """
+    #     h5_file = str(h5_file)
+    #     if not JSON_FILE_H5.is_file():
+    #         with open(JSON_FILE_H5, 'w+') as fp:
+    #             dict_h5 = {'H5_recent_files':[""]}
+    #             json.dump(dict_h5, fp)
 
-        with open(JSON_FILE_H5, 'r') as fp:
-            dict_h5 = json.load(fp)
+    #     with open(JSON_FILE_H5, 'r') as fp:
+    #         dict_h5 = json.load(fp)
 
-        list_h5_files = dict_h5['H5_recent_files']
-        list_h5_files.append(h5_file)
-        list_h5_files = sorted(set(list_h5_files))
-        dict_h5 = {'H5_recent_files':list_h5_files}
+    #     list_h5_files = dict_h5['H5_recent_files']
+    #     list_h5_files.append(h5_file)
+    #     list_h5_files = sorted(set(list_h5_files))
+    #     dict_h5 = {'H5_recent_files':list_h5_files}
 
-        with open(JSON_FILE_H5, 'w+') as fp:        
-            json.dump(dict_h5, fp)
+    #     with open(JSON_FILE_H5, 'w+') as fp:        
+    #         json.dump(dict_h5, fp)
 
-        self.update_combobox_h5()
+    #     self.update_combobox_h5()
             
 
     @log_info
-    def append_and_activate_h5_file(self, h5_file=str()):
+    def append_h5file(self, h5_path=str()) -> None:
         """
+        Register the filename of the .h5 file into the .json file
+
+        Parameters:
+        h5_path(str, Path) : path of an existing .h5 file, that will be appended to the combobox
+
+        Returns:
+        None
+        """
+        # Append to .json file
+        # If no input, take the filename associated to the active H5Integrator instance
+        if not h5_path and self.h5:
+            h5_path = str(self.h5.filename_h5)
+        else:
+            self.write_terminal_and_logger(ERROR_APPEND_H5)
+            return
+        logger.info(f"New .h5 file to append {h5_path}")
         
-        """
-        h5_file = str(h5_file)
+        # Append to the .json file
+        if Path(JSON_FILE_H5).is_file():
+            with open(JSON_FILE_H5, "r+") as fp:
+                logger.info('1')
+                dict_h5 = json.load(fp)
+                list_h5_files = dict_h5["H5_recent_files"].append(str(h5_path))
+                list_h5_files = sorted(set(list_h5_files))
+                json.dump({"H5_recent_files":list_h5_files}, fp)
+        else:
+            with open(JSON_FILE_H5, "w+") as fp:
+                logger.info('2')
+                json.dump({"H5_recent_files" : [str(h5_path)]}, fp)
+        logger.info(f"Current list of .h5 files.")
 
-        if h5_file:
-            self.append_h5_file(
-                h5_file=h5_file,
-            )
+        # with open(JSON_FILE_H5, mode) as fp:
+        #     list_h5_files = json.load(fp)['H5_recent_files'].append(h5_path)
+        #     list_h5_files = sorted(set(list_h5_files))
+        #     logger.info(f"Current list of .h5 files: {list_h5_files}")
+        #     json.dump({'H5_recent_files':list_h5_files}, fp)
+        # # if not JSON_FILE_H5.is_file():
+        # #     with open(JSON_FILE_H5, 'w+') as fp:
+        #         logger.info(f"Created .json file")
+        #         dict_h5 = {'H5_recent_files':[h5_path]}
+        #         json.dump(dict_h5, fp)
+        # else:
+        #     with open(JSON_FILE_H5, 'w+') as fp:
+        #         print(11)
+        #         dict_h5 = json.load(fp)
+        #         list_h5_files = dict_h5['H5_recent_files'].append(h5_path)
+        #         list_h5_files = sorted(set(list_h5_files))
+        #         dict_h5 = {'H5_recent_files':list_h5_files}
+        #         json.dump(dict_h5, fp)
 
-            cb.set_text(
+        # Append to combobox if it's new
+        filenames_from_cb = cb.all_items(self.combobox_h5_files)
+        if h5_path in filenames_from_cb:
+            return
+        else:
+            cb.insert(
                 combobox=self.combobox_h5_files,
-                text=h5_file,
+                item=str(h5_path),
             )
+
+        # If no input, take the filename associated to the active H5Integrator instance
+        # if not h5_path and self.h5:
+        #     h5_path = str(self.h5.filename_h5)
+        # else:
+        #     self.write_terminal_and_logger(ERROR_APPEND_H5)
+        #     return
+
+
+        # Filter to not repeat filenames
+        # list_h5_files = dict_h5['H5_recent_files'].append(h5_path)
+        # # list_h5_files.append(h5_file)
+        # list_h5_files = sorted(set(list_h5_files))
+        # dict_h5 = {'H5_recent_files':list_h5_files}
+        # with open(JSON_FILE_H5, 'w+') as fp:        
+        #     json.dump(dict_h5, fp)
+
+        # Activate that last h5 file
+        # cb.set_text(
+        #     combobox=self.combobox_h5_files,
+        #     text=
+        # self.activate_h5_file(
+        #     h5_filename=h5_path,
+        # )
+
+    @log_info
+    def activate_h5file(self, h5_path=str()) -> None:
+        """
+        Activate the .h5 file, so as all the corresponding widgets of the GUI
+
+        Parameters:
+        h5_filename(str, Path) : path of the existing .h5 file, created with this GUI format, other h5 hierarchies, like NeXus are not valid yet
+
+        Returns:
+        None
+        """
+        # If no input, take the filename associated to the active H5Integrator instance
+        if not h5_path and self.h5:
+            h5_path = str(self.h5.filename_h5)
+        else:
+            self.write_terminal_and_logger(ERROR_APPEND_H5)
+            return
+        
+
+        # Check if the .h5 instance has been already created
+        # if not self.h5:
+        #     # Create h5 instance
+        #     pass
+        # else:
+        #     if str(self.h5.filename_h5) != str(h5_filename):
+        #         pass
+                # Changes the h5 instance
+        # self.set_h5_instance(filename_h5=cb.value(self.combobox_h5_files))
+        # self.update_h5_poni_and_files()
+        self.update_widgets()
+        self.update_setup_info()
+
+
+    # @log_info
+    # def append_and_activate_h5_file(self, h5_file=str()):
+    #     """
+        
+    #     """
+    #     h5_file = str(h5_file)
+
+    #     if h5_file:
+    #         self.append_h5_file(
+    #             h5_file=h5_file,
+    #         )
+
+    #         cb.set_text(
+    #             combobox=self.combobox_h5_files,
+    #             text=h5_file,
+    #         )
 
     @log_info
     def update_widgets(self) -> None:
@@ -1396,7 +1662,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         This method may update the list_widget of folders and the table_widget with files and metadata
         """
         if self.h5:
-
             # Check if new folders to update the list_widget and reference folder combobox
             folders_in_list = set(lt.all_items(self.listwidget_folders))
             folders_in_h5 = set(self.h5.generator_folder_name())
