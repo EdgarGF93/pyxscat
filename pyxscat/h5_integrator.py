@@ -54,6 +54,15 @@ VERTICAL_NAME = 'Vertical'
 ERROR_RAW_INTEGRATION = "Failed at detect integration type."
 MSG_LOGGER_INIT = "Logger was initialized."
 
+
+INFO_H5_PONIFILES_DETECTED = "New ponifiles detected."
+INFO_H5_NO_PONIFILES_DETECTED = "No ponifiles detected."
+INFO_H5_NEW_FILES_DETECTED = "New files were detected."
+INFO_H5_NEW_DICTIONARY_FILES = "Got dictionary of folders and files"
+INFO_H5_FILES_UPDATED = "Finished the update of all the new files."
+
+ERROR_MAIN_DIRECTORY = "No main directory was detected."
+
  # Initialize logger
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -1170,13 +1179,14 @@ class H5Integrator(Transform):
         new_ponifiles = [item for item in ponifile_list.difference(stored_poni_list)]
 
         if new_ponifiles:
-            logger.info(f"New ponifiles detected: {new_ponifiles}")
+            logger.info(INFO_H5_PONIFILES_DETECTED)
+            logger.info(f"{new_ponifiles}")
             self.update_group_ponifile(
                 group_address=ADDRESS_PONIFILE,
                 ponifile_list=new_ponifiles,
             )
         else:
-            logger.info("No ponifiles detected.")
+            logger.info(INFO_H5_NO_PONIFILES_DETECTED)
 
         if return_list:
             return new_ponifiles
@@ -1247,14 +1257,14 @@ class H5Integrator(Transform):
             # Filter for new files
             set_stored_files = set(self.generator_all_files(yield_decode=False))
             new_files = [bytes.decode(item) for item in set_searched_files.difference(set_stored_files)]
-            logger.info(f"{len(new_files)} new files were detected.")
+            logger.info(f"{len(new_files)} {INFO_H5_NEW_FILES_DETECTED}")
 
             if new_files:
                 new_files.sort()
 
             return new_files
         else:
-            logger.info("No main directory was detected.")
+            logger.info(ERROR_MAIN_DIRECTORY)
 
     @check_if_open
     @log_info
@@ -1275,7 +1285,7 @@ class H5Integrator(Transform):
         dict_new_files = get_dict_files(
             list_files=new_files,
         )
-        logger.info("Got dictionary of folders and files")
+        logger.info(INFO_H5_NEW_DICTIONARY_FILES)
 
         # Store in the .h5 file by folder and its own list of files
         for folder, file_list in dict_new_files.items():
@@ -1286,7 +1296,7 @@ class H5Integrator(Transform):
                 get_2D_array=False,
             )
             logger.info(f"Finished with folder: {folder_name}.")
-        logger.info(f"Finished the update of all the new files.")
+        logger.info(INFO_H5_FILES_UPDATED)
 
 
     @check_if_open
@@ -1314,26 +1324,6 @@ class H5Integrator(Transform):
             else:
                 item = data.item()
             yield item
-
-            # try:
-            #     if yield_decode:
-            #         yield bytes.decode(data.item())
-            #     else:
-            #         yield data.item()
-            # except:
-            #     logger.info(f"Error while generating {data.item()}")
-
-
-
-
-        # for data in dataset:
-        #     try:
-        #         if yield_decode:
-        #             yield bytes.decode(data.item())
-        #         else:
-        #             yield data.item()
-        #     except:Fnorm
-        #         logger.info(f"Error while generating {data.item()}")
 
     @log_info
     @check_if_open

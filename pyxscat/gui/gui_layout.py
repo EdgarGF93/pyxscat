@@ -15,7 +15,7 @@ LABEL_TAB_BOX = "Box integration"
 # INPUT FILE PARAMETERS
 LABEL_INPUT_PARAMETERS = "====== Input File Parameters ======"
 LABEL_RECENT_H5 = "Recent .h5 files:"
-LABEL_MAINDIR = "Main directory:"
+LABEL_H5_FILE = "Main directory:"
 LABEL_EXTENSION = "File extension:"
 LABEL_WILDCARDS = "Wildcards(*):"
 LABEL_PONIFILE = "Ponifile:"
@@ -380,9 +380,9 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_recent_h5 = QLabel(LABEL_RECENT_H5)
         self.combobox_h5_files = QComboBox()
         # self.combobox_h5_files.addItem("")        
-        self.label_maindir = QLabel(LABEL_MAINDIR)
-        self.lineedit_maindir = QLineEdit()
-        self.lineedit_maindir.setEnabled(False)
+        self.label_h5file = QLabel(LABEL_H5_FILE)
+        self.lineedit_h5file = QLineEdit()
+        self.lineedit_h5file.setEnabled(False)
         self.button_pick_maindir = QPushButton()
         self.button_pick_hdf5 = QPushButton()
         folder_icon_path = str(GUI_PATH.joinpath(ICON_FOLDER_PATH))
@@ -425,12 +425,12 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_pyfaicalib.setStyleSheet(button_style_input)
         self.button_start.setStyleSheet(button_style_input)
 
-        set_bstyle([self.label_recent_h5, self.label_maindir, self.label_folders, self.label_files, self.label_extension, self.label_conditions, self.label_ponifile, self.label_reffolder, self.label_sample_orientation, self.title_input])
+        set_bstyle([self.label_recent_h5, self.label_h5file, self.label_folders, self.label_files, self.label_extension, self.label_conditions, self.label_ponifile, self.label_reffolder, self.label_sample_orientation, self.title_input])
 
         self.grid_recent_h5.addWidget(self.label_recent_h5, 1, 1)
         self.grid_recent_h5.addWidget(self.combobox_h5_files, 1, 2)
-        self.grid_input_maindir.addWidget(self.label_maindir, 1, 1)
-        self.grid_input_maindir.addWidget(self.lineedit_maindir, 1, 2)
+        self.grid_input_maindir.addWidget(self.label_h5file, 1, 1)
+        self.grid_input_maindir.addWidget(self.lineedit_h5file, 1, 2)
         self.grid_input_maindir.addWidget(self.button_pick_maindir, 1, 3)
         self.grid_input_maindir.addWidget(self.button_pick_hdf5, 1, 4)
         self.grid_input_conditions.addWidget(self.label_extension, 1, 1)
