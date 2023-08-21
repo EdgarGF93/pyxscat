@@ -19,7 +19,7 @@ from gui import combobox_methods as cb
 from gui import listwidget_methods as lt
 from gui import table_methods as tm
 from gui import graph_methods as gm
-from gui.gui_layout import GUIPyX_Widget_layout
+from gui.gui_layout import GUIPyX_Widget_layout, BUTTON_MIRROR_DISABLE, BUTTON_MIRROR_ENABLE, BUTTON_QZ_PAR, BUTTON_QZ_ANTIPAR, BUTTON_QR_PAR, BUTTON_QR_ANTIPAR
 from h5_integrator import H5Integrator
 
 import json
@@ -29,6 +29,10 @@ import subprocess
 import sys
 import os
 import pandas as pd
+
+ICON_SPLASH = join(ICON_PATH, 'pyxscat_logo_thumb.png')
+
+
 
 MSG_SETUP_UPDATED = "New setup dictionary was updated."
 MSG_SETUP_ERROR = "The setup dictionary could not be updated."
@@ -129,7 +133,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         super(GUIPyX_Widget, self).__init__()
 
         # Splash screen
-        pixmap = QPixmap(join(GUI_PATH, 'pyxscat_logo_thumb.png'))
+        pixmap = QPixmap(ICON_SPLASH)
         splash = QSplashScreen(pixmap)
         splash.show()
         splash.finish(self)
@@ -318,8 +322,15 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
         #########################
-        # Callbacks for rotation and parallel/antiparallel axis
+        # Callbacks for mirror rotation and parallel/antiparallel axis
         #########################
+        self.button_mirror.clicked.connect(
+            lambda : (
+                self.update_mirror(),
+                self.update_graphs(),
+            )
+        )
+
         self.button_qz.clicked.connect(
             lambda : (
                 self.update_qz(),
@@ -905,18 +916,38 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.update_integration_widgets()
 
     @log_info
+    def update_mirror(self) -> None:
+        """
+        Performs a left-right flip of the 2D matrix
+        
+        Parameters:
+        None
+
+        Returns:
+        None
+        """
+        
+        pass
+
+
+
+
+
+
+
+    @log_info
     def update_qz(self) -> None:
         """
             Update the state of qz (parallel or antiparallel to PONI)
         """
         if self._qz_parallel:
             self._qz_parallel = False
-            self.button_qz.setText("qz \u2191\u2193")
+            self.button_qz.setText(BUTTON_QZ_ANTIPAR)
             self._write_output(MSG_QZ_DIRECTION_UPDATED)
             self._write_output(f"Now, the qz negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
         else:
             self._qz_parallel = True
-            self.button_qz.setText("qz \u2191\u2191")
+            self.button_qz.setText(BUTTON_QZ_PAR)
             self._write_output(MSG_QZ_DIRECTION_UPDATED)
             self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
 
@@ -933,12 +964,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         if self._qr_parallel:
             self._qr_parallel = False       
-            self.button_qr.setText("qr \u2191\u2193")
+            self.button_qr.setText(BUTTON_QZ_ANTIPAR)
             self._write_output(MSG_QR_DIRECTION_UPDATED)
             self._write_output(f"Now, the qr negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
         else:
             self._qr_parallel = True            
-            self.button_qr.setText("qr \u2191\u2191")
+            self.button_qr.setText(BUTTON_QR_PAR)
             self._write_output(MSG_QR_DIRECTION_UPDATED)
             self._write_output(f"Now, the qr positiveS axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")        
         
@@ -1011,7 +1042,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if not main_directory:
             self.write_terminal_and_logger(ERROR_MAINDIR_DONTEXIST)
             return
-            
+
         if not Path(main_directory).exists():
             self.write_terminal_and_logger(ERROR_MAINDIR_DONTEXIST)
             return
@@ -1813,6 +1844,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             folder_reference_name=reference_folder,
             reference_factor=reference_factor,
         )
+
+        # Mirror fliping?
+        if 
 
         # Get the normalization factor
         norm_factor = self.h5.get_norm_factor(

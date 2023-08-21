@@ -4,7 +4,7 @@ from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import Qt
 from silx.gui.plot.PlotWindow import Plot1D, Plot2D
 from other.units import DICT_UNIT_ALIAS, CAKE_INTEGRATIONS, BOX_INTEGRATIONS
-from . import GUI_PATH
+from . import ICON_PATH
 
 # TABS
 LABEL_TAB_FILES = "Folders and files"
@@ -21,8 +21,12 @@ LABEL_WILDCARDS = "Wildcards(*):"
 LABEL_PONIFILE = "Ponifile:"
 LABEL_REFERENCE_FOLDER = "Reference folder:"
 LABEL_SAMPLE_ORIENTATION = "Sample orientation:"
-BUTTON_QZ = "qz \u2191\u2191"
-BUTTON_QR = "qr \u2191\u2191"
+BUTTON_MIRROR_DISABLE = "Mirror disable"
+BUTTON_MIRROR_ENABLE = "Mirror enable"
+BUTTON_QZ_PAR = "qz \u2191\u2191"
+BUTTON_QZ_ANTIPAR = "qz \u2191\u2193"
+BUTTON_QR_PAR = "qr \u2191\u2191"
+BUTTON_QR_ANTIPAR = "qr \u2191\u2193"
 BUTTON_PONIFILE = "Pick new ponifile"
 BUTTON_PYFAI_GUI = " pyFAI calibration GUI "
 BUTTON_UPDATE_DATA = " Update data "
@@ -31,6 +35,7 @@ WILDCARDS_DEFAULT = "*"
 ICON_FOLDER_PATH = "folder.png"
 LABEL_PICK_MAINDIR = "Pick the directory container of data files."
 ICON_H5_PATH = "hdf5.png"
+ICON_MIRROR_PATH = "mirror.png"
 LABEL_PICK_H5 = "Pick an .hdf5 file."
 ICON_FILE_PATH = "file.png"
 ICON_REFRESH_PATH = "refresh.png"
@@ -377,6 +382,11 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_buttons.setColumnStretch(1,1)
         self.grid_input_buttons.setColumnStretch(2,1)
 
+        self.grid_input_orientations.setColumnStretch(1,1)
+        self.grid_input_orientations.setColumnStretch(2,2)
+        self.grid_input_orientations.setColumnStretch(3,2)
+        self.grid_input_orientations.setColumnStretch(4,2)
+
         self.label_recent_h5 = QLabel(LABEL_RECENT_H5)
         self.combobox_h5_files = QComboBox()
         # self.combobox_h5_files.addItem("")        
@@ -385,14 +395,17 @@ class GUIPyX_Widget_layout(QWidget):
         self.lineedit_h5file.setEnabled(False)
         self.button_pick_maindir = QPushButton()
         self.button_pick_hdf5 = QPushButton()
-        folder_icon_path = str(GUI_PATH.joinpath(ICON_FOLDER_PATH))
+        folder_icon_path = str(ICON_PATH.joinpath(ICON_FOLDER_PATH))
         self.button_pick_maindir.setIcon(QIcon(folder_icon_path))
         self.button_pick_maindir.setToolTip(LABEL_PICK_MAINDIR)
-        h5_icon_path = str(GUI_PATH.joinpath(ICON_H5_PATH))
+        h5_icon_path = str(ICON_PATH.joinpath(ICON_H5_PATH))
         self.button_pick_hdf5.setIcon(QIcon(h5_icon_path))
-        self.button_pick_hdf5.setToolTip(LABEL_PICK_H5) 
-        self.button_qz = QPushButton(BUTTON_QZ)
-        self.button_qr = QPushButton(BUTTON_QR)
+        self.button_pick_hdf5.setToolTip(LABEL_PICK_H5)
+        mirror_icon_path = str(ICON_PATH.joinpath(ICON_MIRROR_PATH))
+        self.button_mirror = QPushButton(BUTTON_MIRROR_DISABLE)
+        self.button_mirror.setIcon(QIcon(mirror_icon_path))
+        self.button_qz = QPushButton(BUTTON_QZ_PAR)
+        self.button_qr = QPushButton(BUTTON_QR_PAR)
         self.label_extension = QLabel(LABEL_EXTENSION)
         self.combobox_extension = QComboBox()
         for ext in LIST_EXTENSION:
@@ -402,16 +415,16 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_ponifile = QLabel(LABEL_PONIFILE)
         self.combobox_ponifile = QComboBox()
         self.button_add_ponifile = QPushButton(BUTTON_PONIFILE)
-        file_icon_path = str(GUI_PATH.joinpath(ICON_FILE_PATH))
+        file_icon_path = str(ICON_PATH.joinpath(ICON_FILE_PATH))
         self.button_add_ponifile.setIcon(QIcon(file_icon_path))
         self.button_update_ponifile = QPushButton()
-        refresh_icon_path = str(GUI_PATH.joinpath(ICON_REFRESH_PATH))
+        refresh_icon_path = str(ICON_PATH.joinpath(ICON_REFRESH_PATH))
         self.button_update_ponifile.setIcon(QIcon(refresh_icon_path))
         self.label_reffolder = QLabel(LABEL_REFERENCE_FOLDER)
         self.combobox_reffolder = QComboBox()
         self.label_sample_orientation = QLabel(LABEL_SAMPLE_ORIENTATION)
         self.button_pyfaicalib = QPushButton(BUTTON_PYFAI_GUI)
-        pyfai_icon_path = str(GUI_PATH.joinpath(ICON_PYFAI_PATH))
+        pyfai_icon_path = str(ICON_PATH.joinpath(ICON_PYFAI_PATH))
         self.button_pyfaicalib.setIcon(QIcon(pyfai_icon_path)) 
         self.button_start = QPushButton(BUTTON_UPDATE_DATA)
         self.button_start.setIcon(QIcon(refresh_icon_path)) 
@@ -420,6 +433,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_pick_hdf5.setStyleSheet(button_style_input)
         self.button_add_ponifile.setStyleSheet(button_style_input)
         self.button_update_ponifile.setStyleSheet(button_style_input)
+        self.button_mirror.setStyleSheet(button_style_input)
         self.button_qz.setStyleSheet(button_style_input)
         self.button_qr.setStyleSheet(button_style_input)
         self.button_pyfaicalib.setStyleSheet(button_style_input)
@@ -444,8 +458,9 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_reference.addWidget(self.label_reffolder, 1, 1)
         self.grid_input_reference.addWidget(self.combobox_reffolder, 1, 2)
         self.grid_input_orientations.addWidget(self.label_sample_orientation, 1, 1)
-        self.grid_input_orientations.addWidget(self.button_qz, 1, 2)
-        self.grid_input_orientations.addWidget(self.button_qr, 1, 3)
+        self.grid_input_orientations.addWidget(self.button_mirror, 1, 2)
+        self.grid_input_orientations.addWidget(self.button_qz, 1, 3)
+        self.grid_input_orientations.addWidget(self.button_qr, 1, 4)
         self.grid_input_buttons.addWidget(self.button_pyfaicalib, 1, 1)
         self.grid_input_buttons.addWidget(self.button_start, 1, 2)
 
@@ -651,7 +666,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_setup_name = QLabel(LABEL_SETUP_NAME)
         self.lineedit_setup_name = QLineEdit()   
         self.button_setup_save = QPushButton(BUTTON_JSON_FILE)
-        save_icon_path = str(GUI_PATH.joinpath(ICON_SAVE_PATH))
+        save_icon_path = str(ICON_PATH.joinpath(ICON_SAVE_PATH))
         self.button_setup_save.setIcon(QIcon(save_icon_path))
         self.button_setup_update = QPushButton(BUTTON_UPDATE_KEYS)
 
