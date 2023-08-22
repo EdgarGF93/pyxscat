@@ -1968,7 +1968,6 @@ class H5Integrator(Transform):
                 scat_z, scat_xy = None, None
                 logger.info(f"Scat_z matrix could not be generated.")
                 logger.info(f"Scat_x matrix could not be generated.")
-
         elif unit in UNITS_THETA:
             try:
                 scat_z, scat_xy = self.calc_angles(
@@ -1999,12 +1998,11 @@ class H5Integrator(Transform):
             elif self.get_sample_orientation() in (2,4):
                 scat_xy = np.flipud(scat_xy) * (-1)
                 data = np.flipud(data)    
-        print(scat_xy)
 
         # Defining the missing wedge
         if unit in UNITS_Q:
             NUMBER_COLUMNS_REMOVED = 10
-            HALF_NUMBER = int(NUMBER_COLUMNS_REMOVED/2)
+            HALF_NUMBER = int(NUMBER_COLUMNS_REMOVED / 2)
             ind = np.unravel_index(np.argmin(abs(scat_xy), axis=None), scat_z.shape)
             if self.get_sample_orientation() in (1,3):
                 data[:, ind[1] - HALF_NUMBER: ind[1] + HALF_NUMBER] = np.nan
@@ -2013,71 +2011,6 @@ class H5Integrator(Transform):
             logger.info(f"The missing wedge was removed from the 2D map.")
 
         return scat_xy, scat_z, data
-
-        # if self.tranform_bool:
-        #     unit = get_pyfai_unit(unit)
-            
-
-        #     if unit in UNITS_Q:
-        #         # scat_z, scat_x = qz, qxy
-        #         if self._transform_q:
-        #             try:
-        #                 scat_z, scat_x = self._transform_q.calc_q(
-        #                     d1=det_array[0,:,:],
-        #                     d2=det_array[1,:,:],
-        #                 )
-        #             except:
-        #                 scat_z, scat_x = None, None
-        #         else:
-        #             try:
-        #                 scat_z, scat_x = self.calc_q(
-        #                     d1=det_array[0,:,:],
-        #                     d2=det_array[1,:,:],
-        #                 )
-        #             except:
-        #                 scat_z, scat_x = None, None
-
-            # elif unit in UNITS_THETA:
-            #     # scat_z, scat_x = alpha, tth
-            #     if self._transform_q:
-            #         try:
-            #             scat_z, scat_x = self._transform_q.calc_angles(
-            #                 d1=det_array[0,:,:],
-            #                 d2=det_array[1,:,:],
-            #             )
-            #         except:
-            #             scat_z, scat_x = None, None
-            #     else:
-            #         try:
-            #             scat_z, scat_x = self.calc_angles(
-            #                 d1=det_array[0,:,:],
-            #                 d2=det_array[1,:,:],
-            #             )
-            #         except:
-            #             scat_z, scat_x = None, None
-            # else:
-            #     scat_z, scat_x = None, None
-            
-            # # Transform units
-            # if (scat_z is not None) and (scat_x is not None):
-            #     DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
-            #     scat_z *= DICT_PLOT['SCALE']
-            #     scat_x *= DICT_PLOT['SCALE']
-
-            #     if data is None:
-            #         data = self.get_data()
-
-            #     if unit in UNITS_Q:
-            #         NUMBER_COLUMNS_REMOVED = 10
-            #         HALF_NUMBER = int(NUMBER_COLUMNS_REMOVED/2)
-            #         ind = np.unravel_index(np.argmin(abs(scat_x), axis=None), scat_z.shape)
-            #         if self.sample_orientation_edf in (1,3):
-            #             data[:, ind[1] - HALF_NUMBER: ind[1] + HALF_NUMBER] = np.nan
-            #         elif self.sample_orientation_edf in (2,4):
-            #             data[ind[0] - HALF_NUMBER: ind[0] + HALF_NUMBER, :] = np.nan
-
-            # return scat_x, scat_z, data
-
 
     @log_info
     @check_if_open
