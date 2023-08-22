@@ -628,6 +628,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_chart_integrations.setColumnStretch(2,2)
         self.grid_input_chart_integrations.setColumnStretch(3,2)
 
+        # self.grid_chart_buttons.addWidget(self.button_clearplot, 1, 1)
         self.grid_chart_buttons.addWidget(self.button_saveplot, 1, 1)
         self.grid_chart_buttons.addWidget(self.button_batch, 1, 2)
         self.grid_chart_buttons.addWidget(self.button_fit, 1, 3)
@@ -647,13 +648,12 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_setup.setRowStretch(1,4)
         self.grid_input_setup.setRowStretch(1,5)
         self.grid_input_setup.setColumnStretch(1,1)
-        self.grid_input_setup.setColumnStretch(2,2)
-        self.grid_input_setup.setColumnStretch(3,2)
+        self.grid_input_setup.setColumnStretch(1,2)
+        self.grid_input_setup.setColumnStretch(1,3)
 
         self.label_setup = QLabel(LABEL_DICT_SETUP)
         self.combobox_setup = QComboBox()
         self.button_setup = QPushButton(BUTTON_PICK_JSON)
-        self.button_setup.setStyleSheet(button_style_input)
         self.label_angle = QLabel(LABEL_IANGLE)
         self.lineedit_angle = QLineEdit()
         self.combobox_angle = QComboBox()
@@ -669,12 +669,12 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_setup_name = QLabel(LABEL_SETUP_NAME)
         self.lineedit_setup_name = QLineEdit()   
         self.button_setup_save = QPushButton(BUTTON_JSON_FILE)
-        self.button_setup_save.setStyleSheet(button_style_input)
         save_icon_path = str(ICON_PATH.joinpath(ICON_SAVE_PATH))
         self.button_setup_save.setIcon(QIcon(save_icon_path))
         self.button_setup_update = QPushButton(BUTTON_UPDATE_KEYS)
-        self.button_setup_update.setStyleSheet(button_style_input)
-        
+
+
+
 
         self.grid_input_setup.addWidget(self.label_setup, 1, 1)
         self.grid_input_setup.addWidget(self.combobox_setup, 1, 2)
@@ -696,16 +696,22 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_setup.addWidget(self.button_setup_save, 6, 3)
         self.grid_button_setup.addWidget(self.button_setup_update, 7, 1)
 
-        ##############################
-        ### Tab for CAKE integation
-        ##############################
+        # Build the grid for input integration parameters CAKE
+        self.grid_input_integration_cake_up = QGridLayout()
+        # self.button_add_cake = QPushButton("Add integration")    
+        # self.grid_input_integration_cake.setRowStretch(1,7)
+        # self.grid_input_integration_cake.setRowStretch(2,1)
+        self.grid_input_integration_cake.addLayout(self.grid_input_integration_cake_up,1,1)
+        # self.grid_input_integration_cake.addWidget(self.button_add_cake,2,1)
 
+        self.grid_labels_cake = QGridLayout()
         self.grid_inputs_cake = QGridLayout()
         self.list_cakes = QListWidget()
-        self.grid_input_integration_cake.setColumnStretch(1,1)
-        self.grid_input_integration_cake.setColumnStretch(2,5)
-        self.grid_input_integration_cake.addLayout(self.grid_inputs_cake,1,1)
-        self.grid_input_integration_cake.addWidget(self.list_cakes,1,2)
+
+        self.grid_input_integration_cake_up.addLayout(self.grid_labels_cake,1,1)
+        self.grid_input_integration_cake_up.addLayout(self.grid_inputs_cake,1,2)
+        self.grid_input_integration_cake_up.addWidget(self.list_cakes,1,3)
+
         self.label_name_cake = QLabel(LABEL_CAKE_NAME)
         self.label_suffix_cake = QLabel(LABEL_CAKE_SUFFIX)
         self.label_type_cake = QLabel(LABEL_CAKE_TYPE)
@@ -714,13 +720,13 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_azimrange_cake = QLabel(LABEL_CAKE_AZIM)
         self.label_azimbins_cake = QLabel(LABEL_CAKE_BINS)  
 
-        self.grid_inputs_cake.addWidget(self.label_name_cake,1,1)
-        self.grid_inputs_cake.addWidget(self.label_suffix_cake,2,1)
-        self.grid_inputs_cake.addWidget(self.label_type_cake,3,1)
-        self.grid_inputs_cake.addWidget(self.label_units_cake,4,1)
-        self.grid_inputs_cake.addWidget(self.label_radialrange_cake,5,1)
-        self.grid_inputs_cake.addWidget(self.label_azimrange_cake,6,1)
-        self.grid_inputs_cake.addWidget(self.label_azimbins_cake,7,1)
+        self.grid_labels_cake.addWidget(self.label_name_cake,1,1)
+        self.grid_labels_cake.addWidget(self.label_suffix_cake,2,1)
+        self.grid_labels_cake.addWidget(self.label_type_cake,3,1)
+        self.grid_labels_cake.addWidget(self.label_units_cake,4,1)
+        self.grid_labels_cake.addWidget(self.label_radialrange_cake,5,1)
+        self.grid_labels_cake.addWidget(self.label_azimrange_cake,6,1)
+        self.grid_labels_cake.addWidget(self.label_azimbins_cake,7,1)
 
         self.lineedit_name_cake = QLineEdit()
         self.lineedit_suffix_cake = QLineEdit()
@@ -730,6 +736,9 @@ class GUIPyX_Widget_layout(QWidget):
         self.combobox_units_cake = QComboBox()
         for unit in DICT_UNIT_ALIAS.values():
             self.combobox_units_cake.addItem(unit)
+        # self.combobox_units_cake.addItem("q_A^-1")
+        # self.combobox_units_cake.addItem("2th_deg")
+        # self.combobox_units_cake.addItem("2th_rad")
         self.grid_radialrange = QGridLayout()
         self.label_radialmin_cake = QLabel(LABEL_MIN)
         self.spinbox_radialmin_cake = QDoubleSpinBox()
@@ -757,26 +766,34 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_azimrange.addWidget(self.label_azimmax_cake,1,3)
         self.grid_azimrange.addWidget(self.spinbox_azimmax_cake,1,4)
         self.lineedit_azimbins_cake = QLineEdit()
+        # self.spinbox_azimbins_cake = QDoubleSpinBox()
+        # self.spinbox_azimbins_cake.setSingleStep(STEP_BINS_SPINBOX)
+        # self.spinbox_azimbins_cake.setRange(SPINBOX_BINS_MIN, SPINBOX_BINS_MAX)
 
-        self.grid_inputs_cake.addWidget(self.lineedit_name_cake,1,2)
-        self.grid_inputs_cake.addWidget(self.lineedit_suffix_cake,2,2)
-        self.grid_inputs_cake.addWidget(self.combobox_type_cake,3,2)
-        self.grid_inputs_cake.addWidget(self.combobox_units_cake,4,2)
-        self.grid_inputs_cake.addLayout(self.grid_radialrange,5,2)
-        self.grid_inputs_cake.addLayout(self.grid_azimrange,6,2)
-        self.grid_inputs_cake.addWidget(self.lineedit_azimbins_cake,7,2)
+        self.grid_inputs_cake.addWidget(self.lineedit_name_cake,1,1)
+        self.grid_inputs_cake.addWidget(self.lineedit_suffix_cake,2,1)
+        self.grid_inputs_cake.addWidget(self.combobox_type_cake,3,1)
+        self.grid_inputs_cake.addWidget(self.combobox_units_cake,4,1)
+        self.grid_inputs_cake.addLayout(self.grid_radialrange,5,1)
+        self.grid_inputs_cake.addLayout(self.grid_azimrange,6,1)
+        self.grid_inputs_cake.addWidget(self.lineedit_azimbins_cake,7,1)
 
-        ##############################
-        ### Tab for BOX integation
-        ##############################
+        # Build the grid for input integration parameters BOX
+        self.grid_input_integration_box_up = QGridLayout()
+        # self.button_add_box = QPushButton("Add integration")    
 
+        # self.grid_input_integration_box.setRowStretch(1,7)
+        # self.grid_input_integration_box.setRowStretch(2,1)
+        self.grid_input_integration_box.addLayout(self.grid_input_integration_box_up,1,1)
+        # self.grid_input_integration_box.addWidget(self.button_add_box,2,1)
+
+        self.grid_labels_box = QGridLayout()
         self.grid_inputs_box = QGridLayout()
         self.list_boxs = QListWidget()
-        self.grid_input_integration_box.addLayout(self.grid_inputs_box,1,1)
-        self.grid_input_integration_box.addWidget(self.list_boxs,1,2)
 
-        self.grid_inputs_box.setColumnStretch(1,1)
-        self.grid_inputs_box.setColumnStretch(2,5)
+        self.grid_input_integration_box_up.addLayout(self.grid_labels_box,1,1)
+        self.grid_input_integration_box_up.addLayout(self.grid_inputs_box,1,2)
+        self.grid_input_integration_box_up.addWidget(self.list_boxs,1,3)
 
         self.label_name_box = QLabel(LABEL_BOX_NAME)
         self.label_suffix_box = QLabel(LABEL_BOX_SUFFIX)
@@ -786,13 +803,13 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_ooprange_box = QLabel(LABEL_BOX_OOP_RANGE)
         self.label_outputunits_box = QLabel(LABEL_BOX_OUTPUT_UNITS)  
 
-        self.grid_inputs_box.addWidget(self.label_name_box,1,1)
-        self.grid_inputs_box.addWidget(self.label_suffix_box,2,1)
-        self.grid_inputs_box.addWidget(self.label_direction_box,3,1)
-        self.grid_inputs_box.addWidget(self.label_input_units_box,4,1)
-        self.grid_inputs_box.addWidget(self.label_iprange_box,5,1)
-        self.grid_inputs_box.addWidget(self.label_ooprange_box,6,1)
-        self.grid_inputs_box.addWidget(self.label_outputunits_box,7,1)
+        self.grid_labels_box.addWidget(self.label_name_box,1,1)
+        self.grid_labels_box.addWidget(self.label_suffix_box,2,1)
+        self.grid_labels_box.addWidget(self.label_direction_box,3,1)
+        self.grid_labels_box.addWidget(self.label_input_units_box,4,1)
+        self.grid_labels_box.addWidget(self.label_iprange_box,5,1)
+        self.grid_labels_box.addWidget(self.label_ooprange_box,6,1)
+        self.grid_labels_box.addWidget(self.label_outputunits_box,7,1)
 
         self.lineedit_name_box = QLineEdit()
         self.lineedit_suffix_box = QLineEdit()
@@ -811,12 +828,10 @@ class GUIPyX_Widget_layout(QWidget):
         self.spinbox_ipmax_box = QDoubleSpinBox()
         self.spinbox_ipmax_box.setSingleStep(STEP_INTEGRATION_SPINBOX)
         self.spinbox_ipmax_box.setRange(SPINBOX_RANGE_MIN, SPINBOX_RANGE_MAX)
-
         self.grid_iprange.addWidget(self.label_ipmin_box,1,1)
         self.grid_iprange.addWidget(self.spinbox_ipmin_box,1,2)
         self.grid_iprange.addWidget(self.label_ipmax_box,1,3)
         self.grid_iprange.addWidget(self.spinbox_ipmax_box,1,4)
-
         self.grid_ooprange = QGridLayout()
         self.label_oopmin_box = QLabel(LABEL_MIN)
         self.spinbox_oopmin_box = QDoubleSpinBox()
@@ -826,7 +841,6 @@ class GUIPyX_Widget_layout(QWidget):
         self.spinbox_oopmax_box = QDoubleSpinBox()
         self.spinbox_oopmax_box.setSingleStep(STEP_INTEGRATION_SPINBOX)
         self.spinbox_oopmax_box.setRange(SPINBOX_RANGE_MIN, SPINBOX_RANGE_MAX)
-
         self.grid_ooprange.addWidget(self.label_oopmin_box,1,1)
         self.grid_ooprange.addWidget(self.spinbox_oopmin_box,1,2)
         self.grid_ooprange.addWidget(self.label_oopmax_box,1,3)
@@ -834,16 +848,12 @@ class GUIPyX_Widget_layout(QWidget):
         self.combobox_outputunits_box = QComboBox()
         for unit in DICT_UNIT_ALIAS.values():
             self.combobox_outputunits_box.addItem(unit)
-
-        self.grid_inputs_box.addWidget(self.lineedit_name_box,1,2)
-        self.grid_inputs_box.addWidget(self.lineedit_suffix_box,2,2)
-        self.grid_inputs_box.addWidget(self.combobox_direction_box,3,2)
-        self.grid_inputs_box.addWidget(self.combobox_units_box,4,2)
-        self.grid_inputs_box.addLayout(self.grid_iprange,5,2)
-        self.grid_inputs_box.addLayout(self.grid_ooprange,6,2)
-        self.grid_inputs_box.addWidget(self.combobox_outputunits_box,7,2)
+        self.grid_inputs_box.addWidget(self.lineedit_name_box,1,1)
+        self.grid_inputs_box.addWidget(self.lineedit_suffix_box,2,1)
+        self.grid_inputs_box.addWidget(self.combobox_direction_box,3,1)
+        self.grid_inputs_box.addWidget(self.combobox_units_box,4,1)
+        self.grid_inputs_box.addLayout(self.grid_iprange,5,1)
+        self.grid_inputs_box.addLayout(self.grid_ooprange,6,1)
+        self.grid_inputs_box.addWidget(self.combobox_outputunits_box,7,1)
 
         set_bstyle([self.label_headeritems, self.label_plaintext, self.xlims, self.ylims, self.label_units, self.xticks, self.yticks, self.label_savefolder, self.label_integrations, self.label_sub, self.label_title,self.label_input_graph,self.label_input_chart])
-        set_bstyle([self.label_setup, self.label_angle, self.label_tilt_angle, self.label_normfactor, self.label_exposure, self.label_setup_name])
-        set_bstyle([self.label_name_cake, self.label_suffix_cake, self.label_type_cake, self.label_units_cake, self.label_radialrange_cake, self.label_azimrange_cake, self.label_azimbins_cake])
-        set_bstyle([self.label_name_box, self.label_suffix_box, self.label_direction_box, self.label_input_units_box, self.label_iprange_box, self.label_ooprange_box, self.label_outputunits_box])
