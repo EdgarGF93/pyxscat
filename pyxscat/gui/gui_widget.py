@@ -85,6 +85,9 @@ INFO_H5_PONIFILE_CB_UPDATED = "Combobox of ponifiles was updated."
 INFO_LIST_FOLDERS_UPDATED = "Updated list widget."
 INFO_LIST_NO_FOLDERS_TO_UPDATE = "No new folders."
 
+INFO_MIRROR_DISABLE = "Mirror transformation disable."
+INFO_MIRROR_ENABLE = "Mirror transformation enable. 2D map has been flipped left-right."
+
 MSG_H5FILE_CHOICE = "An .h5 file will be created. Do you want to save it in the same directory?"
 MSG_H5FILE_OVERWRITE = "There is an h5 file with the same name. Do you want to overwite it?"
 
@@ -148,6 +151,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.list_dict_integration_cache = []
         self._qz_parallel = True
         self._qr_parallel = True
+        self._mirror = False
         self._auto_lims = True
         self._graph_log = True
         self._colorbar = False
@@ -926,14 +930,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         None
         """
-        
-        pass
-
-
-
-
-
-
+        if self._mirror:
+            self._mirror = False
+            self.button_mirror.setText(BUTTON_MIRROR_DISABLE)
+            self.write_terminal_and_logger(INFO_MIRROR_DISABLE)
+        else:
+            self._mirror = True
+            self.button_mirror.setText(BUTTON_MIRROR_ENABLE)
+            self.write_terminal_and_logger(INFO_MIRROR_ENABLE)
 
     @log_info
     def update_qz(self) -> None:
@@ -978,7 +982,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 qz_parallel=self._qz_parallel,
                 qr_parallel=self._qr_parallel,
             )
-
 
     @log_info
     def create_h5_file(self, main_directory=str()):
@@ -1845,8 +1848,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             reference_factor=reference_factor,
         )
 
-        # Mirror fliping?
-        if 
+
 
         # Get the normalization factor
         norm_factor = self.h5.get_norm_factor(
@@ -1870,7 +1872,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         except:
             self.write_terminal_and_logger("Error during updating 1D graph")
-
 
     @log_info
     def update_2D_graph(self, data, norm_factor=1.0):
@@ -2276,8 +2277,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         logger.info(f"Unit of the map: {unit}")
 
         # Get the grid of scattering units
-        scat_x, scat_z, data = self.h5.get_mesh_matrix(unit=unit, data=data)
-        
+        scat_x, scat_z, data = self.h5.get_mesh_matrix(
+            unit=unit, 
+            data=data,
+            mirror=self._mirror,
+        )
+
         # Get the title using the key metadata from lineedit
         title = self.get_title()
 
