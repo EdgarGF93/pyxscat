@@ -230,6 +230,34 @@ QPushButton:pressed  {
     }
 """
 
+button_style_input_disable = """
+QPushButton {
+    font-weight: bold;
+    color : black;
+    background-color: #fbe5d6;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+QPushButton:hover  {
+    font-weight: bold;
+    color : black;
+    background-color: #BFCFCC;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+QPushButton:pressed  {
+    font-weight: bold;
+    color : black;
+    background-color: #D6E4E1;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+"""
+
+
 def set_bstyle(qlabels=[]):
     myFont=QFont("avenir.otf")
     myFont.setBold(True)

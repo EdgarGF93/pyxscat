@@ -20,6 +20,7 @@ from gui import listwidget_methods as lt
 from gui import table_methods as tm
 from gui import graph_methods as gm
 from gui.gui_layout import GUIPyX_Widget_layout, BUTTON_MIRROR_DISABLE, BUTTON_MIRROR_ENABLE, BUTTON_QZ_PAR, BUTTON_QZ_ANTIPAR, BUTTON_QR_PAR, BUTTON_QR_ANTIPAR
+from gui.gui_layout import button_style_input, button_style_input_disable
 from h5_integrator import H5Integrator
 
 import json
@@ -933,10 +934,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if self._mirror:
             self._mirror = False
             self.button_mirror.setText(BUTTON_MIRROR_DISABLE)
+            self.button_mirror.setStyleSheet(button_style_input)
             self.write_terminal_and_logger(INFO_MIRROR_DISABLE)
         else:
             self._mirror = True
             self.button_mirror.setText(BUTTON_MIRROR_ENABLE)
+            self.button_mirror.setStyleSheet(button_style_input_disable)
             self.write_terminal_and_logger(INFO_MIRROR_ENABLE)
 
     @log_info
@@ -947,11 +950,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if self._qz_parallel:
             self._qz_parallel = False
             self.button_qz.setText(BUTTON_QZ_ANTIPAR)
+            self.button_qz.setStyleSheet(button_style_input_disable)
             self._write_output(MSG_QZ_DIRECTION_UPDATED)
             self._write_output(f"Now, the qz negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
         else:
             self._qz_parallel = True
             self.button_qz.setText(BUTTON_QZ_PAR)
+            self.button_qz.setStyleSheet(button_style_input)
             self._write_output(MSG_QZ_DIRECTION_UPDATED)
             self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
 
@@ -969,11 +974,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if self._qr_parallel:
             self._qr_parallel = False       
             self.button_qr.setText(BUTTON_QZ_ANTIPAR)
+            self.button_qr.setStyleSheet(button_style_input_disable)
             self._write_output(MSG_QR_DIRECTION_UPDATED)
             self._write_output(f"Now, the qr negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
         else:
             self._qr_parallel = True            
             self.button_qr.setText(BUTTON_QR_PAR)
+            self.button_qr.setStyleSheet(button_style_input)
             self._write_output(MSG_QR_DIRECTION_UPDATED)
             self._write_output(f"Now, the qr positiveS axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")        
         
