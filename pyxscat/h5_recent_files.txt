@@ -1,3 +1,4 @@
 
 C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5
 C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\test_xmas.h5
+C:\Users\Lenovo\Documents\Python\pyxscat\edf_examples\test_xmas\test_xmas.h5
