@@ -19,7 +19,8 @@ from gui import combobox_methods as cb
 from gui import listwidget_methods as lt
 from gui import table_methods as tm
 from gui import graph_methods as gm
-from gui.gui_layout import GUIPyX_Widget_layout
+from gui.gui_layout import GUIPyX_Widget_layout, BUTTON_MIRROR_DISABLE, BUTTON_MIRROR_ENABLE, BUTTON_QZ_PAR, BUTTON_QZ_ANTIPAR, BUTTON_QR_PAR, BUTTON_QR_ANTIPAR
+from gui.gui_layout import button_style_input, button_style_input_disable
 from h5_integrator import H5Integrator
 
 import json
@@ -29,6 +30,10 @@ import subprocess
 import sys
 import os
 import pandas as pd
+
+ICON_SPLASH = join(ICON_PATH, 'pyxscat_logo_thumb.png')
+
+
 
 MSG_SETUP_UPDATED = "New setup dictionary was updated."
 MSG_SETUP_ERROR = "The setup dictionary could not be updated."
@@ -62,6 +67,7 @@ MSG_H5_FOUNDFILE = "Imported .hdf5 file"
 MSG_H5Integrator = "HDF5 container was created."
 MSG_H5Integrator_ERROR = "HDF5 container could not be created."
 
+ERROR_H5_NOTEXISTS = "There is no H5Integrator instance."
 ERROR_H5_FILENOTFOUND = "The .h5 could not be found."
 ERROR_H5_FILECREATION = "The .h5 file could not be created."
 ERROR_H5_INSTANCE = "The h5 instance could not be created."
@@ -76,6 +82,12 @@ ERROR_APPEND_H5 = "The .h5 file could not be appended to the combobox."
 INFO_NEW_MAINDIR = "New main directory set."
 INFO_H5_CREATION = "New .h5 file was created successfully."
 INFO_H5_UPDATED = "The .h5 file was updated."
+INFO_H5_PONIFILE_CB_UPDATED = "Combobox of ponifiles was updated."
+INFO_LIST_FOLDERS_UPDATED = "Updated list widget."
+INFO_LIST_NO_FOLDERS_TO_UPDATE = "No new folders."
+
+INFO_MIRROR_DISABLE = "Mirror transformation disable."
+INFO_MIRROR_ENABLE = "Mirror transformation enable. 2D map has been flipped left-right."
 
 MSG_H5FILE_CHOICE = "An .h5 file will be created. Do you want to save it in the same directory?"
 MSG_H5FILE_OVERWRITE = "There is an h5 file with the same name. Do you want to overwite it?"
@@ -83,7 +95,7 @@ MSG_H5FILE_OVERWRITE = "There is an h5 file with the same name. Do you want to o
 DESCRIPTION_HDF5 = "HDF5_XMaS_Beamline"
 COMMENT_NEW_FILE = ""
 
-JSON_FILE_H5 = SRC_PATH.joinpath("h5_files.json")
+TXT_FILE_H5 = SRC_PATH.joinpath("h5_recent_files.txt")
 
  # Initialize logger
 logger = logging.getLogger()
@@ -125,14 +137,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         super(GUIPyX_Widget, self).__init__()
 
         # Splash screen
-        pixmap = QPixmap(join(GUI_PATH, 'pyxscat_logo_thumb.png'))
+        pixmap = QPixmap(ICON_SPLASH)
         splash = QSplashScreen(pixmap)
         splash.show()
         splash.finish(self)
 
         # Initialize attributes and callbacks
         self.h5 = None
-        # self._h5_path = str()
         self.main_directory = Path()
         self.active_ponifile = str()
         self.clicked_folder = str()
@@ -141,6 +152,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.list_dict_integration_cache = []
         self._qz_parallel = True
         self._qr_parallel = True
+        self._mirror = False
         self._auto_lims = True
         self._graph_log = True
         self._colorbar = False
@@ -180,7 +192,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #####################################################################
         ##################  MAIN ATTRIBUTES CALLBACKS  ######################
         #####################################################################
-
 
         #########################
         # H5 combobox callback
@@ -267,13 +278,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         )    
 
-        # self.spinbox_azimbins_cake.valueChanged.connect(
-        #     lambda : (
-        #         self.add_integration_cake(),
-        #         self.update_graphs(),         
-        #     )
-        # )
-
         ################
         #### BOXES #####
         ################
@@ -323,8 +327,15 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
         #########################
-        # Callbacks for rotation and parallel/antiparallel axis
+        # Callbacks for mirror rotation and parallel/antiparallel axis
         #########################
+        self.button_mirror.clicked.connect(
+            lambda : (
+                self.update_mirror(),
+                self.update_graphs(),
+            )
+        )
+
         self.button_qz.clicked.connect(
             lambda : (
                 self.update_qz(),
@@ -335,24 +346,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             lambda : (
                 self.update_qr(),
                 self.update_graphs(),
-            )
-        )
-
-        self.button_pick_maindir.clicked.connect(
-            lambda : (
-                self.create_h5_file(),
-                self.update_h5_poni_and_files(),
-                self.append_h5file(),
-                self.activate_h5file(),
-            )
-        )
-
-        self.button_pick_hdf5.clicked.connect(
-            lambda : (
-                self.pick_and_activate_hdf5_file(),
-                self.update_h5_poni_and_files(),
-                self.update_widgets(),   
-                self.update_setup_info(),             
             )
         )
 
@@ -368,6 +361,28 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             lambda : (
                 self.update_pattern(),
             )   
+        )
+
+
+        #########################
+        # Pick main directory
+        #########################
+        self.button_pick_maindir.clicked.connect(
+            lambda : (
+                self.create_h5_file(),
+                self.append_h5file(),                
+                self.update_h5_poni_and_files(),
+                self.activate_h5file(),
+            )
+        )
+
+        self.button_pick_hdf5.clicked.connect(
+            lambda : (
+                self.pick_and_activate_hdf5_file(),
+                self.update_h5_poni_and_files(),
+                self.update_widgets(),   
+                self.update_setup_info(),             
+            )
         )
 
         #########################
@@ -595,7 +610,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         self.write_terminal_and_logger(MSG_RESET_DATA)
 
-
     # #########################
     # # Update self attributes
     # #########################
@@ -610,32 +624,23 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         None
         """
-        if not JSON_FILE_H5.is_file():
+        if not TXT_FILE_H5.is_file():
             self.write_terminal_and_logger("No .h5 files detected.")
             return
         else:
             try:
-                with open(JSON_FILE_H5, 'r') as fp:
-                    dict_h5 = json.load(fp)
+                with open(TXT_FILE_H5, 'r') as f:
+                    files_in_txt = sorted(set([l.strip() for l in f.readlines()]))
             except FileNotFoundError:
                 self.write_terminal_and_logger("Not found")
                 return
 
-        #         dict_h5 = {'H5_recent_files':[""]}
-        #         json.dump(dict_h5, fp)
-
-        # with open(JSON_FILE_H5, 'r') as fp:
-        #     dict_h5 = json.load(fp)
-
-        h5_in_folder = [item for item in dict_h5['H5_recent_files'] if Path(item).is_file()]
-        h5_in_folder.sort()
-
-        # Empty value to avoid automatic trigger
-        h5_in_folder.insert(0, '')
+        files_in_cb = cb.all_items(self.combobox_h5_files)        
+        new_h5_files = [item for item in files_in_txt if item not in files_in_cb]
 
         cb.insert_list(
             combobox=self.combobox_h5_files,
-            list_items=h5_in_folder,
+            list_items=new_h5_files,
             reset=True,
         )
 
@@ -835,7 +840,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.spinbox_azimmax_cake.setValue(dict_cake["Azimuth_range"][1])
         cb.set_text(self.combobox_units_cake, dict_cake["Unit"])
         le.substitute(self.lineedit_azimbins_cake, dict_cake["Bins_azimut"])
-        # self.spinbox_azimbins_cake.setValue(dict_cake["Bins_azimut"])
         logger.info(f"Updated widgets with cake integration values.")
 
     @log_info
@@ -917,18 +921,42 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.update_integration_widgets()
 
     @log_info
+    def update_mirror(self) -> None:
+        """
+        Performs a left-right flip of the 2D matrix
+        
+        Parameters:
+        None
+
+        Returns:
+        None
+        """
+        if self._mirror:
+            self._mirror = False
+            self.button_mirror.setText(BUTTON_MIRROR_DISABLE)
+            self.button_mirror.setStyleSheet(button_style_input)
+            self.write_terminal_and_logger(INFO_MIRROR_DISABLE)
+        else:
+            self._mirror = True
+            self.button_mirror.setText(BUTTON_MIRROR_ENABLE)
+            self.button_mirror.setStyleSheet(button_style_input_disable)
+            self.write_terminal_and_logger(INFO_MIRROR_ENABLE)
+
+    @log_info
     def update_qz(self) -> None:
         """
             Update the state of qz (parallel or antiparallel to PONI)
         """
         if self._qz_parallel:
             self._qz_parallel = False
-            self.button_qz.setText("qz \u2191\u2193")
+            self.button_qz.setText(BUTTON_QZ_ANTIPAR)
+            self.button_qz.setStyleSheet(button_style_input_disable)
             self._write_output(MSG_QZ_DIRECTION_UPDATED)
             self._write_output(f"Now, the qz negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
         else:
             self._qz_parallel = True
-            self.button_qz.setText("qz \u2191\u2191")
+            self.button_qz.setText(BUTTON_QZ_PAR)
+            self.button_qz.setStyleSheet(button_style_input)
             self._write_output(MSG_QZ_DIRECTION_UPDATED)
             self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
 
@@ -945,12 +973,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         if self._qr_parallel:
             self._qr_parallel = False       
-            self.button_qr.setText("qr \u2191\u2193")
+            self.button_qr.setText(BUTTON_QZ_ANTIPAR)
+            self.button_qr.setStyleSheet(button_style_input_disable)
             self._write_output(MSG_QR_DIRECTION_UPDATED)
             self._write_output(f"Now, the qr negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
         else:
             self._qr_parallel = True            
-            self.button_qr.setText("qr \u2191\u2191")
+            self.button_qr.setText(BUTTON_QR_PAR)
+            self.button_qr.setStyleSheet(button_style_input)
             self._write_output(MSG_QR_DIRECTION_UPDATED)
             self._write_output(f"Now, the qr positiveS axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")        
         
@@ -959,7 +989,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 qz_parallel=self._qz_parallel,
                 qr_parallel=self._qr_parallel,
             )
-
 
     @log_info
     def create_h5_file(self, main_directory=str()):
@@ -975,10 +1004,55 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if not main_directory:
             main_directory = self.pick_main_directory()
 
+        # Generate a filename for the .h5 file
+        h5_filename = self.create_h5_filename(
+            main_directory=main_directory,
+        )
+
+        if not h5_filename:
+            self.write_terminal_and_logger(ERROR_H5_FILECREATION)
+            return
+
+        # Create the H5 instance, which will create the .h5 file
+        self.h5 = H5Integrator(
+            filename_h5=str(h5_filename),
+            main_directory=str(main_directory),
+            setup_keys_metadata=self._dict_setup,
+            qz_parallel=self._qz_parallel,
+            qr_parallel=self._qr_parallel,
+            overwrite=True,
+        )
+
+        # If there was an error, register it
+        if not self.h5:
+            self.write_terminal_and_logger(ERROR_H5_FILECREATION)
+            logger.info(h5_filename)
+            logger.info(str(self.main_directory))
+            logger.info(self._dict_setup)
+            logger.info(self._qz_parallel)
+            logger.info(self._qr_parallel)
+            return
+        else:
+            self.write_terminal_and_logger(INFO_H5_CREATION)
+            logger.info(f"sPonifile: {self.active_ponifile}. Keys_metadata: {self._dict_setup}. qz:{self._qz_parallel}, qr:{self._qr_parallel}")
+            self.reset_attributes_and_widgets()
+
+    @log_info
+    def create_h5_filename(self, main_directory=str()):
+        """
+        Creates a new filename for the incoming new .h5 file
+
+        Parameters:
+        main_directory(srt, Path) : path of the root directory where all the data/metadata will be located recursively
+
+        Return:
+        None
+        """
         # It has to be a Path where to search the data files
-        if not self.main_directory:
+        if not main_directory:
             self.write_terminal_and_logger(ERROR_MAINDIR_DONTEXIST)
             return
+
         if not Path(main_directory).exists():
             self.write_terminal_and_logger(ERROR_MAINDIR_DONTEXIST)
             return
@@ -992,7 +1066,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         else:
             self.write_terminal_and_logger(ERROR_H5_FILECREATION)
             return
-        
+
         # If there is no defined path for the future .h5 file, returns without creating the h5 file
         if not h5_filename:
             self.write_terminal_and_logger(ERROR_H5_FILECREATION)
@@ -1020,30 +1094,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if not overwrite:
             h5_filename = h5_filename.joinpath(f"{main_directory.name}_{date_prefix()}.h5")
 
-        # Create the H5 instance, which will create the .h5 file
-        self.h5 = H5Integrator(
-            filename_h5=str(h5_filename),
-            main_directory=str(main_directory),
-            setup_keys_metadata=self._dict_setup,
-            qz_parallel=self._qz_parallel,
-            qr_parallel=self._qr_parallel,
-            overwrite=overwrite,
-        )
+        return h5_filename
 
-        # If there was an error, register it
-        if not self.h5:
-            self.write_terminal_and_logger(ERROR_H5_FILECREATION)
-            logger.info(h5_filename)
-            logger.info(str(self.main_directory))
-            logger.info(self._dict_setup)
-            logger.info(self._qz_parallel)
-            logger.info(self._qr_parallel)
-            logger.info(overwrite)
-            return
-        else:
-            self.write_terminal_and_logger(INFO_H5_CREATION)
-            logger.info(f"sPonifile: {self.active_ponifile}. Keys_metadata: {self._dict_setup}. qz:{self._qz_parallel}, qr:{self._qr_parallel}")
-            self.reset_attributes_and_widgets()
 
     @log_info
     def pick_main_directory(self) -> Path:
@@ -1057,7 +1109,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Path: path instance of the root directory to search data files
         """
         # Pick the folder after pop-up browser window
-        dialog_maindir = QFileDialog.getExistingDirectory(self, 'Choose main directory', ".")
+        dialog_maindir = QFileDialog.getExistingDirectory(self, 'Choose main directory', str(GLOBAL_PATH))
 
         # Returns if is not valid, or the dialog was cancelled
         if not dialog_maindir:
@@ -1134,35 +1186,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         else:
             return
 
-
-
-
-
-
-
-        #     if self.main_directory or self.h5:
-        #         self.reset_attributes_and_widgets()
-        #     try:
-        #         self._h5_file = 
-        #         self.h5 = H5Integrator(
-        #             filename_h5=self._h5_file,
-        #             setup_keys_metadata=self._dict_setup,
-        #             qz_parallel=self._qz_parallel,
-        #             qr_parallel=self._qr_parallel,
-        #         )
-        #         self.main_directory = self.h5.get_main_directory()
-
-        #         self.label_maindir.setText('H5 file:')
-
-        #         self.write_terminal_and_logger(MSG_H5_FOUNDFILE)
-        #         self.write_terminal_and_logger(self._h5_file)                
-        #         self.write_terminal_and_logger(MSG_H5Integrator)
-        #     except:
-        #         self.write_terminal_and_logger(MSG_H5Integrator_ERROR)
-        #         pass
-        # else:
-        #     return
-
     @log_info
     def set_h5_instance(self, filename_h5=str()):
         """
@@ -1208,26 +1231,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             new_main_directory=parent_h5,
         )
 
-        # self.write_terminal_and_logger(MSG_H5_FOUNDFILE)
-        # if self.main_directory or self.h5:
-            
-
-        # Name of the h5_file
-        
-        # self._h5_file = str(filename_h5)
-
-
-
-        #     self.main_directory = self.h5.get_main_directory()
-        #     self.label_maindir.setText('H5 file:')
-
-        #     self.write_terminal_and_logger(MSG_H5_FOUNDFILE)
-        #     self.write_terminal_and_logger(self._h5_file)                
-        #     self.write_terminal_and_logger(MSG_H5Integrator)
-        # except:
-        #     self.write_terminal_and_logger(MSG_H5Integrator_ERROR)
-        #     pass
-
     @log_info
     def set_main_directory(self, new_main_directory=str()):
         """
@@ -1250,11 +1253,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         self.write_terminal_and_logger(INFO_NEW_MAINDIR)
         self.write_terminal_and_logger(str(new_main_directory))
-        # self.label_maindir.setText('H5 file:')
-
-
-
-
 
     ##################################################
     ############# PONIFILE METHODS ###################
@@ -1280,17 +1278,19 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             ponifiles_in_h5 = set(self.h5.generator_stored_ponifiles())
 
             new_ponifiles = [item for item in ponifiles_in_h5.difference(ponifiles_in_cb)]
+
             if new_ponifiles:
                 new_ponifiles = [item for item in new_ponifiles if item]
+
                 # Update combobox of ponifiles
                 cb.insert_list(
                     combobox=self.combobox_ponifile,
                     list_items=new_ponifiles,
                     reset=False,
                 )
-                self.write_terminal_and_logger(f"Combobox of ponifiles was updated.")                
+                self.write_terminal_and_logger(INFO_H5_PONIFILE_CB_UPDATED)                
         else:
-            self.write_terminal_and_logger("No .h5 file to store files.")
+            self.write_terminal_and_logger(ERROR_H5_UPDATED)
 
     @log_info
     def pick_new_ponifile_and_update(self) -> None:
@@ -1492,32 +1492,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         else:
             self.write_terminal_and_logger(ERROR_H5_UPDATED)
 
-
-    # @log_info
-    # def append_h5_file(self, h5_file=str()):
-    #     """
-        
-    #     """
-    #     h5_file = str(h5_file)
-    #     if not JSON_FILE_H5.is_file():
-    #         with open(JSON_FILE_H5, 'w+') as fp:
-    #             dict_h5 = {'H5_recent_files':[""]}
-    #             json.dump(dict_h5, fp)
-
-    #     with open(JSON_FILE_H5, 'r') as fp:
-    #         dict_h5 = json.load(fp)
-
-    #     list_h5_files = dict_h5['H5_recent_files']
-    #     list_h5_files.append(h5_file)
-    #     list_h5_files = sorted(set(list_h5_files))
-    #     dict_h5 = {'H5_recent_files':list_h5_files}
-
-    #     with open(JSON_FILE_H5, 'w+') as fp:        
-    #         json.dump(dict_h5, fp)
-
-    #     self.update_combobox_h5()
-            
-
     @log_info
     def append_h5file(self, h5_path=str()) -> None:
         """
@@ -1529,47 +1503,27 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         None
         """
-        # Append to .json file
         # If no input, take the filename associated to the active H5Integrator instance
-        if not h5_path and self.h5:
-            h5_path = str(self.h5.filename_h5)
+        if not h5_path:
+            try:
+                h5_path = str(self.h5.filename_h5)
+            except AttributeError:
+                self.write_terminal_and_logger(ERROR_H5_NOTEXISTS)
+                return
         else:
             self.write_terminal_and_logger(ERROR_APPEND_H5)
             return
         logger.info(f"New .h5 file to append {h5_path}")
-        
-        # Append to the .json file
-        if Path(JSON_FILE_H5).is_file():
-            with open(JSON_FILE_H5, "r+") as fp:
-                logger.info('1')
-                dict_h5 = json.load(fp)
-                list_h5_files = dict_h5["H5_recent_files"].append(str(h5_path))
-                list_h5_files = sorted(set(list_h5_files))
-                json.dump({"H5_recent_files":list_h5_files}, fp)
-        else:
-            with open(JSON_FILE_H5, "w+") as fp:
-                logger.info('2')
-                json.dump({"H5_recent_files" : [str(h5_path)]}, fp)
-        logger.info(f"Current list of .h5 files.")
 
-        # with open(JSON_FILE_H5, mode) as fp:
-        #     list_h5_files = json.load(fp)['H5_recent_files'].append(h5_path)
-        #     list_h5_files = sorted(set(list_h5_files))
-        #     logger.info(f"Current list of .h5 files: {list_h5_files}")
-        #     json.dump({'H5_recent_files':list_h5_files}, fp)
-        # # if not JSON_FILE_H5.is_file():
-        # #     with open(JSON_FILE_H5, 'w+') as fp:
-        #         logger.info(f"Created .json file")
-        #         dict_h5 = {'H5_recent_files':[h5_path]}
-        #         json.dump(dict_h5, fp)
-        # else:
-        #     with open(JSON_FILE_H5, 'w+') as fp:
-        #         print(11)
-        #         dict_h5 = json.load(fp)
-        #         list_h5_files = dict_h5['H5_recent_files'].append(h5_path)
-        #         list_h5_files = sorted(set(list_h5_files))
-        #         dict_h5 = {'H5_recent_files':list_h5_files}
-        #         json.dump(dict_h5, fp)
+        # Append to .txt file        
+        if Path(TXT_FILE_H5).is_file():
+            with open(TXT_FILE_H5, "a+") as fp:
+                fp.write(f"{str(h5_path)}\n")
+        else:
+            with open(TXT_FILE_H5, "w+") as fp:
+                fp.write(f"\n")
+                fp.write(f"{str(h5_path)}\n")
+        logger.info(f"Current list of .h5 files.")
 
         # Append to combobox if it's new
         filenames_from_cb = cb.all_items(self.combobox_h5_files)
@@ -1580,30 +1534,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 combobox=self.combobox_h5_files,
                 item=str(h5_path),
             )
-
-        # If no input, take the filename associated to the active H5Integrator instance
-        # if not h5_path and self.h5:
-        #     h5_path = str(self.h5.filename_h5)
-        # else:
-        #     self.write_terminal_and_logger(ERROR_APPEND_H5)
-        #     return
-
-
-        # Filter to not repeat filenames
-        # list_h5_files = dict_h5['H5_recent_files'].append(h5_path)
-        # # list_h5_files.append(h5_file)
-        # list_h5_files = sorted(set(list_h5_files))
-        # dict_h5 = {'H5_recent_files':list_h5_files}
-        # with open(JSON_FILE_H5, 'w+') as fp:        
-        #     json.dump(dict_h5, fp)
-
-        # Activate that last h5 file
-        # cb.set_text(
-        #     combobox=self.combobox_h5_files,
-        #     text=
-        # self.activate_h5_file(
-        #     h5_filename=h5_path,
-        # )
 
     @log_info
     def activate_h5file(self, h5_path=str()) -> None:
@@ -1617,43 +1547,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         None
         """
         # If no input, take the filename associated to the active H5Integrator instance
-        if not h5_path and self.h5:
-            h5_path = str(self.h5.filename_h5)
-        else:
-            self.write_terminal_and_logger(ERROR_APPEND_H5)
-            return
-        
-
-        # Check if the .h5 instance has been already created
-        # if not self.h5:
-        #     # Create h5 instance
-        #     pass
-        # else:
-        #     if str(self.h5.filename_h5) != str(h5_filename):
-        #         pass
-                # Changes the h5 instance
-        # self.set_h5_instance(filename_h5=cb.value(self.combobox_h5_files))
-        # self.update_h5_poni_and_files()
+        if not h5_path:
+            try:
+                h5_path = str(self.h5.filename_h5)
+            except AttributeError:
+                 self.write_terminal_and_logger(ERROR_H5_NOTEXISTS)
+                 return
         self.update_widgets()
         self.update_setup_info()
-
-
-    # @log_info
-    # def append_and_activate_h5_file(self, h5_file=str()):
-    #     """
-        
-    #     """
-    #     h5_file = str(h5_file)
-
-    #     if h5_file:
-    #         self.append_h5_file(
-    #             h5_file=h5_file,
-    #         )
-
-    #         cb.set_text(
-    #             combobox=self.combobox_h5_files,
-    #             text=h5_file,
-    #         )
 
     @log_info
     def update_widgets(self) -> None:
@@ -1662,6 +1563,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         This method may update the list_widget of folders and the table_widget with files and metadata
         """
         if self.h5:
+            # Main lineedit
+            le.substitute(
+                lineedit=self.lineedit_h5file,
+                new_text=self.h5.filename_h5,
+            )
+
             # Check if new folders to update the list_widget and reference folder combobox
             folders_in_list = set(lt.all_items(self.listwidget_folders))
             folders_in_h5 = set(self.h5.generator_folder_name())
@@ -1669,14 +1576,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             new_folders.sort()
 
             if new_folders:
-
                 # List widget
                 lt.insert_list(
                     listwidget=self.listwidget_folders,
                     item_list=new_folders,
                     reset=False,
                 )
-                logger.info("Updated list widget.")
+                logger.info(INFO_LIST_FOLDERS_UPDATED)
 
                 # Reference combobox
                 cb.insert_list(
@@ -1685,7 +1591,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     reset=False,
                 )
             else:
-                logger.info("No new folders.")
+                logger.info(INFO_LIST_NO_FOLDERS_TO_UPDATE)
 
             # Check if the table (click_folder) should be updated
             if not self.clicked_folder:
@@ -1702,7 +1608,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             else:
                 logger.info("The table was not updated.")
         else:
-            self.write_terminal_and_logger("Nothing to be updated.")
+            self.write_terminal_and_logger(ERROR_H5_NOTEXISTS)
 
     def update_widgets_to_last_file(self, last_file=str()):
         """
@@ -1949,6 +1855,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             reference_factor=reference_factor,
         )
 
+
+
         # Get the normalization factor
         norm_factor = self.h5.get_norm_factor(
             folder_name=self.clicked_folder,
@@ -1971,7 +1879,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         except:
             self.write_terminal_and_logger("Error during updating 1D graph")
-
 
     @log_info
     def update_2D_graph(self, data, norm_factor=1.0):
@@ -2377,8 +2284,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         logger.info(f"Unit of the map: {unit}")
 
         # Get the grid of scattering units
-        scat_x, scat_z, data = self.h5.get_mesh_matrix(unit=unit, data=data)
-        
+        scat_x, scat_z, data = self.h5.get_mesh_matrix(
+            unit=unit, 
+            data=data,
+            mirror=self._mirror,
+        )
+
         # Get the title using the key metadata from lineedit
         title = self.get_title()
 

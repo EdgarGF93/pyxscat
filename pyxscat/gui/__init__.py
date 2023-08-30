@@ -1,6 +1,7 @@
 from pathlib import Path
 
 GUI_PATH = Path(__file__).parent
+ICON_PATH = GUI_PATH.joinpath('icons')
 SRC_PATH = GUI_PATH.parent
 GLOBAL_PATH = SRC_PATH.parent
 LOGGER_PATH = GLOBAL_PATH.joinpath('logger')

@@ -54,6 +54,15 @@ VERTICAL_NAME = 'Vertical'
 ERROR_RAW_INTEGRATION = "Failed at detect integration type."
 MSG_LOGGER_INIT = "Logger was initialized."
 
+
+INFO_H5_PONIFILES_DETECTED = "New ponifiles detected."
+INFO_H5_NO_PONIFILES_DETECTED = "No ponifiles detected."
+INFO_H5_NEW_FILES_DETECTED = "New files were detected."
+INFO_H5_NEW_DICTIONARY_FILES = "Got dictionary of folders and files"
+INFO_H5_FILES_UPDATED = "Finished the update of all the new files."
+
+ERROR_MAIN_DIRECTORY = "No main directory was detected."
+
  # Initialize logger
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -1170,13 +1179,14 @@ class H5Integrator(Transform):
         new_ponifiles = [item for item in ponifile_list.difference(stored_poni_list)]
 
         if new_ponifiles:
-            logger.info(f"New ponifiles detected: {new_ponifiles}")
+            logger.info(INFO_H5_PONIFILES_DETECTED)
+            logger.info(f"{new_ponifiles}")
             self.update_group_ponifile(
                 group_address=ADDRESS_PONIFILE,
                 ponifile_list=new_ponifiles,
             )
         else:
-            logger.info("No ponifiles detected.")
+            logger.info(INFO_H5_NO_PONIFILES_DETECTED)
 
         if return_list:
             return new_ponifiles
@@ -1247,14 +1257,14 @@ class H5Integrator(Transform):
             # Filter for new files
             set_stored_files = set(self.generator_all_files(yield_decode=False))
             new_files = [bytes.decode(item) for item in set_searched_files.difference(set_stored_files)]
-            logger.info(f"{len(new_files)} new files were detected.")
+            logger.info(f"{len(new_files)} {INFO_H5_NEW_FILES_DETECTED}")
 
             if new_files:
                 new_files.sort()
 
             return new_files
         else:
-            logger.info("No main directory was detected.")
+            logger.info(ERROR_MAIN_DIRECTORY)
 
     @check_if_open
     @log_info
@@ -1275,7 +1285,7 @@ class H5Integrator(Transform):
         dict_new_files = get_dict_files(
             list_files=new_files,
         )
-        logger.info("Got dictionary of folders and files")
+        logger.info(INFO_H5_NEW_DICTIONARY_FILES)
 
         # Store in the .h5 file by folder and its own list of files
         for folder, file_list in dict_new_files.items():
@@ -1286,7 +1296,7 @@ class H5Integrator(Transform):
                 get_2D_array=False,
             )
             logger.info(f"Finished with folder: {folder_name}.")
-        logger.info(f"Finished the update of all the new files.")
+        logger.info(INFO_H5_FILES_UPDATED)
 
 
     @check_if_open
@@ -1314,26 +1324,6 @@ class H5Integrator(Transform):
             else:
                 item = data.item()
             yield item
-
-            # try:
-            #     if yield_decode:
-            #         yield bytes.decode(data.item())
-            #     else:
-            #         yield data.item()
-            # except:
-            #     logger.info(f"Error while generating {data.item()}")
-
-
-
-
-        # for data in dataset:
-        #     try:
-        #         if yield_decode:
-        #             yield bytes.decode(data.item())
-        #         else:
-        #             yield data.item()
-        #     except:Fnorm
-        #         logger.info(f"Error while generating {data.item()}")
 
     @log_info
     @check_if_open
@@ -1943,7 +1933,7 @@ class H5Integrator(Transform):
 
     @log_info
     @check_if_open
-    def get_mesh_matrix(self, data=None, unit='q_nm^-1'):
+    def get_mesh_matrix(self, data=None, unit='q_nm^-1', mirror=False):
         """
         Returns both horizontal and vertical mesh matrix for Grazing-Incidence geometry, returns also the corrected data without the missing wedge
         
@@ -1978,7 +1968,6 @@ class H5Integrator(Transform):
                 scat_z, scat_xy = None, None
                 logger.info(f"Scat_z matrix could not be generated.")
                 logger.info(f"Scat_x matrix could not be generated.")
-
         elif unit in UNITS_THETA:
             try:
                 scat_z, scat_xy = self.calc_angles(
@@ -1998,84 +1987,30 @@ class H5Integrator(Transform):
             scat_z *= DICT_PLOT['SCALE']
             scat_xy *= DICT_PLOT['SCALE']
             logger.info(f"Changing the scale of the matriz q units. Scale: {DICT_PLOT['SCALE']}")
+        else:
+            return
+        
+        # Mirroring the data
+        if mirror:
+            if self.get_sample_orientation() in (1,3):
+                scat_xy = np.fliplr(scat_xy) * (-1)
+                data = np.fliplr(data)
+            elif self.get_sample_orientation() in (2,4):
+                scat_xy = np.flipud(scat_xy) * (-1)
+                data = np.flipud(data)    
 
-            # Defining the missing wedge
-            if unit in UNITS_Q:
-                NUMBER_COLUMNS_REMOVED = 10
-                HALF_NUMBER = int(NUMBER_COLUMNS_REMOVED/2)
-                ind = np.unravel_index(np.argmin(abs(scat_xy), axis=None), scat_z.shape)
-                if self.get_sample_orientation() in (1,3):
-                    data[:, ind[1] - HALF_NUMBER: ind[1] + HALF_NUMBER] = np.nan
-                elif self.get_sample_orientation() in (2,4):
-                    data[ind[0] - HALF_NUMBER: ind[0] + HALF_NUMBER, :] = np.nan
-                logger.info(f"The missing wedge was removed from the 2D map.")
+        # Defining the missing wedge
+        if unit in UNITS_Q:
+            NUMBER_COLUMNS_REMOVED = 10
+            HALF_NUMBER = int(NUMBER_COLUMNS_REMOVED / 2)
+            ind = np.unravel_index(np.argmin(abs(scat_xy), axis=None), scat_z.shape)
+            if self.get_sample_orientation() in (1,3):
+                data[:, ind[1] - HALF_NUMBER: ind[1] + HALF_NUMBER] = np.nan
+            elif self.get_sample_orientation() in (2,4):
+                data[ind[0] - HALF_NUMBER: ind[0] + HALF_NUMBER, :] = np.nan
+            logger.info(f"The missing wedge was removed from the 2D map.")
 
         return scat_xy, scat_z, data
-
-        # if self.tranform_bool:
-        #     unit = get_pyfai_unit(unit)
-            
-
-        #     if unit in UNITS_Q:
-        #         # scat_z, scat_x = qz, qxy
-        #         if self._transform_q:
-        #             try:
-        #                 scat_z, scat_x = self._transform_q.calc_q(
-        #                     d1=det_array[0,:,:],
-        #                     d2=det_array[1,:,:],
-        #                 )
-        #             except:
-        #                 scat_z, scat_x = None, None
-        #         else:
-        #             try:
-        #                 scat_z, scat_x = self.calc_q(
-        #                     d1=det_array[0,:,:],
-        #                     d2=det_array[1,:,:],
-        #                 )
-        #             except:
-        #                 scat_z, scat_x = None, None
-
-            # elif unit in UNITS_THETA:
-            #     # scat_z, scat_x = alpha, tth
-            #     if self._transform_q:
-            #         try:
-            #             scat_z, scat_x = self._transform_q.calc_angles(
-            #                 d1=det_array[0,:,:],
-            #                 d2=det_array[1,:,:],
-            #             )
-            #         except:
-            #             scat_z, scat_x = None, None
-            #     else:
-            #         try:
-            #             scat_z, scat_x = self.calc_angles(
-            #                 d1=det_array[0,:,:],
-            #                 d2=det_array[1,:,:],
-            #             )
-            #         except:
-            #             scat_z, scat_x = None, None
-            # else:
-            #     scat_z, scat_x = None, None
-            
-            # # Transform units
-            # if (scat_z is not None) and (scat_x is not None):
-            #     DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
-            #     scat_z *= DICT_PLOT['SCALE']
-            #     scat_x *= DICT_PLOT['SCALE']
-
-            #     if data is None:
-            #         data = self.get_data()
-
-            #     if unit in UNITS_Q:
-            #         NUMBER_COLUMNS_REMOVED = 10
-            #         HALF_NUMBER = int(NUMBER_COLUMNS_REMOVED/2)
-            #         ind = np.unravel_index(np.argmin(abs(scat_x), axis=None), scat_z.shape)
-            #         if self.sample_orientation_edf in (1,3):
-            #             data[:, ind[1] - HALF_NUMBER: ind[1] + HALF_NUMBER] = np.nan
-            #         elif self.sample_orientation_edf in (2,4):
-            #             data[ind[0] - HALF_NUMBER: ind[0] + HALF_NUMBER, :] = np.nan
-
-            # return scat_x, scat_z, data
-
 
     @log_info
     @check_if_open
