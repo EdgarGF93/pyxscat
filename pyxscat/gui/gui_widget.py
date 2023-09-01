@@ -1396,11 +1396,15 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 subprocess.run([join(GLOBAL_PATH, 'bash_files', 'open_calib2.sh'), self.main_directory])
             except:
                 pass
+            finally:
+                self.search_and_update_ponifiles_widgets()
         else:
             try:
                 subprocess.run([join(GLOBAL_PATH, 'bash_files', 'open_calib2.sh'), os.getcwd()])
             except:
                 pass
+            finally:
+                self.search_and_update_ponifiles_widgets()
 
     @log_info
     def open_pyFAI_calib2_windows(self) -> None:
@@ -1420,6 +1424,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 os.system(cmd)
             except:
                 pass
+            finally:
+                self.search_and_update_ponifiles_widgets()
         else:
             try:
                 os.system(f"cd {os.getcwd()}")
@@ -1433,6 +1439,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 os.system(cmd)
             except:
                 pass
+            finally:
+                self.search_and_update_ponifiles_widgets()
            
     # #########################
     # # Search engines

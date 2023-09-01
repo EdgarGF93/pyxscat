@@ -7,10 +7,10 @@ from other.units import DICT_UNIT_ALIAS, CAKE_INTEGRATIONS, BOX_INTEGRATIONS
 from . import ICON_PATH
 
 # TABS
-LABEL_TAB_FILES = "Folders and files"
-LABEL_TAB_SETUP = "Setup information"
-LABEL_TAB_CAKE = "Cake integration"
-LABEL_TAB_BOX = "Box integration"
+LABEL_TAB_FILES = "Folders and Files"
+LABEL_TAB_SETUP = "Metadata Keys"
+LABEL_TAB_CAKE = "Cake Integration"
+LABEL_TAB_BOX = "Box Integration"
 
 # INPUT FILE PARAMETERS
 LABEL_INPUT_PARAMETERS = "====== Input File Parameters ======"
@@ -84,14 +84,14 @@ LABEL_MASK = "Mask 2D map"
 STEP_SUB_SPINBOX = 0.01
 
 # SETUP INFORMATION TAB
-LABEL_DICT_SETUP = "Choose a setup dictionary:"
+LABEL_DICT_SETUP = "Choose a Metadata Dictionary:"
 BUTTON_PICK_JSON = "Pick a .json file"
-LABEL_IANGLE = "Motor - Incident angle:"
-LABEL_TILTANGLE = "Motor - Tilt angle:"
-LABEL_NORMFACTOR = "Counter - Norm. factor:"
-LABEL_EXPOSURE = "Counter - Exposition time:"
-LABEL_SETUP_NAME = "Setup name:"
-BUTTON_JSON_FILE = "Save .json file"
+LABEL_IANGLE = "Motor - Incident Angle:"
+LABEL_TILTANGLE = "Motor - Tilt Angle:"
+LABEL_NORMFACTOR = "Counter - Norm. Factor:"
+LABEL_EXPOSURE = "Counter - Acquisition Time:"
+LABEL_SETUP_NAME = "Metadata Dict. Name:"
+BUTTON_JSON_FILE = "Save .json File"
 ICON_SAVE_PATH = "save.png"
 BUTTON_UPDATE_KEYS = "UPDATE METADATA KEYS TO .H5 FILE"
 
