@@ -2313,6 +2313,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             colorbar=self._colorbar,
             color_lims=gm.get_zlims(self.graph_2D_widget),
             show=show,
+            scatter_mode=True,
         )
         logger.info(error_mesh)
 

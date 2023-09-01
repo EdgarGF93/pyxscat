@@ -61,7 +61,8 @@ def plot_mesh(
     log=True, 
     colorbar=False,
     color_lims=[], 
-    show=True, 
+    show=True,
+    scatter_mode=False,
     **kwargs):
     """
     Plots the 2D Scattering map using pcolormesh method from matplotlib
@@ -91,20 +92,26 @@ def plot_mesh(
     except:
         norm = None
 
-    try:
-        # if data.shape[::-1] == mesh_horz.shape:
-        #     data = data.T
 
-        plt.pcolormesh(
-            mesh_horz,
-            mesh_vert,
-            data, 
-            shading='nearest', 
-            cmap='viridis',
-            norm=norm,
-        )
-    except:
-        return "Map could not be generated"
+
+    if scatter_mode:
+        try:
+            plt.scatter(mesh_horz,mesh_vert,c=data,s=0.6, norm=norm, edgecolors="None", marker=",")
+        except:
+            return "Map could not be generated"
+
+    else:
+        try:
+            plt.pcolormesh(
+                mesh_horz,
+                mesh_vert,
+                data, 
+                shading='nearest', 
+                cmap='viridis',
+                norm=norm,
+            )
+        except:
+            return "Map could not be generated"
 
     if colorbar:
         plt.colorbar()
