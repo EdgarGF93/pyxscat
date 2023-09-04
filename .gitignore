@@ -10,7 +10,7 @@
 **kk**
 
 # Logger files
-logger/*.txt
+*logger*.txt
 kk/
 dist/
 
