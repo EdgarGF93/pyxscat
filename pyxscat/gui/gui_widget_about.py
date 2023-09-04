@@ -21,7 +21,7 @@ class AboutForm(QWidget):
         self.setLayout(self.gridlayout)
         self.gridlayout.setRowStretch(1,1)
         self.gridlayout.setRowStretch(2,1)
-        self.about_label_1 = QLabel("PyXScat version alpha")
+        self.about_label_1 = QLabel("PyXScat version 0.5")
         self.about_label_2 = QLabel("Contact to Edgar Gutierrez Fernandez")
         self.about_label_3 = QLabel("edgar.gutierrez-fernandez@esrf.fr")
         self.about_label_4 = QLabel("XMaS (BM28) - The European Synchrotron")
