@@ -10,13 +10,9 @@ from other.other_functions import np_weak_lims
 from other.plots import plot_mesh, plot_image
 from other.units import *
 
-# from pyxscat.other.setup_methods import get_dict_setup
-# from pyxscat.other.other_functions import np_weak_lims
-# from pyxscat.other.plots import plot_mesh, plot_image
-# from pyxscat.other.units import *
-
 import fabio
 import numpy as np
+# import re
 
 PATH_EDF = dirname(__file__)
 
@@ -88,6 +84,7 @@ class EdfClass(Transform):
         # Get timestamps
         self.epoch = getctime(self.filename)
         self.date = datetime.fromtimestamp(self.epoch).strftime('%Y-%m-%d %H:%M:%S')
+
         # Update Transform instance from pygix-pyFAI modules
         self.update_q_properties(
             transform_q=transform_q,
@@ -381,20 +378,24 @@ class EdfClass(Transform):
         else:
             return
 
+    def get_raw_header(self):
+        """
+        Returns the raw header using the FabIO header
+        """
+        try:
+            header = dict(fabio.open(self.filename).header)
+            return header
+        except:
+            return {}
+
+
     def get_header(self, search_nmemonics=True, to_float=True) -> dict:
         """
             Return the header read with Fabio and modified if necessary
         """
 
         # First, take the original header using fabio
-        try:
-            header = dict(fabio.open(self.filename).header)
-        except:
-            return
-
-        # Include folder and filename in the header
-        # header['Folder'] = self.folder
-        # header['Filename'] = self.basename
+        header = self.get_raw_header()
 
         # Check for nemonic values (list/strings inside keys)
         if search_nmemonics:
@@ -406,17 +407,46 @@ class EdfClass(Transform):
             pass
 
         # Convert the values to float if possible
-        if to_float:
-            for key, value in header.items():
-                try:
-                    header[key] = float(value)
-                except:
-                    pass
-        else:
-            pass
+        for key, value in header.items():
+            float_value = self.header_value_to_float(
+                header_value=value,
+            )
+            header[key] = float_value
 
         return header
 
+    def header_value_to_float(self, header_value):
+        """
+        Try to transform the original header value into a float value
+        """
+        if isinstance(header_value, float):
+            return header_value
+        elif isinstance(header_value, str):
+
+            # Try to float the first element before empty space
+            try:
+                header_value_mod = header_value.split()[0]
+                header_value_mod = float(header_value_mod)
+                return header_value_mod
+            except:
+                return header_value
+        else:
+            return header_value
+
+            # 
+            # try:
+            #     # Remove alphabetic characters
+            #     str_mod = re.sub("[A-Z-a-z]","", header_value).strip()
+
+            #     # Split and take first value
+            #     str_mod = str_mod.split()[0]
+
+            #     float_value = float(str_mod)
+            #     return float_value
+            # except:
+            #     pass
+
+                
     def get_header_keys(self, search_nmemonics=True, to_float=True) -> list:
         """
             Return a list with the keys of the header
@@ -431,10 +461,6 @@ class EdfClass(Transform):
         header_keys.insert(0,'')
 
         return header_keys
-
-
-
-
 
     def search_keys_in_header(self, header={}, key_list=[]) -> list:
         """
