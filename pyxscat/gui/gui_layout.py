@@ -20,6 +20,8 @@ LABEL_EXTENSION = "File extension:"
 LABEL_WILDCARDS = "Wildcards(*):"
 LABEL_PONIFILE = "Ponifile:"
 LABEL_REFERENCE_FOLDER = "Reference folder:"
+LABEL_MASK_FOLDER = "Mask folder:"
+LABEL_MASK_CHECK = "Use Mask"
 LABEL_SAMPLE_ORIENTATION = "Sample orientation:"
 BUTTON_MIRROR_DISABLE = "Mirror disable"
 BUTTON_MIRROR_ENABLE = "Mirror enable"
@@ -80,7 +82,7 @@ BUTTON_SAVE_INTEGRATIONS = "SAVE INTEGRATIONS"
 BUTTON_BATCH = "BATCH INTEGRATION & SAVE"
 BUTTON_FITTING = "OPEN FITTING FORM"
 LABEL_INTEGRATIONS = "Integrations:"
-LABEL_MASK = "Mask 2D map"
+LABEL_MASK_MAP = "Mask 2D map"
 STEP_SUB_SPINBOX = 0.01
 
 # SETUP INFORMATION TAB
@@ -383,6 +385,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_conditions = QGridLayout()
         self.grid_input_ponifile = QGridLayout()
         self.grid_input_reference = QGridLayout()
+        self.grid_input_mask = QGridLayout()
         self.grid_input_orientations = QGridLayout()
         self.grid_input_buttons = QGridLayout()
         self.grid_input_data.addWidget(self.title_input,1,1)
@@ -391,8 +394,9 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_data.addLayout(self.grid_input_conditions,4,1)
         self.grid_input_data.addLayout(self.grid_input_ponifile,5,1)
         self.grid_input_data.addLayout(self.grid_input_reference,6,1)
-        self.grid_input_data.addLayout(self.grid_input_orientations,7,1)
-        self.grid_input_data.addLayout(self.grid_input_buttons,8,1)
+        self.grid_input_data.addLayout(self.grid_input_mask,7,1)
+        self.grid_input_data.addLayout(self.grid_input_orientations,8,1)
+        self.grid_input_data.addLayout(self.grid_input_buttons,9,1)
         self.grid_input_info.addLayout(self.grid_input_setup,1,1)
         self.grid_input_info.addLayout(self.grid_button_setup,2,1)
 
@@ -410,6 +414,8 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_ponifile.setColumnStretch(3,1)
         self.grid_input_reference.setColumnStretch(1,1)
         self.grid_input_reference.setColumnStretch(2,15)
+        self.grid_input_mask.setColumnStretch(1,1)
+        self.grid_input_mask.setColumnStretch(2,15)
         self.grid_input_buttons.setColumnStretch(1,1)
         self.grid_input_buttons.setColumnStretch(2,1)
 
@@ -453,6 +459,10 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_update_ponifile.setIcon(QIcon(refresh_icon_path))
         self.label_reffolder = QLabel(LABEL_REFERENCE_FOLDER)
         self.combobox_reffolder = QComboBox()
+        self.label_maskfolder = QLabel(LABEL_MASK_FOLDER)
+        self.combobox_maskfolder = QComboBox()
+        self.combobox_maskfolder.setEnabled(False)
+        self.mask_checkbox = QCheckBox(LABEL_MASK_CHECK)
         self.label_sample_orientation = QLabel(LABEL_SAMPLE_ORIENTATION)
         self.button_pyfaicalib = QPushButton(BUTTON_PYFAI_GUI)
         pyfai_icon_path = str(ICON_PATH.joinpath(ICON_PYFAI_PATH))
@@ -470,7 +480,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_pyfaicalib.setStyleSheet(button_style_input)
         self.button_start.setStyleSheet(button_style_input)
 
-        set_bstyle([self.label_recent_h5, self.label_h5file, self.label_folders, self.label_files, self.label_extension, self.label_conditions, self.label_ponifile, self.label_reffolder, self.label_sample_orientation, self.title_input])
+        set_bstyle([self.label_recent_h5, self.label_h5file, self.label_folders, self.label_files, self.label_extension, self.label_conditions, self.label_ponifile, self.label_reffolder, self.label_maskfolder, self.label_sample_orientation, self.title_input])
 
         self.grid_recent_h5.addWidget(self.label_recent_h5, 1, 1)
         self.grid_recent_h5.addWidget(self.combobox_h5_files, 1, 2)
@@ -488,6 +498,11 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_ponifile.addWidget(self.button_update_ponifile, 1, 4)
         self.grid_input_reference.addWidget(self.label_reffolder, 1, 1)
         self.grid_input_reference.addWidget(self.combobox_reffolder, 1, 2)
+
+        self.grid_input_mask.addWidget(self.label_maskfolder, 1, 1)
+        self.grid_input_mask.addWidget(self.combobox_maskfolder, 1, 2)
+        self.grid_input_mask.addWidget(self.mask_checkbox, 1, 3)
+
         self.grid_input_orientations.addWidget(self.label_sample_orientation, 1, 1)
         self.grid_input_orientations.addWidget(self.button_mirror, 1, 2)
         self.grid_input_orientations.addWidget(self.button_qz, 1, 3)
@@ -581,7 +596,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_integrations = QLabel(LABEL_INTEGRATIONS)
         self.combobox_integration = QComboBox()
         self.lineedit_integrations = QLineEdit()
-        self.checkbox_mask_integration = QCheckBox(LABEL_MASK)
+        self.checkbox_mask_integration = QCheckBox(LABEL_MASK_MAP)
 
         self.grid_live_title.addWidget(self.checkbox_live, 1, 1)
         self.grid_live_title.addWidget(self.lineedit_filename, 1, 2)

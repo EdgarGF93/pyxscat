@@ -33,8 +33,6 @@ import pandas as pd
 
 ICON_SPLASH = join(ICON_PATH, 'pyxscat_logo_thumb.png')
 
-
-
 MSG_SETUP_UPDATED = "New setup dictionary was updated."
 MSG_SETUP_ERROR = "The setup dictionary could not be updated."
 MSG_ROTATED_UPDATED = "Rotation state was updated."
@@ -405,6 +403,22 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         )
 
+        #########################
+        # Mask callbacks
+        #########################
+
+        self.mask_checkbox.stateChanged.connect(
+            lambda : (
+                self.enable_combobox_mask(),
+            )
+        ) 
+
+
+
+
+
+
+
         #####################################################################
         ##################  MAIN BUTTONS CALLBACKS  #########################
         #####################################################################
@@ -595,6 +609,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Clear GUI widgets
         cb.clear(self.combobox_ponifile)
         cb.clear(self.combobox_reffolder)
+        cb.clear(self.combobox_maskfolder)
         cb.clear(self.combobox_headeritems)
         cb.clear(self.combobox_headeritems_title)
         cb.clear(self.combobox_angle)
@@ -1352,6 +1367,17 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         else:
             self.write_terminal_and_logger(MSG_PONIFILE_ERROR)
 
+
+    @log_info
+    def enable_combobox_mask(self) -> None:
+        """
+        Enable or disable the combobox to choose a folder with mask files
+        """
+        if self.mask_checkbox.isChecked():
+            self.combobox_maskfolder.setEnabled(True)
+        else:
+            self.combobox_maskfolder.setEnabled(False)
+
     @log_info
     def update_pattern(self) -> None:
         """
@@ -1598,6 +1624,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     list_items=new_folders,
                     reset=False,
                 )
+                # Mask combobox
+                cb.insert_list(
+                    combobox=self.combobox_maskfolder,
+                    list_items=new_folders,
+                    reset=False,
+                )
             else:
                 logger.info(INFO_LIST_NO_FOLDERS_TO_UPDATE)
 
@@ -1729,9 +1761,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 reset=True,
             )
 
-            # Feed the combobox of reference folder
+            # Feed the combobox of reference folder and masks
             cb.insert_list(
                 combobox=self.combobox_reffolder,
+                list_items=list(self.h5.generator_folder_name()),
+            )
+            cb.insert_list(
+                combobox=self.combobox_maskfolder,
                 list_items=list(self.h5.generator_folder_name()),
             )
 
