@@ -10,3 +10,15 @@ E:\Datos_Sincrotrones\Diamond_I07_Jul2023\Diamond_I07_Jul2023.h5
 E:\Datos_Sincrotrones\Diamond_I07_Jul2023\Diamond_I07_Jul2023.h5
 E:\Datos_Sincrotrones\Diamond_I07_Jul2023\Diamond_I07_Jul2023.h5
 E:\Datos_Sincrotrones\Diamond_I07_Jul2023\Diamond_I07_Jul2023.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023\XMaS_Sept2023.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023\XMaS_Sept2023.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023\XMaS_Sept2023.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023\XMaS_Sept2023.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023\XMaS_Sept2023.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023\XMaS_Sept2023.h5
+E:\Datos_Sincrotrones\ALBA_NCD_Jul2023\ALBA_NCD_Jul2023.h5
+E:\Datos_Sincrotrones\ALBA_NCD_Abril2023\ALBA_NCD_Abril2023.h5
+C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5
+C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5
+C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5
+C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5

@@ -1,5 +1,6 @@
 from collections import defaultdict
 from pathlib import Path
+from pyFAI import load
 from pygix.transform import Transform
 from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
 from os.path import getctime
@@ -84,7 +85,7 @@ def log_info(func):
     return wrapper
 
 
-class H5Integrator(Transform):
+class H5GIIntegrator(Transform):
     """
     Creates an HDF5 file and provides methods to read/write the file following the hierarchy of XMaS-BM28
     """
@@ -1298,9 +1299,16 @@ class H5Integrator(Transform):
             logger.info(f"Finished with folder: {folder_name}.")
         logger.info(INFO_H5_FILES_UPDATED)
 
+    @check_if_open
+    def get_base_filename(self, filename_full_path=str()) -> str:
+        """
+        Returns the basename from a full address filename
+        """
+        basename = Path(filename_full_path).name
+        return basename
 
     @check_if_open
-    def generator_filenames_in_folder(self, folder_name=str(), yield_decode=True):
+    def generator_filenames_in_folder(self, folder_name=str(), yield_decode=True, basename=False):
         """
         Yields the name of every file stored in a specific folder
 
@@ -1318,6 +1326,8 @@ class H5Integrator(Transform):
             if yield_decode:
                 try:
                     item = bytes.decode(data.item())
+                    if basename:
+                        item = self.get_base_filename(item)
                 except:
                     logger.info(f"Error during decoding of {data.item()}. Return")
                     return
@@ -1471,21 +1481,32 @@ class H5Integrator(Transform):
         logger.info(f"No matches were found with the filename {filename}")
         return None, None
 
-
     @log_info
     @check_if_open
-    def get_Edf_instance(self, folder_name=str(), index_file=int()):
-        try:
-            Edf_instance = EdfClass(
-                filename=self.get_filename_from_index(
+    def get_Edf_instance(self, full_filename=str(), folder_name=str(), index_file=int()):
+
+        # Take the full filename
+        if full_filename:
+            filename = full_filename
+        else:
+            try:
+                filename = self.get_filename_from_index(
                     folder_name=folder_name,
                     index_list=index_file,
-                    ),
-                    ponifile_path=self.get_active_ponifile(),
-                    qz_parallel=self._qz_parallel,
-                    qr_parallel=self._qr_parallel,
+                )
+            except Exception as e:
+                logger.info(f"{e}: file could not be found in the repository.")
+
+        # Open the Edf instance
+        try:
+            Edf_instance = EdfClass(
+                filename=filename,
+                ponifile_path=self.get_active_ponifile(),
+                qz_parallel=self._qz_parallel,
+                qr_parallel=self._qr_parallel,
             )
-        except:
+        except Exception as e:
+            logger.info(f"{e}: Edf instance could not be created.")
             Edf_instance = None
         return Edf_instance
 
@@ -1495,7 +1516,8 @@ class H5Integrator(Transform):
         self, 
         folder_name=str(), 
         index_list=list(), 
-        folder_reference_name=str(), 
+        folder_reference_name=str(),
+        file_reference_name=str(),
         reference_factor=0.0,
         ) -> np.array:
         """
@@ -1518,7 +1540,10 @@ class H5Integrator(Transform):
         try:
             data_sample = sum(
                 [
-                    self.get_Edf_instance(folder_name, index).get_data() for index in index_list
+                    self.get_Edf_instance(
+                        folder_name=folder_name,
+                        index_file=index,
+                    ).get_data() for index in index_list
                 ]
             ) / len(index_list)
             logger.info(f"New data sample with shape: {data_sample.shape}")
@@ -1528,20 +1553,38 @@ class H5Integrator(Transform):
         
         # Subtract reference if asked
         if folder_reference_name:
-            try:
-                acq_sample = self.get_acquisition_time(folder_name, index_list[0])
-                logger.info(f"Acquisition time of the sample is {acq_sample}.")
-                acq_ref_dataset = self.get_dataset_acquisition_time(folder_reference_name)
-                logger.info(f"Acquisition dataset of the reference folder is {acq_ref_dataset}.")
-                for index, exp_ref in enumerate(acq_ref_dataset):
-                    if exp_ref == acq_sample:
-                        data_ref = self.get_Edf_instance(
-                            folder_name=folder_reference_name,
-                            index_file=index,
-                        ).get_data()
-                        data_sample = data_sample - reference_factor * data_ref
-            except:
-                pass
+            # Take the data from a specific reference file
+            if file_reference_name:
+                try:
+                    full_reference_filename = str(Path(folder_reference_name).joinpath(Path(file_reference_name)))
+                    logger.info(f"Take specific reference file: {file_reference_name} in {folder_reference_name}.")
+                    data_ref = EdfClass(
+                        filename=full_reference_filename,
+                        ponifile_path=self.get_active_ponifile(),
+                        qz_parallel=self._qz_parallel,
+                        qr_parallel=self._qr_parallel,
+                    ).get_data()
+                    data_sample = data_sample - reference_factor * data_ref
+                except Exception as e:
+                    logger.info(f"{e}: Specific reference data could not be loaded.")
+            
+            # Automatic search of reference file after acquisition time
+            else:
+                try:
+                    acq_sample = self.get_acquisition_time(folder_name, index_list[0])
+                    logger.info(f"Acquisition time of the sample is {acq_sample}.")
+                    acq_ref_dataset = self.get_dataset_acquisition_time(folder_reference_name)
+                    logger.info(f"Acquisition dataset of the reference folder is {acq_ref_dataset}.")
+                    for index, exp_ref in enumerate(acq_ref_dataset):
+                        if exp_ref == acq_sample:
+                            data_ref = self.get_Edf_instance(
+                                folder_name=folder_reference_name,
+                                index_file=index,
+                            ).get_data()
+                            data_sample = data_sample - reference_factor * data_ref
+                except Exception as e:
+                    logger.info(f"{e}: Automatic reference data could not be loaded.")
+
         return data_sample
 
     @log_info
@@ -1570,6 +1613,19 @@ class H5Integrator(Transform):
     ###### INTEGRATION METHODS ##########
     #####################################
 
+    @log_info
+    def map_reshaping(
+        self,
+        data=None,
+    ):
+        ponifile = self.get_active_ponifile()
+        ai = load(ponifile)
+        data_reshape, q, chi = ai.integrate2d(
+            data=data,
+            npt_rad=1000,
+            unit="q_nm^-1",
+        )
+        return data_reshape, q, chi
 
     @log_info
     def raw_integration(

@@ -3,7 +3,8 @@ from collections import defaultdict
 from os.path import dirname, exists, join
 from pathlib import Path
 
-from PyQt5.QtCore import QTimer
+from pyFAI import load
+from PyQt5.QtCore import QTimer, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QMessageBox
 from PyQt5.QtGui import QPixmap
 
@@ -21,7 +22,7 @@ from gui import table_methods as tm
 from gui import graph_methods as gm
 from gui.gui_layout import GUIPyX_Widget_layout, BUTTON_MIRROR_DISABLE, BUTTON_MIRROR_ENABLE, BUTTON_QZ_PAR, BUTTON_QZ_ANTIPAR, BUTTON_QR_PAR, BUTTON_QR_ANTIPAR
 from gui.gui_layout import button_style_input, button_style_input_disable
-from h5_integrator import H5Integrator
+from h5_integrator import H5GIIntegrator
 
 import json
 import logging
@@ -126,10 +127,13 @@ def log_info(func):
     return wrapper
 
 
+
 class GUIPyX_Widget(GUIPyX_Widget_layout):
     """
     Class to create a GUI widget, with methods and callbacks
     """
+
+    signal = pyqtSignal(int)
 
     def __init__(self):
         super(GUIPyX_Widget, self).__init__()
@@ -404,20 +408,29 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
         #########################
-        # Mask callbacks
+        # Reference callbacks
         #########################
 
-        self.mask_checkbox.stateChanged.connect(
+        self.combobox_reffolder.currentTextChanged.connect(
             lambda : (
-                self.enable_combobox_mask(),
+                self.update_reference_widgets(),
+                self.update_graphs(),
+            )
+        )
+
+        self.checkbox_auto_reffile.stateChanged.connect(
+            lambda : (
+                self.enable_combobox_autoreffile(),
+                self.update_reference_widgets(),
+                self.update_graphs(),
             )
         ) 
 
-
-
-
-
-
+        # self.mask_checkbox.stateChanged.connect(
+        #     lambda : (
+        #         self.enable_combobox_mask(),
+        #     )
+        # ) 
 
         #####################################################################
         ##################  MAIN BUTTONS CALLBACKS  #########################
@@ -427,7 +440,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Button to open pyFAI-calib2
         #########################
         self.button_pyfaicalib.clicked.connect(
-            lambda : self.open_pyFAI_calib2(),
+            lambda :(
+                self.open_pyFAI_calib2(),
+            )
         )
 
         #########################
@@ -537,6 +552,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         )
 
+        # Button to show the reshape 2D map
+        self.button_reshape_map.clicked.connect(
+            lambda : (
+                self.generate_reshape_map(),
+            )
+        )
+
         # Button to generate a matplotlib map
         self.button_map.clicked.connect(
             lambda: (
@@ -589,6 +611,16 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.button_hide_terminal.clicked.connect(
             self.hide_show_plaintext,
         )
+
+    @pyqtSlot(int)
+    def kkk(self, value):
+        print("hola")
+        print(value)
+
+
+
+
+
 
     @log_info
     def reset_attributes_and_widgets(self) -> None:
@@ -1029,7 +1061,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         # Create the H5 instance, which will create the .h5 file
-        self.h5 = H5Integrator(
+        self.h5 = H5GIIntegrator(
             filename_h5=str(h5_filename),
             main_directory=str(main_directory),
             setup_keys_metadata=self._dict_setup,
@@ -1139,6 +1171,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         return main_directory
 
     @log_info
+    def get_full_folderpath(self, folder_relative_name=str()) -> Path:
+        """
+        Join the folder_name (relative to) with the main_directory
+        """
+        if not self.main_directory:
+            return
+
+        folder_relative_name = Path(folder_relative_name)
+        full_folder_name = self.main_directory.joinpath(folder_relative_name)
+        return full_folder_name
+
+    @log_info
     def pick_hdf5_folder(self) -> Path:
         """
         Picks a folder to save the .h5 file
@@ -1222,7 +1266,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
         
         # Create the H5Integrator instance
-        self.h5 = H5Integrator(
+        self.h5 = H5GIIntegrator(
             filename_h5=filename_h5,
             setup_keys_metadata=self._dict_setup,
             qz_parallel=self._qz_parallel,
@@ -1369,14 +1413,54 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
 
     @log_info
-    def enable_combobox_mask(self) -> None:
+    def update_reference_widgets(self) -> None:
         """
-        Enable or disable the combobox to choose a folder with mask files
+        Update the reference file widget
         """
-        if self.mask_checkbox.isChecked():
-            self.combobox_maskfolder.setEnabled(True)
+        if not self.h5:
+            return
+
+        if self.checkbox_auto_reffile.isChecked():
+            cb.clear(self.combobox_reffile)
+            return
+
+        # Get the name of the folder
+        name_ref_folder = cb.value(self.combobox_reffolder)
+        # full_ref_folder = self.get_full_folderpath(
+        #     folder_relative_name=name_ref_folder,
+        # )
+
+        # Get the list of files
+        list_ref_files = sorted(self.h5.generator_filenames_in_folder(
+            folder_name=name_ref_folder,
+            basename=True,
+        ))
+        cb.insert_list(
+            combobox=self.combobox_reffile,
+            list_items=list_ref_files,
+            reset=True,
+        )
+
+    @log_info
+    def enable_combobox_autoreffile(self) -> None:
+        """
+        Enable or disable the combobox to choose a reference file within the reference folder
+        """
+        if self.checkbox_auto_reffile.isChecked():
+            self.combobox_reffile.setEnabled(False)
         else:
-            self.combobox_maskfolder.setEnabled(False)
+            self.combobox_reffile.setEnabled(True)
+
+
+    # @log_info
+    # def enable_combobox_mask(self) -> None:
+    #     """
+    #     Enable or disable the combobox to choose a folder with mask files
+    #     """
+    #     if self.mask_checkbox.isChecked():
+    #         self.combobox_maskfolder.setEnabled(True)
+    #     else:
+    #         self.combobox_maskfolder.setEnabled(False)
 
     @log_info
     def update_pattern(self) -> None:
@@ -1882,31 +1966,38 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if not self.clicked_folder or not self.cache_index:
             return 
 
-        # Get the data, subtracted if it is asked
-        if (self.spinbox_sub.value() != 0.0):
-            reference_folder = cb.value(self.combobox_reffolder)
-            reference_factor = self.spinbox_sub.value()
-            logger.info(f"New reference factor: {reference_factor}")
-        else:
-            reference_folder = ''
-            reference_factor = 0.0
-
         # Get the data
         data = self.h5.get_Edf_data(
             folder_name=self.clicked_folder,
             index_list=self.cache_index,
-            folder_reference_name=reference_folder,
-            reference_factor=reference_factor,
         )
 
+        # Get the data, subtracted if it is asked
+        if (self.spinbox_sub.value() != 0.0):
+            full_reference_filename = self.get_reference_file()
+            reference_name = Path(full_reference_filename).name
+            if self.checkbox_auto_reffile.isChecked():
+                cb.clear(self.combobox_reffile)
+                cb.insert(
+                    combobox=self.combobox_reffile,
+                    item=f"(Auto): {reference_name}",
+                )
 
+            reference_factor = self.spinbox_sub.value()
+            logger.info(f"New reference factor: {reference_factor}")
+
+            data_ref = self.h5.get_Edf_instance(
+                full_filename=full_reference_filename,
+            ).get_data()
+
+            data = data - reference_factor * data_ref
 
         # Get the normalization factor
         norm_factor = self.h5.get_norm_factor(
             folder_name=self.clicked_folder,
             index_list=self.cache_index,
         )
-        
+       
         # Update 2D graph
         try:
             self.update_2D_graph(
@@ -1916,6 +2007,15 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         except:
             self.write_terminal_and_logger("Error during updating 2D graph")
 
+        # Update 2D reshaping (no need integration parameters)
+        try:
+            self.update_2D_reshape(
+                data=data,
+                norm_factor=norm_factor,
+            )
+        except Exception as e:
+            self.write_terminal_and_logger("Wrong reshaping update")
+
         try:
             self.update_1D_graph(
                 data=data,
@@ -1923,6 +2023,45 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         except:
             self.write_terminal_and_logger("Error during updating 1D graph")
+
+    @log_info
+    def get_reference_file(self) -> str:
+        """
+        Returns the full filename to be subtracted from the sample data
+        """
+        if not self.h5:
+            return
+
+        # Get the reference directory
+        reference_folder_name = cb.value(self.combobox_reffolder)
+        logger.info(f"Reference folder: {reference_folder_name}")
+
+        # Automatic searching of file through the acquisition time
+        if self.checkbox_auto_reffile.isChecked():
+            acq_time_file = self.h5.get_acquisition_time(
+                folder_name=self.clicked_folder,
+                index_list=self.cache_index,
+            )
+            logger.info(f"Acquisition time of the sample is {acq_time_file}.")
+            acq_ref_dataset = self.h5.get_dataset_acquisition_time(
+                folder_name=reference_folder_name,
+            )
+            logger.info(f"Acquisition dataset of the reference folder is {acq_ref_dataset}.")
+            for index, exp_ref in enumerate(acq_ref_dataset):
+                if exp_ref == acq_time_file:
+                    full_reference_filename = self.h5.get_filename_from_index(
+                        folder_name=reference_folder_name,
+                        index_list=index,
+                    )
+                    logger.info(f"Auto reference file: {full_reference_filename}")
+                    continue
+                logger.info(f"There is no match in acquisition times.")
+        # Specific reference file
+        else:
+            file_reference_name = cb.value(self.combobox_reffile)
+            full_reference_filename = str(self.h5.get_main_directory().joinpath(Path(reference_folder_name), Path(file_reference_name)))
+            logger.info(f"Chosen reference file: {full_reference_filename}.")
+        return full_reference_filename
 
     @log_info
     def update_2D_graph(self, data, norm_factor=1.0):
@@ -2059,6 +2198,16 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return [float(tick) for tick in x_ticks], [float(tick) for tick in y_ticks]
         except:
             return None, None
+
+    @log_info
+    def update_2D_reshape(self, data):
+        data_reshape, q, chi = self.h5.reshaping(
+            data=data,
+        )
+        pass
+        self.graph_2D_reshape_widget.addImage(
+                    data=data_reshape,
+                )
 
     @log_info
     def update_1D_graph(self, data=None, norm_factor=1.0):
@@ -2305,6 +2454,40 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
     @log_info
+    def generate_reshape_map(self):
+        if not self.h5:
+            return
+
+        try:
+            data = gm.get_array(self.graph_2D_widget)
+            logger.info(f"Data from the map. Shape: {data.shape}")
+        except Exception as e:
+            self.write_terminal_and_logger(f"{e}: Data could not be retrieved.")
+            return
+
+        try:
+            data_reshape, q, chi = self.h5.map_reshaping(
+                data=data,
+            )
+        except Exception as e:
+            self.write_terminal_and_logger(f"{e}: Data could not be reshaped.")
+            return
+
+        color_lims = gm.get_zlims(self.graph_2D_widget)
+        
+        plt.imshow(
+            data_reshape,
+            origin="lower", 
+            extent=[q.min(), q.max(), chi.min(), chi.max()], 
+            aspect="auto", 
+            vmin=color_lims[0], 
+            vmax=color_lims[1],
+        )
+        plt.ylabel("Chi (degrees)")
+        plt.xlabel("q(nm-1)")
+        plt.show()
+
+    @log_info
     def generate_q_map(self, show=True):
         """
         Generates a pop-up window with a 2D map of the pattern transformed to q or theta units
@@ -2319,7 +2502,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         try:
             data = gm.get_array(self.graph_2D_widget)
             logger.info(f"Data from the map. Shape: {data.shape}")
-        except:
+        except Exception as e:
+            self.write_terminal_and_logger(f"Data could not be retrieved.")
             return
 
         # Get the unit of the generated map

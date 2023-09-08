@@ -11,6 +11,7 @@ LABEL_TAB_FILES = "Folders and Files"
 LABEL_TAB_SETUP = "Metadata Keys"
 LABEL_TAB_CAKE = "Cake Integration"
 LABEL_TAB_BOX = "Box Integration"
+LABEL_TAB_PONIFILE = "Ponifile Parameters"
 
 # INPUT FILE PARAMETERS
 LABEL_INPUT_PARAMETERS = "====== Input File Parameters ======"
@@ -20,6 +21,8 @@ LABEL_EXTENSION = "File extension:"
 LABEL_WILDCARDS = "Wildcards(*):"
 LABEL_PONIFILE = "Ponifile:"
 LABEL_REFERENCE_FOLDER = "Reference folder:"
+LABEL_REFERENCE_FILE = "Reference file:"
+LABEL_AUTO_REFERENCE = "Auto Ref. File"
 LABEL_MASK_FOLDER = "Mask folder:"
 LABEL_MASK_CHECK = "Use Mask"
 LABEL_SAMPLE_ORIENTATION = "Sample orientation:"
@@ -65,6 +68,7 @@ LABEL_2D_MAP = "====== 2D Map Parameters ======"
 BUTTON_LOG = "LOG"
 BUTTON_COLORBAR = "COLORBAR OFF"
 BUTTON_AUTO = "AUTO LIMITS ON"
+BUTTON_SHOW_RESHAPE = "RESHAPE MAP"
 BUTTON_SHOW_QMAP = "SHOW Q-MAP"
 BUTTON_SAVE_QMAP = "SAVE Q-MAP"
 LABEL_MAP_TITLES = "Map titles:"
@@ -76,6 +80,8 @@ LABEL_YTICKS = "y-ticks:"
 
 # 1D CHART
 LABEL_1D_CHART = "====== 1D Plot Parameters ======"
+LABEL_RESHAPE = "2D Reshaping"
+LABEL_1D_INTEGRATION = "1D Integration"
 LABEL_SUB_FACTOR = "Subtraction scale factor (0.0 - 1.0):"
 BUTTON_CLEAR_PLOT = "CLEAR PLOT"
 BUTTON_SAVE_INTEGRATIONS = "SAVE INTEGRATIONS"
@@ -124,6 +130,22 @@ SPINBOX_BINS_MAX = 1E9
 SPINBOX_RANGE_MIN = -100
 SPINBOX_RANGE_MAX = 100
 ERROR_OUTPUT = "Something went wrong with the output message..."
+
+# PONIFILE PARAMETERS TAB
+LABEL_PONI_MOD = "Modify .poni parameters"
+LABEL_DETECTOR = "Detector"
+LABEL_PIXEL_1 = "Pixel size horz. (mm):"
+LABEL_PIXEL_2 = "Pixel size vert. (mm):"
+LABEL_SHAPE_1 = "Detector shape (1):"
+LABEL_SHAPE_2 = "Detector shape (2):"
+LABEL_DISTANCE = "Sample-Detector distance (m):"
+LABEL_PONI_PONI_1 = "PONI 1 (m):"
+LABEL_PONI_PONI_2 = "PONI 2 (m):"
+LABEL_PONI_ROT_1 = "Rot 1 (rads):"
+LABEL_PONI_ROT_2 = "Rot 2 (rads):"
+LABEL_PONI_ROT_3 = "Rot 3 (rads):"
+LABEL_PONI_WAVELENGTH = "Wavelength (nm):"
+
 button_on = """
 
 QPushButton {
@@ -284,7 +306,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.gridlayout = QGridLayout()
         self.setLayout(self.gridlayout)
         self.gridlayout.setColumnStretch(1,1)
-        self.gridlayout.setColumnStretch(2,3)
+        self.gridlayout.setColumnStretch(2,6)
 
         # Build the two main layouts, which are Grids
         self.grid_left = QGridLayout()
@@ -313,17 +335,21 @@ class GUIPyX_Widget_layout(QWidget):
         self.widget_input_integration_cake = QWidget()
         self.grid_input_integration_box = QGridLayout()
         self.widget_input_integration_box = QWidget()
+        self.grid_input_ponifile_parameters = QGridLayout()
+        self.widget_input_ponifile_parameters = QWidget()
 
         self.tab_input_data = QTabWidget()
         self.tab_input_data.addTab(self.widget_input_data, LABEL_TAB_FILES)
         self.tab_input_data.addTab(self.widget_input_info, LABEL_TAB_SETUP)
         self.tab_input_data.addTab(self.widget_input_integration_cake, LABEL_TAB_CAKE)
         self.tab_input_data.addTab(self.widget_input_integration_box, LABEL_TAB_BOX)
+        self.tab_input_data.addTab(self.widget_input_ponifile_parameters, LABEL_TAB_PONIFILE)
 
         self.widget_input_data.setLayout(self.grid_input_data)
         self.widget_input_info.setLayout(self.grid_input_info)
         self.widget_input_integration_cake.setLayout(self.grid_input_integration_cake)
         self.widget_input_integration_box.setLayout(self.grid_input_integration_box)
+        self.widget_input_ponifile_parameters.setLayout(self.grid_input_ponifile_parameters)
 
         self.label_folders = QLabel(LABEL_LIST_FOLDERS)
         self.label_folders.setStyleSheet("background-color: white;border: 1px solid black;")
@@ -459,6 +485,10 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_update_ponifile.setIcon(QIcon(refresh_icon_path))
         self.label_reffolder = QLabel(LABEL_REFERENCE_FOLDER)
         self.combobox_reffolder = QComboBox()
+        self.label_reffile = QLabel(LABEL_REFERENCE_FILE)
+        self.combobox_reffile = QComboBox()
+        self.combobox_reffile.setEnabled(False)
+        self.checkbox_auto_reffile = QCheckBox(LABEL_AUTO_REFERENCE)
         self.label_maskfolder = QLabel(LABEL_MASK_FOLDER)
         self.combobox_maskfolder = QComboBox()
         self.combobox_maskfolder.setEnabled(False)
@@ -480,7 +510,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_pyfaicalib.setStyleSheet(button_style_input)
         self.button_start.setStyleSheet(button_style_input)
 
-        set_bstyle([self.label_recent_h5, self.label_h5file, self.label_folders, self.label_files, self.label_extension, self.label_conditions, self.label_ponifile, self.label_reffolder, self.label_maskfolder, self.label_sample_orientation, self.title_input])
+        set_bstyle([self.label_recent_h5, self.label_h5file, self.label_folders, self.label_files, self.label_extension, self.label_conditions, self.label_ponifile, self.label_reffolder, self.label_maskfolder, self.label_reffile, self.label_sample_orientation, self.title_input])
 
         self.grid_recent_h5.addWidget(self.label_recent_h5, 1, 1)
         self.grid_recent_h5.addWidget(self.combobox_h5_files, 1, 2)
@@ -499,9 +529,14 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_reference.addWidget(self.label_reffolder, 1, 1)
         self.grid_input_reference.addWidget(self.combobox_reffolder, 1, 2)
 
-        self.grid_input_mask.addWidget(self.label_maskfolder, 1, 1)
-        self.grid_input_mask.addWidget(self.combobox_maskfolder, 1, 2)
-        self.grid_input_mask.addWidget(self.mask_checkbox, 1, 3)
+        self.grid_input_mask.addWidget(self.label_reffile, 1, 1)
+        self.grid_input_mask.addWidget(self.combobox_reffile, 1, 2)
+        self.grid_input_mask.addWidget(self.checkbox_auto_reffile, 1, 3)
+        self.checkbox_auto_reffile.setChecked(True)
+
+        # self.grid_input_mask.addWidget(self.label_maskfolder, 1, 1)
+        # self.grid_input_mask.addWidget(self.combobox_maskfolder, 1, 2)
+        # self.grid_input_mask.addWidget(self.mask_checkbox, 1, 3)
 
         self.grid_input_orientations.addWidget(self.label_sample_orientation, 1, 1)
         self.grid_input_orientations.addWidget(self.button_mirror, 1, 2)
@@ -546,9 +581,11 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_default_graph.setStyleSheet(button_on)
         for unit in DICT_UNIT_ALIAS.values():
             self.combobox_units.addItem(unit)
+        self.button_reshape_map = QPushButton(BUTTON_SHOW_RESHAPE)
         self.button_map = QPushButton(BUTTON_SHOW_QMAP)
         self.button_savemap = QPushButton(BUTTON_SAVE_QMAP)
-        
+
+        self.button_reshape_map.setStyleSheet(button_style_thin)
         self.button_map.setStyleSheet(button_style_thin)
         self.button_savemap.setStyleSheet(button_style_thin)
         self.label_title = QLabel(LABEL_MAP_TITLES)
@@ -616,15 +653,23 @@ class GUIPyX_Widget_layout(QWidget):
 
         self.grid_input_graph = QGridLayout()
         self.grid_input_chart = QGridLayout()
+
+        
         self.graph_2D_widget = Plot2D()
+
+        self.tab_graph_widget = QTabWidget()
         self.graph_1D_widget = Plot1D()
+        self.graph_2D_reshape_widget = Plot2D()
+        self.tab_graph_widget.addTab(self.graph_1D_widget, LABEL_1D_INTEGRATION)
+        # self.tab_graph_widget.addTab(self.graph_2D_reshape_widget, LABEL_RESHAPE)
+
 
         self.grid_input_and_graphs.addWidget(self.label_input_graph,1,1)
         self.grid_input_and_graphs.addWidget(self.label_input_chart,1,2)
         self.grid_input_and_graphs.addLayout(self.grid_input_graph,2,1)
         self.grid_input_and_graphs.addLayout(self.grid_input_chart,2,2)
         self.grid_input_and_graphs.addWidget(self.graph_2D_widget,3,1)
-        self.grid_input_and_graphs.addWidget(self.graph_1D_widget,3,2)
+        self.grid_input_and_graphs.addWidget(self.tab_graph_widget,3,2)
 
         self.grid_units_graph = QGridLayout()
         self.grid_input_graph_buttons = QGridLayout()
@@ -643,8 +688,9 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_graph_buttons.addWidget(self.label_title, 1, 1)
         self.grid_input_graph_buttons.addWidget(self.combobox_headeritems_title, 1, 2)
         self.grid_input_graph_buttons.addWidget(self.lineedit_headeritems_title, 1, 3)
-        self.grid_input_graph_buttons.addWidget(self.button_map, 1, 4)
-        self.grid_input_graph_buttons.addWidget(self.button_savemap, 1, 5)
+        self.grid_input_graph_buttons.addWidget(self.button_reshape_map, 1, 4)
+        self.grid_input_graph_buttons.addWidget(self.button_map, 1, 5)
+        self.grid_input_graph_buttons.addWidget(self.button_savemap, 1, 6)
 
         self.grid_input_graph_lims.setColumnStretch(10,3)
         self.grid_input_graph_lims.addWidget(self.xlims, 1, 1)
@@ -885,6 +931,102 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_inputs_box.addLayout(self.grid_iprange,5,2)
         self.grid_inputs_box.addLayout(self.grid_ooprange,6,2)
         self.grid_inputs_box.addWidget(self.combobox_outputunits_box,7,2)
+
+
+
+        ##############################
+        ### Tab for Ponifile Parameters
+        ##############################
+        self.grid_poni_mod = QGridLayout()
+        self.checkbox_poni_mod = QCheckBox(LABEL_PONI_MOD)
+        self.checkbox_poni_mod.setChecked(True)
+        self.grid_poni_detector = QGridLayout()
+        self.label_detector = QLabel(LABEL_DETECTOR)
+        self.combobox_detector = QComboBox()
+        self.grid_poni_pixel = QGridLayout()
+        self.label_pixel1 = QLabel(LABEL_PIXEL_1)
+        self.lineedit_pixel1 = QLineEdit()
+        self.lineedit_pixel1.setEnabled(False)
+        self.label_pixel2 = QLabel(LABEL_PIXEL_2)
+        self.lineedit_pixel2 = QLineEdit()
+        self.lineedit_pixel2.setEnabled(False)
+        self.grid_poni_shape = QGridLayout()
+        self.label_shape_1 = QLabel(LABEL_SHAPE_1)
+        self.label_shape_2 = QLabel(LABEL_SHAPE_2)
+        self.lineedit_shape1 = QLineEdit()
+        self.lineedit_shape2 = QLineEdit()
+        self.lineedit_shape1.setEnabled(False)
+        self.lineedit_shape2.setEnabled(False)
+        self.grid_poni_distance = QGridLayout()
+        self.label_distance = QLabel(LABEL_DISTANCE)
+        self.lineedit_distance = QLineEdit()
+        self.lineedit_distance.setEnabled(False)
+        self.grid_poni_ponis = QGridLayout()
+        self.label_poni_1 = QLabel(LABEL_PONI_PONI_1)
+        self.label_poni_2 = QLabel(LABEL_PONI_PONI_2)
+        self.lineedit_poni1 = QLineEdit()
+        self.lineedit_poni2 = QLineEdit()
+        self.lineedit_poni1.setEnabled(False)
+        self.lineedit_poni2.setEnabled(False)
+        self.grid_poni_rots = QGridLayout()
+        self.label_rot_1 = QLabel(LABEL_PONI_ROT_1)
+        self.label_rot_2 = QLabel(LABEL_PONI_ROT_2)
+        self.label_rot_3 = QLabel(LABEL_PONI_ROT_3)
+        self.lineedit_rot1 = QLineEdit()
+        self.lineedit_rot2 = QLineEdit()
+        self.lineedit_rot3 = QLineEdit()
+        self.lineedit_rot1.setEnabled(False)
+        self.lineedit_rot2.setEnabled(False)
+        self.lineedit_rot3.setEnabled(False)
+        self.grid_poni_wavelength = QGridLayout()
+        self.label_wavelength = QLabel(LABEL_PONI_WAVELENGTH)
+        self.lineedit_wavelength = QLineEdit()
+        self.lineedit_wavelength.setEnabled(False)
+
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_mod, 1, 1)
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_detector, 2, 1)
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_wavelength, 3, 1)        
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_distance, 4, 1)
+
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_pixel, 5, 1)
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_shape, 6, 1)
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_ponis, 7, 1)
+
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_rots, 8, 1)
+
+        self.grid_poni_mod.addWidget(self.checkbox_poni_mod, 1, 1)
+
+        self.grid_poni_detector.addWidget(self.label_detector, 1, 1)
+        self.grid_poni_detector.addWidget(self.combobox_detector, 1, 2)
+
+        self.grid_poni_pixel.addWidget(self.label_pixel1, 1, 1)
+        self.grid_poni_pixel.addWidget(self.lineedit_pixel1, 1, 2)
+        self.grid_poni_pixel.addWidget(self.label_pixel2, 1, 3)
+        self.grid_poni_pixel.addWidget(self.lineedit_pixel2, 1, 4)
+
+        self.grid_poni_shape.addWidget(self.label_shape_1, 1, 1)
+        self.grid_poni_shape.addWidget(self.lineedit_shape1, 1, 2)
+        self.grid_poni_shape.addWidget(self.label_shape_2, 1, 3)
+        self.grid_poni_shape.addWidget(self.lineedit_shape2, 1, 4)
+
+        self.grid_poni_distance.addWidget(self.label_distance, 1, 1)
+        self.grid_poni_distance.addWidget(self.lineedit_distance, 1, 2)
+
+        self.grid_poni_ponis.addWidget(self.label_poni_1, 1, 1)
+        self.grid_poni_ponis.addWidget(self.lineedit_poni1, 1, 2)
+        self.grid_poni_ponis.addWidget(self.label_poni_2, 1, 3)
+        self.grid_poni_ponis.addWidget(self.lineedit_poni2, 1, 4)
+
+        self.grid_poni_rots.addWidget(self.label_rot_1, 1, 1)
+        self.grid_poni_rots.addWidget(self.lineedit_rot1, 1, 2)
+        self.grid_poni_rots.addWidget(self.label_rot_2, 1, 3)
+        self.grid_poni_rots.addWidget(self.lineedit_rot2, 1, 4)
+        self.grid_poni_rots.addWidget(self.label_rot_3, 1, 5)
+        self.grid_poni_rots.addWidget(self.lineedit_rot3, 1, 6)
+
+        self.grid_poni_wavelength.addWidget(self.label_wavelength, 1, 1)
+        self.grid_poni_wavelength.addWidget(self.lineedit_wavelength, 1, 2)
+
 
         set_bstyle([self.label_headeritems, self.label_plaintext, self.xlims, self.ylims, self.label_units, self.xticks, self.yticks, self.label_savefolder, self.label_integrations, self.label_sub, self.label_title,self.label_input_graph,self.label_input_chart])
         set_bstyle([self.label_setup, self.label_angle, self.label_tilt_angle, self.label_normfactor, self.label_exposure, self.label_setup_name])
