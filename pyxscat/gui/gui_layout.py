@@ -132,10 +132,12 @@ SPINBOX_RANGE_MAX = 100
 ERROR_OUTPUT = "Something went wrong with the output message..."
 
 # PONIFILE PARAMETERS TAB
+LABEL_PONI_MOD_WARNING = "CHANGING THESE PARAMETERS WON'T CHANGE THE .PONI FILE. USE IT WISELY."
 LABEL_PONI_MOD = "Modify .poni parameters"
 LABEL_DETECTOR = "Detector"
-LABEL_PIXEL_1 = "Pixel size horz. (mm):"
-LABEL_PIXEL_2 = "Pixel size vert. (mm):"
+LABEL_DETECTOR_BINNING = "Detector Binning"
+LABEL_PIXEL_1 = "Pixel size horz. (m):"
+LABEL_PIXEL_2 = "Pixel size vert. (m):"
 LABEL_SHAPE_1 = "Detector shape (1):"
 LABEL_SHAPE_2 = "Detector shape (2):"
 LABEL_DISTANCE = "Sample-Detector distance (m):"
@@ -144,7 +146,10 @@ LABEL_PONI_PONI_2 = "PONI 2 (m):"
 LABEL_PONI_ROT_1 = "Rot 1 (rads):"
 LABEL_PONI_ROT_2 = "Rot 2 (rads):"
 LABEL_PONI_ROT_3 = "Rot 3 (rads):"
-LABEL_PONI_WAVELENGTH = "Wavelength (nm):"
+LABEL_PONI_WAVELENGTH = "Wavelength (m):"
+BUTTON_UPDATE_PONI_PARAMETERS = "UPDATE .PONI PARAMETERS"
+BUTTON_UPDATE_OLD_PONI_PARAMETERS = "RETRIEVE .PONI PARAMETERS FROM CACHE"
+BUTTON_SAVE_PONI_PARAMETERS = "SAVE .PONI PARAMETERS"
 
 button_on = """
 
@@ -938,11 +943,16 @@ class GUIPyX_Widget_layout(QWidget):
         ### Tab for Ponifile Parameters
         ##############################
         self.grid_poni_mod = QGridLayout()
+        self.label_poni_warning = QLabel(LABEL_PONI_MOD_WARNING)
         self.checkbox_poni_mod = QCheckBox(LABEL_PONI_MOD)
-        self.checkbox_poni_mod.setChecked(True)
+        # self.checkbox_poni_mod.setChecked(True)
         self.grid_poni_detector = QGridLayout()
         self.label_detector = QLabel(LABEL_DETECTOR)
-        self.combobox_detector = QComboBox()
+        self.lineedit_detector = QLineEdit()
+        self.lineedit_detector.setEnabled(False)
+        self.label_detector_binning = QLabel(LABEL_DETECTOR_BINNING)
+        self.lineedit_detector_binning = QLineEdit()
+        self.lineedit_detector_binning.setEnabled(False)
         self.grid_poni_pixel = QGridLayout()
         self.label_pixel1 = QLabel(LABEL_PIXEL_1)
         self.lineedit_pixel1 = QLineEdit()
@@ -982,22 +992,40 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_wavelength = QLabel(LABEL_PONI_WAVELENGTH)
         self.lineedit_wavelength = QLineEdit()
         self.lineedit_wavelength.setEnabled(False)
+        self.grid_update_poni_parameters = QGridLayout()
+        self.button_update_poni_parameters = QPushButton(BUTTON_UPDATE_PONI_PARAMETERS)
+        self.button_update_poni_parameters.setStyleSheet(button_style_input)
+        self.grid_update_old_poni_parameters = QGridLayout()
+        self.button_update_old_poni_parameters = QPushButton(BUTTON_UPDATE_OLD_PONI_PARAMETERS)
+        self.button_update_old_poni_parameters.setStyleSheet(button_style_input)
+        self.grid_save_poni_parameters = QGridLayout()
+        self.button_save_poni_parameters = QPushButton(BUTTON_SAVE_PONI_PARAMETERS)
+        self.button_save_poni_parameters.setStyleSheet(button_style_input)
 
         self.grid_input_ponifile_parameters.addLayout(self.grid_poni_mod, 1, 1)
-        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_detector, 2, 1)
-        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_wavelength, 3, 1)        
-        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_distance, 4, 1)
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_wavelength, 2, 1)        
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_distance, 3, 1)
 
-        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_pixel, 5, 1)
-        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_shape, 6, 1)
+
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_detector, 4, 1)
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_shape, 5, 1)        
+        self.grid_input_ponifile_parameters.addLayout(self.grid_poni_pixel, 6, 1)
         self.grid_input_ponifile_parameters.addLayout(self.grid_poni_ponis, 7, 1)
 
         self.grid_input_ponifile_parameters.addLayout(self.grid_poni_rots, 8, 1)
+        self.grid_input_ponifile_parameters.addLayout(self.grid_update_old_poni_parameters, 9, 1)        
+        self.grid_input_ponifile_parameters.addLayout(self.grid_update_poni_parameters, 10, 1)
+        self.grid_input_ponifile_parameters.addLayout(self.grid_save_poni_parameters, 11, 1)
 
+
+
+        # self.grid_poni_mod.addWidget(self.label_poni_warning, 1, 1)
         self.grid_poni_mod.addWidget(self.checkbox_poni_mod, 1, 1)
 
         self.grid_poni_detector.addWidget(self.label_detector, 1, 1)
-        self.grid_poni_detector.addWidget(self.combobox_detector, 1, 2)
+        self.grid_poni_detector.addWidget(self.lineedit_detector, 1, 2)
+        self.grid_poni_detector.addWidget(self.label_detector_binning, 1, 3)
+        self.grid_poni_detector.addWidget(self.lineedit_detector_binning, 1,4)
 
         self.grid_poni_pixel.addWidget(self.label_pixel1, 1, 1)
         self.grid_poni_pixel.addWidget(self.lineedit_pixel1, 1, 2)
@@ -1027,8 +1055,12 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_poni_wavelength.addWidget(self.label_wavelength, 1, 1)
         self.grid_poni_wavelength.addWidget(self.lineedit_wavelength, 1, 2)
 
+        self.grid_update_poni_parameters.addWidget(self.button_update_poni_parameters, 1, 1)
+        self.grid_update_old_poni_parameters.addWidget(self.button_update_old_poni_parameters, 1, 1)
+        self.grid_save_poni_parameters.addWidget(self.button_save_poni_parameters, 1, 1)
 
-        set_bstyle([self.label_headeritems, self.label_plaintext, self.xlims, self.ylims, self.label_units, self.xticks, self.yticks, self.label_savefolder, self.label_integrations, self.label_sub, self.label_title,self.label_input_graph,self.label_input_chart])
+
+        set_bstyle([self.label_poni_warning, self.label_headeritems, self.label_plaintext, self.xlims, self.ylims, self.label_units, self.xticks, self.yticks, self.label_savefolder, self.label_integrations, self.label_sub, self.label_title,self.label_input_graph,self.label_input_chart])
         set_bstyle([self.label_setup, self.label_angle, self.label_tilt_angle, self.label_normfactor, self.label_exposure, self.label_setup_name])
         set_bstyle([self.label_name_cake, self.label_suffix_cake, self.label_type_cake, self.label_units_cake, self.label_radialrange_cake, self.label_azimrange_cake, self.label_azimbins_cake])
         set_bstyle([self.label_name_box, self.label_suffix_box, self.label_direction_box, self.label_input_units_box, self.label_iprange_box, self.label_ooprange_box, self.label_outputunits_box])

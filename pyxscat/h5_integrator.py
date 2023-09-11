@@ -1,6 +1,7 @@
 from collections import defaultdict
 from pathlib import Path
 from pyFAI import load
+from pyFAI.io.ponifile import PoniFile
 from pygix.transform import Transform
 from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
 from os.path import getctime
@@ -41,6 +42,21 @@ DICT_SAMPLE_ORIENTATIONS = {
     (False,True) : 3,
     (False,False) : 4,
 }
+
+PONI_KEY_VERSION = "poni_version"
+PONI_KEY_DISTANCE = "dist"
+PONI_KEY_WAVELENGTH = "wavelength"
+PONI_KEY_SHAPE1 = "shape1"
+PONI_KEY_SHAPE2 = "shape2"
+PONI_KEY_DETECTOR = "detector"
+PONI_KEY_DETECTOR_CONFIG = "detector_config"
+PONI_KEY_PIXEL1 = "pixelsize1"
+PONI_KEY_PIXEL2 = "pixelsize2"
+PONI_KEY_PONI1 = "poni1"
+PONI_KEY_PONI2 = "poni2"
+PONI_KEY_ROT1 = "rot1"
+PONI_KEY_ROT2 = "rot2"
+PONI_KEY_ROT3 = "rot3"
 
 DICT_BOX_ORIENTATION = {
     'Horizontal' : 'ipbox',
@@ -145,7 +161,6 @@ class H5GIIntegrator(Transform):
             beamline=beamline,
             **kwargs,
         )
-
 
         self.open_h5
         self.close_h5
@@ -763,11 +778,18 @@ class H5GIIntegrator(Transform):
         logger.info(f"Ponifile active: {ponifile_active}")
         return ponifile_active
 
+    @log_info
+    @check_if_open
+    def update_ponifile_parameters(self, dict_poni=dict()) -> None:
+        """
+        Changes manually the functional poni parameters of pygix
+        """
+        new_poni = PoniFile(data=dict_poni)
+        self._init_from_poni(new_poni)
 
     #########################################################
     ######### PYGIX CONNECTIONS ######################
     #########################################################
-
 
     @log_info
     def update_transformQ(self) -> None:
@@ -825,7 +847,6 @@ class H5GIIntegrator(Transform):
     #####################################
     ###### HDF5 METHODS #################
     #####################################
-
 
     @log_info
     @check_if_open
