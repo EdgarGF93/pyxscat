@@ -2468,25 +2468,40 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             index_list=self.cache_index,
         )
 
+        # Updates the incident and tilt angle
+        incident_angle = self.h5.get_incident_angle(
+            folder_name=self.clicked_folder,
+            index_list=self.cache_index,
+        )
+        tilt_angle = self.h5.get_tilt_angle(
+            folder_name=self.clicked_folder,
+            index_list=self.cache_index,
+        )
+        self.h5.update_incident_tilt_angle(
+            incident_angle=incident_angle,
+            tilt_angle=tilt_angle,
+        )
+
         # Get the data, subtracted if it is asked
         if (self.spinbox_sub.value() != 0.0):
             full_reference_filename = self.get_reference_file()
-            reference_name = Path(full_reference_filename).name
-            if self.checkbox_auto_reffile.isChecked():
-                cb.clear(self.combobox_reffile)
-                cb.insert(
-                    combobox=self.combobox_reffile,
-                    item=f"(Auto): {reference_name}",
-                )
 
-            reference_factor = self.spinbox_sub.value()
-            logger.info(f"New reference factor: {reference_factor}")
+            if full_reference_filename:
+                reference_name = Path(full_reference_filename).name
+                if self.checkbox_auto_reffile.isChecked():
+                    cb.clear(self.combobox_reffile)
+                    cb.insert(
+                        combobox=self.combobox_reffile,
+                        item=f"(Auto): {reference_name}",
+                    )
 
-            data_ref = self.h5.get_Edf_instance(
-                full_filename=full_reference_filename,
-            ).get_data()
+                reference_factor = self.spinbox_sub.value()
+                logger.info(f"New reference factor: {reference_factor}")
 
-            data = data - reference_factor * data_ref
+                data_ref = self.h5.get_Edf_instance(
+                    full_filename=full_reference_filename,
+                ).get_data()
+                data = data - reference_factor * data_ref
 
         # Get the normalization factor
         norm_factor = self.h5.get_norm_factor(
@@ -2552,11 +2567,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     logger.info(f"Auto reference file: {full_reference_filename}")
                     continue
                 logger.info(f"There is no match in acquisition times.")
+                full_reference_filename = ""
+
         # Specific reference file
         else:
             file_reference_name = cb.value(self.combobox_reffile)
             full_reference_filename = str(self.h5.get_main_directory().joinpath(Path(reference_folder_name), Path(file_reference_name)))
             logger.info(f"Chosen reference file: {full_reference_filename}.")
+
         return full_reference_filename
 
     @log_info

@@ -36,3 +36,9 @@ C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\
 C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5
 C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5
 C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023_2\XMaS_Sept2023_2.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023_2\XMaS_Sept2023_2.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023_2\XMaS_Sept2023_2.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023_2\XMaS_Sept2023_2.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023_2\XMaS_Sept2023_2.h5
+E:\Datos_Sincrotrones\XMaS_Sept2023_2\XMaS_Sept2023_2.h5

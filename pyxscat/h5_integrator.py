@@ -806,18 +806,31 @@ class H5GIIntegrator(Transform):
             try:
                 self.load(self.get_active_ponifile())
                 logger.info("Loaded poni file")
-                self.set_incident_angle(
+                self.update_incident_tilt_angle(
                     incident_angle=0.0,
-                )
-                logger.info("Incident angle set at 0.0")
-                self.set_tilt_angle(
                     tilt_angle=0.0,
                 )
-                logger.info("Tilt angle set at 0.0")
             except:
                 pass
         else:
             pass
+
+    @log_info
+    def update_incident_tilt_angle(self, incident_angle=0.0, tilt_angle=0.0):
+        try:
+            self.set_incident_angle(
+                incident_angle=incident_angle,
+            )
+            logger.info(f"Incident angle set at {incident_angle}")
+        except Exception as e:
+            logger.info(f"{e}: Incident angle could not be updated.")
+        try:
+            self.set_tilt_angle(
+                tilt_angle=tilt_angle,
+            )
+            logger.info(f"Tilt angle set at {tilt_angle}")
+        except Exception as e:
+            logger.info(f"{e}: Tilt angle could not be updated.")
 
     @log_info
     def update_orientation(self, qz_parallel=True, qr_parallel=True) -> None:
@@ -1677,6 +1690,20 @@ class H5GIIntegrator(Transform):
                 index_list=index_list,
             )
 
+        # # Updates the incident and tilt angle
+        # incident_angle = self.get_incident_angle(
+        #     folder_name=folder_name,
+        #     index_list=index_list,
+        # )
+        # tilt_angle = self.get_tilt_angle(
+        #     folder_name=folder_name,
+        #     index_list=index_list,
+        # )
+        # self.update_incident_tilt_angle(
+        #     incident_angle=incident_angle,
+        #     tilt_angle=tilt_angle,
+        # )
+
         # Get the normalization factor
         if norm_factor == 1.0:
             norm_factor = self.get_norm_factor(
@@ -2027,6 +2054,8 @@ class H5GIIntegrator(Transform):
             logger.info(f"Data is None. Returns.")
             return
 
+        # Updates 
+
         # Get the detector array, it is always the same shape (RAW MATRIX SHAPE!), no rotations yet
         shape = data.shape
         det_array = self.get_detector_array(shape=shape)
@@ -2034,6 +2063,7 @@ class H5GIIntegrator(Transform):
         # Get the mesh matrix
         if unit in UNITS_Q:
             try:
+                print(self._incident_angle)
                 # calc_q will take into account the sample_orientation in GrazingGeometry instance
                 scat_z, scat_xy = self.calc_q(
                     d1=det_array[0,:,:],
