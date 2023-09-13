@@ -10,9 +10,12 @@
 **kk**
 
 # Logger files
-*logger/
-*logger/*
-pyxscat/h5_recent_files.txt
+.logger
+*/.logger/*
+
+
+
+*pyxscat/h5_recent_files.txt
 kk/
 dist/
 
@@ -56,6 +59,7 @@ share/python-wheels/
 MANIFEST
 kk/
 modules_dash/
+logger/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
