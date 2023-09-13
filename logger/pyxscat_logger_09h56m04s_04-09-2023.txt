@@ -1,0 +1,176 @@
+2023-09-04 09:56:04,995 - INFO - Logger was initialized.
+2023-09-04 09:56:09,488 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-04 09:56:09,488 - INFO - The data parameters were reinitialized.
+2023-09-04 09:56:09,489 - INFO - We entered into function: init_callbacks
+2023-09-04 09:56:09,489 - INFO - We entered into function: update_setup_info
+2023-09-04 09:56:09,490 - INFO - New setup dictionary was updated.
+2023-09-04 09:56:09,490 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-04 09:56:09,491 - INFO - We entered into function: update_lims_ticks
+2023-09-04 09:56:09,506 - INFO - We entered into function: update_combobox_h5
+2023-09-04 09:56:09,507 - INFO - We entered into function: set_h5_instance
+2023-09-04 09:56:09,507 - INFO - The .h5 could not be found.
+2023-09-04 09:56:09,507 - INFO - We entered into function: update_h5_poni_and_files
+2023-09-04 09:56:09,507 - INFO - The H5 could not be updated.
+2023-09-04 09:56:09,507 - INFO - We entered into function: update_widgets
+2023-09-04 09:56:09,508 - INFO - There is no H5Integrator instance.
+2023-09-04 09:56:09,508 - INFO - We entered into function: update_setup_info
+2023-09-04 09:56:09,508 - INFO - New setup dictionary was updated.
+2023-09-04 09:56:09,508 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-04 09:56:09,508 - INFO - We entered into function: update_combobox_setups
+2023-09-04 09:56:09,510 - INFO - We entered into function: update_setup_info
+2023-09-04 09:56:09,511 - INFO - New setup dictionary was updated.
+2023-09-04 09:56:09,511 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-04 09:56:09,511 - INFO - We entered into function: update_table
+2023-09-04 09:56:09,511 - INFO - Table was reseted.
+2023-09-04 09:56:09,512 - INFO - No folder to display. Return.
+2023-09-04 09:56:09,512 - INFO - We entered into function: update_table
+2023-09-04 09:56:09,512 - INFO - Table was reseted.
+2023-09-04 09:56:09,512 - INFO - No folder to display. Return.
+2023-09-04 09:56:09,512 - INFO - We entered into function: update_table
+2023-09-04 09:56:09,512 - INFO - Table was reseted.
+2023-09-04 09:56:09,512 - INFO - No folder to display. Return.
+2023-09-04 09:56:09,512 - INFO - We entered into function: update_integration_widgets
+2023-09-04 09:56:09,517 - INFO - We entered into function: update_graphs
+2023-09-04 09:56:25,197 - INFO - We entered into function: create_h5_file
+2023-09-04 09:56:25,197 - INFO - We entered into function: pick_main_directory
+2023-09-04 09:56:32,462 - INFO - We entered into function: create_h5_filename
+2023-09-04 09:56:45,387 - INFO - H5Integrator instance was initialized
+2023-09-04 09:56:45,387 - INFO - The filename is E:\Datos_Sincrotrones\Diamond_I07_Jul2023\Diamond_I07_Jul2023.h5.
+2023-09-04 09:56:45,387 - INFO - We entered into function: create_h5_file
+2023-09-04 09:56:45,387 - INFO - E:\Datos_Sincrotrones\Diamond_I07_Jul2023\Diamond_I07_Jul2023.h5 is going to be created.
+2023-09-04 09:56:45,428 - INFO - The file was created 
+2023-09-04 09:56:45,429 - INFO - Attributes for h5: dict_items([('main_directory', 'E:\\Datos_Sincrotrones\\Diamond_I07_Jul2023'), ('description', 'HDF5 file with Scattering methods.'), ('comment', ''), ('beamline', 'BM28-XMaS')])
+2023-09-04 09:56:45,430 - INFO - New attribute. Datetime : 09h56m45s_04-09-2023
+2023-09-04 09:56:45,430 - INFO - New attribute. main_directory : E:\Datos_Sincrotrones\Diamond_I07_Jul2023
+2023-09-04 09:56:45,431 - INFO - New attribute. description : HDF5 file with Scattering methods.
+2023-09-04 09:56:45,432 - INFO - New attribute. comment : 
+2023-09-04 09:56:45,432 - INFO - New attribute. beamline : BM28-XMaS
+2023-09-04 09:56:45,436 - INFO - We entered into function: update_group_ponifile
+2023-09-04 09:56:45,438 - INFO - Ponifile dataset was created.
+2023-09-04 09:56:45,439 - INFO - Active_ponifile dataset was created.
+2023-09-04 09:56:45,439 - INFO - No ponifiles to be updated. Return.
+2023-09-04 09:56:45,441 - INFO - We entered into function: update_setup_keys
+2023-09-04 09:56:45,442 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-04 09:56:45,442 - INFO - We entered into function: update_attributes_in_group
+2023-09-04 09:56:45,442 - INFO - Updated iangle_key = spitch
+2023-09-04 09:56:45,442 - INFO - We entered into function: update_attributes_in_group
+2023-09-04 09:56:45,443 - INFO - Updated acq_key = exposure
+2023-09-04 09:56:45,443 - INFO - We entered into function: update_attributes_in_group
+2023-09-04 09:56:45,443 - INFO - Updated norm_key = Monitor
+2023-09-04 09:56:45,443 - INFO - We entered into function: update_attributes_in_group
+2023-09-04 09:56:45,444 - INFO - Updated tilt_key = 
+2023-09-04 09:56:45,444 - INFO - Inherited methods from pygix.transform
+2023-09-04 09:56:45,444 - INFO - We entered into function: update_transformQ
+2023-09-04 09:56:45,445 - INFO - We entered into function: get_active_ponifile
+2023-09-04 09:56:45,446 - INFO - Ponifile active: 
+2023-09-04 09:56:45,446 - INFO - We entered into function: update_orientation
+2023-09-04 09:56:45,446 - INFO - qz parallel is True
+2023-09-04 09:56:45,446 - INFO - qr parallel is True
+2023-09-04 09:56:45,447 - INFO - The sample orientation (pygix) is set at 1
+2023-09-04 09:56:45,447 - INFO - New .h5 file was created successfully.
+2023-09-04 09:56:45,447 - INFO - sPonifile: . Keys_metadata: defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'}). qz:True, qr:True
+2023-09-04 09:56:45,447 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-04 09:56:45,447 - INFO - We entered into function: update_table
+2023-09-04 09:56:45,448 - INFO - Table was reseted.
+2023-09-04 09:56:45,448 - INFO - No folder to display. Return.
+2023-09-04 09:56:45,448 - INFO - The data parameters were reinitialized.
+2023-09-04 09:56:45,448 - INFO - We entered into function: append_h5file
+2023-09-04 09:56:45,448 - INFO - New .h5 file to append E:\Datos_Sincrotrones\Diamond_I07_Jul2023\Diamond_I07_Jul2023.h5
+2023-09-04 09:56:45,449 - INFO - Current list of .h5 files.
+2023-09-04 09:56:45,450 - INFO - We entered into function: update_h5_poni_and_files
+2023-09-04 09:56:45,450 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-09-04 09:56:45,450 - INFO - We entered into function: search_and_update_ponifiles
+2023-09-04 09:56:45,450 - INFO - Got main directory: E:\Datos_Sincrotrones\Diamond_I07_Jul2023
+2023-09-04 09:56:47,249 - INFO - We entered into function: generator_stored_ponifiles
+2023-09-04 09:56:47,249 - INFO - No ponifiles detected.
+2023-09-04 09:56:47,249 - INFO - We entered into function: generator_stored_ponifiles
+2023-09-04 09:56:47,250 - INFO - Combobox of ponifiles was updated.
+2023-09-04 09:56:47,250 - INFO - We entered into function: search_and_update_new_files
+2023-09-04 09:56:47,251 - INFO - We entered into function: search_new_files_folders
+2023-09-04 09:56:47,251 - INFO - Got main directory: E:\Datos_Sincrotrones\Diamond_I07_Jul2023
+2023-09-04 09:56:47,272 - INFO - 0 New files were detected.
+2023-09-04 09:56:47,273 - INFO - The .h5 file was updated.
+2023-09-04 09:56:47,273 - INFO - We entered into function: activate_h5file
+2023-09-04 09:56:47,273 - INFO - We entered into function: update_widgets
+2023-09-04 09:56:47,274 - INFO - No new folders.
+2023-09-04 09:56:47,274 - INFO - We entered into function: update_setup_info
+2023-09-04 09:56:47,275 - INFO - New setup dictionary was updated.
+2023-09-04 09:56:47,276 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-04 09:56:47,276 - INFO - We entered into function: update_table
+2023-09-04 09:56:47,276 - INFO - Table was reseted.
+2023-09-04 09:56:47,277 - INFO - No folder to display. Return.
+2023-09-04 09:56:47,277 - INFO - We entered into function: update_table
+2023-09-04 09:56:47,277 - INFO - Table was reseted.
+2023-09-04 09:56:47,277 - INFO - No folder to display. Return.
+2023-09-04 09:56:47,277 - INFO - We entered into function: update_table
+2023-09-04 09:56:47,277 - INFO - Table was reseted.
+2023-09-04 09:56:47,277 - INFO - No folder to display. Return.
+2023-09-04 09:57:22,182 - INFO - We entered into function: update_pattern
+2023-09-04 09:57:22,182 - INFO - The file pattern was updated.
+2023-09-04 09:57:22,183 - INFO - New pattern: *.tiff
+2023-09-04 09:57:24,444 - INFO - We entered into function: create_h5_file
+2023-09-04 09:57:24,444 - INFO - We entered into function: pick_main_directory
+2023-09-04 09:57:38,143 - INFO - We entered into function: create_h5_filename
+2023-09-04 09:57:41,434 - INFO - H5Integrator instance was initialized
+2023-09-04 09:57:41,434 - INFO - The filename is E:\Datos_Sincrotrones\Diamond_I07_Jul2023\Diamond_I07_Jul2023.h5.
+2023-09-04 09:57:41,435 - INFO - We entered into function: create_h5_file
+2023-09-04 09:57:41,435 - INFO - E:\Datos_Sincrotrones\Diamond_I07_Jul2023\Diamond_I07_Jul2023.h5 is going to be created.
+2023-09-04 09:57:41,435 - INFO - The file could not be created. Return.
+2023-09-04 09:57:41,436 - INFO - We entered into function: update_group_ponifile
+2023-09-04 09:57:41,438 - INFO - No ponifiles to be updated. Return.
+2023-09-04 09:57:41,438 - INFO - We entered into function: update_setup_keys
+2023-09-04 09:57:41,438 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-04 09:57:41,438 - INFO - We entered into function: update_attributes_in_group
+2023-09-04 09:57:41,439 - INFO - Updated iangle_key = spitch
+2023-09-04 09:57:41,439 - INFO - We entered into function: update_attributes_in_group
+2023-09-04 09:57:41,439 - INFO - Updated acq_key = exposure
+2023-09-04 09:57:41,439 - INFO - We entered into function: update_attributes_in_group
+2023-09-04 09:57:41,439 - INFO - Updated norm_key = Monitor
+2023-09-04 09:57:41,440 - INFO - We entered into function: update_attributes_in_group
+2023-09-04 09:57:41,440 - INFO - Updated tilt_key = 
+2023-09-04 09:57:41,440 - INFO - Inherited methods from pygix.transform
+2023-09-04 09:57:41,440 - INFO - We entered into function: update_transformQ
+2023-09-04 09:57:41,440 - INFO - We entered into function: get_active_ponifile
+2023-09-04 09:57:41,441 - INFO - Ponifile active: 
+2023-09-04 09:57:41,441 - INFO - We entered into function: update_orientation
+2023-09-04 09:57:41,441 - INFO - qz parallel is True
+2023-09-04 09:57:41,441 - INFO - qr parallel is True
+2023-09-04 09:57:41,441 - INFO - The sample orientation (pygix) is set at 1
+2023-09-04 09:57:41,442 - INFO - New .h5 file was created successfully.
+2023-09-04 09:57:41,442 - INFO - sPonifile: . Keys_metadata: defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'}). qz:True, qr:True
+2023-09-04 09:57:41,442 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-04 09:57:41,442 - INFO - We entered into function: update_table
+2023-09-04 09:57:41,443 - INFO - Table was reseted.
+2023-09-04 09:57:41,443 - INFO - No folder to display. Return.
+2023-09-04 09:57:41,443 - INFO - The data parameters were reinitialized.
+2023-09-04 09:57:41,443 - INFO - We entered into function: append_h5file
+2023-09-04 09:57:41,443 - INFO - New .h5 file to append E:\Datos_Sincrotrones\Diamond_I07_Jul2023\Diamond_I07_Jul2023.h5
+2023-09-04 09:57:41,444 - INFO - Current list of .h5 files.
+2023-09-04 09:57:41,444 - INFO - We entered into function: update_h5_poni_and_files
+2023-09-04 09:57:41,444 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-09-04 09:57:41,444 - INFO - We entered into function: search_and_update_ponifiles
+2023-09-04 09:57:41,444 - INFO - Got main directory: E:\Datos_Sincrotrones\Diamond_I07_Jul2023
+2023-09-04 09:57:41,468 - INFO - We entered into function: generator_stored_ponifiles
+2023-09-04 09:57:41,469 - INFO - No ponifiles detected.
+2023-09-04 09:57:41,470 - INFO - We entered into function: generator_stored_ponifiles
+2023-09-04 09:57:41,470 - INFO - Combobox of ponifiles was updated.
+2023-09-04 09:57:41,471 - INFO - We entered into function: search_and_update_new_files
+2023-09-04 09:57:41,471 - INFO - We entered into function: search_new_files_folders
+2023-09-04 09:57:41,471 - INFO - Got main directory: E:\Datos_Sincrotrones\Diamond_I07_Jul2023
+2023-09-04 09:57:41,495 - INFO - 0 New files were detected.
+2023-09-04 09:57:41,495 - INFO - The .h5 file was updated.
+2023-09-04 09:57:41,496 - INFO - We entered into function: activate_h5file
+2023-09-04 09:57:41,496 - INFO - We entered into function: update_widgets
+2023-09-04 09:57:41,496 - INFO - No new folders.
+2023-09-04 09:57:41,497 - INFO - We entered into function: update_setup_info
+2023-09-04 09:57:41,498 - INFO - New setup dictionary was updated.
+2023-09-04 09:57:41,499 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-04 09:57:41,499 - INFO - We entered into function: update_table
+2023-09-04 09:57:41,499 - INFO - Table was reseted.
+2023-09-04 09:57:41,500 - INFO - No folder to display. Return.
+2023-09-04 09:57:41,500 - INFO - We entered into function: update_table
+2023-09-04 09:57:41,500 - INFO - Table was reseted.
+2023-09-04 09:57:41,500 - INFO - No folder to display. Return.
+2023-09-04 09:57:41,501 - INFO - We entered into function: update_table
+2023-09-04 09:57:41,501 - INFO - Table was reseted.
+2023-09-04 09:57:41,501 - INFO - No folder to display. Return.

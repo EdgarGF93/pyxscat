@@ -1,0 +1,55 @@
+2023-08-22 17:50:17,517 - INFO - Logger was initialized.
+2023-08-22 17:50:17,518 - INFO - Logger was initialized.
+2023-08-22 17:50:18,882 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-22 17:50:18,883 - INFO - The data parameters were reinitialized.
+2023-08-22 17:50:18,883 - INFO - We entered into function: init_callbacks
+2023-08-22 17:50:18,884 - INFO - We entered into function: update_setup_info
+2023-08-22 17:50:18,885 - INFO - New setup dictionary was updated.
+2023-08-22 17:50:18,885 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-22 17:50:18,887 - INFO - We entered into function: update_lims_ticks
+2023-08-22 17:50:18,903 - INFO - We entered into function: update_combobox_h5
+2023-08-22 17:50:18,904 - INFO - We entered into function: set_h5_instance
+2023-08-22 17:50:18,905 - INFO - The .h5 could not be found.
+2023-08-22 17:50:18,905 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-22 17:50:18,905 - INFO - The H5 could not be updated.
+2023-08-22 17:50:18,905 - INFO - We entered into function: update_widgets
+2023-08-22 17:50:18,906 - INFO - There is no H5Integrator instance.
+2023-08-22 17:50:18,906 - INFO - We entered into function: update_setup_info
+2023-08-22 17:50:18,907 - INFO - New setup dictionary was updated.
+2023-08-22 17:50:18,907 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-22 17:50:18,907 - INFO - We entered into function: update_combobox_setups
+2023-08-22 17:50:18,909 - INFO - We entered into function: update_setup_info
+2023-08-22 17:50:18,910 - INFO - New setup dictionary was updated.
+2023-08-22 17:50:18,910 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-22 17:50:18,910 - INFO - We entered into function: update_table
+2023-08-22 17:50:18,911 - INFO - Table was reseted.
+2023-08-22 17:50:18,911 - INFO - No folder to display. Return.
+2023-08-22 17:50:18,911 - INFO - We entered into function: update_table
+2023-08-22 17:50:18,911 - INFO - Table was reseted.
+2023-08-22 17:50:18,911 - INFO - No folder to display. Return.
+2023-08-22 17:50:18,911 - INFO - We entered into function: update_table
+2023-08-22 17:50:18,911 - INFO - Table was reseted.
+2023-08-22 17:50:18,911 - INFO - No folder to display. Return.
+2023-08-22 17:50:18,912 - INFO - We entered into function: update_integration_widgets
+2023-08-22 17:50:18,914 - INFO - We entered into function: update_graphs
+2023-08-22 17:50:24,395 - INFO - We entered into function: update_cake_parameters
+2023-08-22 17:50:24,395 - INFO - Json file: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\pyxscat\integration_dicts\complete.json
+2023-08-22 17:50:24,395 - INFO - We entered into function: add_integration_cake
+2023-08-22 17:50:24,396 - INFO - We entered into function: update_integration_widgets
+2023-08-22 17:50:24,399 - INFO - We entered into function: update_graphs
+2023-08-22 17:50:24,399 - INFO - We entered into function: add_integration_cake
+2023-08-22 17:50:24,399 - INFO - We entered into function: update_integration_widgets
+2023-08-22 17:50:24,402 - INFO - We entered into function: update_graphs
+2023-08-22 17:50:24,402 - INFO - We entered into function: add_integration_cake
+2023-08-22 17:50:24,402 - INFO - We entered into function: update_integration_widgets
+2023-08-22 17:50:24,405 - INFO - We entered into function: update_graphs
+2023-08-22 17:50:24,405 - INFO - We entered into function: add_integration_cake
+2023-08-22 17:50:24,406 - INFO - We entered into function: update_integration_widgets
+2023-08-22 17:50:24,409 - INFO - We entered into function: update_graphs
+2023-08-22 17:50:24,409 - INFO - Updated widgets with cake integration values.
+2023-08-22 17:50:25,450 - INFO - We entered into function: update_cake_parameters
+2023-08-22 17:50:25,450 - INFO - Json file: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\pyxscat\integration_dicts\oop.json
+2023-08-22 17:50:25,451 - INFO - We entered into function: add_integration_cake
+2023-08-22 17:50:25,451 - INFO - We entered into function: update_integration_widgets
+2023-08-22 17:50:25,454 - INFO - We entered into function: update_graphs
+2023-08-22 17:50:25,454 - INFO - Updated widgets with cake integration values.

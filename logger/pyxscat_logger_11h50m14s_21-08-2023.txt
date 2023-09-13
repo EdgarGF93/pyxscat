@@ -1,0 +1,45 @@
+2023-08-21 11:50:14,725 - INFO - Logger was initialized.
+2023-08-21 11:50:16,103 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:50:16,103 - INFO - The data parameters were reinitialized.
+2023-08-21 11:50:16,103 - INFO - We entered into function: init_callbacks
+2023-08-21 11:50:16,104 - INFO - We entered into function: update_setup_info
+2023-08-21 11:50:16,104 - INFO - New setup dictionary was updated.
+2023-08-21 11:50:16,105 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-21 11:50:16,106 - INFO - We entered into function: update_lims_ticks
+2023-08-21 11:50:16,127 - INFO - We entered into function: update_combobox_h5
+2023-08-21 11:50:16,127 - INFO - We entered into function: set_h5_instance
+2023-08-21 11:50:16,128 - INFO - H5Integrator instance was initialized
+2023-08-21 11:50:16,128 - INFO - The filename is None.
+2023-08-21 11:50:16,128 - INFO - We entered into function: create_h5_file
+2023-08-21 11:50:16,128 - INFO - None already exists. Return.
+2023-08-21 11:50:16,130 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:50:16,130 - INFO - No ponifiles to be updated. Return.
+2023-08-21 11:50:16,131 - INFO - We entered into function: update_setup_keys
+2023-08-21 11:50:16,132 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-21 11:50:16,132 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:50:16,133 - INFO - Updated iangle_key = 
+2023-08-21 11:50:16,133 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:50:16,133 - INFO - Updated acq_key = 
+2023-08-21 11:50:16,133 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:50:16,134 - INFO - Updated norm_key = 
+2023-08-21 11:50:16,134 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:50:16,134 - INFO - Updated tilt_key = 
+2023-08-21 11:50:16,134 - INFO - Inherited methods from pygix.transform
+2023-08-21 11:50:16,135 - INFO - We entered into function: update_transformQ
+2023-08-21 11:50:16,135 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:50:16,136 - INFO - Ponifile active: 
+2023-08-21 11:50:16,136 - INFO - We entered into function: update_orientation
+2023-08-21 11:50:16,136 - INFO - qz parallel is True
+2023-08-21 11:50:16,136 - INFO - qr parallel is True
+2023-08-21 11:50:16,136 - INFO - The sample orientation (pygix) is set at 1
+2023-08-21 11:50:16,136 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:50:16,137 - INFO - The data parameters were reinitialized.
+2023-08-21 11:50:16,137 - INFO - We entered into function: set_main_directory
+2023-08-21 11:50:16,137 - INFO - New main directory set.
+2023-08-21 11:50:16,137 - INFO - .
+2023-08-21 11:50:16,137 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-21 11:50:16,138 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-08-21 11:50:16,138 - INFO - We entered into function: search_and_update_ponifiles
+2023-08-21 11:50:16,138 - INFO - Got main directory: .
+2023-08-21 11:50:24,066 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:50:24,067 - INFO - Dataset ponifiles could not be accessed.

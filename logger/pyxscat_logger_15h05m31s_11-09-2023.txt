@@ -1,0 +1,75 @@
+2023-09-11 15:05:31,704 - INFO - Logger was initialized.
+2023-09-11 15:05:33,146 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-11 15:05:33,147 - INFO - The data parameters were reinitialized.
+2023-09-11 15:05:33,147 - INFO - We entered into function: init_callbacks
+2023-09-11 15:05:33,148 - INFO - We entered into function: update_setup_info
+2023-09-11 15:05:33,148 - INFO - New setup dictionary was updated.
+2023-09-11 15:05:33,148 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-11 15:05:33,149 - INFO - We entered into function: update_lims_ticks
+2023-09-11 15:05:33,165 - INFO - We entered into function: update_combobox_h5
+2023-09-11 15:05:33,166 - INFO - We entered into function: set_h5_instance
+2023-09-11 15:05:33,166 - INFO - The .h5 could not be found.
+2023-09-11 15:05:33,166 - INFO - We entered into function: update_h5_poni_and_files
+2023-09-11 15:05:33,166 - INFO - The H5 could not be updated.
+2023-09-11 15:05:33,167 - INFO - We entered into function: update_widgets
+2023-09-11 15:05:33,167 - INFO - There is no H5Integrator instance.
+2023-09-11 15:05:33,167 - INFO - We entered into function: update_setup_info
+2023-09-11 15:05:33,167 - INFO - New setup dictionary was updated.
+2023-09-11 15:05:33,168 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-11 15:05:33,168 - INFO - We entered into function: update_combobox_setups
+2023-09-11 15:05:33,169 - INFO - We entered into function: update_setup_info
+2023-09-11 15:05:33,171 - INFO - New setup dictionary was updated.
+2023-09-11 15:05:33,171 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-11 15:05:33,171 - INFO - We entered into function: update_table
+2023-09-11 15:05:33,171 - INFO - Table was reseted.
+2023-09-11 15:05:33,171 - INFO - No folder to display. Return.
+2023-09-11 15:05:33,172 - INFO - We entered into function: update_table
+2023-09-11 15:05:33,172 - INFO - Table was reseted.
+2023-09-11 15:05:33,172 - INFO - No folder to display. Return.
+2023-09-11 15:05:33,172 - INFO - We entered into function: update_table
+2023-09-11 15:05:33,172 - INFO - Table was reseted.
+2023-09-11 15:05:33,172 - INFO - No folder to display. Return.
+2023-09-11 15:05:33,172 - INFO - We entered into function: update_integration_widgets
+2023-09-11 15:05:33,175 - INFO - We entered into function: update_graphs
+2023-09-11 15:05:34,902 - INFO - We entered into function: set_h5_instance
+2023-09-11 15:05:34,902 - INFO - H5Integrator instance was initialized
+2023-09-11 15:05:34,902 - INFO - The filename is C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5.
+2023-09-11 15:05:34,902 - INFO - We entered into function: create_h5_file
+2023-09-11 15:05:34,903 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5 already exists. Return.
+2023-09-11 15:05:34,903 - INFO - We entered into function: update_group_ponifile
+2023-09-11 15:05:34,904 - INFO - No ponifiles to be updated. Return.
+2023-09-11 15:05:34,904 - INFO - We entered into function: update_setup_keys
+2023-09-11 15:05:34,905 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-11 15:05:34,905 - INFO - We entered into function: update_attributes_in_group
+2023-09-11 15:05:34,905 - INFO - Updated iangle_key = spitch
+2023-09-11 15:05:34,906 - INFO - We entered into function: update_attributes_in_group
+2023-09-11 15:05:34,906 - INFO - Updated acq_key = exposure
+2023-09-11 15:05:34,907 - INFO - We entered into function: update_attributes_in_group
+2023-09-11 15:05:34,907 - INFO - Updated norm_key = Monitor
+2023-09-11 15:05:34,907 - INFO - We entered into function: update_attributes_in_group
+2023-09-11 15:05:34,908 - INFO - Updated tilt_key = 
+2023-09-11 15:05:34,908 - INFO - Inherited methods from pygix.transform
+2023-09-11 15:05:34,908 - INFO - We entered into function: update_transformQ
+2023-09-11 15:05:34,908 - INFO - We entered into function: get_active_ponifile
+2023-09-11 15:05:34,909 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3_14h57m41s_11-09-2023.poni
+2023-09-11 15:05:34,909 - INFO - We entered into function: get_active_ponifile
+2023-09-11 15:05:34,909 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3_14h57m41s_11-09-2023.poni
+2023-09-11 15:05:34,909 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3_14h57m41s_11-09-2023.poni as JSON file, defaulting to PoniParser
+2023-09-11 15:05:34,909 - INFO - We entered into function: update_orientation
+2023-09-11 15:05:34,910 - INFO - qz parallel is True
+2023-09-11 15:05:34,910 - INFO - qr parallel is True
+2023-09-11 15:05:34,910 - INFO - The sample orientation (pygix) is set at 1
+2023-09-11 15:05:34,910 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-11 15:05:34,910 - INFO - We entered into function: update_table
+2023-09-11 15:05:34,910 - INFO - Table was reseted.
+2023-09-11 15:05:34,911 - INFO - No folder to display. Return.
+2023-09-11 15:05:34,911 - INFO - The data parameters were reinitialized.
+2023-09-11 15:05:34,911 - INFO - We entered into function: set_main_directory
+2023-09-11 15:05:34,911 - INFO - New main directory set.
+2023-09-11 15:05:34,911 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-09-11 15:05:34,912 - INFO - We entered into function: update_h5_poni_and_files
+2023-09-11 15:05:34,912 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-09-11 15:05:34,912 - INFO - We entered into function: search_and_update_ponifiles
+2023-09-11 15:05:34,912 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-09-11 15:05:34,913 - INFO - We entered into function: generator_stored_ponifiles
+2023-09-11 15:05:34,914 - INFO - Dataset ponifiles could not be accessed.

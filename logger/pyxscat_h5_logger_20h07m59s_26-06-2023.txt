@@ -1,0 +1,44 @@
+2023-06-26 20:07:59,044 - INFO - Logger was initialized.
+2023-06-26 20:07:59,044 - INFO - Logger was initialized.
+2023-06-26 20:08:00,413 - INFO - We entered into function: reset_attributes_and_widgets
+2023-06-26 20:08:00,414 - INFO - The data parameters were reinitialized.
+2023-06-26 20:08:00,414 - INFO - We entered into function: init_callbacks
+2023-06-26 20:08:00,414 - INFO - We entered into function: update_setup_info
+2023-06-26 20:08:00,415 - INFO - New setup dictionary was updated.
+2023-06-26 20:08:00,415 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-06-26 20:08:00,416 - INFO - We entered into function: update_lims_ticks
+2023-06-26 20:08:00,433 - INFO - We entered into function: update_combobox_h5
+2023-06-26 20:08:00,436 - INFO - We entered into function: read_h5_file
+2023-06-26 20:08:00,436 - INFO - We entered into function: update_h5
+2023-06-26 20:08:00,436 - INFO - The H5 could not be updated.
+2023-06-26 20:08:00,436 - INFO - We entered into function: update_widgets
+2023-06-26 20:08:00,437 - INFO - Nothing to be updated.
+2023-06-26 20:08:00,437 - INFO - We entered into function: update_setup_info
+2023-06-26 20:08:00,437 - INFO - New setup dictionary was updated.
+2023-06-26 20:08:00,437 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-06-26 20:08:00,437 - INFO - We entered into function: read_h5_file
+2023-06-26 20:08:00,437 - INFO - We entered into function: update_h5
+2023-06-26 20:08:00,438 - INFO - The H5 could not be updated.
+2023-06-26 20:08:00,438 - INFO - We entered into function: update_widgets
+2023-06-26 20:08:00,438 - INFO - Nothing to be updated.
+2023-06-26 20:08:00,438 - INFO - We entered into function: update_setup_info
+2023-06-26 20:08:00,438 - INFO - New setup dictionary was updated.
+2023-06-26 20:08:00,438 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-06-26 20:08:00,439 - INFO - We entered into function: update_combobox_setups
+2023-06-26 20:08:00,440 - INFO - We entered into function: update_setup_info
+2023-06-26 20:08:00,441 - INFO - New setup dictionary was updated.
+2023-06-26 20:08:00,441 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-06-26 20:08:00,441 - INFO - We entered into function: update_table
+2023-06-26 20:08:00,441 - INFO - Table was reseted.
+2023-06-26 20:08:00,441 - INFO - No folder to display. Return.
+2023-06-26 20:08:00,442 - INFO - We entered into function: update_table
+2023-06-26 20:08:00,442 - INFO - Table was reseted.
+2023-06-26 20:08:00,442 - INFO - No folder to display. Return.
+2023-06-26 20:08:00,442 - INFO - We entered into function: update_table
+2023-06-26 20:08:00,442 - INFO - Table was reseted.
+2023-06-26 20:08:00,442 - INFO - No folder to display. Return.
+2023-06-26 20:08:00,442 - INFO - We entered into function: update_integration_widgets
+2023-06-26 20:08:00,445 - INFO - We entered into function: update_graphs
+2023-06-26 20:08:02,500 - INFO - We entered into function: update_cake_parameters
+2023-06-26 20:08:02,501 - INFO - Json file: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\pyxscat\integration_dicts\ip.json
+2023-06-26 20:08:02,501 - INFO - We entered into function: add_integration_cake

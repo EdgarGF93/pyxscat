@@ -1,0 +1,334 @@
+2023-09-08 16:21:34,302 - INFO - Logger was initialized.
+2023-09-08 16:21:35,708 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-08 16:21:35,708 - INFO - The data parameters were reinitialized.
+2023-09-08 16:21:35,709 - INFO - We entered into function: init_callbacks
+2023-09-08 16:21:35,709 - INFO - We entered into function: update_setup_info
+2023-09-08 16:21:35,709 - INFO - New setup dictionary was updated.
+2023-09-08 16:21:35,710 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-08 16:21:35,711 - INFO - We entered into function: update_lims_ticks
+2023-09-08 16:21:35,727 - INFO - We entered into function: update_combobox_h5
+2023-09-08 16:21:35,727 - INFO - We entered into function: set_h5_instance
+2023-09-08 16:21:35,727 - INFO - The .h5 could not be found.
+2023-09-08 16:21:35,727 - INFO - We entered into function: update_h5_poni_and_files
+2023-09-08 16:21:35,728 - INFO - The H5 could not be updated.
+2023-09-08 16:21:35,728 - INFO - We entered into function: update_widgets
+2023-09-08 16:21:35,728 - INFO - There is no H5Integrator instance.
+2023-09-08 16:21:35,728 - INFO - We entered into function: update_setup_info
+2023-09-08 16:21:35,728 - INFO - New setup dictionary was updated.
+2023-09-08 16:21:35,728 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-08 16:21:35,729 - INFO - We entered into function: update_combobox_setups
+2023-09-08 16:21:35,730 - INFO - We entered into function: update_setup_info
+2023-09-08 16:21:35,731 - INFO - New setup dictionary was updated.
+2023-09-08 16:21:35,731 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-08 16:21:35,731 - INFO - We entered into function: update_table
+2023-09-08 16:21:35,731 - INFO - Table was reseted.
+2023-09-08 16:21:35,731 - INFO - No folder to display. Return.
+2023-09-08 16:21:35,732 - INFO - We entered into function: update_table
+2023-09-08 16:21:35,732 - INFO - Table was reseted.
+2023-09-08 16:21:35,732 - INFO - No folder to display. Return.
+2023-09-08 16:21:35,732 - INFO - We entered into function: update_table
+2023-09-08 16:21:35,732 - INFO - Table was reseted.
+2023-09-08 16:21:35,732 - INFO - No folder to display. Return.
+2023-09-08 16:21:35,732 - INFO - We entered into function: update_integration_widgets
+2023-09-08 16:21:35,735 - INFO - We entered into function: update_graphs
+2023-09-08 16:21:37,452 - INFO - We entered into function: set_h5_instance
+2023-09-08 16:21:37,452 - INFO - H5Integrator instance was initialized
+2023-09-08 16:21:37,452 - INFO - The filename is C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5.
+2023-09-08 16:21:37,452 - INFO - We entered into function: create_h5_file
+2023-09-08 16:21:37,453 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5 already exists. Return.
+2023-09-08 16:21:37,453 - INFO - We entered into function: update_group_ponifile
+2023-09-08 16:21:37,454 - INFO - No ponifiles to be updated. Return.
+2023-09-08 16:21:37,454 - INFO - We entered into function: update_setup_keys
+2023-09-08 16:21:37,454 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-08 16:21:37,455 - INFO - We entered into function: update_attributes_in_group
+2023-09-08 16:21:37,455 - INFO - Updated iangle_key = spitch
+2023-09-08 16:21:37,455 - INFO - We entered into function: update_attributes_in_group
+2023-09-08 16:21:37,456 - INFO - Updated acq_key = exposure
+2023-09-08 16:21:37,456 - INFO - We entered into function: update_attributes_in_group
+2023-09-08 16:21:37,456 - INFO - Updated norm_key = Monitor
+2023-09-08 16:21:37,456 - INFO - We entered into function: update_attributes_in_group
+2023-09-08 16:21:37,457 - INFO - Updated tilt_key = 
+2023-09-08 16:21:37,457 - INFO - Inherited methods from pygix.transform
+2023-09-08 16:21:37,457 - INFO - We entered into function: update_transformQ
+2023-09-08 16:21:37,457 - INFO - We entered into function: get_active_ponifile
+2023-09-08 16:21:37,458 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-09-08 16:21:37,458 - INFO - We entered into function: get_active_ponifile
+2023-09-08 16:21:37,458 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-09-08 16:21:37,459 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni as JSON file, defaulting to PoniParser
+2023-09-08 16:21:37,459 - INFO - Loaded poni file
+2023-09-08 16:21:37,459 - INFO - Incident angle set at 0.0
+2023-09-08 16:21:37,459 - INFO - Tilt angle set at 0.0
+2023-09-08 16:21:37,460 - INFO - We entered into function: update_orientation
+2023-09-08 16:21:37,460 - INFO - qz parallel is True
+2023-09-08 16:21:37,460 - INFO - qr parallel is True
+2023-09-08 16:21:37,460 - INFO - The sample orientation (pygix) is set at 1
+2023-09-08 16:21:37,460 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-08 16:21:37,460 - INFO - We entered into function: update_table
+2023-09-08 16:21:37,461 - INFO - Table was reseted.
+2023-09-08 16:21:37,461 - INFO - No folder to display. Return.
+2023-09-08 16:21:37,461 - INFO - The data parameters were reinitialized.
+2023-09-08 16:21:37,461 - INFO - We entered into function: set_main_directory
+2023-09-08 16:21:37,461 - INFO - New main directory set.
+2023-09-08 16:21:37,461 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-09-08 16:21:37,462 - INFO - We entered into function: update_h5_poni_and_files
+2023-09-08 16:21:37,462 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-09-08 16:21:37,462 - INFO - We entered into function: search_and_update_ponifiles
+2023-09-08 16:21:37,462 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-09-08 16:21:37,463 - INFO - We entered into function: generator_stored_ponifiles
+2023-09-08 16:21:37,463 - INFO - No ponifiles detected.
+2023-09-08 16:21:37,463 - INFO - We entered into function: generator_stored_ponifiles
+2023-09-08 16:21:37,464 - INFO - We entered into function: activate_ponifile
+2023-09-08 16:21:37,464 - INFO - We entered into function: activate_ponifile
+2023-09-08 16:21:37,464 - INFO - We entered into function: generator_stored_ponifiles
+2023-09-08 16:21:37,464 - INFO - Ponifile to be activated: b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni'
+2023-09-08 16:21:37,465 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni' activated successfully.
+2023-09-08 16:21:37,465 - INFO - We entered into function: update_transformQ
+2023-09-08 16:21:37,465 - INFO - We entered into function: get_active_ponifile
+2023-09-08 16:21:37,465 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-09-08 16:21:37,465 - INFO - We entered into function: get_active_ponifile
+2023-09-08 16:21:37,466 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-09-08 16:21:37,466 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni as JSON file, defaulting to PoniParser
+2023-09-08 16:21:37,466 - INFO - Loaded poni file
+2023-09-08 16:21:37,467 - INFO - Incident angle set at 0.0
+2023-09-08 16:21:37,467 - INFO - Tilt angle set at 0.0
+2023-09-08 16:21:37,467 - INFO - New ponifile updated.
+2023-09-08 16:21:37,467 - INFO - We entered into function: update_graphs
+2023-09-08 16:21:37,467 - INFO - Combobox of ponifiles was updated.
+2023-09-08 16:21:37,467 - INFO - We entered into function: search_and_update_new_files
+2023-09-08 16:21:37,467 - INFO - We entered into function: search_new_files_folders
+2023-09-08 16:21:37,468 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-09-08 16:21:37,470 - INFO - 0 New files were detected.
+2023-09-08 16:21:37,471 - INFO - The .h5 file was updated.
+2023-09-08 16:21:37,471 - INFO - We entered into function: update_widgets
+2023-09-08 16:21:37,471 - INFO - Updated list widget.
+2023-09-08 16:21:37,471 - INFO - We entered into function: update_reference_widgets
+2023-09-08 16:21:37,472 - INFO - We entered into function: update_graphs
+2023-09-08 16:21:37,472 - INFO - We entered into function: update_setup_info
+2023-09-08 16:21:37,473 - INFO - New setup dictionary was updated.
+2023-09-08 16:21:37,473 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-08 16:21:37,473 - INFO - We entered into function: update_table
+2023-09-08 16:21:37,474 - INFO - Table was reseted.
+2023-09-08 16:21:37,474 - INFO - No folder to display. Return.
+2023-09-08 16:21:37,474 - INFO - We entered into function: update_table
+2023-09-08 16:21:37,474 - INFO - Table was reseted.
+2023-09-08 16:21:37,474 - INFO - No folder to display. Return.
+2023-09-08 16:21:37,474 - INFO - We entered into function: update_table
+2023-09-08 16:21:37,474 - INFO - Table was reseted.
+2023-09-08 16:21:37,474 - INFO - No folder to display. Return.
+2023-09-08 16:21:38,098 - INFO - We entered into function: update_clicked_folder
+2023-09-08 16:21:38,098 - INFO - Clicked folder: A1
+2023-09-08 16:21:38,099 - INFO - We entered into function: contains_group
+2023-09-08 16:21:38,099 - INFO - New clicked folder: A1
+2023-09-08 16:21:38,099 - INFO - We entered into function: update_comboboxes_metadata
+2023-09-08 16:21:38,099 - INFO - We entered into function: generator_keys_in_folder
+2023-09-08 16:21:38,100 - INFO - Metadata keys: ['ByteOrder', 'DataType', 'Dim_1', 'Dim_2', 'HeaderID', 'Image', 'Monitor', 'Photo', 'Rayonix', 'Rotation 90 deg', 'Size', 'acq_autoexpo_mode', 'acq_expo_time', 'acq_frame_nb', 'acq_latency_time', 'acq_mode', 'acq_nb_frames', 'acq_trigger_mode', 'att1', 'att2', 'auxstage', 'bs0x', 'bs1_alpha', 'bs1_beta', 'bs2x', 'bs2z', 'current', 'det_x', 'det_z', 'energy_bragg', 'exposure', 'ft_length', 'ft_xdown', 'ft_xup', 'ft_zdown', 'ft_zup', 'image_bin', 'image_flip', 'image_roi', 'image_rotation', 'pt_no', 'spitch', 'sroll', 'stz', 'sx', 'syaw', 'sz', 'tfg_ch1', 'tfg_ch2', 'tfg_ch3', 'tfg_ch4', 'tfg_ch5', 'tfg_ch6', 'tfg_ch7', 'tfg_ch8', 'time', 'time_of_day', 'time_of_frame', 'waxs_x', 'waxs_z']
+2023-09-08 16:21:38,101 - INFO - New metadata keys: ['ByteOrder', 'DataType', 'Dim_1', 'Dim_2', 'HeaderID', 'Image', 'Monitor', 'Photo', 'Rayonix', 'Rotation 90 deg', 'Size', 'acq_autoexpo_mode', 'acq_expo_time', 'acq_frame_nb', 'acq_latency_time', 'acq_mode', 'acq_nb_frames', 'acq_trigger_mode', 'att1', 'att2', 'auxstage', 'bs0x', 'bs1_alpha', 'bs1_beta', 'bs2x', 'bs2z', 'current', 'det_x', 'det_z', 'energy_bragg', 'exposure', 'ft_length', 'ft_xdown', 'ft_xup', 'ft_zdown', 'ft_zup', 'image_bin', 'image_flip', 'image_roi', 'image_rotation', 'pt_no', 'spitch', 'sroll', 'stz', 'sx', 'syaw', 'sz', 'tfg_ch1', 'tfg_ch2', 'tfg_ch3', 'tfg_ch4', 'tfg_ch5', 'tfg_ch6', 'tfg_ch7', 'tfg_ch8', 'time', 'time_of_day', 'time_of_frame', 'waxs_x', 'waxs_z']
+2023-09-08 16:21:38,101 - INFO - We entered into function: update_table
+2023-09-08 16:21:38,101 - INFO - Table was reseted.
+2023-09-08 16:21:38,101 - INFO - Folder to display: A1.
+2023-09-08 16:21:38,101 - INFO - Keys to display: ['spitch', 'Monitor', 'exposure', 'ByteOrder'].
+2023-09-08 16:21:38,102 - INFO - We entered into function: get_metadata_dataframe
+2023-09-08 16:21:38,102 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,103 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,103 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,103 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,104 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,104 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,105 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,105 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,105 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,105 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,106 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,106 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,106 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,107 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,107 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,107 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,114 - INFO - This is the dataframe:                               Filename  spitch      Monitor  exposure        ByteOrder
+0  rayonix_A1_spitch_0.12_000_0000.edf    0.12  2019.056882      10.0  b'LowByteFirst'
+1  rayonix_A1_spitch_0.15_000_0000.edf    0.15  2018.734168      10.0  b'LowByteFirst'
+2   rayonix_A1_spitch_0.1_000_0000.edf    0.10  2019.455155      10.0  b'LowByteFirst'
+3   rayonix_A1_spitch_0.2_000_0000.edf    0.20  2018.442513      10.0  b'LowByteFirst'
+2023-09-08 16:21:38,115 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-09-08 16:21:38,115 - INFO - Inserted columns: 5
+2023-09-08 16:21:38,116 - INFO - Inserted rows: 4
+2023-09-08 16:21:38,116 - INFO - Updated cell [0,0].
+2023-09-08 16:21:38,116 - INFO - Updated cell [0,1].
+2023-09-08 16:21:38,116 - INFO - Updated cell [0,2].
+2023-09-08 16:21:38,116 - INFO - Updated cell [0,3].
+2023-09-08 16:21:38,117 - INFO - Updated cell [0,4].
+2023-09-08 16:21:38,117 - INFO - Updated cell [1,0].
+2023-09-08 16:21:38,117 - INFO - Updated cell [1,1].
+2023-09-08 16:21:38,117 - INFO - Updated cell [1,2].
+2023-09-08 16:21:38,118 - INFO - Updated cell [1,3].
+2023-09-08 16:21:38,118 - INFO - Updated cell [1,4].
+2023-09-08 16:21:38,118 - INFO - Updated cell [2,0].
+2023-09-08 16:21:38,119 - INFO - Updated cell [2,1].
+2023-09-08 16:21:38,119 - INFO - Updated cell [2,2].
+2023-09-08 16:21:38,119 - INFO - Updated cell [2,3].
+2023-09-08 16:21:38,119 - INFO - Updated cell [2,4].
+2023-09-08 16:21:38,119 - INFO - Updated cell [3,0].
+2023-09-08 16:21:38,119 - INFO - Updated cell [3,1].
+2023-09-08 16:21:38,119 - INFO - Updated cell [3,2].
+2023-09-08 16:21:38,119 - INFO - Updated cell [3,3].
+2023-09-08 16:21:38,119 - INFO - Updated cell [3,4].
+2023-09-08 16:21:38,120 - INFO - Combobox header_items updated.
+2023-09-08 16:21:38,120 - INFO - Combobox header_items title updated.
+2023-09-08 16:21:38,120 - INFO - We entered into function: update_angle_parameter
+2023-09-08 16:21:38,120 - INFO - Combobox angle updated.
+2023-09-08 16:21:38,120 - INFO - We entered into function: update_tiltangle_parameter
+2023-09-08 16:21:38,121 - INFO - Combobox tilt angle updated.
+2023-09-08 16:21:38,121 - INFO - We entered into function: update_normfactor_parameter
+2023-09-08 16:21:38,121 - INFO - Combobox norm updated.
+2023-09-08 16:21:38,121 - INFO - We entered into function: update_exposure_parameter
+2023-09-08 16:21:38,121 - INFO - Combobox exposure updated.
+2023-09-08 16:21:38,121 - INFO - We entered into function: update_table
+2023-09-08 16:21:38,121 - INFO - Table was reseted.
+2023-09-08 16:21:38,121 - INFO - Folder to display: A1.
+2023-09-08 16:21:38,121 - INFO - Keys to display: ['spitch', 'Monitor', 'exposure', 'ByteOrder'].
+2023-09-08 16:21:38,122 - INFO - We entered into function: get_metadata_dataframe
+2023-09-08 16:21:38,122 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,123 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,123 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,123 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,124 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,124 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,124 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,124 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,124 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,126 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,126 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,126 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,127 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,127 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,127 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,127 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,133 - INFO - This is the dataframe:                               Filename  spitch      Monitor  exposure        ByteOrder
+0  rayonix_A1_spitch_0.12_000_0000.edf    0.12  2019.056882      10.0  b'LowByteFirst'
+1  rayonix_A1_spitch_0.15_000_0000.edf    0.15  2018.734168      10.0  b'LowByteFirst'
+2   rayonix_A1_spitch_0.1_000_0000.edf    0.10  2019.455155      10.0  b'LowByteFirst'
+3   rayonix_A1_spitch_0.2_000_0000.edf    0.20  2018.442513      10.0  b'LowByteFirst'
+2023-09-08 16:21:38,134 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-09-08 16:21:38,134 - INFO - Inserted columns: 5
+2023-09-08 16:21:38,135 - INFO - Inserted rows: 4
+2023-09-08 16:21:38,135 - INFO - Updated cell [0,0].
+2023-09-08 16:21:38,135 - INFO - Updated cell [0,1].
+2023-09-08 16:21:38,135 - INFO - Updated cell [0,2].
+2023-09-08 16:21:38,135 - INFO - Updated cell [0,3].
+2023-09-08 16:21:38,136 - INFO - Updated cell [0,4].
+2023-09-08 16:21:38,136 - INFO - Updated cell [1,0].
+2023-09-08 16:21:38,136 - INFO - Updated cell [1,1].
+2023-09-08 16:21:38,136 - INFO - Updated cell [1,2].
+2023-09-08 16:21:38,136 - INFO - Updated cell [1,3].
+2023-09-08 16:21:38,136 - INFO - Updated cell [1,4].
+2023-09-08 16:21:38,136 - INFO - Updated cell [2,0].
+2023-09-08 16:21:38,137 - INFO - Updated cell [2,1].
+2023-09-08 16:21:38,137 - INFO - Updated cell [2,2].
+2023-09-08 16:21:38,137 - INFO - Updated cell [2,3].
+2023-09-08 16:21:38,137 - INFO - Updated cell [2,4].
+2023-09-08 16:21:38,137 - INFO - Updated cell [3,0].
+2023-09-08 16:21:38,137 - INFO - Updated cell [3,1].
+2023-09-08 16:21:38,137 - INFO - Updated cell [3,2].
+2023-09-08 16:21:38,137 - INFO - Updated cell [3,3].
+2023-09-08 16:21:38,137 - INFO - Updated cell [3,4].
+2023-09-08 16:21:38,651 - INFO - We entered into function: update_clicked_filenames
+2023-09-08 16:21:38,651 - INFO - We entered into function: filename_fromrow
+2023-09-08 16:21:38,651 - INFO - New cache index: [0]
+2023-09-08 16:21:38,652 - INFO - New cache filenames: [WindowsPath('C:/Users/edgar1993a/Work Folders/Documents/Python/pyxscat/edf_examples/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf')]
+2023-09-08 16:21:38,652 - INFO - We entered into function: update_graphs
+2023-09-08 16:21:38,652 - INFO - We entered into function: get_Edf_data
+2023-09-08 16:21:38,652 - INFO - We entered into function: get_Edf_instance
+2023-09-08 16:21:38,653 - INFO - We entered into function: get_filename_from_index
+2023-09-08 16:21:38,653 - INFO - We entered into function: get_active_ponifile
+2023-09-08 16:21:38,654 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-09-08 16:21:38,654 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni as JSON file, defaulting to PoniParser
+2023-09-08 16:21:38,670 - INFO - New data sample with shape: (2880, 960)
+2023-09-08 16:21:38,671 - INFO - We entered into function: get_norm_factor
+2023-09-08 16:21:38,671 - INFO - We entered into function: get_dataset_norm_factor
+2023-09-08 16:21:38,671 - INFO - We entered into function: get_norm_key
+2023-09-08 16:21:38,671 - INFO - We entered into function: get_attrs_in_group
+2023-09-08 16:21:38,672 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:38,672 - INFO - Got norm factor: 2019.0568816752
+2023-09-08 16:21:38,673 - INFO - We entered into function: update_2D_graph
+2023-09-08 16:21:38,673 - INFO - True
+2023-09-08 16:21:38,674 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-09-08 16:21:38,713 - INFO - (0.16200428631274394, 1.0492483863910975)
+2023-09-08 16:21:38,738 - INFO - Filtered negative, nan and zero values.
+2023-09-08 16:21:38,774 - INFO - Displayed data.
+2023-09-08 16:21:38,775 - INFO - We entered into function: update_2D_reshape
+2023-09-08 16:21:38,776 - INFO - We entered into function: reshaping
+2023-09-08 16:21:38,776 - INFO - We entered into function: get_active_ponifile
+2023-09-08 16:21:38,776 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-09-08 16:21:38,786 - INFO - Degrading method from Method(dim=1, split='pseudo', algo='histogram', impl='*', target=None) -> Method(dim=1, split='bbox', algo='histogram', impl='*', target=None)
+2023-09-08 16:21:38,787 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni as JSON file, defaulting to PoniParser
+2023-09-08 16:21:39,589 - INFO - We entered into function: update_1D_graph
+2023-09-08 16:21:39,589 - INFO - Ponifile: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-09-08 16:21:39,590 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-09-08 16:21:39,590 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 4.5], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-09-08 16:21:39,590 - INFO - We entered into function: raw_integration
+2023-09-08 16:21:39,590 - INFO - We entered into function: raw_integration_box
+2023-09-08 16:21:39,591 - INFO - We entered into function: calculate_bins
+2023-09-08 16:21:39,591 - INFO - We entered into function: q_to_twotheta
+2023-09-08 16:21:39,591 - INFO - We entered into function: q_to_twotheta
+2023-09-08 16:21:39,591 - INFO - We entered into function: get_q_nm
+2023-09-08 16:21:39,591 - INFO - We entered into function: get_q_nm
+2023-09-08 16:21:39,592 - INFO - We entered into function: get_q_nm
+2023-09-08 16:21:39,592 - INFO - We entered into function: get_q_nm
+2023-09-08 16:21:39,592 - INFO - Trying box integration with: process=opbox, npt=821, p0_range=[0.0, 20.0], p1_range=[3.1, 4.5], unit=q_nm^-1
+2023-09-08 16:21:40,441 - INFO - Integration performed.
+2023-09-08 16:21:40,441 - INFO - New integration: 1
+2023-09-08 16:21:40,445 - INFO - We entered into function: update_label_displayed
+2023-09-08 16:21:40,445 - INFO - We entered into function: get_filename_from_index
+2023-09-08 16:21:40,445 - INFO - New label: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\A1\rayonix_A1_spitch_0.12_000_0000.edf
+2023-09-08 16:21:40,564 - INFO - We entered into function: update_qz
+2023-09-08 16:21:40,565 - INFO - We entered into function: update_orientation
+2023-09-08 16:21:40,565 - INFO - qz parallel is False
+2023-09-08 16:21:40,565 - INFO - qr parallel is False
+2023-09-08 16:21:40,573 - INFO - The sample orientation (pygix) is set at 3
+2023-09-08 16:21:40,573 - INFO - We entered into function: update_graphs
+2023-09-08 16:21:40,573 - INFO - We entered into function: get_Edf_data
+2023-09-08 16:21:40,574 - INFO - We entered into function: get_Edf_instance
+2023-09-08 16:21:40,574 - INFO - We entered into function: get_filename_from_index
+2023-09-08 16:21:40,574 - INFO - We entered into function: get_active_ponifile
+2023-09-08 16:21:40,575 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-09-08 16:21:40,576 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni as JSON file, defaulting to PoniParser
+2023-09-08 16:21:40,593 - INFO - New data sample with shape: (2880, 960)
+2023-09-08 16:21:40,593 - INFO - We entered into function: get_norm_factor
+2023-09-08 16:21:40,593 - INFO - We entered into function: get_dataset_norm_factor
+2023-09-08 16:21:40,594 - INFO - We entered into function: get_norm_key
+2023-09-08 16:21:40,594 - INFO - We entered into function: get_attrs_in_group
+2023-09-08 16:21:40,595 - INFO - We entered into function: get_metadata_dataset
+2023-09-08 16:21:40,595 - INFO - Got norm factor: 2019.0568816752
+2023-09-08 16:21:40,595 - INFO - We entered into function: update_2D_graph
+2023-09-08 16:21:40,596 - INFO - False
+2023-09-08 16:21:40,596 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-09-08 16:21:40,634 - INFO - (0.16200428631274394, 1.0492483863910975)
+2023-09-08 16:21:40,659 - INFO - Filtered negative, nan and zero values.
+2023-09-08 16:21:40,690 - INFO - Displayed data.
+2023-09-08 16:21:40,691 - INFO - We entered into function: update_2D_reshape
+2023-09-08 16:21:40,692 - INFO - We entered into function: reshaping
+2023-09-08 16:21:40,692 - INFO - We entered into function: get_active_ponifile
+2023-09-08 16:21:40,692 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-09-08 16:21:40,693 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni as JSON file, defaulting to PoniParser
+2023-09-08 16:21:41,467 - INFO - We entered into function: update_1D_graph
+2023-09-08 16:21:41,467 - INFO - Ponifile: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-09-08 16:21:41,468 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-09-08 16:21:41,468 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 4.5], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-09-08 16:21:41,468 - INFO - We entered into function: raw_integration
+2023-09-08 16:21:41,468 - INFO - We entered into function: raw_integration_box
+2023-09-08 16:21:41,469 - INFO - We entered into function: calculate_bins
+2023-09-08 16:21:41,469 - INFO - We entered into function: q_to_twotheta
+2023-09-08 16:21:41,469 - INFO - We entered into function: q_to_twotheta
+2023-09-08 16:21:41,469 - INFO - We entered into function: get_q_nm
+2023-09-08 16:21:41,469 - INFO - We entered into function: get_q_nm
+2023-09-08 16:21:41,470 - INFO - We entered into function: get_q_nm
+2023-09-08 16:21:41,470 - INFO - We entered into function: get_q_nm
+2023-09-08 16:21:41,470 - INFO - Trying box integration with: process=opbox, npt=821, p0_range=[0.0, 20.0], p1_range=[3.1, 4.5], unit=q_nm^-1
+2023-09-08 16:21:42,518 - INFO - Integration performed.
+2023-09-08 16:21:42,518 - INFO - New integration: 1
+2023-09-08 16:21:42,632 - INFO - We entered into function: generate_reshape_map
+2023-09-08 16:21:42,636 - INFO - Data from the map. Shape: (2880, 960)
+2023-09-08 16:21:42,636 - INFO - We entered into function: reshaping
+2023-09-08 16:21:42,636 - INFO - We entered into function: get_active_ponifile
+2023-09-08 16:21:42,637 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-09-08 16:21:42,637 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni as JSON file, defaulting to PoniParser

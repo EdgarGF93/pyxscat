@@ -9,9 +9,6 @@
 # kk files
 **kk**
 
-# txt files
-*.txt
-
 # Logger files
 pyxscat\h5_recent_files.txt
 kk/

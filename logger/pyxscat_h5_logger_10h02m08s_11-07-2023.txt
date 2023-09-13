@@ -1,0 +1,610 @@
+2023-07-11 10:02:08,317 - INFO - Logger was initialized.
+2023-07-11 10:02:08,318 - INFO - Logger was initialized.
+2023-07-11 10:02:09,638 - INFO - We entered into function: reset_attributes_and_widgets
+2023-07-11 10:02:09,639 - INFO - The data parameters were reinitialized.
+2023-07-11 10:02:09,639 - INFO - We entered into function: init_callbacks
+2023-07-11 10:02:09,640 - INFO - We entered into function: update_setup_info
+2023-07-11 10:02:09,640 - INFO - New setup dictionary was updated.
+2023-07-11 10:02:09,640 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-07-11 10:02:09,641 - INFO - We entered into function: update_lims_ticks
+2023-07-11 10:02:09,656 - INFO - We entered into function: update_combobox_h5
+2023-07-11 10:02:09,659 - INFO - We entered into function: read_h5_file
+2023-07-11 10:02:09,659 - INFO - We entered into function: update_h5
+2023-07-11 10:02:09,659 - INFO - The H5 could not be updated.
+2023-07-11 10:02:09,659 - INFO - We entered into function: update_widgets
+2023-07-11 10:02:09,659 - INFO - Nothing to be updated.
+2023-07-11 10:02:09,659 - INFO - We entered into function: update_setup_info
+2023-07-11 10:02:09,660 - INFO - New setup dictionary was updated.
+2023-07-11 10:02:09,660 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-07-11 10:02:09,661 - INFO - We entered into function: read_h5_file
+2023-07-11 10:02:09,661 - INFO - We entered into function: update_h5
+2023-07-11 10:02:09,661 - INFO - The H5 could not be updated.
+2023-07-11 10:02:09,661 - INFO - We entered into function: update_widgets
+2023-07-11 10:02:09,661 - INFO - Nothing to be updated.
+2023-07-11 10:02:09,661 - INFO - We entered into function: update_setup_info
+2023-07-11 10:02:09,661 - INFO - New setup dictionary was updated.
+2023-07-11 10:02:09,662 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-07-11 10:02:09,662 - INFO - We entered into function: update_combobox_setups
+2023-07-11 10:02:09,663 - INFO - We entered into function: update_setup_info
+2023-07-11 10:02:09,664 - INFO - New setup dictionary was updated.
+2023-07-11 10:02:09,664 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-07-11 10:02:09,664 - INFO - We entered into function: update_table
+2023-07-11 10:02:09,664 - INFO - Table was reseted.
+2023-07-11 10:02:09,664 - INFO - No folder to display. Return.
+2023-07-11 10:02:09,665 - INFO - We entered into function: update_table
+2023-07-11 10:02:09,665 - INFO - Table was reseted.
+2023-07-11 10:02:09,665 - INFO - No folder to display. Return.
+2023-07-11 10:02:09,665 - INFO - We entered into function: update_table
+2023-07-11 10:02:09,665 - INFO - Table was reseted.
+2023-07-11 10:02:09,665 - INFO - No folder to display. Return.
+2023-07-11 10:02:09,665 - INFO - We entered into function: update_integration_widgets
+2023-07-11 10:02:09,668 - INFO - We entered into function: update_graphs
+2023-07-11 10:02:13,505 - INFO - We entered into function: pick_and_activate_hdf5_file
+2023-07-11 10:02:24,445 - INFO - We entered into function: append_h5_file
+2023-07-11 10:02:24,446 - INFO - We entered into function: update_combobox_h5
+2023-07-11 10:02:24,449 - INFO - We entered into function: read_h5_file
+2023-07-11 10:02:24,449 - INFO - We entered into function: update_h5
+2023-07-11 10:02:24,449 - INFO - The H5 could not be updated.
+2023-07-11 10:02:24,449 - INFO - We entered into function: update_widgets
+2023-07-11 10:02:24,450 - INFO - Nothing to be updated.
+2023-07-11 10:02:24,450 - INFO - We entered into function: update_setup_info
+2023-07-11 10:02:24,451 - INFO - New setup dictionary was updated.
+2023-07-11 10:02:24,451 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-07-11 10:02:24,451 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,451 - INFO - Table was reseted.
+2023-07-11 10:02:24,451 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,452 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,452 - INFO - Table was reseted.
+2023-07-11 10:02:24,452 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,452 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,452 - INFO - Table was reseted.
+2023-07-11 10:02:24,452 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,452 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,452 - INFO - Table was reseted.
+2023-07-11 10:02:24,453 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,453 - INFO - We entered into function: read_h5_file
+2023-07-11 10:02:24,453 - INFO - We entered into function: update_h5
+2023-07-11 10:02:24,453 - INFO - The H5 could not be updated.
+2023-07-11 10:02:24,453 - INFO - We entered into function: update_widgets
+2023-07-11 10:02:24,453 - INFO - Nothing to be updated.
+2023-07-11 10:02:24,454 - INFO - We entered into function: update_setup_info
+2023-07-11 10:02:24,455 - INFO - New setup dictionary was updated.
+2023-07-11 10:02:24,456 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-07-11 10:02:24,456 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,456 - INFO - Table was reseted.
+2023-07-11 10:02:24,456 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,456 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,457 - INFO - Table was reseted.
+2023-07-11 10:02:24,457 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,457 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,457 - INFO - Table was reseted.
+2023-07-11 10:02:24,457 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,457 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,457 - INFO - Table was reseted.
+2023-07-11 10:02:24,457 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,458 - INFO - We entered into function: read_h5_file
+2023-07-11 10:02:24,458 - INFO - We entered into function: reset_attributes_and_widgets
+2023-07-11 10:02:24,458 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,458 - INFO - Table was reseted.
+2023-07-11 10:02:24,458 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,459 - INFO - The data parameters were reinitialized.
+2023-07-11 10:02:24,459 - INFO - H5Integrator instance was initialized
+2023-07-11 10:02:24,459 - INFO - The filename is E:/Back-up TOSHIBA/Datos_Sincrotrones/ALBA_NCD_Nov2022/ALBA_NCD_Nov2022.h5.
+2023-07-11 10:02:24,459 - INFO - We entered into function: create_h5_file
+2023-07-11 10:02:24,459 - INFO - E:/Back-up TOSHIBA/Datos_Sincrotrones/ALBA_NCD_Nov2022/ALBA_NCD_Nov2022.h5 already exists. Return.
+2023-07-11 10:02:24,462 - INFO - We entered into function: update_group_ponifile
+2023-07-11 10:02:24,462 - INFO - No ponifiles to be updated. Return.
+2023-07-11 10:02:24,463 - INFO - We entered into function: update_setup_keys
+2023-07-11 10:02:24,463 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-07-11 10:02:24,464 - INFO - We entered into function: update_attributes_in_group
+2023-07-11 10:02:24,464 - INFO - Updated iangle_key = spitch
+2023-07-11 10:02:24,464 - INFO - We entered into function: update_attributes_in_group
+2023-07-11 10:02:24,465 - INFO - Updated acq_key = exposure
+2023-07-11 10:02:24,465 - INFO - We entered into function: update_attributes_in_group
+2023-07-11 10:02:24,465 - INFO - Updated norm_key = Monitor
+2023-07-11 10:02:24,466 - INFO - We entered into function: update_attributes_in_group
+2023-07-11 10:02:24,466 - INFO - Updated tilt_key = 
+2023-07-11 10:02:24,466 - INFO - Inherited methods from pygix.transform
+2023-07-11 10:02:24,466 - INFO - We entered into function: update_transformQ
+2023-07-11 10:02:24,467 - INFO - We entered into function: get_active_ponifile
+2023-07-11 10:02:24,467 - INFO - Ponifile active: 
+2023-07-11 10:02:24,467 - INFO - We entered into function: update_orientation
+2023-07-11 10:02:24,467 - INFO - qz parallel is True
+2023-07-11 10:02:24,467 - INFO - qr parallel is True
+2023-07-11 10:02:24,467 - INFO - The sample orientation (pygix) is set at 1
+2023-07-11 10:02:24,467 - INFO - Got main directory: E:\Back-up TOSHIBA\Datos_Sincrotrones\ALBA_NCD_Nov2022
+2023-07-11 10:02:24,468 - INFO - Imported .hdf5 file
+2023-07-11 10:02:24,468 - INFO - E:/Back-up TOSHIBA/Datos_Sincrotrones/ALBA_NCD_Nov2022/ALBA_NCD_Nov2022.h5
+2023-07-11 10:02:24,468 - INFO - HDF5 container was created.
+2023-07-11 10:02:24,468 - INFO - We entered into function: update_h5
+2023-07-11 10:02:24,469 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-07-11 10:02:24,469 - INFO - We entered into function: search_and_update_ponifiles
+2023-07-11 10:02:24,469 - INFO - Got main directory: E:\Back-up TOSHIBA\Datos_Sincrotrones\ALBA_NCD_Nov2022
+2023-07-11 10:02:24,516 - INFO - We entered into function: generator_stored_ponifiles
+2023-07-11 10:02:24,516 - INFO - No ponifiles detected.
+2023-07-11 10:02:24,517 - INFO - We entered into function: generator_stored_ponifiles
+2023-07-11 10:02:24,517 - INFO - We entered into function: activate_ponifile
+2023-07-11 10:02:24,518 - INFO - We entered into function: activate_ponifile
+2023-07-11 10:02:24,518 - INFO - We entered into function: generator_stored_ponifiles
+2023-07-11 10:02:24,519 - INFO - Ponifile to be activated: b'E:\\Back-up TOSHIBA\\Datos_Sincrotrones\\ALBA_NCD_Nov2022\\cr2O3.poni'
+2023-07-11 10:02:24,519 - INFO - Ponifile b'E:\\Back-up TOSHIBA\\Datos_Sincrotrones\\ALBA_NCD_Nov2022\\cr2O3.poni' activated successfully.
+2023-07-11 10:02:24,520 - INFO - We entered into function: update_transformQ
+2023-07-11 10:02:24,520 - INFO - We entered into function: get_active_ponifile
+2023-07-11 10:02:24,520 - INFO - Ponifile active: E:\Back-up TOSHIBA\Datos_Sincrotrones\ALBA_NCD_Nov2022\cr2O3.poni
+2023-07-11 10:02:24,520 - INFO - We entered into function: get_active_ponifile
+2023-07-11 10:02:24,521 - INFO - Ponifile active: E:\Back-up TOSHIBA\Datos_Sincrotrones\ALBA_NCD_Nov2022\cr2O3.poni
+2023-07-11 10:02:24,521 - INFO - Unable to parse E:\Back-up TOSHIBA\Datos_Sincrotrones\ALBA_NCD_Nov2022\cr2O3.poni as JSON file, defaulting to PoniParser
+2023-07-11 10:02:24,522 - INFO - Loaded poni file
+2023-07-11 10:02:24,522 - INFO - Incident angle set at 0.0
+2023-07-11 10:02:24,522 - INFO - Tilt angle set at 0.0
+2023-07-11 10:02:24,523 - INFO - New ponifile updated.
+2023-07-11 10:02:24,523 - INFO - We entered into function: update_graphs
+2023-07-11 10:02:24,523 - INFO - Combobox of ponifiles was updated.
+2023-07-11 10:02:24,524 - INFO - We entered into function: search_and_update_new_files
+2023-07-11 10:02:24,524 - INFO - We entered into function: search_new_files_folders
+2023-07-11 10:02:24,524 - INFO - Got main directory: E:\Back-up TOSHIBA\Datos_Sincrotrones\ALBA_NCD_Nov2022
+2023-07-11 10:02:24,841 - INFO - 0 new files were detected.
+2023-07-11 10:02:24,841 - INFO - The H5 was updated. Not the Widgets yet.
+2023-07-11 10:02:24,842 - INFO - We entered into function: update_widgets
+2023-07-11 10:02:24,867 - INFO - Updated list widget.
+2023-07-11 10:02:24,868 - INFO - We entered into function: update_setup_info
+2023-07-11 10:02:24,869 - INFO - New setup dictionary was updated.
+2023-07-11 10:02:24,870 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-07-11 10:02:24,870 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,870 - INFO - Table was reseted.
+2023-07-11 10:02:24,871 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,871 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,871 - INFO - Table was reseted.
+2023-07-11 10:02:24,871 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,871 - INFO - We entered into function: update_table
+2023-07-11 10:02:24,872 - INFO - Table was reseted.
+2023-07-11 10:02:24,872 - INFO - No folder to display. Return.
+2023-07-11 10:02:24,872 - INFO - We entered into function: update_h5
+2023-07-11 10:02:24,872 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-07-11 10:02:24,872 - INFO - We entered into function: search_and_update_ponifiles
+2023-07-11 10:02:24,873 - INFO - Got main directory: E:\Back-up TOSHIBA\Datos_Sincrotrones\ALBA_NCD_Nov2022
+2023-07-11 10:02:24,916 - INFO - We entered into function: generator_stored_ponifiles
+2023-07-11 10:02:24,917 - INFO - No ponifiles detected.
+2023-07-11 10:02:24,917 - INFO - We entered into function: generator_stored_ponifiles
+2023-07-11 10:02:24,919 - INFO - Combobox of ponifiles was updated.
+2023-07-11 10:02:24,919 - INFO - We entered into function: search_and_update_new_files
+2023-07-11 10:02:24,919 - INFO - We entered into function: search_new_files_folders
+2023-07-11 10:02:24,919 - INFO - Got main directory: E:\Back-up TOSHIBA\Datos_Sincrotrones\ALBA_NCD_Nov2022
+2023-07-11 10:02:25,255 - INFO - 0 new files were detected.
+2023-07-11 10:02:25,256 - INFO - The H5 was updated. Not the Widgets yet.
+2023-07-11 10:02:25,256 - INFO - We entered into function: update_widgets
+2023-07-11 10:02:25,260 - INFO - No new folders.
+2023-07-11 10:02:25,261 - INFO - We entered into function: update_setup_info
+2023-07-11 10:02:25,262 - INFO - New setup dictionary was updated.
+2023-07-11 10:02:25,262 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-07-11 10:02:25,263 - INFO - We entered into function: update_table
+2023-07-11 10:02:25,263 - INFO - Table was reseted.
+2023-07-11 10:02:25,263 - INFO - No folder to display. Return.
+2023-07-11 10:02:25,263 - INFO - We entered into function: update_table
+2023-07-11 10:02:25,263 - INFO - Table was reseted.
+2023-07-11 10:02:25,264 - INFO - No folder to display. Return.
+2023-07-11 10:02:25,264 - INFO - We entered into function: update_table
+2023-07-11 10:02:25,264 - INFO - Table was reseted.
+2023-07-11 10:02:25,264 - INFO - No folder to display. Return.
+2023-07-11 10:02:25,264 - INFO - We entered into function: update_table
+2023-07-11 10:02:25,264 - INFO - Table was reseted.
+2023-07-11 10:02:25,264 - INFO - No folder to display. Return.
+2023-07-11 10:02:31,471 - INFO - We entered into function: update_clicked_folder
+2023-07-11 10:02:31,472 - INFO - Clicked folder: Edgar\PM6\Si_5gL_3k_100c_10m\Si_5gL_3k_100c_10m_snapmesh_2192\data_00
+2023-07-11 10:02:31,472 - INFO - We entered into function: contains_group
+2023-07-11 10:02:31,472 - INFO - New clicked folder: Edgar\PM6\Si_5gL_3k_100c_10m\Si_5gL_3k_100c_10m_snapmesh_2192\data_00
+2023-07-11 10:02:31,473 - INFO - We entered into function: update_comboboxes_metadata
+2023-07-11 10:02:31,473 - INFO - We entered into function: generator_keys_in_folder
+2023-07-11 10:02:31,473 - INFO - Metadata keys: ['ByteOrder', 'DataType', 'Dim_1', 'Dim_2', 'HeaderID', 'Image', 'Monitor', 'MonitorRing', 'Photo', 'Rayonix', 'Size', 'acq_autoexpo_mode', 'acq_expo_time', 'acq_frame_nb', 'acq_latency_time', 'acq_mode', 'acq_nb_frames', 'acq_trigger_mode', 'att1', 'att2', 'auxstage', 'be_x', 'bs0x', 'bs1_alpha', 'bs1_beta', 'bs2x', 'bs2z', 'current', 'det_x', 'det_z', 'em2_period', 'energy_bragg', 'exposure', 'fs1_x', 'fs1_z', 'ft_length', 'ft_xdown', 'ft_xup', 'ft_zdown', 'ft_zup', 'image_bin', 'image_flip', 'image_roi', 'image_rotation', 'linkam', 'pt_no', 'rayonix_roi', 'rayonix_timer', 'spitch', 'sroll', 'stz', 'sx', 'syaw', 'sz', 'tfg_ch1', 'tfg_ch2', 'tfg_ch3', 'tfg_ch4', 'tfg_timer', 'time', 'time_of_day', 'time_of_frame', 'uxtimer', 'waxs_x', 'waxs_z']
+2023-07-11 10:02:31,474 - INFO - New metadata keys: ['ByteOrder', 'DataType', 'Dim_1', 'Dim_2', 'HeaderID', 'Image', 'Monitor', 'MonitorRing', 'Photo', 'Rayonix', 'Size', 'acq_autoexpo_mode', 'acq_expo_time', 'acq_frame_nb', 'acq_latency_time', 'acq_mode', 'acq_nb_frames', 'acq_trigger_mode', 'att1', 'att2', 'auxstage', 'be_x', 'bs0x', 'bs1_alpha', 'bs1_beta', 'bs2x', 'bs2z', 'current', 'det_x', 'det_z', 'em2_period', 'energy_bragg', 'exposure', 'fs1_x', 'fs1_z', 'ft_length', 'ft_xdown', 'ft_xup', 'ft_zdown', 'ft_zup', 'image_bin', 'image_flip', 'image_roi', 'image_rotation', 'linkam', 'pt_no', 'rayonix_roi', 'rayonix_timer', 'spitch', 'sroll', 'stz', 'sx', 'syaw', 'sz', 'tfg_ch1', 'tfg_ch2', 'tfg_ch3', 'tfg_ch4', 'tfg_timer', 'time', 'time_of_day', 'time_of_frame', 'uxtimer', 'waxs_x', 'waxs_z']
+2023-07-11 10:02:31,475 - INFO - We entered into function: update_table
+2023-07-11 10:02:31,475 - INFO - Table was reseted.
+2023-07-11 10:02:31,475 - INFO - Folder to display: Edgar\PM6\Si_5gL_3k_100c_10m\Si_5gL_3k_100c_10m_snapmesh_2192\data_00.
+2023-07-11 10:02:31,476 - INFO - Keys to display: ['spitch', 'Monitor', 'exposure', 'ByteOrder'].
+2023-07-11 10:02:31,476 - INFO - We entered into function: get_metadata_dataframe
+2023-07-11 10:02:31,476 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,477 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,477 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,478 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,478 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,479 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,479 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,479 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,480 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,480 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,480 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,481 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,481 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,482 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,482 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,482 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,482 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,482 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,483 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,483 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,484 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,484 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,484 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,484 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,485 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,485 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,485 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,486 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,486 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,486 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,487 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,487 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,487 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,488 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,488 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,488 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,489 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,489 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,489 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,489 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,490 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,490 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,490 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,491 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,491 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,491 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,492 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,492 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,492 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,493 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,493 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,493 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,494 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,494 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,494 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,494 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,495 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,495 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,495 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,495 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,496 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,496 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,496 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,496 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,497 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,497 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,497 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,497 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,498 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,498 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,498 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,498 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,507 - INFO - This is the dataframe:                                     Filename    spitch  Monitor  exposure        ByteOrder
+0   rayonix_Si_5gL_3k_100c_10m_2192_0000.edf  0.059375      0.0       5.0  b'LowByteFirst'
+1   rayonix_Si_5gL_3k_100c_10m_2192_0001.edf  0.060000      0.0       5.0  b'LowByteFirst'
+2   rayonix_Si_5gL_3k_100c_10m_2192_0002.edf  0.060000      0.0       5.0  b'LowByteFirst'
+3   rayonix_Si_5gL_3k_100c_10m_2192_0003.edf  0.080000      0.0       5.0  b'LowByteFirst'
+4   rayonix_Si_5gL_3k_100c_10m_2192_0004.edf  0.080000      0.0       5.0  b'LowByteFirst'
+5   rayonix_Si_5gL_3k_100c_10m_2192_0005.edf  0.080000      0.0       5.0  b'LowByteFirst'
+6   rayonix_Si_5gL_3k_100c_10m_2192_0006.edf  0.100000      0.0       5.0  b'LowByteFirst'
+7   rayonix_Si_5gL_3k_100c_10m_2192_0007.edf  0.100000      0.0       5.0  b'LowByteFirst'
+8   rayonix_Si_5gL_3k_100c_10m_2192_0008.edf  0.100000      0.0       5.0  b'LowByteFirst'
+9   rayonix_Si_5gL_3k_100c_10m_2192_0009.edf  0.120000      0.0       5.0  b'LowByteFirst'
+10  rayonix_Si_5gL_3k_100c_10m_2192_0010.edf  0.120000      0.0       5.0  b'LowByteFirst'
+11  rayonix_Si_5gL_3k_100c_10m_2192_0011.edf  0.120000      0.0       5.0  b'LowByteFirst'
+12  rayonix_Si_5gL_3k_100c_10m_2192_0012.edf  0.140000      0.0       5.0  b'LowByteFirst'
+13  rayonix_Si_5gL_3k_100c_10m_2192_0013.edf  0.140000      0.0       5.0  b'LowByteFirst'
+14  rayonix_Si_5gL_3k_100c_10m_2192_0014.edf  0.140000      0.0       5.0  b'LowByteFirst'
+15  rayonix_Si_5gL_3k_100c_10m_2192_0015.edf  0.160000      0.0       5.0  b'LowByteFirst'
+16  rayonix_Si_5gL_3k_100c_10m_2192_0016.edf  0.160000      0.0       5.0  b'LowByteFirst'
+17  rayonix_Si_5gL_3k_100c_10m_2192_0017.edf  0.160000      0.0       5.0  b'LowByteFirst'
+2023-07-11 10:02:31,508 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-07-11 10:02:31,509 - INFO - Inserted columns: 5
+2023-07-11 10:02:31,509 - INFO - Inserted rows: 18
+2023-07-11 10:02:31,509 - INFO - Updated cell [0,0].
+2023-07-11 10:02:31,509 - INFO - Updated cell [0,1].
+2023-07-11 10:02:31,510 - INFO - Updated cell [0,2].
+2023-07-11 10:02:31,510 - INFO - Updated cell [0,3].
+2023-07-11 10:02:31,510 - INFO - Updated cell [0,4].
+2023-07-11 10:02:31,511 - INFO - Updated cell [1,0].
+2023-07-11 10:02:31,511 - INFO - Updated cell [1,1].
+2023-07-11 10:02:31,511 - INFO - Updated cell [1,2].
+2023-07-11 10:02:31,511 - INFO - Updated cell [1,3].
+2023-07-11 10:02:31,511 - INFO - Updated cell [1,4].
+2023-07-11 10:02:31,512 - INFO - Updated cell [2,0].
+2023-07-11 10:02:31,512 - INFO - Updated cell [2,1].
+2023-07-11 10:02:31,512 - INFO - Updated cell [2,2].
+2023-07-11 10:02:31,512 - INFO - Updated cell [2,3].
+2023-07-11 10:02:31,512 - INFO - Updated cell [2,4].
+2023-07-11 10:02:31,513 - INFO - Updated cell [3,0].
+2023-07-11 10:02:31,513 - INFO - Updated cell [3,1].
+2023-07-11 10:02:31,513 - INFO - Updated cell [3,2].
+2023-07-11 10:02:31,513 - INFO - Updated cell [3,3].
+2023-07-11 10:02:31,513 - INFO - Updated cell [3,4].
+2023-07-11 10:02:31,514 - INFO - Updated cell [4,0].
+2023-07-11 10:02:31,514 - INFO - Updated cell [4,1].
+2023-07-11 10:02:31,514 - INFO - Updated cell [4,2].
+2023-07-11 10:02:31,514 - INFO - Updated cell [4,3].
+2023-07-11 10:02:31,514 - INFO - Updated cell [4,4].
+2023-07-11 10:02:31,514 - INFO - Updated cell [5,0].
+2023-07-11 10:02:31,514 - INFO - Updated cell [5,1].
+2023-07-11 10:02:31,514 - INFO - Updated cell [5,2].
+2023-07-11 10:02:31,515 - INFO - Updated cell [5,3].
+2023-07-11 10:02:31,515 - INFO - Updated cell [5,4].
+2023-07-11 10:02:31,515 - INFO - Updated cell [6,0].
+2023-07-11 10:02:31,515 - INFO - Updated cell [6,1].
+2023-07-11 10:02:31,515 - INFO - Updated cell [6,2].
+2023-07-11 10:02:31,515 - INFO - Updated cell [6,3].
+2023-07-11 10:02:31,515 - INFO - Updated cell [6,4].
+2023-07-11 10:02:31,515 - INFO - Updated cell [7,0].
+2023-07-11 10:02:31,516 - INFO - Updated cell [7,1].
+2023-07-11 10:02:31,516 - INFO - Updated cell [7,2].
+2023-07-11 10:02:31,516 - INFO - Updated cell [7,3].
+2023-07-11 10:02:31,516 - INFO - Updated cell [7,4].
+2023-07-11 10:02:31,516 - INFO - Updated cell [8,0].
+2023-07-11 10:02:31,516 - INFO - Updated cell [8,1].
+2023-07-11 10:02:31,516 - INFO - Updated cell [8,2].
+2023-07-11 10:02:31,516 - INFO - Updated cell [8,3].
+2023-07-11 10:02:31,516 - INFO - Updated cell [8,4].
+2023-07-11 10:02:31,517 - INFO - Updated cell [9,0].
+2023-07-11 10:02:31,517 - INFO - Updated cell [9,1].
+2023-07-11 10:02:31,517 - INFO - Updated cell [9,2].
+2023-07-11 10:02:31,517 - INFO - Updated cell [9,3].
+2023-07-11 10:02:31,517 - INFO - Updated cell [9,4].
+2023-07-11 10:02:31,517 - INFO - Updated cell [10,0].
+2023-07-11 10:02:31,517 - INFO - Updated cell [10,1].
+2023-07-11 10:02:31,518 - INFO - Updated cell [10,2].
+2023-07-11 10:02:31,518 - INFO - Updated cell [10,3].
+2023-07-11 10:02:31,518 - INFO - Updated cell [10,4].
+2023-07-11 10:02:31,518 - INFO - Updated cell [11,0].
+2023-07-11 10:02:31,518 - INFO - Updated cell [11,1].
+2023-07-11 10:02:31,518 - INFO - Updated cell [11,2].
+2023-07-11 10:02:31,518 - INFO - Updated cell [11,3].
+2023-07-11 10:02:31,518 - INFO - Updated cell [11,4].
+2023-07-11 10:02:31,518 - INFO - Updated cell [12,0].
+2023-07-11 10:02:31,519 - INFO - Updated cell [12,1].
+2023-07-11 10:02:31,519 - INFO - Updated cell [12,2].
+2023-07-11 10:02:31,519 - INFO - Updated cell [12,3].
+2023-07-11 10:02:31,519 - INFO - Updated cell [12,4].
+2023-07-11 10:02:31,519 - INFO - Updated cell [13,0].
+2023-07-11 10:02:31,519 - INFO - Updated cell [13,1].
+2023-07-11 10:02:31,519 - INFO - Updated cell [13,2].
+2023-07-11 10:02:31,519 - INFO - Updated cell [13,3].
+2023-07-11 10:02:31,520 - INFO - Updated cell [13,4].
+2023-07-11 10:02:31,520 - INFO - Updated cell [14,0].
+2023-07-11 10:02:31,520 - INFO - Updated cell [14,1].
+2023-07-11 10:02:31,520 - INFO - Updated cell [14,2].
+2023-07-11 10:02:31,520 - INFO - Updated cell [14,3].
+2023-07-11 10:02:31,520 - INFO - Updated cell [14,4].
+2023-07-11 10:02:31,520 - INFO - Updated cell [15,0].
+2023-07-11 10:02:31,520 - INFO - Updated cell [15,1].
+2023-07-11 10:02:31,520 - INFO - Updated cell [15,2].
+2023-07-11 10:02:31,521 - INFO - Updated cell [15,3].
+2023-07-11 10:02:31,521 - INFO - Updated cell [15,4].
+2023-07-11 10:02:31,521 - INFO - Updated cell [16,0].
+2023-07-11 10:02:31,521 - INFO - Updated cell [16,1].
+2023-07-11 10:02:31,521 - INFO - Updated cell [16,2].
+2023-07-11 10:02:31,521 - INFO - Updated cell [16,3].
+2023-07-11 10:02:31,521 - INFO - Updated cell [16,4].
+2023-07-11 10:02:31,521 - INFO - Updated cell [17,0].
+2023-07-11 10:02:31,522 - INFO - Updated cell [17,1].
+2023-07-11 10:02:31,522 - INFO - Updated cell [17,2].
+2023-07-11 10:02:31,522 - INFO - Updated cell [17,3].
+2023-07-11 10:02:31,522 - INFO - Updated cell [17,4].
+2023-07-11 10:02:31,522 - INFO - Combobox header_items updated.
+2023-07-11 10:02:31,522 - INFO - Combobox header_items title updated.
+2023-07-11 10:02:31,523 - INFO - We entered into function: update_angle_parameter
+2023-07-11 10:02:31,523 - INFO - Combobox angle updated.
+2023-07-11 10:02:31,523 - INFO - We entered into function: update_tiltangle_parameter
+2023-07-11 10:02:31,523 - INFO - Combobox tilt angle updated.
+2023-07-11 10:02:31,523 - INFO - We entered into function: update_normfactor_parameter
+2023-07-11 10:02:31,523 - INFO - Combobox norm updated.
+2023-07-11 10:02:31,523 - INFO - We entered into function: update_exposure_parameter
+2023-07-11 10:02:31,524 - INFO - Combobox exposure updated.
+2023-07-11 10:02:31,524 - INFO - We entered into function: update_table
+2023-07-11 10:02:31,524 - INFO - Table was reseted.
+2023-07-11 10:02:31,524 - INFO - Folder to display: Edgar\PM6\Si_5gL_3k_100c_10m\Si_5gL_3k_100c_10m_snapmesh_2192\data_00.
+2023-07-11 10:02:31,524 - INFO - Keys to display: ['spitch', 'Monitor', 'exposure', 'ByteOrder'].
+2023-07-11 10:02:31,524 - INFO - We entered into function: get_metadata_dataframe
+2023-07-11 10:02:31,525 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,525 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,525 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,526 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,526 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,526 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,526 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,526 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,527 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,528 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,528 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,528 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,529 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,529 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,529 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,530 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,530 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,530 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,531 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,531 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,531 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,531 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,532 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,532 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,532 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,533 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,533 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,533 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,533 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,534 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,534 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,534 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,535 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,535 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,535 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,536 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,536 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,536 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,537 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,537 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,537 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,538 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,538 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,538 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,539 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,539 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,540 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,540 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,541 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,541 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,541 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,542 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,542 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,542 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,543 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,543 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,543 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,544 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,544 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,544 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,545 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,545 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,546 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,546 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,546 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,547 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,547 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,547 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,548 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,548 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,548 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,549 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:31,558 - INFO - This is the dataframe:                                     Filename    spitch  Monitor  exposure        ByteOrder
+0   rayonix_Si_5gL_3k_100c_10m_2192_0000.edf  0.059375      0.0       5.0  b'LowByteFirst'
+1   rayonix_Si_5gL_3k_100c_10m_2192_0001.edf  0.060000      0.0       5.0  b'LowByteFirst'
+2   rayonix_Si_5gL_3k_100c_10m_2192_0002.edf  0.060000      0.0       5.0  b'LowByteFirst'
+3   rayonix_Si_5gL_3k_100c_10m_2192_0003.edf  0.080000      0.0       5.0  b'LowByteFirst'
+4   rayonix_Si_5gL_3k_100c_10m_2192_0004.edf  0.080000      0.0       5.0  b'LowByteFirst'
+5   rayonix_Si_5gL_3k_100c_10m_2192_0005.edf  0.080000      0.0       5.0  b'LowByteFirst'
+6   rayonix_Si_5gL_3k_100c_10m_2192_0006.edf  0.100000      0.0       5.0  b'LowByteFirst'
+7   rayonix_Si_5gL_3k_100c_10m_2192_0007.edf  0.100000      0.0       5.0  b'LowByteFirst'
+8   rayonix_Si_5gL_3k_100c_10m_2192_0008.edf  0.100000      0.0       5.0  b'LowByteFirst'
+9   rayonix_Si_5gL_3k_100c_10m_2192_0009.edf  0.120000      0.0       5.0  b'LowByteFirst'
+10  rayonix_Si_5gL_3k_100c_10m_2192_0010.edf  0.120000      0.0       5.0  b'LowByteFirst'
+11  rayonix_Si_5gL_3k_100c_10m_2192_0011.edf  0.120000      0.0       5.0  b'LowByteFirst'
+12  rayonix_Si_5gL_3k_100c_10m_2192_0012.edf  0.140000      0.0       5.0  b'LowByteFirst'
+13  rayonix_Si_5gL_3k_100c_10m_2192_0013.edf  0.140000      0.0       5.0  b'LowByteFirst'
+14  rayonix_Si_5gL_3k_100c_10m_2192_0014.edf  0.140000      0.0       5.0  b'LowByteFirst'
+15  rayonix_Si_5gL_3k_100c_10m_2192_0015.edf  0.160000      0.0       5.0  b'LowByteFirst'
+16  rayonix_Si_5gL_3k_100c_10m_2192_0016.edf  0.160000      0.0       5.0  b'LowByteFirst'
+17  rayonix_Si_5gL_3k_100c_10m_2192_0017.edf  0.160000      0.0       5.0  b'LowByteFirst'
+2023-07-11 10:02:31,559 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-07-11 10:02:31,560 - INFO - Inserted columns: 5
+2023-07-11 10:02:31,560 - INFO - Inserted rows: 18
+2023-07-11 10:02:31,561 - INFO - Updated cell [0,0].
+2023-07-11 10:02:31,561 - INFO - Updated cell [0,1].
+2023-07-11 10:02:31,561 - INFO - Updated cell [0,2].
+2023-07-11 10:02:31,562 - INFO - Updated cell [0,3].
+2023-07-11 10:02:31,562 - INFO - Updated cell [0,4].
+2023-07-11 10:02:31,562 - INFO - Updated cell [1,0].
+2023-07-11 10:02:31,562 - INFO - Updated cell [1,1].
+2023-07-11 10:02:31,563 - INFO - Updated cell [1,2].
+2023-07-11 10:02:31,563 - INFO - Updated cell [1,3].
+2023-07-11 10:02:31,563 - INFO - Updated cell [1,4].
+2023-07-11 10:02:31,563 - INFO - Updated cell [2,0].
+2023-07-11 10:02:31,563 - INFO - Updated cell [2,1].
+2023-07-11 10:02:31,564 - INFO - Updated cell [2,2].
+2023-07-11 10:02:31,564 - INFO - Updated cell [2,3].
+2023-07-11 10:02:31,564 - INFO - Updated cell [2,4].
+2023-07-11 10:02:31,565 - INFO - Updated cell [3,0].
+2023-07-11 10:02:31,565 - INFO - Updated cell [3,1].
+2023-07-11 10:02:31,565 - INFO - Updated cell [3,2].
+2023-07-11 10:02:31,565 - INFO - Updated cell [3,3].
+2023-07-11 10:02:31,566 - INFO - Updated cell [3,4].
+2023-07-11 10:02:31,566 - INFO - Updated cell [4,0].
+2023-07-11 10:02:31,566 - INFO - Updated cell [4,1].
+2023-07-11 10:02:31,566 - INFO - Updated cell [4,2].
+2023-07-11 10:02:31,567 - INFO - Updated cell [4,3].
+2023-07-11 10:02:31,567 - INFO - Updated cell [4,4].
+2023-07-11 10:02:31,567 - INFO - Updated cell [5,0].
+2023-07-11 10:02:31,567 - INFO - Updated cell [5,1].
+2023-07-11 10:02:31,567 - INFO - Updated cell [5,2].
+2023-07-11 10:02:31,567 - INFO - Updated cell [5,3].
+2023-07-11 10:02:31,567 - INFO - Updated cell [5,4].
+2023-07-11 10:02:31,568 - INFO - Updated cell [6,0].
+2023-07-11 10:02:31,568 - INFO - Updated cell [6,1].
+2023-07-11 10:02:31,568 - INFO - Updated cell [6,2].
+2023-07-11 10:02:31,568 - INFO - Updated cell [6,3].
+2023-07-11 10:02:31,568 - INFO - Updated cell [6,4].
+2023-07-11 10:02:31,568 - INFO - Updated cell [7,0].
+2023-07-11 10:02:31,568 - INFO - Updated cell [7,1].
+2023-07-11 10:02:31,568 - INFO - Updated cell [7,2].
+2023-07-11 10:02:31,569 - INFO - Updated cell [7,3].
+2023-07-11 10:02:31,569 - INFO - Updated cell [7,4].
+2023-07-11 10:02:31,569 - INFO - Updated cell [8,0].
+2023-07-11 10:02:31,569 - INFO - Updated cell [8,1].
+2023-07-11 10:02:31,569 - INFO - Updated cell [8,2].
+2023-07-11 10:02:31,569 - INFO - Updated cell [8,3].
+2023-07-11 10:02:31,569 - INFO - Updated cell [8,4].
+2023-07-11 10:02:31,569 - INFO - Updated cell [9,0].
+2023-07-11 10:02:31,570 - INFO - Updated cell [9,1].
+2023-07-11 10:02:31,570 - INFO - Updated cell [9,2].
+2023-07-11 10:02:31,570 - INFO - Updated cell [9,3].
+2023-07-11 10:02:31,570 - INFO - Updated cell [9,4].
+2023-07-11 10:02:31,570 - INFO - Updated cell [10,0].
+2023-07-11 10:02:31,570 - INFO - Updated cell [10,1].
+2023-07-11 10:02:31,570 - INFO - Updated cell [10,2].
+2023-07-11 10:02:31,570 - INFO - Updated cell [10,3].
+2023-07-11 10:02:31,571 - INFO - Updated cell [10,4].
+2023-07-11 10:02:31,571 - INFO - Updated cell [11,0].
+2023-07-11 10:02:31,571 - INFO - Updated cell [11,1].
+2023-07-11 10:02:31,571 - INFO - Updated cell [11,2].
+2023-07-11 10:02:31,571 - INFO - Updated cell [11,3].
+2023-07-11 10:02:31,572 - INFO - Updated cell [11,4].
+2023-07-11 10:02:31,572 - INFO - Updated cell [12,0].
+2023-07-11 10:02:31,572 - INFO - Updated cell [12,1].
+2023-07-11 10:02:31,572 - INFO - Updated cell [12,2].
+2023-07-11 10:02:31,573 - INFO - Updated cell [12,3].
+2023-07-11 10:02:31,573 - INFO - Updated cell [12,4].
+2023-07-11 10:02:31,573 - INFO - Updated cell [13,0].
+2023-07-11 10:02:31,573 - INFO - Updated cell [13,1].
+2023-07-11 10:02:31,573 - INFO - Updated cell [13,2].
+2023-07-11 10:02:31,574 - INFO - Updated cell [13,3].
+2023-07-11 10:02:31,574 - INFO - Updated cell [13,4].
+2023-07-11 10:02:31,574 - INFO - Updated cell [14,0].
+2023-07-11 10:02:31,574 - INFO - Updated cell [14,1].
+2023-07-11 10:02:31,575 - INFO - Updated cell [14,2].
+2023-07-11 10:02:31,575 - INFO - Updated cell [14,3].
+2023-07-11 10:02:31,575 - INFO - Updated cell [14,4].
+2023-07-11 10:02:31,575 - INFO - Updated cell [15,0].
+2023-07-11 10:02:31,575 - INFO - Updated cell [15,1].
+2023-07-11 10:02:31,576 - INFO - Updated cell [15,2].
+2023-07-11 10:02:31,576 - INFO - Updated cell [15,3].
+2023-07-11 10:02:31,576 - INFO - Updated cell [15,4].
+2023-07-11 10:02:31,576 - INFO - Updated cell [16,0].
+2023-07-11 10:02:31,576 - INFO - Updated cell [16,1].
+2023-07-11 10:02:31,576 - INFO - Updated cell [16,2].
+2023-07-11 10:02:31,576 - INFO - Updated cell [16,3].
+2023-07-11 10:02:31,576 - INFO - Updated cell [16,4].
+2023-07-11 10:02:31,577 - INFO - Updated cell [17,0].
+2023-07-11 10:02:31,577 - INFO - Updated cell [17,1].
+2023-07-11 10:02:31,577 - INFO - Updated cell [17,2].
+2023-07-11 10:02:31,577 - INFO - Updated cell [17,3].
+2023-07-11 10:02:31,577 - INFO - Updated cell [17,4].
+2023-07-11 10:02:32,792 - INFO - We entered into function: update_clicked_filenames
+2023-07-11 10:02:32,792 - INFO - We entered into function: filename_fromrow
+2023-07-11 10:02:32,793 - INFO - New cache index: [4]
+2023-07-11 10:02:32,793 - INFO - New cache filenames: [WindowsPath('E:/Back-up TOSHIBA/Datos_Sincrotrones/ALBA_NCD_Nov2022/Edgar/PM6/Si_5gL_3k_100c_10m/Si_5gL_3k_100c_10m_snapmesh_2192/data_00/rayonix_Si_5gL_3k_100c_10m_2192_0004.edf')]
+2023-07-11 10:02:32,793 - INFO - We entered into function: update_graphs
+2023-07-11 10:02:32,793 - INFO - We entered into function: get_Edf_data
+2023-07-11 10:02:32,794 - INFO - We entered into function: get_Edf_instance
+2023-07-11 10:02:32,794 - INFO - We entered into function: get_filename_from_index
+2023-07-11 10:02:32,794 - INFO - We entered into function: get_active_ponifile
+2023-07-11 10:02:32,795 - INFO - Ponifile active: E:\Back-up TOSHIBA\Datos_Sincrotrones\ALBA_NCD_Nov2022\cr2O3.poni
+2023-07-11 10:02:32,795 - INFO - Unable to parse E:\Back-up TOSHIBA\Datos_Sincrotrones\ALBA_NCD_Nov2022\cr2O3.poni as JSON file, defaulting to PoniParser
+2023-07-11 10:02:32,988 - INFO - New data sample with shape: (2880, 960)
+2023-07-11 10:02:32,988 - INFO - We entered into function: get_norm_factor
+2023-07-11 10:02:32,988 - INFO - We entered into function: get_dataset_norm_factor
+2023-07-11 10:02:32,988 - INFO - We entered into function: get_norm_key
+2023-07-11 10:02:32,989 - INFO - We entered into function: get_attrs_in_group
+2023-07-11 10:02:32,989 - INFO - We entered into function: get_metadata_dataset
+2023-07-11 10:02:32,990 - INFO - Got norm factor: 0.0
+2023-07-11 10:02:32,990 - INFO - We entered into function: update_2D_graph
+2023-07-11 10:02:32,990 - INFO - True
+2023-07-11 10:02:32,992 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-07-11 10:02:33,032 - INFO - (nan, nan)
+2023-07-11 10:02:33,059 - INFO - Filtered negative, nan and zero values.

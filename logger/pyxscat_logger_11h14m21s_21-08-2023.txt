@@ -1,0 +1,9 @@
+2023-08-21 11:14:21,690 - INFO - Logger was initialized.
+2023-08-21 11:14:23,037 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:14:23,037 - INFO - The data parameters were reinitialized.
+2023-08-21 11:14:23,037 - INFO - We entered into function: init_callbacks
+2023-08-21 11:14:23,038 - INFO - We entered into function: update_setup_info
+2023-08-21 11:14:23,038 - INFO - New setup dictionary was updated.
+2023-08-21 11:14:23,038 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-21 11:14:23,040 - INFO - We entered into function: update_lims_ticks
+2023-08-21 11:14:23,056 - INFO - We entered into function: update_combobox_h5

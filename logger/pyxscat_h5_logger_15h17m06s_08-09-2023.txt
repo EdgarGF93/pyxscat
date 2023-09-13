@@ -1,0 +1,5 @@
+2023-09-08 15:17:06,315 - INFO - Logger was initialized.
+2023-09-08 15:17:06,316 - INFO - Logger was initialized.
+2023-09-08 15:17:07,720 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-08 15:17:07,721 - INFO - The data parameters were reinitialized.
+2023-09-08 15:17:07,721 - INFO - We entered into function: init_callbacks

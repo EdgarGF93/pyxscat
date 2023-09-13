@@ -1,0 +1,2698 @@
+2023-09-12 14:58:45,521 - INFO - Logger was initialized.
+2023-09-12 14:58:46,934 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-12 14:58:46,934 - INFO - The data parameters were reinitialized.
+2023-09-12 14:58:46,934 - INFO - We entered into function: init_callbacks
+2023-09-12 14:58:46,936 - INFO - We entered into function: update_setup_info
+2023-09-12 14:58:46,936 - INFO - New setup dictionary was updated.
+2023-09-12 14:58:46,936 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-12 14:58:46,938 - INFO - We entered into function: update_lims_ticks
+2023-09-12 14:58:46,953 - INFO - We entered into function: update_combobox_h5
+2023-09-12 14:58:46,953 - INFO - We entered into function: set_h5_instance
+2023-09-12 14:58:46,954 - INFO - The .h5 could not be found.
+2023-09-12 14:58:46,954 - INFO - We entered into function: update_h5_poni_and_files
+2023-09-12 14:58:46,954 - INFO - The H5 could not be updated.
+2023-09-12 14:58:46,954 - INFO - We entered into function: update_widgets
+2023-09-12 14:58:46,954 - INFO - There is no H5Integrator instance.
+2023-09-12 14:58:46,954 - INFO - We entered into function: update_setup_info
+2023-09-12 14:58:46,955 - INFO - New setup dictionary was updated.
+2023-09-12 14:58:46,955 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-12 14:58:46,955 - INFO - We entered into function: update_combobox_setups
+2023-09-12 14:58:46,956 - INFO - We entered into function: update_setup_info
+2023-09-12 14:58:46,957 - INFO - New setup dictionary was updated.
+2023-09-12 14:58:46,957 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-12 14:58:46,958 - INFO - We entered into function: update_table
+2023-09-12 14:58:46,958 - INFO - Table was reseted.
+2023-09-12 14:58:46,958 - INFO - No folder to display. Return.
+2023-09-12 14:58:46,958 - INFO - We entered into function: update_table
+2023-09-12 14:58:46,958 - INFO - Table was reseted.
+2023-09-12 14:58:46,958 - INFO - No folder to display. Return.
+2023-09-12 14:58:46,958 - INFO - We entered into function: update_table
+2023-09-12 14:58:46,959 - INFO - Table was reseted.
+2023-09-12 14:58:46,959 - INFO - No folder to display. Return.
+2023-09-12 14:58:46,959 - INFO - We entered into function: update_integration_widgets
+2023-09-12 14:58:46,961 - INFO - We entered into function: update_graphs
+2023-09-12 14:58:52,833 - INFO - We entered into function: set_h5_instance
+2023-09-12 14:58:52,833 - INFO - H5Integrator instance was initialized
+2023-09-12 14:58:52,833 - INFO - The filename is E:\Datos_Sincrotrones\XMaS_Sept2023_2\XMaS_Sept2023_2.h5.
+2023-09-12 14:58:52,834 - INFO - We entered into function: create_h5_file
+2023-09-12 14:58:52,834 - INFO - E:\Datos_Sincrotrones\XMaS_Sept2023_2\XMaS_Sept2023_2.h5 already exists. Return.
+2023-09-12 14:58:52,839 - INFO - We entered into function: update_group_ponifile
+2023-09-12 14:58:52,840 - INFO - No ponifiles to be updated. Return.
+2023-09-12 14:58:52,842 - INFO - We entered into function: update_setup_keys
+2023-09-12 14:58:52,843 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-12 14:58:52,843 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:52,844 - INFO - Updated iangle_key = spitch
+2023-09-12 14:58:52,844 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:52,845 - INFO - Updated acq_key = exposure
+2023-09-12 14:58:52,845 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:52,846 - INFO - Updated norm_key = Monitor
+2023-09-12 14:58:52,846 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:52,846 - INFO - Updated tilt_key = 
+2023-09-12 14:58:52,846 - INFO - Inherited methods from pygix.transform
+2023-09-12 14:58:52,847 - INFO - We entered into function: update_transformQ
+2023-09-12 14:58:52,847 - INFO - We entered into function: get_active_ponifile
+2023-09-12 14:58:52,848 - INFO - Ponifile active: E:\Datos_Sincrotrones\XMaS_Sept2023_2\LaB6\lab6.poni
+2023-09-12 14:58:52,848 - INFO - We entered into function: get_active_ponifile
+2023-09-12 14:58:52,848 - INFO - Ponifile active: E:\Datos_Sincrotrones\XMaS_Sept2023_2\LaB6\lab6.poni
+2023-09-12 14:58:52,850 - INFO - Unable to parse E:\Datos_Sincrotrones\XMaS_Sept2023_2\LaB6\lab6.poni as JSON file, defaulting to PoniParser
+2023-09-12 14:58:52,850 - INFO - Loaded poni file
+2023-09-12 14:58:52,851 - INFO - Incident angle set at 0.0
+2023-09-12 14:58:52,851 - INFO - Tilt angle set at 0.0
+2023-09-12 14:58:52,851 - INFO - We entered into function: update_orientation
+2023-09-12 14:58:52,852 - INFO - qz parallel is True
+2023-09-12 14:58:52,852 - INFO - qr parallel is True
+2023-09-12 14:58:52,852 - INFO - The sample orientation (pygix) is set at 1
+2023-09-12 14:58:52,852 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-12 14:58:52,852 - INFO - We entered into function: update_table
+2023-09-12 14:58:52,852 - INFO - Table was reseted.
+2023-09-12 14:58:52,852 - INFO - No folder to display. Return.
+2023-09-12 14:58:52,853 - INFO - The data parameters were reinitialized.
+2023-09-12 14:58:52,853 - INFO - We entered into function: set_main_directory
+2023-09-12 14:58:52,853 - INFO - New main directory set.
+2023-09-12 14:58:52,853 - INFO - E:\Datos_Sincrotrones\XMaS_Sept2023_2
+2023-09-12 14:58:52,853 - INFO - We entered into function: update_h5_poni_and_files
+2023-09-12 14:58:52,854 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-09-12 14:58:52,854 - INFO - We entered into function: search_and_update_ponifiles
+2023-09-12 14:58:52,854 - INFO - Got main directory: E:\Datos_Sincrotrones\XMaS_Sept2023_2
+2023-09-12 14:58:52,858 - INFO - We entered into function: generator_stored_ponifiles
+2023-09-12 14:58:52,859 - INFO - No ponifiles detected.
+2023-09-12 14:58:52,859 - INFO - We entered into function: generator_stored_ponifiles
+2023-09-12 14:58:52,859 - INFO - Got main directory: E:\Datos_Sincrotrones\XMaS_Sept2023_2
+2023-09-12 14:58:52,860 - INFO - We entered into function: activate_ponifile
+2023-09-12 14:58:52,860 - INFO - Got main directory: E:\Datos_Sincrotrones\XMaS_Sept2023_2
+2023-09-12 14:58:52,861 - INFO - We entered into function: activate_ponifile
+2023-09-12 14:58:52,861 - INFO - We entered into function: generator_stored_ponifiles
+2023-09-12 14:58:52,861 - INFO - Ponifile to be activated: b'E:\\Datos_Sincrotrones\\XMaS_Sept2023_2\\LaB6\\lab6.poni'
+2023-09-12 14:58:52,862 - INFO - Ponifile b'E:\\Datos_Sincrotrones\\XMaS_Sept2023_2\\LaB6\\lab6.poni' activated successfully.
+2023-09-12 14:58:52,862 - INFO - We entered into function: update_transformQ
+2023-09-12 14:58:52,862 - INFO - We entered into function: get_active_ponifile
+2023-09-12 14:58:52,862 - INFO - Ponifile active: E:\Datos_Sincrotrones\XMaS_Sept2023_2\LaB6\lab6.poni
+2023-09-12 14:58:52,862 - INFO - We entered into function: get_active_ponifile
+2023-09-12 14:58:52,863 - INFO - Ponifile active: E:\Datos_Sincrotrones\XMaS_Sept2023_2\LaB6\lab6.poni
+2023-09-12 14:58:52,863 - INFO - Unable to parse E:\Datos_Sincrotrones\XMaS_Sept2023_2\LaB6\lab6.poni as JSON file, defaulting to PoniParser
+2023-09-12 14:58:52,863 - INFO - Loaded poni file
+2023-09-12 14:58:52,864 - INFO - Incident angle set at 0.0
+2023-09-12 14:58:52,864 - INFO - Tilt angle set at 0.0
+2023-09-12 14:58:52,864 - INFO - We entered into function: retrieve_poni_dict_from_h5
+2023-09-12 14:58:52,864 - INFO - We entered into function: update_poni_cache
+2023-09-12 14:58:52,865 - INFO - Updated poni cache: {'poni_version': 2, 'detector': Detector Pilatus 1M	 PixelSize= 1.720e-04, 1.720e-04 m, 'detector_config': OrderedDict(), 'wavelength': 9.998725680096795e-11, 'dist': 0.25984971331890366, 'pixelsize1': 0.000172, 'pixelsize2': 0.000172, 'shape1': 1043, 'shape2': 981, 'poni1': 0.09816169722717816, 'poni2': 0.0025042960756992126, 'rot1': 0.0036095019969118753, 'rot2': -0.011021179193369505, 'rot3': 0.0}
+2023-09-12 14:58:52,865 - INFO - New ponifile updated.
+2023-09-12 14:58:52,865 - INFO - We entered into function: update_ponifile_widgets
+2023-09-12 14:58:52,865 - INFO - We entered into function: get_active_ponifile
+2023-09-12 14:58:52,866 - INFO - Ponifile active: E:\Datos_Sincrotrones\XMaS_Sept2023_2\LaB6\lab6.poni
+2023-09-12 14:58:52,866 - INFO - We entered into function: update_graphs
+2023-09-12 14:58:52,866 - INFO - Combobox of ponifiles was updated.
+2023-09-12 14:58:52,866 - INFO - We entered into function: search_and_update_new_files
+2023-09-12 14:58:52,866 - INFO - We entered into function: search_new_files_folders
+2023-09-12 14:58:52,867 - INFO - Got main directory: E:\Datos_Sincrotrones\XMaS_Sept2023_2
+2023-09-12 14:58:52,888 - INFO - 0 New files were detected.
+2023-09-12 14:58:52,888 - INFO - The .h5 file was updated.
+2023-09-12 14:58:52,889 - INFO - We entered into function: update_widgets
+2023-09-12 14:58:52,889 - INFO - Updated list widget.
+2023-09-12 14:58:52,890 - INFO - We entered into function: update_reference_widgets
+2023-09-12 14:58:52,890 - INFO - We entered into function: update_graphs
+2023-09-12 14:58:52,890 - INFO - We entered into function: update_setup_info
+2023-09-12 14:58:52,892 - INFO - New setup dictionary was updated.
+2023-09-12 14:58:52,892 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-12 14:58:52,892 - INFO - We entered into function: update_table
+2023-09-12 14:58:52,892 - INFO - Table was reseted.
+2023-09-12 14:58:52,892 - INFO - No folder to display. Return.
+2023-09-12 14:58:52,893 - INFO - We entered into function: update_table
+2023-09-12 14:58:52,893 - INFO - Table was reseted.
+2023-09-12 14:58:52,893 - INFO - No folder to display. Return.
+2023-09-12 14:58:52,893 - INFO - We entered into function: update_table
+2023-09-12 14:58:52,893 - INFO - Table was reseted.
+2023-09-12 14:58:52,894 - INFO - No folder to display. Return.
+2023-09-12 14:58:54,200 - INFO - We entered into function: update_clicked_folder
+2023-09-12 14:58:54,201 - INFO - Clicked folder: PM6Y6_112_05CN
+2023-09-12 14:58:54,201 - INFO - We entered into function: contains_group
+2023-09-12 14:58:54,201 - INFO - New clicked folder: PM6Y6_112_05CN
+2023-09-12 14:58:54,202 - INFO - We entered into function: update_comboboxes_metadata
+2023-09-12 14:58:54,202 - INFO - We entered into function: generator_keys_in_folder
+2023-09-12 14:58:54,203 - INFO - Metadata keys: ['ByteOrder', 'Ce_fluo', 'Cr_fluo', 'DataType', 'Dim_1', 'Dim_2', 'Emot', 'Fe_fluo', 'HeaderID', 'Icnt', 'Image', 'Imon', 'Io', 'Ion', 'Iop', 'Iref', 'It', 'LCP1', 'Mn_fluo', 'Ni_fluo', 'Qref', 'Qx', 'Qz', 'R1', 'RCP1', 'Size', 'Temp', 'TempOH', 'VersionNumber', 'Vmon', 'amp1', 'apd', 'apdmon', 'arcx', 'arcy', 'attn', 'bigx', 'bigz', 'bpmio', 'bpmx', 'bpmz', 'bstopx', 'bstopz', 'bviewer', 'c100', 'cdet', 'ch1n', 'ch1p', 'chi', 'col_beg', 'col_end', 'count_time', 'cryx', 'cryy', 'cryz', 'curind', 'dac1', 'dcoffs1', 'del', 'det', 'detsp', 'diff1', 'dir', 'dsb', 'dsd', 'dsf', 'dshg', 'dsho', 'dsu', 'dsvg', 'dsvo', 'dummy', 'eLCP1', 'eR1', 'eRCP1', 'ediff1', 'ehsp1', 'ehsp2', 'ehsp4', 'ehsp5', 'ehsp6', 'eta', 'etap', 'euro', 'euro2', 'euro3', 'euro4', 'euro_T', 'euro_pv', 'euro_sp', 'euro_ts', 'euro_ws', 'filter', 'filtio', 'fluo01', 'fluo02', 'fluo03', 'fluo04', 'fluo05', 'fluo06', 'fluo07', 'fluo08', 'fluo09', 'fluo10', 'fluo11', 'fluo12', 'fluo13', 'freq1', 'fwhmx', 'fwhmy', 'ge01', 'ge02', 'ge03', 'ge04', 'ge05', 'ge06', 'ge07', 'ge08', 'ge09', 'ge10', 'ge11', 'ge12', 'ge13', 'ge_fall', 'goniox', 'gonioy', 'hgt', 'hsb', 'hsd', 'hsf', 'hshg', 'hsho', 'hsu', 'hsvg', 'hsvo', 'ic0io', 'ic1io', 'inout', 'intens', 'iroi', 'iroi1', 'iroi2', 'iroiall', 'kepcoi', 'lcp_ret', 'lgb', 'lgb_enc', 'lgf', 'lgf_enc', 'lgm', 'lgm_enc', 'llth', 'm1d', 'm1hgt', 'm1m', 'm1th', 'm1tilt', 'm1u', 'm2d', 'm2hgt', 'm2m', 'm2th', 'm2tilt', 'm2u', 'magA', 'magAE', 'magB', 'magBE', 'magD', 'magDE', 'magR', 'magRE', 'magS', 'magSE', 'mca0', 'mca1', 'mca2', 'mccdR', 'mccdx', 'mccdz', 'mcrbd', 'mcrbu', 'mjack', 'mon', 'mono', 'mptbd', 'mptbu', 'mroll', 'mth', 'mtrans', 'mty', 'mtz', 'mu', 'myaw', 'nomon', 'nu', 'offset', 'ohspare', 'omtz', 'p10', 'p11', 'p4', 'p6', 'p7', 'p8', 'phi', 'pico1', 'pico2', 'pilx', 'pilz', 'pm_enc', 'point_no', 'ppchi', 'ppio', 'ppth', 'pptth', 'ppx', 'ppz', 'prefix', 'preset', 'quadio', 'quadx', 'quadz', 'rcp_ret', 'row_beg', 'row_end', 'run', 's1b', 's1d', 's1f', 's1hg', 's1ho', 's1u', 's1vg', 's1vo', 's2b', 's2d', 's2f', 's2hg', 's2ho', 's2u', 's2vg', 's2vo', 's3b', 's3d', 's3f', 's3hg', 's3ho', 's3u', 's3vg', 's3vo', 's4b', 's4d', 's4f', 's4hg', 's4ho', 's4u', 's4vg', 's4vo', 'samsp', 'samx', 'samz', 'scan_no', 'sec', 'srcur', 'standax', 'suffix', 'sum1', 'temp_A', 'temp_B', 'tha', 'thc2', 'thdiff', 'thorx', 'thorz', 'thp', 'title', 'trans', 'tsinb', 'tsind', 'tsinf', 'tsinhg', 'tsinho', 'tsinu', 'tsinvg', 'tsinvo', 'tsoutb', 'tsoutd', 'tsoutf', 'tsouthg', 'tsoutho', 'tsoutu', 'tsoutvg', 'tsoutvo', 'tsx', 'tsz', 'ttha', 'tthp', 'tthy1', 'tthy2', 'tubex', 'vtrans', 'win', 'x', 'xdiff', 'xdt', 'xdt00', 'xdt01', 'xdt02', 'xdt03', 'xicr', 'xicr00', 'xicr01', 'xicr02', 'xicr03', 'xlt', 'xlt00', 'xlt01', 'xlt02', 'xlt03', 'xocr', 'xocr00', 'xocr01', 'xocr02', 'xocr03', 'xtilt', 'y', 'ytilt', 'zdiff', 'zdown', 'zup']
+2023-09-12 14:58:54,203 - INFO - New metadata keys: ['ByteOrder', 'Ce_fluo', 'Cr_fluo', 'DataType', 'Dim_1', 'Dim_2', 'Emot', 'Fe_fluo', 'HeaderID', 'Icnt', 'Image', 'Imon', 'Io', 'Ion', 'Iop', 'Iref', 'It', 'LCP1', 'Mn_fluo', 'Ni_fluo', 'Qref', 'Qx', 'Qz', 'R1', 'RCP1', 'Size', 'Temp', 'TempOH', 'VersionNumber', 'Vmon', 'amp1', 'apd', 'apdmon', 'arcx', 'arcy', 'attn', 'bigx', 'bigz', 'bpmio', 'bpmx', 'bpmz', 'bstopx', 'bstopz', 'bviewer', 'c100', 'cdet', 'ch1n', 'ch1p', 'chi', 'col_beg', 'col_end', 'count_time', 'cryx', 'cryy', 'cryz', 'curind', 'dac1', 'dcoffs1', 'del', 'det', 'detsp', 'diff1', 'dir', 'dsb', 'dsd', 'dsf', 'dshg', 'dsho', 'dsu', 'dsvg', 'dsvo', 'dummy', 'eLCP1', 'eR1', 'eRCP1', 'ediff1', 'ehsp1', 'ehsp2', 'ehsp4', 'ehsp5', 'ehsp6', 'eta', 'etap', 'euro', 'euro2', 'euro3', 'euro4', 'euro_T', 'euro_pv', 'euro_sp', 'euro_ts', 'euro_ws', 'filter', 'filtio', 'fluo01', 'fluo02', 'fluo03', 'fluo04', 'fluo05', 'fluo06', 'fluo07', 'fluo08', 'fluo09', 'fluo10', 'fluo11', 'fluo12', 'fluo13', 'freq1', 'fwhmx', 'fwhmy', 'ge01', 'ge02', 'ge03', 'ge04', 'ge05', 'ge06', 'ge07', 'ge08', 'ge09', 'ge10', 'ge11', 'ge12', 'ge13', 'ge_fall', 'goniox', 'gonioy', 'hgt', 'hsb', 'hsd', 'hsf', 'hshg', 'hsho', 'hsu', 'hsvg', 'hsvo', 'ic0io', 'ic1io', 'inout', 'intens', 'iroi', 'iroi1', 'iroi2', 'iroiall', 'kepcoi', 'lcp_ret', 'lgb', 'lgb_enc', 'lgf', 'lgf_enc', 'lgm', 'lgm_enc', 'llth', 'm1d', 'm1hgt', 'm1m', 'm1th', 'm1tilt', 'm1u', 'm2d', 'm2hgt', 'm2m', 'm2th', 'm2tilt', 'm2u', 'magA', 'magAE', 'magB', 'magBE', 'magD', 'magDE', 'magR', 'magRE', 'magS', 'magSE', 'mca0', 'mca1', 'mca2', 'mccdR', 'mccdx', 'mccdz', 'mcrbd', 'mcrbu', 'mjack', 'mon', 'mono', 'mptbd', 'mptbu', 'mroll', 'mth', 'mtrans', 'mty', 'mtz', 'mu', 'myaw', 'nomon', 'nu', 'offset', 'ohspare', 'omtz', 'p10', 'p11', 'p4', 'p6', 'p7', 'p8', 'phi', 'pico1', 'pico2', 'pilx', 'pilz', 'pm_enc', 'point_no', 'ppchi', 'ppio', 'ppth', 'pptth', 'ppx', 'ppz', 'prefix', 'preset', 'quadio', 'quadx', 'quadz', 'rcp_ret', 'row_beg', 'row_end', 'run', 's1b', 's1d', 's1f', 's1hg', 's1ho', 's1u', 's1vg', 's1vo', 's2b', 's2d', 's2f', 's2hg', 's2ho', 's2u', 's2vg', 's2vo', 's3b', 's3d', 's3f', 's3hg', 's3ho', 's3u', 's3vg', 's3vo', 's4b', 's4d', 's4f', 's4hg', 's4ho', 's4u', 's4vg', 's4vo', 'samsp', 'samx', 'samz', 'scan_no', 'sec', 'srcur', 'standax', 'suffix', 'sum1', 'temp_A', 'temp_B', 'tha', 'thc2', 'thdiff', 'thorx', 'thorz', 'thp', 'title', 'trans', 'tsinb', 'tsind', 'tsinf', 'tsinhg', 'tsinho', 'tsinu', 'tsinvg', 'tsinvo', 'tsoutb', 'tsoutd', 'tsoutf', 'tsouthg', 'tsoutho', 'tsoutu', 'tsoutvg', 'tsoutvo', 'tsx', 'tsz', 'ttha', 'tthp', 'tthy1', 'tthy2', 'tubex', 'vtrans', 'win', 'x', 'xdiff', 'xdt', 'xdt00', 'xdt01', 'xdt02', 'xdt03', 'xicr', 'xicr00', 'xicr01', 'xicr02', 'xicr03', 'xlt', 'xlt00', 'xlt01', 'xlt02', 'xlt03', 'xocr', 'xocr00', 'xocr01', 'xocr02', 'xocr03', 'xtilt', 'y', 'ytilt', 'zdiff', 'zdown', 'zup']
+2023-09-12 14:58:54,204 - INFO - We entered into function: update_table
+2023-09-12 14:58:54,204 - INFO - Table was reseted.
+2023-09-12 14:58:54,205 - INFO - Folder to display: PM6Y6_112_05CN.
+2023-09-12 14:58:54,205 - INFO - Keys to display: ['spitch', 'Monitor', 'exposure', 'ByteOrder'].
+2023-09-12 14:58:54,205 - INFO - We entered into function: get_metadata_dataframe
+2023-09-12 14:58:54,205 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,206 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,206 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,206 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,207 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,207 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,207 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,208 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,208 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,208 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,209 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,209 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,209 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,209 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,209 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,210 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,210 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,210 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,210 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,210 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,210 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,212 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,212 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,212 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,212 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,212 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,213 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,213 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,213 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,213 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,213 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,214 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,214 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,214 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,214 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,214 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,215 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,215 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,215 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,215 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,216 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,216 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,216 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,216 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,216 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,216 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,216 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,217 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,217 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,217 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,217 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,217 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,218 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,218 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,218 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,218 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,219 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,219 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,219 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,219 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,220 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,220 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,220 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,220 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,220 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,221 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,221 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,221 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,221 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,221 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,222 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,222 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,222 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,222 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,222 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,222 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,223 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,223 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,223 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,223 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,224 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,224 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,224 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,224 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,224 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,225 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,225 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,225 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,225 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,225 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,226 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,226 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,226 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,226 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,226 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,227 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,227 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,227 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,227 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,227 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,228 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,228 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,228 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,228 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,229 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,229 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,229 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,230 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,230 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,230 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,231 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,231 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,231 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,231 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,232 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,232 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,233 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,233 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,233 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,234 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,234 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,234 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,234 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,235 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,235 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,236 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,236 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,236 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,236 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,237 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,237 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,237 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,237 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,237 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,238 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,238 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,238 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,238 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,238 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,239 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,239 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,239 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,239 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,239 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,240 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,240 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,240 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,240 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,240 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,241 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,241 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,241 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,241 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,241 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,242 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,242 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,242 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,242 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,242 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,243 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,243 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,243 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,243 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,243 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,244 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,244 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,244 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,244 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,244 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,245 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,245 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,245 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,246 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,246 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,246 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,246 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,246 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,247 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,247 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,247 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,247 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,247 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,247 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,247 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,248 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,248 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,248 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,248 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,249 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,249 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,249 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,249 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,258 - INFO - This is the dataframe:                                 Filename spitch Monitor exposure        ByteOrder
+0   PM6Y6_112_05CN_2m_00001_0033_000.edf   None    None     None  b'LowByteFirst'
+1   PM6Y6_112_05CN_2m_00002_0033_001.edf   None    None     None  b'LowByteFirst'
+2   PM6Y6_112_05CN_2m_00003_0033_002.edf   None    None     None  b'LowByteFirst'
+3   PM6Y6_112_05CN_2m_00004_0033_003.edf   None    None     None  b'LowByteFirst'
+4   PM6Y6_112_05CN_2m_00005_0033_004.edf   None    None     None  b'LowByteFirst'
+5   PM6Y6_112_05CN_2m_00006_0033_005.edf   None    None     None  b'LowByteFirst'
+6   PM6Y6_112_05CN_2m_00007_0033_006.edf   None    None     None  b'LowByteFirst'
+7   PM6Y6_112_05CN_2m_00008_0033_007.edf   None    None     None  b'LowByteFirst'
+8   PM6Y6_112_05CN_2m_00009_0039_000.edf   None    None     None  b'LowByteFirst'
+9   PM6Y6_112_05CN_2m_00010_0039_001.edf   None    None     None  b'LowByteFirst'
+10  PM6Y6_112_05CN_2m_00011_0039_002.edf   None    None     None  b'LowByteFirst'
+11  PM6Y6_112_05CN_2m_00012_0039_003.edf   None    None     None  b'LowByteFirst'
+12  PM6Y6_112_05CN_2m_00013_0039_004.edf   None    None     None  b'LowByteFirst'
+13  PM6Y6_112_05CN_2m_00014_0039_005.edf   None    None     None  b'LowByteFirst'
+14  PM6Y6_112_05CN_2m_00015_0039_006.edf   None    None     None  b'LowByteFirst'
+15  PM6Y6_112_05CN_2m_00016_0039_007.edf   None    None     None  b'LowByteFirst'
+16  PM6Y6_112_05CN_2m_00017_0039_008.edf   None    None     None  b'LowByteFirst'
+17  PM6Y6_112_05CN_2m_00018_0039_009.edf   None    None     None  b'LowByteFirst'
+18  PM6Y6_112_05CN_2m_00019_0040_000.edf   None    None     None  b'LowByteFirst'
+19  PM6Y6_112_05CN_2m_00020_0040_001.edf   None    None     None  b'LowByteFirst'
+20  PM6Y6_112_05CN_2m_00021_0040_002.edf   None    None     None  b'LowByteFirst'
+21  PM6Y6_112_05CN_2m_00022_0040_003.edf   None    None     None  b'LowByteFirst'
+22  PM6Y6_112_05CN_2m_00023_0040_004.edf   None    None     None  b'LowByteFirst'
+23  PM6Y6_112_05CN_2m_00024_0040_005.edf   None    None     None  b'LowByteFirst'
+24  PM6Y6_112_05CN_2m_00025_0040_006.edf   None    None     None  b'LowByteFirst'
+25  PM6Y6_112_05CN_2m_00026_0040_007.edf   None    None     None  b'LowByteFirst'
+26  PM6Y6_112_05CN_2m_00027_0040_008.edf   None    None     None  b'LowByteFirst'
+27  PM6Y6_112_05CN_2m_00028_0040_009.edf   None    None     None  b'LowByteFirst'
+28  PM6Y6_112_05CN_2m_00029_0041_000.edf   None    None     None  b'LowByteFirst'
+29  PM6Y6_112_05CN_2m_00030_0041_001.edf   None    None     None  b'LowByteFirst'
+30  PM6Y6_112_05CN_2m_00031_0041_002.edf   None    None     None  b'LowByteFirst'
+31  PM6Y6_112_05CN_2m_00032_0041_003.edf   None    None     None  b'LowByteFirst'
+32  PM6Y6_112_05CN_2m_00033_0041_004.edf   None    None     None  b'LowByteFirst'
+33  PM6Y6_112_05CN_2m_00034_0041_005.edf   None    None     None  b'LowByteFirst'
+34  PM6Y6_112_05CN_2m_00035_0041_006.edf   None    None     None  b'LowByteFirst'
+35  PM6Y6_112_05CN_2m_00036_0041_007.edf   None    None     None  b'LowByteFirst'
+36  PM6Y6_112_05CN_2m_00037_0041_008.edf   None    None     None  b'LowByteFirst'
+37  PM6Y6_112_05CN_2m_00038_0041_009.edf   None    None     None  b'LowByteFirst'
+38  PM6Y6_112_05CN_2m_00039_0042_000.edf   None    None     None  b'LowByteFirst'
+39  PM6Y6_112_05CN_2m_00040_0042_001.edf   None    None     None  b'LowByteFirst'
+40  PM6Y6_112_05CN_2m_00041_0042_002.edf   None    None     None  b'LowByteFirst'
+41  PM6Y6_112_05CN_2m_00042_0042_003.edf   None    None     None  b'LowByteFirst'
+42  PM6Y6_112_05CN_2m_00043_0042_004.edf   None    None     None  b'LowByteFirst'
+43  PM6Y6_112_05CN_2m_00044_0042_005.edf   None    None     None  b'LowByteFirst'
+44  PM6Y6_112_05CN_2m_00045_0042_006.edf   None    None     None  b'LowByteFirst'
+45  PM6Y6_112_05CN_2m_00046_0042_007.edf   None    None     None  b'LowByteFirst'
+46  PM6Y6_112_05CN_2m_00047_0042_008.edf   None    None     None  b'LowByteFirst'
+47  PM6Y6_112_05CN_2m_00048_0042_009.edf   None    None     None  b'LowByteFirst'
+2023-09-12 14:58:54,259 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-09-12 14:58:54,259 - INFO - Inserted columns: 5
+2023-09-12 14:58:54,260 - INFO - Inserted rows: 48
+2023-09-12 14:58:54,260 - INFO - Updated cell [0,0].
+2023-09-12 14:58:54,260 - INFO - Updated cell [0,1].
+2023-09-12 14:58:54,261 - INFO - Updated cell [0,2].
+2023-09-12 14:58:54,261 - INFO - Updated cell [0,3].
+2023-09-12 14:58:54,261 - INFO - Updated cell [0,4].
+2023-09-12 14:58:54,261 - INFO - Updated cell [1,0].
+2023-09-12 14:58:54,261 - INFO - Updated cell [1,1].
+2023-09-12 14:58:54,262 - INFO - Updated cell [1,2].
+2023-09-12 14:58:54,262 - INFO - Updated cell [1,3].
+2023-09-12 14:58:54,262 - INFO - Updated cell [1,4].
+2023-09-12 14:58:54,262 - INFO - Updated cell [2,0].
+2023-09-12 14:58:54,262 - INFO - Updated cell [2,1].
+2023-09-12 14:58:54,262 - INFO - Updated cell [2,2].
+2023-09-12 14:58:54,262 - INFO - Updated cell [2,3].
+2023-09-12 14:58:54,262 - INFO - Updated cell [2,4].
+2023-09-12 14:58:54,262 - INFO - Updated cell [3,0].
+2023-09-12 14:58:54,262 - INFO - Updated cell [3,1].
+2023-09-12 14:58:54,263 - INFO - Updated cell [3,2].
+2023-09-12 14:58:54,263 - INFO - Updated cell [3,3].
+2023-09-12 14:58:54,263 - INFO - Updated cell [3,4].
+2023-09-12 14:58:54,263 - INFO - Updated cell [4,0].
+2023-09-12 14:58:54,263 - INFO - Updated cell [4,1].
+2023-09-12 14:58:54,263 - INFO - Updated cell [4,2].
+2023-09-12 14:58:54,263 - INFO - Updated cell [4,3].
+2023-09-12 14:58:54,263 - INFO - Updated cell [4,4].
+2023-09-12 14:58:54,264 - INFO - Updated cell [5,0].
+2023-09-12 14:58:54,264 - INFO - Updated cell [5,1].
+2023-09-12 14:58:54,264 - INFO - Updated cell [5,2].
+2023-09-12 14:58:54,264 - INFO - Updated cell [5,3].
+2023-09-12 14:58:54,264 - INFO - Updated cell [5,4].
+2023-09-12 14:58:54,264 - INFO - Updated cell [6,0].
+2023-09-12 14:58:54,264 - INFO - Updated cell [6,1].
+2023-09-12 14:58:54,264 - INFO - Updated cell [6,2].
+2023-09-12 14:58:54,264 - INFO - Updated cell [6,3].
+2023-09-12 14:58:54,265 - INFO - Updated cell [6,4].
+2023-09-12 14:58:54,265 - INFO - Updated cell [7,0].
+2023-09-12 14:58:54,265 - INFO - Updated cell [7,1].
+2023-09-12 14:58:54,265 - INFO - Updated cell [7,2].
+2023-09-12 14:58:54,265 - INFO - Updated cell [7,3].
+2023-09-12 14:58:54,265 - INFO - Updated cell [7,4].
+2023-09-12 14:58:54,265 - INFO - Updated cell [8,0].
+2023-09-12 14:58:54,265 - INFO - Updated cell [8,1].
+2023-09-12 14:58:54,265 - INFO - Updated cell [8,2].
+2023-09-12 14:58:54,265 - INFO - Updated cell [8,3].
+2023-09-12 14:58:54,265 - INFO - Updated cell [8,4].
+2023-09-12 14:58:54,265 - INFO - Updated cell [9,0].
+2023-09-12 14:58:54,265 - INFO - Updated cell [9,1].
+2023-09-12 14:58:54,265 - INFO - Updated cell [9,2].
+2023-09-12 14:58:54,267 - INFO - Updated cell [9,3].
+2023-09-12 14:58:54,267 - INFO - Updated cell [9,4].
+2023-09-12 14:58:54,267 - INFO - Updated cell [10,0].
+2023-09-12 14:58:54,267 - INFO - Updated cell [10,1].
+2023-09-12 14:58:54,267 - INFO - Updated cell [10,2].
+2023-09-12 14:58:54,267 - INFO - Updated cell [10,3].
+2023-09-12 14:58:54,267 - INFO - Updated cell [10,4].
+2023-09-12 14:58:54,267 - INFO - Updated cell [11,0].
+2023-09-12 14:58:54,268 - INFO - Updated cell [11,1].
+2023-09-12 14:58:54,268 - INFO - Updated cell [11,2].
+2023-09-12 14:58:54,268 - INFO - Updated cell [11,3].
+2023-09-12 14:58:54,268 - INFO - Updated cell [11,4].
+2023-09-12 14:58:54,268 - INFO - Updated cell [12,0].
+2023-09-12 14:58:54,268 - INFO - Updated cell [12,1].
+2023-09-12 14:58:54,268 - INFO - Updated cell [12,2].
+2023-09-12 14:58:54,268 - INFO - Updated cell [12,3].
+2023-09-12 14:58:54,268 - INFO - Updated cell [12,4].
+2023-09-12 14:58:54,269 - INFO - Updated cell [13,0].
+2023-09-12 14:58:54,269 - INFO - Updated cell [13,1].
+2023-09-12 14:58:54,269 - INFO - Updated cell [13,2].
+2023-09-12 14:58:54,269 - INFO - Updated cell [13,3].
+2023-09-12 14:58:54,269 - INFO - Updated cell [13,4].
+2023-09-12 14:58:54,269 - INFO - Updated cell [14,0].
+2023-09-12 14:58:54,269 - INFO - Updated cell [14,1].
+2023-09-12 14:58:54,269 - INFO - Updated cell [14,2].
+2023-09-12 14:58:54,269 - INFO - Updated cell [14,3].
+2023-09-12 14:58:54,270 - INFO - Updated cell [14,4].
+2023-09-12 14:58:54,270 - INFO - Updated cell [15,0].
+2023-09-12 14:58:54,270 - INFO - Updated cell [15,1].
+2023-09-12 14:58:54,270 - INFO - Updated cell [15,2].
+2023-09-12 14:58:54,270 - INFO - Updated cell [15,3].
+2023-09-12 14:58:54,270 - INFO - Updated cell [15,4].
+2023-09-12 14:58:54,270 - INFO - Updated cell [16,0].
+2023-09-12 14:58:54,270 - INFO - Updated cell [16,1].
+2023-09-12 14:58:54,271 - INFO - Updated cell [16,2].
+2023-09-12 14:58:54,271 - INFO - Updated cell [16,3].
+2023-09-12 14:58:54,271 - INFO - Updated cell [16,4].
+2023-09-12 14:58:54,271 - INFO - Updated cell [17,0].
+2023-09-12 14:58:54,271 - INFO - Updated cell [17,1].
+2023-09-12 14:58:54,271 - INFO - Updated cell [17,2].
+2023-09-12 14:58:54,271 - INFO - Updated cell [17,3].
+2023-09-12 14:58:54,271 - INFO - Updated cell [17,4].
+2023-09-12 14:58:54,271 - INFO - Updated cell [18,0].
+2023-09-12 14:58:54,272 - INFO - Updated cell [18,1].
+2023-09-12 14:58:54,272 - INFO - Updated cell [18,2].
+2023-09-12 14:58:54,272 - INFO - Updated cell [18,3].
+2023-09-12 14:58:54,272 - INFO - Updated cell [18,4].
+2023-09-12 14:58:54,272 - INFO - Updated cell [19,0].
+2023-09-12 14:58:54,272 - INFO - Updated cell [19,1].
+2023-09-12 14:58:54,272 - INFO - Updated cell [19,2].
+2023-09-12 14:58:54,272 - INFO - Updated cell [19,3].
+2023-09-12 14:58:54,272 - INFO - Updated cell [19,4].
+2023-09-12 14:58:54,272 - INFO - Updated cell [20,0].
+2023-09-12 14:58:54,272 - INFO - Updated cell [20,1].
+2023-09-12 14:58:54,272 - INFO - Updated cell [20,2].
+2023-09-12 14:58:54,272 - INFO - Updated cell [20,3].
+2023-09-12 14:58:54,272 - INFO - Updated cell [20,4].
+2023-09-12 14:58:54,273 - INFO - Updated cell [21,0].
+2023-09-12 14:58:54,273 - INFO - Updated cell [21,1].
+2023-09-12 14:58:54,273 - INFO - Updated cell [21,2].
+2023-09-12 14:58:54,273 - INFO - Updated cell [21,3].
+2023-09-12 14:58:54,273 - INFO - Updated cell [21,4].
+2023-09-12 14:58:54,273 - INFO - Updated cell [22,0].
+2023-09-12 14:58:54,273 - INFO - Updated cell [22,1].
+2023-09-12 14:58:54,273 - INFO - Updated cell [22,2].
+2023-09-12 14:58:54,273 - INFO - Updated cell [22,3].
+2023-09-12 14:58:54,274 - INFO - Updated cell [22,4].
+2023-09-12 14:58:54,274 - INFO - Updated cell [23,0].
+2023-09-12 14:58:54,274 - INFO - Updated cell [23,1].
+2023-09-12 14:58:54,274 - INFO - Updated cell [23,2].
+2023-09-12 14:58:54,274 - INFO - Updated cell [23,3].
+2023-09-12 14:58:54,274 - INFO - Updated cell [23,4].
+2023-09-12 14:58:54,274 - INFO - Updated cell [24,0].
+2023-09-12 14:58:54,274 - INFO - Updated cell [24,1].
+2023-09-12 14:58:54,275 - INFO - Updated cell [24,2].
+2023-09-12 14:58:54,275 - INFO - Updated cell [24,3].
+2023-09-12 14:58:54,275 - INFO - Updated cell [24,4].
+2023-09-12 14:58:54,275 - INFO - Updated cell [25,0].
+2023-09-12 14:58:54,275 - INFO - Updated cell [25,1].
+2023-09-12 14:58:54,275 - INFO - Updated cell [25,2].
+2023-09-12 14:58:54,275 - INFO - Updated cell [25,3].
+2023-09-12 14:58:54,276 - INFO - Updated cell [25,4].
+2023-09-12 14:58:54,276 - INFO - Updated cell [26,0].
+2023-09-12 14:58:54,276 - INFO - Updated cell [26,1].
+2023-09-12 14:58:54,276 - INFO - Updated cell [26,2].
+2023-09-12 14:58:54,276 - INFO - Updated cell [26,3].
+2023-09-12 14:58:54,276 - INFO - Updated cell [26,4].
+2023-09-12 14:58:54,276 - INFO - Updated cell [27,0].
+2023-09-12 14:58:54,276 - INFO - Updated cell [27,1].
+2023-09-12 14:58:54,276 - INFO - Updated cell [27,2].
+2023-09-12 14:58:54,277 - INFO - Updated cell [27,3].
+2023-09-12 14:58:54,277 - INFO - Updated cell [27,4].
+2023-09-12 14:58:54,277 - INFO - Updated cell [28,0].
+2023-09-12 14:58:54,277 - INFO - Updated cell [28,1].
+2023-09-12 14:58:54,277 - INFO - Updated cell [28,2].
+2023-09-12 14:58:54,277 - INFO - Updated cell [28,3].
+2023-09-12 14:58:54,277 - INFO - Updated cell [28,4].
+2023-09-12 14:58:54,277 - INFO - Updated cell [29,0].
+2023-09-12 14:58:54,277 - INFO - Updated cell [29,1].
+2023-09-12 14:58:54,278 - INFO - Updated cell [29,2].
+2023-09-12 14:58:54,278 - INFO - Updated cell [29,3].
+2023-09-12 14:58:54,278 - INFO - Updated cell [29,4].
+2023-09-12 14:58:54,278 - INFO - Updated cell [30,0].
+2023-09-12 14:58:54,278 - INFO - Updated cell [30,1].
+2023-09-12 14:58:54,278 - INFO - Updated cell [30,2].
+2023-09-12 14:58:54,278 - INFO - Updated cell [30,3].
+2023-09-12 14:58:54,278 - INFO - Updated cell [30,4].
+2023-09-12 14:58:54,278 - INFO - Updated cell [31,0].
+2023-09-12 14:58:54,279 - INFO - Updated cell [31,1].
+2023-09-12 14:58:54,279 - INFO - Updated cell [31,2].
+2023-09-12 14:58:54,279 - INFO - Updated cell [31,3].
+2023-09-12 14:58:54,279 - INFO - Updated cell [31,4].
+2023-09-12 14:58:54,279 - INFO - Updated cell [32,0].
+2023-09-12 14:58:54,279 - INFO - Updated cell [32,1].
+2023-09-12 14:58:54,279 - INFO - Updated cell [32,2].
+2023-09-12 14:58:54,279 - INFO - Updated cell [32,3].
+2023-09-12 14:58:54,281 - INFO - Updated cell [32,4].
+2023-09-12 14:58:54,281 - INFO - Updated cell [33,0].
+2023-09-12 14:58:54,281 - INFO - Updated cell [33,1].
+2023-09-12 14:58:54,281 - INFO - Updated cell [33,2].
+2023-09-12 14:58:54,281 - INFO - Updated cell [33,3].
+2023-09-12 14:58:54,281 - INFO - Updated cell [33,4].
+2023-09-12 14:58:54,281 - INFO - Updated cell [34,0].
+2023-09-12 14:58:54,282 - INFO - Updated cell [34,1].
+2023-09-12 14:58:54,282 - INFO - Updated cell [34,2].
+2023-09-12 14:58:54,282 - INFO - Updated cell [34,3].
+2023-09-12 14:58:54,282 - INFO - Updated cell [34,4].
+2023-09-12 14:58:54,282 - INFO - Updated cell [35,0].
+2023-09-12 14:58:54,282 - INFO - Updated cell [35,1].
+2023-09-12 14:58:54,282 - INFO - Updated cell [35,2].
+2023-09-12 14:58:54,282 - INFO - Updated cell [35,3].
+2023-09-12 14:58:54,283 - INFO - Updated cell [35,4].
+2023-09-12 14:58:54,283 - INFO - Updated cell [36,0].
+2023-09-12 14:58:54,283 - INFO - Updated cell [36,1].
+2023-09-12 14:58:54,283 - INFO - Updated cell [36,2].
+2023-09-12 14:58:54,283 - INFO - Updated cell [36,3].
+2023-09-12 14:58:54,283 - INFO - Updated cell [36,4].
+2023-09-12 14:58:54,283 - INFO - Updated cell [37,0].
+2023-09-12 14:58:54,283 - INFO - Updated cell [37,1].
+2023-09-12 14:58:54,284 - INFO - Updated cell [37,2].
+2023-09-12 14:58:54,284 - INFO - Updated cell [37,3].
+2023-09-12 14:58:54,284 - INFO - Updated cell [37,4].
+2023-09-12 14:58:54,284 - INFO - Updated cell [38,0].
+2023-09-12 14:58:54,284 - INFO - Updated cell [38,1].
+2023-09-12 14:58:54,284 - INFO - Updated cell [38,2].
+2023-09-12 14:58:54,284 - INFO - Updated cell [38,3].
+2023-09-12 14:58:54,284 - INFO - Updated cell [38,4].
+2023-09-12 14:58:54,284 - INFO - Updated cell [39,0].
+2023-09-12 14:58:54,285 - INFO - Updated cell [39,1].
+2023-09-12 14:58:54,285 - INFO - Updated cell [39,2].
+2023-09-12 14:58:54,285 - INFO - Updated cell [39,3].
+2023-09-12 14:58:54,285 - INFO - Updated cell [39,4].
+2023-09-12 14:58:54,285 - INFO - Updated cell [40,0].
+2023-09-12 14:58:54,285 - INFO - Updated cell [40,1].
+2023-09-12 14:58:54,285 - INFO - Updated cell [40,2].
+2023-09-12 14:58:54,285 - INFO - Updated cell [40,3].
+2023-09-12 14:58:54,286 - INFO - Updated cell [40,4].
+2023-09-12 14:58:54,286 - INFO - Updated cell [41,0].
+2023-09-12 14:58:54,286 - INFO - Updated cell [41,1].
+2023-09-12 14:58:54,286 - INFO - Updated cell [41,2].
+2023-09-12 14:58:54,286 - INFO - Updated cell [41,3].
+2023-09-12 14:58:54,286 - INFO - Updated cell [41,4].
+2023-09-12 14:58:54,286 - INFO - Updated cell [42,0].
+2023-09-12 14:58:54,286 - INFO - Updated cell [42,1].
+2023-09-12 14:58:54,286 - INFO - Updated cell [42,2].
+2023-09-12 14:58:54,287 - INFO - Updated cell [42,3].
+2023-09-12 14:58:54,287 - INFO - Updated cell [42,4].
+2023-09-12 14:58:54,287 - INFO - Updated cell [43,0].
+2023-09-12 14:58:54,287 - INFO - Updated cell [43,1].
+2023-09-12 14:58:54,287 - INFO - Updated cell [43,2].
+2023-09-12 14:58:54,287 - INFO - Updated cell [43,3].
+2023-09-12 14:58:54,287 - INFO - Updated cell [43,4].
+2023-09-12 14:58:54,287 - INFO - Updated cell [44,0].
+2023-09-12 14:58:54,287 - INFO - Updated cell [44,1].
+2023-09-12 14:58:54,288 - INFO - Updated cell [44,2].
+2023-09-12 14:58:54,288 - INFO - Updated cell [44,3].
+2023-09-12 14:58:54,288 - INFO - Updated cell [44,4].
+2023-09-12 14:58:54,288 - INFO - Updated cell [45,0].
+2023-09-12 14:58:54,288 - INFO - Updated cell [45,1].
+2023-09-12 14:58:54,288 - INFO - Updated cell [45,2].
+2023-09-12 14:58:54,288 - INFO - Updated cell [45,3].
+2023-09-12 14:58:54,288 - INFO - Updated cell [45,4].
+2023-09-12 14:58:54,288 - INFO - Updated cell [46,0].
+2023-09-12 14:58:54,289 - INFO - Updated cell [46,1].
+2023-09-12 14:58:54,289 - INFO - Updated cell [46,2].
+2023-09-12 14:58:54,289 - INFO - Updated cell [46,3].
+2023-09-12 14:58:54,289 - INFO - Updated cell [46,4].
+2023-09-12 14:58:54,289 - INFO - Updated cell [47,0].
+2023-09-12 14:58:54,289 - INFO - Updated cell [47,1].
+2023-09-12 14:58:54,289 - INFO - Updated cell [47,2].
+2023-09-12 14:58:54,289 - INFO - Updated cell [47,3].
+2023-09-12 14:58:54,290 - INFO - Updated cell [47,4].
+2023-09-12 14:58:54,290 - INFO - Combobox header_items updated.
+2023-09-12 14:58:54,291 - INFO - Combobox header_items title updated.
+2023-09-12 14:58:54,291 - INFO - We entered into function: update_angle_parameter
+2023-09-12 14:58:54,291 - INFO - Combobox angle updated.
+2023-09-12 14:58:54,291 - INFO - We entered into function: update_tiltangle_parameter
+2023-09-12 14:58:54,292 - INFO - Combobox tilt angle updated.
+2023-09-12 14:58:54,292 - INFO - We entered into function: update_normfactor_parameter
+2023-09-12 14:58:54,292 - INFO - Combobox norm updated.
+2023-09-12 14:58:54,292 - INFO - We entered into function: update_exposure_parameter
+2023-09-12 14:58:54,292 - INFO - Combobox exposure updated.
+2023-09-12 14:58:54,292 - INFO - We entered into function: update_table
+2023-09-12 14:58:54,294 - INFO - Table was reseted.
+2023-09-12 14:58:54,294 - INFO - Folder to display: PM6Y6_112_05CN.
+2023-09-12 14:58:54,294 - INFO - Keys to display: ['spitch', 'Monitor', 'exposure', 'ByteOrder'].
+2023-09-12 14:58:54,294 - INFO - We entered into function: get_metadata_dataframe
+2023-09-12 14:58:54,295 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,295 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,295 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,295 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,295 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,296 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,296 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,296 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,296 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,296 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,297 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,297 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,297 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,297 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,297 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,298 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,298 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,298 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,298 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,298 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,299 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,299 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,299 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,299 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,299 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,300 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,300 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,300 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,300 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,300 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,301 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,301 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,301 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,301 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,301 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,302 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,302 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,302 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,302 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,302 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,303 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,303 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,303 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,303 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,304 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,304 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,304 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,304 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,304 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,304 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,304 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,304 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,305 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,305 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,305 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,305 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,305 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,306 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,306 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,306 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,307 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,307 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,307 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,307 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,308 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,308 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,308 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,308 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,309 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,309 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,309 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,309 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,309 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,309 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,309 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,309 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,311 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,311 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,311 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,311 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,312 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,312 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,312 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,313 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,313 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,313 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,313 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,314 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,315 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,315 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,315 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,315 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,315 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,316 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,316 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,316 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,316 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,316 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,317 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,317 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,317 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,317 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,317 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,318 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,318 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,318 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,318 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,318 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,319 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,319 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,319 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,319 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,320 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,320 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,320 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,320 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,320 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,321 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,321 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,321 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,321 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,321 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,322 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,322 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,322 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,322 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,323 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,323 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,323 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,323 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,323 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,324 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,324 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,324 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,324 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,324 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,325 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,325 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,325 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,325 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,325 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,325 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,325 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,326 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,326 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,326 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,326 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,326 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,327 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,327 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,327 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,327 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,328 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,328 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,328 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,328 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,328 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,329 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,329 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,329 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,329 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,329 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,330 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,330 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,330 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,330 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,330 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,331 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,331 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,331 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,331 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,331 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,332 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,332 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,332 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,332 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,332 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,333 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,333 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,333 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,333 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,333 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,333 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,333 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,335 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,335 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,335 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,335 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,335 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,336 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,336 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,336 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:54,342 - INFO - This is the dataframe:                                 Filename spitch Monitor exposure        ByteOrder
+0   PM6Y6_112_05CN_2m_00001_0033_000.edf   None    None     None  b'LowByteFirst'
+1   PM6Y6_112_05CN_2m_00002_0033_001.edf   None    None     None  b'LowByteFirst'
+2   PM6Y6_112_05CN_2m_00003_0033_002.edf   None    None     None  b'LowByteFirst'
+3   PM6Y6_112_05CN_2m_00004_0033_003.edf   None    None     None  b'LowByteFirst'
+4   PM6Y6_112_05CN_2m_00005_0033_004.edf   None    None     None  b'LowByteFirst'
+5   PM6Y6_112_05CN_2m_00006_0033_005.edf   None    None     None  b'LowByteFirst'
+6   PM6Y6_112_05CN_2m_00007_0033_006.edf   None    None     None  b'LowByteFirst'
+7   PM6Y6_112_05CN_2m_00008_0033_007.edf   None    None     None  b'LowByteFirst'
+8   PM6Y6_112_05CN_2m_00009_0039_000.edf   None    None     None  b'LowByteFirst'
+9   PM6Y6_112_05CN_2m_00010_0039_001.edf   None    None     None  b'LowByteFirst'
+10  PM6Y6_112_05CN_2m_00011_0039_002.edf   None    None     None  b'LowByteFirst'
+11  PM6Y6_112_05CN_2m_00012_0039_003.edf   None    None     None  b'LowByteFirst'
+12  PM6Y6_112_05CN_2m_00013_0039_004.edf   None    None     None  b'LowByteFirst'
+13  PM6Y6_112_05CN_2m_00014_0039_005.edf   None    None     None  b'LowByteFirst'
+14  PM6Y6_112_05CN_2m_00015_0039_006.edf   None    None     None  b'LowByteFirst'
+15  PM6Y6_112_05CN_2m_00016_0039_007.edf   None    None     None  b'LowByteFirst'
+16  PM6Y6_112_05CN_2m_00017_0039_008.edf   None    None     None  b'LowByteFirst'
+17  PM6Y6_112_05CN_2m_00018_0039_009.edf   None    None     None  b'LowByteFirst'
+18  PM6Y6_112_05CN_2m_00019_0040_000.edf   None    None     None  b'LowByteFirst'
+19  PM6Y6_112_05CN_2m_00020_0040_001.edf   None    None     None  b'LowByteFirst'
+20  PM6Y6_112_05CN_2m_00021_0040_002.edf   None    None     None  b'LowByteFirst'
+21  PM6Y6_112_05CN_2m_00022_0040_003.edf   None    None     None  b'LowByteFirst'
+22  PM6Y6_112_05CN_2m_00023_0040_004.edf   None    None     None  b'LowByteFirst'
+23  PM6Y6_112_05CN_2m_00024_0040_005.edf   None    None     None  b'LowByteFirst'
+24  PM6Y6_112_05CN_2m_00025_0040_006.edf   None    None     None  b'LowByteFirst'
+25  PM6Y6_112_05CN_2m_00026_0040_007.edf   None    None     None  b'LowByteFirst'
+26  PM6Y6_112_05CN_2m_00027_0040_008.edf   None    None     None  b'LowByteFirst'
+27  PM6Y6_112_05CN_2m_00028_0040_009.edf   None    None     None  b'LowByteFirst'
+28  PM6Y6_112_05CN_2m_00029_0041_000.edf   None    None     None  b'LowByteFirst'
+29  PM6Y6_112_05CN_2m_00030_0041_001.edf   None    None     None  b'LowByteFirst'
+30  PM6Y6_112_05CN_2m_00031_0041_002.edf   None    None     None  b'LowByteFirst'
+31  PM6Y6_112_05CN_2m_00032_0041_003.edf   None    None     None  b'LowByteFirst'
+32  PM6Y6_112_05CN_2m_00033_0041_004.edf   None    None     None  b'LowByteFirst'
+33  PM6Y6_112_05CN_2m_00034_0041_005.edf   None    None     None  b'LowByteFirst'
+34  PM6Y6_112_05CN_2m_00035_0041_006.edf   None    None     None  b'LowByteFirst'
+35  PM6Y6_112_05CN_2m_00036_0041_007.edf   None    None     None  b'LowByteFirst'
+36  PM6Y6_112_05CN_2m_00037_0041_008.edf   None    None     None  b'LowByteFirst'
+37  PM6Y6_112_05CN_2m_00038_0041_009.edf   None    None     None  b'LowByteFirst'
+38  PM6Y6_112_05CN_2m_00039_0042_000.edf   None    None     None  b'LowByteFirst'
+39  PM6Y6_112_05CN_2m_00040_0042_001.edf   None    None     None  b'LowByteFirst'
+40  PM6Y6_112_05CN_2m_00041_0042_002.edf   None    None     None  b'LowByteFirst'
+41  PM6Y6_112_05CN_2m_00042_0042_003.edf   None    None     None  b'LowByteFirst'
+42  PM6Y6_112_05CN_2m_00043_0042_004.edf   None    None     None  b'LowByteFirst'
+43  PM6Y6_112_05CN_2m_00044_0042_005.edf   None    None     None  b'LowByteFirst'
+44  PM6Y6_112_05CN_2m_00045_0042_006.edf   None    None     None  b'LowByteFirst'
+45  PM6Y6_112_05CN_2m_00046_0042_007.edf   None    None     None  b'LowByteFirst'
+46  PM6Y6_112_05CN_2m_00047_0042_008.edf   None    None     None  b'LowByteFirst'
+47  PM6Y6_112_05CN_2m_00048_0042_009.edf   None    None     None  b'LowByteFirst'
+2023-09-12 14:58:54,343 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-09-12 14:58:54,343 - INFO - Inserted columns: 5
+2023-09-12 14:58:54,345 - INFO - Inserted rows: 48
+2023-09-12 14:58:54,345 - INFO - Updated cell [0,0].
+2023-09-12 14:58:54,345 - INFO - Updated cell [0,1].
+2023-09-12 14:58:54,345 - INFO - Updated cell [0,2].
+2023-09-12 14:58:54,345 - INFO - Updated cell [0,3].
+2023-09-12 14:58:54,346 - INFO - Updated cell [0,4].
+2023-09-12 14:58:54,346 - INFO - Updated cell [1,0].
+2023-09-12 14:58:54,346 - INFO - Updated cell [1,1].
+2023-09-12 14:58:54,346 - INFO - Updated cell [1,2].
+2023-09-12 14:58:54,346 - INFO - Updated cell [1,3].
+2023-09-12 14:58:54,346 - INFO - Updated cell [1,4].
+2023-09-12 14:58:54,346 - INFO - Updated cell [2,0].
+2023-09-12 14:58:54,346 - INFO - Updated cell [2,1].
+2023-09-12 14:58:54,347 - INFO - Updated cell [2,2].
+2023-09-12 14:58:54,347 - INFO - Updated cell [2,3].
+2023-09-12 14:58:54,347 - INFO - Updated cell [2,4].
+2023-09-12 14:58:54,347 - INFO - Updated cell [3,0].
+2023-09-12 14:58:54,347 - INFO - Updated cell [3,1].
+2023-09-12 14:58:54,347 - INFO - Updated cell [3,2].
+2023-09-12 14:58:54,347 - INFO - Updated cell [3,3].
+2023-09-12 14:58:54,348 - INFO - Updated cell [3,4].
+2023-09-12 14:58:54,348 - INFO - Updated cell [4,0].
+2023-09-12 14:58:54,348 - INFO - Updated cell [4,1].
+2023-09-12 14:58:54,348 - INFO - Updated cell [4,2].
+2023-09-12 14:58:54,348 - INFO - Updated cell [4,3].
+2023-09-12 14:58:54,348 - INFO - Updated cell [4,4].
+2023-09-12 14:58:54,348 - INFO - Updated cell [5,0].
+2023-09-12 14:58:54,348 - INFO - Updated cell [5,1].
+2023-09-12 14:58:54,348 - INFO - Updated cell [5,2].
+2023-09-12 14:58:54,349 - INFO - Updated cell [5,3].
+2023-09-12 14:58:54,349 - INFO - Updated cell [5,4].
+2023-09-12 14:58:54,349 - INFO - Updated cell [6,0].
+2023-09-12 14:58:54,349 - INFO - Updated cell [6,1].
+2023-09-12 14:58:54,349 - INFO - Updated cell [6,2].
+2023-09-12 14:58:54,349 - INFO - Updated cell [6,3].
+2023-09-12 14:58:54,349 - INFO - Updated cell [6,4].
+2023-09-12 14:58:54,349 - INFO - Updated cell [7,0].
+2023-09-12 14:58:54,349 - INFO - Updated cell [7,1].
+2023-09-12 14:58:54,350 - INFO - Updated cell [7,2].
+2023-09-12 14:58:54,350 - INFO - Updated cell [7,3].
+2023-09-12 14:58:54,350 - INFO - Updated cell [7,4].
+2023-09-12 14:58:54,350 - INFO - Updated cell [8,0].
+2023-09-12 14:58:54,350 - INFO - Updated cell [8,1].
+2023-09-12 14:58:54,350 - INFO - Updated cell [8,2].
+2023-09-12 14:58:54,350 - INFO - Updated cell [8,3].
+2023-09-12 14:58:54,350 - INFO - Updated cell [8,4].
+2023-09-12 14:58:54,350 - INFO - Updated cell [9,0].
+2023-09-12 14:58:54,351 - INFO - Updated cell [9,1].
+2023-09-12 14:58:54,351 - INFO - Updated cell [9,2].
+2023-09-12 14:58:54,351 - INFO - Updated cell [9,3].
+2023-09-12 14:58:54,351 - INFO - Updated cell [9,4].
+2023-09-12 14:58:54,351 - INFO - Updated cell [10,0].
+2023-09-12 14:58:54,351 - INFO - Updated cell [10,1].
+2023-09-12 14:58:54,351 - INFO - Updated cell [10,2].
+2023-09-12 14:58:54,352 - INFO - Updated cell [10,3].
+2023-09-12 14:58:54,352 - INFO - Updated cell [10,4].
+2023-09-12 14:58:54,352 - INFO - Updated cell [11,0].
+2023-09-12 14:58:54,352 - INFO - Updated cell [11,1].
+2023-09-12 14:58:54,352 - INFO - Updated cell [11,2].
+2023-09-12 14:58:54,352 - INFO - Updated cell [11,3].
+2023-09-12 14:58:54,352 - INFO - Updated cell [11,4].
+2023-09-12 14:58:54,352 - INFO - Updated cell [12,0].
+2023-09-12 14:58:54,352 - INFO - Updated cell [12,1].
+2023-09-12 14:58:54,353 - INFO - Updated cell [12,2].
+2023-09-12 14:58:54,353 - INFO - Updated cell [12,3].
+2023-09-12 14:58:54,353 - INFO - Updated cell [12,4].
+2023-09-12 14:58:54,353 - INFO - Updated cell [13,0].
+2023-09-12 14:58:54,353 - INFO - Updated cell [13,1].
+2023-09-12 14:58:54,353 - INFO - Updated cell [13,2].
+2023-09-12 14:58:54,353 - INFO - Updated cell [13,3].
+2023-09-12 14:58:54,353 - INFO - Updated cell [13,4].
+2023-09-12 14:58:54,354 - INFO - Updated cell [14,0].
+2023-09-12 14:58:54,354 - INFO - Updated cell [14,1].
+2023-09-12 14:58:54,354 - INFO - Updated cell [14,2].
+2023-09-12 14:58:54,354 - INFO - Updated cell [14,3].
+2023-09-12 14:58:54,354 - INFO - Updated cell [14,4].
+2023-09-12 14:58:54,354 - INFO - Updated cell [15,0].
+2023-09-12 14:58:54,354 - INFO - Updated cell [15,1].
+2023-09-12 14:58:54,354 - INFO - Updated cell [15,2].
+2023-09-12 14:58:54,355 - INFO - Updated cell [15,3].
+2023-09-12 14:58:54,355 - INFO - Updated cell [15,4].
+2023-09-12 14:58:54,355 - INFO - Updated cell [16,0].
+2023-09-12 14:58:54,355 - INFO - Updated cell [16,1].
+2023-09-12 14:58:54,355 - INFO - Updated cell [16,2].
+2023-09-12 14:58:54,355 - INFO - Updated cell [16,3].
+2023-09-12 14:58:54,355 - INFO - Updated cell [16,4].
+2023-09-12 14:58:54,355 - INFO - Updated cell [17,0].
+2023-09-12 14:58:54,355 - INFO - Updated cell [17,1].
+2023-09-12 14:58:54,355 - INFO - Updated cell [17,2].
+2023-09-12 14:58:54,355 - INFO - Updated cell [17,3].
+2023-09-12 14:58:54,355 - INFO - Updated cell [17,4].
+2023-09-12 14:58:54,355 - INFO - Updated cell [18,0].
+2023-09-12 14:58:54,355 - INFO - Updated cell [18,1].
+2023-09-12 14:58:54,356 - INFO - Updated cell [18,2].
+2023-09-12 14:58:54,356 - INFO - Updated cell [18,3].
+2023-09-12 14:58:54,356 - INFO - Updated cell [18,4].
+2023-09-12 14:58:54,356 - INFO - Updated cell [19,0].
+2023-09-12 14:58:54,356 - INFO - Updated cell [19,1].
+2023-09-12 14:58:54,356 - INFO - Updated cell [19,2].
+2023-09-12 14:58:54,356 - INFO - Updated cell [19,3].
+2023-09-12 14:58:54,356 - INFO - Updated cell [19,4].
+2023-09-12 14:58:54,357 - INFO - Updated cell [20,0].
+2023-09-12 14:58:54,357 - INFO - Updated cell [20,1].
+2023-09-12 14:58:54,357 - INFO - Updated cell [20,2].
+2023-09-12 14:58:54,357 - INFO - Updated cell [20,3].
+2023-09-12 14:58:54,357 - INFO - Updated cell [20,4].
+2023-09-12 14:58:54,357 - INFO - Updated cell [21,0].
+2023-09-12 14:58:54,357 - INFO - Updated cell [21,1].
+2023-09-12 14:58:54,357 - INFO - Updated cell [21,2].
+2023-09-12 14:58:54,357 - INFO - Updated cell [21,3].
+2023-09-12 14:58:54,358 - INFO - Updated cell [21,4].
+2023-09-12 14:58:54,358 - INFO - Updated cell [22,0].
+2023-09-12 14:58:54,358 - INFO - Updated cell [22,1].
+2023-09-12 14:58:54,358 - INFO - Updated cell [22,2].
+2023-09-12 14:58:54,358 - INFO - Updated cell [22,3].
+2023-09-12 14:58:54,358 - INFO - Updated cell [22,4].
+2023-09-12 14:58:54,358 - INFO - Updated cell [23,0].
+2023-09-12 14:58:54,358 - INFO - Updated cell [23,1].
+2023-09-12 14:58:54,358 - INFO - Updated cell [23,2].
+2023-09-12 14:58:54,359 - INFO - Updated cell [23,3].
+2023-09-12 14:58:54,359 - INFO - Updated cell [23,4].
+2023-09-12 14:58:54,359 - INFO - Updated cell [24,0].
+2023-09-12 14:58:54,359 - INFO - Updated cell [24,1].
+2023-09-12 14:58:54,359 - INFO - Updated cell [24,2].
+2023-09-12 14:58:54,359 - INFO - Updated cell [24,3].
+2023-09-12 14:58:54,359 - INFO - Updated cell [24,4].
+2023-09-12 14:58:54,359 - INFO - Updated cell [25,0].
+2023-09-12 14:58:54,359 - INFO - Updated cell [25,1].
+2023-09-12 14:58:54,360 - INFO - Updated cell [25,2].
+2023-09-12 14:58:54,360 - INFO - Updated cell [25,3].
+2023-09-12 14:58:54,360 - INFO - Updated cell [25,4].
+2023-09-12 14:58:54,360 - INFO - Updated cell [26,0].
+2023-09-12 14:58:54,360 - INFO - Updated cell [26,1].
+2023-09-12 14:58:54,360 - INFO - Updated cell [26,2].
+2023-09-12 14:58:54,360 - INFO - Updated cell [26,3].
+2023-09-12 14:58:54,360 - INFO - Updated cell [26,4].
+2023-09-12 14:58:54,361 - INFO - Updated cell [27,0].
+2023-09-12 14:58:54,361 - INFO - Updated cell [27,1].
+2023-09-12 14:58:54,361 - INFO - Updated cell [27,2].
+2023-09-12 14:58:54,361 - INFO - Updated cell [27,3].
+2023-09-12 14:58:54,361 - INFO - Updated cell [27,4].
+2023-09-12 14:58:54,361 - INFO - Updated cell [28,0].
+2023-09-12 14:58:54,361 - INFO - Updated cell [28,1].
+2023-09-12 14:58:54,361 - INFO - Updated cell [28,2].
+2023-09-12 14:58:54,361 - INFO - Updated cell [28,3].
+2023-09-12 14:58:54,362 - INFO - Updated cell [28,4].
+2023-09-12 14:58:54,362 - INFO - Updated cell [29,0].
+2023-09-12 14:58:54,362 - INFO - Updated cell [29,1].
+2023-09-12 14:58:54,362 - INFO - Updated cell [29,2].
+2023-09-12 14:58:54,362 - INFO - Updated cell [29,3].
+2023-09-12 14:58:54,362 - INFO - Updated cell [29,4].
+2023-09-12 14:58:54,362 - INFO - Updated cell [30,0].
+2023-09-12 14:58:54,362 - INFO - Updated cell [30,1].
+2023-09-12 14:58:54,362 - INFO - Updated cell [30,2].
+2023-09-12 14:58:54,363 - INFO - Updated cell [30,3].
+2023-09-12 14:58:54,363 - INFO - Updated cell [30,4].
+2023-09-12 14:58:54,363 - INFO - Updated cell [31,0].
+2023-09-12 14:58:54,363 - INFO - Updated cell [31,1].
+2023-09-12 14:58:54,363 - INFO - Updated cell [31,2].
+2023-09-12 14:58:54,363 - INFO - Updated cell [31,3].
+2023-09-12 14:58:54,363 - INFO - Updated cell [31,4].
+2023-09-12 14:58:54,363 - INFO - Updated cell [32,0].
+2023-09-12 14:58:54,363 - INFO - Updated cell [32,1].
+2023-09-12 14:58:54,364 - INFO - Updated cell [32,2].
+2023-09-12 14:58:54,364 - INFO - Updated cell [32,3].
+2023-09-12 14:58:54,364 - INFO - Updated cell [32,4].
+2023-09-12 14:58:54,364 - INFO - Updated cell [33,0].
+2023-09-12 14:58:54,364 - INFO - Updated cell [33,1].
+2023-09-12 14:58:54,364 - INFO - Updated cell [33,2].
+2023-09-12 14:58:54,364 - INFO - Updated cell [33,3].
+2023-09-12 14:58:54,364 - INFO - Updated cell [33,4].
+2023-09-12 14:58:54,365 - INFO - Updated cell [34,0].
+2023-09-12 14:58:54,365 - INFO - Updated cell [34,1].
+2023-09-12 14:58:54,365 - INFO - Updated cell [34,2].
+2023-09-12 14:58:54,365 - INFO - Updated cell [34,3].
+2023-09-12 14:58:54,365 - INFO - Updated cell [34,4].
+2023-09-12 14:58:54,366 - INFO - Updated cell [35,0].
+2023-09-12 14:58:54,366 - INFO - Updated cell [35,1].
+2023-09-12 14:58:54,366 - INFO - Updated cell [35,2].
+2023-09-12 14:58:54,366 - INFO - Updated cell [35,3].
+2023-09-12 14:58:54,366 - INFO - Updated cell [35,4].
+2023-09-12 14:58:54,366 - INFO - Updated cell [36,0].
+2023-09-12 14:58:54,366 - INFO - Updated cell [36,1].
+2023-09-12 14:58:54,366 - INFO - Updated cell [36,2].
+2023-09-12 14:58:54,366 - INFO - Updated cell [36,3].
+2023-09-12 14:58:54,367 - INFO - Updated cell [36,4].
+2023-09-12 14:58:54,367 - INFO - Updated cell [37,0].
+2023-09-12 14:58:54,367 - INFO - Updated cell [37,1].
+2023-09-12 14:58:54,367 - INFO - Updated cell [37,2].
+2023-09-12 14:58:54,367 - INFO - Updated cell [37,3].
+2023-09-12 14:58:54,367 - INFO - Updated cell [37,4].
+2023-09-12 14:58:54,367 - INFO - Updated cell [38,0].
+2023-09-12 14:58:54,367 - INFO - Updated cell [38,1].
+2023-09-12 14:58:54,367 - INFO - Updated cell [38,2].
+2023-09-12 14:58:54,368 - INFO - Updated cell [38,3].
+2023-09-12 14:58:54,368 - INFO - Updated cell [38,4].
+2023-09-12 14:58:54,368 - INFO - Updated cell [39,0].
+2023-09-12 14:58:54,368 - INFO - Updated cell [39,1].
+2023-09-12 14:58:54,368 - INFO - Updated cell [39,2].
+2023-09-12 14:58:54,368 - INFO - Updated cell [39,3].
+2023-09-12 14:58:54,368 - INFO - Updated cell [39,4].
+2023-09-12 14:58:54,369 - INFO - Updated cell [40,0].
+2023-09-12 14:58:54,369 - INFO - Updated cell [40,1].
+2023-09-12 14:58:54,369 - INFO - Updated cell [40,2].
+2023-09-12 14:58:54,369 - INFO - Updated cell [40,3].
+2023-09-12 14:58:54,369 - INFO - Updated cell [40,4].
+2023-09-12 14:58:54,369 - INFO - Updated cell [41,0].
+2023-09-12 14:58:54,369 - INFO - Updated cell [41,1].
+2023-09-12 14:58:54,369 - INFO - Updated cell [41,2].
+2023-09-12 14:58:54,369 - INFO - Updated cell [41,3].
+2023-09-12 14:58:54,370 - INFO - Updated cell [41,4].
+2023-09-12 14:58:54,370 - INFO - Updated cell [42,0].
+2023-09-12 14:58:54,370 - INFO - Updated cell [42,1].
+2023-09-12 14:58:54,370 - INFO - Updated cell [42,2].
+2023-09-12 14:58:54,370 - INFO - Updated cell [42,3].
+2023-09-12 14:58:54,370 - INFO - Updated cell [42,4].
+2023-09-12 14:58:54,370 - INFO - Updated cell [43,0].
+2023-09-12 14:58:54,370 - INFO - Updated cell [43,1].
+2023-09-12 14:58:54,371 - INFO - Updated cell [43,2].
+2023-09-12 14:58:54,371 - INFO - Updated cell [43,3].
+2023-09-12 14:58:54,371 - INFO - Updated cell [43,4].
+2023-09-12 14:58:54,371 - INFO - Updated cell [44,0].
+2023-09-12 14:58:54,371 - INFO - Updated cell [44,1].
+2023-09-12 14:58:54,371 - INFO - Updated cell [44,2].
+2023-09-12 14:58:54,371 - INFO - Updated cell [44,3].
+2023-09-12 14:58:54,371 - INFO - Updated cell [44,4].
+2023-09-12 14:58:54,371 - INFO - Updated cell [45,0].
+2023-09-12 14:58:54,372 - INFO - Updated cell [45,1].
+2023-09-12 14:58:54,372 - INFO - Updated cell [45,2].
+2023-09-12 14:58:54,372 - INFO - Updated cell [45,3].
+2023-09-12 14:58:54,372 - INFO - Updated cell [45,4].
+2023-09-12 14:58:54,372 - INFO - Updated cell [46,0].
+2023-09-12 14:58:54,372 - INFO - Updated cell [46,1].
+2023-09-12 14:58:54,372 - INFO - Updated cell [46,2].
+2023-09-12 14:58:54,372 - INFO - Updated cell [46,3].
+2023-09-12 14:58:54,372 - INFO - Updated cell [46,4].
+2023-09-12 14:58:54,372 - INFO - Updated cell [47,0].
+2023-09-12 14:58:54,372 - INFO - Updated cell [47,1].
+2023-09-12 14:58:54,372 - INFO - Updated cell [47,2].
+2023-09-12 14:58:54,372 - INFO - Updated cell [47,3].
+2023-09-12 14:58:54,372 - INFO - Updated cell [47,4].
+2023-09-12 14:58:57,410 - INFO - We entered into function: update_setup_info
+2023-09-12 14:58:57,411 - INFO - New setup dictionary was updated.
+2023-09-12 14:58:57,412 - INFO - defaultdict(<class 'str'>, {'Name': 'ESRF_XMaS', 'Angle': 'eta', 'Tilt angle': 'chi', 'Norm': 'Io', 'Exposure': 'sec'})
+2023-09-12 14:58:57,412 - INFO - We entered into function: update_table
+2023-09-12 14:58:57,413 - INFO - Table was reseted.
+2023-09-12 14:58:57,413 - INFO - Folder to display: PM6Y6_112_05CN.
+2023-09-12 14:58:57,413 - INFO - Keys to display: [].
+2023-09-12 14:58:57,413 - INFO - We entered into function: get_metadata_dataframe
+2023-09-12 14:58:57,422 - INFO - This is the dataframe:                                 Filename
+0   PM6Y6_112_05CN_2m_00001_0033_000.edf
+1   PM6Y6_112_05CN_2m_00002_0033_001.edf
+2   PM6Y6_112_05CN_2m_00003_0033_002.edf
+3   PM6Y6_112_05CN_2m_00004_0033_003.edf
+4   PM6Y6_112_05CN_2m_00005_0033_004.edf
+5   PM6Y6_112_05CN_2m_00006_0033_005.edf
+6   PM6Y6_112_05CN_2m_00007_0033_006.edf
+7   PM6Y6_112_05CN_2m_00008_0033_007.edf
+8   PM6Y6_112_05CN_2m_00009_0039_000.edf
+9   PM6Y6_112_05CN_2m_00010_0039_001.edf
+10  PM6Y6_112_05CN_2m_00011_0039_002.edf
+11  PM6Y6_112_05CN_2m_00012_0039_003.edf
+12  PM6Y6_112_05CN_2m_00013_0039_004.edf
+13  PM6Y6_112_05CN_2m_00014_0039_005.edf
+14  PM6Y6_112_05CN_2m_00015_0039_006.edf
+15  PM6Y6_112_05CN_2m_00016_0039_007.edf
+16  PM6Y6_112_05CN_2m_00017_0039_008.edf
+17  PM6Y6_112_05CN_2m_00018_0039_009.edf
+18  PM6Y6_112_05CN_2m_00019_0040_000.edf
+19  PM6Y6_112_05CN_2m_00020_0040_001.edf
+20  PM6Y6_112_05CN_2m_00021_0040_002.edf
+21  PM6Y6_112_05CN_2m_00022_0040_003.edf
+22  PM6Y6_112_05CN_2m_00023_0040_004.edf
+23  PM6Y6_112_05CN_2m_00024_0040_005.edf
+24  PM6Y6_112_05CN_2m_00025_0040_006.edf
+25  PM6Y6_112_05CN_2m_00026_0040_007.edf
+26  PM6Y6_112_05CN_2m_00027_0040_008.edf
+27  PM6Y6_112_05CN_2m_00028_0040_009.edf
+28  PM6Y6_112_05CN_2m_00029_0041_000.edf
+29  PM6Y6_112_05CN_2m_00030_0041_001.edf
+30  PM6Y6_112_05CN_2m_00031_0041_002.edf
+31  PM6Y6_112_05CN_2m_00032_0041_003.edf
+32  PM6Y6_112_05CN_2m_00033_0041_004.edf
+33  PM6Y6_112_05CN_2m_00034_0041_005.edf
+34  PM6Y6_112_05CN_2m_00035_0041_006.edf
+35  PM6Y6_112_05CN_2m_00036_0041_007.edf
+36  PM6Y6_112_05CN_2m_00037_0041_008.edf
+37  PM6Y6_112_05CN_2m_00038_0041_009.edf
+38  PM6Y6_112_05CN_2m_00039_0042_000.edf
+39  PM6Y6_112_05CN_2m_00040_0042_001.edf
+40  PM6Y6_112_05CN_2m_00041_0042_002.edf
+41  PM6Y6_112_05CN_2m_00042_0042_003.edf
+42  PM6Y6_112_05CN_2m_00043_0042_004.edf
+43  PM6Y6_112_05CN_2m_00044_0042_005.edf
+44  PM6Y6_112_05CN_2m_00045_0042_006.edf
+45  PM6Y6_112_05CN_2m_00046_0042_007.edf
+46  PM6Y6_112_05CN_2m_00047_0042_008.edf
+47  PM6Y6_112_05CN_2m_00048_0042_009.edf
+2023-09-12 14:58:57,423 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-09-12 14:58:57,423 - INFO - Inserted columns: 1
+2023-09-12 14:58:57,423 - INFO - Inserted rows: 48
+2023-09-12 14:58:57,423 - INFO - Updated cell [0,0].
+2023-09-12 14:58:57,423 - INFO - Updated cell [1,0].
+2023-09-12 14:58:57,424 - INFO - Updated cell [2,0].
+2023-09-12 14:58:57,424 - INFO - Updated cell [3,0].
+2023-09-12 14:58:57,424 - INFO - Updated cell [4,0].
+2023-09-12 14:58:57,424 - INFO - Updated cell [5,0].
+2023-09-12 14:58:57,425 - INFO - Updated cell [6,0].
+2023-09-12 14:58:57,425 - INFO - Updated cell [7,0].
+2023-09-12 14:58:57,425 - INFO - Updated cell [8,0].
+2023-09-12 14:58:57,425 - INFO - Updated cell [9,0].
+2023-09-12 14:58:57,425 - INFO - Updated cell [10,0].
+2023-09-12 14:58:57,426 - INFO - Updated cell [11,0].
+2023-09-12 14:58:57,426 - INFO - Updated cell [12,0].
+2023-09-12 14:58:57,426 - INFO - Updated cell [13,0].
+2023-09-12 14:58:57,426 - INFO - Updated cell [14,0].
+2023-09-12 14:58:57,427 - INFO - Updated cell [15,0].
+2023-09-12 14:58:57,427 - INFO - Updated cell [16,0].
+2023-09-12 14:58:57,428 - INFO - Updated cell [17,0].
+2023-09-12 14:58:57,428 - INFO - Updated cell [18,0].
+2023-09-12 14:58:57,428 - INFO - Updated cell [19,0].
+2023-09-12 14:58:57,428 - INFO - Updated cell [20,0].
+2023-09-12 14:58:57,428 - INFO - Updated cell [21,0].
+2023-09-12 14:58:57,428 - INFO - Updated cell [22,0].
+2023-09-12 14:58:57,428 - INFO - Updated cell [23,0].
+2023-09-12 14:58:57,428 - INFO - Updated cell [24,0].
+2023-09-12 14:58:57,429 - INFO - Updated cell [25,0].
+2023-09-12 14:58:57,429 - INFO - Updated cell [26,0].
+2023-09-12 14:58:57,429 - INFO - Updated cell [27,0].
+2023-09-12 14:58:57,429 - INFO - Updated cell [28,0].
+2023-09-12 14:58:57,429 - INFO - Updated cell [29,0].
+2023-09-12 14:58:57,429 - INFO - Updated cell [30,0].
+2023-09-12 14:58:57,429 - INFO - Updated cell [31,0].
+2023-09-12 14:58:57,429 - INFO - Updated cell [32,0].
+2023-09-12 14:58:57,430 - INFO - Updated cell [33,0].
+2023-09-12 14:58:57,430 - INFO - Updated cell [34,0].
+2023-09-12 14:58:57,430 - INFO - Updated cell [35,0].
+2023-09-12 14:58:57,430 - INFO - Updated cell [36,0].
+2023-09-12 14:58:57,430 - INFO - Updated cell [37,0].
+2023-09-12 14:58:57,430 - INFO - Updated cell [38,0].
+2023-09-12 14:58:57,430 - INFO - Updated cell [39,0].
+2023-09-12 14:58:57,430 - INFO - Updated cell [40,0].
+2023-09-12 14:58:57,431 - INFO - Updated cell [41,0].
+2023-09-12 14:58:57,431 - INFO - Updated cell [42,0].
+2023-09-12 14:58:57,431 - INFO - Updated cell [43,0].
+2023-09-12 14:58:57,431 - INFO - Updated cell [44,0].
+2023-09-12 14:58:57,431 - INFO - Updated cell [45,0].
+2023-09-12 14:58:57,431 - INFO - Updated cell [46,0].
+2023-09-12 14:58:57,431 - INFO - Updated cell [47,0].
+2023-09-12 14:58:57,431 - INFO - We entered into function: update_table
+2023-09-12 14:58:57,432 - INFO - Table was reseted.
+2023-09-12 14:58:57,432 - INFO - Folder to display: PM6Y6_112_05CN.
+2023-09-12 14:58:57,432 - INFO - Keys to display: ['eta'].
+2023-09-12 14:58:57,432 - INFO - We entered into function: get_metadata_dataframe
+2023-09-12 14:58:57,432 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,433 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,433 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,433 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,434 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,434 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,434 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,435 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,435 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,435 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,436 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,436 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,436 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,436 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,436 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,438 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,438 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,438 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,439 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,439 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,439 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,440 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,440 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,440 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,441 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,441 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,442 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,442 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,443 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,443 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,444 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,444 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,444 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,445 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,445 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,446 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,446 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,447 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,447 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,447 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,447 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,448 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,448 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,448 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,449 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,449 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,449 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,450 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,454 - INFO - This is the dataframe:                                 Filename       eta
+0   PM6Y6_112_05CN_2m_00001_0033_000.edf  0.080000
+1   PM6Y6_112_05CN_2m_00002_0033_001.edf  0.088625
+2   PM6Y6_112_05CN_2m_00003_0033_002.edf  0.097125
+3   PM6Y6_112_05CN_2m_00004_0033_003.edf  0.105750
+4   PM6Y6_112_05CN_2m_00005_0033_004.edf  0.114250
+5   PM6Y6_112_05CN_2m_00006_0033_005.edf  0.122875
+6   PM6Y6_112_05CN_2m_00007_0033_006.edf  0.131375
+7   PM6Y6_112_05CN_2m_00008_0033_007.edf  0.140000
+8   PM6Y6_112_05CN_2m_00009_0039_000.edf  6.470000
+9   PM6Y6_112_05CN_2m_00010_0039_001.edf  6.470000
+10  PM6Y6_112_05CN_2m_00011_0039_002.edf  6.470000
+11  PM6Y6_112_05CN_2m_00012_0039_003.edf  6.470000
+12  PM6Y6_112_05CN_2m_00013_0039_004.edf  6.470000
+13  PM6Y6_112_05CN_2m_00014_0039_005.edf  6.470000
+14  PM6Y6_112_05CN_2m_00015_0039_006.edf  6.470000
+15  PM6Y6_112_05CN_2m_00016_0039_007.edf  6.470000
+16  PM6Y6_112_05CN_2m_00017_0039_008.edf  6.470000
+17  PM6Y6_112_05CN_2m_00018_0039_009.edf  6.470000
+18  PM6Y6_112_05CN_2m_00019_0040_000.edf  6.970000
+19  PM6Y6_112_05CN_2m_00020_0040_001.edf  6.970000
+20  PM6Y6_112_05CN_2m_00021_0040_002.edf  6.970000
+21  PM6Y6_112_05CN_2m_00022_0040_003.edf  6.970000
+22  PM6Y6_112_05CN_2m_00023_0040_004.edf  6.970000
+23  PM6Y6_112_05CN_2m_00024_0040_005.edf  6.970000
+24  PM6Y6_112_05CN_2m_00025_0040_006.edf  6.970000
+25  PM6Y6_112_05CN_2m_00026_0040_007.edf  6.970000
+26  PM6Y6_112_05CN_2m_00027_0040_008.edf  6.970000
+27  PM6Y6_112_05CN_2m_00028_0040_009.edf  6.970000
+28  PM6Y6_112_05CN_2m_00029_0041_000.edf  7.470000
+29  PM6Y6_112_05CN_2m_00030_0041_001.edf  7.470000
+30  PM6Y6_112_05CN_2m_00031_0041_002.edf  7.470000
+31  PM6Y6_112_05CN_2m_00032_0041_003.edf  7.470000
+32  PM6Y6_112_05CN_2m_00033_0041_004.edf  7.470000
+33  PM6Y6_112_05CN_2m_00034_0041_005.edf  7.470000
+34  PM6Y6_112_05CN_2m_00035_0041_006.edf  7.470000
+35  PM6Y6_112_05CN_2m_00036_0041_007.edf  7.470000
+36  PM6Y6_112_05CN_2m_00037_0041_008.edf  7.470000
+37  PM6Y6_112_05CN_2m_00038_0041_009.edf  7.470000
+38  PM6Y6_112_05CN_2m_00039_0042_000.edf  7.970000
+39  PM6Y6_112_05CN_2m_00040_0042_001.edf  7.970000
+40  PM6Y6_112_05CN_2m_00041_0042_002.edf  7.970000
+41  PM6Y6_112_05CN_2m_00042_0042_003.edf  7.970000
+42  PM6Y6_112_05CN_2m_00043_0042_004.edf  7.970000
+43  PM6Y6_112_05CN_2m_00044_0042_005.edf  7.970000
+44  PM6Y6_112_05CN_2m_00045_0042_006.edf  7.970000
+45  PM6Y6_112_05CN_2m_00046_0042_007.edf  7.970000
+46  PM6Y6_112_05CN_2m_00047_0042_008.edf  7.970000
+47  PM6Y6_112_05CN_2m_00048_0042_009.edf  7.970000
+2023-09-12 14:58:57,455 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-09-12 14:58:57,455 - INFO - Inserted columns: 2
+2023-09-12 14:58:57,456 - INFO - Inserted rows: 48
+2023-09-12 14:58:57,456 - INFO - Updated cell [0,0].
+2023-09-12 14:58:57,457 - INFO - Updated cell [0,1].
+2023-09-12 14:58:57,457 - INFO - Updated cell [1,0].
+2023-09-12 14:58:57,457 - INFO - Updated cell [1,1].
+2023-09-12 14:58:57,457 - INFO - Updated cell [2,0].
+2023-09-12 14:58:57,457 - INFO - Updated cell [2,1].
+2023-09-12 14:58:57,457 - INFO - Updated cell [3,0].
+2023-09-12 14:58:57,457 - INFO - Updated cell [3,1].
+2023-09-12 14:58:57,459 - INFO - Updated cell [4,0].
+2023-09-12 14:58:57,459 - INFO - Updated cell [4,1].
+2023-09-12 14:58:57,459 - INFO - Updated cell [5,0].
+2023-09-12 14:58:57,459 - INFO - Updated cell [5,1].
+2023-09-12 14:58:57,459 - INFO - Updated cell [6,0].
+2023-09-12 14:58:57,459 - INFO - Updated cell [6,1].
+2023-09-12 14:58:57,459 - INFO - Updated cell [7,0].
+2023-09-12 14:58:57,460 - INFO - Updated cell [7,1].
+2023-09-12 14:58:57,460 - INFO - Updated cell [8,0].
+2023-09-12 14:58:57,460 - INFO - Updated cell [8,1].
+2023-09-12 14:58:57,460 - INFO - Updated cell [9,0].
+2023-09-12 14:58:57,460 - INFO - Updated cell [9,1].
+2023-09-12 14:58:57,460 - INFO - Updated cell [10,0].
+2023-09-12 14:58:57,460 - INFO - Updated cell [10,1].
+2023-09-12 14:58:57,460 - INFO - Updated cell [11,0].
+2023-09-12 14:58:57,461 - INFO - Updated cell [11,1].
+2023-09-12 14:58:57,461 - INFO - Updated cell [12,0].
+2023-09-12 14:58:57,461 - INFO - Updated cell [12,1].
+2023-09-12 14:58:57,461 - INFO - Updated cell [13,0].
+2023-09-12 14:58:57,461 - INFO - Updated cell [13,1].
+2023-09-12 14:58:57,461 - INFO - Updated cell [14,0].
+2023-09-12 14:58:57,461 - INFO - Updated cell [14,1].
+2023-09-12 14:58:57,461 - INFO - Updated cell [15,0].
+2023-09-12 14:58:57,461 - INFO - Updated cell [15,1].
+2023-09-12 14:58:57,462 - INFO - Updated cell [16,0].
+2023-09-12 14:58:57,462 - INFO - Updated cell [16,1].
+2023-09-12 14:58:57,462 - INFO - Updated cell [17,0].
+2023-09-12 14:58:57,462 - INFO - Updated cell [17,1].
+2023-09-12 14:58:57,462 - INFO - Updated cell [18,0].
+2023-09-12 14:58:57,462 - INFO - Updated cell [18,1].
+2023-09-12 14:58:57,462 - INFO - Updated cell [19,0].
+2023-09-12 14:58:57,462 - INFO - Updated cell [19,1].
+2023-09-12 14:58:57,462 - INFO - Updated cell [20,0].
+2023-09-12 14:58:57,463 - INFO - Updated cell [20,1].
+2023-09-12 14:58:57,463 - INFO - Updated cell [21,0].
+2023-09-12 14:58:57,463 - INFO - Updated cell [21,1].
+2023-09-12 14:58:57,463 - INFO - Updated cell [22,0].
+2023-09-12 14:58:57,463 - INFO - Updated cell [22,1].
+2023-09-12 14:58:57,463 - INFO - Updated cell [23,0].
+2023-09-12 14:58:57,463 - INFO - Updated cell [23,1].
+2023-09-12 14:58:57,463 - INFO - Updated cell [24,0].
+2023-09-12 14:58:57,463 - INFO - Updated cell [24,1].
+2023-09-12 14:58:57,464 - INFO - Updated cell [25,0].
+2023-09-12 14:58:57,464 - INFO - Updated cell [25,1].
+2023-09-12 14:58:57,464 - INFO - Updated cell [26,0].
+2023-09-12 14:58:57,464 - INFO - Updated cell [26,1].
+2023-09-12 14:58:57,464 - INFO - Updated cell [27,0].
+2023-09-12 14:58:57,464 - INFO - Updated cell [27,1].
+2023-09-12 14:58:57,464 - INFO - Updated cell [28,0].
+2023-09-12 14:58:57,464 - INFO - Updated cell [28,1].
+2023-09-12 14:58:57,465 - INFO - Updated cell [29,0].
+2023-09-12 14:58:57,465 - INFO - Updated cell [29,1].
+2023-09-12 14:58:57,465 - INFO - Updated cell [30,0].
+2023-09-12 14:58:57,465 - INFO - Updated cell [30,1].
+2023-09-12 14:58:57,465 - INFO - Updated cell [31,0].
+2023-09-12 14:58:57,465 - INFO - Updated cell [31,1].
+2023-09-12 14:58:57,465 - INFO - Updated cell [32,0].
+2023-09-12 14:58:57,465 - INFO - Updated cell [32,1].
+2023-09-12 14:58:57,465 - INFO - Updated cell [33,0].
+2023-09-12 14:58:57,466 - INFO - Updated cell [33,1].
+2023-09-12 14:58:57,466 - INFO - Updated cell [34,0].
+2023-09-12 14:58:57,466 - INFO - Updated cell [34,1].
+2023-09-12 14:58:57,466 - INFO - Updated cell [35,0].
+2023-09-12 14:58:57,466 - INFO - Updated cell [35,1].
+2023-09-12 14:58:57,466 - INFO - Updated cell [36,0].
+2023-09-12 14:58:57,466 - INFO - Updated cell [36,1].
+2023-09-12 14:58:57,466 - INFO - Updated cell [37,0].
+2023-09-12 14:58:57,466 - INFO - Updated cell [37,1].
+2023-09-12 14:58:57,467 - INFO - Updated cell [38,0].
+2023-09-12 14:58:57,467 - INFO - Updated cell [38,1].
+2023-09-12 14:58:57,467 - INFO - Updated cell [39,0].
+2023-09-12 14:58:57,467 - INFO - Updated cell [39,1].
+2023-09-12 14:58:57,467 - INFO - Updated cell [40,0].
+2023-09-12 14:58:57,467 - INFO - Updated cell [40,1].
+2023-09-12 14:58:57,467 - INFO - Updated cell [41,0].
+2023-09-12 14:58:57,467 - INFO - Updated cell [41,1].
+2023-09-12 14:58:57,467 - INFO - Updated cell [42,0].
+2023-09-12 14:58:57,468 - INFO - Updated cell [42,1].
+2023-09-12 14:58:57,468 - INFO - Updated cell [43,0].
+2023-09-12 14:58:57,468 - INFO - Updated cell [43,1].
+2023-09-12 14:58:57,468 - INFO - Updated cell [44,0].
+2023-09-12 14:58:57,468 - INFO - Updated cell [44,1].
+2023-09-12 14:58:57,468 - INFO - Updated cell [45,0].
+2023-09-12 14:58:57,468 - INFO - Updated cell [45,1].
+2023-09-12 14:58:57,469 - INFO - Updated cell [46,0].
+2023-09-12 14:58:57,469 - INFO - Updated cell [46,1].
+2023-09-12 14:58:57,469 - INFO - Updated cell [47,0].
+2023-09-12 14:58:57,469 - INFO - Updated cell [47,1].
+2023-09-12 14:58:57,469 - INFO - We entered into function: update_table
+2023-09-12 14:58:57,469 - INFO - Table was reseted.
+2023-09-12 14:58:57,469 - INFO - Folder to display: PM6Y6_112_05CN.
+2023-09-12 14:58:57,469 - INFO - Keys to display: ['eta', 'chi'].
+2023-09-12 14:58:57,470 - INFO - We entered into function: get_metadata_dataframe
+2023-09-12 14:58:57,470 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,470 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,470 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,472 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,472 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,472 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,473 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,473 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,473 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,474 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,474 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,474 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,474 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,475 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,475 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,475 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,475 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,476 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,476 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,476 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,477 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,477 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,477 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,477 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,478 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,478 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,478 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,478 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,478 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,479 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,479 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,479 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,479 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,480 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,480 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,480 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,481 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,481 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,481 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,481 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,482 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,482 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,482 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,483 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,483 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,483 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,483 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,484 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,484 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,484 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,485 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,485 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,485 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,485 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,486 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,486 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,486 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,486 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,487 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,487 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,488 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,488 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,488 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,488 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,488 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,488 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,490 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,490 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,490 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,490 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,491 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,491 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,491 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,491 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,492 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,492 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,492 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,492 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,493 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,493 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,493 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,494 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,494 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,494 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,494 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,495 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,495 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,495 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,495 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,496 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,496 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,496 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,496 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,497 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,497 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,497 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,506 - INFO - This is the dataframe:                                 Filename       eta    chi
+0   PM6Y6_112_05CN_2m_00001_0033_000.edf  0.080000  120.0
+1   PM6Y6_112_05CN_2m_00002_0033_001.edf  0.088625  120.0
+2   PM6Y6_112_05CN_2m_00003_0033_002.edf  0.097125  120.0
+3   PM6Y6_112_05CN_2m_00004_0033_003.edf  0.105750  120.0
+4   PM6Y6_112_05CN_2m_00005_0033_004.edf  0.114250  120.0
+5   PM6Y6_112_05CN_2m_00006_0033_005.edf  0.122875  120.0
+6   PM6Y6_112_05CN_2m_00007_0033_006.edf  0.131375  120.0
+7   PM6Y6_112_05CN_2m_00008_0033_007.edf  0.140000  120.0
+8   PM6Y6_112_05CN_2m_00009_0039_000.edf  6.470000  120.0
+9   PM6Y6_112_05CN_2m_00010_0039_001.edf  6.470000  120.0
+10  PM6Y6_112_05CN_2m_00011_0039_002.edf  6.470000  120.0
+11  PM6Y6_112_05CN_2m_00012_0039_003.edf  6.470000  120.0
+12  PM6Y6_112_05CN_2m_00013_0039_004.edf  6.470000  120.0
+13  PM6Y6_112_05CN_2m_00014_0039_005.edf  6.470000  120.0
+14  PM6Y6_112_05CN_2m_00015_0039_006.edf  6.470000  120.0
+15  PM6Y6_112_05CN_2m_00016_0039_007.edf  6.470000  120.0
+16  PM6Y6_112_05CN_2m_00017_0039_008.edf  6.470000  120.0
+17  PM6Y6_112_05CN_2m_00018_0039_009.edf  6.470000  120.0
+18  PM6Y6_112_05CN_2m_00019_0040_000.edf  6.970000  120.0
+19  PM6Y6_112_05CN_2m_00020_0040_001.edf  6.970000  120.0
+20  PM6Y6_112_05CN_2m_00021_0040_002.edf  6.970000  120.0
+21  PM6Y6_112_05CN_2m_00022_0040_003.edf  6.970000  120.0
+22  PM6Y6_112_05CN_2m_00023_0040_004.edf  6.970000  120.0
+23  PM6Y6_112_05CN_2m_00024_0040_005.edf  6.970000  120.0
+24  PM6Y6_112_05CN_2m_00025_0040_006.edf  6.970000  120.0
+25  PM6Y6_112_05CN_2m_00026_0040_007.edf  6.970000  120.0
+26  PM6Y6_112_05CN_2m_00027_0040_008.edf  6.970000  120.0
+27  PM6Y6_112_05CN_2m_00028_0040_009.edf  6.970000  120.0
+28  PM6Y6_112_05CN_2m_00029_0041_000.edf  7.470000  120.0
+29  PM6Y6_112_05CN_2m_00030_0041_001.edf  7.470000  120.0
+30  PM6Y6_112_05CN_2m_00031_0041_002.edf  7.470000  120.0
+31  PM6Y6_112_05CN_2m_00032_0041_003.edf  7.470000  120.0
+32  PM6Y6_112_05CN_2m_00033_0041_004.edf  7.470000  120.0
+33  PM6Y6_112_05CN_2m_00034_0041_005.edf  7.470000  120.0
+34  PM6Y6_112_05CN_2m_00035_0041_006.edf  7.470000  120.0
+35  PM6Y6_112_05CN_2m_00036_0041_007.edf  7.470000  120.0
+36  PM6Y6_112_05CN_2m_00037_0041_008.edf  7.470000  120.0
+37  PM6Y6_112_05CN_2m_00038_0041_009.edf  7.470000  120.0
+38  PM6Y6_112_05CN_2m_00039_0042_000.edf  7.970000  120.0
+39  PM6Y6_112_05CN_2m_00040_0042_001.edf  7.970000  120.0
+40  PM6Y6_112_05CN_2m_00041_0042_002.edf  7.970000  120.0
+41  PM6Y6_112_05CN_2m_00042_0042_003.edf  7.970000  120.0
+42  PM6Y6_112_05CN_2m_00043_0042_004.edf  7.970000  120.0
+43  PM6Y6_112_05CN_2m_00044_0042_005.edf  7.970000  120.0
+44  PM6Y6_112_05CN_2m_00045_0042_006.edf  7.970000  120.0
+45  PM6Y6_112_05CN_2m_00046_0042_007.edf  7.970000  120.0
+46  PM6Y6_112_05CN_2m_00047_0042_008.edf  7.970000  120.0
+47  PM6Y6_112_05CN_2m_00048_0042_009.edf  7.970000  120.0
+2023-09-12 14:58:57,506 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-09-12 14:58:57,507 - INFO - Inserted columns: 3
+2023-09-12 14:58:57,507 - INFO - Inserted rows: 48
+2023-09-12 14:58:57,507 - INFO - Updated cell [0,0].
+2023-09-12 14:58:57,508 - INFO - Updated cell [0,1].
+2023-09-12 14:58:57,508 - INFO - Updated cell [0,2].
+2023-09-12 14:58:57,508 - INFO - Updated cell [1,0].
+2023-09-12 14:58:57,508 - INFO - Updated cell [1,1].
+2023-09-12 14:58:57,509 - INFO - Updated cell [1,2].
+2023-09-12 14:58:57,509 - INFO - Updated cell [2,0].
+2023-09-12 14:58:57,509 - INFO - Updated cell [2,1].
+2023-09-12 14:58:57,509 - INFO - Updated cell [2,2].
+2023-09-12 14:58:57,509 - INFO - Updated cell [3,0].
+2023-09-12 14:58:57,509 - INFO - Updated cell [3,1].
+2023-09-12 14:58:57,510 - INFO - Updated cell [3,2].
+2023-09-12 14:58:57,510 - INFO - Updated cell [4,0].
+2023-09-12 14:58:57,510 - INFO - Updated cell [4,1].
+2023-09-12 14:58:57,510 - INFO - Updated cell [4,2].
+2023-09-12 14:58:57,510 - INFO - Updated cell [5,0].
+2023-09-12 14:58:57,510 - INFO - Updated cell [5,1].
+2023-09-12 14:58:57,510 - INFO - Updated cell [5,2].
+2023-09-12 14:58:57,510 - INFO - Updated cell [6,0].
+2023-09-12 14:58:57,511 - INFO - Updated cell [6,1].
+2023-09-12 14:58:57,511 - INFO - Updated cell [6,2].
+2023-09-12 14:58:57,511 - INFO - Updated cell [7,0].
+2023-09-12 14:58:57,511 - INFO - Updated cell [7,1].
+2023-09-12 14:58:57,511 - INFO - Updated cell [7,2].
+2023-09-12 14:58:57,511 - INFO - Updated cell [8,0].
+2023-09-12 14:58:57,511 - INFO - Updated cell [8,1].
+2023-09-12 14:58:57,511 - INFO - Updated cell [8,2].
+2023-09-12 14:58:57,511 - INFO - Updated cell [9,0].
+2023-09-12 14:58:57,512 - INFO - Updated cell [9,1].
+2023-09-12 14:58:57,512 - INFO - Updated cell [9,2].
+2023-09-12 14:58:57,512 - INFO - Updated cell [10,0].
+2023-09-12 14:58:57,512 - INFO - Updated cell [10,1].
+2023-09-12 14:58:57,512 - INFO - Updated cell [10,2].
+2023-09-12 14:58:57,512 - INFO - Updated cell [11,0].
+2023-09-12 14:58:57,512 - INFO - Updated cell [11,1].
+2023-09-12 14:58:57,512 - INFO - Updated cell [11,2].
+2023-09-12 14:58:57,513 - INFO - Updated cell [12,0].
+2023-09-12 14:58:57,513 - INFO - Updated cell [12,1].
+2023-09-12 14:58:57,513 - INFO - Updated cell [12,2].
+2023-09-12 14:58:57,513 - INFO - Updated cell [13,0].
+2023-09-12 14:58:57,513 - INFO - Updated cell [13,1].
+2023-09-12 14:58:57,513 - INFO - Updated cell [13,2].
+2023-09-12 14:58:57,513 - INFO - Updated cell [14,0].
+2023-09-12 14:58:57,513 - INFO - Updated cell [14,1].
+2023-09-12 14:58:57,513 - INFO - Updated cell [14,2].
+2023-09-12 14:58:57,514 - INFO - Updated cell [15,0].
+2023-09-12 14:58:57,514 - INFO - Updated cell [15,1].
+2023-09-12 14:58:57,514 - INFO - Updated cell [15,2].
+2023-09-12 14:58:57,514 - INFO - Updated cell [16,0].
+2023-09-12 14:58:57,514 - INFO - Updated cell [16,1].
+2023-09-12 14:58:57,514 - INFO - Updated cell [16,2].
+2023-09-12 14:58:57,514 - INFO - Updated cell [17,0].
+2023-09-12 14:58:57,514 - INFO - Updated cell [17,1].
+2023-09-12 14:58:57,514 - INFO - Updated cell [17,2].
+2023-09-12 14:58:57,515 - INFO - Updated cell [18,0].
+2023-09-12 14:58:57,515 - INFO - Updated cell [18,1].
+2023-09-12 14:58:57,515 - INFO - Updated cell [18,2].
+2023-09-12 14:58:57,515 - INFO - Updated cell [19,0].
+2023-09-12 14:58:57,515 - INFO - Updated cell [19,1].
+2023-09-12 14:58:57,515 - INFO - Updated cell [19,2].
+2023-09-12 14:58:57,515 - INFO - Updated cell [20,0].
+2023-09-12 14:58:57,515 - INFO - Updated cell [20,1].
+2023-09-12 14:58:57,515 - INFO - Updated cell [20,2].
+2023-09-12 14:58:57,516 - INFO - Updated cell [21,0].
+2023-09-12 14:58:57,516 - INFO - Updated cell [21,1].
+2023-09-12 14:58:57,516 - INFO - Updated cell [21,2].
+2023-09-12 14:58:57,516 - INFO - Updated cell [22,0].
+2023-09-12 14:58:57,516 - INFO - Updated cell [22,1].
+2023-09-12 14:58:57,516 - INFO - Updated cell [22,2].
+2023-09-12 14:58:57,516 - INFO - Updated cell [23,0].
+2023-09-12 14:58:57,516 - INFO - Updated cell [23,1].
+2023-09-12 14:58:57,517 - INFO - Updated cell [23,2].
+2023-09-12 14:58:57,517 - INFO - Updated cell [24,0].
+2023-09-12 14:58:57,517 - INFO - Updated cell [24,1].
+2023-09-12 14:58:57,517 - INFO - Updated cell [24,2].
+2023-09-12 14:58:57,517 - INFO - Updated cell [25,0].
+2023-09-12 14:58:57,517 - INFO - Updated cell [25,1].
+2023-09-12 14:58:57,517 - INFO - Updated cell [25,2].
+2023-09-12 14:58:57,517 - INFO - Updated cell [26,0].
+2023-09-12 14:58:57,517 - INFO - Updated cell [26,1].
+2023-09-12 14:58:57,518 - INFO - Updated cell [26,2].
+2023-09-12 14:58:57,518 - INFO - Updated cell [27,0].
+2023-09-12 14:58:57,518 - INFO - Updated cell [27,1].
+2023-09-12 14:58:57,518 - INFO - Updated cell [27,2].
+2023-09-12 14:58:57,518 - INFO - Updated cell [28,0].
+2023-09-12 14:58:57,518 - INFO - Updated cell [28,1].
+2023-09-12 14:58:57,518 - INFO - Updated cell [28,2].
+2023-09-12 14:58:57,518 - INFO - Updated cell [29,0].
+2023-09-12 14:58:57,519 - INFO - Updated cell [29,1].
+2023-09-12 14:58:57,519 - INFO - Updated cell [29,2].
+2023-09-12 14:58:57,519 - INFO - Updated cell [30,0].
+2023-09-12 14:58:57,519 - INFO - Updated cell [30,1].
+2023-09-12 14:58:57,519 - INFO - Updated cell [30,2].
+2023-09-12 14:58:57,519 - INFO - Updated cell [31,0].
+2023-09-12 14:58:57,519 - INFO - Updated cell [31,1].
+2023-09-12 14:58:57,519 - INFO - Updated cell [31,2].
+2023-09-12 14:58:57,519 - INFO - Updated cell [32,0].
+2023-09-12 14:58:57,520 - INFO - Updated cell [32,1].
+2023-09-12 14:58:57,520 - INFO - Updated cell [32,2].
+2023-09-12 14:58:57,520 - INFO - Updated cell [33,0].
+2023-09-12 14:58:57,520 - INFO - Updated cell [33,1].
+2023-09-12 14:58:57,520 - INFO - Updated cell [33,2].
+2023-09-12 14:58:57,520 - INFO - Updated cell [34,0].
+2023-09-12 14:58:57,520 - INFO - Updated cell [34,1].
+2023-09-12 14:58:57,520 - INFO - Updated cell [34,2].
+2023-09-12 14:58:57,520 - INFO - Updated cell [35,0].
+2023-09-12 14:58:57,520 - INFO - Updated cell [35,1].
+2023-09-12 14:58:57,520 - INFO - Updated cell [35,2].
+2023-09-12 14:58:57,520 - INFO - Updated cell [36,0].
+2023-09-12 14:58:57,520 - INFO - Updated cell [36,1].
+2023-09-12 14:58:57,521 - INFO - Updated cell [36,2].
+2023-09-12 14:58:57,521 - INFO - Updated cell [37,0].
+2023-09-12 14:58:57,521 - INFO - Updated cell [37,1].
+2023-09-12 14:58:57,521 - INFO - Updated cell [37,2].
+2023-09-12 14:58:57,521 - INFO - Updated cell [38,0].
+2023-09-12 14:58:57,521 - INFO - Updated cell [38,1].
+2023-09-12 14:58:57,521 - INFO - Updated cell [38,2].
+2023-09-12 14:58:57,521 - INFO - Updated cell [39,0].
+2023-09-12 14:58:57,522 - INFO - Updated cell [39,1].
+2023-09-12 14:58:57,522 - INFO - Updated cell [39,2].
+2023-09-12 14:58:57,522 - INFO - Updated cell [40,0].
+2023-09-12 14:58:57,522 - INFO - Updated cell [40,1].
+2023-09-12 14:58:57,522 - INFO - Updated cell [40,2].
+2023-09-12 14:58:57,522 - INFO - Updated cell [41,0].
+2023-09-12 14:58:57,522 - INFO - Updated cell [41,1].
+2023-09-12 14:58:57,522 - INFO - Updated cell [41,2].
+2023-09-12 14:58:57,522 - INFO - Updated cell [42,0].
+2023-09-12 14:58:57,523 - INFO - Updated cell [42,1].
+2023-09-12 14:58:57,523 - INFO - Updated cell [42,2].
+2023-09-12 14:58:57,523 - INFO - Updated cell [43,0].
+2023-09-12 14:58:57,523 - INFO - Updated cell [43,1].
+2023-09-12 14:58:57,523 - INFO - Updated cell [43,2].
+2023-09-12 14:58:57,523 - INFO - Updated cell [44,0].
+2023-09-12 14:58:57,523 - INFO - Updated cell [44,1].
+2023-09-12 14:58:57,523 - INFO - Updated cell [44,2].
+2023-09-12 14:58:57,524 - INFO - Updated cell [45,0].
+2023-09-12 14:58:57,524 - INFO - Updated cell [45,1].
+2023-09-12 14:58:57,524 - INFO - Updated cell [45,2].
+2023-09-12 14:58:57,524 - INFO - Updated cell [46,0].
+2023-09-12 14:58:57,524 - INFO - Updated cell [46,1].
+2023-09-12 14:58:57,524 - INFO - Updated cell [46,2].
+2023-09-12 14:58:57,524 - INFO - Updated cell [47,0].
+2023-09-12 14:58:57,524 - INFO - Updated cell [47,1].
+2023-09-12 14:58:57,524 - INFO - Updated cell [47,2].
+2023-09-12 14:58:57,525 - INFO - We entered into function: update_table
+2023-09-12 14:58:57,525 - INFO - Table was reseted.
+2023-09-12 14:58:57,525 - INFO - Folder to display: PM6Y6_112_05CN.
+2023-09-12 14:58:57,525 - INFO - Keys to display: ['eta', 'chi', 'Io'].
+2023-09-12 14:58:57,525 - INFO - We entered into function: get_metadata_dataframe
+2023-09-12 14:58:57,526 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,526 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,526 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,526 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,527 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,527 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,527 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,527 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,528 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,528 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,528 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,528 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,528 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,528 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,530 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,530 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,530 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,531 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,531 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,531 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,531 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,532 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,532 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,532 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,532 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,532 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,533 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,533 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,534 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,534 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,534 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,535 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,535 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,536 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,536 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,536 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,536 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,537 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,537 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,538 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,538 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,538 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,538 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,539 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,539 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,539 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,539 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,540 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,540 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,540 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,540 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,541 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,541 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,541 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,541 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,542 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,542 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,542 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,542 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,542 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,543 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,543 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,543 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,543 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,544 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,544 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,544 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,544 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,545 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,545 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,545 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,545 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,546 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,546 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,546 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,546 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,547 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,547 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,547 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,547 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,548 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,548 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,548 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,548 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,549 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,549 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,549 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,550 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,550 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,550 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,550 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,550 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,551 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,551 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,551 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,551 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,552 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,552 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,552 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,552 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,552 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,554 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,554 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,554 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,554 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,555 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,555 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,555 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,555 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,556 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,556 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,556 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,556 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,557 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,557 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,557 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,557 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,558 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,558 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,558 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,558 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,559 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,559 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,559 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,559 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,560 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,560 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,560 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,560 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,560 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,560 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,561 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,561 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,561 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,561 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,561 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,563 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,563 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,563 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,563 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,564 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,564 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,564 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,565 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,575 - INFO - This is the dataframe:                                 Filename       eta    chi           Io
+0   PM6Y6_112_05CN_2m_00001_0033_000.edf  0.080000  120.0  129947000.0
+1   PM6Y6_112_05CN_2m_00002_0033_001.edf  0.088625  120.0  129809000.0
+2   PM6Y6_112_05CN_2m_00003_0033_002.edf  0.097125  120.0  129794000.0
+3   PM6Y6_112_05CN_2m_00004_0033_003.edf  0.105750  120.0  129854000.0
+4   PM6Y6_112_05CN_2m_00005_0033_004.edf  0.114250  120.0  129799000.0
+5   PM6Y6_112_05CN_2m_00006_0033_005.edf  0.122875  120.0  129770000.0
+6   PM6Y6_112_05CN_2m_00007_0033_006.edf  0.131375  120.0  129806000.0
+7   PM6Y6_112_05CN_2m_00008_0033_007.edf  0.140000  120.0  129829000.0
+8   PM6Y6_112_05CN_2m_00009_0039_000.edf  6.470000  120.0  137342000.0
+9   PM6Y6_112_05CN_2m_00010_0039_001.edf  6.470000  120.0  137361000.0
+10  PM6Y6_112_05CN_2m_00011_0039_002.edf  6.470000  120.0  137286000.0
+11  PM6Y6_112_05CN_2m_00012_0039_003.edf  6.470000  120.0  137271000.0
+12  PM6Y6_112_05CN_2m_00013_0039_004.edf  6.470000  120.0  137283000.0
+13  PM6Y6_112_05CN_2m_00014_0039_005.edf  6.470000  120.0  137266000.0
+14  PM6Y6_112_05CN_2m_00015_0039_006.edf  6.470000  120.0  137170000.0
+15  PM6Y6_112_05CN_2m_00016_0039_007.edf  6.470000  120.0  137185000.0
+16  PM6Y6_112_05CN_2m_00017_0039_008.edf  6.470000  120.0  137237000.0
+17  PM6Y6_112_05CN_2m_00018_0039_009.edf  6.470000  120.0  137129000.0
+18  PM6Y6_112_05CN_2m_00019_0040_000.edf  6.970000  120.0  137047000.0
+19  PM6Y6_112_05CN_2m_00020_0040_001.edf  6.970000  120.0  137041000.0
+20  PM6Y6_112_05CN_2m_00021_0040_002.edf  6.970000  120.0  137055000.0
+21  PM6Y6_112_05CN_2m_00022_0040_003.edf  6.970000  120.0  137055000.0
+22  PM6Y6_112_05CN_2m_00023_0040_004.edf  6.970000  120.0  136910000.0
+23  PM6Y6_112_05CN_2m_00024_0040_005.edf  6.970000  120.0  136964000.0
+24  PM6Y6_112_05CN_2m_00025_0040_006.edf  6.970000  120.0  136899000.0
+25  PM6Y6_112_05CN_2m_00026_0040_007.edf  6.970000  120.0  136914000.0
+26  PM6Y6_112_05CN_2m_00027_0040_008.edf  6.970000  120.0  136876000.0
+27  PM6Y6_112_05CN_2m_00028_0040_009.edf  6.970000  120.0  136871000.0
+28  PM6Y6_112_05CN_2m_00029_0041_000.edf  7.470000  120.0  136774000.0
+29  PM6Y6_112_05CN_2m_00030_0041_001.edf  7.470000  120.0  136677000.0
+30  PM6Y6_112_05CN_2m_00031_0041_002.edf  7.470000  120.0  136633000.0
+31  PM6Y6_112_05CN_2m_00032_0041_003.edf  7.470000  120.0  136564000.0
+32  PM6Y6_112_05CN_2m_00033_0041_004.edf  7.470000  120.0  136588000.0
+33  PM6Y6_112_05CN_2m_00034_0041_005.edf  7.470000  120.0  136563000.0
+34  PM6Y6_112_05CN_2m_00035_0041_006.edf  7.470000  120.0  136559000.0
+35  PM6Y6_112_05CN_2m_00036_0041_007.edf  7.470000  120.0  136554000.0
+36  PM6Y6_112_05CN_2m_00037_0041_008.edf  7.470000  120.0  136600000.0
+37  PM6Y6_112_05CN_2m_00038_0041_009.edf  7.470000  120.0  136477000.0
+38  PM6Y6_112_05CN_2m_00039_0042_000.edf  7.970000  120.0  136451000.0
+39  PM6Y6_112_05CN_2m_00040_0042_001.edf  7.970000  120.0  136467000.0
+40  PM6Y6_112_05CN_2m_00041_0042_002.edf  7.970000  120.0  136411000.0
+41  PM6Y6_112_05CN_2m_00042_0042_003.edf  7.970000  120.0  136327000.0
+42  PM6Y6_112_05CN_2m_00043_0042_004.edf  7.970000  120.0  136345000.0
+43  PM6Y6_112_05CN_2m_00044_0042_005.edf  7.970000  120.0  136286000.0
+44  PM6Y6_112_05CN_2m_00045_0042_006.edf  7.970000  120.0  136279000.0
+45  PM6Y6_112_05CN_2m_00046_0042_007.edf  7.970000  120.0  136221000.0
+46  PM6Y6_112_05CN_2m_00047_0042_008.edf  7.970000  120.0  136170000.0
+47  PM6Y6_112_05CN_2m_00048_0042_009.edf  7.970000  120.0  136153000.0
+2023-09-12 14:58:57,576 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-09-12 14:58:57,576 - INFO - Inserted columns: 4
+2023-09-12 14:58:57,576 - INFO - Inserted rows: 48
+2023-09-12 14:58:57,577 - INFO - Updated cell [0,0].
+2023-09-12 14:58:57,577 - INFO - Updated cell [0,1].
+2023-09-12 14:58:57,577 - INFO - Updated cell [0,2].
+2023-09-12 14:58:57,577 - INFO - Updated cell [0,3].
+2023-09-12 14:58:57,577 - INFO - Updated cell [1,0].
+2023-09-12 14:58:57,578 - INFO - Updated cell [1,1].
+2023-09-12 14:58:57,578 - INFO - Updated cell [1,2].
+2023-09-12 14:58:57,578 - INFO - Updated cell [1,3].
+2023-09-12 14:58:57,578 - INFO - Updated cell [2,0].
+2023-09-12 14:58:57,578 - INFO - Updated cell [2,1].
+2023-09-12 14:58:57,578 - INFO - Updated cell [2,2].
+2023-09-12 14:58:57,578 - INFO - Updated cell [2,3].
+2023-09-12 14:58:57,578 - INFO - Updated cell [3,0].
+2023-09-12 14:58:57,578 - INFO - Updated cell [3,1].
+2023-09-12 14:58:57,579 - INFO - Updated cell [3,2].
+2023-09-12 14:58:57,579 - INFO - Updated cell [3,3].
+2023-09-12 14:58:57,579 - INFO - Updated cell [4,0].
+2023-09-12 14:58:57,579 - INFO - Updated cell [4,1].
+2023-09-12 14:58:57,579 - INFO - Updated cell [4,2].
+2023-09-12 14:58:57,579 - INFO - Updated cell [4,3].
+2023-09-12 14:58:57,579 - INFO - Updated cell [5,0].
+2023-09-12 14:58:57,579 - INFO - Updated cell [5,1].
+2023-09-12 14:58:57,580 - INFO - Updated cell [5,2].
+2023-09-12 14:58:57,580 - INFO - Updated cell [5,3].
+2023-09-12 14:58:57,580 - INFO - Updated cell [6,0].
+2023-09-12 14:58:57,580 - INFO - Updated cell [6,1].
+2023-09-12 14:58:57,580 - INFO - Updated cell [6,2].
+2023-09-12 14:58:57,580 - INFO - Updated cell [6,3].
+2023-09-12 14:58:57,580 - INFO - Updated cell [7,0].
+2023-09-12 14:58:57,580 - INFO - Updated cell [7,1].
+2023-09-12 14:58:57,580 - INFO - Updated cell [7,2].
+2023-09-12 14:58:57,581 - INFO - Updated cell [7,3].
+2023-09-12 14:58:57,581 - INFO - Updated cell [8,0].
+2023-09-12 14:58:57,581 - INFO - Updated cell [8,1].
+2023-09-12 14:58:57,581 - INFO - Updated cell [8,2].
+2023-09-12 14:58:57,581 - INFO - Updated cell [8,3].
+2023-09-12 14:58:57,581 - INFO - Updated cell [9,0].
+2023-09-12 14:58:57,581 - INFO - Updated cell [9,1].
+2023-09-12 14:58:57,581 - INFO - Updated cell [9,2].
+2023-09-12 14:58:57,581 - INFO - Updated cell [9,3].
+2023-09-12 14:58:57,582 - INFO - Updated cell [10,0].
+2023-09-12 14:58:57,582 - INFO - Updated cell [10,1].
+2023-09-12 14:58:57,582 - INFO - Updated cell [10,2].
+2023-09-12 14:58:57,582 - INFO - Updated cell [10,3].
+2023-09-12 14:58:57,582 - INFO - Updated cell [11,0].
+2023-09-12 14:58:57,582 - INFO - Updated cell [11,1].
+2023-09-12 14:58:57,582 - INFO - Updated cell [11,2].
+2023-09-12 14:58:57,582 - INFO - Updated cell [11,3].
+2023-09-12 14:58:57,582 - INFO - Updated cell [12,0].
+2023-09-12 14:58:57,582 - INFO - Updated cell [12,1].
+2023-09-12 14:58:57,582 - INFO - Updated cell [12,2].
+2023-09-12 14:58:57,582 - INFO - Updated cell [12,3].
+2023-09-12 14:58:57,582 - INFO - Updated cell [13,0].
+2023-09-12 14:58:57,584 - INFO - Updated cell [13,1].
+2023-09-12 14:58:57,584 - INFO - Updated cell [13,2].
+2023-09-12 14:58:57,584 - INFO - Updated cell [13,3].
+2023-09-12 14:58:57,584 - INFO - Updated cell [14,0].
+2023-09-12 14:58:57,584 - INFO - Updated cell [14,1].
+2023-09-12 14:58:57,584 - INFO - Updated cell [14,2].
+2023-09-12 14:58:57,584 - INFO - Updated cell [14,3].
+2023-09-12 14:58:57,584 - INFO - Updated cell [15,0].
+2023-09-12 14:58:57,584 - INFO - Updated cell [15,1].
+2023-09-12 14:58:57,585 - INFO - Updated cell [15,2].
+2023-09-12 14:58:57,585 - INFO - Updated cell [15,3].
+2023-09-12 14:58:57,585 - INFO - Updated cell [16,0].
+2023-09-12 14:58:57,585 - INFO - Updated cell [16,1].
+2023-09-12 14:58:57,585 - INFO - Updated cell [16,2].
+2023-09-12 14:58:57,585 - INFO - Updated cell [16,3].
+2023-09-12 14:58:57,585 - INFO - Updated cell [17,0].
+2023-09-12 14:58:57,585 - INFO - Updated cell [17,1].
+2023-09-12 14:58:57,585 - INFO - Updated cell [17,2].
+2023-09-12 14:58:57,586 - INFO - Updated cell [17,3].
+2023-09-12 14:58:57,586 - INFO - Updated cell [18,0].
+2023-09-12 14:58:57,586 - INFO - Updated cell [18,1].
+2023-09-12 14:58:57,586 - INFO - Updated cell [18,2].
+2023-09-12 14:58:57,586 - INFO - Updated cell [18,3].
+2023-09-12 14:58:57,586 - INFO - Updated cell [19,0].
+2023-09-12 14:58:57,586 - INFO - Updated cell [19,1].
+2023-09-12 14:58:57,586 - INFO - Updated cell [19,2].
+2023-09-12 14:58:57,586 - INFO - Updated cell [19,3].
+2023-09-12 14:58:57,587 - INFO - Updated cell [20,0].
+2023-09-12 14:58:57,587 - INFO - Updated cell [20,1].
+2023-09-12 14:58:57,587 - INFO - Updated cell [20,2].
+2023-09-12 14:58:57,587 - INFO - Updated cell [20,3].
+2023-09-12 14:58:57,587 - INFO - Updated cell [21,0].
+2023-09-12 14:58:57,587 - INFO - Updated cell [21,1].
+2023-09-12 14:58:57,587 - INFO - Updated cell [21,2].
+2023-09-12 14:58:57,587 - INFO - Updated cell [21,3].
+2023-09-12 14:58:57,587 - INFO - Updated cell [22,0].
+2023-09-12 14:58:57,588 - INFO - Updated cell [22,1].
+2023-09-12 14:58:57,588 - INFO - Updated cell [22,2].
+2023-09-12 14:58:57,588 - INFO - Updated cell [22,3].
+2023-09-12 14:58:57,588 - INFO - Updated cell [23,0].
+2023-09-12 14:58:57,588 - INFO - Updated cell [23,1].
+2023-09-12 14:58:57,588 - INFO - Updated cell [23,2].
+2023-09-12 14:58:57,588 - INFO - Updated cell [23,3].
+2023-09-12 14:58:57,588 - INFO - Updated cell [24,0].
+2023-09-12 14:58:57,589 - INFO - Updated cell [24,1].
+2023-09-12 14:58:57,589 - INFO - Updated cell [24,2].
+2023-09-12 14:58:57,589 - INFO - Updated cell [24,3].
+2023-09-12 14:58:57,589 - INFO - Updated cell [25,0].
+2023-09-12 14:58:57,589 - INFO - Updated cell [25,1].
+2023-09-12 14:58:57,589 - INFO - Updated cell [25,2].
+2023-09-12 14:58:57,589 - INFO - Updated cell [25,3].
+2023-09-12 14:58:57,589 - INFO - Updated cell [26,0].
+2023-09-12 14:58:57,589 - INFO - Updated cell [26,1].
+2023-09-12 14:58:57,590 - INFO - Updated cell [26,2].
+2023-09-12 14:58:57,590 - INFO - Updated cell [26,3].
+2023-09-12 14:58:57,590 - INFO - Updated cell [27,0].
+2023-09-12 14:58:57,590 - INFO - Updated cell [27,1].
+2023-09-12 14:58:57,590 - INFO - Updated cell [27,2].
+2023-09-12 14:58:57,590 - INFO - Updated cell [27,3].
+2023-09-12 14:58:57,590 - INFO - Updated cell [28,0].
+2023-09-12 14:58:57,590 - INFO - Updated cell [28,1].
+2023-09-12 14:58:57,590 - INFO - Updated cell [28,2].
+2023-09-12 14:58:57,591 - INFO - Updated cell [28,3].
+2023-09-12 14:58:57,591 - INFO - Updated cell [29,0].
+2023-09-12 14:58:57,591 - INFO - Updated cell [29,1].
+2023-09-12 14:58:57,591 - INFO - Updated cell [29,2].
+2023-09-12 14:58:57,591 - INFO - Updated cell [29,3].
+2023-09-12 14:58:57,591 - INFO - Updated cell [30,0].
+2023-09-12 14:58:57,591 - INFO - Updated cell [30,1].
+2023-09-12 14:58:57,591 - INFO - Updated cell [30,2].
+2023-09-12 14:58:57,591 - INFO - Updated cell [30,3].
+2023-09-12 14:58:57,591 - INFO - Updated cell [31,0].
+2023-09-12 14:58:57,591 - INFO - Updated cell [31,1].
+2023-09-12 14:58:57,591 - INFO - Updated cell [31,2].
+2023-09-12 14:58:57,591 - INFO - Updated cell [31,3].
+2023-09-12 14:58:57,592 - INFO - Updated cell [32,0].
+2023-09-12 14:58:57,592 - INFO - Updated cell [32,1].
+2023-09-12 14:58:57,592 - INFO - Updated cell [32,2].
+2023-09-12 14:58:57,592 - INFO - Updated cell [32,3].
+2023-09-12 14:58:57,592 - INFO - Updated cell [33,0].
+2023-09-12 14:58:57,592 - INFO - Updated cell [33,1].
+2023-09-12 14:58:57,592 - INFO - Updated cell [33,2].
+2023-09-12 14:58:57,594 - INFO - Updated cell [33,3].
+2023-09-12 14:58:57,594 - INFO - Updated cell [34,0].
+2023-09-12 14:58:57,594 - INFO - Updated cell [34,1].
+2023-09-12 14:58:57,594 - INFO - Updated cell [34,2].
+2023-09-12 14:58:57,594 - INFO - Updated cell [34,3].
+2023-09-12 14:58:57,594 - INFO - Updated cell [35,0].
+2023-09-12 14:58:57,594 - INFO - Updated cell [35,1].
+2023-09-12 14:58:57,594 - INFO - Updated cell [35,2].
+2023-09-12 14:58:57,594 - INFO - Updated cell [35,3].
+2023-09-12 14:58:57,595 - INFO - Updated cell [36,0].
+2023-09-12 14:58:57,595 - INFO - Updated cell [36,1].
+2023-09-12 14:58:57,595 - INFO - Updated cell [36,2].
+2023-09-12 14:58:57,595 - INFO - Updated cell [36,3].
+2023-09-12 14:58:57,595 - INFO - Updated cell [37,0].
+2023-09-12 14:58:57,595 - INFO - Updated cell [37,1].
+2023-09-12 14:58:57,595 - INFO - Updated cell [37,2].
+2023-09-12 14:58:57,596 - INFO - Updated cell [37,3].
+2023-09-12 14:58:57,596 - INFO - Updated cell [38,0].
+2023-09-12 14:58:57,596 - INFO - Updated cell [38,1].
+2023-09-12 14:58:57,596 - INFO - Updated cell [38,2].
+2023-09-12 14:58:57,596 - INFO - Updated cell [38,3].
+2023-09-12 14:58:57,596 - INFO - Updated cell [39,0].
+2023-09-12 14:58:57,596 - INFO - Updated cell [39,1].
+2023-09-12 14:58:57,596 - INFO - Updated cell [39,2].
+2023-09-12 14:58:57,596 - INFO - Updated cell [39,3].
+2023-09-12 14:58:57,597 - INFO - Updated cell [40,0].
+2023-09-12 14:58:57,597 - INFO - Updated cell [40,1].
+2023-09-12 14:58:57,597 - INFO - Updated cell [40,2].
+2023-09-12 14:58:57,597 - INFO - Updated cell [40,3].
+2023-09-12 14:58:57,597 - INFO - Updated cell [41,0].
+2023-09-12 14:58:57,597 - INFO - Updated cell [41,1].
+2023-09-12 14:58:57,597 - INFO - Updated cell [41,2].
+2023-09-12 14:58:57,598 - INFO - Updated cell [41,3].
+2023-09-12 14:58:57,598 - INFO - Updated cell [42,0].
+2023-09-12 14:58:57,598 - INFO - Updated cell [42,1].
+2023-09-12 14:58:57,598 - INFO - Updated cell [42,2].
+2023-09-12 14:58:57,598 - INFO - Updated cell [42,3].
+2023-09-12 14:58:57,598 - INFO - Updated cell [43,0].
+2023-09-12 14:58:57,598 - INFO - Updated cell [43,1].
+2023-09-12 14:58:57,598 - INFO - Updated cell [43,2].
+2023-09-12 14:58:57,598 - INFO - Updated cell [43,3].
+2023-09-12 14:58:57,599 - INFO - Updated cell [44,0].
+2023-09-12 14:58:57,599 - INFO - Updated cell [44,1].
+2023-09-12 14:58:57,599 - INFO - Updated cell [44,2].
+2023-09-12 14:58:57,599 - INFO - Updated cell [44,3].
+2023-09-12 14:58:57,599 - INFO - Updated cell [45,0].
+2023-09-12 14:58:57,599 - INFO - Updated cell [45,1].
+2023-09-12 14:58:57,599 - INFO - Updated cell [45,2].
+2023-09-12 14:58:57,600 - INFO - Updated cell [45,3].
+2023-09-12 14:58:57,600 - INFO - Updated cell [46,0].
+2023-09-12 14:58:57,600 - INFO - Updated cell [46,1].
+2023-09-12 14:58:57,600 - INFO - Updated cell [46,2].
+2023-09-12 14:58:57,600 - INFO - Updated cell [46,3].
+2023-09-12 14:58:57,600 - INFO - Updated cell [47,0].
+2023-09-12 14:58:57,600 - INFO - Updated cell [47,1].
+2023-09-12 14:58:57,600 - INFO - Updated cell [47,2].
+2023-09-12 14:58:57,600 - INFO - Updated cell [47,3].
+2023-09-12 14:58:57,601 - INFO - We entered into function: update_table
+2023-09-12 14:58:57,601 - INFO - Table was reseted.
+2023-09-12 14:58:57,601 - INFO - Folder to display: PM6Y6_112_05CN.
+2023-09-12 14:58:57,601 - INFO - Keys to display: ['eta', 'chi', 'Io', 'sec'].
+2023-09-12 14:58:57,601 - INFO - We entered into function: get_metadata_dataframe
+2023-09-12 14:58:57,602 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,602 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,602 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,603 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,603 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,603 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,603 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,604 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,604 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,604 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,604 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,604 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,604 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,604 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,605 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,605 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,605 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,605 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,606 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,606 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,606 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,606 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,607 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,607 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,607 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,607 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,607 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,608 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,608 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,608 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,608 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,609 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,609 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,609 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,609 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,610 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,610 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,610 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,611 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,611 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,611 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,611 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,611 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,612 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,612 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,612 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,612 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,612 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,612 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,614 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,614 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,614 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,614 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,615 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,615 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,615 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,615 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,615 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,616 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,616 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,616 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,616 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,617 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,617 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,617 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,617 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,618 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,618 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,618 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,618 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,619 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,619 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,619 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,619 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,619 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,620 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,620 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,620 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,620 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,621 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,621 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,621 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,621 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,622 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,622 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,622 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,622 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,622 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,622 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,623 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,623 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,624 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,624 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,624 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,624 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,625 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,626 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,626 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,626 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,626 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,627 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,627 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,627 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,628 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,628 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,628 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,629 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,629 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,629 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,630 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,630 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,630 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,630 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,631 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,631 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,631 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,631 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,631 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,632 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,632 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,632 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,632 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,633 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,633 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,633 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,633 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,634 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,634 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,634 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,634 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,634 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,634 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,635 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,635 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,635 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,635 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,635 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,636 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,636 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,636 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,636 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,637 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,637 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,637 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,637 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,638 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,638 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,638 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,638 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,639 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,639 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,639 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,639 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,639 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,640 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,640 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,640 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,641 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,641 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,641 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,641 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,642 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,642 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,642 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,642 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,642 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,642 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,642 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,644 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,644 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,644 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,644 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,645 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,645 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,645 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,645 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,646 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,646 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,646 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,646 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,647 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,647 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,647 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,647 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,648 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,648 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,648 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,648 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,648 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,649 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,649 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,649 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:58:57,664 - INFO - This is the dataframe:                                 Filename       eta    chi           Io  sec
+0   PM6Y6_112_05CN_2m_00001_0033_000.edf  0.080000  120.0  129947000.0  5.0
+1   PM6Y6_112_05CN_2m_00002_0033_001.edf  0.088625  120.0  129809000.0  5.0
+2   PM6Y6_112_05CN_2m_00003_0033_002.edf  0.097125  120.0  129794000.0  5.0
+3   PM6Y6_112_05CN_2m_00004_0033_003.edf  0.105750  120.0  129854000.0  5.0
+4   PM6Y6_112_05CN_2m_00005_0033_004.edf  0.114250  120.0  129799000.0  5.0
+5   PM6Y6_112_05CN_2m_00006_0033_005.edf  0.122875  120.0  129770000.0  5.0
+6   PM6Y6_112_05CN_2m_00007_0033_006.edf  0.131375  120.0  129806000.0  5.0
+7   PM6Y6_112_05CN_2m_00008_0033_007.edf  0.140000  120.0  129829000.0  5.0
+8   PM6Y6_112_05CN_2m_00009_0039_000.edf  6.470000  120.0  137342000.0  5.0
+9   PM6Y6_112_05CN_2m_00010_0039_001.edf  6.470000  120.0  137361000.0  5.0
+10  PM6Y6_112_05CN_2m_00011_0039_002.edf  6.470000  120.0  137286000.0  5.0
+11  PM6Y6_112_05CN_2m_00012_0039_003.edf  6.470000  120.0  137271000.0  5.0
+12  PM6Y6_112_05CN_2m_00013_0039_004.edf  6.470000  120.0  137283000.0  5.0
+13  PM6Y6_112_05CN_2m_00014_0039_005.edf  6.470000  120.0  137266000.0  5.0
+14  PM6Y6_112_05CN_2m_00015_0039_006.edf  6.470000  120.0  137170000.0  5.0
+15  PM6Y6_112_05CN_2m_00016_0039_007.edf  6.470000  120.0  137185000.0  5.0
+16  PM6Y6_112_05CN_2m_00017_0039_008.edf  6.470000  120.0  137237000.0  5.0
+17  PM6Y6_112_05CN_2m_00018_0039_009.edf  6.470000  120.0  137129000.0  5.0
+18  PM6Y6_112_05CN_2m_00019_0040_000.edf  6.970000  120.0  137047000.0  5.0
+19  PM6Y6_112_05CN_2m_00020_0040_001.edf  6.970000  120.0  137041000.0  5.0
+20  PM6Y6_112_05CN_2m_00021_0040_002.edf  6.970000  120.0  137055000.0  5.0
+21  PM6Y6_112_05CN_2m_00022_0040_003.edf  6.970000  120.0  137055000.0  5.0
+22  PM6Y6_112_05CN_2m_00023_0040_004.edf  6.970000  120.0  136910000.0  5.0
+23  PM6Y6_112_05CN_2m_00024_0040_005.edf  6.970000  120.0  136964000.0  5.0
+24  PM6Y6_112_05CN_2m_00025_0040_006.edf  6.970000  120.0  136899000.0  5.0
+25  PM6Y6_112_05CN_2m_00026_0040_007.edf  6.970000  120.0  136914000.0  5.0
+26  PM6Y6_112_05CN_2m_00027_0040_008.edf  6.970000  120.0  136876000.0  5.0
+27  PM6Y6_112_05CN_2m_00028_0040_009.edf  6.970000  120.0  136871000.0  5.0
+28  PM6Y6_112_05CN_2m_00029_0041_000.edf  7.470000  120.0  136774000.0  5.0
+29  PM6Y6_112_05CN_2m_00030_0041_001.edf  7.470000  120.0  136677000.0  5.0
+30  PM6Y6_112_05CN_2m_00031_0041_002.edf  7.470000  120.0  136633000.0  5.0
+31  PM6Y6_112_05CN_2m_00032_0041_003.edf  7.470000  120.0  136564000.0  5.0
+32  PM6Y6_112_05CN_2m_00033_0041_004.edf  7.470000  120.0  136588000.0  5.0
+33  PM6Y6_112_05CN_2m_00034_0041_005.edf  7.470000  120.0  136563000.0  5.0
+34  PM6Y6_112_05CN_2m_00035_0041_006.edf  7.470000  120.0  136559000.0  5.0
+35  PM6Y6_112_05CN_2m_00036_0041_007.edf  7.470000  120.0  136554000.0  5.0
+36  PM6Y6_112_05CN_2m_00037_0041_008.edf  7.470000  120.0  136600000.0  5.0
+37  PM6Y6_112_05CN_2m_00038_0041_009.edf  7.470000  120.0  136477000.0  5.0
+38  PM6Y6_112_05CN_2m_00039_0042_000.edf  7.970000  120.0  136451000.0  5.0
+39  PM6Y6_112_05CN_2m_00040_0042_001.edf  7.970000  120.0  136467000.0  5.0
+40  PM6Y6_112_05CN_2m_00041_0042_002.edf  7.970000  120.0  136411000.0  5.0
+41  PM6Y6_112_05CN_2m_00042_0042_003.edf  7.970000  120.0  136327000.0  5.0
+42  PM6Y6_112_05CN_2m_00043_0042_004.edf  7.970000  120.0  136345000.0  5.0
+43  PM6Y6_112_05CN_2m_00044_0042_005.edf  7.970000  120.0  136286000.0  5.0
+44  PM6Y6_112_05CN_2m_00045_0042_006.edf  7.970000  120.0  136279000.0  5.0
+45  PM6Y6_112_05CN_2m_00046_0042_007.edf  7.970000  120.0  136221000.0  5.0
+46  PM6Y6_112_05CN_2m_00047_0042_008.edf  7.970000  120.0  136170000.0  5.0
+47  PM6Y6_112_05CN_2m_00048_0042_009.edf  7.970000  120.0  136153000.0  5.0
+2023-09-12 14:58:57,664 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-09-12 14:58:57,665 - INFO - Inserted columns: 5
+2023-09-12 14:58:57,665 - INFO - Inserted rows: 48
+2023-09-12 14:58:57,665 - INFO - Updated cell [0,0].
+2023-09-12 14:58:57,665 - INFO - Updated cell [0,1].
+2023-09-12 14:58:57,665 - INFO - Updated cell [0,2].
+2023-09-12 14:58:57,665 - INFO - Updated cell [0,3].
+2023-09-12 14:58:57,666 - INFO - Updated cell [0,4].
+2023-09-12 14:58:57,666 - INFO - Updated cell [1,0].
+2023-09-12 14:58:57,666 - INFO - Updated cell [1,1].
+2023-09-12 14:58:57,666 - INFO - Updated cell [1,2].
+2023-09-12 14:58:57,666 - INFO - Updated cell [1,3].
+2023-09-12 14:58:57,666 - INFO - Updated cell [1,4].
+2023-09-12 14:58:57,667 - INFO - Updated cell [2,0].
+2023-09-12 14:58:57,667 - INFO - Updated cell [2,1].
+2023-09-12 14:58:57,667 - INFO - Updated cell [2,2].
+2023-09-12 14:58:57,667 - INFO - Updated cell [2,3].
+2023-09-12 14:58:57,667 - INFO - Updated cell [2,4].
+2023-09-12 14:58:57,667 - INFO - Updated cell [3,0].
+2023-09-12 14:58:57,667 - INFO - Updated cell [3,1].
+2023-09-12 14:58:57,668 - INFO - Updated cell [3,2].
+2023-09-12 14:58:57,668 - INFO - Updated cell [3,3].
+2023-09-12 14:58:57,668 - INFO - Updated cell [3,4].
+2023-09-12 14:58:57,668 - INFO - Updated cell [4,0].
+2023-09-12 14:58:57,668 - INFO - Updated cell [4,1].
+2023-09-12 14:58:57,668 - INFO - Updated cell [4,2].
+2023-09-12 14:58:57,668 - INFO - Updated cell [4,3].
+2023-09-12 14:58:57,668 - INFO - Updated cell [4,4].
+2023-09-12 14:58:57,668 - INFO - Updated cell [5,0].
+2023-09-12 14:58:57,669 - INFO - Updated cell [5,1].
+2023-09-12 14:58:57,669 - INFO - Updated cell [5,2].
+2023-09-12 14:58:57,669 - INFO - Updated cell [5,3].
+2023-09-12 14:58:57,669 - INFO - Updated cell [5,4].
+2023-09-12 14:58:57,669 - INFO - Updated cell [6,0].
+2023-09-12 14:58:57,669 - INFO - Updated cell [6,1].
+2023-09-12 14:58:57,669 - INFO - Updated cell [6,2].
+2023-09-12 14:58:57,669 - INFO - Updated cell [6,3].
+2023-09-12 14:58:57,669 - INFO - Updated cell [6,4].
+2023-09-12 14:58:57,670 - INFO - Updated cell [7,0].
+2023-09-12 14:58:57,670 - INFO - Updated cell [7,1].
+2023-09-12 14:58:57,670 - INFO - Updated cell [7,2].
+2023-09-12 14:58:57,670 - INFO - Updated cell [7,3].
+2023-09-12 14:58:57,670 - INFO - Updated cell [7,4].
+2023-09-12 14:58:57,670 - INFO - Updated cell [8,0].
+2023-09-12 14:58:57,670 - INFO - Updated cell [8,1].
+2023-09-12 14:58:57,670 - INFO - Updated cell [8,2].
+2023-09-12 14:58:57,671 - INFO - Updated cell [8,3].
+2023-09-12 14:58:57,671 - INFO - Updated cell [8,4].
+2023-09-12 14:58:57,671 - INFO - Updated cell [9,0].
+2023-09-12 14:58:57,671 - INFO - Updated cell [9,1].
+2023-09-12 14:58:57,671 - INFO - Updated cell [9,2].
+2023-09-12 14:58:57,671 - INFO - Updated cell [9,3].
+2023-09-12 14:58:57,672 - INFO - Updated cell [9,4].
+2023-09-12 14:58:57,672 - INFO - Updated cell [10,0].
+2023-09-12 14:58:57,672 - INFO - Updated cell [10,1].
+2023-09-12 14:58:57,672 - INFO - Updated cell [10,2].
+2023-09-12 14:58:57,672 - INFO - Updated cell [10,3].
+2023-09-12 14:58:57,672 - INFO - Updated cell [10,4].
+2023-09-12 14:58:57,672 - INFO - Updated cell [11,0].
+2023-09-12 14:58:57,672 - INFO - Updated cell [11,1].
+2023-09-12 14:58:57,672 - INFO - Updated cell [11,2].
+2023-09-12 14:58:57,673 - INFO - Updated cell [11,3].
+2023-09-12 14:58:57,673 - INFO - Updated cell [11,4].
+2023-09-12 14:58:57,673 - INFO - Updated cell [12,0].
+2023-09-12 14:58:57,673 - INFO - Updated cell [12,1].
+2023-09-12 14:58:57,673 - INFO - Updated cell [12,2].
+2023-09-12 14:58:57,673 - INFO - Updated cell [12,3].
+2023-09-12 14:58:57,673 - INFO - Updated cell [12,4].
+2023-09-12 14:58:57,673 - INFO - Updated cell [13,0].
+2023-09-12 14:58:57,673 - INFO - Updated cell [13,1].
+2023-09-12 14:58:57,673 - INFO - Updated cell [13,2].
+2023-09-12 14:58:57,673 - INFO - Updated cell [13,3].
+2023-09-12 14:58:57,673 - INFO - Updated cell [13,4].
+2023-09-12 14:58:57,673 - INFO - Updated cell [14,0].
+2023-09-12 14:58:57,673 - INFO - Updated cell [14,1].
+2023-09-12 14:58:57,675 - INFO - Updated cell [14,2].
+2023-09-12 14:58:57,675 - INFO - Updated cell [14,3].
+2023-09-12 14:58:57,675 - INFO - Updated cell [14,4].
+2023-09-12 14:58:57,675 - INFO - Updated cell [15,0].
+2023-09-12 14:58:57,675 - INFO - Updated cell [15,1].
+2023-09-12 14:58:57,675 - INFO - Updated cell [15,2].
+2023-09-12 14:58:57,675 - INFO - Updated cell [15,3].
+2023-09-12 14:58:57,675 - INFO - Updated cell [15,4].
+2023-09-12 14:58:57,675 - INFO - Updated cell [16,0].
+2023-09-12 14:58:57,676 - INFO - Updated cell [16,1].
+2023-09-12 14:58:57,676 - INFO - Updated cell [16,2].
+2023-09-12 14:58:57,676 - INFO - Updated cell [16,3].
+2023-09-12 14:58:57,676 - INFO - Updated cell [16,4].
+2023-09-12 14:58:57,676 - INFO - Updated cell [17,0].
+2023-09-12 14:58:57,676 - INFO - Updated cell [17,1].
+2023-09-12 14:58:57,676 - INFO - Updated cell [17,2].
+2023-09-12 14:58:57,676 - INFO - Updated cell [17,3].
+2023-09-12 14:58:57,677 - INFO - Updated cell [17,4].
+2023-09-12 14:58:57,677 - INFO - Updated cell [18,0].
+2023-09-12 14:58:57,677 - INFO - Updated cell [18,1].
+2023-09-12 14:58:57,677 - INFO - Updated cell [18,2].
+2023-09-12 14:58:57,677 - INFO - Updated cell [18,3].
+2023-09-12 14:58:57,677 - INFO - Updated cell [18,4].
+2023-09-12 14:58:57,677 - INFO - Updated cell [19,0].
+2023-09-12 14:58:57,677 - INFO - Updated cell [19,1].
+2023-09-12 14:58:57,677 - INFO - Updated cell [19,2].
+2023-09-12 14:58:57,678 - INFO - Updated cell [19,3].
+2023-09-12 14:58:57,678 - INFO - Updated cell [19,4].
+2023-09-12 14:58:57,678 - INFO - Updated cell [20,0].
+2023-09-12 14:58:57,678 - INFO - Updated cell [20,1].
+2023-09-12 14:58:57,678 - INFO - Updated cell [20,2].
+2023-09-12 14:58:57,678 - INFO - Updated cell [20,3].
+2023-09-12 14:58:57,678 - INFO - Updated cell [20,4].
+2023-09-12 14:58:57,678 - INFO - Updated cell [21,0].
+2023-09-12 14:58:57,678 - INFO - Updated cell [21,1].
+2023-09-12 14:58:57,679 - INFO - Updated cell [21,2].
+2023-09-12 14:58:57,679 - INFO - Updated cell [21,3].
+2023-09-12 14:58:57,679 - INFO - Updated cell [21,4].
+2023-09-12 14:58:57,679 - INFO - Updated cell [22,0].
+2023-09-12 14:58:57,679 - INFO - Updated cell [22,1].
+2023-09-12 14:58:57,679 - INFO - Updated cell [22,2].
+2023-09-12 14:58:57,679 - INFO - Updated cell [22,3].
+2023-09-12 14:58:57,679 - INFO - Updated cell [22,4].
+2023-09-12 14:58:57,679 - INFO - Updated cell [23,0].
+2023-09-12 14:58:57,680 - INFO - Updated cell [23,1].
+2023-09-12 14:58:57,680 - INFO - Updated cell [23,2].
+2023-09-12 14:58:57,680 - INFO - Updated cell [23,3].
+2023-09-12 14:58:57,680 - INFO - Updated cell [23,4].
+2023-09-12 14:58:57,680 - INFO - Updated cell [24,0].
+2023-09-12 14:58:57,680 - INFO - Updated cell [24,1].
+2023-09-12 14:58:57,680 - INFO - Updated cell [24,2].
+2023-09-12 14:58:57,680 - INFO - Updated cell [24,3].
+2023-09-12 14:58:57,681 - INFO - Updated cell [24,4].
+2023-09-12 14:58:57,681 - INFO - Updated cell [25,0].
+2023-09-12 14:58:57,681 - INFO - Updated cell [25,1].
+2023-09-12 14:58:57,681 - INFO - Updated cell [25,2].
+2023-09-12 14:58:57,681 - INFO - Updated cell [25,3].
+2023-09-12 14:58:57,681 - INFO - Updated cell [25,4].
+2023-09-12 14:58:57,681 - INFO - Updated cell [26,0].
+2023-09-12 14:58:57,681 - INFO - Updated cell [26,1].
+2023-09-12 14:58:57,681 - INFO - Updated cell [26,2].
+2023-09-12 14:58:57,682 - INFO - Updated cell [26,3].
+2023-09-12 14:58:57,682 - INFO - Updated cell [26,4].
+2023-09-12 14:58:57,682 - INFO - Updated cell [27,0].
+2023-09-12 14:58:57,682 - INFO - Updated cell [27,1].
+2023-09-12 14:58:57,682 - INFO - Updated cell [27,2].
+2023-09-12 14:58:57,682 - INFO - Updated cell [27,3].
+2023-09-12 14:58:57,682 - INFO - Updated cell [27,4].
+2023-09-12 14:58:57,682 - INFO - Updated cell [28,0].
+2023-09-12 14:58:57,682 - INFO - Updated cell [28,1].
+2023-09-12 14:58:57,683 - INFO - Updated cell [28,2].
+2023-09-12 14:58:57,683 - INFO - Updated cell [28,3].
+2023-09-12 14:58:57,683 - INFO - Updated cell [28,4].
+2023-09-12 14:58:57,683 - INFO - Updated cell [29,0].
+2023-09-12 14:58:57,683 - INFO - Updated cell [29,1].
+2023-09-12 14:58:57,683 - INFO - Updated cell [29,2].
+2023-09-12 14:58:57,683 - INFO - Updated cell [29,3].
+2023-09-12 14:58:57,683 - INFO - Updated cell [29,4].
+2023-09-12 14:58:57,683 - INFO - Updated cell [30,0].
+2023-09-12 14:58:57,684 - INFO - Updated cell [30,1].
+2023-09-12 14:58:57,684 - INFO - Updated cell [30,2].
+2023-09-12 14:58:57,684 - INFO - Updated cell [30,3].
+2023-09-12 14:58:57,684 - INFO - Updated cell [30,4].
+2023-09-12 14:58:57,684 - INFO - Updated cell [31,0].
+2023-09-12 14:58:57,684 - INFO - Updated cell [31,1].
+2023-09-12 14:58:57,684 - INFO - Updated cell [31,2].
+2023-09-12 14:58:57,684 - INFO - Updated cell [31,3].
+2023-09-12 14:58:57,684 - INFO - Updated cell [31,4].
+2023-09-12 14:58:57,684 - INFO - Updated cell [32,0].
+2023-09-12 14:58:57,684 - INFO - Updated cell [32,1].
+2023-09-12 14:58:57,684 - INFO - Updated cell [32,2].
+2023-09-12 14:58:57,684 - INFO - Updated cell [32,3].
+2023-09-12 14:58:57,685 - INFO - Updated cell [32,4].
+2023-09-12 14:58:57,685 - INFO - Updated cell [33,0].
+2023-09-12 14:58:57,685 - INFO - Updated cell [33,1].
+2023-09-12 14:58:57,685 - INFO - Updated cell [33,2].
+2023-09-12 14:58:57,686 - INFO - Updated cell [33,3].
+2023-09-12 14:58:57,686 - INFO - Updated cell [33,4].
+2023-09-12 14:58:57,686 - INFO - Updated cell [34,0].
+2023-09-12 14:58:57,686 - INFO - Updated cell [34,1].
+2023-09-12 14:58:57,686 - INFO - Updated cell [34,2].
+2023-09-12 14:58:57,686 - INFO - Updated cell [34,3].
+2023-09-12 14:58:57,686 - INFO - Updated cell [34,4].
+2023-09-12 14:58:57,686 - INFO - Updated cell [35,0].
+2023-09-12 14:58:57,687 - INFO - Updated cell [35,1].
+2023-09-12 14:58:57,687 - INFO - Updated cell [35,2].
+2023-09-12 14:58:57,687 - INFO - Updated cell [35,3].
+2023-09-12 14:58:57,687 - INFO - Updated cell [35,4].
+2023-09-12 14:58:57,687 - INFO - Updated cell [36,0].
+2023-09-12 14:58:57,687 - INFO - Updated cell [36,1].
+2023-09-12 14:58:57,688 - INFO - Updated cell [36,2].
+2023-09-12 14:58:57,688 - INFO - Updated cell [36,3].
+2023-09-12 14:58:57,688 - INFO - Updated cell [36,4].
+2023-09-12 14:58:57,688 - INFO - Updated cell [37,0].
+2023-09-12 14:58:57,688 - INFO - Updated cell [37,1].
+2023-09-12 14:58:57,688 - INFO - Updated cell [37,2].
+2023-09-12 14:58:57,688 - INFO - Updated cell [37,3].
+2023-09-12 14:58:57,688 - INFO - Updated cell [37,4].
+2023-09-12 14:58:57,689 - INFO - Updated cell [38,0].
+2023-09-12 14:58:57,689 - INFO - Updated cell [38,1].
+2023-09-12 14:58:57,689 - INFO - Updated cell [38,2].
+2023-09-12 14:58:57,689 - INFO - Updated cell [38,3].
+2023-09-12 14:58:57,689 - INFO - Updated cell [38,4].
+2023-09-12 14:58:57,689 - INFO - Updated cell [39,0].
+2023-09-12 14:58:57,689 - INFO - Updated cell [39,1].
+2023-09-12 14:58:57,689 - INFO - Updated cell [39,2].
+2023-09-12 14:58:57,690 - INFO - Updated cell [39,3].
+2023-09-12 14:58:57,690 - INFO - Updated cell [39,4].
+2023-09-12 14:58:57,690 - INFO - Updated cell [40,0].
+2023-09-12 14:58:57,690 - INFO - Updated cell [40,1].
+2023-09-12 14:58:57,690 - INFO - Updated cell [40,2].
+2023-09-12 14:58:57,690 - INFO - Updated cell [40,3].
+2023-09-12 14:58:57,690 - INFO - Updated cell [40,4].
+2023-09-12 14:58:57,690 - INFO - Updated cell [41,0].
+2023-09-12 14:58:57,691 - INFO - Updated cell [41,1].
+2023-09-12 14:58:57,691 - INFO - Updated cell [41,2].
+2023-09-12 14:58:57,691 - INFO - Updated cell [41,3].
+2023-09-12 14:58:57,691 - INFO - Updated cell [41,4].
+2023-09-12 14:58:57,691 - INFO - Updated cell [42,0].
+2023-09-12 14:58:57,691 - INFO - Updated cell [42,1].
+2023-09-12 14:58:57,692 - INFO - Updated cell [42,2].
+2023-09-12 14:58:57,692 - INFO - Updated cell [42,3].
+2023-09-12 14:58:57,692 - INFO - Updated cell [42,4].
+2023-09-12 14:58:57,692 - INFO - Updated cell [43,0].
+2023-09-12 14:58:57,692 - INFO - Updated cell [43,1].
+2023-09-12 14:58:57,692 - INFO - Updated cell [43,2].
+2023-09-12 14:58:57,693 - INFO - Updated cell [43,3].
+2023-09-12 14:58:57,693 - INFO - Updated cell [43,4].
+2023-09-12 14:58:57,693 - INFO - Updated cell [44,0].
+2023-09-12 14:58:57,693 - INFO - Updated cell [44,1].
+2023-09-12 14:58:57,693 - INFO - Updated cell [44,2].
+2023-09-12 14:58:57,694 - INFO - Updated cell [44,3].
+2023-09-12 14:58:57,694 - INFO - Updated cell [44,4].
+2023-09-12 14:58:57,694 - INFO - Updated cell [45,0].
+2023-09-12 14:58:57,694 - INFO - Updated cell [45,1].
+2023-09-12 14:58:57,694 - INFO - Updated cell [45,2].
+2023-09-12 14:58:57,694 - INFO - Updated cell [45,3].
+2023-09-12 14:58:57,694 - INFO - Updated cell [45,4].
+2023-09-12 14:58:57,695 - INFO - Updated cell [46,0].
+2023-09-12 14:58:57,695 - INFO - Updated cell [46,1].
+2023-09-12 14:58:57,695 - INFO - Updated cell [46,2].
+2023-09-12 14:58:57,695 - INFO - Updated cell [46,3].
+2023-09-12 14:58:57,695 - INFO - Updated cell [46,4].
+2023-09-12 14:58:57,695 - INFO - Updated cell [47,0].
+2023-09-12 14:58:57,695 - INFO - Updated cell [47,1].
+2023-09-12 14:58:57,695 - INFO - Updated cell [47,2].
+2023-09-12 14:58:57,696 - INFO - Updated cell [47,3].
+2023-09-12 14:58:57,696 - INFO - Updated cell [47,4].
+2023-09-12 14:58:58,657 - INFO - We entered into function: update_setup_parameter
+2023-09-12 14:58:58,657 - INFO - We entered into function: read_dict_setup
+2023-09-12 14:58:58,658 - INFO - We entered into function: update_setup_keys
+2023-09-12 14:58:58,658 - INFO - defaultdict(<class 'str'>, {'Name': 'ESRF_XMaS', 'Angle': 'eta', 'Tilt angle': 'chi', 'Norm': 'Io', 'Exposure': 'sec'})
+2023-09-12 14:58:58,658 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:58,659 - INFO - Updated iangle_key = eta
+2023-09-12 14:58:58,659 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:58,659 - INFO - Updated acq_key = sec
+2023-09-12 14:58:58,659 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:58,660 - INFO - Updated norm_key = Io
+2023-09-12 14:58:58,660 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:58,661 - INFO - Updated tilt_key = chi
+2023-09-12 14:58:58,801 - INFO - We entered into function: update_setup_parameter
+2023-09-12 14:58:58,801 - INFO - We entered into function: read_dict_setup
+2023-09-12 14:58:58,802 - INFO - We entered into function: update_setup_keys
+2023-09-12 14:58:58,802 - INFO - defaultdict(<class 'str'>, {'Name': 'ESRF_XMaS', 'Angle': 'eta', 'Tilt angle': 'chi', 'Norm': 'Io', 'Exposure': 'sec'})
+2023-09-12 14:58:58,802 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:58,802 - INFO - Updated iangle_key = eta
+2023-09-12 14:58:58,802 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:58,803 - INFO - Updated acq_key = sec
+2023-09-12 14:58:58,803 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:58,803 - INFO - Updated norm_key = Io
+2023-09-12 14:58:58,803 - INFO - We entered into function: update_attributes_in_group
+2023-09-12 14:58:58,805 - INFO - Updated tilt_key = chi
+2023-09-12 14:59:01,476 - INFO - We entered into function: update_clicked_filenames
+2023-09-12 14:59:01,477 - INFO - We entered into function: filename_fromrow
+2023-09-12 14:59:01,478 - INFO - New cache index: [11]
+2023-09-12 14:59:01,480 - INFO - New cache filenames: [WindowsPath('E:/Datos_Sincrotrones/XMaS_Sept2023_2/PM6Y6_112_05CN/PM6Y6_112_05CN_2m_00012_0039_003.edf')]
+2023-09-12 14:59:01,481 - INFO - We entered into function: update_graphs
+2023-09-12 14:59:01,481 - INFO - We entered into function: get_Edf_data
+2023-09-12 14:59:01,481 - INFO - We entered into function: get_Edf_instance
+2023-09-12 14:59:01,481 - INFO - We entered into function: get_filename_from_index
+2023-09-12 14:59:01,481 - INFO - We entered into function: get_active_ponifile
+2023-09-12 14:59:01,483 - INFO - Ponifile active: E:\Datos_Sincrotrones\XMaS_Sept2023_2\LaB6\lab6.poni
+2023-09-12 14:59:01,483 - INFO - Unable to parse E:\Datos_Sincrotrones\XMaS_Sept2023_2\LaB6\lab6.poni as JSON file, defaulting to PoniParser
+2023-09-12 14:59:01,655 - INFO - New data sample with shape: (1043, 981)
+2023-09-12 14:59:01,655 - INFO - We entered into function: get_norm_factor
+2023-09-12 14:59:01,656 - INFO - We entered into function: get_dataset_norm_factor
+2023-09-12 14:59:01,656 - INFO - We entered into function: get_norm_key
+2023-09-12 14:59:01,656 - INFO - We entered into function: get_attrs_in_group
+2023-09-12 14:59:01,658 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:59:01,659 - INFO - Got norm factor: 137271000.0
+2023-09-12 14:59:01,660 - INFO - We entered into function: update_2D_graph
+2023-09-12 14:59:01,660 - INFO - True
+2023-09-12 14:59:01,663 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-09-12 14:59:01,683 - INFO - (1.1112828708404648e-06, 3.1064642101798202e-06)
+2023-09-12 14:59:01,693 - INFO - Filtered negative, nan and zero values.
+2023-09-12 14:59:01,710 - INFO - Displayed data.
+2023-09-12 14:59:01,711 - INFO - We entered into function: update_2D_reshape
+2023-09-12 14:59:01,711 - INFO - Wrong reshaping update
+2023-09-12 14:59:01,711 - INFO - We entered into function: update_1D_graph
+2023-09-12 14:59:01,711 - INFO - Ponifile: E:\Datos_Sincrotrones\XMaS_Sept2023_2\LaB6\lab6.poni
+2023-09-12 14:59:01,712 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-09-12 14:59:01,712 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 4.5], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-09-12 14:59:01,712 - INFO - We entered into function: raw_integration
+2023-09-12 14:59:01,712 - INFO - We entered into function: raw_integration_box
+2023-09-12 14:59:01,713 - INFO - We entered into function: calculate_bins
+2023-09-12 14:59:01,713 - INFO - We entered into function: q_to_twotheta
+2023-09-12 14:59:01,713 - INFO - We entered into function: q_to_twotheta
+2023-09-12 14:59:01,713 - INFO - We entered into function: get_q_nm
+2023-09-12 14:59:01,713 - INFO - We entered into function: get_q_nm
+2023-09-12 14:59:01,713 - INFO - We entered into function: get_q_nm
+2023-09-12 14:59:01,713 - INFO - We entered into function: get_q_nm
+2023-09-12 14:59:01,714 - INFO - Trying box integration with: process=opbox, npt=500, p0_range=[0.0, 20.0], p1_range=[3.1, 4.5], unit=q_nm^-1
+2023-09-12 14:59:02,040 - INFO - Integration performed.
+2023-09-12 14:59:02,041 - INFO - New integration: 1
+2023-09-12 14:59:02,043 - INFO - We entered into function: update_label_displayed
+2023-09-12 14:59:02,043 - INFO - We entered into function: get_filename_from_index
+2023-09-12 14:59:02,044 - INFO - New label: E:\Datos_Sincrotrones\XMaS_Sept2023_2\PM6Y6_112_05CN\PM6Y6_112_05CN_2m_00012_0039_003.edf
+2023-09-12 14:59:09,079 - INFO - We entered into function: generate_q_map
+2023-09-12 14:59:09,080 - INFO - Data from the map. Shape: (1043, 981)
+2023-09-12 14:59:09,081 - INFO - Unit of the map: q_nm^-1
+2023-09-12 14:59:09,081 - INFO - We entered into function: get_mesh_matrix
+2023-09-12 14:59:09,081 - INFO - We entered into function: get_detector_array
+2023-09-12 14:59:09,081 - INFO - Shape of the detector: (1043, 981)
+2023-09-12 14:59:09,162 - INFO - Shape of the scat_z matrix: (1043, 981)
+2023-09-12 14:59:09,162 - INFO - Shape of the scat_x matrix: (1043, 981)
+2023-09-12 14:59:09,164 - INFO - Changing the scale of the matriz q units. Scale: 100
+2023-09-12 14:59:09,165 - INFO - We entered into function: get_title
+2023-09-12 14:59:09,165 - INFO - We entered into function: get_metadata_value
+2023-09-12 14:59:09,165 - INFO - We entered into function: get_metadata_dataset
+2023-09-12 14:59:09,166 - INFO - Title for the generated map: ByteOrder=["b'LowByteFirst'"]; 
+2023-09-12 14:59:09,166 - INFO - We entered into function: get_map_limits
+2023-09-12 14:59:09,166 - INFO - X limits for the generated map: [-20, 20]
+2023-09-12 14:59:09,167 - INFO - Y limits for the generated map: [-20, 20]
+2023-09-12 14:59:09,167 - INFO - We entered into function: get_map_ticks
+2023-09-12 14:59:09,167 - INFO - X ticks for the generated map: ['-20', ' -10', ' 0', ' 10', ' 20']
+2023-09-12 14:59:09,167 - INFO - Y ticks for the generated map: ['-20', ' -10', ' 0', ' 10', ' 20']
+2023-09-12 14:59:09,275 - INFO - None

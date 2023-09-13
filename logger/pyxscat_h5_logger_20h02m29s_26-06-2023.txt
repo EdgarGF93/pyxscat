@@ -1,0 +1,52 @@
+2023-06-26 20:02:29,334 - INFO - Logger was initialized.
+2023-06-26 20:02:29,334 - INFO - Logger was initialized.
+2023-06-26 20:02:30,867 - INFO - We entered into function: reset_attributes_and_widgets
+2023-06-26 20:02:30,868 - INFO - The data parameters were reinitialized.
+2023-06-26 20:02:30,868 - INFO - We entered into function: init_callbacks
+2023-06-26 20:02:30,869 - INFO - We entered into function: update_setup_info
+2023-06-26 20:02:30,869 - INFO - New setup dictionary was updated.
+2023-06-26 20:02:30,869 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-06-26 20:02:30,870 - INFO - We entered into function: update_lims_ticks
+2023-06-26 20:02:30,887 - INFO - We entered into function: update_combobox_h5
+2023-06-26 20:02:30,892 - INFO - We entered into function: read_h5_file
+2023-06-26 20:02:30,892 - INFO - We entered into function: update_h5
+2023-06-26 20:02:30,892 - INFO - The H5 could not be updated.
+2023-06-26 20:02:30,892 - INFO - We entered into function: update_widgets
+2023-06-26 20:02:30,893 - INFO - Nothing to be updated.
+2023-06-26 20:02:30,893 - INFO - We entered into function: update_setup_info
+2023-06-26 20:02:30,893 - INFO - New setup dictionary was updated.
+2023-06-26 20:02:30,893 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-06-26 20:02:30,893 - INFO - We entered into function: read_h5_file
+2023-06-26 20:02:30,893 - INFO - We entered into function: update_h5
+2023-06-26 20:02:30,894 - INFO - The H5 could not be updated.
+2023-06-26 20:02:30,894 - INFO - We entered into function: update_widgets
+2023-06-26 20:02:30,894 - INFO - Nothing to be updated.
+2023-06-26 20:02:30,894 - INFO - We entered into function: update_setup_info
+2023-06-26 20:02:30,894 - INFO - New setup dictionary was updated.
+2023-06-26 20:02:30,894 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-06-26 20:02:30,894 - INFO - We entered into function: update_combobox_setups
+2023-06-26 20:02:30,896 - INFO - We entered into function: update_setup_info
+2023-06-26 20:02:30,897 - INFO - New setup dictionary was updated.
+2023-06-26 20:02:30,897 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-06-26 20:02:30,897 - INFO - We entered into function: update_table
+2023-06-26 20:02:30,898 - INFO - Table was reseted.
+2023-06-26 20:02:30,898 - INFO - No folder to display. Return.
+2023-06-26 20:02:30,898 - INFO - We entered into function: update_table
+2023-06-26 20:02:30,898 - INFO - Table was reseted.
+2023-06-26 20:02:30,898 - INFO - No folder to display. Return.
+2023-06-26 20:02:30,898 - INFO - We entered into function: update_table
+2023-06-26 20:02:30,899 - INFO - Table was reseted.
+2023-06-26 20:02:30,899 - INFO - No folder to display. Return.
+2023-06-26 20:02:30,899 - INFO - We entered into function: update_integration_widgets
+2023-06-26 20:02:30,902 - INFO - We entered into function: update_graphs
+2023-06-26 20:02:37,469 - INFO - We entered into function: update_cake_parameters
+2023-06-26 20:02:37,470 - INFO - Json file: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\pyxscat\integration_dicts\left.json
+2023-06-26 20:02:37,470 - INFO - We entered into function: add_integration_cake
+2023-06-26 20:02:37,471 - INFO - We entered into function: update_integration_widgets
+2023-06-26 20:02:37,475 - INFO - We entered into function: update_graphs
+2023-06-26 20:02:37,475 - INFO - We entered into function: add_integration_cake
+2023-06-26 20:02:37,476 - INFO - We entered into function: update_integration_widgets
+2023-06-26 20:02:37,478 - INFO - We entered into function: update_graphs
+2023-06-26 20:02:37,479 - INFO - We entered into function: add_integration_cake
+2023-06-26 20:02:37,479 - INFO - We entered into function: update_integration_widgets
+2023-06-26 20:02:37,481 - INFO - We entered into function: update_graphs

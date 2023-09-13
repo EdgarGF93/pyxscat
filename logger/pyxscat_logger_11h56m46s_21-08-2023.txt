@@ -1,0 +1,39 @@
+2023-08-21 11:56:46,507 - INFO - Logger was initialized.
+2023-08-21 11:56:47,829 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:56:47,830 - INFO - The data parameters were reinitialized.
+2023-08-21 11:56:47,830 - INFO - We entered into function: init_callbacks
+2023-08-21 11:56:47,831 - INFO - We entered into function: update_setup_info
+2023-08-21 11:56:47,831 - INFO - New setup dictionary was updated.
+2023-08-21 11:56:47,831 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-21 11:56:47,832 - INFO - We entered into function: update_lims_ticks
+2023-08-21 11:56:47,848 - INFO - We entered into function: update_combobox_h5
+2023-08-21 11:56:47,849 - INFO - No .h5 files detected.
+2023-08-21 11:56:47,849 - INFO - We entered into function: update_combobox_setups
+2023-08-21 11:56:47,850 - INFO - We entered into function: update_setup_info
+2023-08-21 11:56:47,851 - INFO - New setup dictionary was updated.
+2023-08-21 11:56:47,852 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:56:47,852 - INFO - We entered into function: update_table
+2023-08-21 11:56:47,852 - INFO - Table was reseted.
+2023-08-21 11:56:47,852 - INFO - No folder to display. Return.
+2023-08-21 11:56:47,852 - INFO - We entered into function: update_table
+2023-08-21 11:56:47,852 - INFO - Table was reseted.
+2023-08-21 11:56:47,852 - INFO - No folder to display. Return.
+2023-08-21 11:56:47,853 - INFO - We entered into function: update_table
+2023-08-21 11:56:47,853 - INFO - Table was reseted.
+2023-08-21 11:56:47,853 - INFO - No folder to display. Return.
+2023-08-21 11:56:47,853 - INFO - We entered into function: update_integration_widgets
+2023-08-21 11:56:47,856 - INFO - We entered into function: update_graphs
+2023-08-21 11:56:50,339 - INFO - We entered into function: create_h5_file
+2023-08-21 11:56:50,341 - INFO - We entered into function: pick_main_directory
+2023-08-21 11:56:59,397 - INFO - No folder detected.
+2023-08-21 11:56:59,397 - INFO - We entered into function: create_h5_filename
+2023-08-21 11:57:00,456 - INFO - We entered into function: pick_hdf5_folder
+2023-08-21 11:57:01,426 - INFO - There is no new address for the .h5 file. Cancel everything.
+2023-08-21 11:57:01,427 - INFO - The .h5 file could not be created.
+2023-08-21 11:57:01,427 - INFO - The .h5 file could not be created.
+2023-08-21 11:57:01,427 - INFO - We entered into function: append_h5file
+2023-08-21 11:57:01,427 - INFO - There is no H5Integrator instance.
+2023-08-21 11:57:01,427 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-21 11:57:01,428 - INFO - The H5 could not be updated.
+2023-08-21 11:57:01,428 - INFO - We entered into function: activate_h5file
+2023-08-21 11:57:01,428 - INFO - There is no H5Integrator instance.

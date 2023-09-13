@@ -1,0 +1,78 @@
+2023-08-21 11:09:44,278 - INFO - Logger was initialized.
+2023-08-21 11:09:45,683 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:09:45,684 - INFO - The data parameters were reinitialized.
+2023-08-21 11:09:45,684 - INFO - We entered into function: init_callbacks
+2023-08-21 11:09:45,685 - INFO - We entered into function: update_setup_info
+2023-08-21 11:09:45,685 - INFO - New setup dictionary was updated.
+2023-08-21 11:09:45,686 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-21 11:09:45,686 - INFO - We entered into function: update_lims_ticks
+2023-08-21 11:09:45,708 - INFO - We entered into function: update_combobox_h5
+2023-08-21 11:09:45,708 - INFO - We entered into function: set_h5_instance
+2023-08-21 11:09:45,709 - INFO - The .h5 could not be found.
+2023-08-21 11:09:45,709 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-21 11:09:45,709 - INFO - The H5 could not be updated.
+2023-08-21 11:09:45,709 - INFO - We entered into function: update_widgets
+2023-08-21 11:09:45,710 - INFO - There is no H5Integrator instance.
+2023-08-21 11:09:45,710 - INFO - We entered into function: update_setup_info
+2023-08-21 11:09:45,710 - INFO - New setup dictionary was updated.
+2023-08-21 11:09:45,710 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-21 11:09:45,710 - INFO - We entered into function: update_combobox_setups
+2023-08-21 11:09:45,713 - INFO - We entered into function: update_setup_info
+2023-08-21 11:09:45,715 - INFO - New setup dictionary was updated.
+2023-08-21 11:09:45,716 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:09:45,716 - INFO - We entered into function: update_table
+2023-08-21 11:09:45,716 - INFO - Table was reseted.
+2023-08-21 11:09:45,716 - INFO - No folder to display. Return.
+2023-08-21 11:09:45,716 - INFO - We entered into function: update_table
+2023-08-21 11:09:45,717 - INFO - Table was reseted.
+2023-08-21 11:09:45,717 - INFO - No folder to display. Return.
+2023-08-21 11:09:45,717 - INFO - We entered into function: update_table
+2023-08-21 11:09:45,717 - INFO - Table was reseted.
+2023-08-21 11:09:45,717 - INFO - No folder to display. Return.
+2023-08-21 11:09:45,717 - INFO - We entered into function: update_integration_widgets
+2023-08-21 11:09:45,720 - INFO - We entered into function: update_graphs
+2023-08-21 11:09:51,600 - INFO - We entered into function: create_h5_file
+2023-08-21 11:09:51,601 - INFO - We entered into function: pick_main_directory
+2023-08-21 11:09:58,684 - INFO - We entered into function: create_h5_filename
+2023-08-21 11:10:00,308 - INFO - H5Integrator instance was initialized
+2023-08-21 11:10:00,308 - INFO - The filename is C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5.
+2023-08-21 11:10:00,308 - INFO - We entered into function: create_h5_file
+2023-08-21 11:10:00,308 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5 is going to be created.
+2023-08-21 11:10:00,309 - INFO - The file was created 
+2023-08-21 11:10:00,309 - INFO - Attributes for h5: dict_items([('main_directory', 'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD'), ('description', 'HDF5 file with Scattering methods.'), ('comment', ''), ('beamline', 'BM28-XMaS')])
+2023-08-21 11:10:00,309 - INFO - New attribute. Datetime : 11h10m00s_21-08-2023
+2023-08-21 11:10:00,310 - INFO - New attribute. main_directory : C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:10:00,310 - INFO - New attribute. description : HDF5 file with Scattering methods.
+2023-08-21 11:10:00,310 - INFO - New attribute. comment : 
+2023-08-21 11:10:00,311 - INFO - New attribute. beamline : BM28-XMaS
+2023-08-21 11:10:00,312 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:10:00,314 - INFO - Ponifile dataset was created.
+2023-08-21 11:10:00,315 - INFO - Active_ponifile dataset was created.
+2023-08-21 11:10:00,315 - INFO - No ponifiles to be updated. Return.
+2023-08-21 11:10:00,315 - INFO - We entered into function: update_setup_keys
+2023-08-21 11:10:00,316 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:10:00,316 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:10:00,317 - INFO - Updated iangle_key = spitch
+2023-08-21 11:10:00,317 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:10:00,317 - INFO - Updated acq_key = exposure
+2023-08-21 11:10:00,317 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:10:00,318 - INFO - Updated norm_key = Monitor
+2023-08-21 11:10:00,318 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:10:00,318 - INFO - Updated tilt_key = 
+2023-08-21 11:10:00,318 - INFO - Inherited methods from pygix.transform
+2023-08-21 11:10:00,318 - INFO - We entered into function: update_transformQ
+2023-08-21 11:10:00,318 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:10:00,319 - INFO - Ponifile active: 
+2023-08-21 11:10:00,319 - INFO - We entered into function: update_orientation
+2023-08-21 11:10:00,319 - INFO - qz parallel is True
+2023-08-21 11:10:00,320 - INFO - qr parallel is True
+2023-08-21 11:10:00,320 - INFO - The sample orientation (pygix) is set at 1
+2023-08-21 11:10:00,320 - INFO - New .h5 file was created successfully.
+2023-08-21 11:10:00,320 - INFO - sPonifile: . Keys_metadata: defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'}). qz:True, qr:True
+2023-08-21 11:10:00,321 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:10:00,321 - INFO - We entered into function: update_table
+2023-08-21 11:10:00,321 - INFO - Table was reseted.
+2023-08-21 11:10:00,321 - INFO - No folder to display. Return.
+2023-08-21 11:10:00,321 - INFO - The data parameters were reinitialized.
+2023-08-21 11:10:00,321 - INFO - We entered into function: append_h5file
+2023-08-21 11:10:00,322 - INFO - New .h5 file to append C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5

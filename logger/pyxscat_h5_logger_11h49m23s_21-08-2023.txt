@@ -1,0 +1,518 @@
+2023-08-21 11:49:23,741 - INFO - Logger was initialized.
+2023-08-21 11:49:23,742 - INFO - Logger was initialized.
+2023-08-21 11:49:26,002 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:49:26,002 - INFO - The data parameters were reinitialized.
+2023-08-21 11:49:26,003 - INFO - We entered into function: init_callbacks
+2023-08-21 11:49:26,003 - INFO - We entered into function: update_setup_info
+2023-08-21 11:49:26,003 - INFO - New setup dictionary was updated.
+2023-08-21 11:49:26,004 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-21 11:49:26,005 - INFO - We entered into function: update_lims_ticks
+2023-08-21 11:49:26,021 - INFO - We entered into function: update_combobox_h5
+2023-08-21 11:49:26,021 - INFO - No .h5 files detected.
+2023-08-21 11:49:26,022 - INFO - We entered into function: update_combobox_setups
+2023-08-21 11:49:26,023 - INFO - We entered into function: update_setup_info
+2023-08-21 11:49:26,024 - INFO - New setup dictionary was updated.
+2023-08-21 11:49:26,024 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:49:26,024 - INFO - We entered into function: update_table
+2023-08-21 11:49:26,024 - INFO - Table was reseted.
+2023-08-21 11:49:26,024 - INFO - No folder to display. Return.
+2023-08-21 11:49:26,025 - INFO - We entered into function: update_table
+2023-08-21 11:49:26,025 - INFO - Table was reseted.
+2023-08-21 11:49:26,025 - INFO - No folder to display. Return.
+2023-08-21 11:49:26,025 - INFO - We entered into function: update_table
+2023-08-21 11:49:26,025 - INFO - Table was reseted.
+2023-08-21 11:49:26,025 - INFO - No folder to display. Return.
+2023-08-21 11:49:26,025 - INFO - We entered into function: update_integration_widgets
+2023-08-21 11:49:26,029 - INFO - We entered into function: update_graphs
+2023-08-21 11:49:27,626 - INFO - We entered into function: create_h5_file
+2023-08-21 11:49:27,627 - INFO - We entered into function: pick_main_directory
+2023-08-21 11:49:30,029 - INFO - No folder detected.
+2023-08-21 11:49:30,029 - INFO - We entered into function: create_h5_filename
+2023-08-21 11:49:37,102 - INFO - We entered into function: pick_hdf5_folder
+2023-08-21 11:49:38,642 - INFO - There is no new address for the .h5 file. Cancel everything.
+2023-08-21 11:49:38,643 - INFO - The .h5 file could not be created.
+2023-08-21 11:49:38,643 - INFO - H5Integrator instance was initialized
+2023-08-21 11:49:38,644 - INFO - The filename is None.
+2023-08-21 11:49:38,644 - INFO - We entered into function: create_h5_file
+2023-08-21 11:49:38,644 - INFO - None is going to be created.
+2023-08-21 11:49:38,645 - INFO - The file was created 
+2023-08-21 11:49:38,645 - INFO - Attributes for h5: dict_items([('main_directory', ''), ('description', 'HDF5 file with Scattering methods.'), ('comment', ''), ('beamline', 'BM28-XMaS')])
+2023-08-21 11:49:38,646 - INFO - New attribute. Datetime : 11h49m38s_21-08-2023
+2023-08-21 11:49:38,646 - INFO - New attribute. main_directory : 
+2023-08-21 11:49:38,647 - INFO - New attribute. description : HDF5 file with Scattering methods.
+2023-08-21 11:49:38,647 - INFO - New attribute. comment : 
+2023-08-21 11:49:38,647 - INFO - New attribute. beamline : BM28-XMaS
+2023-08-21 11:49:38,649 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:49:38,651 - INFO - Ponifile dataset was created.
+2023-08-21 11:49:38,652 - INFO - Active_ponifile dataset was created.
+2023-08-21 11:49:38,652 - INFO - No ponifiles to be updated. Return.
+2023-08-21 11:49:38,653 - INFO - We entered into function: update_setup_keys
+2023-08-21 11:49:38,653 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:49:38,653 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:49:38,654 - INFO - Updated iangle_key = spitch
+2023-08-21 11:49:38,654 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:49:38,654 - INFO - Updated acq_key = exposure
+2023-08-21 11:49:38,654 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:49:38,655 - INFO - Updated norm_key = Monitor
+2023-08-21 11:49:38,655 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:49:38,655 - INFO - Updated tilt_key = 
+2023-08-21 11:49:38,655 - INFO - Inherited methods from pygix.transform
+2023-08-21 11:49:38,655 - INFO - We entered into function: update_transformQ
+2023-08-21 11:49:38,655 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:49:38,656 - INFO - Ponifile active: 
+2023-08-21 11:49:38,656 - INFO - We entered into function: update_orientation
+2023-08-21 11:49:38,656 - INFO - qz parallel is True
+2023-08-21 11:49:38,657 - INFO - qr parallel is True
+2023-08-21 11:49:38,657 - INFO - The sample orientation (pygix) is set at 1
+2023-08-21 11:49:38,657 - INFO - New .h5 file was created successfully.
+2023-08-21 11:49:38,657 - INFO - sPonifile: . Keys_metadata: defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'}). qz:True, qr:True
+2023-08-21 11:49:38,657 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:49:38,657 - INFO - We entered into function: update_table
+2023-08-21 11:49:38,658 - INFO - Table was reseted.
+2023-08-21 11:49:38,658 - INFO - No folder to display. Return.
+2023-08-21 11:49:38,658 - INFO - The data parameters were reinitialized.
+2023-08-21 11:49:38,659 - INFO - We entered into function: append_h5file
+2023-08-21 11:49:38,659 - INFO - New .h5 file to append None
+2023-08-21 11:49:38,659 - INFO - Current list of .h5 files.
+2023-08-21 11:49:38,660 - INFO - We entered into function: set_h5_instance
+2023-08-21 11:49:38,660 - INFO - H5Integrator instance was initialized
+2023-08-21 11:49:38,660 - INFO - The filename is None.
+2023-08-21 11:49:38,660 - INFO - We entered into function: create_h5_file
+2023-08-21 11:49:38,660 - INFO - None already exists. Return.
+2023-08-21 11:49:38,661 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:49:38,662 - INFO - No ponifiles to be updated. Return.
+2023-08-21 11:49:38,662 - INFO - We entered into function: update_setup_keys
+2023-08-21 11:49:38,662 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:49:38,662 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:49:38,663 - INFO - Updated iangle_key = spitch
+2023-08-21 11:49:38,663 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:49:38,664 - INFO - Updated acq_key = exposure
+2023-08-21 11:49:38,664 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:49:38,665 - INFO - Updated norm_key = Monitor
+2023-08-21 11:49:38,665 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:49:38,666 - INFO - Updated tilt_key = 
+2023-08-21 11:49:38,667 - INFO - Inherited methods from pygix.transform
+2023-08-21 11:49:38,667 - INFO - We entered into function: update_transformQ
+2023-08-21 11:49:38,667 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:49:38,669 - INFO - Ponifile active: 
+2023-08-21 11:49:38,670 - INFO - We entered into function: update_orientation
+2023-08-21 11:49:38,670 - INFO - qz parallel is True
+2023-08-21 11:49:38,670 - INFO - qr parallel is True
+2023-08-21 11:49:38,671 - INFO - The sample orientation (pygix) is set at 1
+2023-08-21 11:49:38,671 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:49:38,672 - INFO - The data parameters were reinitialized.
+2023-08-21 11:49:38,672 - INFO - We entered into function: set_main_directory
+2023-08-21 11:49:38,673 - INFO - New main directory set.
+2023-08-21 11:49:38,673 - INFO - .
+2023-08-21 11:49:38,673 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-21 11:49:38,673 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-08-21 11:49:38,674 - INFO - We entered into function: search_and_update_ponifiles
+2023-08-21 11:49:38,674 - INFO - Got main directory: .
+2023-08-21 11:49:57,189 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:49:57,190 - INFO - New ponifiles detected.
+2023-08-21 11:49:57,190 - INFO - ['Desktop\\pyxscat_backup_19-06\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni', 'Desktop\\pyxscat_backup_19-06\\pyxscat\\test\\test_NCD\\Cr2O3.poni', 'Desktop\\pyxscat_backup_19-06\\pyxscat_struc\\pyxscat\\test\\test_NCD_2\\Cr2O3.poni', 'Desktop\\PyXScat\\edf_examples\\test_xmas\\LaB6\\LaB6.poni', 'Desktop\\pyxscat_backup_19-06\\pyxscat_struc\\pyxscat\\test\\test_NCD\\Cr2O3.poni', 'Videos\\pyxscat\\pyxscat\\test\\test_NCD\\Cr2O3.poni', 'Work Folders\\Documents\\Python\\jupyter_notebooks\\test\\standard_LaB6.poni', 'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni', 'Desktop\\PyXScat\\edf_examples\\test_NCD_2\\Cr2O3.poni', 'Desktop\\PyXScat\\test\\test_NCD_2\\Cr2O3.poni', 'Downloads\\cr2O3.poni', 'Desktop\\PyXScat\\test\\test_NCD\\Cr2O3.poni', 'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_2.poni', 'Desktop\\pyxscat_backup_19-06\\pyxscat_struc\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni', 'Work Folders\\Documents\\Python\\jupyter_notebooks\\image_to_angle\\my_calibrant2.poni', 'Desktop\\pyxscat_backup_13July\\pyxscat\\edf_examples\\test_DUBBLE\\AgBh_2.poni', 'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD_2\\Cr2O3.poni', 'Desktop\\pyxscat_backup_13July\\pyxscat\\edf_examples\\test_NCD_2\\Cr2O3.poni', 'Desktop\\PyXScat\\pyxscat\\test\\test_xmas\\LaB6\\LaB6.poni', 'Desktop\\pyxscat_BACKUP_march2023\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni', 'Desktop\\pyxscat_BACKUP_march2023\\pyxscat\\test\\test_NCD\\Cr2O3.poni', 'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni', 'Desktop\\pyxscat_backup_13July\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni', 'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6.poni', 'Desktop\\Dropbox_Backup_23Jun_2023\\Papers\\PM6Y6\\Version_Mayo2022\\cr2o3.poni', 'Desktop\\PyXScat\\edf_examples\\test_NCD\\Cr2O3.poni', 'Desktop\\PyXScat\\pyxscat\\test\\test_NCD\\Cr2O3.poni', 'Dropbox\\Papers\\PM6Y6\\Version_Mayo2022\\cr2o3.poni', 'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_DUBBLE\\AgBh_2.poni', 'Desktop\\PyXScat\\edf_examples\\test_DUBBLE\\AgBh_2.poni', 'Desktop\\PyXScat\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni', 'Dropbox (Personal)\\Papers\\PM6Y6\\Version_Mayo2022\\cr2o3.poni', 'Desktop\\pyxscat_backup_19-06\\pyxscat_struc\\pyxscat\\test\\test_xmas\\LaB6\\LaB6.poni', 'Desktop\\PyXScat\\test\\test_DUBBLE\\AgBh_2.poni', 'Videos\\pyxscat\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni', 'Desktop\\PyXScat\\test\\test_xmas\\LaB6\\LaB6.poni', 'Desktop\\pyxscat_backup_13July\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6.poni']
+2023-08-21 11:49:57,191 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:49:57,191 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:49:57,193 - INFO - Ponifile b'Desktop\\pyxscat_backup_19-06\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni' was appended to dataset.
+2023-08-21 11:49:57,194 - INFO - Ponifile b'Desktop\\pyxscat_backup_19-06\\pyxscat\\test\\test_NCD\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,194 - INFO - Ponifile b'Desktop\\pyxscat_backup_19-06\\pyxscat_struc\\pyxscat\\test\\test_NCD_2\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,195 - INFO - Ponifile b'Desktop\\PyXScat\\edf_examples\\test_xmas\\LaB6\\LaB6.poni' was appended to dataset.
+2023-08-21 11:49:57,196 - INFO - Ponifile b'Desktop\\pyxscat_backup_19-06\\pyxscat_struc\\pyxscat\\test\\test_NCD\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,197 - INFO - Ponifile b'Videos\\pyxscat\\pyxscat\\test\\test_NCD\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,198 - INFO - Ponifile b'Work Folders\\Documents\\Python\\jupyter_notebooks\\test\\standard_LaB6.poni' was appended to dataset.
+2023-08-21 11:49:57,199 - INFO - Ponifile b'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,200 - INFO - Ponifile b'Desktop\\PyXScat\\edf_examples\\test_NCD_2\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,202 - INFO - Ponifile b'Desktop\\PyXScat\\test\\test_NCD_2\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,205 - INFO - Ponifile b'Downloads\\cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,206 - INFO - Ponifile b'Desktop\\PyXScat\\test\\test_NCD\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,209 - INFO - Ponifile b'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_2.poni' was appended to dataset.
+2023-08-21 11:49:57,210 - INFO - Ponifile b'Desktop\\pyxscat_backup_19-06\\pyxscat_struc\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni' was appended to dataset.
+2023-08-21 11:49:57,211 - INFO - Ponifile b'Work Folders\\Documents\\Python\\jupyter_notebooks\\image_to_angle\\my_calibrant2.poni' was appended to dataset.
+2023-08-21 11:49:57,212 - INFO - Ponifile b'Desktop\\pyxscat_backup_13July\\pyxscat\\edf_examples\\test_DUBBLE\\AgBh_2.poni' was appended to dataset.
+2023-08-21 11:49:57,213 - INFO - Ponifile b'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD_2\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,213 - INFO - Ponifile b'Desktop\\pyxscat_backup_13July\\pyxscat\\edf_examples\\test_NCD_2\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,214 - INFO - Ponifile b'Desktop\\PyXScat\\pyxscat\\test\\test_xmas\\LaB6\\LaB6.poni' was appended to dataset.
+2023-08-21 11:49:57,215 - INFO - Ponifile b'Desktop\\pyxscat_BACKUP_march2023\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni' was appended to dataset.
+2023-08-21 11:49:57,216 - INFO - Ponifile b'Desktop\\pyxscat_BACKUP_march2023\\pyxscat\\test\\test_NCD\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,216 - INFO - Ponifile b'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni' was appended to dataset.
+2023-08-21 11:49:57,218 - INFO - Ponifile b'Desktop\\pyxscat_backup_13July\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,219 - INFO - Ponifile b'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6.poni' was appended to dataset.
+2023-08-21 11:49:57,222 - INFO - Ponifile b'Desktop\\Dropbox_Backup_23Jun_2023\\Papers\\PM6Y6\\Version_Mayo2022\\cr2o3.poni' was appended to dataset.
+2023-08-21 11:49:57,223 - INFO - Ponifile b'Desktop\\PyXScat\\edf_examples\\test_NCD\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,225 - INFO - Ponifile b'Desktop\\PyXScat\\pyxscat\\test\\test_NCD\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:49:57,226 - INFO - Ponifile b'Dropbox\\Papers\\PM6Y6\\Version_Mayo2022\\cr2o3.poni' was appended to dataset.
+2023-08-21 11:49:57,228 - INFO - Ponifile b'Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_DUBBLE\\AgBh_2.poni' was appended to dataset.
+2023-08-21 11:49:57,229 - INFO - Ponifile b'Desktop\\PyXScat\\edf_examples\\test_DUBBLE\\AgBh_2.poni' was appended to dataset.
+2023-08-21 11:49:57,230 - INFO - Ponifile b'Desktop\\PyXScat\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni' was appended to dataset.
+2023-08-21 11:49:57,231 - INFO - Ponifile b'Dropbox (Personal)\\Papers\\PM6Y6\\Version_Mayo2022\\cr2o3.poni' was appended to dataset.
+2023-08-21 11:49:57,232 - INFO - Ponifile b'Desktop\\pyxscat_backup_19-06\\pyxscat_struc\\pyxscat\\test\\test_xmas\\LaB6\\LaB6.poni' was appended to dataset.
+2023-08-21 11:49:57,233 - INFO - Ponifile b'Desktop\\PyXScat\\test\\test_DUBBLE\\AgBh_2.poni' was appended to dataset.
+2023-08-21 11:49:57,234 - INFO - Ponifile b'Videos\\pyxscat\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni' was appended to dataset.
+2023-08-21 11:49:57,235 - INFO - Ponifile b'Desktop\\PyXScat\\test\\test_xmas\\LaB6\\LaB6.poni' was appended to dataset.
+2023-08-21 11:49:57,238 - INFO - Ponifile b'Desktop\\pyxscat_backup_13July\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6.poni' was appended to dataset.
+2023-08-21 11:49:57,238 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:49:57,239 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:49:57,240 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:49:57,240 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:49:57,241 - INFO - Ponifile to be activated: b'Desktop\\pyxscat_backup_19-06\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni'
+2023-08-21 11:49:57,242 - INFO - Ponifile b'Desktop\\pyxscat_backup_19-06\\pyxscat\\test\\test_DUBBLE\\AgBh_2.poni' activated successfully.
+2023-08-21 11:49:57,242 - INFO - We entered into function: update_transformQ
+2023-08-21 11:49:57,242 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:49:57,243 - INFO - Ponifile active: Desktop\pyxscat_backup_19-06\pyxscat\test\test_DUBBLE\AgBh_2.poni
+2023-08-21 11:49:57,243 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:49:57,243 - INFO - Ponifile active: Desktop\pyxscat_backup_19-06\pyxscat\test\test_DUBBLE\AgBh_2.poni
+2023-08-21 11:49:57,244 - INFO - Unable to parse Desktop\pyxscat_backup_19-06\pyxscat\test\test_DUBBLE\AgBh_2.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:49:57,245 - INFO - Loaded poni file
+2023-08-21 11:49:57,245 - INFO - Incident angle set at 0.0
+2023-08-21 11:49:57,245 - INFO - Tilt angle set at 0.0
+2023-08-21 11:49:57,246 - INFO - New ponifile updated.
+2023-08-21 11:49:57,246 - INFO - We entered into function: update_graphs
+2023-08-21 11:49:57,246 - INFO - Combobox of ponifiles was updated.
+2023-08-21 11:49:57,246 - INFO - We entered into function: search_and_update_new_files
+2023-08-21 11:49:57,247 - INFO - We entered into function: search_new_files_folders
+2023-08-21 11:49:57,247 - INFO - Got main directory: .
+2023-08-21 11:50:06,624 - INFO - 474 New files were detected.
+2023-08-21 11:50:06,625 - INFO - We entered into function: update_new_files
+2023-08-21 11:50:06,629 - INFO - Got dictionary of folders and files
+2023-08-21 11:50:06,630 - INFO - Got main directory: .
+2023-08-21 11:50:06,630 - INFO - We entered into function: update_folder_from_files
+2023-08-21 11:50:06,630 - INFO - We entered into function: h5_new_folder
+2023-08-21 11:50:06,631 - INFO - The folder AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data was successfully created.
+2023-08-21 11:50:06,631 - INFO - We entered into function: get_merged_data_and_metadata
+2023-08-21 11:50:06,631 - INFO - We entered into function: generator_fabio_data_header
+2023-08-21 11:50:06,636 - INFO - Data dataset in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data group created.
+2023-08-21 11:50:06,636 - INFO - Added in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Data shape: (1, 1, 1)
+2023-08-21 11:50:06,636 - INFO - Metadata group in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data group created.
+2023-08-21 11:50:06,637 - INFO - Dataset could not be created with the standard format for the key HeaderID, value ['EH:000001:000000:000000'].
+2023-08-21 11:50:06,637 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,637 - INFO - Dataset HeaderID in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,638 - INFO - Dataset Image in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created.
+2023-08-21 11:50:06,638 - INFO - Dataset VersionNumber in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created.
+2023-08-21 11:50:06,638 - INFO - Dataset could not be created with the standard format for the key ByteOrder, value ['LowByteFirst'].
+2023-08-21 11:50:06,638 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,639 - INFO - Dataset ByteOrder in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,639 - INFO - Dataset could not be created with the standard format for the key DataType, value ['SignedInteger'].
+2023-08-21 11:50:06,639 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,639 - INFO - Dataset DataType in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,640 - INFO - Dataset Dim_1 in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created.
+2023-08-21 11:50:06,641 - INFO - Dataset Dim_2 in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created.
+2023-08-21 11:50:06,641 - INFO - Dataset Size in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created.
+2023-08-21 11:50:06,641 - INFO - Dataset could not be created with the standard format for the key Date, value ['Wed Jun 16 19:14:09 2010'].
+2023-08-21 11:50:06,642 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,642 - INFO - Dataset Date in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,643 - INFO - Dataset count_time in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created.
+2023-08-21 11:50:06,643 - INFO - Dataset could not be created with the standard format for the key title, value ['# Pixel_size 172e-6 m x 172e-6 m'].
+2023-08-21 11:50:06,643 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,644 - INFO - Dataset title in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,644 - INFO - Dataset run in AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data-Metadata was created.
+2023-08-21 11:50:06,644 - INFO - Finished with folder: AppData\Local\Programs\Dawn\2.26\plugins\org.dawb.workbench.examples_1.2.0.v20201113-1449\data.
+2023-08-21 11:50:06,645 - INFO - Got main directory: .
+2023-08-21 11:50:06,645 - INFO - We entered into function: update_folder_from_files
+2023-08-21 11:50:06,645 - INFO - We entered into function: h5_new_folder
+2023-08-21 11:50:06,646 - INFO - The folder Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19 was successfully created.
+2023-08-21 11:50:06,646 - INFO - We entered into function: get_merged_data_and_metadata
+2023-08-21 11:50:06,647 - INFO - We entered into function: generator_fabio_data_header
+2023-08-21 11:50:06,655 - INFO - Data dataset in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19 group created.
+2023-08-21 11:50:06,655 - INFO - Added in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Data shape: (4, 1, 1)
+2023-08-21 11:50:06,655 - INFO - Metadata group in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19 group created.
+2023-08-21 11:50:06,655 - INFO - Dataset could not be created with the standard format for the key HeaderID, value ['EH:000001:000000:000000' 'EH:000001:000000:000000'
+ 'EH:000001:000000:000000' 'EH:000001:000000:000000'].
+2023-08-21 11:50:06,655 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,656 - INFO - Dataset HeaderID in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,656 - INFO - Dataset could not be created with the standard format for the key ByteOrder, value ['LowByteFirst' 'LowByteFirst' 'LowByteFirst' 'LowByteFirst'].
+2023-08-21 11:50:06,656 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,657 - INFO - Dataset ByteOrder in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,657 - INFO - Dataset could not be created with the standard format for the key DataType, value ['UnsignedShort' 'UnsignedShort' 'UnsignedShort' 'UnsignedShort'].
+2023-08-21 11:50:06,657 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,658 - INFO - Dataset DataType in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,658 - INFO - Dataset Size in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,659 - INFO - Dataset Dim_1 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,660 - INFO - Dataset Dim_2 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,660 - INFO - Dataset Image in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,661 - INFO - Dataset acq_frame_nb in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,662 - INFO - Dataset could not be created with the standard format for the key time, value ['Wed Sep  9 23:50:50 2020' 'Wed Sep  9 23:50:58 2020'
+ 'Wed Sep  9 23:50:42 2020' 'Wed Sep  9 23:51:06 2020'].
+2023-08-21 11:50:06,662 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,662 - INFO - Dataset time in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,662 - INFO - Dataset time_of_day in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,663 - INFO - Dataset time_of_frame in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,663 - INFO - Dataset could not be created with the standard format for the key Rotation 90 deg, value ['take : 0.021299s' 'take : 0.022284s' 'take : 0.021351s'
+ 'take : 0.023774s'].
+2023-08-21 11:50:06,664 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,664 - INFO - Dataset Rotation 90 deg in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,665 - INFO - Dataset Monitor in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,666 - INFO - Dataset Photo in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,666 - INFO - Dataset could not be created with the standard format for the key Rayonix, value ['/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Edgar/A19/rayonix_A19_spitch_0.12_000_0000.edf'
+ '/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Edgar/A19/rayonix_A19_spitch_0.15_000_0000.edf'
+ '/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Edgar/A19/rayonix_A19_spitch_0.1_000_0000.edf'
+ '/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Edgar/A19/rayonix_A19_spitch_0.2_000_0000.edf'].
+2023-08-21 11:50:06,666 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,667 - INFO - Dataset Rayonix in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,668 - INFO - Dataset could not be created with the standard format for the key acq_autoexpo_mode, value ['OFF' 'OFF' 'OFF' 'OFF'].
+2023-08-21 11:50:06,668 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,668 - INFO - Dataset acq_autoexpo_mode in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,669 - INFO - Dataset acq_expo_time in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,669 - INFO - Dataset acq_latency_time in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,669 - INFO - Dataset could not be created with the standard format for the key acq_mode, value ['Single' 'Single' 'Single' 'Single'].
+2023-08-21 11:50:06,669 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,670 - INFO - Dataset acq_mode in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,670 - INFO - Dataset acq_nb_frames in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,670 - INFO - Dataset could not be created with the standard format for the key acq_trigger_mode, value ['ExtGate' 'ExtGate' 'ExtGate' 'ExtGate'].
+2023-08-21 11:50:06,671 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,671 - INFO - Dataset acq_trigger_mode in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,671 - INFO - Dataset att1 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,672 - INFO - Dataset att2 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,672 - INFO - Dataset auxstage in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,673 - INFO - Dataset bs0x in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,674 - INFO - Dataset bs1_alpha in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,674 - INFO - Dataset could not be created with the standard format for the key bs1_beta, value ['None' 'None' 'None' 'None'].
+2023-08-21 11:50:06,674 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,675 - INFO - Dataset bs1_beta in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,676 - INFO - Dataset bs2x in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,676 - INFO - Dataset bs2z in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,677 - INFO - Dataset current in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,678 - INFO - Dataset det_x in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,679 - INFO - Dataset det_z in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,679 - INFO - Dataset energy_bragg in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,680 - INFO - Dataset exposure in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,681 - INFO - Dataset ft_length in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,681 - INFO - Dataset ft_xdown in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,682 - INFO - Dataset ft_xup in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,682 - INFO - Dataset ft_zdown in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,683 - INFO - Dataset ft_zup in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,683 - INFO - Dataset could not be created with the standard format for the key image_bin, value ['<2x2>' '<2x2>' '<2x2>' '<2x2>'].
+2023-08-21 11:50:06,683 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,684 - INFO - Dataset image_bin in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,684 - INFO - Dataset could not be created with the standard format for the key image_flip, value ['<flip x : False,flip y : False>' '<flip x : False,flip y : False>'
+ '<flip x : False,flip y : False>' '<flip x : False,flip y : False>'].
+2023-08-21 11:50:06,684 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,685 - INFO - Dataset image_flip in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,685 - INFO - Dataset could not be created with the standard format for the key image_roi, value ['<0,0>-<960x2880>' '<0,0>-<960x2880>' '<0,0>-<960x2880>'
+ '<0,0>-<960x2880>'].
+2023-08-21 11:50:06,685 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,685 - INFO - Dataset image_roi in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,686 - INFO - Dataset could not be created with the standard format for the key image_rotation, value ['Rotation_90' 'Rotation_90' 'Rotation_90' 'Rotation_90'].
+2023-08-21 11:50:06,686 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,686 - INFO - Dataset image_rotation in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,687 - INFO - Dataset pt_no in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,687 - INFO - Dataset spitch in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,688 - INFO - Dataset sroll in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,688 - INFO - Dataset stz in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,689 - INFO - Dataset sx in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,689 - INFO - Dataset syaw in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,690 - INFO - Dataset sz in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,690 - INFO - Dataset tfg_ch1 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,691 - INFO - Dataset tfg_ch2 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,692 - INFO - Dataset tfg_ch3 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,693 - INFO - Dataset tfg_ch4 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,693 - INFO - Dataset tfg_ch5 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,694 - INFO - Dataset tfg_ch6 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,695 - INFO - Dataset tfg_ch7 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,696 - INFO - Dataset tfg_ch8 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,696 - INFO - Dataset waxs_x in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,697 - INFO - Dataset waxs_z in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19-Metadata was created.
+2023-08-21 11:50:06,697 - INFO - Finished with folder: Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo\A19.
+2023-08-21 11:50:06,697 - INFO - Got main directory: .
+2023-08-21 11:50:06,697 - INFO - We entered into function: update_folder_from_files
+2023-08-21 11:50:06,698 - INFO - We entered into function: h5_new_folder
+2023-08-21 11:50:06,698 - INFO - The folder Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo was successfully created.
+2023-08-21 11:50:06,699 - INFO - We entered into function: get_merged_data_and_metadata
+2023-08-21 11:50:06,699 - INFO - We entered into function: generator_fabio_data_header
+2023-08-21 11:50:06,701 - INFO - Data dataset in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo group created.
+2023-08-21 11:50:06,701 - INFO - Added in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Data shape: (1, 1, 1)
+2023-08-21 11:50:06,701 - INFO - Metadata group in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo group created.
+2023-08-21 11:50:06,701 - INFO - Dataset could not be created with the standard format for the key HeaderID, value ['EH:000001:000000:000000'].
+2023-08-21 11:50:06,702 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,702 - INFO - Dataset HeaderID in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,702 - INFO - Dataset could not be created with the standard format for the key ByteOrder, value ['LowByteFirst'].
+2023-08-21 11:50:06,703 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,703 - INFO - Dataset ByteOrder in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,703 - INFO - Dataset could not be created with the standard format for the key DataType, value ['UnsignedShort'].
+2023-08-21 11:50:06,704 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,704 - INFO - Dataset DataType in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,705 - INFO - Dataset Size in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,705 - INFO - Dataset Dim_1 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,706 - INFO - Dataset Dim_2 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,707 - INFO - Dataset Image in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,707 - INFO - Dataset acq_frame_nb in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,709 - INFO - Dataset could not be created with the standard format for the key time, value ['Fri Sep 11 13:41:54 2020'].
+2023-08-21 11:50:06,709 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,712 - INFO - Dataset time in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,713 - INFO - Dataset time_of_day in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,713 - INFO - Dataset time_of_frame in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,714 - INFO - Dataset could not be created with the standard format for the key Rotation 90 deg, value ['take : 0.023318s'].
+2023-08-21 11:50:06,714 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,715 - INFO - Dataset Rotation 90 deg in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,715 - INFO - Dataset Monitor in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,716 - INFO - Dataset Photo in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,716 - INFO - Dataset could not be created with the standard format for the key Rayonix, value ['/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Aire/5s/rayonix_5s_spitch_0.12_000_0000.edf'].
+2023-08-21 11:50:06,716 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,716 - INFO - Dataset Rayonix in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,717 - INFO - Dataset could not be created with the standard format for the key acq_autoexpo_mode, value ['OFF'].
+2023-08-21 11:50:06,717 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,717 - INFO - Dataset acq_autoexpo_mode in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,718 - INFO - Dataset acq_expo_time in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,718 - INFO - Dataset acq_latency_time in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,719 - INFO - Dataset could not be created with the standard format for the key acq_mode, value ['Single'].
+2023-08-21 11:50:06,719 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,720 - INFO - Dataset acq_mode in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,720 - INFO - Dataset acq_nb_frames in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,720 - INFO - Dataset could not be created with the standard format for the key acq_trigger_mode, value ['ExtGate'].
+2023-08-21 11:50:06,721 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,721 - INFO - Dataset acq_trigger_mode in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,722 - INFO - Dataset att1 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,722 - INFO - Dataset att2 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,723 - INFO - Dataset auxstage in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,723 - INFO - Dataset bs0x in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,724 - INFO - Dataset bs1_alpha in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,727 - INFO - Dataset could not be created with the standard format for the key bs1_beta, value ['None'].
+2023-08-21 11:50:06,728 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,729 - INFO - Dataset bs1_beta in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,729 - INFO - Dataset bs2x in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,730 - INFO - Dataset bs2z in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,730 - INFO - Dataset current in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,731 - INFO - Dataset det_x in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,731 - INFO - Dataset det_z in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,732 - INFO - Dataset energy_bragg in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,732 - INFO - Dataset exposure in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,732 - INFO - Dataset ft_length in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,733 - INFO - Dataset ft_xdown in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,733 - INFO - Dataset ft_xup in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,734 - INFO - Dataset ft_zdown in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,734 - INFO - Dataset ft_zup in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,735 - INFO - Dataset could not be created with the standard format for the key image_bin, value ['<2x2>'].
+2023-08-21 11:50:06,735 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,736 - INFO - Dataset image_bin in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,736 - INFO - Dataset could not be created with the standard format for the key image_flip, value ['<flip x : False,flip y : False>'].
+2023-08-21 11:50:06,736 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,737 - INFO - Dataset image_flip in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,737 - INFO - Dataset could not be created with the standard format for the key image_roi, value ['<0,0>-<960x2880>'].
+2023-08-21 11:50:06,737 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,738 - INFO - Dataset image_roi in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,738 - INFO - Dataset could not be created with the standard format for the key image_rotation, value ['Rotation_90'].
+2023-08-21 11:50:06,739 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,739 - INFO - Dataset image_rotation in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,740 - INFO - Dataset pt_no in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,740 - INFO - Dataset spitch in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,741 - INFO - Dataset sroll in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,743 - INFO - Dataset stz in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,744 - INFO - Dataset sx in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,745 - INFO - Dataset syaw in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,746 - INFO - Dataset sz in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,746 - INFO - Dataset tfg_ch1 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,747 - INFO - Dataset tfg_ch2 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,747 - INFO - Dataset tfg_ch3 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,747 - INFO - Dataset tfg_ch4 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,748 - INFO - Dataset tfg_ch5 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,748 - INFO - Dataset tfg_ch6 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,749 - INFO - Dataset tfg_ch7 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,749 - INFO - Dataset tfg_ch8 in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,750 - INFO - Dataset waxs_x in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,750 - INFO - Dataset waxs_z in Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo-Metadata was created.
+2023-08-21 11:50:06,751 - INFO - Finished with folder: Desktop\Dropbox_Backup_23Jun_2023\Clases\GIWAXS_ejemplo.
+2023-08-21 11:50:06,751 - INFO - Got main directory: .
+2023-08-21 11:50:06,751 - INFO - We entered into function: update_folder_from_files
+2023-08-21 11:50:06,751 - INFO - We entered into function: h5_new_folder
+2023-08-21 11:50:06,752 - INFO - The folder Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022 was successfully created.
+2023-08-21 11:50:06,752 - INFO - We entered into function: get_merged_data_and_metadata
+2023-08-21 11:50:06,752 - INFO - We entered into function: generator_fabio_data_header
+2023-08-21 11:50:06,757 - INFO - Data dataset in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022 group created.
+2023-08-21 11:50:06,757 - INFO - Added in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Data shape: (2, 1, 1)
+2023-08-21 11:50:06,758 - INFO - Metadata group in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022 group created.
+2023-08-21 11:50:06,758 - INFO - Dataset could not be created with the standard format for the key HeaderID, value ['EH:000001:000000:000000' 'EH:000001:000000:000000'].
+2023-08-21 11:50:06,759 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,759 - INFO - Dataset HeaderID in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,760 - INFO - Dataset could not be created with the standard format for the key ByteOrder, value ['LowByteFirst' 'LowByteFirst'].
+2023-08-21 11:50:06,760 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,761 - INFO - Dataset ByteOrder in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,761 - INFO - Dataset could not be created with the standard format for the key DataType, value ['UnsignedShort' 'UnsignedShort'].
+2023-08-21 11:50:06,761 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,762 - INFO - Dataset DataType in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,762 - INFO - Dataset Size in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,762 - INFO - Dataset Dim_1 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,764 - INFO - Dataset Dim_2 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,764 - INFO - Dataset Image in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,765 - INFO - Dataset acq_frame_nb in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,765 - INFO - Dataset could not be created with the standard format for the key time, value ['Fri Sep 11 00:42:53 2020' 'Fri Sep 11 13:43:41 2020'].
+2023-08-21 11:50:06,766 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,766 - INFO - Dataset time in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,767 - INFO - Dataset time_of_day in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,768 - INFO - Dataset time_of_frame in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,768 - INFO - Dataset could not be created with the standard format for the key Rotation 90 deg, value ['take : 0.021824s' 'take : 0.024284s'].
+2023-08-21 11:50:06,768 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,769 - INFO - Dataset Rotation 90 deg in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,770 - INFO - Dataset Monitor in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,770 - INFO - Dataset Photo in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,772 - INFO - Dataset could not be created with the standard format for the key Rayonix, value ['/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Edgar/B5/rayonix_B5_spitch_0.12_000_0000.edf'
+ '/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Aire/10s/rayonix_10s_spitch_0.12_000_0000.edf'].
+2023-08-21 11:50:06,778 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,778 - INFO - Dataset Rayonix in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,779 - INFO - Dataset could not be created with the standard format for the key acq_autoexpo_mode, value ['OFF' 'OFF'].
+2023-08-21 11:50:06,779 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,780 - INFO - Dataset acq_autoexpo_mode in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,781 - INFO - Dataset acq_expo_time in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,782 - INFO - Dataset acq_latency_time in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,783 - INFO - Dataset could not be created with the standard format for the key acq_mode, value ['Single' 'Single'].
+2023-08-21 11:50:06,783 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,784 - INFO - Dataset acq_mode in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,785 - INFO - Dataset acq_nb_frames in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,785 - INFO - Dataset could not be created with the standard format for the key acq_trigger_mode, value ['ExtGate' 'ExtGate'].
+2023-08-21 11:50:06,786 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,786 - INFO - Dataset acq_trigger_mode in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,787 - INFO - Dataset att1 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,788 - INFO - Dataset att2 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,789 - INFO - Dataset auxstage in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,795 - INFO - Dataset bs0x in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,798 - INFO - Dataset bs1_alpha in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,799 - INFO - Dataset could not be created with the standard format for the key bs1_beta, value ['None' 'None'].
+2023-08-21 11:50:06,799 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,800 - INFO - Dataset bs1_beta in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,801 - INFO - Dataset bs2x in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,801 - INFO - Dataset bs2z in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,802 - INFO - Dataset current in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,803 - INFO - Dataset det_x in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,804 - INFO - Dataset det_z in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,805 - INFO - Dataset energy_bragg in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,805 - INFO - Dataset exposure in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,806 - INFO - Dataset ft_length in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,807 - INFO - Dataset ft_xdown in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,817 - INFO - Dataset ft_xup in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,818 - INFO - Dataset ft_zdown in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,819 - INFO - Dataset ft_zup in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,821 - INFO - Dataset could not be created with the standard format for the key image_bin, value ['<2x2>' '<2x2>'].
+2023-08-21 11:50:06,821 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,822 - INFO - Dataset image_bin in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,823 - INFO - Dataset could not be created with the standard format for the key image_flip, value ['<flip x : False,flip y : False>' '<flip x : False,flip y : False>'].
+2023-08-21 11:50:06,823 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,825 - INFO - Dataset image_flip in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,826 - INFO - Dataset could not be created with the standard format for the key image_roi, value ['<0,0>-<960x2880>' '<0,0>-<960x2880>'].
+2023-08-21 11:50:06,827 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,828 - INFO - Dataset image_roi in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,829 - INFO - Dataset could not be created with the standard format for the key image_rotation, value ['Rotation_90' 'Rotation_90'].
+2023-08-21 11:50:06,830 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:50:06,831 - INFO - Dataset image_rotation in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created. Encoding worked.
+2023-08-21 11:50:06,832 - INFO - Dataset pt_no in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,832 - INFO - Dataset spitch in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,833 - INFO - Dataset sroll in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,836 - INFO - Dataset stz in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,838 - INFO - Dataset sx in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,839 - INFO - Dataset syaw in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,839 - INFO - Dataset sz in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,840 - INFO - Dataset tfg_ch1 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,840 - INFO - Dataset tfg_ch2 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,841 - INFO - Dataset tfg_ch3 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,842 - INFO - Dataset tfg_ch4 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,843 - INFO - Dataset tfg_ch5 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,844 - INFO - Dataset tfg_ch6 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,845 - INFO - Dataset tfg_ch7 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,845 - INFO - Dataset tfg_ch8 in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,846 - INFO - Dataset waxs_x in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,847 - INFO - Dataset waxs_z in Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022-Metadata was created.
+2023-08-21 11:50:06,847 - INFO - Finished with folder: Desktop\Dropbox_Backup_23Jun_2023\Papers\PM6Y6\Version_Mayo2022.
+2023-08-21 11:50:06,848 - INFO - Got main directory: .
+2023-08-21 11:50:06,848 - INFO - We entered into function: update_folder_from_files
+2023-08-21 11:50:06,848 - INFO - We entered into function: h5_new_folder
+2023-08-21 11:50:06,850 - INFO - The folder Desktop\InOperandoCell\Components\PT_Solidworks\Connectors\Phoenix\1758173\OrCAD_Allegro16 was successfully created.
+2023-08-21 11:50:06,850 - INFO - We entered into function: get_merged_data_and_metadata
+2023-08-21 11:50:06,850 - INFO - We entered into function: generator_fabio_data_header
+2023-08-21 11:50:06,853 - INFO - Error while fabio handling at Desktop\InOperandoCell\Components\PT_Solidworks\Connectors\Phoenix\1758173\OrCAD_Allegro16\1758173.edf

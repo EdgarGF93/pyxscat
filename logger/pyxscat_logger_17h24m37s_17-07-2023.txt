@@ -1,0 +1,46 @@
+2023-07-17 17:24:37,347 - INFO - Logger was initialized.
+2023-07-17 17:24:41,283 - INFO - We entered into function: reset_attributes_and_widgets
+2023-07-17 17:24:41,284 - INFO - The data parameters were reinitialized.
+2023-07-17 17:24:41,284 - INFO - We entered into function: init_callbacks
+2023-07-17 17:24:41,285 - INFO - We entered into function: update_setup_info
+2023-07-17 17:24:41,285 - INFO - New setup dictionary was updated.
+2023-07-17 17:24:41,285 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-07-17 17:24:41,286 - INFO - We entered into function: update_lims_ticks
+2023-07-17 17:24:41,300 - INFO - We entered into function: update_combobox_h5
+2023-07-17 17:24:41,306 - INFO - We entered into function: read_h5_file
+2023-07-17 17:24:41,306 - INFO - We entered into function: update_h5
+2023-07-17 17:24:41,307 - INFO - The H5 could not be updated.
+2023-07-17 17:24:41,307 - INFO - We entered into function: update_widgets
+2023-07-17 17:24:41,307 - INFO - Nothing to be updated.
+2023-07-17 17:24:41,307 - INFO - We entered into function: update_setup_info
+2023-07-17 17:24:41,307 - INFO - New setup dictionary was updated.
+2023-07-17 17:24:41,307 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-07-17 17:24:41,308 - INFO - We entered into function: read_h5_file
+2023-07-17 17:24:41,308 - INFO - We entered into function: update_h5
+2023-07-17 17:24:41,308 - INFO - The H5 could not be updated.
+2023-07-17 17:24:41,308 - INFO - We entered into function: update_widgets
+2023-07-17 17:24:41,308 - INFO - Nothing to be updated.
+2023-07-17 17:24:41,308 - INFO - We entered into function: update_setup_info
+2023-07-17 17:24:41,308 - INFO - New setup dictionary was updated.
+2023-07-17 17:24:41,309 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-07-17 17:24:41,309 - INFO - We entered into function: update_combobox_setups
+2023-07-17 17:24:41,310 - INFO - We entered into function: update_setup_info
+2023-07-17 17:24:41,311 - INFO - New setup dictionary was updated.
+2023-07-17 17:24:41,311 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-07-17 17:24:41,311 - INFO - We entered into function: update_table
+2023-07-17 17:24:41,312 - INFO - Table was reseted.
+2023-07-17 17:24:41,312 - INFO - No folder to display. Return.
+2023-07-17 17:24:41,312 - INFO - We entered into function: update_table
+2023-07-17 17:24:41,312 - INFO - Table was reseted.
+2023-07-17 17:24:41,312 - INFO - No folder to display. Return.
+2023-07-17 17:24:41,312 - INFO - We entered into function: update_table
+2023-07-17 17:24:41,312 - INFO - Table was reseted.
+2023-07-17 17:24:41,312 - INFO - No folder to display. Return.
+2023-07-17 17:24:41,312 - INFO - We entered into function: update_integration_widgets
+2023-07-17 17:24:41,316 - INFO - We entered into function: update_graphs
+2023-07-17 17:24:45,021 - INFO - We entered into function: pick_folder
+2023-07-17 17:24:50,320 - INFO - No main directory was detected.
+2023-07-17 17:24:50,320 - INFO - We entered into function: generate_hdf5
+2023-07-17 17:24:50,320 - INFO - We entered into function: update_h5
+2023-07-17 17:24:50,320 - INFO - The H5 could not be updated.
+2023-07-17 17:24:50,321 - INFO - We entered into function: append_and_activate_h5_file

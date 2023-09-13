@@ -1,0 +1,38 @@
+2023-09-12 14:44:25,343 - INFO - Logger was initialized.
+2023-09-12 14:44:26,742 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-12 14:44:26,742 - INFO - The data parameters were reinitialized.
+2023-09-12 14:44:26,743 - INFO - We entered into function: init_callbacks
+2023-09-12 14:44:26,743 - INFO - We entered into function: update_setup_info
+2023-09-12 14:44:26,744 - INFO - New setup dictionary was updated.
+2023-09-12 14:44:26,744 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-12 14:44:26,745 - INFO - We entered into function: update_lims_ticks
+2023-09-12 14:44:26,762 - INFO - We entered into function: update_combobox_h5
+2023-09-12 14:44:26,762 - INFO - We entered into function: set_h5_instance
+2023-09-12 14:44:26,762 - INFO - The .h5 could not be found.
+2023-09-12 14:44:26,762 - INFO - We entered into function: update_h5_poni_and_files
+2023-09-12 14:44:26,763 - INFO - The H5 could not be updated.
+2023-09-12 14:44:26,763 - INFO - We entered into function: update_widgets
+2023-09-12 14:44:26,763 - INFO - There is no H5Integrator instance.
+2023-09-12 14:44:26,763 - INFO - We entered into function: update_setup_info
+2023-09-12 14:44:26,763 - INFO - New setup dictionary was updated.
+2023-09-12 14:44:26,763 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-12 14:44:26,764 - INFO - We entered into function: update_combobox_setups
+2023-09-12 14:44:26,764 - INFO - We entered into function: update_setup_info
+2023-09-12 14:44:26,765 - INFO - New setup dictionary was updated.
+2023-09-12 14:44:26,765 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-12 14:44:26,766 - INFO - We entered into function: update_table
+2023-09-12 14:44:26,766 - INFO - Table was reseted.
+2023-09-12 14:44:26,766 - INFO - No folder to display. Return.
+2023-09-12 14:44:26,766 - INFO - We entered into function: update_table
+2023-09-12 14:44:26,767 - INFO - Table was reseted.
+2023-09-12 14:44:26,767 - INFO - No folder to display. Return.
+2023-09-12 14:44:26,767 - INFO - We entered into function: update_table
+2023-09-12 14:44:26,767 - INFO - Table was reseted.
+2023-09-12 14:44:26,767 - INFO - No folder to display. Return.
+2023-09-12 14:44:26,767 - INFO - We entered into function: update_integration_widgets
+2023-09-12 14:44:26,770 - INFO - We entered into function: update_graphs
+2023-09-12 14:44:29,401 - INFO - We entered into function: set_h5_instance
+2023-09-12 14:44:29,403 - INFO - H5Integrator instance was initialized
+2023-09-12 14:44:29,403 - INFO - The filename is E:\Datos_Sincrotrones\XMaS_Sept2023_2\XMaS_Sept2023_2.h5.
+2023-09-12 14:44:29,403 - INFO - We entered into function: create_h5_file
+2023-09-12 14:44:29,404 - INFO - E:\Datos_Sincrotrones\XMaS_Sept2023_2\XMaS_Sept2023_2.h5 already exists. Return.

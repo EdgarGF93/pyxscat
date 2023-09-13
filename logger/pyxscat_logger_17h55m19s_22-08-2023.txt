@@ -1,0 +1,48 @@
+2023-08-22 17:55:19,034 - INFO - Logger was initialized.
+2023-08-22 17:55:20,392 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-22 17:55:20,393 - INFO - The data parameters were reinitialized.
+2023-08-22 17:55:20,393 - INFO - We entered into function: init_callbacks
+2023-08-22 17:55:20,394 - INFO - We entered into function: update_setup_info
+2023-08-22 17:55:20,394 - INFO - New setup dictionary was updated.
+2023-08-22 17:55:20,395 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-22 17:55:20,396 - INFO - We entered into function: update_lims_ticks
+2023-08-22 17:55:20,413 - INFO - We entered into function: update_combobox_h5
+2023-08-22 17:55:20,413 - INFO - We entered into function: set_h5_instance
+2023-08-22 17:55:20,414 - INFO - The .h5 could not be found.
+2023-08-22 17:55:20,414 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-22 17:55:20,414 - INFO - The H5 could not be updated.
+2023-08-22 17:55:20,414 - INFO - We entered into function: update_widgets
+2023-08-22 17:55:20,415 - INFO - There is no H5Integrator instance.
+2023-08-22 17:55:20,415 - INFO - We entered into function: update_setup_info
+2023-08-22 17:55:20,415 - INFO - New setup dictionary was updated.
+2023-08-22 17:55:20,415 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-22 17:55:20,416 - INFO - We entered into function: update_combobox_setups
+2023-08-22 17:55:20,417 - INFO - We entered into function: update_setup_info
+2023-08-22 17:55:20,418 - INFO - New setup dictionary was updated.
+2023-08-22 17:55:20,419 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-22 17:55:20,419 - INFO - We entered into function: update_table
+2023-08-22 17:55:20,419 - INFO - Table was reseted.
+2023-08-22 17:55:20,420 - INFO - No folder to display. Return.
+2023-08-22 17:55:20,420 - INFO - We entered into function: update_table
+2023-08-22 17:55:20,420 - INFO - Table was reseted.
+2023-08-22 17:55:20,420 - INFO - No folder to display. Return.
+2023-08-22 17:55:20,421 - INFO - We entered into function: update_table
+2023-08-22 17:55:20,421 - INFO - Table was reseted.
+2023-08-22 17:55:20,421 - INFO - No folder to display. Return.
+2023-08-22 17:55:20,421 - INFO - We entered into function: update_integration_widgets
+2023-08-22 17:55:20,424 - INFO - We entered into function: update_graphs
+2023-08-22 17:55:33,722 - INFO - We entered into function: update_box_parameters
+2023-08-22 17:55:33,723 - INFO - Json file: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\pyxscat\integration_dicts\vert_waxs.json
+2023-08-22 17:55:33,723 - INFO - We entered into function: add_integration_box
+2023-08-22 17:55:33,723 - INFO - We entered into function: update_integration_widgets
+2023-08-22 17:55:33,727 - INFO - We entered into function: update_graphs
+2023-08-22 17:55:33,727 - INFO - We entered into function: add_integration_box
+2023-08-22 17:55:33,727 - INFO - We entered into function: update_integration_widgets
+2023-08-22 17:55:33,729 - INFO - We entered into function: update_graphs
+2023-08-22 17:55:33,730 - INFO - We entered into function: add_integration_box
+2023-08-22 17:55:33,730 - INFO - We entered into function: update_integration_widgets
+2023-08-22 17:55:33,733 - INFO - We entered into function: update_graphs
+2023-08-22 17:55:33,733 - INFO - We entered into function: add_integration_box
+2023-08-22 17:55:33,733 - INFO - We entered into function: update_integration_widgets
+2023-08-22 17:55:33,736 - INFO - We entered into function: update_graphs
+2023-08-22 17:55:33,736 - INFO - Updated widgets with box integration values.

@@ -1,0 +1,1486 @@
+2023-06-26 14:08:43,792 - INFO - Logger was initialized.
+2023-06-26 14:08:43,793 - INFO - Logger was initialized.
+2023-06-26 14:08:45,157 - INFO - We entered into function: reset_attributes_and_widgets
+2023-06-26 14:08:45,160 - INFO - The data parameters were reinitialized.
+2023-06-26 14:08:45,161 - INFO - We entered into function: init_callbacks
+2023-06-26 14:08:45,161 - INFO - We entered into function: update_setup_info
+2023-06-26 14:08:45,162 - INFO - New setup dictionary was updated.
+2023-06-26 14:08:45,163 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-06-26 14:08:45,163 - INFO - We entered into function: update_lims_ticks
+2023-06-26 14:08:45,181 - INFO - We entered into function: update_combobox_h5
+2023-06-26 14:08:45,184 - INFO - We entered into function: read_h5_file
+2023-06-26 14:08:45,184 - INFO - We entered into function: update_h5
+2023-06-26 14:08:45,185 - INFO - The H5 could not be updated.
+2023-06-26 14:08:45,185 - INFO - We entered into function: update_widgets
+2023-06-26 14:08:45,185 - INFO - Nothing to be updated.
+2023-06-26 14:08:45,185 - INFO - We entered into function: update_setup_info
+2023-06-26 14:08:45,186 - INFO - New setup dictionary was updated.
+2023-06-26 14:08:45,186 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-06-26 14:08:45,187 - INFO - We entered into function: read_h5_file
+2023-06-26 14:08:45,187 - INFO - We entered into function: update_h5
+2023-06-26 14:08:45,187 - INFO - The H5 could not be updated.
+2023-06-26 14:08:45,187 - INFO - We entered into function: update_widgets
+2023-06-26 14:08:45,188 - INFO - Nothing to be updated.
+2023-06-26 14:08:45,188 - INFO - We entered into function: update_setup_info
+2023-06-26 14:08:45,188 - INFO - New setup dictionary was updated.
+2023-06-26 14:08:45,189 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-06-26 14:08:45,189 - INFO - We entered into function: update_combobox_setups
+2023-06-26 14:08:45,191 - INFO - We entered into function: update_setup_info
+2023-06-26 14:08:45,193 - INFO - New setup dictionary was updated.
+2023-06-26 14:08:45,193 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-06-26 14:08:45,194 - INFO - We entered into function: update_table
+2023-06-26 14:08:45,194 - INFO - Table was reseted.
+2023-06-26 14:08:45,194 - INFO - No folder to display. Return.
+2023-06-26 14:08:45,194 - INFO - We entered into function: update_table
+2023-06-26 14:08:45,194 - INFO - Table was reseted.
+2023-06-26 14:08:45,194 - INFO - No folder to display. Return.
+2023-06-26 14:08:45,196 - INFO - We entered into function: update_table
+2023-06-26 14:08:45,196 - INFO - Table was reseted.
+2023-06-26 14:08:45,196 - INFO - No folder to display. Return.
+2023-06-26 14:08:45,196 - INFO - We entered into function: update_integration_widgets
+2023-06-26 14:08:45,199 - INFO - We entered into function: update_graphs
+2023-06-26 14:08:51,477 - INFO - We entered into function: read_h5_file
+2023-06-26 14:08:51,479 - INFO - We entered into function: reset_attributes_and_widgets
+2023-06-26 14:08:51,479 - INFO - We entered into function: update_table
+2023-06-26 14:08:51,479 - INFO - Table was reseted.
+2023-06-26 14:08:51,480 - INFO - No folder to display. Return.
+2023-06-26 14:08:51,480 - INFO - The data parameters were reinitialized.
+2023-06-26 14:08:51,480 - INFO - H5Integrator instance was initialized
+2023-06-26 14:08:51,481 - INFO - The filename is N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\restored_dataset.h5.
+2023-06-26 14:08:51,481 - INFO - We entered into function: create_h5_file
+2023-06-26 14:08:51,482 - INFO - N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\restored_dataset.h5 already exists. Return.
+2023-06-26 14:08:51,487 - INFO - We entered into function: update_group_ponifile
+2023-06-26 14:08:51,490 - INFO - No ponifiles to be updated. Return.
+2023-06-26 14:08:51,491 - INFO - We entered into function: update_setup_keys
+2023-06-26 14:08:51,494 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-06-26 14:08:51,494 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:51,495 - INFO - Updated iangle_key = spitch
+2023-06-26 14:08:51,495 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:51,495 - INFO - Updated acq_key = exposure
+2023-06-26 14:08:51,495 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:51,496 - INFO - Updated norm_key = Monitor
+2023-06-26 14:08:51,496 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:51,496 - INFO - Updated tilt_key = 
+2023-06-26 14:08:51,496 - INFO - Inherited methods from pygix.transform
+2023-06-26 14:08:51,496 - INFO - We entered into function: update_transformQ
+2023-06-26 14:08:51,497 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:08:51,499 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:08:51,499 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:08:51,499 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:08:51,503 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:08:51,503 - INFO - Loaded poni file
+2023-06-26 14:08:51,504 - INFO - Incident angle set at 0.0
+2023-06-26 14:08:51,504 - INFO - Tilt angle set at 0.0
+2023-06-26 14:08:51,504 - INFO - We entered into function: update_orientation
+2023-06-26 14:08:51,504 - INFO - qz parallel is True
+2023-06-26 14:08:51,504 - INFO - qr parallel is True
+2023-06-26 14:08:51,504 - INFO - The sample orientation (pygix) is set at 1
+2023-06-26 14:08:51,504 - INFO - Got main directory: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset
+2023-06-26 14:08:51,506 - INFO - Imported .hdf5 file
+2023-06-26 14:08:51,506 - INFO - N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\restored_dataset.h5
+2023-06-26 14:08:51,506 - INFO - HDF5 container was created.
+2023-06-26 14:08:51,506 - INFO - We entered into function: update_h5
+2023-06-26 14:08:51,506 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-06-26 14:08:51,506 - INFO - We entered into function: search_and_update_ponifiles
+2023-06-26 14:08:51,506 - INFO - Got main directory: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset
+2023-06-26 14:08:51,528 - INFO - We entered into function: generator_stored_ponifiles
+2023-06-26 14:08:51,529 - INFO - No ponifiles detected.
+2023-06-26 14:08:51,529 - INFO - We entered into function: generator_stored_ponifiles
+2023-06-26 14:08:51,530 - INFO - We entered into function: activate_ponifile
+2023-06-26 14:08:51,530 - INFO - We entered into function: activate_ponifile
+2023-06-26 14:08:51,530 - INFO - We entered into function: generator_stored_ponifiles
+2023-06-26 14:08:51,531 - INFO - Ponifile to be activated: b'N:\\Datos_sincrotrones\\XMaS_Feb2023\\restored_dataset\\MARLaB6\\LaB6.poni'
+2023-06-26 14:08:51,531 - INFO - Ponifile b'N:\\Datos_sincrotrones\\XMaS_Feb2023\\restored_dataset\\MARLaB6\\LaB6.poni' activated successfully.
+2023-06-26 14:08:51,532 - INFO - We entered into function: update_transformQ
+2023-06-26 14:08:51,532 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:08:51,532 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:08:51,532 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:08:51,533 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:08:51,536 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:08:51,538 - INFO - Loaded poni file
+2023-06-26 14:08:51,538 - INFO - Incident angle set at 0.0
+2023-06-26 14:08:51,538 - INFO - Tilt angle set at 0.0
+2023-06-26 14:08:51,539 - INFO - New ponifile updated.
+2023-06-26 14:08:51,539 - INFO - We entered into function: update_graphs
+2023-06-26 14:08:51,539 - INFO - Combobox of ponifiles was updated.
+2023-06-26 14:08:51,539 - INFO - We entered into function: search_and_update_new_files
+2023-06-26 14:08:51,539 - INFO - We entered into function: search_new_files_folders
+2023-06-26 14:08:51,540 - INFO - Got main directory: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset
+2023-06-26 14:08:51,576 - INFO - 0 new files were detected.
+2023-06-26 14:08:51,577 - INFO - The H5 was updated. Not the Widgets yet.
+2023-06-26 14:08:51,577 - INFO - We entered into function: update_widgets
+2023-06-26 14:08:51,578 - INFO - Updated list widget.
+2023-06-26 14:08:51,578 - INFO - We entered into function: update_setup_info
+2023-06-26 14:08:51,579 - INFO - New setup dictionary was updated.
+2023-06-26 14:08:51,579 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-06-26 14:08:51,580 - INFO - We entered into function: update_table
+2023-06-26 14:08:51,580 - INFO - Table was reseted.
+2023-06-26 14:08:51,580 - INFO - No folder to display. Return.
+2023-06-26 14:08:51,580 - INFO - We entered into function: update_table
+2023-06-26 14:08:51,580 - INFO - Table was reseted.
+2023-06-26 14:08:51,581 - INFO - No folder to display. Return.
+2023-06-26 14:08:51,581 - INFO - We entered into function: update_table
+2023-06-26 14:08:51,581 - INFO - Table was reseted.
+2023-06-26 14:08:51,581 - INFO - No folder to display. Return.
+2023-06-26 14:08:52,447 - INFO - We entered into function: update_qr
+2023-06-26 14:08:52,448 - INFO - We entered into function: update_orientation
+2023-06-26 14:08:52,448 - INFO - qz parallel is True
+2023-06-26 14:08:52,448 - INFO - qr parallel is True
+2023-06-26 14:08:52,448 - INFO - The sample orientation (pygix) is set at 2
+2023-06-26 14:08:52,449 - INFO - We entered into function: update_graphs
+2023-06-26 14:08:52,860 - INFO - We entered into function: update_qz
+2023-06-26 14:08:52,861 - INFO - We entered into function: update_orientation
+2023-06-26 14:08:52,861 - INFO - qz parallel is False
+2023-06-26 14:08:52,861 - INFO - qr parallel is False
+2023-06-26 14:08:52,861 - INFO - The sample orientation (pygix) is set at 4
+2023-06-26 14:08:52,862 - INFO - We entered into function: update_graphs
+2023-06-26 14:08:58,526 - INFO - We entered into function: update_setup_info
+2023-06-26 14:08:58,527 - INFO - New setup dictionary was updated.
+2023-06-26 14:08:58,528 - INFO - defaultdict(<class 'str'>, {'Name': 'ESRF_XMaS', 'Angle': 'eta', 'Tilt angle': '', 'Norm': 'Io', 'Exposure': 'sec'})
+2023-06-26 14:08:58,528 - INFO - We entered into function: update_table
+2023-06-26 14:08:58,528 - INFO - Table was reseted.
+2023-06-26 14:08:58,529 - INFO - No folder to display. Return.
+2023-06-26 14:08:58,529 - INFO - We entered into function: update_table
+2023-06-26 14:08:58,529 - INFO - Table was reseted.
+2023-06-26 14:08:58,529 - INFO - No folder to display. Return.
+2023-06-26 14:08:58,530 - INFO - We entered into function: update_table
+2023-06-26 14:08:58,530 - INFO - Table was reseted.
+2023-06-26 14:08:58,530 - INFO - No folder to display. Return.
+2023-06-26 14:08:58,530 - INFO - We entered into function: update_table
+2023-06-26 14:08:58,531 - INFO - Table was reseted.
+2023-06-26 14:08:58,531 - INFO - No folder to display. Return.
+2023-06-26 14:08:59,008 - INFO - We entered into function: update_setup_parameter
+2023-06-26 14:08:59,009 - INFO - We entered into function: read_dict_setup
+2023-06-26 14:08:59,010 - INFO - We entered into function: update_setup_keys
+2023-06-26 14:08:59,010 - INFO - defaultdict(<class 'str'>, {'Name': 'ESRF_XMaS', 'Angle': 'eta', 'Tilt angle': '', 'Norm': 'Io', 'Exposure': 'sec'})
+2023-06-26 14:08:59,010 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:59,013 - INFO - Updated iangle_key = eta
+2023-06-26 14:08:59,014 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:59,016 - INFO - Updated acq_key = sec
+2023-06-26 14:08:59,016 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:59,016 - INFO - Updated norm_key = Io
+2023-06-26 14:08:59,016 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:59,017 - INFO - Updated tilt_key = 
+2023-06-26 14:08:59,188 - INFO - We entered into function: update_setup_parameter
+2023-06-26 14:08:59,189 - INFO - We entered into function: read_dict_setup
+2023-06-26 14:08:59,189 - INFO - We entered into function: update_setup_keys
+2023-06-26 14:08:59,189 - INFO - defaultdict(<class 'str'>, {'Name': 'ESRF_XMaS', 'Angle': 'eta', 'Tilt angle': '', 'Norm': 'Io', 'Exposure': 'sec'})
+2023-06-26 14:08:59,190 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:59,190 - INFO - Updated iangle_key = eta
+2023-06-26 14:08:59,191 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:59,191 - INFO - Updated acq_key = sec
+2023-06-26 14:08:59,191 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:59,192 - INFO - Updated norm_key = Io
+2023-06-26 14:08:59,192 - INFO - We entered into function: update_attributes_in_group
+2023-06-26 14:08:59,192 - INFO - Updated tilt_key = 
+2023-06-26 14:09:00,916 - INFO - We entered into function: update_cake_parameters
+2023-06-26 14:09:00,916 - INFO - Json file: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\pyxscat\integration_dicts\oop.json
+2023-06-26 14:09:00,917 - INFO - We entered into function: add_integration_cake
+2023-06-26 14:09:00,917 - INFO - We entered into function: update_integration_widgets
+2023-06-26 14:09:00,920 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:00,921 - INFO - We entered into function: add_integration_cake
+2023-06-26 14:09:00,921 - INFO - We entered into function: update_integration_widgets
+2023-06-26 14:09:00,924 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:00,924 - INFO - We entered into function: add_integration_cake
+2023-06-26 14:09:00,925 - INFO - We entered into function: update_integration_widgets
+2023-06-26 14:09:00,928 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:00,928 - INFO - We entered into function: add_integration_cake
+2023-06-26 14:09:00,929 - INFO - We entered into function: update_integration_widgets
+2023-06-26 14:09:00,931 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:00,932 - INFO - We entered into function: add_integration_cake
+2023-06-26 14:09:00,932 - INFO - We entered into function: update_integration_widgets
+2023-06-26 14:09:00,935 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:00,935 - INFO - Updated widgets with cake integration values.
+2023-06-26 14:09:02,540 - INFO - We entered into function: update_box_parameters
+2023-06-26 14:09:02,540 - INFO - Json file: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\pyxscat\integration_dicts\Bragg_rod.json
+2023-06-26 14:09:02,541 - INFO - We entered into function: add_integration_box
+2023-06-26 14:09:02,542 - INFO - We entered into function: update_integration_widgets
+2023-06-26 14:09:02,544 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:02,545 - INFO - We entered into function: add_integration_box
+2023-06-26 14:09:02,545 - INFO - We entered into function: update_integration_widgets
+2023-06-26 14:09:02,547 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:02,548 - INFO - We entered into function: add_integration_box
+2023-06-26 14:09:02,548 - INFO - We entered into function: update_integration_widgets
+2023-06-26 14:09:02,551 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:02,551 - INFO - We entered into function: add_integration_box
+2023-06-26 14:09:02,552 - INFO - We entered into function: update_integration_widgets
+2023-06-26 14:09:02,554 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:02,555 - INFO - Updated widgets with box integration values.
+2023-06-26 14:09:04,641 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:05,309 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:13,949 - INFO - We entered into function: update_clicked_folder
+2023-06-26 14:09:13,949 - INFO - Clicked folder: MARY6p2refined
+2023-06-26 14:09:13,950 - INFO - We entered into function: contains_group
+2023-06-26 14:09:13,950 - INFO - New clicked folder: MARY6p2refined
+2023-06-26 14:09:13,950 - INFO - We entered into function: update_comboboxes_metadata
+2023-06-26 14:09:13,951 - INFO - We entered into function: generator_keys_in_folder
+2023-06-26 14:09:14,009 - INFO - Metadata keys: ['ByteOrder', 'Ce_fluo', 'Cr_fluo', 'DataType', 'Dim_1', 'Dim_2', 'Emot', 'Fe_fluo', 'HeaderID', 'Icnt', 'Image', 'Imon', 'Io', 'Ion', 'Iop', 'Iref', 'It', 'LCP1', 'Mn_fluo', 'Ni_fluo', 'Qref', 'Qx', 'Qz', 'R1', 'RCP1', 'Size', 'Temp', 'TempOH', 'U0', 'U1', 'U2', 'U3', 'U4', 'U5', 'UB0', 'UB1', 'UB2', 'UB3', 'UB4', 'UB5', 'UB6', 'UB7', 'UB8', 'VersionNumber', 'Vmon', 'amp1', 'apd', 'apdmon', 'arcx', 'arcy', 'attn', 'beam_x', 'beam_y', 'bigx', 'bigz', 'bpmio', 'bpmx', 'bpmz', 'bstopx', 'bstopz', 'bviewer', 'c100', 'cdet', 'ch1n', 'ch1p', 'chi', 'cmd', 'count_time', 'cryx', 'cryy', 'cryz', 'curind', 'dac1', 'date', 'dcoffs1', 'del', 'det', 'detector_distance', 'detsp', 'diff1', 'dsb', 'dsd', 'dsf', 'dshg', 'dsho', 'dsu', 'dsvg', 'dsvo', 'dummy', 'eLCP1', 'eR1', 'eRCP1', 'ediff1', 'ehsp1', 'ehsp2', 'ehsp3', 'ehsp4', 'ehsp5', 'ehsp6', 'eta', 'etap', 'euro', 'euro_T', 'euro_pv', 'euro_sp', 'euro_ts', 'euro_ws', 'file_comments', 'filter', 'filtio', 'fluo01', 'fluo02', 'fluo03', 'fluo04', 'fluo05', 'fluo06', 'fluo07', 'fluo08', 'fluo09', 'fluo10', 'fluo11', 'fluo12', 'fluo13', 'freq1', 'fwhmx', 'fwhmy', 'ge01', 'ge02', 'ge03', 'ge04', 'ge05', 'ge06', 'ge07', 'ge08', 'ge09', 'ge10', 'ge11', 'ge12', 'ge13', 'ge_fall', 'goniox', 'gonioy', 'h', 'hgt', 'hsb', 'hsd', 'hsf', 'hshg', 'hsho', 'hsu', 'hsvg', 'hsvo', 'ic0io', 'ic1io', 'inout', 'intens', 'iroi', 'iroi1', 'iroi2', 'iroiall', 'k', 'kepcoi', 'l', 'lcp_ret', 'lgb', 'lgb_enc', 'lgf', 'lgf_enc', 'lgm', 'lgm_enc', 'llth', 'm1d', 'm1hgt', 'm1m', 'm1th', 'm1tilt', 'm1u', 'm2d', 'm2hgt', 'm2m', 'm2th', 'm2tilt', 'm2u', 'magA', 'magAE', 'magB', 'magBE', 'magD', 'magDE', 'magR', 'magRE', 'magS', 'magSE', 'mca0', 'mca1', 'mca2', 'mccdR', 'mccdx', 'mccdz', 'mcrbd', 'mcrbu', 'mjack', 'mon', 'monitor', 'mono', 'mptbd', 'mptbu', 'mroll', 'mth', 'mtrans', 'mty', 'mtz', 'mu', 'myaw', 'nomon', 'nu', 'ohspare', 'omtz', 'p10', 'p11', 'p4', 'p6', 'p7', 'p8', 'phi', 'pico1', 'pico2', 'pilx', 'pilz', 'pm_enc', 'ppchi', 'ppio', 'ppth', 'pptth', 'ppx', 'ppz', 'quadio', 'quadx', 'quadz', 'rcp_ret', 's1b', 's1d', 's1f', 's1hg', 's1ho', 's1u', 's1vg', 's1vo', 's2b', 's2d', 's2f', 's2hg', 's2ho', 's2u', 's2vg', 's2vo', 's3b', 's3d', 's3f', 's3hg', 's3ho', 's3u', 's3vg', 's3vo', 's4b', 's4d', 's4f', 's4hg', 's4ho', 's4u', 's4vg', 's4vo', 'samsp', 'samx', 'samz', 'scan', 'sec', 'source_wavelength', 'srcur', 'sum1', 'temp_A', 'temp_B', 'tha', 'thc2', 'thdiff', 'thorx', 'thorz', 'thp', 'time', 'trans', 'transmission', 'tsinb', 'tsind', 'tsinf', 'tsinhg', 'tsinho', 'tsinu', 'tsinvg', 'tsinvo', 'tsoutb', 'tsoutd', 'tsoutf', 'tsouthg', 'tsoutho', 'tsoutu', 'tsoutvg', 'tsoutvo', 'tsx', 'tsz', 'ttha', 'tthp', 'tthy1', 'tthy2', 'tubex', 'vtrans', 'win', 'x', 'xdiff', 'xdt', 'xdt00', 'xdt01', 'xdt02', 'xicr', 'xicr00', 'xicr01', 'xicr02', 'xlt', 'xlt00', 'xlt01', 'xlt02', 'xocr', 'xocr00', 'xocr01', 'xocr02', 'xtilt', 'y', 'ytilt', 'zdiff', 'zdown', 'zup']
+2023-06-26 14:09:14,010 - INFO - New metadata keys: ['ByteOrder', 'Ce_fluo', 'Cr_fluo', 'DataType', 'Dim_1', 'Dim_2', 'Emot', 'Fe_fluo', 'HeaderID', 'Icnt', 'Image', 'Imon', 'Io', 'Ion', 'Iop', 'Iref', 'It', 'LCP1', 'Mn_fluo', 'Ni_fluo', 'Qref', 'Qx', 'Qz', 'R1', 'RCP1', 'Size', 'Temp', 'TempOH', 'U0', 'U1', 'U2', 'U3', 'U4', 'U5', 'UB0', 'UB1', 'UB2', 'UB3', 'UB4', 'UB5', 'UB6', 'UB7', 'UB8', 'VersionNumber', 'Vmon', 'amp1', 'apd', 'apdmon', 'arcx', 'arcy', 'attn', 'beam_x', 'beam_y', 'bigx', 'bigz', 'bpmio', 'bpmx', 'bpmz', 'bstopx', 'bstopz', 'bviewer', 'c100', 'cdet', 'ch1n', 'ch1p', 'chi', 'cmd', 'count_time', 'cryx', 'cryy', 'cryz', 'curind', 'dac1', 'date', 'dcoffs1', 'del', 'det', 'detector_distance', 'detsp', 'diff1', 'dsb', 'dsd', 'dsf', 'dshg', 'dsho', 'dsu', 'dsvg', 'dsvo', 'dummy', 'eLCP1', 'eR1', 'eRCP1', 'ediff1', 'ehsp1', 'ehsp2', 'ehsp3', 'ehsp4', 'ehsp5', 'ehsp6', 'eta', 'etap', 'euro', 'euro_T', 'euro_pv', 'euro_sp', 'euro_ts', 'euro_ws', 'file_comments', 'filter', 'filtio', 'fluo01', 'fluo02', 'fluo03', 'fluo04', 'fluo05', 'fluo06', 'fluo07', 'fluo08', 'fluo09', 'fluo10', 'fluo11', 'fluo12', 'fluo13', 'freq1', 'fwhmx', 'fwhmy', 'ge01', 'ge02', 'ge03', 'ge04', 'ge05', 'ge06', 'ge07', 'ge08', 'ge09', 'ge10', 'ge11', 'ge12', 'ge13', 'ge_fall', 'goniox', 'gonioy', 'h', 'hgt', 'hsb', 'hsd', 'hsf', 'hshg', 'hsho', 'hsu', 'hsvg', 'hsvo', 'ic0io', 'ic1io', 'inout', 'intens', 'iroi', 'iroi1', 'iroi2', 'iroiall', 'k', 'kepcoi', 'l', 'lcp_ret', 'lgb', 'lgb_enc', 'lgf', 'lgf_enc', 'lgm', 'lgm_enc', 'llth', 'm1d', 'm1hgt', 'm1m', 'm1th', 'm1tilt', 'm1u', 'm2d', 'm2hgt', 'm2m', 'm2th', 'm2tilt', 'm2u', 'magA', 'magAE', 'magB', 'magBE', 'magD', 'magDE', 'magR', 'magRE', 'magS', 'magSE', 'mca0', 'mca1', 'mca2', 'mccdR', 'mccdx', 'mccdz', 'mcrbd', 'mcrbu', 'mjack', 'mon', 'monitor', 'mono', 'mptbd', 'mptbu', 'mroll', 'mth', 'mtrans', 'mty', 'mtz', 'mu', 'myaw', 'nomon', 'nu', 'ohspare', 'omtz', 'p10', 'p11', 'p4', 'p6', 'p7', 'p8', 'phi', 'pico1', 'pico2', 'pilx', 'pilz', 'pm_enc', 'ppchi', 'ppio', 'ppth', 'pptth', 'ppx', 'ppz', 'quadio', 'quadx', 'quadz', 'rcp_ret', 's1b', 's1d', 's1f', 's1hg', 's1ho', 's1u', 's1vg', 's1vo', 's2b', 's2d', 's2f', 's2hg', 's2ho', 's2u', 's2vg', 's2vo', 's3b', 's3d', 's3f', 's3hg', 's3ho', 's3u', 's3vg', 's3vo', 's4b', 's4d', 's4f', 's4hg', 's4ho', 's4u', 's4vg', 's4vo', 'samsp', 'samx', 'samz', 'scan', 'sec', 'source_wavelength', 'srcur', 'sum1', 'temp_A', 'temp_B', 'tha', 'thc2', 'thdiff', 'thorx', 'thorz', 'thp', 'time', 'trans', 'transmission', 'tsinb', 'tsind', 'tsinf', 'tsinhg', 'tsinho', 'tsinu', 'tsinvg', 'tsinvo', 'tsoutb', 'tsoutd', 'tsoutf', 'tsouthg', 'tsoutho', 'tsoutu', 'tsoutvg', 'tsoutvo', 'tsx', 'tsz', 'ttha', 'tthp', 'tthy1', 'tthy2', 'tubex', 'vtrans', 'win', 'x', 'xdiff', 'xdt', 'xdt00', 'xdt01', 'xdt02', 'xicr', 'xicr00', 'xicr01', 'xicr02', 'xlt', 'xlt00', 'xlt01', 'xlt02', 'xocr', 'xocr00', 'xocr01', 'xocr02', 'xtilt', 'y', 'ytilt', 'zdiff', 'zdown', 'zup']
+2023-06-26 14:09:14,010 - INFO - We entered into function: update_table
+2023-06-26 14:09:14,010 - INFO - Table was reseted.
+2023-06-26 14:09:14,011 - INFO - Folder to display: MARY6p2refined.
+2023-06-26 14:09:14,011 - INFO - Keys to display: ['eta', 'Io', 'sec', 'ByteOrder'].
+2023-06-26 14:09:14,011 - INFO - We entered into function: get_metadata_dataframe
+2023-06-26 14:09:14,012 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,013 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,014 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,014 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,016 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,016 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,016 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,016 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,017 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,017 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,017 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,018 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,018 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,018 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,019 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,019 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,019 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,019 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,020 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,020 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,020 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,021 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,021 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,021 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,021 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,022 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,022 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,022 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,023 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,023 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,023 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,024 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,024 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,024 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,025 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,025 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,026 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,026 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,026 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,026 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,041 - INFO - This is the dataframe:                               Filename    eta         Io  sec        ByteOrder
+0  Y6_p2_refined_r00002_n2003_p000.edf  0.125  1053670.0  2.0  b'LowByteFirst'
+1  Y6_p2_refined_r00003_n2003_p001.edf  0.125  1053510.0  2.0  b'LowByteFirst'
+2  Y6_p2_refined_r00004_n2003_p002.edf  0.125  1053450.0  2.0  b'LowByteFirst'
+3  Y6_p2_refined_r00005_n2003_p003.edf  0.125  1053230.0  2.0  b'LowByteFirst'
+4  Y6_p2_refined_r00006_n2003_p004.edf  0.125  1053180.0  2.0  b'LowByteFirst'
+5  Y6_p2_refined_r00007_n2003_p005.edf  0.125  1052970.0  2.0  b'LowByteFirst'
+6  Y6_p2_refined_r00008_n2003_p006.edf  0.125  1052840.0  2.0  b'LowByteFirst'
+7  Y6_p2_refined_r00009_n2003_p007.edf  0.125  1052770.0  2.0  b'LowByteFirst'
+8  Y6_p2_refined_r00010_n2003_p008.edf  0.125  1052620.0  2.0  b'LowByteFirst'
+9  Y6_p2_refined_r00011_n2003_p009.edf  0.125  1052520.0  2.0  b'LowByteFirst'
+2023-06-26 14:09:14,041 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-06-26 14:09:14,042 - INFO - Inserted columns: 5
+2023-06-26 14:09:14,043 - INFO - Inserted rows: 10
+2023-06-26 14:09:14,043 - INFO - Updated cell [0,0].
+2023-06-26 14:09:14,043 - INFO - Updated cell [0,1].
+2023-06-26 14:09:14,044 - INFO - Updated cell [0,2].
+2023-06-26 14:09:14,044 - INFO - Updated cell [0,3].
+2023-06-26 14:09:14,044 - INFO - Updated cell [0,4].
+2023-06-26 14:09:14,044 - INFO - Updated cell [1,0].
+2023-06-26 14:09:14,044 - INFO - Updated cell [1,1].
+2023-06-26 14:09:14,046 - INFO - Updated cell [1,2].
+2023-06-26 14:09:14,046 - INFO - Updated cell [1,3].
+2023-06-26 14:09:14,046 - INFO - Updated cell [1,4].
+2023-06-26 14:09:14,046 - INFO - Updated cell [2,0].
+2023-06-26 14:09:14,047 - INFO - Updated cell [2,1].
+2023-06-26 14:09:14,047 - INFO - Updated cell [2,2].
+2023-06-26 14:09:14,047 - INFO - Updated cell [2,3].
+2023-06-26 14:09:14,047 - INFO - Updated cell [2,4].
+2023-06-26 14:09:14,047 - INFO - Updated cell [3,0].
+2023-06-26 14:09:14,048 - INFO - Updated cell [3,1].
+2023-06-26 14:09:14,048 - INFO - Updated cell [3,2].
+2023-06-26 14:09:14,048 - INFO - Updated cell [3,3].
+2023-06-26 14:09:14,048 - INFO - Updated cell [3,4].
+2023-06-26 14:09:14,049 - INFO - Updated cell [4,0].
+2023-06-26 14:09:14,049 - INFO - Updated cell [4,1].
+2023-06-26 14:09:14,049 - INFO - Updated cell [4,2].
+2023-06-26 14:09:14,049 - INFO - Updated cell [4,3].
+2023-06-26 14:09:14,049 - INFO - Updated cell [4,4].
+2023-06-26 14:09:14,050 - INFO - Updated cell [5,0].
+2023-06-26 14:09:14,050 - INFO - Updated cell [5,1].
+2023-06-26 14:09:14,050 - INFO - Updated cell [5,2].
+2023-06-26 14:09:14,050 - INFO - Updated cell [5,3].
+2023-06-26 14:09:14,050 - INFO - Updated cell [5,4].
+2023-06-26 14:09:14,050 - INFO - Updated cell [6,0].
+2023-06-26 14:09:14,050 - INFO - Updated cell [6,1].
+2023-06-26 14:09:14,051 - INFO - Updated cell [6,2].
+2023-06-26 14:09:14,051 - INFO - Updated cell [6,3].
+2023-06-26 14:09:14,051 - INFO - Updated cell [6,4].
+2023-06-26 14:09:14,051 - INFO - Updated cell [7,0].
+2023-06-26 14:09:14,051 - INFO - Updated cell [7,1].
+2023-06-26 14:09:14,051 - INFO - Updated cell [7,2].
+2023-06-26 14:09:14,051 - INFO - Updated cell [7,3].
+2023-06-26 14:09:14,051 - INFO - Updated cell [7,4].
+2023-06-26 14:09:14,052 - INFO - Updated cell [8,0].
+2023-06-26 14:09:14,052 - INFO - Updated cell [8,1].
+2023-06-26 14:09:14,052 - INFO - Updated cell [8,2].
+2023-06-26 14:09:14,052 - INFO - Updated cell [8,3].
+2023-06-26 14:09:14,052 - INFO - Updated cell [8,4].
+2023-06-26 14:09:14,052 - INFO - Updated cell [9,0].
+2023-06-26 14:09:14,053 - INFO - Updated cell [9,1].
+2023-06-26 14:09:14,053 - INFO - Updated cell [9,2].
+2023-06-26 14:09:14,053 - INFO - Updated cell [9,3].
+2023-06-26 14:09:14,053 - INFO - Updated cell [9,4].
+2023-06-26 14:09:14,054 - INFO - Combobox header_items updated.
+2023-06-26 14:09:14,054 - INFO - Combobox header_items title updated.
+2023-06-26 14:09:14,054 - INFO - We entered into function: update_angle_parameter
+2023-06-26 14:09:14,055 - INFO - Combobox angle updated.
+2023-06-26 14:09:14,055 - INFO - We entered into function: update_tiltangle_parameter
+2023-06-26 14:09:14,056 - INFO - Combobox tilt angle updated.
+2023-06-26 14:09:14,056 - INFO - We entered into function: update_normfactor_parameter
+2023-06-26 14:09:14,056 - INFO - Combobox norm updated.
+2023-06-26 14:09:14,056 - INFO - We entered into function: update_exposure_parameter
+2023-06-26 14:09:14,057 - INFO - Combobox exposure updated.
+2023-06-26 14:09:14,057 - INFO - We entered into function: update_table
+2023-06-26 14:09:14,057 - INFO - Table was reseted.
+2023-06-26 14:09:14,057 - INFO - Folder to display: MARY6p2refined.
+2023-06-26 14:09:14,057 - INFO - Keys to display: ['eta', 'Io', 'sec', 'ByteOrder'].
+2023-06-26 14:09:14,058 - INFO - We entered into function: get_metadata_dataframe
+2023-06-26 14:09:14,058 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,058 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,059 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,059 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,059 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,060 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,060 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,060 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,060 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,061 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,061 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,061 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,061 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,062 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,063 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,064 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,066 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,066 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,067 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,068 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,069 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,069 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,069 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,070 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,071 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,071 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,071 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,071 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,072 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,072 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,073 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,073 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,074 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,074 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,075 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,075 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,076 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,076 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,076 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,076 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:14,089 - INFO - This is the dataframe:                               Filename    eta         Io  sec        ByteOrder
+0  Y6_p2_refined_r00002_n2003_p000.edf  0.125  1053670.0  2.0  b'LowByteFirst'
+1  Y6_p2_refined_r00003_n2003_p001.edf  0.125  1053510.0  2.0  b'LowByteFirst'
+2  Y6_p2_refined_r00004_n2003_p002.edf  0.125  1053450.0  2.0  b'LowByteFirst'
+3  Y6_p2_refined_r00005_n2003_p003.edf  0.125  1053230.0  2.0  b'LowByteFirst'
+4  Y6_p2_refined_r00006_n2003_p004.edf  0.125  1053180.0  2.0  b'LowByteFirst'
+5  Y6_p2_refined_r00007_n2003_p005.edf  0.125  1052970.0  2.0  b'LowByteFirst'
+6  Y6_p2_refined_r00008_n2003_p006.edf  0.125  1052840.0  2.0  b'LowByteFirst'
+7  Y6_p2_refined_r00009_n2003_p007.edf  0.125  1052770.0  2.0  b'LowByteFirst'
+8  Y6_p2_refined_r00010_n2003_p008.edf  0.125  1052620.0  2.0  b'LowByteFirst'
+9  Y6_p2_refined_r00011_n2003_p009.edf  0.125  1052520.0  2.0  b'LowByteFirst'
+2023-06-26 14:09:14,089 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-06-26 14:09:14,090 - INFO - Inserted columns: 5
+2023-06-26 14:09:14,090 - INFO - Inserted rows: 10
+2023-06-26 14:09:14,091 - INFO - Updated cell [0,0].
+2023-06-26 14:09:14,091 - INFO - Updated cell [0,1].
+2023-06-26 14:09:14,091 - INFO - Updated cell [0,2].
+2023-06-26 14:09:14,091 - INFO - Updated cell [0,3].
+2023-06-26 14:09:14,092 - INFO - Updated cell [0,4].
+2023-06-26 14:09:14,092 - INFO - Updated cell [1,0].
+2023-06-26 14:09:14,092 - INFO - Updated cell [1,1].
+2023-06-26 14:09:14,092 - INFO - Updated cell [1,2].
+2023-06-26 14:09:14,093 - INFO - Updated cell [1,3].
+2023-06-26 14:09:14,093 - INFO - Updated cell [1,4].
+2023-06-26 14:09:14,093 - INFO - Updated cell [2,0].
+2023-06-26 14:09:14,093 - INFO - Updated cell [2,1].
+2023-06-26 14:09:14,094 - INFO - Updated cell [2,2].
+2023-06-26 14:09:14,094 - INFO - Updated cell [2,3].
+2023-06-26 14:09:14,094 - INFO - Updated cell [2,4].
+2023-06-26 14:09:14,094 - INFO - Updated cell [3,0].
+2023-06-26 14:09:14,094 - INFO - Updated cell [3,1].
+2023-06-26 14:09:14,094 - INFO - Updated cell [3,2].
+2023-06-26 14:09:14,096 - INFO - Updated cell [3,3].
+2023-06-26 14:09:14,096 - INFO - Updated cell [3,4].
+2023-06-26 14:09:14,096 - INFO - Updated cell [4,0].
+2023-06-26 14:09:14,096 - INFO - Updated cell [4,1].
+2023-06-26 14:09:14,096 - INFO - Updated cell [4,2].
+2023-06-26 14:09:14,096 - INFO - Updated cell [4,3].
+2023-06-26 14:09:14,096 - INFO - Updated cell [4,4].
+2023-06-26 14:09:14,096 - INFO - Updated cell [5,0].
+2023-06-26 14:09:14,097 - INFO - Updated cell [5,1].
+2023-06-26 14:09:14,097 - INFO - Updated cell [5,2].
+2023-06-26 14:09:14,097 - INFO - Updated cell [5,3].
+2023-06-26 14:09:14,097 - INFO - Updated cell [5,4].
+2023-06-26 14:09:14,097 - INFO - Updated cell [6,0].
+2023-06-26 14:09:14,097 - INFO - Updated cell [6,1].
+2023-06-26 14:09:14,098 - INFO - Updated cell [6,2].
+2023-06-26 14:09:14,098 - INFO - Updated cell [6,3].
+2023-06-26 14:09:14,098 - INFO - Updated cell [6,4].
+2023-06-26 14:09:14,098 - INFO - Updated cell [7,0].
+2023-06-26 14:09:14,098 - INFO - Updated cell [7,1].
+2023-06-26 14:09:14,098 - INFO - Updated cell [7,2].
+2023-06-26 14:09:14,098 - INFO - Updated cell [7,3].
+2023-06-26 14:09:14,098 - INFO - Updated cell [7,4].
+2023-06-26 14:09:14,099 - INFO - Updated cell [8,0].
+2023-06-26 14:09:14,099 - INFO - Updated cell [8,1].
+2023-06-26 14:09:14,099 - INFO - Updated cell [8,2].
+2023-06-26 14:09:14,099 - INFO - Updated cell [8,3].
+2023-06-26 14:09:14,099 - INFO - Updated cell [8,4].
+2023-06-26 14:09:14,099 - INFO - Updated cell [9,0].
+2023-06-26 14:09:14,099 - INFO - Updated cell [9,1].
+2023-06-26 14:09:14,100 - INFO - Updated cell [9,2].
+2023-06-26 14:09:14,100 - INFO - Updated cell [9,3].
+2023-06-26 14:09:14,100 - INFO - Updated cell [9,4].
+2023-06-26 14:09:14,893 - INFO - We entered into function: update_clicked_filenames
+2023-06-26 14:09:14,893 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:09:14,895 - INFO - New cache index: [0]
+2023-06-26 14:09:14,896 - INFO - New cache filenames: [WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00002_n2003_p000.edf')]
+2023-06-26 14:09:14,896 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:14,896 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:09:14,896 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:09:14,896 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:14,897 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:09:14,897 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:14,904 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:09:15,008 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:09:15,009 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:09:15,009 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:09:15,009 - INFO - We entered into function: get_norm_key
+2023-06-26 14:09:15,010 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:09:15,010 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:15,011 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:09:15,011 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:09:15,011 - INFO - True
+2023-06-26 14:09:15,013 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:09:15,073 - INFO - (0.00013205655909734532, 0.0006571822552413583)
+2023-06-26 14:09:15,112 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:09:15,163 - INFO - Displayed data.
+2023-06-26 14:09:15,164 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:09:15,164 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:15,166 - INFO - Dictionaries of integration: ['complete']
+2023-06-26 14:09:15,166 - INFO - Dictionaries of integration: [{'Name': 'complete', 'Suffix': 'complete', 'Type': 'Azimuthal', 'Radial_range': [0.0, 25.0], 'Azimuth_range': [-90.0, 90.0], 'Unit': 'q_nm^-1', 'Bins_azimut': 0}]
+2023-06-26 14:09:15,166 - INFO - We entered into function: raw_integration
+2023-06-26 14:09:15,166 - INFO - We entered into function: raw_integration_azimuthal
+2023-06-26 14:09:15,166 - INFO - We entered into function: calculate_bins
+2023-06-26 14:09:15,166 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:15,166 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:15,166 - INFO - Trying azimuthal integration with: bins=1230, p0_range=[0.0, 25.0], p1_range=[-90.0, 90.0], unit=q_nm^-1
+2023-06-26 14:09:17,280 - INFO - Integration performed.
+2023-06-26 14:09:17,280 - INFO - New integration: 1
+2023-06-26 14:09:17,284 - INFO - We entered into function: update_label_displayed
+2023-06-26 14:09:17,284 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:17,285 - INFO - New label: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARY6p2refined\Y6_p2_refined_r00002_n2003_p000.edf
+2023-06-26 14:09:19,419 - INFO - We entered into function: update_table
+2023-06-26 14:09:19,419 - INFO - We entered into function: update_clicked_filenames
+2023-06-26 14:09:19,419 - INFO - New cache index: []
+2023-06-26 14:09:19,420 - INFO - New cache filenames: []
+2023-06-26 14:09:19,420 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:19,420 - INFO - We entered into function: update_label_displayed
+2023-06-26 14:09:19,420 - INFO - Table was reseted.
+2023-06-26 14:09:19,421 - INFO - Folder to display: MARY6p2refined.
+2023-06-26 14:09:19,421 - INFO - Keys to display: ['eta', 'Io', 'sec'].
+2023-06-26 14:09:19,421 - INFO - We entered into function: get_metadata_dataframe
+2023-06-26 14:09:19,422 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,422 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,422 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,423 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,423 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,423 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,424 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,424 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,424 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,424 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,424 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,426 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,426 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,426 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,427 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,427 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,427 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,428 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,428 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,428 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,429 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,429 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,429 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,430 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,430 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,430 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,431 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,431 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,431 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,432 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:19,438 - INFO - This is the dataframe:                               Filename    eta         Io  sec
+0  Y6_p2_refined_r00002_n2003_p000.edf  0.125  1053670.0  2.0
+1  Y6_p2_refined_r00003_n2003_p001.edf  0.125  1053510.0  2.0
+2  Y6_p2_refined_r00004_n2003_p002.edf  0.125  1053450.0  2.0
+3  Y6_p2_refined_r00005_n2003_p003.edf  0.125  1053230.0  2.0
+4  Y6_p2_refined_r00006_n2003_p004.edf  0.125  1053180.0  2.0
+5  Y6_p2_refined_r00007_n2003_p005.edf  0.125  1052970.0  2.0
+6  Y6_p2_refined_r00008_n2003_p006.edf  0.125  1052840.0  2.0
+7  Y6_p2_refined_r00009_n2003_p007.edf  0.125  1052770.0  2.0
+8  Y6_p2_refined_r00010_n2003_p008.edf  0.125  1052620.0  2.0
+9  Y6_p2_refined_r00011_n2003_p009.edf  0.125  1052520.0  2.0
+2023-06-26 14:09:19,439 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-06-26 14:09:19,439 - INFO - Inserted columns: 4
+2023-06-26 14:09:19,439 - INFO - Inserted rows: 10
+2023-06-26 14:09:19,440 - INFO - Updated cell [0,0].
+2023-06-26 14:09:19,440 - INFO - Updated cell [0,1].
+2023-06-26 14:09:19,440 - INFO - Updated cell [0,2].
+2023-06-26 14:09:19,440 - INFO - Updated cell [0,3].
+2023-06-26 14:09:19,441 - INFO - Updated cell [1,0].
+2023-06-26 14:09:19,441 - INFO - Updated cell [1,1].
+2023-06-26 14:09:19,441 - INFO - Updated cell [1,2].
+2023-06-26 14:09:19,441 - INFO - Updated cell [1,3].
+2023-06-26 14:09:19,442 - INFO - Updated cell [2,0].
+2023-06-26 14:09:19,442 - INFO - Updated cell [2,1].
+2023-06-26 14:09:19,442 - INFO - Updated cell [2,2].
+2023-06-26 14:09:19,442 - INFO - Updated cell [2,3].
+2023-06-26 14:09:19,442 - INFO - Updated cell [3,0].
+2023-06-26 14:09:19,442 - INFO - Updated cell [3,1].
+2023-06-26 14:09:19,443 - INFO - Updated cell [3,2].
+2023-06-26 14:09:19,443 - INFO - Updated cell [3,3].
+2023-06-26 14:09:19,443 - INFO - Updated cell [4,0].
+2023-06-26 14:09:19,443 - INFO - Updated cell [4,1].
+2023-06-26 14:09:19,443 - INFO - Updated cell [4,2].
+2023-06-26 14:09:19,443 - INFO - Updated cell [4,3].
+2023-06-26 14:09:19,444 - INFO - Updated cell [5,0].
+2023-06-26 14:09:19,444 - INFO - Updated cell [5,1].
+2023-06-26 14:09:19,444 - INFO - Updated cell [5,2].
+2023-06-26 14:09:19,444 - INFO - Updated cell [5,3].
+2023-06-26 14:09:19,444 - INFO - Updated cell [6,0].
+2023-06-26 14:09:19,444 - INFO - Updated cell [6,1].
+2023-06-26 14:09:19,444 - INFO - Updated cell [6,2].
+2023-06-26 14:09:19,445 - INFO - Updated cell [6,3].
+2023-06-26 14:09:19,445 - INFO - Updated cell [7,0].
+2023-06-26 14:09:19,445 - INFO - Updated cell [7,1].
+2023-06-26 14:09:19,445 - INFO - Updated cell [7,2].
+2023-06-26 14:09:19,445 - INFO - Updated cell [7,3].
+2023-06-26 14:09:19,445 - INFO - Updated cell [8,0].
+2023-06-26 14:09:19,445 - INFO - Updated cell [8,1].
+2023-06-26 14:09:19,446 - INFO - Updated cell [8,2].
+2023-06-26 14:09:19,446 - INFO - Updated cell [8,3].
+2023-06-26 14:09:19,446 - INFO - Updated cell [9,0].
+2023-06-26 14:09:19,446 - INFO - Updated cell [9,1].
+2023-06-26 14:09:19,446 - INFO - Updated cell [9,2].
+2023-06-26 14:09:19,446 - INFO - Updated cell [9,3].
+2023-06-26 14:09:20,668 - INFO - We entered into function: update_table
+2023-06-26 14:09:20,669 - INFO - Table was reseted.
+2023-06-26 14:09:20,670 - INFO - Folder to display: MARY6p2refined.
+2023-06-26 14:09:20,671 - INFO - Keys to display: ['eta', 'sec'].
+2023-06-26 14:09:20,671 - INFO - We entered into function: get_metadata_dataframe
+2023-06-26 14:09:20,674 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,674 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,677 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,679 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,682 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,683 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,685 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,686 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,690 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,691 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,693 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,693 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,695 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,695 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,696 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,696 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,697 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,698 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,699 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,699 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:20,708 - INFO - This is the dataframe:                               Filename    eta  sec
+0  Y6_p2_refined_r00002_n2003_p000.edf  0.125  2.0
+1  Y6_p2_refined_r00003_n2003_p001.edf  0.125  2.0
+2  Y6_p2_refined_r00004_n2003_p002.edf  0.125  2.0
+3  Y6_p2_refined_r00005_n2003_p003.edf  0.125  2.0
+4  Y6_p2_refined_r00006_n2003_p004.edf  0.125  2.0
+5  Y6_p2_refined_r00007_n2003_p005.edf  0.125  2.0
+6  Y6_p2_refined_r00008_n2003_p006.edf  0.125  2.0
+7  Y6_p2_refined_r00009_n2003_p007.edf  0.125  2.0
+8  Y6_p2_refined_r00010_n2003_p008.edf  0.125  2.0
+9  Y6_p2_refined_r00011_n2003_p009.edf  0.125  2.0
+2023-06-26 14:09:20,709 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-06-26 14:09:20,710 - INFO - Inserted columns: 3
+2023-06-26 14:09:20,710 - INFO - Inserted rows: 10
+2023-06-26 14:09:20,710 - INFO - Updated cell [0,0].
+2023-06-26 14:09:20,711 - INFO - Updated cell [0,1].
+2023-06-26 14:09:20,711 - INFO - Updated cell [0,2].
+2023-06-26 14:09:20,711 - INFO - Updated cell [1,0].
+2023-06-26 14:09:20,711 - INFO - Updated cell [1,1].
+2023-06-26 14:09:20,712 - INFO - Updated cell [1,2].
+2023-06-26 14:09:20,712 - INFO - Updated cell [2,0].
+2023-06-26 14:09:20,712 - INFO - Updated cell [2,1].
+2023-06-26 14:09:20,712 - INFO - Updated cell [2,2].
+2023-06-26 14:09:20,713 - INFO - Updated cell [3,0].
+2023-06-26 14:09:20,713 - INFO - Updated cell [3,1].
+2023-06-26 14:09:20,713 - INFO - Updated cell [3,2].
+2023-06-26 14:09:20,713 - INFO - Updated cell [4,0].
+2023-06-26 14:09:20,714 - INFO - Updated cell [4,1].
+2023-06-26 14:09:20,714 - INFO - Updated cell [4,2].
+2023-06-26 14:09:20,714 - INFO - Updated cell [5,0].
+2023-06-26 14:09:20,714 - INFO - Updated cell [5,1].
+2023-06-26 14:09:20,715 - INFO - Updated cell [5,2].
+2023-06-26 14:09:20,715 - INFO - Updated cell [6,0].
+2023-06-26 14:09:20,715 - INFO - Updated cell [6,1].
+2023-06-26 14:09:20,715 - INFO - Updated cell [6,2].
+2023-06-26 14:09:20,715 - INFO - Updated cell [7,0].
+2023-06-26 14:09:20,715 - INFO - Updated cell [7,1].
+2023-06-26 14:09:20,715 - INFO - Updated cell [7,2].
+2023-06-26 14:09:20,715 - INFO - Updated cell [8,0].
+2023-06-26 14:09:20,716 - INFO - Updated cell [8,1].
+2023-06-26 14:09:20,716 - INFO - Updated cell [8,2].
+2023-06-26 14:09:20,716 - INFO - Updated cell [9,0].
+2023-06-26 14:09:20,716 - INFO - Updated cell [9,1].
+2023-06-26 14:09:20,716 - INFO - Updated cell [9,2].
+2023-06-26 14:09:21,870 - INFO - We entered into function: update_clicked_filenames
+2023-06-26 14:09:21,871 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:09:21,872 - INFO - New cache index: [0]
+2023-06-26 14:09:21,873 - INFO - New cache filenames: [WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00002_n2003_p000.edf')]
+2023-06-26 14:09:21,873 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:21,873 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:09:21,873 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:09:21,873 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:21,874 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:09:21,874 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:21,879 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:09:21,922 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:09:21,923 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:09:21,923 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:09:21,923 - INFO - We entered into function: get_norm_key
+2023-06-26 14:09:21,923 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:09:21,924 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:21,926 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:09:21,926 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:09:21,926 - INFO - False
+2023-06-26 14:09:21,927 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:09:21,994 - INFO - (0.00013205655909734532, 0.0006571822552413583)
+2023-06-26 14:09:22,032 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:09:22,080 - INFO - Displayed data.
+2023-06-26 14:09:22,082 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:09:22,082 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:22,082 - INFO - Dictionaries of integration: ['complete']
+2023-06-26 14:09:22,083 - INFO - Dictionaries of integration: [{'Name': 'complete', 'Suffix': 'complete', 'Type': 'Azimuthal', 'Radial_range': [0.0, 25.0], 'Azimuth_range': [-90.0, 90.0], 'Unit': 'q_nm^-1', 'Bins_azimut': 0}]
+2023-06-26 14:09:22,083 - INFO - We entered into function: raw_integration
+2023-06-26 14:09:22,083 - INFO - We entered into function: raw_integration_azimuthal
+2023-06-26 14:09:22,083 - INFO - We entered into function: calculate_bins
+2023-06-26 14:09:22,083 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:22,084 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:22,084 - INFO - Trying azimuthal integration with: bins=1230, p0_range=[0.0, 25.0], p1_range=[-90.0, 90.0], unit=q_nm^-1
+2023-06-26 14:09:22,264 - INFO - Integration performed.
+2023-06-26 14:09:22,264 - INFO - New integration: 1
+2023-06-26 14:09:22,267 - INFO - We entered into function: update_label_displayed
+2023-06-26 14:09:22,267 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:22,268 - INFO - New label: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARY6p2refined\Y6_p2_refined_r00002_n2003_p000.edf
+2023-06-26 14:09:24,331 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:24,332 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:09:24,332 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:09:24,332 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:24,333 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:09:24,333 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:24,339 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:09:24,369 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:09:24,370 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:09:24,370 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:09:24,370 - INFO - We entered into function: get_norm_key
+2023-06-26 14:09:24,370 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:09:24,371 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:24,371 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:09:24,372 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:09:24,372 - INFO - False
+2023-06-26 14:09:24,372 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:09:24,431 - INFO - (0.00013205655909734532, 0.0006571822552413583)
+2023-06-26 14:09:24,470 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:09:24,470 - INFO - We entered into function: get_masked_integration_array
+2023-06-26 14:09:24,471 - INFO - Dictionary of integration to be masked: {'Name': 'complete', 'Suffix': 'complete', 'Type': 'Azimuthal', 'Radial_range': [0.0, 25.0], 'Azimuth_range': [-90.0, 90.0], 'Unit': 'q_nm^-1', 'Bins_azimut': 0}
+2023-06-26 14:09:24,471 - INFO - Parameters to mask the array. Shape: (2048, 2048), unit: q_nm^-1,                     p0_range: (0.0, 0.25), p1_range: (1.5707963267948966, 4.71238898038469), pos0_scale: 100.
+2023-06-26 14:09:24,673 - INFO - The mask was generated.
+2023-06-26 14:09:25,818 - INFO - The mask was completed.
+2023-06-26 14:09:25,920 - INFO - Displayed data.
+2023-06-26 14:09:25,924 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:09:25,925 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:25,926 - INFO - Dictionaries of integration: ['complete']
+2023-06-26 14:09:25,928 - INFO - Dictionaries of integration: [{'Name': 'complete', 'Suffix': 'complete', 'Type': 'Azimuthal', 'Radial_range': [0.0, 25.0], 'Azimuth_range': [-90.0, 90.0], 'Unit': 'q_nm^-1', 'Bins_azimut': 0}]
+2023-06-26 14:09:25,929 - INFO - We entered into function: raw_integration
+2023-06-26 14:09:25,930 - INFO - We entered into function: raw_integration_azimuthal
+2023-06-26 14:09:25,930 - INFO - We entered into function: calculate_bins
+2023-06-26 14:09:25,931 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:25,931 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:25,931 - INFO - Trying azimuthal integration with: bins=1230, p0_range=[0.0, 25.0], p1_range=[-90.0, 90.0], unit=q_nm^-1
+2023-06-26 14:09:26,222 - INFO - Integration performed.
+2023-06-26 14:09:26,222 - INFO - New integration: 1
+2023-06-26 14:09:29,900 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:29,900 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:09:29,901 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:09:29,901 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:29,902 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:09:29,903 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:29,911 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:09:29,941 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:09:29,941 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:09:29,942 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:09:29,942 - INFO - We entered into function: get_norm_key
+2023-06-26 14:09:29,942 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:09:29,943 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:29,945 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:09:29,945 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:09:29,945 - INFO - False
+2023-06-26 14:09:29,945 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:09:30,048 - INFO - (0.00013205655909734532, 0.0006571822552413583)
+2023-06-26 14:09:30,132 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:09:30,133 - INFO - We entered into function: get_masked_integration_array
+2023-06-26 14:09:30,134 - INFO - Error during updating 2D graph
+2023-06-26 14:09:30,137 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:09:30,137 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:30,137 - INFO - Dictionaries of integration: []
+2023-06-26 14:09:30,137 - INFO - Dictionaries of integration: []
+2023-06-26 14:09:30,137 - INFO - We entered into function: raw_integration
+2023-06-26 14:09:30,138 - INFO - New integration: 0
+2023-06-26 14:09:31,702 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:31,702 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:09:31,702 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:09:31,702 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:31,703 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:09:31,704 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:31,709 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:09:31,749 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:09:31,749 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:09:31,749 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:09:31,749 - INFO - We entered into function: get_norm_key
+2023-06-26 14:09:31,750 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:09:31,750 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:31,751 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:09:31,751 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:09:31,752 - INFO - False
+2023-06-26 14:09:31,752 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:09:31,821 - INFO - (0.00013205655909734532, 0.0006571822552413583)
+2023-06-26 14:09:31,859 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:09:31,860 - INFO - We entered into function: get_masked_integration_array
+2023-06-26 14:09:31,860 - INFO - Dictionary of integration to be masked: {'Name': 'oop', 'Suffix': 'oop', 'Type': 'Azimuthal', 'Radial_range': [0.0, 25.0], 'Azimuth_range': [-20.0, 20.0], 'Unit': 'q_nm^-1', 'Bins_azimut': 90}
+2023-06-26 14:09:31,860 - INFO - Parameters to mask the array. Shape: (2048, 2048), unit: q_nm^-1,                     p0_range: (0.0, 0.25), p1_range: (2.792526803190927, 3.490658503988659), pos0_scale: 100.
+2023-06-26 14:09:32,058 - INFO - The mask was generated.
+2023-06-26 14:09:35,027 - INFO - The mask was completed.
+2023-06-26 14:09:35,134 - INFO - Displayed data.
+2023-06-26 14:09:35,138 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:09:35,138 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:35,139 - INFO - Dictionaries of integration: ['oop']
+2023-06-26 14:09:35,139 - INFO - Dictionaries of integration: [{'Name': 'oop', 'Suffix': 'oop', 'Type': 'Azimuthal', 'Radial_range': [0.0, 25.0], 'Azimuth_range': [-20.0, 20.0], 'Unit': 'q_nm^-1', 'Bins_azimut': 90}]
+2023-06-26 14:09:35,139 - INFO - We entered into function: raw_integration
+2023-06-26 14:09:35,140 - INFO - We entered into function: raw_integration_azimuthal
+2023-06-26 14:09:35,140 - INFO - We entered into function: calculate_bins
+2023-06-26 14:09:35,140 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:35,140 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:35,141 - INFO - Trying azimuthal integration with: bins=1230, p0_range=[0.0, 25.0], p1_range=[-20.0, 20.0], unit=q_nm^-1
+2023-06-26 14:09:35,398 - INFO - Integration performed.
+2023-06-26 14:09:35,399 - INFO - New integration: 1
+2023-06-26 14:09:39,932 - INFO - We entered into function: add_integration_cake
+2023-06-26 14:09:39,933 - INFO - We entered into function: update_integration_widgets
+2023-06-26 14:09:39,939 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:39,939 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:09:39,939 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:09:39,940 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:39,941 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:09:39,942 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:39,952 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:09:39,983 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:09:39,983 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:09:39,983 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:09:39,983 - INFO - We entered into function: get_norm_key
+2023-06-26 14:09:39,984 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:09:39,984 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:39,984 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:09:39,986 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:09:39,986 - INFO - False
+2023-06-26 14:09:39,986 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:09:40,046 - INFO - (0.00013205655909734532, 0.0006571822552413583)
+2023-06-26 14:09:40,086 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:09:40,086 - INFO - We entered into function: get_masked_integration_array
+2023-06-26 14:09:40,087 - INFO - Dictionary of integration to be masked: {'Name': 'oop', 'Suffix': 'oop', 'Type': 'Azimuthal', 'Radial_range': [10.0, 25.0], 'Azimuth_range': [-20.0, 20.0], 'Unit': 'q_nm^-1', 'Bins_azimut': 90}
+2023-06-26 14:09:40,087 - INFO - Parameters to mask the array. Shape: (2048, 2048), unit: q_nm^-1,                     p0_range: (0.1, 0.25), p1_range: (2.792526803190927, 3.490658503988659), pos0_scale: 100.
+2023-06-26 14:09:40,288 - INFO - The mask was generated.
+2023-06-26 14:09:43,256 - INFO - The mask was completed.
+2023-06-26 14:09:43,368 - INFO - Displayed data.
+2023-06-26 14:09:43,370 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:09:43,370 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:43,370 - INFO - Dictionaries of integration: ['oop']
+2023-06-26 14:09:43,372 - INFO - Dictionaries of integration: [{'Name': 'oop', 'Suffix': 'oop', 'Type': 'Azimuthal', 'Radial_range': [10.0, 25.0], 'Azimuth_range': [-20.0, 20.0], 'Unit': 'q_nm^-1', 'Bins_azimut': 90}]
+2023-06-26 14:09:43,373 - INFO - We entered into function: raw_integration
+2023-06-26 14:09:43,373 - INFO - We entered into function: raw_integration_azimuthal
+2023-06-26 14:09:43,373 - INFO - We entered into function: calculate_bins
+2023-06-26 14:09:43,374 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:43,374 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:43,374 - INFO - Trying azimuthal integration with: bins=764, p0_range=[10.0, 25.0], p1_range=[-20.0, 20.0], unit=q_nm^-1
+2023-06-26 14:09:43,614 - INFO - Integration performed.
+2023-06-26 14:09:43,616 - INFO - New integration: 1
+2023-06-26 14:09:46,267 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:46,268 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:09:46,268 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:09:46,268 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:46,269 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:09:46,269 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:46,277 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:09:46,309 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:09:46,309 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:09:46,309 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:09:46,309 - INFO - We entered into function: get_norm_key
+2023-06-26 14:09:46,310 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:09:46,310 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:46,311 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:09:46,311 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:09:46,311 - INFO - False
+2023-06-26 14:09:46,312 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:09:46,373 - INFO - (0.00013205655909734532, 0.0006571822552413583)
+2023-06-26 14:09:46,412 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:09:46,459 - INFO - Displayed data.
+2023-06-26 14:09:46,461 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:09:46,461 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:46,461 - INFO - Dictionaries of integration: ['oop']
+2023-06-26 14:09:46,461 - INFO - Dictionaries of integration: [{'Name': 'oop', 'Suffix': 'oop', 'Type': 'Azimuthal', 'Radial_range': [10.0, 25.0], 'Azimuth_range': [-20.0, 20.0], 'Unit': 'q_nm^-1', 'Bins_azimut': 90}]
+2023-06-26 14:09:46,462 - INFO - We entered into function: raw_integration
+2023-06-26 14:09:46,462 - INFO - We entered into function: raw_integration_azimuthal
+2023-06-26 14:09:46,462 - INFO - We entered into function: calculate_bins
+2023-06-26 14:09:46,462 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:46,462 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:46,462 - INFO - Trying azimuthal integration with: bins=764, p0_range=[10.0, 25.0], p1_range=[-20.0, 20.0], unit=q_nm^-1
+2023-06-26 14:09:46,657 - INFO - Integration performed.
+2023-06-26 14:09:46,657 - INFO - New integration: 1
+2023-06-26 14:09:47,707 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:47,707 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:09:47,707 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:09:47,707 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:47,708 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:09:47,708 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:47,714 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:09:47,754 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:09:47,756 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:09:47,758 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:09:47,759 - INFO - We entered into function: get_norm_key
+2023-06-26 14:09:47,759 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:09:47,760 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:47,760 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:09:47,760 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:09:47,760 - INFO - False
+2023-06-26 14:09:47,761 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:09:47,877 - INFO - (0.00013205655909734532, 0.0006571822552413583)
+2023-06-26 14:09:47,956 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:09:48,064 - INFO - Displayed data.
+2023-06-26 14:09:48,068 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:09:48,069 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:48,069 - INFO - Dictionaries of integration: []
+2023-06-26 14:09:48,069 - INFO - Dictionaries of integration: []
+2023-06-26 14:09:48,069 - INFO - We entered into function: raw_integration
+2023-06-26 14:09:48,069 - INFO - New integration: 0
+2023-06-26 14:09:50,214 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:50,214 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:09:50,214 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:09:50,214 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:50,216 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:09:50,216 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:50,223 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:09:50,261 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:09:50,261 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:09:50,261 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:09:50,262 - INFO - We entered into function: get_norm_key
+2023-06-26 14:09:50,262 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:09:50,262 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:50,262 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:09:50,264 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:09:50,264 - INFO - False
+2023-06-26 14:09:50,264 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:09:50,331 - INFO - (0.00013205655909734532, 0.0006571822552413583)
+2023-06-26 14:09:50,371 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:09:50,419 - INFO - Displayed data.
+2023-06-26 14:09:50,421 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:09:50,421 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:50,421 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-06-26 14:09:50,422 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 3.9], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-06-26 14:09:50,422 - INFO - We entered into function: raw_integration
+2023-06-26 14:09:50,422 - INFO - We entered into function: raw_integration_box
+2023-06-26 14:09:50,422 - INFO - We entered into function: calculate_bins
+2023-06-26 14:09:50,422 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:50,423 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:50,423 - INFO - We entered into function: get_q_nm
+2023-06-26 14:09:50,423 - INFO - We entered into function: get_q_nm
+2023-06-26 14:09:50,423 - INFO - We entered into function: get_q_nm
+2023-06-26 14:09:50,423 - INFO - We entered into function: get_q_nm
+2023-06-26 14:09:50,424 - INFO - Trying box integration with: process=opbox, npt=962, p0_range=[0.0, 20.0], p1_range=[3.1, 3.9], unit=q_nm^-1
+2023-06-26 14:09:51,641 - INFO - Integration performed.
+2023-06-26 14:09:51,642 - INFO - New integration: 1
+2023-06-26 14:09:52,907 - INFO - We entered into function: update_graphs
+2023-06-26 14:09:52,907 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:09:52,908 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:09:52,908 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:09:52,909 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:09:52,909 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:52,915 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:09:52,950 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:09:52,951 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:09:52,951 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:09:52,951 - INFO - We entered into function: get_norm_key
+2023-06-26 14:09:52,951 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:09:52,952 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:09:52,952 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:09:52,953 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:09:52,953 - INFO - False
+2023-06-26 14:09:52,953 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:09:53,012 - INFO - (0.00013205655909734532, 0.0006571822552413583)
+2023-06-26 14:09:53,049 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:09:53,050 - INFO - We entered into function: get_masked_integration_array
+2023-06-26 14:09:53,050 - INFO - Dictionary of integration to be masked: {'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 3.9], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}
+2023-06-26 14:09:53,050 - INFO - Parameters to mask the array. Shape: (2048, 2048), unit: q_nm^-1,                     oop_range: (0.0, 0.2), ip_range: (0.031, 0.039), q_scale: 100.
+2023-06-26 14:09:56,738 - INFO - The mask was completed.
+2023-06-26 14:09:56,843 - INFO - Displayed data.
+2023-06-26 14:09:56,847 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:09:56,847 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:09:56,848 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-06-26 14:09:56,850 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 3.9], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-06-26 14:09:56,850 - INFO - We entered into function: raw_integration
+2023-06-26 14:09:56,851 - INFO - We entered into function: raw_integration_box
+2023-06-26 14:09:56,851 - INFO - We entered into function: calculate_bins
+2023-06-26 14:09:56,851 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:56,851 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:09:56,852 - INFO - We entered into function: get_q_nm
+2023-06-26 14:09:56,852 - INFO - We entered into function: get_q_nm
+2023-06-26 14:09:56,852 - INFO - We entered into function: get_q_nm
+2023-06-26 14:09:56,852 - INFO - We entered into function: get_q_nm
+2023-06-26 14:09:56,852 - INFO - Trying box integration with: process=opbox, npt=962, p0_range=[0.0, 20.0], p1_range=[3.1, 3.9], unit=q_nm^-1
+2023-06-26 14:09:56,913 - INFO - Integration performed.
+2023-06-26 14:09:56,914 - INFO - New integration: 1
+2023-06-26 14:10:01,459 - INFO - We entered into function: update_graphs
+2023-06-26 14:10:01,460 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:10:01,460 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:01,460 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:01,461 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:01,461 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:01,468 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:01,506 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:10:01,506 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:10:01,506 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:10:01,507 - INFO - We entered into function: get_norm_key
+2023-06-26 14:10:01,507 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:01,508 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:01,508 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:10:01,508 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:10:01,509 - INFO - False
+2023-06-26 14:10:01,509 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:10:01,570 - INFO - (0.00013205655909734532, 0.0006571822552413583)
+2023-06-26 14:10:01,608 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:10:01,656 - INFO - Displayed data.
+2023-06-26 14:10:01,658 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:10:01,658 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:01,658 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-06-26 14:10:01,659 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 3.9], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-06-26 14:10:01,659 - INFO - We entered into function: raw_integration
+2023-06-26 14:10:01,659 - INFO - We entered into function: raw_integration_box
+2023-06-26 14:10:01,659 - INFO - We entered into function: calculate_bins
+2023-06-26 14:10:01,659 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:01,660 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:01,660 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:01,660 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:01,660 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:01,660 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:01,661 - INFO - Trying box integration with: process=opbox, npt=962, p0_range=[0.0, 20.0], p1_range=[3.1, 3.9], unit=q_nm^-1
+2023-06-26 14:10:01,695 - INFO - Integration performed.
+2023-06-26 14:10:01,696 - INFO - New integration: 1
+2023-06-26 14:10:07,579 - INFO - We entered into function: update_graphs
+2023-06-26 14:10:07,579 - INFO - New reference factor: 0.1
+2023-06-26 14:10:07,580 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:10:07,580 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:07,580 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:07,581 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:07,582 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:07,587 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:07,624 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:10:07,624 - INFO - We entered into function: get_acquisition_time
+2023-06-26 14:10:07,624 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:07,624 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:07,626 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:07,626 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:07,626 - INFO - Got acquistion time: 2.0
+2023-06-26 14:10:07,627 - INFO - Acquisition time of the sample is 2.0.
+2023-06-26 14:10:07,627 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:07,627 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:07,627 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:07,628 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:07,631 - INFO - Acquisition dataset of the reference folder is <HDF5 dataset "sec": shape (8,), type "<f8">.
+2023-06-26 14:10:07,633 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:07,633 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:07,634 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:07,634 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:07,640 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:07,754 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:10:07,756 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:10:07,756 - INFO - We entered into function: get_norm_key
+2023-06-26 14:10:07,756 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:07,757 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:07,757 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:10:07,758 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:10:07,758 - INFO - False
+2023-06-26 14:10:07,758 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:10:07,821 - INFO - (5.873456080432535e-05, 0.0003940653882339246)
+2023-06-26 14:10:07,861 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:10:07,921 - INFO - Displayed data.
+2023-06-26 14:10:07,923 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:10:07,923 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:07,923 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-06-26 14:10:07,924 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 3.9], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-06-26 14:10:07,924 - INFO - We entered into function: raw_integration
+2023-06-26 14:10:07,924 - INFO - We entered into function: raw_integration_box
+2023-06-26 14:10:07,924 - INFO - We entered into function: calculate_bins
+2023-06-26 14:10:07,924 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:07,924 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:07,924 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:07,926 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:07,926 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:07,926 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:07,926 - INFO - Trying box integration with: process=opbox, npt=962, p0_range=[0.0, 20.0], p1_range=[3.1, 3.9], unit=q_nm^-1
+2023-06-26 14:10:07,962 - INFO - Integration performed.
+2023-06-26 14:10:07,962 - INFO - New integration: 1
+2023-06-26 14:10:09,117 - INFO - We entered into function: update_graphs
+2023-06-26 14:10:09,117 - INFO - New reference factor: 0.15
+2023-06-26 14:10:09,117 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:10:09,117 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:09,118 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:09,119 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:09,119 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:09,125 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:09,156 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:10:09,157 - INFO - We entered into function: get_acquisition_time
+2023-06-26 14:10:09,157 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:09,157 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:09,157 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:09,158 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:09,159 - INFO - Got acquistion time: 2.0
+2023-06-26 14:10:09,159 - INFO - Acquisition time of the sample is 2.0.
+2023-06-26 14:10:09,159 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:09,159 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:09,159 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:09,160 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:09,160 - INFO - Acquisition dataset of the reference folder is <HDF5 dataset "sec": shape (8,), type "<f8">.
+2023-06-26 14:10:09,161 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:09,161 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:09,161 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:09,162 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:09,167 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:09,210 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:10:09,210 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:10:09,210 - INFO - We entered into function: get_norm_key
+2023-06-26 14:10:09,211 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:09,211 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:09,212 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:10:09,212 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:10:09,212 - INFO - False
+2023-06-26 14:10:09,213 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:10:09,290 - INFO - (2.2073561657815434e-05, 0.00031125586667632123)
+2023-06-26 14:10:09,339 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:10:09,388 - INFO - Displayed data.
+2023-06-26 14:10:09,390 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:10:09,390 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:09,391 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-06-26 14:10:09,392 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 3.9], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-06-26 14:10:09,392 - INFO - We entered into function: raw_integration
+2023-06-26 14:10:09,392 - INFO - We entered into function: raw_integration_box
+2023-06-26 14:10:09,393 - INFO - We entered into function: calculate_bins
+2023-06-26 14:10:09,393 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:09,393 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:09,393 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:09,393 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:09,394 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:09,394 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:09,394 - INFO - Trying box integration with: process=opbox, npt=962, p0_range=[0.0, 20.0], p1_range=[3.1, 3.9], unit=q_nm^-1
+2023-06-26 14:10:09,428 - INFO - Integration performed.
+2023-06-26 14:10:09,429 - INFO - New integration: 1
+2023-06-26 14:10:10,900 - INFO - We entered into function: update_graphs
+2023-06-26 14:10:10,900 - INFO - New reference factor: 0.16
+2023-06-26 14:10:10,901 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:10:10,901 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:10,901 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:10,902 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:10,903 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:10,909 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:10,939 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:10:10,939 - INFO - We entered into function: get_acquisition_time
+2023-06-26 14:10:10,940 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:10,940 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:10,940 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:10,941 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:10,941 - INFO - Got acquistion time: 2.0
+2023-06-26 14:10:10,941 - INFO - Acquisition time of the sample is 2.0.
+2023-06-26 14:10:10,942 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:10,942 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:10,942 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:10,943 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:10,943 - INFO - Acquisition dataset of the reference folder is <HDF5 dataset "sec": shape (8,), type "<f8">.
+2023-06-26 14:10:10,943 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:10,944 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:10,944 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:10,944 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:10,950 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:10,987 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:10:10,988 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:10:10,988 - INFO - We entered into function: get_norm_key
+2023-06-26 14:10:10,988 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:10,989 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:10,989 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:10:10,989 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:10:10,990 - INFO - False
+2023-06-26 14:10:10,990 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:10:11,050 - INFO - (1.4741361828513427e-05, 0.00030125334156408363)
+2023-06-26 14:10:11,092 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:10:11,139 - INFO - Displayed data.
+2023-06-26 14:10:11,140 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:10:11,141 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:11,141 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-06-26 14:10:11,141 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 3.9], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-06-26 14:10:11,141 - INFO - We entered into function: raw_integration
+2023-06-26 14:10:11,142 - INFO - We entered into function: raw_integration_box
+2023-06-26 14:10:11,142 - INFO - We entered into function: calculate_bins
+2023-06-26 14:10:11,142 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:11,142 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:11,142 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:11,142 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:11,142 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:11,143 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:11,143 - INFO - Trying box integration with: process=opbox, npt=962, p0_range=[0.0, 20.0], p1_range=[3.1, 3.9], unit=q_nm^-1
+2023-06-26 14:10:11,177 - INFO - Integration performed.
+2023-06-26 14:10:11,178 - INFO - New integration: 1
+2023-06-26 14:10:11,436 - INFO - We entered into function: update_graphs
+2023-06-26 14:10:11,437 - INFO - New reference factor: 0.17
+2023-06-26 14:10:11,437 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:10:11,437 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:11,437 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:11,438 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:11,438 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:11,443 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:11,473 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:10:11,473 - INFO - We entered into function: get_acquisition_time
+2023-06-26 14:10:11,474 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:11,474 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:11,474 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:11,475 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:11,475 - INFO - Got acquistion time: 2.0
+2023-06-26 14:10:11,476 - INFO - Acquisition time of the sample is 2.0.
+2023-06-26 14:10:11,476 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:11,476 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:11,476 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:11,477 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:11,477 - INFO - Acquisition dataset of the reference folder is <HDF5 dataset "sec": shape (8,), type "<f8">.
+2023-06-26 14:10:11,477 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:11,478 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:11,478 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:11,479 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:11,486 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:11,523 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:10:11,523 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:10:11,524 - INFO - We entered into function: get_norm_key
+2023-06-26 14:10:11,524 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:11,524 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:11,526 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:10:11,526 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:10:11,526 - INFO - False
+2023-06-26 14:10:11,526 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:10:11,586 - INFO - (7.409161999211423e-06, 0.00029369704230996124)
+2023-06-26 14:10:11,631 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:10:11,681 - INFO - Displayed data.
+2023-06-26 14:10:11,682 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:10:11,683 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:11,683 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-06-26 14:10:11,683 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 3.9], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-06-26 14:10:11,684 - INFO - We entered into function: raw_integration
+2023-06-26 14:10:11,684 - INFO - We entered into function: raw_integration_box
+2023-06-26 14:10:11,684 - INFO - We entered into function: calculate_bins
+2023-06-26 14:10:11,684 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:11,685 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:11,685 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:11,685 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:11,685 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:11,685 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:11,685 - INFO - Trying box integration with: process=opbox, npt=962, p0_range=[0.0, 20.0], p1_range=[3.1, 3.9], unit=q_nm^-1
+2023-06-26 14:10:11,719 - INFO - Integration performed.
+2023-06-26 14:10:11,719 - INFO - New integration: 1
+2023-06-26 14:10:19,101 - INFO - We entered into function: generate_q_map
+2023-06-26 14:10:19,107 - INFO - Data from the map. Shape: (2048, 2048)
+2023-06-26 14:10:19,107 - INFO - Unit of the map: q_nm^-1
+2023-06-26 14:10:19,107 - INFO - We entered into function: get_mesh_matrix
+2023-06-26 14:10:19,108 - INFO - We entered into function: get_detector_array
+2023-06-26 14:10:19,108 - INFO - Shape of the detector: (2048, 2048)
+2023-06-26 14:10:19,722 - INFO - Shape of the scat_z matrix: (2048, 2048)
+2023-06-26 14:10:19,722 - INFO - Shape of the scat_x matrix: (2048, 2048)
+2023-06-26 14:10:19,730 - INFO - Changing the scale of the matriz q units. Scale: 100
+2023-06-26 14:10:19,744 - INFO - The missing wedge was removed from the 2D map.
+2023-06-26 14:10:19,749 - INFO - We entered into function: get_title
+2023-06-26 14:10:19,749 - INFO - We entered into function: get_metadata_value
+2023-06-26 14:10:19,750 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:19,750 - INFO - Title for the generated map: ByteOrder=["b'LowByteFirst'"]; 
+2023-06-26 14:10:19,751 - INFO - We entered into function: get_map_limits
+2023-06-26 14:10:19,751 - INFO - X limits for the generated map: [-20, 20]
+2023-06-26 14:10:19,751 - INFO - Y limits for the generated map: [-20, 20]
+2023-06-26 14:10:19,751 - INFO - We entered into function: get_map_ticks
+2023-06-26 14:10:19,751 - INFO - X ticks for the generated map: ['-20', ' -10', ' 0', ' 10', ' 20']
+2023-06-26 14:10:19,751 - INFO - Y ticks for the generated map: ['-20', ' -10', ' 0', ' 10', ' 20']
+2023-06-26 14:10:29,125 - INFO - We entered into function: update_qz
+2023-06-26 14:10:29,126 - INFO - We entered into function: update_orientation
+2023-06-26 14:10:29,126 - INFO - qz parallel is True
+2023-06-26 14:10:29,126 - INFO - qr parallel is True
+2023-06-26 14:10:29,142 - INFO - The sample orientation (pygix) is set at 2
+2023-06-26 14:10:29,142 - INFO - We entered into function: update_graphs
+2023-06-26 14:10:29,143 - INFO - New reference factor: 0.17
+2023-06-26 14:10:29,143 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:10:29,143 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:29,143 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:29,144 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:29,145 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:29,153 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:29,262 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:10:29,263 - INFO - We entered into function: get_acquisition_time
+2023-06-26 14:10:29,263 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:29,263 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:29,263 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:29,264 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:29,265 - INFO - Got acquistion time: 2.0
+2023-06-26 14:10:29,265 - INFO - Acquisition time of the sample is 2.0.
+2023-06-26 14:10:29,265 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:29,265 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:29,265 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:29,266 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:29,266 - INFO - Acquisition dataset of the reference folder is <HDF5 dataset "sec": shape (8,), type "<f8">.
+2023-06-26 14:10:29,267 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:29,267 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:29,268 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:29,268 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:29,273 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:29,397 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:10:29,397 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:10:29,398 - INFO - We entered into function: get_norm_key
+2023-06-26 14:10:29,398 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:29,398 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:29,399 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:10:29,399 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:10:29,399 - INFO - False
+2023-06-26 14:10:29,400 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:10:29,460 - INFO - (7.409161999211423e-06, 0.00029369704230996124)
+2023-06-26 14:10:29,503 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:10:29,552 - INFO - Displayed data.
+2023-06-26 14:10:29,554 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:10:29,554 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:29,554 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-06-26 14:10:29,556 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 3.9], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-06-26 14:10:29,556 - INFO - We entered into function: raw_integration
+2023-06-26 14:10:29,557 - INFO - We entered into function: raw_integration_box
+2023-06-26 14:10:29,557 - INFO - We entered into function: calculate_bins
+2023-06-26 14:10:29,557 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:29,557 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:29,557 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:29,558 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:29,558 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:29,558 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:29,558 - INFO - Trying box integration with: process=opbox, npt=962, p0_range=[0.0, 20.0], p1_range=[3.1, 3.9], unit=q_nm^-1
+2023-06-26 14:10:31,978 - INFO - Integration performed.
+2023-06-26 14:10:31,978 - INFO - New integration: 1
+2023-06-26 14:10:34,468 - INFO - We entered into function: generate_q_map
+2023-06-26 14:10:34,475 - INFO - Data from the map. Shape: (2048, 2048)
+2023-06-26 14:10:34,475 - INFO - Unit of the map: q_nm^-1
+2023-06-26 14:10:34,475 - INFO - We entered into function: get_mesh_matrix
+2023-06-26 14:10:34,475 - INFO - We entered into function: get_detector_array
+2023-06-26 14:10:34,476 - INFO - Shape of the detector: (2048, 2048)
+2023-06-26 14:10:35,261 - INFO - Shape of the scat_z matrix: (2048, 2048)
+2023-06-26 14:10:35,262 - INFO - Shape of the scat_x matrix: (2048, 2048)
+2023-06-26 14:10:35,269 - INFO - Changing the scale of the matriz q units. Scale: 100
+2023-06-26 14:10:35,282 - INFO - The missing wedge was removed from the 2D map.
+2023-06-26 14:10:35,284 - INFO - We entered into function: get_title
+2023-06-26 14:10:35,284 - INFO - We entered into function: get_metadata_value
+2023-06-26 14:10:35,285 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:35,285 - INFO - Title for the generated map: ByteOrder=["b'LowByteFirst'"]; 
+2023-06-26 14:10:35,285 - INFO - We entered into function: get_map_limits
+2023-06-26 14:10:35,286 - INFO - X limits for the generated map: [-20, 20]
+2023-06-26 14:10:35,286 - INFO - Y limits for the generated map: [-20, 20]
+2023-06-26 14:10:35,286 - INFO - We entered into function: get_map_ticks
+2023-06-26 14:10:35,286 - INFO - X ticks for the generated map: ['-20', ' -10', ' 0', ' 10', ' 20']
+2023-06-26 14:10:35,287 - INFO - Y ticks for the generated map: ['-20', ' -10', ' 0', ' 10', ' 20']
+2023-06-26 14:10:41,468 - INFO - We entered into function: update_qz
+2023-06-26 14:10:41,469 - INFO - We entered into function: update_orientation
+2023-06-26 14:10:41,469 - INFO - qz parallel is False
+2023-06-26 14:10:41,469 - INFO - qr parallel is False
+2023-06-26 14:10:41,480 - INFO - The sample orientation (pygix) is set at 4
+2023-06-26 14:10:41,480 - INFO - We entered into function: update_graphs
+2023-06-26 14:10:41,481 - INFO - New reference factor: 0.17
+2023-06-26 14:10:41,481 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:10:41,481 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:41,481 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:41,482 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:41,483 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:41,490 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:41,609 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:10:41,610 - INFO - We entered into function: get_acquisition_time
+2023-06-26 14:10:41,610 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:41,610 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:41,610 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:41,611 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:41,612 - INFO - Got acquistion time: 2.0
+2023-06-26 14:10:41,612 - INFO - Acquisition time of the sample is 2.0.
+2023-06-26 14:10:41,612 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:41,612 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:41,612 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:41,613 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:41,613 - INFO - Acquisition dataset of the reference folder is <HDF5 dataset "sec": shape (8,), type "<f8">.
+2023-06-26 14:10:41,614 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:41,614 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:41,614 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:41,615 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:41,621 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:41,739 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:10:41,739 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:10:41,739 - INFO - We entered into function: get_norm_key
+2023-06-26 14:10:41,740 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:41,740 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:41,741 - INFO - Got norm factor: 1053670.0
+2023-06-26 14:10:41,741 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:10:41,741 - INFO - False
+2023-06-26 14:10:41,741 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:10:41,801 - INFO - (7.409161999211423e-06, 0.00029369704230996124)
+2023-06-26 14:10:41,846 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:10:41,893 - INFO - Displayed data.
+2023-06-26 14:10:41,896 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:10:41,896 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:41,896 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-06-26 14:10:41,897 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 3.9], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-06-26 14:10:41,897 - INFO - We entered into function: raw_integration
+2023-06-26 14:10:41,897 - INFO - We entered into function: raw_integration_box
+2023-06-26 14:10:41,897 - INFO - We entered into function: calculate_bins
+2023-06-26 14:10:41,897 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:41,897 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:41,898 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:41,898 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:41,898 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:41,898 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:41,899 - INFO - Trying box integration with: process=opbox, npt=962, p0_range=[0.0, 20.0], p1_range=[3.1, 3.9], unit=q_nm^-1
+2023-06-26 14:10:44,850 - INFO - Integration performed.
+2023-06-26 14:10:44,850 - INFO - New integration: 1
+2023-06-26 14:10:47,212 - INFO - We entered into function: update_clicked_filenames
+2023-06-26 14:10:47,212 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:10:47,214 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:10:47,216 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:10:47,218 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:10:47,219 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:10:47,220 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:10:47,222 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:10:47,224 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:10:47,225 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:10:47,227 - INFO - We entered into function: filename_fromrow
+2023-06-26 14:10:47,228 - INFO - New cache index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+2023-06-26 14:10:47,229 - INFO - New cache filenames: [WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00002_n2003_p000.edf'), WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00003_n2003_p001.edf'), WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00004_n2003_p002.edf'), WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00005_n2003_p003.edf'), WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00006_n2003_p004.edf'), WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00007_n2003_p005.edf'), WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00008_n2003_p006.edf'), WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00009_n2003_p007.edf'), WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00010_n2003_p008.edf'), WindowsPath('N:/Datos_sincrotrones/XMaS_Feb2023/restored_dataset/MARY6p2refined/Y6_p2_refined_r00011_n2003_p009.edf')]
+2023-06-26 14:10:47,229 - INFO - We entered into function: update_graphs
+2023-06-26 14:10:47,229 - INFO - New reference factor: 0.17
+2023-06-26 14:10:47,229 - INFO - We entered into function: get_Edf_data
+2023-06-26 14:10:47,230 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:47,230 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:47,230 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:47,231 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:47,236 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:47,251 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:47,251 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:47,252 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:47,252 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:47,258 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:47,352 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:47,352 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:47,353 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:47,353 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:47,359 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:47,451 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:47,452 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:47,452 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:47,453 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:47,458 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:47,548 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:47,549 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:47,549 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:47,550 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:47,556 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:47,704 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:47,704 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:47,705 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:47,705 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:47,711 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:47,803 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:47,803 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:47,804 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:47,804 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:47,810 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:47,902 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:47,902 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:47,903 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:47,903 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:47,909 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:48,000 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:48,001 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:48,001 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:48,002 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:48,008 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:48,100 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:48,100 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:48,101 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:48,102 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:48,107 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:48,301 - INFO - New data sample with shape: (2048, 2048)
+2023-06-26 14:10:48,301 - INFO - We entered into function: get_acquisition_time
+2023-06-26 14:10:48,301 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:48,302 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:48,302 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:48,302 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:48,303 - INFO - Got acquistion time: 2.0
+2023-06-26 14:10:48,303 - INFO - Acquisition time of the sample is 2.0.
+2023-06-26 14:10:48,303 - INFO - We entered into function: get_dataset_acquisition_time
+2023-06-26 14:10:48,303 - INFO - We entered into function: get_acquisition_key
+2023-06-26 14:10:48,304 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:48,304 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:48,305 - INFO - Acquisition dataset of the reference folder is <HDF5 dataset "sec": shape (8,), type "<f8">.
+2023-06-26 14:10:48,305 - INFO - We entered into function: get_Edf_instance
+2023-06-26 14:10:48,305 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:48,306 - INFO - We entered into function: get_active_ponifile
+2023-06-26 14:10:48,306 - INFO - Ponifile active: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:48,311 - INFO - Unable to parse N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni as JSON file, defaulting to PoniParser
+2023-06-26 14:10:48,353 - INFO - We entered into function: get_norm_factor
+2023-06-26 14:10:48,353 - INFO - We entered into function: get_dataset_norm_factor
+2023-06-26 14:10:48,353 - INFO - We entered into function: get_norm_key
+2023-06-26 14:10:48,353 - INFO - We entered into function: get_attrs_in_group
+2023-06-26 14:10:48,354 - INFO - We entered into function: get_metadata_dataset
+2023-06-26 14:10:48,355 - INFO - Got norm factor: 1053076.0
+2023-06-26 14:10:48,355 - INFO - We entered into function: update_2D_graph
+2023-06-26 14:10:48,355 - INFO - False
+2023-06-26 14:10:48,355 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-06-26 14:10:48,429 - INFO - (8.307096310822561e-06, 0.0002991866130499643)
+2023-06-26 14:10:48,476 - INFO - Filtered negative, nan and zero values.
+2023-06-26 14:10:48,530 - INFO - Displayed data.
+2023-06-26 14:10:48,532 - INFO - We entered into function: update_1D_graph
+2023-06-26 14:10:48,532 - INFO - Ponifile: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARLaB6\LaB6.poni
+2023-06-26 14:10:48,532 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-06-26 14:10:48,533 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 3.9], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-06-26 14:10:48,533 - INFO - We entered into function: raw_integration
+2023-06-26 14:10:48,533 - INFO - We entered into function: raw_integration_box
+2023-06-26 14:10:48,533 - INFO - We entered into function: calculate_bins
+2023-06-26 14:10:48,533 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:48,533 - INFO - We entered into function: q_to_twotheta
+2023-06-26 14:10:48,534 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:48,534 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:48,534 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:48,534 - INFO - We entered into function: get_q_nm
+2023-06-26 14:10:48,534 - INFO - Trying box integration with: process=opbox, npt=962, p0_range=[0.0, 20.0], p1_range=[3.1, 3.9], unit=q_nm^-1
+2023-06-26 14:10:48,574 - INFO - Integration performed.
+2023-06-26 14:10:48,574 - INFO - New integration: 1
+2023-06-26 14:10:48,579 - INFO - We entered into function: update_label_displayed
+2023-06-26 14:10:48,579 - INFO - We entered into function: get_filename_from_index
+2023-06-26 14:10:48,580 - INFO - New label: N:\Datos_sincrotrones\XMaS_Feb2023\restored_dataset\MARY6p2refined\Y6_p2_refined_r00011_n2003_p009_average.edf

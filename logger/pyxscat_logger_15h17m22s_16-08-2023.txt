@@ -1,0 +1,702 @@
+2023-08-16 15:17:22,403 - INFO - Logger was initialized.
+2023-08-16 15:17:23,849 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-16 15:17:23,850 - INFO - The data parameters were reinitialized.
+2023-08-16 15:17:23,850 - INFO - We entered into function: init_callbacks
+2023-08-16 15:17:23,852 - INFO - We entered into function: update_setup_info
+2023-08-16 15:17:23,853 - INFO - New setup dictionary was updated.
+2023-08-16 15:17:23,854 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-16 15:17:23,855 - INFO - We entered into function: update_lims_ticks
+2023-08-16 15:17:23,895 - INFO - We entered into function: update_combobox_h5
+2023-08-16 15:17:23,898 - INFO - We entered into function: read_h5_file
+2023-08-16 15:17:23,898 - INFO - We entered into function: update_h5
+2023-08-16 15:17:23,899 - INFO - The H5 could not be updated.
+2023-08-16 15:17:23,899 - INFO - We entered into function: update_widgets
+2023-08-16 15:17:23,899 - INFO - Nothing to be updated.
+2023-08-16 15:17:23,899 - INFO - We entered into function: update_setup_info
+2023-08-16 15:17:23,899 - INFO - New setup dictionary was updated.
+2023-08-16 15:17:23,900 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-16 15:17:23,900 - INFO - We entered into function: read_h5_file
+2023-08-16 15:17:23,900 - INFO - We entered into function: update_h5
+2023-08-16 15:17:23,901 - INFO - The H5 could not be updated.
+2023-08-16 15:17:23,901 - INFO - We entered into function: update_widgets
+2023-08-16 15:17:23,901 - INFO - Nothing to be updated.
+2023-08-16 15:17:23,901 - INFO - We entered into function: update_setup_info
+2023-08-16 15:17:23,902 - INFO - New setup dictionary was updated.
+2023-08-16 15:17:23,902 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-16 15:17:23,902 - INFO - We entered into function: update_combobox_setups
+2023-08-16 15:17:23,905 - INFO - We entered into function: update_setup_info
+2023-08-16 15:17:23,906 - INFO - New setup dictionary was updated.
+2023-08-16 15:17:23,906 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-16 15:17:23,906 - INFO - We entered into function: update_table
+2023-08-16 15:17:23,907 - INFO - Table was reseted.
+2023-08-16 15:17:23,907 - INFO - No folder to display. Return.
+2023-08-16 15:17:23,907 - INFO - We entered into function: update_table
+2023-08-16 15:17:23,907 - INFO - Table was reseted.
+2023-08-16 15:17:23,907 - INFO - No folder to display. Return.
+2023-08-16 15:17:23,907 - INFO - We entered into function: update_table
+2023-08-16 15:17:23,907 - INFO - Table was reseted.
+2023-08-16 15:17:23,908 - INFO - No folder to display. Return.
+2023-08-16 15:17:23,908 - INFO - We entered into function: update_integration_widgets
+2023-08-16 15:17:23,911 - INFO - We entered into function: update_graphs
+2023-08-16 15:17:28,136 - INFO - We entered into function: read_h5_file
+2023-08-16 15:17:28,136 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-16 15:17:28,136 - INFO - We entered into function: update_table
+2023-08-16 15:17:28,137 - INFO - Table was reseted.
+2023-08-16 15:17:28,137 - INFO - No folder to display. Return.
+2023-08-16 15:17:28,137 - INFO - The data parameters were reinitialized.
+2023-08-16 15:17:28,137 - INFO - H5Integrator instance was initialized
+2023-08-16 15:17:28,137 - INFO - The filename is E:\Datos_Sincrotrones\XMaS_May2023\MARCCD\MARCCD.h5.
+2023-08-16 15:17:28,138 - INFO - We entered into function: create_h5_file
+2023-08-16 15:17:28,138 - INFO - E:\Datos_Sincrotrones\XMaS_May2023\MARCCD\MARCCD.h5 already exists. Return.
+2023-08-16 15:17:28,142 - INFO - We entered into function: update_group_ponifile
+2023-08-16 15:17:28,142 - INFO - No ponifiles to be updated. Return.
+2023-08-16 15:17:28,143 - INFO - We entered into function: update_setup_keys
+2023-08-16 15:17:28,144 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-16 15:17:28,144 - INFO - We entered into function: update_attributes_in_group
+2023-08-16 15:17:28,144 - INFO - Updated iangle_key = spitch
+2023-08-16 15:17:28,145 - INFO - We entered into function: update_attributes_in_group
+2023-08-16 15:17:28,145 - INFO - Updated acq_key = exposure
+2023-08-16 15:17:28,145 - INFO - We entered into function: update_attributes_in_group
+2023-08-16 15:17:28,145 - INFO - Updated norm_key = Monitor
+2023-08-16 15:17:28,145 - INFO - We entered into function: update_attributes_in_group
+2023-08-16 15:17:28,146 - INFO - Updated tilt_key = 
+2023-08-16 15:17:28,146 - INFO - Inherited methods from pygix.transform
+2023-08-16 15:17:28,146 - INFO - We entered into function: update_transformQ
+2023-08-16 15:17:28,146 - INFO - We entered into function: get_active_ponifile
+2023-08-16 15:17:28,147 - INFO - Ponifile active: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6\lab6_2_dummy.poni
+2023-08-16 15:17:28,147 - INFO - We entered into function: get_active_ponifile
+2023-08-16 15:17:28,147 - INFO - Ponifile active: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6\lab6_2_dummy.poni
+2023-08-16 15:17:28,147 - INFO - Unable to parse D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6\lab6_2_dummy.poni as JSON file, defaulting to PoniParser
+2023-08-16 15:17:28,148 - INFO - We entered into function: update_orientation
+2023-08-16 15:17:28,148 - INFO - qz parallel is True
+2023-08-16 15:17:28,148 - INFO - qr parallel is True
+2023-08-16 15:17:28,148 - INFO - The sample orientation (pygix) is set at 1
+2023-08-16 15:17:28,148 - INFO - Got main directory: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD
+2023-08-16 15:17:28,149 - INFO - Imported .hdf5 file
+2023-08-16 15:17:28,149 - INFO - E:\Datos_Sincrotrones\XMaS_May2023\MARCCD\MARCCD.h5
+2023-08-16 15:17:28,149 - INFO - HDF5 container was created.
+2023-08-16 15:17:28,149 - INFO - We entered into function: update_h5
+2023-08-16 15:17:28,149 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-08-16 15:17:28,149 - INFO - We entered into function: search_and_update_ponifiles
+2023-08-16 15:17:28,150 - INFO - Got main directory: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD
+2023-08-16 15:17:28,150 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-16 15:17:28,150 - INFO - No ponifiles detected.
+2023-08-16 15:17:28,150 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-16 15:17:28,151 - INFO - We entered into function: activate_ponifile
+2023-08-16 15:17:28,151 - INFO - We entered into function: activate_ponifile
+2023-08-16 15:17:28,151 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-16 15:17:28,151 - INFO - Ponifile to be activated: b'D:\\Back-up TOSHIBA\\Datos_Sincrotrones\\XMaS_May2023\\MARCCD\\LaB6\\lab6_2_dummy.poni'
+2023-08-16 15:17:28,152 - INFO - Ponifile b'D:\\Back-up TOSHIBA\\Datos_Sincrotrones\\XMaS_May2023\\MARCCD\\LaB6\\lab6_2_dummy.poni' activated successfully.
+2023-08-16 15:17:28,152 - INFO - We entered into function: update_transformQ
+2023-08-16 15:17:28,152 - INFO - We entered into function: get_active_ponifile
+2023-08-16 15:17:28,152 - INFO - Ponifile active: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6\lab6_2_dummy.poni
+2023-08-16 15:17:28,153 - INFO - We entered into function: get_active_ponifile
+2023-08-16 15:17:28,153 - INFO - Ponifile active: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6\lab6_2_dummy.poni
+2023-08-16 15:17:28,153 - INFO - Unable to parse D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6\lab6_2_dummy.poni as JSON file, defaulting to PoniParser
+2023-08-16 15:17:28,153 - INFO - New ponifile updated.
+2023-08-16 15:17:28,153 - INFO - We entered into function: update_graphs
+2023-08-16 15:17:28,154 - INFO - Combobox of ponifiles was updated.
+2023-08-16 15:17:28,154 - INFO - We entered into function: search_and_update_new_files
+2023-08-16 15:17:28,154 - INFO - We entered into function: search_new_files_folders
+2023-08-16 15:17:28,154 - INFO - Got main directory: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD
+2023-08-16 15:17:28,154 - INFO - No main directory was detected.
+2023-08-16 15:17:28,155 - INFO - The H5 was updated. Not the Widgets yet.
+2023-08-16 15:17:28,155 - INFO - We entered into function: update_widgets
+2023-08-16 15:17:28,157 - INFO - Updated list widget.
+2023-08-16 15:17:28,157 - INFO - We entered into function: update_setup_info
+2023-08-16 15:17:28,158 - INFO - New setup dictionary was updated.
+2023-08-16 15:17:28,158 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-16 15:17:28,158 - INFO - We entered into function: update_table
+2023-08-16 15:17:28,159 - INFO - Table was reseted.
+2023-08-16 15:17:28,159 - INFO - No folder to display. Return.
+2023-08-16 15:17:28,159 - INFO - We entered into function: update_table
+2023-08-16 15:17:28,159 - INFO - Table was reseted.
+2023-08-16 15:17:28,159 - INFO - No folder to display. Return.
+2023-08-16 15:17:28,159 - INFO - We entered into function: update_table
+2023-08-16 15:17:28,159 - INFO - Table was reseted.
+2023-08-16 15:17:28,159 - INFO - No folder to display. Return.
+2023-08-16 15:17:31,710 - INFO - We entered into function: update_clicked_folder
+2023-08-16 15:17:31,711 - INFO - Clicked folder: PM6Y6_12_0CN_beamdamage
+2023-08-16 15:17:31,711 - INFO - We entered into function: contains_group
+2023-08-16 15:17:31,712 - INFO - New clicked folder: PM6Y6_12_0CN_beamdamage
+2023-08-16 15:17:31,712 - INFO - We entered into function: update_comboboxes_metadata
+2023-08-16 15:17:31,712 - INFO - We entered into function: generator_keys_in_folder
+2023-08-16 15:17:31,714 - INFO - Metadata keys: ['ByteOrder', 'Ce_fluo', 'Cr_fluo', 'DataType', 'Dim_1', 'Dim_2', 'Emot', 'Fe_fluo', 'HeaderID', 'Icnt', 'Image', 'Imon', 'Io', 'Ion', 'Iop', 'Iref', 'It', 'LCP1', 'Mn_fluo', 'Ni_fluo', 'Qref', 'Qx', 'Qz', 'R1', 'RCP1', 'Size', 'Temp', 'TempOH', 'U0', 'U1', 'U2', 'U3', 'U4', 'U5', 'UB0', 'UB1', 'UB2', 'UB3', 'UB4', 'UB5', 'UB6', 'UB7', 'UB8', 'VersionNumber', 'Vmon', 'amp1', 'apd', 'apdmon', 'arcx', 'arcy', 'attn', 'beam_x', 'beam_y', 'bigx', 'bigz', 'bpmio', 'bpmx', 'bpmz', 'bstopx', 'bstopz', 'bviewer', 'c100', 'cdet', 'ch1n', 'ch1p', 'chi', 'cmd', 'count_time', 'cryx', 'cryy', 'cryz', 'curind', 'dac1', 'date', 'dcoffs1', 'del', 'det', 'detector_distance', 'detsp', 'diff1', 'dsb', 'dsd', 'dsf', 'dshg', 'dsho', 'dsu', 'dsvg', 'dsvo', 'dummy', 'eLCP1', 'eR1', 'eRCP1', 'ediff1', 'ehsp1', 'ehsp2', 'ehsp4', 'ehsp5', 'ehsp6', 'eta', 'etap', 'euro', 'euro2', 'euro_T', 'euro_pv', 'euro_sp', 'euro_ts', 'euro_ws', 'file_comments', 'filter', 'filtio', 'fluo01', 'fluo02', 'fluo03', 'fluo04', 'fluo05', 'fluo06', 'fluo07', 'fluo08', 'fluo09', 'fluo10', 'fluo11', 'fluo12', 'fluo13', 'freq1', 'fwhmx', 'fwhmy', 'ge01', 'ge02', 'ge03', 'ge04', 'ge05', 'ge06', 'ge07', 'ge08', 'ge09', 'ge10', 'ge11', 'ge12', 'ge13', 'ge_fall', 'goniox', 'gonioy', 'h', 'hgt', 'hsb', 'hsd', 'hsf', 'hshg', 'hsho', 'hsu', 'hsvg', 'hsvo', 'ic0io', 'ic1io', 'inout', 'intens', 'iroi', 'iroi1', 'iroi2', 'iroiall', 'k', 'kepcoi', 'l', 'lcp_ret', 'lgb', 'lgb_enc', 'lgf', 'lgf_enc', 'lgm', 'lgm_enc', 'llth', 'm1d', 'm1hgt', 'm1m', 'm1th', 'm1tilt', 'm1u', 'm2d', 'm2hgt', 'm2m', 'm2th', 'm2tilt', 'm2u', 'magA', 'magAE', 'magB', 'magBE', 'magD', 'magDE', 'magR', 'magRE', 'magS', 'magSE', 'mca0', 'mca1', 'mca2', 'mccdR', 'mccdx', 'mccdz', 'mcrbd', 'mcrbu', 'mjack', 'mon', 'monitor', 'mono', 'mptbd', 'mptbu', 'mroll', 'mth', 'mtrans', 'mty', 'mtz', 'mu', 'myaw', 'nomon', 'nu', 'ohspare', 'omtz', 'p10', 'p11', 'p4', 'p6', 'p7', 'p8', 'phi', 'pico1', 'pico2', 'pilx', 'pilz', 'pm_enc', 'ppchi', 'ppio', 'ppth', 'pptth', 'ppx', 'ppz', 'quadio', 'quadx', 'quadz', 'rcp_ret', 's1b', 's1d', 's1f', 's1hg', 's1ho', 's1u', 's1vg', 's1vo', 's2b', 's2d', 's2f', 's2hg', 's2ho', 's2u', 's2vg', 's2vo', 's3b', 's3d', 's3f', 's3hg', 's3ho', 's3u', 's3vg', 's3vo', 's4b', 's4d', 's4f', 's4hg', 's4ho', 's4u', 's4vg', 's4vo', 'samsp', 'samx', 'samz', 'sbad132', 'sbad133', 'scan', 'sec', 'source_wavelength', 'srcur', 'standax', 'sum1', 'temp_A', 'temp_B', 'tha', 'thc2', 'thdiff', 'thorx', 'thorz', 'thp', 'time', 'trans', 'transmission', 'tsinb', 'tsind', 'tsinf', 'tsinhg', 'tsinho', 'tsinu', 'tsinvg', 'tsinvo', 'tsoutb', 'tsoutd', 'tsoutf', 'tsouthg', 'tsoutho', 'tsoutu', 'tsoutvg', 'tsoutvo', 'tsx', 'tsz', 'ttha', 'tthp', 'tthy1', 'tthy2', 'tubex', 'vtrans', 'win', 'x', 'xdiff', 'xdt', 'xdt00', 'xdt01', 'xdt02', 'xdt03', 'xicr', 'xicr00', 'xicr01', 'xicr02', 'xicr03', 'xlt', 'xlt00', 'xlt01', 'xlt02', 'xlt03', 'xocr', 'xocr00', 'xocr01', 'xocr02', 'xocr03', 'xtilt', 'y', 'ytilt', 'zdiff', 'zdown', 'zup']
+2023-08-16 15:17:31,715 - INFO - New metadata keys: ['ByteOrder', 'Ce_fluo', 'Cr_fluo', 'DataType', 'Dim_1', 'Dim_2', 'Emot', 'Fe_fluo', 'HeaderID', 'Icnt', 'Image', 'Imon', 'Io', 'Ion', 'Iop', 'Iref', 'It', 'LCP1', 'Mn_fluo', 'Ni_fluo', 'Qref', 'Qx', 'Qz', 'R1', 'RCP1', 'Size', 'Temp', 'TempOH', 'U0', 'U1', 'U2', 'U3', 'U4', 'U5', 'UB0', 'UB1', 'UB2', 'UB3', 'UB4', 'UB5', 'UB6', 'UB7', 'UB8', 'VersionNumber', 'Vmon', 'amp1', 'apd', 'apdmon', 'arcx', 'arcy', 'attn', 'beam_x', 'beam_y', 'bigx', 'bigz', 'bpmio', 'bpmx', 'bpmz', 'bstopx', 'bstopz', 'bviewer', 'c100', 'cdet', 'ch1n', 'ch1p', 'chi', 'cmd', 'count_time', 'cryx', 'cryy', 'cryz', 'curind', 'dac1', 'date', 'dcoffs1', 'del', 'det', 'detector_distance', 'detsp', 'diff1', 'dsb', 'dsd', 'dsf', 'dshg', 'dsho', 'dsu', 'dsvg', 'dsvo', 'dummy', 'eLCP1', 'eR1', 'eRCP1', 'ediff1', 'ehsp1', 'ehsp2', 'ehsp4', 'ehsp5', 'ehsp6', 'eta', 'etap', 'euro', 'euro2', 'euro_T', 'euro_pv', 'euro_sp', 'euro_ts', 'euro_ws', 'file_comments', 'filter', 'filtio', 'fluo01', 'fluo02', 'fluo03', 'fluo04', 'fluo05', 'fluo06', 'fluo07', 'fluo08', 'fluo09', 'fluo10', 'fluo11', 'fluo12', 'fluo13', 'freq1', 'fwhmx', 'fwhmy', 'ge01', 'ge02', 'ge03', 'ge04', 'ge05', 'ge06', 'ge07', 'ge08', 'ge09', 'ge10', 'ge11', 'ge12', 'ge13', 'ge_fall', 'goniox', 'gonioy', 'h', 'hgt', 'hsb', 'hsd', 'hsf', 'hshg', 'hsho', 'hsu', 'hsvg', 'hsvo', 'ic0io', 'ic1io', 'inout', 'intens', 'iroi', 'iroi1', 'iroi2', 'iroiall', 'k', 'kepcoi', 'l', 'lcp_ret', 'lgb', 'lgb_enc', 'lgf', 'lgf_enc', 'lgm', 'lgm_enc', 'llth', 'm1d', 'm1hgt', 'm1m', 'm1th', 'm1tilt', 'm1u', 'm2d', 'm2hgt', 'm2m', 'm2th', 'm2tilt', 'm2u', 'magA', 'magAE', 'magB', 'magBE', 'magD', 'magDE', 'magR', 'magRE', 'magS', 'magSE', 'mca0', 'mca1', 'mca2', 'mccdR', 'mccdx', 'mccdz', 'mcrbd', 'mcrbu', 'mjack', 'mon', 'monitor', 'mono', 'mptbd', 'mptbu', 'mroll', 'mth', 'mtrans', 'mty', 'mtz', 'mu', 'myaw', 'nomon', 'nu', 'ohspare', 'omtz', 'p10', 'p11', 'p4', 'p6', 'p7', 'p8', 'phi', 'pico1', 'pico2', 'pilx', 'pilz', 'pm_enc', 'ppchi', 'ppio', 'ppth', 'pptth', 'ppx', 'ppz', 'quadio', 'quadx', 'quadz', 'rcp_ret', 's1b', 's1d', 's1f', 's1hg', 's1ho', 's1u', 's1vg', 's1vo', 's2b', 's2d', 's2f', 's2hg', 's2ho', 's2u', 's2vg', 's2vo', 's3b', 's3d', 's3f', 's3hg', 's3ho', 's3u', 's3vg', 's3vo', 's4b', 's4d', 's4f', 's4hg', 's4ho', 's4u', 's4vg', 's4vo', 'samsp', 'samx', 'samz', 'sbad132', 'sbad133', 'scan', 'sec', 'source_wavelength', 'srcur', 'standax', 'sum1', 'temp_A', 'temp_B', 'tha', 'thc2', 'thdiff', 'thorx', 'thorz', 'thp', 'time', 'trans', 'transmission', 'tsinb', 'tsind', 'tsinf', 'tsinhg', 'tsinho', 'tsinu', 'tsinvg', 'tsinvo', 'tsoutb', 'tsoutd', 'tsoutf', 'tsouthg', 'tsoutho', 'tsoutu', 'tsoutvg', 'tsoutvo', 'tsx', 'tsz', 'ttha', 'tthp', 'tthy1', 'tthy2', 'tubex', 'vtrans', 'win', 'x', 'xdiff', 'xdt', 'xdt00', 'xdt01', 'xdt02', 'xdt03', 'xicr', 'xicr00', 'xicr01', 'xicr02', 'xicr03', 'xlt', 'xlt00', 'xlt01', 'xlt02', 'xlt03', 'xocr', 'xocr00', 'xocr01', 'xocr02', 'xocr03', 'xtilt', 'y', 'ytilt', 'zdiff', 'zdown', 'zup']
+2023-08-16 15:17:31,716 - INFO - We entered into function: update_table
+2023-08-16 15:17:31,716 - INFO - Table was reseted.
+2023-08-16 15:17:31,716 - INFO - Folder to display: PM6Y6_12_0CN_beamdamage.
+2023-08-16 15:17:31,716 - INFO - Keys to display: ['spitch', 'Monitor', 'exposure', 'ByteOrder'].
+2023-08-16 15:17:31,717 - INFO - We entered into function: get_metadata_dataframe
+2023-08-16 15:17:31,719 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,721 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,721 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,722 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,722 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,723 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,723 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,723 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,724 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,724 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,724 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,725 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,725 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,725 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,726 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,726 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,726 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,727 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,727 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,727 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,728 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,728 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,728 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,729 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,729 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,729 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,730 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,730 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,731 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,731 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,731 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,731 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,732 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,732 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,732 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,732 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,733 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,733 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,733 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,734 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,734 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,734 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,734 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,735 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,735 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,736 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,736 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,736 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,737 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,737 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,738 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,738 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,739 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,739 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,739 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,739 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,740 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,740 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,740 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,740 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,741 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,741 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,742 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,742 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,743 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,743 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,743 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,743 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,745 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,745 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,745 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,746 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,746 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,747 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,747 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,747 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,760 - INFO - This is the dataframe:                                          Filename spitch Monitor exposure        ByteOrder
+0   PM6Y6_12_0CN_beamdamage_r00000_n2178_p000.edf   None    None     None  b'LowByteFirst'
+1   PM6Y6_12_0CN_beamdamage_r00001_n2178_p001.edf   None    None     None  b'LowByteFirst'
+2   PM6Y6_12_0CN_beamdamage_r00002_n2184_p000.edf   None    None     None  b'LowByteFirst'
+3   PM6Y6_12_0CN_beamdamage_r00003_n2184_p001.edf   None    None     None  b'LowByteFirst'
+4   PM6Y6_12_0CN_beamdamage_r00004_n2195_p000.edf   None    None     None  b'LowByteFirst'
+5   PM6Y6_12_0CN_beamdamage_r00005_n2200_p000.edf   None    None     None  b'LowByteFirst'
+6   PM6Y6_12_0CN_beamdamage_r00006_n2200_p001.edf   None    None     None  b'LowByteFirst'
+7   PM6Y6_12_0CN_beamdamage_r00007_n2208_p000.edf   None    None     None  b'LowByteFirst'
+8   PM6Y6_12_0CN_beamdamage_r00008_n2208_p001.edf   None    None     None  b'LowByteFirst'
+9   PM6Y6_12_0CN_beamdamage_r00009_n2213_p000.edf   None    None     None  b'LowByteFirst'
+10  PM6Y6_12_0CN_beamdamage_r00010_n2213_p001.edf   None    None     None  b'LowByteFirst'
+11  PM6Y6_12_0CN_beamdamage_r00011_n2220_p000.edf   None    None     None  b'LowByteFirst'
+12  PM6Y6_12_0CN_beamdamage_r00012_n2220_p001.edf   None    None     None  b'LowByteFirst'
+13  PM6Y6_12_0CN_beamdamage_r00013_n2226_p000.edf   None    None     None  b'LowByteFirst'
+14  PM6Y6_12_0CN_beamdamage_r00014_n2226_p001.edf   None    None     None  b'LowByteFirst'
+15  PM6Y6_12_0CN_beamdamage_r00015_n2233_p000.edf   None    None     None  b'LowByteFirst'
+16  PM6Y6_12_0CN_beamdamage_r00016_n2233_p001.edf   None    None     None  b'LowByteFirst'
+17  PM6Y6_12_0CN_beamdamage_r00017_n2239_p000.edf   None    None     None  b'LowByteFirst'
+18  PM6Y6_12_0CN_beamdamage_r00018_n2239_p001.edf   None    None     None  b'LowByteFirst'
+2023-08-16 15:17:31,760 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-08-16 15:17:31,762 - INFO - Inserted columns: 5
+2023-08-16 15:17:31,763 - INFO - Inserted rows: 19
+2023-08-16 15:17:31,763 - INFO - Updated cell [0,0].
+2023-08-16 15:17:31,763 - INFO - Updated cell [0,1].
+2023-08-16 15:17:31,764 - INFO - Updated cell [0,2].
+2023-08-16 15:17:31,764 - INFO - Updated cell [0,3].
+2023-08-16 15:17:31,764 - INFO - Updated cell [0,4].
+2023-08-16 15:17:31,764 - INFO - Updated cell [1,0].
+2023-08-16 15:17:31,765 - INFO - Updated cell [1,1].
+2023-08-16 15:17:31,765 - INFO - Updated cell [1,2].
+2023-08-16 15:17:31,765 - INFO - Updated cell [1,3].
+2023-08-16 15:17:31,765 - INFO - Updated cell [1,4].
+2023-08-16 15:17:31,765 - INFO - Updated cell [2,0].
+2023-08-16 15:17:31,766 - INFO - Updated cell [2,1].
+2023-08-16 15:17:31,766 - INFO - Updated cell [2,2].
+2023-08-16 15:17:31,766 - INFO - Updated cell [2,3].
+2023-08-16 15:17:31,766 - INFO - Updated cell [2,4].
+2023-08-16 15:17:31,766 - INFO - Updated cell [3,0].
+2023-08-16 15:17:31,767 - INFO - Updated cell [3,1].
+2023-08-16 15:17:31,767 - INFO - Updated cell [3,2].
+2023-08-16 15:17:31,767 - INFO - Updated cell [3,3].
+2023-08-16 15:17:31,767 - INFO - Updated cell [3,4].
+2023-08-16 15:17:31,767 - INFO - Updated cell [4,0].
+2023-08-16 15:17:31,768 - INFO - Updated cell [4,1].
+2023-08-16 15:17:31,768 - INFO - Updated cell [4,2].
+2023-08-16 15:17:31,768 - INFO - Updated cell [4,3].
+2023-08-16 15:17:31,768 - INFO - Updated cell [4,4].
+2023-08-16 15:17:31,768 - INFO - Updated cell [5,0].
+2023-08-16 15:17:31,769 - INFO - Updated cell [5,1].
+2023-08-16 15:17:31,769 - INFO - Updated cell [5,2].
+2023-08-16 15:17:31,769 - INFO - Updated cell [5,3].
+2023-08-16 15:17:31,769 - INFO - Updated cell [5,4].
+2023-08-16 15:17:31,769 - INFO - Updated cell [6,0].
+2023-08-16 15:17:31,770 - INFO - Updated cell [6,1].
+2023-08-16 15:17:31,770 - INFO - Updated cell [6,2].
+2023-08-16 15:17:31,770 - INFO - Updated cell [6,3].
+2023-08-16 15:17:31,770 - INFO - Updated cell [6,4].
+2023-08-16 15:17:31,770 - INFO - Updated cell [7,0].
+2023-08-16 15:17:31,770 - INFO - Updated cell [7,1].
+2023-08-16 15:17:31,770 - INFO - Updated cell [7,2].
+2023-08-16 15:17:31,772 - INFO - Updated cell [7,3].
+2023-08-16 15:17:31,772 - INFO - Updated cell [7,4].
+2023-08-16 15:17:31,772 - INFO - Updated cell [8,0].
+2023-08-16 15:17:31,772 - INFO - Updated cell [8,1].
+2023-08-16 15:17:31,772 - INFO - Updated cell [8,2].
+2023-08-16 15:17:31,772 - INFO - Updated cell [8,3].
+2023-08-16 15:17:31,773 - INFO - Updated cell [8,4].
+2023-08-16 15:17:31,773 - INFO - Updated cell [9,0].
+2023-08-16 15:17:31,773 - INFO - Updated cell [9,1].
+2023-08-16 15:17:31,773 - INFO - Updated cell [9,2].
+2023-08-16 15:17:31,773 - INFO - Updated cell [9,3].
+2023-08-16 15:17:31,774 - INFO - Updated cell [9,4].
+2023-08-16 15:17:31,774 - INFO - Updated cell [10,0].
+2023-08-16 15:17:31,774 - INFO - Updated cell [10,1].
+2023-08-16 15:17:31,774 - INFO - Updated cell [10,2].
+2023-08-16 15:17:31,774 - INFO - Updated cell [10,3].
+2023-08-16 15:17:31,775 - INFO - Updated cell [10,4].
+2023-08-16 15:17:31,775 - INFO - Updated cell [11,0].
+2023-08-16 15:17:31,775 - INFO - Updated cell [11,1].
+2023-08-16 15:17:31,775 - INFO - Updated cell [11,2].
+2023-08-16 15:17:31,776 - INFO - Updated cell [11,3].
+2023-08-16 15:17:31,776 - INFO - Updated cell [11,4].
+2023-08-16 15:17:31,776 - INFO - Updated cell [12,0].
+2023-08-16 15:17:31,776 - INFO - Updated cell [12,1].
+2023-08-16 15:17:31,776 - INFO - Updated cell [12,2].
+2023-08-16 15:17:31,777 - INFO - Updated cell [12,3].
+2023-08-16 15:17:31,777 - INFO - Updated cell [12,4].
+2023-08-16 15:17:31,777 - INFO - Updated cell [13,0].
+2023-08-16 15:17:31,778 - INFO - Updated cell [13,1].
+2023-08-16 15:17:31,778 - INFO - Updated cell [13,2].
+2023-08-16 15:17:31,779 - INFO - Updated cell [13,3].
+2023-08-16 15:17:31,779 - INFO - Updated cell [13,4].
+2023-08-16 15:17:31,779 - INFO - Updated cell [14,0].
+2023-08-16 15:17:31,780 - INFO - Updated cell [14,1].
+2023-08-16 15:17:31,780 - INFO - Updated cell [14,2].
+2023-08-16 15:17:31,780 - INFO - Updated cell [14,3].
+2023-08-16 15:17:31,780 - INFO - Updated cell [14,4].
+2023-08-16 15:17:31,781 - INFO - Updated cell [15,0].
+2023-08-16 15:17:31,781 - INFO - Updated cell [15,1].
+2023-08-16 15:17:31,781 - INFO - Updated cell [15,2].
+2023-08-16 15:17:31,781 - INFO - Updated cell [15,3].
+2023-08-16 15:17:31,781 - INFO - Updated cell [15,4].
+2023-08-16 15:17:31,781 - INFO - Updated cell [16,0].
+2023-08-16 15:17:31,782 - INFO - Updated cell [16,1].
+2023-08-16 15:17:31,782 - INFO - Updated cell [16,2].
+2023-08-16 15:17:31,782 - INFO - Updated cell [16,3].
+2023-08-16 15:17:31,782 - INFO - Updated cell [16,4].
+2023-08-16 15:17:31,782 - INFO - Updated cell [17,0].
+2023-08-16 15:17:31,783 - INFO - Updated cell [17,1].
+2023-08-16 15:17:31,783 - INFO - Updated cell [17,2].
+2023-08-16 15:17:31,783 - INFO - Updated cell [17,3].
+2023-08-16 15:17:31,783 - INFO - Updated cell [17,4].
+2023-08-16 15:17:31,784 - INFO - Updated cell [18,0].
+2023-08-16 15:17:31,784 - INFO - Updated cell [18,1].
+2023-08-16 15:17:31,784 - INFO - Updated cell [18,2].
+2023-08-16 15:17:31,784 - INFO - Updated cell [18,3].
+2023-08-16 15:17:31,785 - INFO - Updated cell [18,4].
+2023-08-16 15:17:31,785 - INFO - Combobox header_items updated.
+2023-08-16 15:17:31,786 - INFO - Combobox header_items title updated.
+2023-08-16 15:17:31,787 - INFO - We entered into function: update_angle_parameter
+2023-08-16 15:17:31,787 - INFO - Combobox angle updated.
+2023-08-16 15:17:31,788 - INFO - We entered into function: update_tiltangle_parameter
+2023-08-16 15:17:31,789 - INFO - Combobox tilt angle updated.
+2023-08-16 15:17:31,789 - INFO - We entered into function: update_normfactor_parameter
+2023-08-16 15:17:31,790 - INFO - Combobox norm updated.
+2023-08-16 15:17:31,790 - INFO - We entered into function: update_exposure_parameter
+2023-08-16 15:17:31,791 - INFO - Combobox exposure updated.
+2023-08-16 15:17:31,791 - INFO - We entered into function: update_table
+2023-08-16 15:17:31,792 - INFO - Table was reseted.
+2023-08-16 15:17:31,792 - INFO - Folder to display: PM6Y6_12_0CN_beamdamage.
+2023-08-16 15:17:31,792 - INFO - Keys to display: ['spitch', 'Monitor', 'exposure', 'ByteOrder'].
+2023-08-16 15:17:31,792 - INFO - We entered into function: get_metadata_dataframe
+2023-08-16 15:17:31,793 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,793 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,793 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,793 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,794 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,794 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,794 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,795 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,795 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,795 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,796 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,796 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,796 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,797 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,797 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,797 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,798 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,798 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,798 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,798 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,799 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,799 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,799 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,799 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,800 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,800 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,800 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,800 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,801 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,801 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,801 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,801 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,802 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,802 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,802 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,802 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,803 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,803 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,803 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,803 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,803 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,804 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,804 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,804 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,804 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,805 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,805 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,805 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,805 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,805 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,806 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,806 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,806 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,806 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,807 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,807 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,807 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,807 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,808 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,808 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,808 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,808 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,809 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,809 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,809 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,809 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,810 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,810 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,810 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,810 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,811 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,811 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,811 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,811 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,812 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,812 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:31,818 - INFO - This is the dataframe:                                          Filename spitch Monitor exposure        ByteOrder
+0   PM6Y6_12_0CN_beamdamage_r00000_n2178_p000.edf   None    None     None  b'LowByteFirst'
+1   PM6Y6_12_0CN_beamdamage_r00001_n2178_p001.edf   None    None     None  b'LowByteFirst'
+2   PM6Y6_12_0CN_beamdamage_r00002_n2184_p000.edf   None    None     None  b'LowByteFirst'
+3   PM6Y6_12_0CN_beamdamage_r00003_n2184_p001.edf   None    None     None  b'LowByteFirst'
+4   PM6Y6_12_0CN_beamdamage_r00004_n2195_p000.edf   None    None     None  b'LowByteFirst'
+5   PM6Y6_12_0CN_beamdamage_r00005_n2200_p000.edf   None    None     None  b'LowByteFirst'
+6   PM6Y6_12_0CN_beamdamage_r00006_n2200_p001.edf   None    None     None  b'LowByteFirst'
+7   PM6Y6_12_0CN_beamdamage_r00007_n2208_p000.edf   None    None     None  b'LowByteFirst'
+8   PM6Y6_12_0CN_beamdamage_r00008_n2208_p001.edf   None    None     None  b'LowByteFirst'
+9   PM6Y6_12_0CN_beamdamage_r00009_n2213_p000.edf   None    None     None  b'LowByteFirst'
+10  PM6Y6_12_0CN_beamdamage_r00010_n2213_p001.edf   None    None     None  b'LowByteFirst'
+11  PM6Y6_12_0CN_beamdamage_r00011_n2220_p000.edf   None    None     None  b'LowByteFirst'
+12  PM6Y6_12_0CN_beamdamage_r00012_n2220_p001.edf   None    None     None  b'LowByteFirst'
+13  PM6Y6_12_0CN_beamdamage_r00013_n2226_p000.edf   None    None     None  b'LowByteFirst'
+14  PM6Y6_12_0CN_beamdamage_r00014_n2226_p001.edf   None    None     None  b'LowByteFirst'
+15  PM6Y6_12_0CN_beamdamage_r00015_n2233_p000.edf   None    None     None  b'LowByteFirst'
+16  PM6Y6_12_0CN_beamdamage_r00016_n2233_p001.edf   None    None     None  b'LowByteFirst'
+17  PM6Y6_12_0CN_beamdamage_r00017_n2239_p000.edf   None    None     None  b'LowByteFirst'
+18  PM6Y6_12_0CN_beamdamage_r00018_n2239_p001.edf   None    None     None  b'LowByteFirst'
+2023-08-16 15:17:31,818 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-08-16 15:17:31,819 - INFO - Inserted columns: 5
+2023-08-16 15:17:31,819 - INFO - Inserted rows: 19
+2023-08-16 15:17:31,819 - INFO - Updated cell [0,0].
+2023-08-16 15:17:31,820 - INFO - Updated cell [0,1].
+2023-08-16 15:17:31,820 - INFO - Updated cell [0,2].
+2023-08-16 15:17:31,820 - INFO - Updated cell [0,3].
+2023-08-16 15:17:31,820 - INFO - Updated cell [0,4].
+2023-08-16 15:17:31,820 - INFO - Updated cell [1,0].
+2023-08-16 15:17:31,820 - INFO - Updated cell [1,1].
+2023-08-16 15:17:31,821 - INFO - Updated cell [1,2].
+2023-08-16 15:17:31,821 - INFO - Updated cell [1,3].
+2023-08-16 15:17:31,821 - INFO - Updated cell [1,4].
+2023-08-16 15:17:31,821 - INFO - Updated cell [2,0].
+2023-08-16 15:17:31,821 - INFO - Updated cell [2,1].
+2023-08-16 15:17:31,821 - INFO - Updated cell [2,2].
+2023-08-16 15:17:31,821 - INFO - Updated cell [2,3].
+2023-08-16 15:17:31,821 - INFO - Updated cell [2,4].
+2023-08-16 15:17:31,822 - INFO - Updated cell [3,0].
+2023-08-16 15:17:31,822 - INFO - Updated cell [3,1].
+2023-08-16 15:17:31,822 - INFO - Updated cell [3,2].
+2023-08-16 15:17:31,822 - INFO - Updated cell [3,3].
+2023-08-16 15:17:31,822 - INFO - Updated cell [3,4].
+2023-08-16 15:17:31,822 - INFO - Updated cell [4,0].
+2023-08-16 15:17:31,822 - INFO - Updated cell [4,1].
+2023-08-16 15:17:31,822 - INFO - Updated cell [4,2].
+2023-08-16 15:17:31,822 - INFO - Updated cell [4,3].
+2023-08-16 15:17:31,822 - INFO - Updated cell [4,4].
+2023-08-16 15:17:31,822 - INFO - Updated cell [5,0].
+2023-08-16 15:17:31,822 - INFO - Updated cell [5,1].
+2023-08-16 15:17:31,824 - INFO - Updated cell [5,2].
+2023-08-16 15:17:31,824 - INFO - Updated cell [5,3].
+2023-08-16 15:17:31,824 - INFO - Updated cell [5,4].
+2023-08-16 15:17:31,824 - INFO - Updated cell [6,0].
+2023-08-16 15:17:31,824 - INFO - Updated cell [6,1].
+2023-08-16 15:17:31,824 - INFO - Updated cell [6,2].
+2023-08-16 15:17:31,824 - INFO - Updated cell [6,3].
+2023-08-16 15:17:31,825 - INFO - Updated cell [6,4].
+2023-08-16 15:17:31,825 - INFO - Updated cell [7,0].
+2023-08-16 15:17:31,825 - INFO - Updated cell [7,1].
+2023-08-16 15:17:31,825 - INFO - Updated cell [7,2].
+2023-08-16 15:17:31,825 - INFO - Updated cell [7,3].
+2023-08-16 15:17:31,825 - INFO - Updated cell [7,4].
+2023-08-16 15:17:31,825 - INFO - Updated cell [8,0].
+2023-08-16 15:17:31,826 - INFO - Updated cell [8,1].
+2023-08-16 15:17:31,826 - INFO - Updated cell [8,2].
+2023-08-16 15:17:31,826 - INFO - Updated cell [8,3].
+2023-08-16 15:17:31,826 - INFO - Updated cell [8,4].
+2023-08-16 15:17:31,826 - INFO - Updated cell [9,0].
+2023-08-16 15:17:31,826 - INFO - Updated cell [9,1].
+2023-08-16 15:17:31,826 - INFO - Updated cell [9,2].
+2023-08-16 15:17:31,826 - INFO - Updated cell [9,3].
+2023-08-16 15:17:31,827 - INFO - Updated cell [9,4].
+2023-08-16 15:17:31,827 - INFO - Updated cell [10,0].
+2023-08-16 15:17:31,827 - INFO - Updated cell [10,1].
+2023-08-16 15:17:31,827 - INFO - Updated cell [10,2].
+2023-08-16 15:17:31,827 - INFO - Updated cell [10,3].
+2023-08-16 15:17:31,827 - INFO - Updated cell [10,4].
+2023-08-16 15:17:31,827 - INFO - Updated cell [11,0].
+2023-08-16 15:17:31,827 - INFO - Updated cell [11,1].
+2023-08-16 15:17:31,828 - INFO - Updated cell [11,2].
+2023-08-16 15:17:31,828 - INFO - Updated cell [11,3].
+2023-08-16 15:17:31,828 - INFO - Updated cell [11,4].
+2023-08-16 15:17:31,828 - INFO - Updated cell [12,0].
+2023-08-16 15:17:31,828 - INFO - Updated cell [12,1].
+2023-08-16 15:17:31,828 - INFO - Updated cell [12,2].
+2023-08-16 15:17:31,828 - INFO - Updated cell [12,3].
+2023-08-16 15:17:31,828 - INFO - Updated cell [12,4].
+2023-08-16 15:17:31,828 - INFO - Updated cell [13,0].
+2023-08-16 15:17:31,829 - INFO - Updated cell [13,1].
+2023-08-16 15:17:31,829 - INFO - Updated cell [13,2].
+2023-08-16 15:17:31,829 - INFO - Updated cell [13,3].
+2023-08-16 15:17:31,829 - INFO - Updated cell [13,4].
+2023-08-16 15:17:31,829 - INFO - Updated cell [14,0].
+2023-08-16 15:17:31,829 - INFO - Updated cell [14,1].
+2023-08-16 15:17:31,829 - INFO - Updated cell [14,2].
+2023-08-16 15:17:31,829 - INFO - Updated cell [14,3].
+2023-08-16 15:17:31,830 - INFO - Updated cell [14,4].
+2023-08-16 15:17:31,830 - INFO - Updated cell [15,0].
+2023-08-16 15:17:31,830 - INFO - Updated cell [15,1].
+2023-08-16 15:17:31,830 - INFO - Updated cell [15,2].
+2023-08-16 15:17:31,830 - INFO - Updated cell [15,3].
+2023-08-16 15:17:31,830 - INFO - Updated cell [15,4].
+2023-08-16 15:17:31,830 - INFO - Updated cell [16,0].
+2023-08-16 15:17:31,830 - INFO - Updated cell [16,1].
+2023-08-16 15:17:31,830 - INFO - Updated cell [16,2].
+2023-08-16 15:17:31,831 - INFO - Updated cell [16,3].
+2023-08-16 15:17:31,831 - INFO - Updated cell [16,4].
+2023-08-16 15:17:31,831 - INFO - Updated cell [17,0].
+2023-08-16 15:17:31,831 - INFO - Updated cell [17,1].
+2023-08-16 15:17:31,831 - INFO - Updated cell [17,2].
+2023-08-16 15:17:31,831 - INFO - Updated cell [17,3].
+2023-08-16 15:17:31,831 - INFO - Updated cell [17,4].
+2023-08-16 15:17:31,831 - INFO - Updated cell [18,0].
+2023-08-16 15:17:31,832 - INFO - Updated cell [18,1].
+2023-08-16 15:17:31,832 - INFO - Updated cell [18,2].
+2023-08-16 15:17:31,832 - INFO - Updated cell [18,3].
+2023-08-16 15:17:31,832 - INFO - Updated cell [18,4].
+2023-08-16 15:17:32,870 - INFO - We entered into function: update_clicked_filenames
+2023-08-16 15:17:32,871 - INFO - We entered into function: filename_fromrow
+2023-08-16 15:17:32,871 - INFO - New cache index: [2]
+2023-08-16 15:17:32,871 - INFO - New cache filenames: [None]
+2023-08-16 15:17:32,871 - INFO - We entered into function: update_graphs
+2023-08-16 15:17:32,872 - INFO - We entered into function: get_Edf_data
+2023-08-16 15:17:32,872 - INFO - We entered into function: get_Edf_instance
+2023-08-16 15:17:32,872 - INFO - We entered into function: get_filename_from_index
+2023-08-16 15:17:32,873 - INFO - We entered into function: get_active_ponifile
+2023-08-16 15:17:32,873 - INFO - Ponifile active: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6\lab6_2_dummy.poni
+2023-08-16 15:17:32,873 - INFO - Data sample could not be uploaded.
+2023-08-16 15:17:32,874 - INFO - We entered into function: get_norm_factor
+2023-08-16 15:17:32,874 - INFO - We entered into function: get_dataset_norm_factor
+2023-08-16 15:17:32,875 - INFO - We entered into function: get_norm_key
+2023-08-16 15:17:32,875 - INFO - We entered into function: get_attrs_in_group
+2023-08-16 15:17:32,875 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:32,876 - INFO - Failed while getting norm factor.
+2023-08-16 15:17:32,876 - INFO - Got norm factor: 1.0
+2023-08-16 15:17:32,876 - INFO - We entered into function: update_2D_graph
+2023-08-16 15:17:32,877 - INFO - True
+2023-08-16 15:17:32,878 - INFO - Data extracted from cache. Data: <class 'NoneType'>
+2023-08-16 15:17:32,878 - INFO - Error during updating 2D graph
+2023-08-16 15:17:32,879 - INFO - We entered into function: update_1D_graph
+2023-08-16 15:17:32,879 - INFO - Ponifile: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6\lab6_2_dummy.poni
+2023-08-16 15:17:32,879 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-08-16 15:17:32,879 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 4.5], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-08-16 15:17:32,880 - INFO - We entered into function: raw_integration
+2023-08-16 15:17:32,880 - INFO - We entered into function: get_Edf_data
+2023-08-16 15:17:32,880 - INFO - Data sample could not be uploaded.
+2023-08-16 15:17:32,880 - INFO - We entered into function: get_norm_factor
+2023-08-16 15:17:32,880 - INFO - We entered into function: get_dataset_norm_factor
+2023-08-16 15:17:32,880 - INFO - We entered into function: get_norm_key
+2023-08-16 15:17:32,880 - INFO - We entered into function: get_attrs_in_group
+2023-08-16 15:17:32,881 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:32,881 - INFO - Failed while getting norm factor.
+2023-08-16 15:17:32,881 - INFO - Got norm factor: 1.0
+2023-08-16 15:17:32,881 - INFO - We entered into function: raw_integration_box
+2023-08-16 15:17:32,881 - INFO - New integration: 1
+2023-08-16 15:17:32,882 - INFO - We entered into function: update_label_displayed
+2023-08-16 15:17:32,882 - INFO - We entered into function: get_filename_from_index
+2023-08-16 15:17:32,882 - INFO - New label: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\PM6Y6_12_0CN_beamdamage\PM6Y6_12_0CN_beamdamage_r00002_n2184_p000.edf
+2023-08-16 15:17:48,718 - INFO - We entered into function: activate_ponifile
+2023-08-16 15:17:48,719 - INFO - We entered into function: activate_ponifile
+2023-08-16 15:17:48,719 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-16 15:17:48,720 - INFO - Ponifile to be activated: b'D:\\Back-up TOSHIBA\\Datos_Sincrotrones\\XMaS_May2023\\MARCCD\\LaB6_final_position\\lab6_3.poni'
+2023-08-16 15:17:48,722 - INFO - Ponifile b'D:\\Back-up TOSHIBA\\Datos_Sincrotrones\\XMaS_May2023\\MARCCD\\LaB6_final_position\\lab6_3.poni' activated successfully.
+2023-08-16 15:17:48,722 - INFO - We entered into function: update_transformQ
+2023-08-16 15:17:48,722 - INFO - We entered into function: get_active_ponifile
+2023-08-16 15:17:48,723 - INFO - Ponifile active: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6_final_position\lab6_3.poni
+2023-08-16 15:17:48,723 - INFO - We entered into function: get_active_ponifile
+2023-08-16 15:17:48,724 - INFO - Ponifile active: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6_final_position\lab6_3.poni
+2023-08-16 15:17:48,724 - INFO - Unable to parse D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6_final_position\lab6_3.poni as JSON file, defaulting to PoniParser
+2023-08-16 15:17:48,725 - INFO - New ponifile updated.
+2023-08-16 15:17:48,725 - INFO - We entered into function: update_graphs
+2023-08-16 15:17:48,725 - INFO - We entered into function: get_Edf_data
+2023-08-16 15:17:48,725 - INFO - We entered into function: get_Edf_instance
+2023-08-16 15:17:48,725 - INFO - We entered into function: get_filename_from_index
+2023-08-16 15:17:48,726 - INFO - We entered into function: get_active_ponifile
+2023-08-16 15:17:48,727 - INFO - Ponifile active: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6_final_position\lab6_3.poni
+2023-08-16 15:17:48,727 - INFO - Data sample could not be uploaded.
+2023-08-16 15:17:48,728 - INFO - We entered into function: get_norm_factor
+2023-08-16 15:17:48,728 - INFO - We entered into function: get_dataset_norm_factor
+2023-08-16 15:17:48,728 - INFO - We entered into function: get_norm_key
+2023-08-16 15:17:48,728 - INFO - We entered into function: get_attrs_in_group
+2023-08-16 15:17:48,729 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:48,730 - INFO - Failed while getting norm factor.
+2023-08-16 15:17:48,730 - INFO - Got norm factor: 1.0
+2023-08-16 15:17:48,730 - INFO - We entered into function: update_2D_graph
+2023-08-16 15:17:48,730 - INFO - False
+2023-08-16 15:17:48,730 - INFO - Data extracted from cache. Data: <class 'NoneType'>
+2023-08-16 15:17:48,731 - INFO - Error during updating 2D graph
+2023-08-16 15:17:48,731 - INFO - We entered into function: update_1D_graph
+2023-08-16 15:17:48,732 - INFO - Ponifile: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6_final_position\lab6_3.poni
+2023-08-16 15:17:48,732 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-08-16 15:17:48,733 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 4.5], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-08-16 15:17:48,733 - INFO - We entered into function: raw_integration
+2023-08-16 15:17:48,733 - INFO - We entered into function: get_Edf_data
+2023-08-16 15:17:48,733 - INFO - Data sample could not be uploaded.
+2023-08-16 15:17:48,733 - INFO - We entered into function: get_norm_factor
+2023-08-16 15:17:48,734 - INFO - We entered into function: get_dataset_norm_factor
+2023-08-16 15:17:48,734 - INFO - We entered into function: get_norm_key
+2023-08-16 15:17:48,734 - INFO - We entered into function: get_attrs_in_group
+2023-08-16 15:17:48,736 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:48,736 - INFO - Failed while getting norm factor.
+2023-08-16 15:17:48,736 - INFO - Got norm factor: 1.0
+2023-08-16 15:17:48,736 - INFO - We entered into function: raw_integration_box
+2023-08-16 15:17:48,736 - INFO - New integration: 1
+2023-08-16 15:17:50,256 - INFO - We entered into function: update_clicked_filenames
+2023-08-16 15:17:50,257 - INFO - We entered into function: filename_fromrow
+2023-08-16 15:17:50,258 - INFO - New cache index: [3]
+2023-08-16 15:17:50,259 - INFO - New cache filenames: [None]
+2023-08-16 15:17:50,260 - INFO - We entered into function: update_graphs
+2023-08-16 15:17:50,260 - INFO - We entered into function: get_Edf_data
+2023-08-16 15:17:50,261 - INFO - We entered into function: get_Edf_instance
+2023-08-16 15:17:50,262 - INFO - We entered into function: get_filename_from_index
+2023-08-16 15:17:50,264 - INFO - We entered into function: get_active_ponifile
+2023-08-16 15:17:50,266 - INFO - Ponifile active: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6_final_position\lab6_3.poni
+2023-08-16 15:17:50,267 - INFO - Data sample could not be uploaded.
+2023-08-16 15:17:50,267 - INFO - We entered into function: get_norm_factor
+2023-08-16 15:17:50,268 - INFO - We entered into function: get_dataset_norm_factor
+2023-08-16 15:17:50,269 - INFO - We entered into function: get_norm_key
+2023-08-16 15:17:50,269 - INFO - We entered into function: get_attrs_in_group
+2023-08-16 15:17:50,272 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:50,273 - INFO - Failed while getting norm factor.
+2023-08-16 15:17:50,274 - INFO - Got norm factor: 1.0
+2023-08-16 15:17:50,275 - INFO - We entered into function: update_2D_graph
+2023-08-16 15:17:50,276 - INFO - False
+2023-08-16 15:17:50,277 - INFO - Data extracted from cache. Data: <class 'NoneType'>
+2023-08-16 15:17:50,278 - INFO - Error during updating 2D graph
+2023-08-16 15:17:50,278 - INFO - We entered into function: update_1D_graph
+2023-08-16 15:17:50,278 - INFO - Ponifile: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6_final_position\lab6_3.poni
+2023-08-16 15:17:50,278 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-08-16 15:17:50,278 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 4.5], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-08-16 15:17:50,280 - INFO - We entered into function: raw_integration
+2023-08-16 15:17:50,280 - INFO - We entered into function: get_Edf_data
+2023-08-16 15:17:50,280 - INFO - Data sample could not be uploaded.
+2023-08-16 15:17:50,280 - INFO - We entered into function: get_norm_factor
+2023-08-16 15:17:50,280 - INFO - We entered into function: get_dataset_norm_factor
+2023-08-16 15:17:50,280 - INFO - We entered into function: get_norm_key
+2023-08-16 15:17:50,280 - INFO - We entered into function: get_attrs_in_group
+2023-08-16 15:17:50,281 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:50,281 - INFO - Failed while getting norm factor.
+2023-08-16 15:17:50,281 - INFO - Got norm factor: 1.0
+2023-08-16 15:17:50,281 - INFO - We entered into function: raw_integration_box
+2023-08-16 15:17:50,282 - INFO - New integration: 1
+2023-08-16 15:17:50,282 - INFO - We entered into function: update_label_displayed
+2023-08-16 15:17:50,282 - INFO - We entered into function: get_filename_from_index
+2023-08-16 15:17:50,283 - INFO - New label: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\PM6Y6_12_0CN_beamdamage\PM6Y6_12_0CN_beamdamage_r00003_n2184_p001.edf
+2023-08-16 15:17:51,022 - INFO - We entered into function: update_clicked_filenames
+2023-08-16 15:17:51,023 - INFO - We entered into function: filename_fromrow
+2023-08-16 15:17:51,024 - INFO - New cache index: [2]
+2023-08-16 15:17:51,026 - INFO - New cache filenames: [None]
+2023-08-16 15:17:51,026 - INFO - We entered into function: update_graphs
+2023-08-16 15:17:51,026 - INFO - We entered into function: get_Edf_data
+2023-08-16 15:17:51,028 - INFO - We entered into function: get_Edf_instance
+2023-08-16 15:17:51,029 - INFO - We entered into function: get_filename_from_index
+2023-08-16 15:17:51,030 - INFO - We entered into function: get_active_ponifile
+2023-08-16 15:17:51,032 - INFO - Ponifile active: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6_final_position\lab6_3.poni
+2023-08-16 15:17:51,033 - INFO - Data sample could not be uploaded.
+2023-08-16 15:17:51,034 - INFO - We entered into function: get_norm_factor
+2023-08-16 15:17:51,035 - INFO - We entered into function: get_dataset_norm_factor
+2023-08-16 15:17:51,035 - INFO - We entered into function: get_norm_key
+2023-08-16 15:17:51,036 - INFO - We entered into function: get_attrs_in_group
+2023-08-16 15:17:51,039 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:51,040 - INFO - Failed while getting norm factor.
+2023-08-16 15:17:51,040 - INFO - Got norm factor: 1.0
+2023-08-16 15:17:51,041 - INFO - We entered into function: update_2D_graph
+2023-08-16 15:17:51,041 - INFO - False
+2023-08-16 15:17:51,042 - INFO - Data extracted from cache. Data: <class 'NoneType'>
+2023-08-16 15:17:51,043 - INFO - Error during updating 2D graph
+2023-08-16 15:17:51,043 - INFO - We entered into function: update_1D_graph
+2023-08-16 15:17:51,044 - INFO - Ponifile: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\LaB6_final_position\lab6_3.poni
+2023-08-16 15:17:51,044 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-08-16 15:17:51,045 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 4.5], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-08-16 15:17:51,046 - INFO - We entered into function: raw_integration
+2023-08-16 15:17:51,046 - INFO - We entered into function: get_Edf_data
+2023-08-16 15:17:51,046 - INFO - Data sample could not be uploaded.
+2023-08-16 15:17:51,047 - INFO - We entered into function: get_norm_factor
+2023-08-16 15:17:51,047 - INFO - We entered into function: get_dataset_norm_factor
+2023-08-16 15:17:51,048 - INFO - We entered into function: get_norm_key
+2023-08-16 15:17:51,049 - INFO - We entered into function: get_attrs_in_group
+2023-08-16 15:17:51,050 - INFO - We entered into function: get_metadata_dataset
+2023-08-16 15:17:51,050 - INFO - Failed while getting norm factor.
+2023-08-16 15:17:51,050 - INFO - Got norm factor: 1.0
+2023-08-16 15:17:51,051 - INFO - We entered into function: raw_integration_box
+2023-08-16 15:17:51,051 - INFO - New integration: 1
+2023-08-16 15:17:51,051 - INFO - We entered into function: update_label_displayed
+2023-08-16 15:17:51,051 - INFO - We entered into function: get_filename_from_index
+2023-08-16 15:17:51,052 - INFO - New label: D:\Back-up TOSHIBA\Datos_Sincrotrones\XMaS_May2023\MARCCD\PM6Y6_12_0CN_beamdamage\PM6Y6_12_0CN_beamdamage_r00002_n2184_p000.edf

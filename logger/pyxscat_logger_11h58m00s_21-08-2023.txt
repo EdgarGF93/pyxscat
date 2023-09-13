@@ -1,0 +1,1858 @@
+2023-08-21 11:58:00,709 - INFO - Logger was initialized.
+2023-08-21 11:58:02,041 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:58:02,042 - INFO - The data parameters were reinitialized.
+2023-08-21 11:58:02,042 - INFO - We entered into function: init_callbacks
+2023-08-21 11:58:02,043 - INFO - We entered into function: update_setup_info
+2023-08-21 11:58:02,043 - INFO - New setup dictionary was updated.
+2023-08-21 11:58:02,043 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-21 11:58:02,044 - INFO - We entered into function: update_lims_ticks
+2023-08-21 11:58:02,059 - INFO - We entered into function: update_combobox_h5
+2023-08-21 11:58:02,060 - INFO - No .h5 files detected.
+2023-08-21 11:58:02,060 - INFO - We entered into function: update_combobox_setups
+2023-08-21 11:58:02,061 - INFO - We entered into function: update_setup_info
+2023-08-21 11:58:02,062 - INFO - New setup dictionary was updated.
+2023-08-21 11:58:02,062 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:02,063 - INFO - We entered into function: update_table
+2023-08-21 11:58:02,063 - INFO - Table was reseted.
+2023-08-21 11:58:02,063 - INFO - No folder to display. Return.
+2023-08-21 11:58:02,063 - INFO - We entered into function: update_table
+2023-08-21 11:58:02,063 - INFO - Table was reseted.
+2023-08-21 11:58:02,063 - INFO - No folder to display. Return.
+2023-08-21 11:58:02,063 - INFO - We entered into function: update_table
+2023-08-21 11:58:02,064 - INFO - Table was reseted.
+2023-08-21 11:58:02,064 - INFO - No folder to display. Return.
+2023-08-21 11:58:02,064 - INFO - We entered into function: update_integration_widgets
+2023-08-21 11:58:02,067 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:02,956 - INFO - We entered into function: create_h5_file
+2023-08-21 11:58:02,956 - INFO - We entered into function: pick_main_directory
+2023-08-21 11:58:06,115 - INFO - We entered into function: create_h5_filename
+2023-08-21 11:58:07,480 - INFO - H5Integrator instance was initialized
+2023-08-21 11:58:07,480 - INFO - The filename is C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5.
+2023-08-21 11:58:07,481 - INFO - We entered into function: create_h5_file
+2023-08-21 11:58:07,481 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5 is going to be created.
+2023-08-21 11:58:07,481 - INFO - The file was created 
+2023-08-21 11:58:07,481 - INFO - Attributes for h5: dict_items([('main_directory', 'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD'), ('description', 'HDF5 file with Scattering methods.'), ('comment', ''), ('beamline', 'BM28-XMaS')])
+2023-08-21 11:58:07,483 - INFO - New attribute. Datetime : 11h58m07s_21-08-2023
+2023-08-21 11:58:07,483 - INFO - New attribute. main_directory : C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:58:07,483 - INFO - New attribute. description : HDF5 file with Scattering methods.
+2023-08-21 11:58:07,483 - INFO - New attribute. comment : 
+2023-08-21 11:58:07,483 - INFO - New attribute. beamline : BM28-XMaS
+2023-08-21 11:58:07,485 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:58:07,486 - INFO - Ponifile dataset was created.
+2023-08-21 11:58:07,487 - INFO - Active_ponifile dataset was created.
+2023-08-21 11:58:07,487 - INFO - No ponifiles to be updated. Return.
+2023-08-21 11:58:07,487 - INFO - We entered into function: update_setup_keys
+2023-08-21 11:58:07,487 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:07,488 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:07,488 - INFO - Updated iangle_key = spitch
+2023-08-21 11:58:07,488 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:07,488 - INFO - Updated acq_key = exposure
+2023-08-21 11:58:07,489 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:07,489 - INFO - Updated norm_key = Monitor
+2023-08-21 11:58:07,489 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:07,489 - INFO - Updated tilt_key = 
+2023-08-21 11:58:07,489 - INFO - Inherited methods from pygix.transform
+2023-08-21 11:58:07,489 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:07,490 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:07,490 - INFO - Ponifile active: 
+2023-08-21 11:58:07,490 - INFO - We entered into function: update_orientation
+2023-08-21 11:58:07,490 - INFO - qz parallel is True
+2023-08-21 11:58:07,490 - INFO - qr parallel is True
+2023-08-21 11:58:07,491 - INFO - The sample orientation (pygix) is set at 1
+2023-08-21 11:58:07,491 - INFO - New .h5 file was created successfully.
+2023-08-21 11:58:07,491 - INFO - sPonifile: . Keys_metadata: defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'}). qz:True, qr:True
+2023-08-21 11:58:07,491 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:58:07,491 - INFO - We entered into function: update_table
+2023-08-21 11:58:07,492 - INFO - Table was reseted.
+2023-08-21 11:58:07,492 - INFO - No folder to display. Return.
+2023-08-21 11:58:07,492 - INFO - The data parameters were reinitialized.
+2023-08-21 11:58:07,492 - INFO - We entered into function: append_h5file
+2023-08-21 11:58:07,492 - INFO - New .h5 file to append C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5
+2023-08-21 11:58:07,492 - INFO - Current list of .h5 files.
+2023-08-21 11:58:07,492 - INFO - We entered into function: set_h5_instance
+2023-08-21 11:58:07,493 - INFO - H5Integrator instance was initialized
+2023-08-21 11:58:07,493 - INFO - The filename is C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5.
+2023-08-21 11:58:07,493 - INFO - We entered into function: create_h5_file
+2023-08-21 11:58:07,493 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5 already exists. Return.
+2023-08-21 11:58:07,493 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:58:07,494 - INFO - No ponifiles to be updated. Return.
+2023-08-21 11:58:07,494 - INFO - We entered into function: update_setup_keys
+2023-08-21 11:58:07,494 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:07,494 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:07,495 - INFO - Updated iangle_key = spitch
+2023-08-21 11:58:07,495 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:07,495 - INFO - Updated acq_key = exposure
+2023-08-21 11:58:07,495 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:07,495 - INFO - Updated norm_key = Monitor
+2023-08-21 11:58:07,496 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:07,496 - INFO - Updated tilt_key = 
+2023-08-21 11:58:07,496 - INFO - Inherited methods from pygix.transform
+2023-08-21 11:58:07,496 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:07,496 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:07,497 - INFO - Ponifile active: 
+2023-08-21 11:58:07,497 - INFO - We entered into function: update_orientation
+2023-08-21 11:58:07,497 - INFO - qz parallel is True
+2023-08-21 11:58:07,497 - INFO - qr parallel is True
+2023-08-21 11:58:07,497 - INFO - The sample orientation (pygix) is set at 1
+2023-08-21 11:58:07,497 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:58:07,498 - INFO - The data parameters were reinitialized.
+2023-08-21 11:58:07,498 - INFO - We entered into function: set_main_directory
+2023-08-21 11:58:07,498 - INFO - New main directory set.
+2023-08-21 11:58:07,498 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:58:07,498 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-21 11:58:07,498 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-08-21 11:58:07,498 - INFO - We entered into function: search_and_update_ponifiles
+2023-08-21 11:58:07,499 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:58:07,500 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:07,500 - INFO - New ponifiles detected.
+2023-08-21 11:58:07,500 - INFO - ['C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni']
+2023-08-21 11:58:07,500 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:58:07,500 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:07,501 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni' was appended to dataset.
+2023-08-21 11:58:07,501 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:07,502 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:07,502 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:07,502 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:07,502 - INFO - Ponifile to be activated: b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni'
+2023-08-21 11:58:07,502 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni' activated successfully.
+2023-08-21 11:58:07,504 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:07,504 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:07,504 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-08-21 11:58:07,504 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:07,504 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-08-21 11:58:07,505 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:07,505 - INFO - Loaded poni file
+2023-08-21 11:58:07,505 - INFO - Incident angle set at 0.0
+2023-08-21 11:58:07,506 - INFO - Tilt angle set at 0.0
+2023-08-21 11:58:07,506 - INFO - New ponifile updated.
+2023-08-21 11:58:07,506 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:07,506 - INFO - Combobox of ponifiles was updated.
+2023-08-21 11:58:07,506 - INFO - We entered into function: search_and_update_new_files
+2023-08-21 11:58:07,507 - INFO - We entered into function: search_new_files_folders
+2023-08-21 11:58:07,507 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:58:07,508 - INFO - 7 New files were detected.
+2023-08-21 11:58:07,509 - INFO - We entered into function: update_new_files
+2023-08-21 11:58:07,509 - INFO - Got dictionary of folders and files
+2023-08-21 11:58:07,509 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:58:07,509 - INFO - We entered into function: update_folder_from_files
+2023-08-21 11:58:07,510 - INFO - We entered into function: h5_new_folder
+2023-08-21 11:58:07,510 - INFO - The folder A1 was successfully created.
+2023-08-21 11:58:07,510 - INFO - We entered into function: get_merged_data_and_metadata
+2023-08-21 11:58:07,511 - INFO - We entered into function: generator_fabio_data_header
+2023-08-21 11:58:07,515 - INFO - Data dataset in A1 group created.
+2023-08-21 11:58:07,515 - INFO - Added in A1-Data shape: (4, 1, 1)
+2023-08-21 11:58:07,515 - INFO - Metadata group in A1 group created.
+2023-08-21 11:58:07,516 - INFO - Dataset could not be created with the standard format for the key HeaderID, value ['EH:000001:000000:000000' 'EH:000001:000000:000000'
+ 'EH:000001:000000:000000' 'EH:000001:000000:000000'].
+2023-08-21 11:58:07,516 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,516 - INFO - Dataset HeaderID in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,517 - INFO - Dataset could not be created with the standard format for the key ByteOrder, value ['LowByteFirst' 'LowByteFirst' 'LowByteFirst' 'LowByteFirst'].
+2023-08-21 11:58:07,517 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,518 - INFO - Dataset ByteOrder in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,518 - INFO - Dataset could not be created with the standard format for the key DataType, value ['UnsignedShort' 'UnsignedShort' 'UnsignedShort' 'UnsignedShort'].
+2023-08-21 11:58:07,519 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,520 - INFO - Dataset DataType in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,521 - INFO - Dataset Size in A1-Metadata was created.
+2023-08-21 11:58:07,521 - INFO - Dataset Dim_1 in A1-Metadata was created.
+2023-08-21 11:58:07,522 - INFO - Dataset Dim_2 in A1-Metadata was created.
+2023-08-21 11:58:07,523 - INFO - Dataset Image in A1-Metadata was created.
+2023-08-21 11:58:07,523 - INFO - Dataset acq_frame_nb in A1-Metadata was created.
+2023-08-21 11:58:07,524 - INFO - Dataset could not be created with the standard format for the key time, value ['Wed Sep  9 21:12:13 2020' 'Wed Sep  9 21:12:26 2020'
+ 'Wed Sep  9 21:12:00 2020' 'Wed Sep  9 21:12:39 2020'].
+2023-08-21 11:58:07,525 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,525 - INFO - Dataset time in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,526 - INFO - Dataset time_of_day in A1-Metadata was created.
+2023-08-21 11:58:07,526 - INFO - Dataset time_of_frame in A1-Metadata was created.
+2023-08-21 11:58:07,527 - INFO - Dataset could not be created with the standard format for the key Rotation 90 deg, value ['take : 0.013824s' 'take : 0.013509s' 'take : 0.01513s'
+ 'take : 0.014911s'].
+2023-08-21 11:58:07,527 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,527 - INFO - Dataset Rotation 90 deg in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,528 - INFO - Dataset Monitor in A1-Metadata was created.
+2023-08-21 11:58:07,528 - INFO - Dataset Photo in A1-Metadata was created.
+2023-08-21 11:58:07,528 - INFO - Dataset could not be created with the standard format for the key Rayonix, value ['/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Edgar/A1/rayonix_A1_spitch_0.12_000_0000.edf'
+ '/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Edgar/A1/rayonix_A1_spitch_0.15_000_0000.edf'
+ '/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Edgar/A1/rayonix_A1_spitch_0.1_000_0000.edf'
+ '/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Edgar/A1/rayonix_A1_spitch_0.2_000_0000.edf'].
+2023-08-21 11:58:07,529 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,529 - INFO - Dataset Rayonix in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,530 - INFO - Dataset could not be created with the standard format for the key acq_autoexpo_mode, value ['OFF' 'OFF' 'OFF' 'OFF'].
+2023-08-21 11:58:07,530 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,530 - INFO - Dataset acq_autoexpo_mode in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,531 - INFO - Dataset acq_expo_time in A1-Metadata was created.
+2023-08-21 11:58:07,531 - INFO - Dataset acq_latency_time in A1-Metadata was created.
+2023-08-21 11:58:07,531 - INFO - Dataset could not be created with the standard format for the key acq_mode, value ['Single' 'Single' 'Single' 'Single'].
+2023-08-21 11:58:07,532 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,532 - INFO - Dataset acq_mode in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,532 - INFO - Dataset acq_nb_frames in A1-Metadata was created.
+2023-08-21 11:58:07,533 - INFO - Dataset could not be created with the standard format for the key acq_trigger_mode, value ['ExtGate' 'ExtGate' 'ExtGate' 'ExtGate'].
+2023-08-21 11:58:07,533 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,533 - INFO - Dataset acq_trigger_mode in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,534 - INFO - Dataset att1 in A1-Metadata was created.
+2023-08-21 11:58:07,534 - INFO - Dataset att2 in A1-Metadata was created.
+2023-08-21 11:58:07,534 - INFO - Dataset auxstage in A1-Metadata was created.
+2023-08-21 11:58:07,535 - INFO - Dataset bs0x in A1-Metadata was created.
+2023-08-21 11:58:07,535 - INFO - Dataset bs1_alpha in A1-Metadata was created.
+2023-08-21 11:58:07,535 - INFO - Dataset could not be created with the standard format for the key bs1_beta, value ['None' 'None' 'None' 'None'].
+2023-08-21 11:58:07,536 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,536 - INFO - Dataset bs1_beta in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,536 - INFO - Dataset bs2x in A1-Metadata was created.
+2023-08-21 11:58:07,537 - INFO - Dataset bs2z in A1-Metadata was created.
+2023-08-21 11:58:07,537 - INFO - Dataset current in A1-Metadata was created.
+2023-08-21 11:58:07,538 - INFO - Dataset det_x in A1-Metadata was created.
+2023-08-21 11:58:07,538 - INFO - Dataset det_z in A1-Metadata was created.
+2023-08-21 11:58:07,538 - INFO - Dataset energy_bragg in A1-Metadata was created.
+2023-08-21 11:58:07,539 - INFO - Dataset exposure in A1-Metadata was created.
+2023-08-21 11:58:07,539 - INFO - Dataset ft_length in A1-Metadata was created.
+2023-08-21 11:58:07,540 - INFO - Dataset ft_xdown in A1-Metadata was created.
+2023-08-21 11:58:07,540 - INFO - Dataset ft_xup in A1-Metadata was created.
+2023-08-21 11:58:07,540 - INFO - Dataset ft_zdown in A1-Metadata was created.
+2023-08-21 11:58:07,541 - INFO - Dataset ft_zup in A1-Metadata was created.
+2023-08-21 11:58:07,541 - INFO - Dataset could not be created with the standard format for the key image_bin, value ['<2x2>' '<2x2>' '<2x2>' '<2x2>'].
+2023-08-21 11:58:07,541 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,542 - INFO - Dataset image_bin in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,542 - INFO - Dataset could not be created with the standard format for the key image_flip, value ['<flip x : False,flip y : False>' '<flip x : False,flip y : False>'
+ '<flip x : False,flip y : False>' '<flip x : False,flip y : False>'].
+2023-08-21 11:58:07,543 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,543 - INFO - Dataset image_flip in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,543 - INFO - Dataset could not be created with the standard format for the key image_roi, value ['<0,0>-<960x2880>' '<0,0>-<960x2880>' '<0,0>-<960x2880>'
+ '<0,0>-<960x2880>'].
+2023-08-21 11:58:07,544 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,544 - INFO - Dataset image_roi in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,545 - INFO - Dataset could not be created with the standard format for the key image_rotation, value ['Rotation_90' 'Rotation_90' 'Rotation_90' 'Rotation_90'].
+2023-08-21 11:58:07,545 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,546 - INFO - Dataset image_rotation in A1-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,546 - INFO - Dataset pt_no in A1-Metadata was created.
+2023-08-21 11:58:07,547 - INFO - Dataset spitch in A1-Metadata was created.
+2023-08-21 11:58:07,547 - INFO - Dataset sroll in A1-Metadata was created.
+2023-08-21 11:58:07,548 - INFO - Dataset stz in A1-Metadata was created.
+2023-08-21 11:58:07,548 - INFO - Dataset sx in A1-Metadata was created.
+2023-08-21 11:58:07,549 - INFO - Dataset syaw in A1-Metadata was created.
+2023-08-21 11:58:07,549 - INFO - Dataset sz in A1-Metadata was created.
+2023-08-21 11:58:07,550 - INFO - Dataset tfg_ch1 in A1-Metadata was created.
+2023-08-21 11:58:07,550 - INFO - Dataset tfg_ch2 in A1-Metadata was created.
+2023-08-21 11:58:07,551 - INFO - Dataset tfg_ch3 in A1-Metadata was created.
+2023-08-21 11:58:07,551 - INFO - Dataset tfg_ch4 in A1-Metadata was created.
+2023-08-21 11:58:07,552 - INFO - Dataset tfg_ch5 in A1-Metadata was created.
+2023-08-21 11:58:07,552 - INFO - Dataset tfg_ch6 in A1-Metadata was created.
+2023-08-21 11:58:07,553 - INFO - Dataset tfg_ch7 in A1-Metadata was created.
+2023-08-21 11:58:07,553 - INFO - Dataset tfg_ch8 in A1-Metadata was created.
+2023-08-21 11:58:07,554 - INFO - Dataset waxs_x in A1-Metadata was created.
+2023-08-21 11:58:07,554 - INFO - Dataset waxs_z in A1-Metadata was created.
+2023-08-21 11:58:07,555 - INFO - Finished with folder: A1.
+2023-08-21 11:58:07,555 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:58:07,555 - INFO - We entered into function: update_folder_from_files
+2023-08-21 11:58:07,556 - INFO - We entered into function: h5_new_folder
+2023-08-21 11:58:07,556 - INFO - The folder Reference was successfully created.
+2023-08-21 11:58:07,556 - INFO - We entered into function: get_merged_data_and_metadata
+2023-08-21 11:58:07,556 - INFO - We entered into function: generator_fabio_data_header
+2023-08-21 11:58:07,559 - INFO - Data dataset in Reference group created.
+2023-08-21 11:58:07,560 - INFO - Added in Reference-Data shape: (3, 1, 1)
+2023-08-21 11:58:07,560 - INFO - Metadata group in Reference group created.
+2023-08-21 11:58:07,561 - INFO - Dataset could not be created with the standard format for the key HeaderID, value ['EH:000001:000000:000000' 'EH:000001:000000:000000'
+ 'EH:000001:000000:000000'].
+2023-08-21 11:58:07,561 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,562 - INFO - Dataset HeaderID in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,563 - INFO - Dataset could not be created with the standard format for the key ByteOrder, value ['LowByteFirst' 'LowByteFirst' 'LowByteFirst'].
+2023-08-21 11:58:07,563 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,563 - INFO - Dataset ByteOrder in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,564 - INFO - Dataset could not be created with the standard format for the key DataType, value ['UnsignedShort' 'UnsignedShort' 'UnsignedShort'].
+2023-08-21 11:58:07,564 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,565 - INFO - Dataset DataType in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,565 - INFO - Dataset Size in Reference-Metadata was created.
+2023-08-21 11:58:07,566 - INFO - Dataset Dim_1 in Reference-Metadata was created.
+2023-08-21 11:58:07,568 - INFO - Dataset Dim_2 in Reference-Metadata was created.
+2023-08-21 11:58:07,568 - INFO - Dataset Image in Reference-Metadata was created.
+2023-08-21 11:58:07,569 - INFO - Dataset acq_frame_nb in Reference-Metadata was created.
+2023-08-21 11:58:07,569 - INFO - Dataset could not be created with the standard format for the key time, value ['Fri Sep 11 13:43:41 2020' 'Fri Sep 11 13:44:19 2020'
+ 'Fri Sep 11 13:41:54 2020'].
+2023-08-21 11:58:07,569 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,570 - INFO - Dataset time in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,570 - INFO - Dataset time_of_day in Reference-Metadata was created.
+2023-08-21 11:58:07,571 - INFO - Dataset time_of_frame in Reference-Metadata was created.
+2023-08-21 11:58:07,571 - INFO - Dataset could not be created with the standard format for the key Rotation 90 deg, value ['take : 0.024284s' 'take : 0.023937s' 'take : 0.023318s'].
+2023-08-21 11:58:07,571 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,572 - INFO - Dataset Rotation 90 deg in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,572 - INFO - Dataset Monitor in Reference-Metadata was created.
+2023-08-21 11:58:07,573 - INFO - Dataset Photo in Reference-Metadata was created.
+2023-08-21 11:58:07,573 - INFO - Dataset could not be created with the standard format for the key Rayonix, value ['/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Aire/10s/rayonix_10s_spitch_0.12_000_0000.edf'
+ '/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Aire/1s/rayonix_1s_000_0000.edf'
+ '/beamlines/bl11/projects/cycle2020-I/2019093735-jmartinperez/DATA/Septiembre2020/Aire/5s/rayonix_5s_spitch_0.12_000_0000.edf'].
+2023-08-21 11:58:07,573 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,574 - INFO - Dataset Rayonix in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,575 - INFO - Dataset could not be created with the standard format for the key acq_autoexpo_mode, value ['OFF' 'OFF' 'OFF'].
+2023-08-21 11:58:07,575 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,576 - INFO - Dataset acq_autoexpo_mode in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,576 - INFO - Dataset acq_expo_time in Reference-Metadata was created.
+2023-08-21 11:58:07,577 - INFO - Dataset acq_latency_time in Reference-Metadata was created.
+2023-08-21 11:58:07,577 - INFO - Dataset could not be created with the standard format for the key acq_mode, value ['Single' 'Single' 'Single'].
+2023-08-21 11:58:07,577 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,577 - INFO - Dataset acq_mode in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,578 - INFO - Dataset acq_nb_frames in Reference-Metadata was created.
+2023-08-21 11:58:07,578 - INFO - Dataset could not be created with the standard format for the key acq_trigger_mode, value ['ExtGate' 'ExtGate' 'ExtGate'].
+2023-08-21 11:58:07,579 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,579 - INFO - Dataset acq_trigger_mode in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,580 - INFO - Dataset att1 in Reference-Metadata was created.
+2023-08-21 11:58:07,581 - INFO - Dataset att2 in Reference-Metadata was created.
+2023-08-21 11:58:07,581 - INFO - Dataset auxstage in Reference-Metadata was created.
+2023-08-21 11:58:07,582 - INFO - Dataset bs0x in Reference-Metadata was created.
+2023-08-21 11:58:07,583 - INFO - Dataset bs1_alpha in Reference-Metadata was created.
+2023-08-21 11:58:07,583 - INFO - Dataset could not be created with the standard format for the key bs1_beta, value ['None' 'None' 'None'].
+2023-08-21 11:58:07,584 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,584 - INFO - Dataset bs1_beta in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,585 - INFO - Dataset bs2x in Reference-Metadata was created.
+2023-08-21 11:58:07,585 - INFO - Dataset bs2z in Reference-Metadata was created.
+2023-08-21 11:58:07,586 - INFO - Dataset current in Reference-Metadata was created.
+2023-08-21 11:58:07,586 - INFO - Dataset det_x in Reference-Metadata was created.
+2023-08-21 11:58:07,587 - INFO - Dataset det_z in Reference-Metadata was created.
+2023-08-21 11:58:07,588 - INFO - Dataset energy_bragg in Reference-Metadata was created.
+2023-08-21 11:58:07,588 - INFO - Dataset exposure in Reference-Metadata was created.
+2023-08-21 11:58:07,589 - INFO - Dataset ft_length in Reference-Metadata was created.
+2023-08-21 11:58:07,589 - INFO - Dataset ft_xdown in Reference-Metadata was created.
+2023-08-21 11:58:07,590 - INFO - Dataset ft_xup in Reference-Metadata was created.
+2023-08-21 11:58:07,590 - INFO - Dataset ft_zdown in Reference-Metadata was created.
+2023-08-21 11:58:07,591 - INFO - Dataset ft_zup in Reference-Metadata was created.
+2023-08-21 11:58:07,591 - INFO - Dataset could not be created with the standard format for the key image_bin, value ['<2x2>' '<2x2>' '<2x2>'].
+2023-08-21 11:58:07,591 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,592 - INFO - Dataset image_bin in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,592 - INFO - Dataset could not be created with the standard format for the key image_flip, value ['<flip x : False,flip y : False>' '<flip x : False,flip y : False>'
+ '<flip x : False,flip y : False>'].
+2023-08-21 11:58:07,592 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,593 - INFO - Dataset image_flip in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,593 - INFO - Dataset could not be created with the standard format for the key image_roi, value ['<0,0>-<960x2880>' '<0,0>-<960x2880>' '<0,0>-<960x2880>'].
+2023-08-21 11:58:07,593 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,594 - INFO - Dataset image_roi in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,594 - INFO - Dataset could not be created with the standard format for the key image_rotation, value ['Rotation_90' 'Rotation_90' 'Rotation_90'].
+2023-08-21 11:58:07,595 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:07,595 - INFO - Dataset image_rotation in Reference-Metadata was created. Encoding worked.
+2023-08-21 11:58:07,596 - INFO - Dataset pt_no in Reference-Metadata was created.
+2023-08-21 11:58:07,597 - INFO - Dataset spitch in Reference-Metadata was created.
+2023-08-21 11:58:07,597 - INFO - Dataset sroll in Reference-Metadata was created.
+2023-08-21 11:58:07,598 - INFO - Dataset stz in Reference-Metadata was created.
+2023-08-21 11:58:07,598 - INFO - Dataset sx in Reference-Metadata was created.
+2023-08-21 11:58:07,599 - INFO - Dataset syaw in Reference-Metadata was created.
+2023-08-21 11:58:07,600 - INFO - Dataset sz in Reference-Metadata was created.
+2023-08-21 11:58:07,600 - INFO - Dataset tfg_ch1 in Reference-Metadata was created.
+2023-08-21 11:58:07,601 - INFO - Dataset tfg_ch2 in Reference-Metadata was created.
+2023-08-21 11:58:07,601 - INFO - Dataset tfg_ch3 in Reference-Metadata was created.
+2023-08-21 11:58:07,602 - INFO - Dataset tfg_ch4 in Reference-Metadata was created.
+2023-08-21 11:58:07,602 - INFO - Dataset tfg_ch5 in Reference-Metadata was created.
+2023-08-21 11:58:07,603 - INFO - Dataset tfg_ch6 in Reference-Metadata was created.
+2023-08-21 11:58:07,603 - INFO - Dataset tfg_ch7 in Reference-Metadata was created.
+2023-08-21 11:58:07,604 - INFO - Dataset tfg_ch8 in Reference-Metadata was created.
+2023-08-21 11:58:07,604 - INFO - Dataset waxs_x in Reference-Metadata was created.
+2023-08-21 11:58:07,605 - INFO - Dataset waxs_z in Reference-Metadata was created.
+2023-08-21 11:58:07,605 - INFO - Finished with folder: Reference.
+2023-08-21 11:58:07,605 - INFO - Finished the update of all the new files.
+2023-08-21 11:58:07,605 - INFO - The .h5 file was updated.
+2023-08-21 11:58:07,606 - INFO - We entered into function: update_widgets
+2023-08-21 11:58:07,606 - INFO - Updated list widget.
+2023-08-21 11:58:07,606 - INFO - We entered into function: update_setup_info
+2023-08-21 11:58:07,607 - INFO - New setup dictionary was updated.
+2023-08-21 11:58:07,608 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:07,608 - INFO - We entered into function: update_table
+2023-08-21 11:58:07,608 - INFO - Table was reseted.
+2023-08-21 11:58:07,608 - INFO - No folder to display. Return.
+2023-08-21 11:58:07,609 - INFO - We entered into function: update_table
+2023-08-21 11:58:07,609 - INFO - Table was reseted.
+2023-08-21 11:58:07,609 - INFO - No folder to display. Return.
+2023-08-21 11:58:07,609 - INFO - We entered into function: update_table
+2023-08-21 11:58:07,609 - INFO - Table was reseted.
+2023-08-21 11:58:07,609 - INFO - No folder to display. Return.
+2023-08-21 11:58:07,610 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-21 11:58:07,610 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-08-21 11:58:07,610 - INFO - We entered into function: search_and_update_ponifiles
+2023-08-21 11:58:07,610 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:58:07,611 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:07,613 - INFO - No ponifiles detected.
+2023-08-21 11:58:07,613 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:07,614 - INFO - Combobox of ponifiles was updated.
+2023-08-21 11:58:07,614 - INFO - We entered into function: search_and_update_new_files
+2023-08-21 11:58:07,614 - INFO - We entered into function: search_new_files_folders
+2023-08-21 11:58:07,615 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:58:07,618 - INFO - 0 New files were detected.
+2023-08-21 11:58:07,619 - INFO - The .h5 file was updated.
+2023-08-21 11:58:07,619 - INFO - We entered into function: activate_h5file
+2023-08-21 11:58:07,619 - INFO - We entered into function: update_widgets
+2023-08-21 11:58:07,620 - INFO - No new folders.
+2023-08-21 11:58:07,620 - INFO - We entered into function: update_setup_info
+2023-08-21 11:58:07,621 - INFO - New setup dictionary was updated.
+2023-08-21 11:58:07,621 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:07,621 - INFO - We entered into function: update_table
+2023-08-21 11:58:07,622 - INFO - Table was reseted.
+2023-08-21 11:58:07,622 - INFO - No folder to display. Return.
+2023-08-21 11:58:07,622 - INFO - We entered into function: update_table
+2023-08-21 11:58:07,622 - INFO - Table was reseted.
+2023-08-21 11:58:07,622 - INFO - No folder to display. Return.
+2023-08-21 11:58:07,623 - INFO - We entered into function: update_table
+2023-08-21 11:58:07,623 - INFO - Table was reseted.
+2023-08-21 11:58:07,623 - INFO - No folder to display. Return.
+2023-08-21 11:58:07,623 - INFO - We entered into function: update_table
+2023-08-21 11:58:07,624 - INFO - Table was reseted.
+2023-08-21 11:58:07,624 - INFO - No folder to display. Return.
+2023-08-21 11:58:09,963 - INFO - We entered into function: create_h5_file
+2023-08-21 11:58:09,964 - INFO - We entered into function: pick_main_directory
+2023-08-21 11:58:14,605 - INFO - We entered into function: create_h5_filename
+2023-08-21 11:58:16,217 - INFO - H5Integrator instance was initialized
+2023-08-21 11:58:16,217 - INFO - The filename is C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\test_xmas.h5.
+2023-08-21 11:58:16,217 - INFO - We entered into function: create_h5_file
+2023-08-21 11:58:16,218 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\test_xmas.h5 is going to be created.
+2023-08-21 11:58:16,218 - INFO - The file was created 
+2023-08-21 11:58:16,219 - INFO - Attributes for h5: dict_items([('main_directory', 'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas'), ('description', 'HDF5 file with Scattering methods.'), ('comment', ''), ('beamline', 'BM28-XMaS')])
+2023-08-21 11:58:16,219 - INFO - New attribute. Datetime : 11h58m16s_21-08-2023
+2023-08-21 11:58:16,219 - INFO - New attribute. main_directory : C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:16,220 - INFO - New attribute. description : HDF5 file with Scattering methods.
+2023-08-21 11:58:16,220 - INFO - New attribute. comment : 
+2023-08-21 11:58:16,220 - INFO - New attribute. beamline : BM28-XMaS
+2023-08-21 11:58:16,221 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:58:16,222 - INFO - Ponifile dataset was created.
+2023-08-21 11:58:16,223 - INFO - Active_ponifile dataset was created.
+2023-08-21 11:58:16,223 - INFO - No ponifiles to be updated. Return.
+2023-08-21 11:58:16,223 - INFO - We entered into function: update_setup_keys
+2023-08-21 11:58:16,224 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:16,224 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:16,224 - INFO - Updated iangle_key = spitch
+2023-08-21 11:58:16,224 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:16,225 - INFO - Updated acq_key = exposure
+2023-08-21 11:58:16,225 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:16,225 - INFO - Updated norm_key = Monitor
+2023-08-21 11:58:16,225 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:16,226 - INFO - Updated tilt_key = 
+2023-08-21 11:58:16,226 - INFO - Inherited methods from pygix.transform
+2023-08-21 11:58:16,226 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:16,226 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:16,226 - INFO - Ponifile active: 
+2023-08-21 11:58:16,227 - INFO - We entered into function: update_orientation
+2023-08-21 11:58:16,227 - INFO - qz parallel is True
+2023-08-21 11:58:16,227 - INFO - qr parallel is True
+2023-08-21 11:58:16,227 - INFO - The sample orientation (pygix) is set at 1
+2023-08-21 11:58:16,229 - INFO - New .h5 file was created successfully.
+2023-08-21 11:58:16,229 - INFO - sPonifile: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni. Keys_metadata: defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'}). qz:True, qr:True
+2023-08-21 11:58:16,229 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:58:16,230 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:16,230 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:16,230 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:16,230 - INFO - Ponifile to be activated: b''
+2023-08-21 11:58:16,231 - INFO - Ponifile b'' activated successfully.
+2023-08-21 11:58:16,231 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:16,231 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:16,232 - INFO - Ponifile active: 
+2023-08-21 11:58:16,232 - INFO - New ponifile updated.
+2023-08-21 11:58:16,232 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:16,233 - INFO - We entered into function: update_table
+2023-08-21 11:58:16,233 - INFO - Table was reseted.
+2023-08-21 11:58:16,233 - INFO - No folder to display. Return.
+2023-08-21 11:58:16,233 - INFO - The data parameters were reinitialized.
+2023-08-21 11:58:16,234 - INFO - We entered into function: append_h5file
+2023-08-21 11:58:16,234 - INFO - New .h5 file to append C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\test_xmas.h5
+2023-08-21 11:58:16,234 - INFO - Current list of .h5 files.
+2023-08-21 11:58:16,235 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-21 11:58:16,235 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-08-21 11:58:16,235 - INFO - We entered into function: search_and_update_ponifiles
+2023-08-21 11:58:16,235 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:16,236 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:16,237 - INFO - New ponifiles detected.
+2023-08-21 11:58:16,237 - INFO - ['C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni', 'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6.poni', 'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_2.poni']
+2023-08-21 11:58:16,237 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:58:16,237 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:16,238 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni' was appended to dataset.
+2023-08-21 11:58:16,239 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6.poni' was appended to dataset.
+2023-08-21 11:58:16,240 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_2.poni' was appended to dataset.
+2023-08-21 11:58:16,240 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:16,241 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:16,241 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:16,241 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:16,241 - INFO - Ponifile to be activated: b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni'
+2023-08-21 11:58:16,242 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni' activated successfully.
+2023-08-21 11:58:16,242 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:16,242 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:16,243 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:16,243 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:16,243 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:16,244 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:16,245 - INFO - Loaded poni file
+2023-08-21 11:58:16,245 - INFO - Incident angle set at 0.0
+2023-08-21 11:58:16,245 - INFO - Tilt angle set at 0.0
+2023-08-21 11:58:16,246 - INFO - New ponifile updated.
+2023-08-21 11:58:16,246 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:16,246 - INFO - Combobox of ponifiles was updated.
+2023-08-21 11:58:16,247 - INFO - We entered into function: search_and_update_new_files
+2023-08-21 11:58:16,247 - INFO - We entered into function: search_new_files_folders
+2023-08-21 11:58:16,247 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:16,249 - INFO - 25 New files were detected.
+2023-08-21 11:58:16,249 - INFO - We entered into function: update_new_files
+2023-08-21 11:58:16,250 - INFO - Got dictionary of folders and files
+2023-08-21 11:58:16,251 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:16,251 - INFO - We entered into function: update_folder_from_files
+2023-08-21 11:58:16,251 - INFO - We entered into function: h5_new_folder
+2023-08-21 11:58:16,252 - INFO - The folder Air was successfully created.
+2023-08-21 11:58:16,252 - INFO - We entered into function: get_merged_data_and_metadata
+2023-08-21 11:58:16,252 - INFO - We entered into function: generator_fabio_data_header
+2023-08-21 11:58:16,260 - INFO - Data dataset in Air group created.
+2023-08-21 11:58:16,260 - INFO - Added in Air-Data shape: (8, 1, 1)
+2023-08-21 11:58:16,261 - INFO - Metadata group in Air group created.
+2023-08-21 11:58:16,261 - INFO - Dataset could not be created with the standard format for the key HeaderID, value ['EH:003228:000000:000000' 'EH:000675:000000:000000'
+ 'EH:000676:000000:000000' 'EH:000677:000000:000000'
+ 'EH:000678:000000:000000' 'EH:000679:000000:000000'
+ 'EH:000680:000000:000000' 'EH:000681:000000:000000'].
+2023-08-21 11:58:16,261 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,261 - INFO - Dataset HeaderID in Air-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,262 - INFO - Dataset VersionNumber in Air-Metadata was created.
+2023-08-21 11:58:16,263 - INFO - Dataset Image in Air-Metadata was created.
+2023-08-21 11:58:16,263 - INFO - Dataset could not be created with the standard format for the key ByteOrder, value ['LowByteFirst' 'LowByteFirst' 'LowByteFirst' 'LowByteFirst'
+ 'LowByteFirst' 'LowByteFirst' 'LowByteFirst' 'LowByteFirst'].
+2023-08-21 11:58:16,263 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,263 - INFO - Dataset ByteOrder in Air-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,263 - INFO - Dataset could not be created with the standard format for the key DataType, value ['UnsignedShort' 'UnsignedShort' 'UnsignedShort' 'UnsignedShort'
+ 'UnsignedShort' 'UnsignedShort' 'UnsignedShort' 'UnsignedShort'].
+2023-08-21 11:58:16,264 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,264 - INFO - Dataset DataType in Air-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,265 - INFO - Dataset Dim_1 in Air-Metadata was created.
+2023-08-21 11:58:16,265 - INFO - Dataset Dim_2 in Air-Metadata was created.
+2023-08-21 11:58:16,265 - INFO - Dataset Size in Air-Metadata was created.
+2023-08-21 11:58:16,266 - INFO - Dataset could not be created with the standard format for the key date, value ['Sun Feb 05 05:29:50 2023' 'Fri Feb 03 00:10:38 2023'
+ 'Fri Feb 03 00:10:56 2023' 'Fri Feb 03 00:12:17 2023'
+ 'Fri Feb 03 00:12:43 2023' 'Fri Feb 03 00:13:00 2023'
+ 'Fri Feb 03 00:13:13 2023' 'Fri Feb 03 00:13:24 2023'].
+2023-08-21 11:58:16,267 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,267 - INFO - Dataset date in Air-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,267 - INFO - Dataset time in Air-Metadata was created.
+2023-08-21 11:58:16,267 - INFO - Dataset source_wavelength in Air-Metadata was created.
+2023-08-21 11:58:16,268 - INFO - Dataset beam_y in Air-Metadata was created.
+2023-08-21 11:58:16,269 - INFO - Dataset beam_x in Air-Metadata was created.
+2023-08-21 11:58:16,269 - INFO - Dataset detector_distance in Air-Metadata was created.
+2023-08-21 11:58:16,269 - INFO - Dataset transmission in Air-Metadata was created.
+2023-08-21 11:58:16,271 - INFO - Dataset monitor in Air-Metadata was created.
+2023-08-21 11:58:16,271 - INFO - Dataset l in Air-Metadata was created.
+2023-08-21 11:58:16,272 - INFO - Dataset k in Air-Metadata was created.
+2023-08-21 11:58:16,273 - INFO - Dataset h in Air-Metadata was created.
+2023-08-21 11:58:16,273 - INFO - Dataset count_time in Air-Metadata was created.
+2023-08-21 11:58:16,273 - INFO - Dataset could not be created with the standard format for the key file_comments, value ['file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'].
+2023-08-21 11:58:16,274 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,275 - INFO - Dataset file_comments in Air-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,275 - INFO - Dataset U0 in Air-Metadata was created.
+2023-08-21 11:58:16,275 - INFO - Dataset U1 in Air-Metadata was created.
+2023-08-21 11:58:16,275 - INFO - Dataset U2 in Air-Metadata was created.
+2023-08-21 11:58:16,276 - INFO - Dataset U3 in Air-Metadata was created.
+2023-08-21 11:58:16,277 - INFO - Dataset U4 in Air-Metadata was created.
+2023-08-21 11:58:16,277 - INFO - Dataset U5 in Air-Metadata was created.
+2023-08-21 11:58:16,277 - INFO - Dataset dummy in Air-Metadata was created.
+2023-08-21 11:58:16,277 - INFO - Dataset s1f in Air-Metadata was created.
+2023-08-21 11:58:16,278 - INFO - Dataset s1b in Air-Metadata was created.
+2023-08-21 11:58:16,279 - INFO - Dataset s1u in Air-Metadata was created.
+2023-08-21 11:58:16,279 - INFO - Dataset s1d in Air-Metadata was created.
+2023-08-21 11:58:16,279 - INFO - Dataset s1hg in Air-Metadata was created.
+2023-08-21 11:58:16,280 - INFO - Dataset s1ho in Air-Metadata was created.
+2023-08-21 11:58:16,280 - INFO - Dataset s1vg in Air-Metadata was created.
+2023-08-21 11:58:16,281 - INFO - Dataset s1vo in Air-Metadata was created.
+2023-08-21 11:58:16,281 - INFO - Dataset s2f in Air-Metadata was created.
+2023-08-21 11:58:16,282 - INFO - Dataset s2b in Air-Metadata was created.
+2023-08-21 11:58:16,282 - INFO - Dataset s2u in Air-Metadata was created.
+2023-08-21 11:58:16,283 - INFO - Dataset s2d in Air-Metadata was created.
+2023-08-21 11:58:16,283 - INFO - Dataset s2hg in Air-Metadata was created.
+2023-08-21 11:58:16,284 - INFO - Dataset s2ho in Air-Metadata was created.
+2023-08-21 11:58:16,284 - INFO - Dataset s2vg in Air-Metadata was created.
+2023-08-21 11:58:16,285 - INFO - Dataset s2vo in Air-Metadata was created.
+2023-08-21 11:58:16,285 - INFO - Dataset s4f in Air-Metadata was created.
+2023-08-21 11:58:16,286 - INFO - Dataset s4b in Air-Metadata was created.
+2023-08-21 11:58:16,287 - INFO - Dataset s4u in Air-Metadata was created.
+2023-08-21 11:58:16,288 - INFO - Dataset s4d in Air-Metadata was created.
+2023-08-21 11:58:16,288 - INFO - Dataset s4hg in Air-Metadata was created.
+2023-08-21 11:58:16,288 - INFO - Dataset s4ho in Air-Metadata was created.
+2023-08-21 11:58:16,289 - INFO - Dataset s4vg in Air-Metadata was created.
+2023-08-21 11:58:16,290 - INFO - Dataset s4vo in Air-Metadata was created.
+2023-08-21 11:58:16,290 - INFO - Dataset s3f in Air-Metadata was created.
+2023-08-21 11:58:16,291 - INFO - Dataset s3b in Air-Metadata was created.
+2023-08-21 11:58:16,291 - INFO - Dataset s3u in Air-Metadata was created.
+2023-08-21 11:58:16,291 - INFO - Dataset s3d in Air-Metadata was created.
+2023-08-21 11:58:16,292 - INFO - Dataset s3hg in Air-Metadata was created.
+2023-08-21 11:58:16,292 - INFO - Dataset s3ho in Air-Metadata was created.
+2023-08-21 11:58:16,293 - INFO - Dataset s3vg in Air-Metadata was created.
+2023-08-21 11:58:16,293 - INFO - Dataset s3vo in Air-Metadata was created.
+2023-08-21 11:58:16,294 - INFO - Dataset mono in Air-Metadata was created.
+2023-08-21 11:58:16,294 - INFO - Dataset hgt in Air-Metadata was created.
+2023-08-21 11:58:16,294 - INFO - Dataset xtilt in Air-Metadata was created.
+2023-08-21 11:58:16,295 - INFO - Dataset ytilt in Air-Metadata was created.
+2023-08-21 11:58:16,295 - INFO - Dataset lgm in Air-Metadata was created.
+2023-08-21 11:58:16,296 - INFO - Dataset lgf in Air-Metadata was created.
+2023-08-21 11:58:16,296 - INFO - Dataset lgb in Air-Metadata was created.
+2023-08-21 11:58:16,297 - INFO - Dataset inout in Air-Metadata was created.
+2023-08-21 11:58:16,297 - INFO - Dataset mjack in Air-Metadata was created.
+2023-08-21 11:58:16,297 - INFO - Dataset mth in Air-Metadata was created.
+2023-08-21 11:58:16,298 - INFO - Dataset mroll in Air-Metadata was created.
+2023-08-21 11:58:16,298 - INFO - Dataset myaw in Air-Metadata was created.
+2023-08-21 11:58:16,300 - INFO - Dataset mty in Air-Metadata was created.
+2023-08-21 11:58:16,300 - INFO - Dataset mtz in Air-Metadata was created.
+2023-08-21 11:58:16,301 - INFO - Dataset mcrbu in Air-Metadata was created.
+2023-08-21 11:58:16,301 - INFO - Dataset mcrbd in Air-Metadata was created.
+2023-08-21 11:58:16,302 - INFO - Dataset mptbu in Air-Metadata was created.
+2023-08-21 11:58:16,302 - INFO - Dataset mptbd in Air-Metadata was created.
+2023-08-21 11:58:16,303 - INFO - Dataset omtz in Air-Metadata was created.
+2023-08-21 11:58:16,304 - INFO - Dataset ohspare in Air-Metadata was created.
+2023-08-21 11:58:16,304 - INFO - Dataset bviewer in Air-Metadata was created.
+2023-08-21 11:58:16,305 - INFO - Dataset mtrans in Air-Metadata was created.
+2023-08-21 11:58:16,305 - INFO - Dataset m1u in Air-Metadata was created.
+2023-08-21 11:58:16,306 - INFO - Dataset m1m in Air-Metadata was created.
+2023-08-21 11:58:16,307 - INFO - Dataset m1d in Air-Metadata was created.
+2023-08-21 11:58:16,307 - INFO - Dataset m1hgt in Air-Metadata was created.
+2023-08-21 11:58:16,308 - INFO - Dataset m1th in Air-Metadata was created.
+2023-08-21 11:58:16,308 - INFO - Dataset m1tilt in Air-Metadata was created.
+2023-08-21 11:58:16,308 - INFO - Dataset m2u in Air-Metadata was created.
+2023-08-21 11:58:16,309 - INFO - Dataset m2m in Air-Metadata was created.
+2023-08-21 11:58:16,309 - INFO - Dataset m2d in Air-Metadata was created.
+2023-08-21 11:58:16,309 - INFO - Dataset m2hgt in Air-Metadata was created.
+2023-08-21 11:58:16,310 - INFO - Dataset m2th in Air-Metadata was created.
+2023-08-21 11:58:16,310 - INFO - Dataset m2tilt in Air-Metadata was created.
+2023-08-21 11:58:16,310 - INFO - Dataset hsf in Air-Metadata was created.
+2023-08-21 11:58:16,311 - INFO - Dataset hsb in Air-Metadata was created.
+2023-08-21 11:58:16,311 - INFO - Dataset hsu in Air-Metadata was created.
+2023-08-21 11:58:16,312 - INFO - Dataset hsd in Air-Metadata was created.
+2023-08-21 11:58:16,312 - INFO - Dataset hshg in Air-Metadata was created.
+2023-08-21 11:58:16,313 - INFO - Dataset hsho in Air-Metadata was created.
+2023-08-21 11:58:16,313 - INFO - Dataset hsvg in Air-Metadata was created.
+2023-08-21 11:58:16,313 - INFO - Dataset hsvo in Air-Metadata was created.
+2023-08-21 11:58:16,314 - INFO - Dataset tsinf in Air-Metadata was created.
+2023-08-21 11:58:16,314 - INFO - Dataset tsinb in Air-Metadata was created.
+2023-08-21 11:58:16,315 - INFO - Dataset tsinu in Air-Metadata was created.
+2023-08-21 11:58:16,315 - INFO - Dataset tsind in Air-Metadata was created.
+2023-08-21 11:58:16,316 - INFO - Dataset tsinhg in Air-Metadata was created.
+2023-08-21 11:58:16,316 - INFO - Dataset tsinho in Air-Metadata was created.
+2023-08-21 11:58:16,317 - INFO - Dataset tsinvg in Air-Metadata was created.
+2023-08-21 11:58:16,317 - INFO - Dataset tsinvo in Air-Metadata was created.
+2023-08-21 11:58:16,318 - INFO - Dataset pptth in Air-Metadata was created.
+2023-08-21 11:58:16,318 - INFO - Dataset ppth in Air-Metadata was created.
+2023-08-21 11:58:16,319 - INFO - Dataset ppchi in Air-Metadata was created.
+2023-08-21 11:58:16,319 - INFO - Dataset ppx in Air-Metadata was created.
+2023-08-21 11:58:16,321 - INFO - Dataset ppz in Air-Metadata was created.
+2023-08-21 11:58:16,322 - INFO - Dataset ppio in Air-Metadata was created.
+2023-08-21 11:58:16,322 - INFO - Dataset ic0io in Air-Metadata was created.
+2023-08-21 11:58:16,323 - INFO - Dataset ic1io in Air-Metadata was created.
+2023-08-21 11:58:16,323 - INFO - Dataset quadx in Air-Metadata was created.
+2023-08-21 11:58:16,324 - INFO - Dataset quadz in Air-Metadata was created.
+2023-08-21 11:58:16,324 - INFO - Dataset quadio in Air-Metadata was created.
+2023-08-21 11:58:16,325 - INFO - Dataset bpmx in Air-Metadata was created.
+2023-08-21 11:58:16,325 - INFO - Dataset bpmz in Air-Metadata was created.
+2023-08-21 11:58:16,326 - INFO - Dataset bpmio in Air-Metadata was created.
+2023-08-21 11:58:16,326 - INFO - Dataset filter in Air-Metadata was created.
+2023-08-21 11:58:16,327 - INFO - Dataset filtio in Air-Metadata was created.
+2023-08-21 11:58:16,327 - INFO - Dataset tsx in Air-Metadata was created.
+2023-08-21 11:58:16,328 - INFO - Dataset tsz in Air-Metadata was created.
+2023-08-21 11:58:16,328 - INFO - Dataset bigx in Air-Metadata was created.
+2023-08-21 11:58:16,329 - INFO - Dataset bigz in Air-Metadata was created.
+2023-08-21 11:58:16,329 - INFO - Dataset mccdx in Air-Metadata was created.
+2023-08-21 11:58:16,330 - INFO - Dataset mccdz in Air-Metadata was created.
+2023-08-21 11:58:16,330 - INFO - Dataset ehsp1 in Air-Metadata was created.
+2023-08-21 11:58:16,330 - INFO - Dataset ehsp2 in Air-Metadata was created.
+2023-08-21 11:58:16,331 - INFO - Dataset del in Air-Metadata was created.
+2023-08-21 11:58:16,331 - INFO - Dataset eta in Air-Metadata was created.
+2023-08-21 11:58:16,332 - INFO - Dataset chi in Air-Metadata was created.
+2023-08-21 11:58:16,332 - INFO - Dataset phi in Air-Metadata was created.
+2023-08-21 11:58:16,333 - INFO - Dataset nu in Air-Metadata was created.
+2023-08-21 11:58:16,333 - INFO - Dataset mu in Air-Metadata was created.
+2023-08-21 11:58:16,334 - INFO - Dataset ttha in Air-Metadata was created.
+2023-08-21 11:58:16,334 - INFO - Dataset tha in Air-Metadata was created.
+2023-08-21 11:58:16,335 - INFO - Dataset tthp in Air-Metadata was created.
+2023-08-21 11:58:16,335 - INFO - Dataset thp in Air-Metadata was created.
+2023-08-21 11:58:16,336 - INFO - Dataset etap in Air-Metadata was created.
+2023-08-21 11:58:16,337 - INFO - Dataset xdiff in Air-Metadata was created.
+2023-08-21 11:58:16,337 - INFO - Dataset zup in Air-Metadata was created.
+2023-08-21 11:58:16,338 - INFO - Dataset zdown in Air-Metadata was created.
+2023-08-21 11:58:16,339 - INFO - Dataset zdiff in Air-Metadata was created.
+2023-08-21 11:58:16,339 - INFO - Dataset thdiff in Air-Metadata was created.
+2023-08-21 11:58:16,340 - INFO - Dataset tthy1 in Air-Metadata was created.
+2023-08-21 11:58:16,340 - INFO - Dataset tthy2 in Air-Metadata was created.
+2023-08-21 11:58:16,341 - INFO - Dataset cryx in Air-Metadata was created.
+2023-08-21 11:58:16,342 - INFO - Dataset cryy in Air-Metadata was created.
+2023-08-21 11:58:16,342 - INFO - Dataset cryz in Air-Metadata was created.
+2023-08-21 11:58:16,343 - INFO - Dataset vtrans in Air-Metadata was created.
+2023-08-21 11:58:16,343 - INFO - Dataset goniox in Air-Metadata was created.
+2023-08-21 11:58:16,344 - INFO - Dataset gonioy in Air-Metadata was created.
+2023-08-21 11:58:16,344 - INFO - Dataset arcx in Air-Metadata was created.
+2023-08-21 11:58:16,345 - INFO - Dataset arcy in Air-Metadata was created.
+2023-08-21 11:58:16,345 - INFO - Dataset tsoutf in Air-Metadata was created.
+2023-08-21 11:58:16,346 - INFO - Dataset tsoutb in Air-Metadata was created.
+2023-08-21 11:58:16,346 - INFO - Dataset tsoutu in Air-Metadata was created.
+2023-08-21 11:58:16,347 - INFO - Dataset tsoutd in Air-Metadata was created.
+2023-08-21 11:58:16,347 - INFO - Dataset tsouthg in Air-Metadata was created.
+2023-08-21 11:58:16,348 - INFO - Dataset tsoutho in Air-Metadata was created.
+2023-08-21 11:58:16,348 - INFO - Dataset tsoutvg in Air-Metadata was created.
+2023-08-21 11:58:16,349 - INFO - Dataset tsoutvo in Air-Metadata was created.
+2023-08-21 11:58:16,349 - INFO - Dataset dsf in Air-Metadata was created.
+2023-08-21 11:58:16,350 - INFO - Dataset dsb in Air-Metadata was created.
+2023-08-21 11:58:16,350 - INFO - Dataset dsu in Air-Metadata was created.
+2023-08-21 11:58:16,351 - INFO - Dataset dsd in Air-Metadata was created.
+2023-08-21 11:58:16,351 - INFO - Dataset dshg in Air-Metadata was created.
+2023-08-21 11:58:16,352 - INFO - Dataset dsho in Air-Metadata was created.
+2023-08-21 11:58:16,353 - INFO - Dataset dsvg in Air-Metadata was created.
+2023-08-21 11:58:16,354 - INFO - Dataset dsvo in Air-Metadata was created.
+2023-08-21 11:58:16,354 - INFO - Dataset samsp in Air-Metadata was created.
+2023-08-21 11:58:16,355 - INFO - Dataset detsp in Air-Metadata was created.
+2023-08-21 11:58:16,355 - INFO - Dataset tubex in Air-Metadata was created.
+2023-08-21 11:58:16,356 - INFO - Dataset bstopx in Air-Metadata was created.
+2023-08-21 11:58:16,356 - INFO - Dataset bstopz in Air-Metadata was created.
+2023-08-21 11:58:16,356 - INFO - Dataset pilx in Air-Metadata was created.
+2023-08-21 11:58:16,357 - INFO - Dataset pilz in Air-Metadata was created.
+2023-08-21 11:58:16,357 - INFO - Dataset ehsp3 in Air-Metadata was created.
+2023-08-21 11:58:16,358 - INFO - Dataset ehsp4 in Air-Metadata was created.
+2023-08-21 11:58:16,358 - INFO - Dataset ehsp5 in Air-Metadata was created.
+2023-08-21 11:58:16,359 - INFO - Dataset ehsp6 in Air-Metadata was created.
+2023-08-21 11:58:16,359 - INFO - Dataset llth in Air-Metadata was created.
+2023-08-21 11:58:16,360 - INFO - Dataset win in Air-Metadata was created.
+2023-08-21 11:58:16,360 - INFO - Dataset amp1 in Air-Metadata was created.
+2023-08-21 11:58:16,361 - INFO - Dataset freq1 in Air-Metadata was created.
+2023-08-21 11:58:16,361 - INFO - Dataset dcoffs1 in Air-Metadata was created.
+2023-08-21 11:58:16,362 - INFO - Dataset kepcoi in Air-Metadata was created.
+2023-08-21 11:58:16,362 - INFO - Dataset dac1 in Air-Metadata was created.
+2023-08-21 11:58:16,363 - INFO - Dataset samx in Air-Metadata was created.
+2023-08-21 11:58:16,363 - INFO - Dataset euro_sp in Air-Metadata was created.
+2023-08-21 11:58:16,363 - INFO - Dataset samz in Air-Metadata was created.
+2023-08-21 11:58:16,364 - INFO - Dataset Emot in Air-Metadata was created.
+2023-08-21 11:58:16,364 - INFO - Dataset euro in Air-Metadata was created.
+2023-08-21 11:58:16,365 - INFO - Dataset curind in Air-Metadata was created.
+2023-08-21 11:58:16,366 - INFO - Dataset thorx in Air-Metadata was created.
+2023-08-21 11:58:16,366 - INFO - Dataset thorz in Air-Metadata was created.
+2023-08-21 11:58:16,367 - INFO - Dataset sec in Air-Metadata was created.
+2023-08-21 11:58:16,367 - INFO - Dataset srcur in Air-Metadata was created.
+2023-08-21 11:58:16,368 - INFO - Dataset mon in Air-Metadata was created.
+2023-08-21 11:58:16,368 - INFO - Dataset det in Air-Metadata was created.
+2023-08-21 11:58:16,369 - INFO - Dataset pico1 in Air-Metadata was created.
+2023-08-21 11:58:16,369 - INFO - Dataset Io in Air-Metadata was created.
+2023-08-21 11:58:16,370 - INFO - Dataset p4 in Air-Metadata was created.
+2023-08-21 11:58:16,370 - INFO - Dataset Iref in Air-Metadata was created.
+2023-08-21 11:58:16,371 - INFO - Dataset pico2 in Air-Metadata was created.
+2023-08-21 11:58:16,371 - INFO - Dataset lgm_enc in Air-Metadata was created.
+2023-08-21 11:58:16,372 - INFO - Dataset lgf_enc in Air-Metadata was created.
+2023-08-21 11:58:16,372 - INFO - Dataset lgb_enc in Air-Metadata was created.
+2023-08-21 11:58:16,373 - INFO - Dataset x in Air-Metadata was created.
+2023-08-21 11:58:16,374 - INFO - Dataset y in Air-Metadata was created.
+2023-08-21 11:58:16,374 - INFO - Dataset fwhmx in Air-Metadata was created.
+2023-08-21 11:58:16,375 - INFO - Dataset fwhmy in Air-Metadata was created.
+2023-08-21 11:58:16,375 - INFO - Dataset intens in Air-Metadata was created.
+2023-08-21 11:58:16,375 - INFO - Dataset iroi in Air-Metadata was created.
+2023-08-21 11:58:16,376 - INFO - Dataset p6 in Air-Metadata was created.
+2023-08-21 11:58:16,376 - INFO - Dataset p7 in Air-Metadata was created.
+2023-08-21 11:58:16,377 - INFO - Dataset p8 in Air-Metadata was created.
+2023-08-21 11:58:16,377 - INFO - Dataset It in Air-Metadata was created.
+2023-08-21 11:58:16,378 - INFO - Dataset p10 in Air-Metadata was created.
+2023-08-21 11:58:16,378 - INFO - Dataset Temp in Air-Metadata was created.
+2023-08-21 11:58:16,379 - INFO - Dataset apd in Air-Metadata was created.
+2023-08-21 11:58:16,379 - INFO - Dataset cdet in Air-Metadata was created.
+2023-08-21 11:58:16,380 - INFO - Dataset trans in Air-Metadata was created.
+2023-08-21 11:58:16,380 - INFO - Dataset attn in Air-Metadata was created.
+2023-08-21 11:58:16,381 - INFO - Dataset iroi2 in Air-Metadata was created.
+2023-08-21 11:58:16,381 - INFO - Dataset Qx in Air-Metadata was created.
+2023-08-21 11:58:16,381 - INFO - Dataset Qz in Air-Metadata was created.
+2023-08-21 11:58:16,382 - INFO - Dataset thc2 in Air-Metadata was created.
+2023-08-21 11:58:16,383 - INFO - Dataset Qref in Air-Metadata was created.
+2023-08-21 11:58:16,383 - INFO - Dataset ch1p in Air-Metadata was created.
+2023-08-21 11:58:16,384 - INFO - Dataset Iop in Air-Metadata was created.
+2023-08-21 11:58:16,384 - INFO - Dataset ch1n in Air-Metadata was created.
+2023-08-21 11:58:16,384 - INFO - Dataset Ion in Air-Metadata was created.
+2023-08-21 11:58:16,385 - INFO - Dataset diff1 in Air-Metadata was created.
+2023-08-21 11:58:16,385 - INFO - Dataset sum1 in Air-Metadata was created.
+2023-08-21 11:58:16,386 - INFO - Dataset R1 in Air-Metadata was created.
+2023-08-21 11:58:16,386 - INFO - Dataset RCP1 in Air-Metadata was created.
+2023-08-21 11:58:16,387 - INFO - Dataset LCP1 in Air-Metadata was created.
+2023-08-21 11:58:16,387 - INFO - Dataset ediff1 in Air-Metadata was created.
+2023-08-21 11:58:16,388 - INFO - Dataset eR1 in Air-Metadata was created.
+2023-08-21 11:58:16,388 - INFO - Dataset eRCP1 in Air-Metadata was created.
+2023-08-21 11:58:16,389 - INFO - Dataset eLCP1 in Air-Metadata was created.
+2023-08-21 11:58:16,389 - INFO - Dataset rcp_ret in Air-Metadata was created.
+2023-08-21 11:58:16,390 - INFO - Dataset lcp_ret in Air-Metadata was created.
+2023-08-21 11:58:16,390 - INFO - Dataset euro_T in Air-Metadata was created.
+2023-08-21 11:58:16,391 - INFO - Dataset mca0 in Air-Metadata was created.
+2023-08-21 11:58:16,391 - INFO - Dataset mca1 in Air-Metadata was created.
+2023-08-21 11:58:16,392 - INFO - Dataset Fe_fluo in Air-Metadata was created.
+2023-08-21 11:58:16,392 - INFO - Dataset Ni_fluo in Air-Metadata was created.
+2023-08-21 11:58:16,393 - INFO - Dataset Ce_fluo in Air-Metadata was created.
+2023-08-21 11:58:16,393 - INFO - Dataset Mn_fluo in Air-Metadata was created.
+2023-08-21 11:58:16,394 - INFO - Dataset Cr_fluo in Air-Metadata was created.
+2023-08-21 11:58:16,394 - INFO - Dataset ge01 in Air-Metadata was created.
+2023-08-21 11:58:16,395 - INFO - Dataset ge02 in Air-Metadata was created.
+2023-08-21 11:58:16,395 - INFO - Dataset ge03 in Air-Metadata was created.
+2023-08-21 11:58:16,396 - INFO - Dataset ge04 in Air-Metadata was created.
+2023-08-21 11:58:16,396 - INFO - Dataset ge05 in Air-Metadata was created.
+2023-08-21 11:58:16,397 - INFO - Dataset ge06 in Air-Metadata was created.
+2023-08-21 11:58:16,397 - INFO - Dataset ge07 in Air-Metadata was created.
+2023-08-21 11:58:16,398 - INFO - Dataset ge08 in Air-Metadata was created.
+2023-08-21 11:58:16,398 - INFO - Dataset ge09 in Air-Metadata was created.
+2023-08-21 11:58:16,399 - INFO - Dataset ge10 in Air-Metadata was created.
+2023-08-21 11:58:16,400 - INFO - Dataset ge11 in Air-Metadata was created.
+2023-08-21 11:58:16,400 - INFO - Dataset ge12 in Air-Metadata was created.
+2023-08-21 11:58:16,401 - INFO - Dataset ge13 in Air-Metadata was created.
+2023-08-21 11:58:16,401 - INFO - Dataset fluo01 in Air-Metadata was created.
+2023-08-21 11:58:16,402 - INFO - Dataset fluo02 in Air-Metadata was created.
+2023-08-21 11:58:16,402 - INFO - Dataset fluo03 in Air-Metadata was created.
+2023-08-21 11:58:16,403 - INFO - Dataset fluo04 in Air-Metadata was created.
+2023-08-21 11:58:16,403 - INFO - Dataset fluo05 in Air-Metadata was created.
+2023-08-21 11:58:16,403 - INFO - Dataset fluo06 in Air-Metadata was created.
+2023-08-21 11:58:16,405 - INFO - Dataset fluo07 in Air-Metadata was created.
+2023-08-21 11:58:16,405 - INFO - Dataset fluo08 in Air-Metadata was created.
+2023-08-21 11:58:16,406 - INFO - Dataset fluo09 in Air-Metadata was created.
+2023-08-21 11:58:16,406 - INFO - Dataset fluo10 in Air-Metadata was created.
+2023-08-21 11:58:16,407 - INFO - Dataset fluo11 in Air-Metadata was created.
+2023-08-21 11:58:16,407 - INFO - Dataset fluo12 in Air-Metadata was created.
+2023-08-21 11:58:16,407 - INFO - Dataset fluo13 in Air-Metadata was created.
+2023-08-21 11:58:16,408 - INFO - Dataset ge_fall in Air-Metadata was created.
+2023-08-21 11:58:16,408 - INFO - Dataset iroi1 in Air-Metadata was created.
+2023-08-21 11:58:16,409 - INFO - Dataset iroiall in Air-Metadata was created.
+2023-08-21 11:58:16,409 - INFO - Dataset magA in Air-Metadata was created.
+2023-08-21 11:58:16,410 - INFO - Dataset magB in Air-Metadata was created.
+2023-08-21 11:58:16,410 - INFO - Dataset magS in Air-Metadata was created.
+2023-08-21 11:58:16,411 - INFO - Dataset magD in Air-Metadata was created.
+2023-08-21 11:58:16,411 - INFO - Dataset magR in Air-Metadata was created.
+2023-08-21 11:58:16,412 - INFO - Dataset magAE in Air-Metadata was created.
+2023-08-21 11:58:16,412 - INFO - Dataset magBE in Air-Metadata was created.
+2023-08-21 11:58:16,413 - INFO - Dataset magSE in Air-Metadata was created.
+2023-08-21 11:58:16,413 - INFO - Dataset magDE in Air-Metadata was created.
+2023-08-21 11:58:16,414 - INFO - Dataset magRE in Air-Metadata was created.
+2023-08-21 11:58:16,414 - INFO - Dataset nomon in Air-Metadata was created.
+2023-08-21 11:58:16,414 - INFO - Dataset apdmon in Air-Metadata was created.
+2023-08-21 11:58:16,415 - INFO - Dataset mccdR in Air-Metadata was created.
+2023-08-21 11:58:16,415 - INFO - Dataset temp_A in Air-Metadata was created.
+2023-08-21 11:58:16,416 - INFO - Dataset temp_B in Air-Metadata was created.
+2023-08-21 11:58:16,416 - INFO - Dataset c100 in Air-Metadata was created.
+2023-08-21 11:58:16,417 - INFO - Dataset p11 in Air-Metadata was created.
+2023-08-21 11:58:16,418 - INFO - Dataset Icnt in Air-Metadata was created.
+2023-08-21 11:58:16,418 - INFO - Dataset euro_pv in Air-Metadata was created.
+2023-08-21 11:58:16,419 - INFO - Dataset euro_ts in Air-Metadata was created.
+2023-08-21 11:58:16,419 - INFO - Dataset euro_ws in Air-Metadata was created.
+2023-08-21 11:58:16,420 - INFO - Dataset xicr in Air-Metadata was created.
+2023-08-21 11:58:16,420 - INFO - Dataset xocr in Air-Metadata was created.
+2023-08-21 11:58:16,421 - INFO - Dataset xlt in Air-Metadata was created.
+2023-08-21 11:58:16,421 - INFO - Dataset xdt in Air-Metadata was created.
+2023-08-21 11:58:16,422 - INFO - Dataset xicr00 in Air-Metadata was created.
+2023-08-21 11:58:16,422 - INFO - Dataset xocr00 in Air-Metadata was created.
+2023-08-21 11:58:16,422 - INFO - Dataset xlt00 in Air-Metadata was created.
+2023-08-21 11:58:16,423 - INFO - Dataset xdt00 in Air-Metadata was created.
+2023-08-21 11:58:16,423 - INFO - Dataset xicr01 in Air-Metadata was created.
+2023-08-21 11:58:16,424 - INFO - Dataset xocr01 in Air-Metadata was created.
+2023-08-21 11:58:16,424 - INFO - Dataset xlt01 in Air-Metadata was created.
+2023-08-21 11:58:16,424 - INFO - Dataset xdt01 in Air-Metadata was created.
+2023-08-21 11:58:16,426 - INFO - Dataset xicr02 in Air-Metadata was created.
+2023-08-21 11:58:16,427 - INFO - Dataset xocr02 in Air-Metadata was created.
+2023-08-21 11:58:16,427 - INFO - Dataset xlt02 in Air-Metadata was created.
+2023-08-21 11:58:16,428 - INFO - Dataset xdt02 in Air-Metadata was created.
+2023-08-21 11:58:16,428 - INFO - Dataset pm_enc in Air-Metadata was created.
+2023-08-21 11:58:16,429 - INFO - Dataset TempOH in Air-Metadata was created.
+2023-08-21 11:58:16,429 - INFO - Dataset Imon in Air-Metadata was created.
+2023-08-21 11:58:16,430 - INFO - Dataset Vmon in Air-Metadata was created.
+2023-08-21 11:58:16,430 - INFO - Dataset mca2 in Air-Metadata was created.
+2023-08-21 11:58:16,431 - INFO - Dataset UB0 in Air-Metadata was created.
+2023-08-21 11:58:16,431 - INFO - Dataset UB1 in Air-Metadata was created.
+2023-08-21 11:58:16,432 - INFO - Dataset UB2 in Air-Metadata was created.
+2023-08-21 11:58:16,432 - INFO - Dataset UB3 in Air-Metadata was created.
+2023-08-21 11:58:16,433 - INFO - Dataset UB4 in Air-Metadata was created.
+2023-08-21 11:58:16,433 - INFO - Dataset UB5 in Air-Metadata was created.
+2023-08-21 11:58:16,434 - INFO - Dataset UB6 in Air-Metadata was created.
+2023-08-21 11:58:16,435 - INFO - Dataset UB7 in Air-Metadata was created.
+2023-08-21 11:58:16,435 - INFO - Dataset UB8 in Air-Metadata was created.
+2023-08-21 11:58:16,435 - INFO - Dataset scan in Air-Metadata was created.
+2023-08-21 11:58:16,435 - INFO - Dataset could not be created with the standard format for the key cmd, value ['loopscan 5 5 0' 'loopscan 5 5 0' 'loopscan 5 5 0' 'loopscan 5 5 0'
+ 'loopscan 5 5 0' 'loopscan 5 5 0' 'loopscan 5 5 0'].
+2023-08-21 11:58:16,436 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,436 - INFO - Dataset cmd in Air-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,436 - INFO - Finished with folder: Air.
+2023-08-21 11:58:16,437 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:16,437 - INFO - We entered into function: update_folder_from_files
+2023-08-21 11:58:16,437 - INFO - We entered into function: h5_new_folder
+2023-08-21 11:58:16,438 - INFO - The folder LaB6 was successfully created.
+2023-08-21 11:58:16,438 - INFO - We entered into function: get_merged_data_and_metadata
+2023-08-21 11:58:16,438 - INFO - We entered into function: generator_fabio_data_header
+2023-08-21 11:58:16,444 - INFO - Data dataset in LaB6 group created.
+2023-08-21 11:58:16,444 - INFO - Added in LaB6-Data shape: (9, 1, 1)
+2023-08-21 11:58:16,444 - INFO - Metadata group in LaB6 group created.
+2023-08-21 11:58:16,444 - INFO - Dataset could not be created with the standard format for the key HeaderID, value ['EH:000042:000000:000000' 'EH:000043:000000:000000'
+ 'EH:000044:000000:000000' 'EH:000045:000000:000000'
+ 'EH:000046:000000:000000' 'EH:000047:000000:000000'
+ 'EH:000048:000000:000000' 'EH:000049:000000:000000'
+ 'EH:000050:000000:000000'].
+2023-08-21 11:58:16,445 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,445 - INFO - Dataset HeaderID in LaB6-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,445 - INFO - Dataset VersionNumber in LaB6-Metadata was created.
+2023-08-21 11:58:16,447 - INFO - Dataset Image in LaB6-Metadata was created.
+2023-08-21 11:58:16,447 - INFO - Dataset could not be created with the standard format for the key ByteOrder, value ['LowByteFirst' 'LowByteFirst' 'LowByteFirst' 'LowByteFirst'
+ 'LowByteFirst' 'LowByteFirst' 'LowByteFirst' 'LowByteFirst'
+ 'LowByteFirst'].
+2023-08-21 11:58:16,447 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,448 - INFO - Dataset ByteOrder in LaB6-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,448 - INFO - Dataset could not be created with the standard format for the key DataType, value ['UnsignedShort' 'UnsignedShort' 'UnsignedShort' 'UnsignedShort'
+ 'UnsignedShort' 'UnsignedShort' 'UnsignedShort' 'UnsignedShort'
+ 'UnsignedShort'].
+2023-08-21 11:58:16,448 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,449 - INFO - Dataset DataType in LaB6-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,449 - INFO - Dataset Dim_1 in LaB6-Metadata was created.
+2023-08-21 11:58:16,450 - INFO - Dataset Dim_2 in LaB6-Metadata was created.
+2023-08-21 11:58:16,450 - INFO - Dataset Size in LaB6-Metadata was created.
+2023-08-21 11:58:16,451 - INFO - Finished with folder: LaB6.
+2023-08-21 11:58:16,451 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:16,451 - INFO - We entered into function: update_folder_from_files
+2023-08-21 11:58:16,452 - INFO - We entered into function: h5_new_folder
+2023-08-21 11:58:16,453 - INFO - The folder Y6 was successfully created.
+2023-08-21 11:58:16,453 - INFO - We entered into function: get_merged_data_and_metadata
+2023-08-21 11:58:16,453 - INFO - We entered into function: generator_fabio_data_header
+2023-08-21 11:58:16,461 - INFO - Data dataset in Y6 group created.
+2023-08-21 11:58:16,462 - INFO - Added in Y6-Data shape: (8, 1, 1)
+2023-08-21 11:58:16,462 - INFO - Metadata group in Y6 group created.
+2023-08-21 11:58:16,462 - INFO - Dataset could not be created with the standard format for the key HeaderID, value ['EH:003268:000000:000000' 'EH:003269:000000:000000'
+ 'EH:003270:000000:000000' 'EH:003271:000000:000000'
+ 'EH:003272:000000:000000' 'EH:003273:000000:000000'
+ 'EH:003274:000000:000000' 'EH:003275:000000:000000'].
+2023-08-21 11:58:16,463 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,463 - INFO - Dataset HeaderID in Y6-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,464 - INFO - Dataset VersionNumber in Y6-Metadata was created.
+2023-08-21 11:58:16,464 - INFO - Dataset Image in Y6-Metadata was created.
+2023-08-21 11:58:16,464 - INFO - Dataset could not be created with the standard format for the key ByteOrder, value ['LowByteFirst' 'LowByteFirst' 'LowByteFirst' 'LowByteFirst'
+ 'LowByteFirst' 'LowByteFirst' 'LowByteFirst' 'LowByteFirst'].
+2023-08-21 11:58:16,465 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,465 - INFO - Dataset ByteOrder in Y6-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,466 - INFO - Dataset could not be created with the standard format for the key DataType, value ['UnsignedShort' 'UnsignedShort' 'UnsignedShort' 'UnsignedShort'
+ 'UnsignedShort' 'UnsignedShort' 'UnsignedShort' 'UnsignedShort'].
+2023-08-21 11:58:16,466 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,466 - INFO - Dataset DataType in Y6-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,468 - INFO - Dataset Dim_1 in Y6-Metadata was created.
+2023-08-21 11:58:16,468 - INFO - Dataset Dim_2 in Y6-Metadata was created.
+2023-08-21 11:58:16,469 - INFO - Dataset Size in Y6-Metadata was created.
+2023-08-21 11:58:16,469 - INFO - Dataset could not be created with the standard format for the key date, value ['Sun Feb 05 06:31:14 2023' 'Sun Feb 05 06:31:25 2023'
+ 'Sun Feb 05 06:31:35 2023' 'Sun Feb 05 06:31:46 2023'
+ 'Sun Feb 05 06:31:56 2023' 'Sun Feb 05 06:32:07 2023'
+ 'Sun Feb 05 06:32:17 2023' 'Sun Feb 05 06:32:28 2023'].
+2023-08-21 11:58:16,470 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,470 - INFO - Dataset date in Y6-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,471 - INFO - Dataset time in Y6-Metadata was created.
+2023-08-21 11:58:16,471 - INFO - Dataset source_wavelength in Y6-Metadata was created.
+2023-08-21 11:58:16,472 - INFO - Dataset beam_y in Y6-Metadata was created.
+2023-08-21 11:58:16,472 - INFO - Dataset beam_x in Y6-Metadata was created.
+2023-08-21 11:58:16,473 - INFO - Dataset detector_distance in Y6-Metadata was created.
+2023-08-21 11:58:16,473 - INFO - Dataset transmission in Y6-Metadata was created.
+2023-08-21 11:58:16,474 - INFO - Dataset monitor in Y6-Metadata was created.
+2023-08-21 11:58:16,474 - INFO - Dataset l in Y6-Metadata was created.
+2023-08-21 11:58:16,475 - INFO - Dataset k in Y6-Metadata was created.
+2023-08-21 11:58:16,475 - INFO - Dataset h in Y6-Metadata was created.
+2023-08-21 11:58:16,476 - INFO - Dataset count_time in Y6-Metadata was created.
+2023-08-21 11:58:16,476 - INFO - Dataset could not be created with the standard format for the key file_comments, value ['file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'
+ 'file=/data/visitor/ma5752/bm28/20230131/align_XMaS.spec'].
+2023-08-21 11:58:16,476 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,477 - INFO - Dataset file_comments in Y6-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,477 - INFO - Dataset scan in Y6-Metadata was created.
+2023-08-21 11:58:16,477 - INFO - Dataset could not be created with the standard format for the key cmd, value ['loopscan 10 2 0' 'loopscan 10 2 0' 'loopscan 10 2 0' 'loopscan 10 2 0'
+ 'loopscan 10 2 0' 'loopscan 10 2 0' 'loopscan 10 2 0' 'loopscan 10 2 0'].
+2023-08-21 11:58:16,478 - INFO - Trying to create dataset with encoded data.
+2023-08-21 11:58:16,478 - INFO - Dataset cmd in Y6-Metadata was created. Encoding worked.
+2023-08-21 11:58:16,479 - INFO - Dataset U0 in Y6-Metadata was created.
+2023-08-21 11:58:16,479 - INFO - Dataset U1 in Y6-Metadata was created.
+2023-08-21 11:58:16,480 - INFO - Dataset U2 in Y6-Metadata was created.
+2023-08-21 11:58:16,480 - INFO - Dataset U3 in Y6-Metadata was created.
+2023-08-21 11:58:16,481 - INFO - Dataset U4 in Y6-Metadata was created.
+2023-08-21 11:58:16,481 - INFO - Dataset U5 in Y6-Metadata was created.
+2023-08-21 11:58:16,482 - INFO - Dataset dummy in Y6-Metadata was created.
+2023-08-21 11:58:16,482 - INFO - Dataset s1f in Y6-Metadata was created.
+2023-08-21 11:58:16,483 - INFO - Dataset s1b in Y6-Metadata was created.
+2023-08-21 11:58:16,483 - INFO - Dataset s1u in Y6-Metadata was created.
+2023-08-21 11:58:16,484 - INFO - Dataset s1d in Y6-Metadata was created.
+2023-08-21 11:58:16,485 - INFO - Dataset s1hg in Y6-Metadata was created.
+2023-08-21 11:58:16,486 - INFO - Dataset s1ho in Y6-Metadata was created.
+2023-08-21 11:58:16,486 - INFO - Dataset s1vg in Y6-Metadata was created.
+2023-08-21 11:58:16,487 - INFO - Dataset s1vo in Y6-Metadata was created.
+2023-08-21 11:58:16,487 - INFO - Dataset s2f in Y6-Metadata was created.
+2023-08-21 11:58:16,487 - INFO - Dataset s2b in Y6-Metadata was created.
+2023-08-21 11:58:16,489 - INFO - Dataset s2u in Y6-Metadata was created.
+2023-08-21 11:58:16,489 - INFO - Dataset s2d in Y6-Metadata was created.
+2023-08-21 11:58:16,489 - INFO - Dataset s2hg in Y6-Metadata was created.
+2023-08-21 11:58:16,490 - INFO - Dataset s2ho in Y6-Metadata was created.
+2023-08-21 11:58:16,491 - INFO - Dataset s2vg in Y6-Metadata was created.
+2023-08-21 11:58:16,491 - INFO - Dataset s2vo in Y6-Metadata was created.
+2023-08-21 11:58:16,492 - INFO - Dataset s4f in Y6-Metadata was created.
+2023-08-21 11:58:16,492 - INFO - Dataset s4b in Y6-Metadata was created.
+2023-08-21 11:58:16,492 - INFO - Dataset s4u in Y6-Metadata was created.
+2023-08-21 11:58:16,493 - INFO - Dataset s4d in Y6-Metadata was created.
+2023-08-21 11:58:16,493 - INFO - Dataset s4hg in Y6-Metadata was created.
+2023-08-21 11:58:16,494 - INFO - Dataset s4ho in Y6-Metadata was created.
+2023-08-21 11:58:16,494 - INFO - Dataset s4vg in Y6-Metadata was created.
+2023-08-21 11:58:16,495 - INFO - Dataset s4vo in Y6-Metadata was created.
+2023-08-21 11:58:16,495 - INFO - Dataset s3f in Y6-Metadata was created.
+2023-08-21 11:58:16,496 - INFO - Dataset s3b in Y6-Metadata was created.
+2023-08-21 11:58:16,496 - INFO - Dataset s3u in Y6-Metadata was created.
+2023-08-21 11:58:16,496 - INFO - Dataset s3d in Y6-Metadata was created.
+2023-08-21 11:58:16,497 - INFO - Dataset s3hg in Y6-Metadata was created.
+2023-08-21 11:58:16,497 - INFO - Dataset s3ho in Y6-Metadata was created.
+2023-08-21 11:58:16,498 - INFO - Dataset s3vg in Y6-Metadata was created.
+2023-08-21 11:58:16,498 - INFO - Dataset s3vo in Y6-Metadata was created.
+2023-08-21 11:58:16,498 - INFO - Dataset mono in Y6-Metadata was created.
+2023-08-21 11:58:16,499 - INFO - Dataset hgt in Y6-Metadata was created.
+2023-08-21 11:58:16,499 - INFO - Dataset xtilt in Y6-Metadata was created.
+2023-08-21 11:58:16,500 - INFO - Dataset ytilt in Y6-Metadata was created.
+2023-08-21 11:58:16,500 - INFO - Dataset lgm in Y6-Metadata was created.
+2023-08-21 11:58:16,501 - INFO - Dataset lgf in Y6-Metadata was created.
+2023-08-21 11:58:16,501 - INFO - Dataset lgb in Y6-Metadata was created.
+2023-08-21 11:58:16,502 - INFO - Dataset inout in Y6-Metadata was created.
+2023-08-21 11:58:16,502 - INFO - Dataset mjack in Y6-Metadata was created.
+2023-08-21 11:58:16,503 - INFO - Dataset mth in Y6-Metadata was created.
+2023-08-21 11:58:16,503 - INFO - Dataset mroll in Y6-Metadata was created.
+2023-08-21 11:58:16,504 - INFO - Dataset myaw in Y6-Metadata was created.
+2023-08-21 11:58:16,504 - INFO - Dataset mty in Y6-Metadata was created.
+2023-08-21 11:58:16,505 - INFO - Dataset mtz in Y6-Metadata was created.
+2023-08-21 11:58:16,505 - INFO - Dataset mcrbu in Y6-Metadata was created.
+2023-08-21 11:58:16,506 - INFO - Dataset mcrbd in Y6-Metadata was created.
+2023-08-21 11:58:16,506 - INFO - Dataset mptbu in Y6-Metadata was created.
+2023-08-21 11:58:16,507 - INFO - Dataset mptbd in Y6-Metadata was created.
+2023-08-21 11:58:16,507 - INFO - Dataset omtz in Y6-Metadata was created.
+2023-08-21 11:58:16,508 - INFO - Dataset ohspare in Y6-Metadata was created.
+2023-08-21 11:58:16,508 - INFO - Dataset bviewer in Y6-Metadata was created.
+2023-08-21 11:58:16,508 - INFO - Dataset mtrans in Y6-Metadata was created.
+2023-08-21 11:58:16,508 - INFO - Dataset m1u in Y6-Metadata was created.
+2023-08-21 11:58:16,510 - INFO - Dataset m1m in Y6-Metadata was created.
+2023-08-21 11:58:16,510 - INFO - Dataset m1d in Y6-Metadata was created.
+2023-08-21 11:58:16,511 - INFO - Dataset m1hgt in Y6-Metadata was created.
+2023-08-21 11:58:16,511 - INFO - Dataset m1th in Y6-Metadata was created.
+2023-08-21 11:58:16,512 - INFO - Dataset m1tilt in Y6-Metadata was created.
+2023-08-21 11:58:16,512 - INFO - Dataset m2u in Y6-Metadata was created.
+2023-08-21 11:58:16,513 - INFO - Dataset m2m in Y6-Metadata was created.
+2023-08-21 11:58:16,513 - INFO - Dataset m2d in Y6-Metadata was created.
+2023-08-21 11:58:16,514 - INFO - Dataset m2hgt in Y6-Metadata was created.
+2023-08-21 11:58:16,514 - INFO - Dataset m2th in Y6-Metadata was created.
+2023-08-21 11:58:16,515 - INFO - Dataset m2tilt in Y6-Metadata was created.
+2023-08-21 11:58:16,515 - INFO - Dataset hsf in Y6-Metadata was created.
+2023-08-21 11:58:16,515 - INFO - Dataset hsb in Y6-Metadata was created.
+2023-08-21 11:58:16,516 - INFO - Dataset hsu in Y6-Metadata was created.
+2023-08-21 11:58:16,516 - INFO - Dataset hsd in Y6-Metadata was created.
+2023-08-21 11:58:16,517 - INFO - Dataset hshg in Y6-Metadata was created.
+2023-08-21 11:58:16,518 - INFO - Dataset hsho in Y6-Metadata was created.
+2023-08-21 11:58:16,518 - INFO - Dataset hsvg in Y6-Metadata was created.
+2023-08-21 11:58:16,519 - INFO - Dataset hsvo in Y6-Metadata was created.
+2023-08-21 11:58:16,519 - INFO - Dataset tsinf in Y6-Metadata was created.
+2023-08-21 11:58:16,519 - INFO - Dataset tsinb in Y6-Metadata was created.
+2023-08-21 11:58:16,520 - INFO - Dataset tsinu in Y6-Metadata was created.
+2023-08-21 11:58:16,520 - INFO - Dataset tsind in Y6-Metadata was created.
+2023-08-21 11:58:16,521 - INFO - Dataset tsinhg in Y6-Metadata was created.
+2023-08-21 11:58:16,521 - INFO - Dataset tsinho in Y6-Metadata was created.
+2023-08-21 11:58:16,521 - INFO - Dataset tsinvg in Y6-Metadata was created.
+2023-08-21 11:58:16,522 - INFO - Dataset tsinvo in Y6-Metadata was created.
+2023-08-21 11:58:16,522 - INFO - Dataset pptth in Y6-Metadata was created.
+2023-08-21 11:58:16,523 - INFO - Dataset ppth in Y6-Metadata was created.
+2023-08-21 11:58:16,523 - INFO - Dataset ppchi in Y6-Metadata was created.
+2023-08-21 11:58:16,524 - INFO - Dataset ppx in Y6-Metadata was created.
+2023-08-21 11:58:16,524 - INFO - Dataset ppz in Y6-Metadata was created.
+2023-08-21 11:58:16,524 - INFO - Dataset ppio in Y6-Metadata was created.
+2023-08-21 11:58:16,525 - INFO - Dataset ic0io in Y6-Metadata was created.
+2023-08-21 11:58:16,525 - INFO - Dataset ic1io in Y6-Metadata was created.
+2023-08-21 11:58:16,526 - INFO - Dataset quadx in Y6-Metadata was created.
+2023-08-21 11:58:16,526 - INFO - Dataset quadz in Y6-Metadata was created.
+2023-08-21 11:58:16,527 - INFO - Dataset quadio in Y6-Metadata was created.
+2023-08-21 11:58:16,527 - INFO - Dataset bpmx in Y6-Metadata was created.
+2023-08-21 11:58:16,528 - INFO - Dataset bpmz in Y6-Metadata was created.
+2023-08-21 11:58:16,528 - INFO - Dataset bpmio in Y6-Metadata was created.
+2023-08-21 11:58:16,528 - INFO - Dataset filter in Y6-Metadata was created.
+2023-08-21 11:58:16,529 - INFO - Dataset filtio in Y6-Metadata was created.
+2023-08-21 11:58:16,529 - INFO - Dataset tsx in Y6-Metadata was created.
+2023-08-21 11:58:16,529 - INFO - Dataset tsz in Y6-Metadata was created.
+2023-08-21 11:58:16,531 - INFO - Dataset bigx in Y6-Metadata was created.
+2023-08-21 11:58:16,531 - INFO - Dataset bigz in Y6-Metadata was created.
+2023-08-21 11:58:16,532 - INFO - Dataset mccdx in Y6-Metadata was created.
+2023-08-21 11:58:16,532 - INFO - Dataset mccdz in Y6-Metadata was created.
+2023-08-21 11:58:16,533 - INFO - Dataset ehsp1 in Y6-Metadata was created.
+2023-08-21 11:58:16,533 - INFO - Dataset ehsp2 in Y6-Metadata was created.
+2023-08-21 11:58:16,534 - INFO - Dataset del in Y6-Metadata was created.
+2023-08-21 11:58:16,534 - INFO - Dataset eta in Y6-Metadata was created.
+2023-08-21 11:58:16,535 - INFO - Dataset chi in Y6-Metadata was created.
+2023-08-21 11:58:16,535 - INFO - Dataset phi in Y6-Metadata was created.
+2023-08-21 11:58:16,536 - INFO - Dataset nu in Y6-Metadata was created.
+2023-08-21 11:58:16,536 - INFO - Dataset mu in Y6-Metadata was created.
+2023-08-21 11:58:16,537 - INFO - Dataset ttha in Y6-Metadata was created.
+2023-08-21 11:58:16,537 - INFO - Dataset tha in Y6-Metadata was created.
+2023-08-21 11:58:16,537 - INFO - Dataset tthp in Y6-Metadata was created.
+2023-08-21 11:58:16,538 - INFO - Dataset thp in Y6-Metadata was created.
+2023-08-21 11:58:16,538 - INFO - Dataset etap in Y6-Metadata was created.
+2023-08-21 11:58:16,539 - INFO - Dataset xdiff in Y6-Metadata was created.
+2023-08-21 11:58:16,539 - INFO - Dataset zup in Y6-Metadata was created.
+2023-08-21 11:58:16,540 - INFO - Dataset zdown in Y6-Metadata was created.
+2023-08-21 11:58:16,540 - INFO - Dataset zdiff in Y6-Metadata was created.
+2023-08-21 11:58:16,540 - INFO - Dataset thdiff in Y6-Metadata was created.
+2023-08-21 11:58:16,541 - INFO - Dataset tthy1 in Y6-Metadata was created.
+2023-08-21 11:58:16,541 - INFO - Dataset tthy2 in Y6-Metadata was created.
+2023-08-21 11:58:16,542 - INFO - Dataset cryx in Y6-Metadata was created.
+2023-08-21 11:58:16,542 - INFO - Dataset cryy in Y6-Metadata was created.
+2023-08-21 11:58:16,543 - INFO - Dataset cryz in Y6-Metadata was created.
+2023-08-21 11:58:16,543 - INFO - Dataset vtrans in Y6-Metadata was created.
+2023-08-21 11:58:16,544 - INFO - Dataset goniox in Y6-Metadata was created.
+2023-08-21 11:58:16,544 - INFO - Dataset gonioy in Y6-Metadata was created.
+2023-08-21 11:58:16,545 - INFO - Dataset arcx in Y6-Metadata was created.
+2023-08-21 11:58:16,545 - INFO - Dataset arcy in Y6-Metadata was created.
+2023-08-21 11:58:16,545 - INFO - Dataset tsoutf in Y6-Metadata was created.
+2023-08-21 11:58:16,546 - INFO - Dataset tsoutb in Y6-Metadata was created.
+2023-08-21 11:58:16,546 - INFO - Dataset tsoutu in Y6-Metadata was created.
+2023-08-21 11:58:16,547 - INFO - Dataset tsoutd in Y6-Metadata was created.
+2023-08-21 11:58:16,547 - INFO - Dataset tsouthg in Y6-Metadata was created.
+2023-08-21 11:58:16,548 - INFO - Dataset tsoutho in Y6-Metadata was created.
+2023-08-21 11:58:16,548 - INFO - Dataset tsoutvg in Y6-Metadata was created.
+2023-08-21 11:58:16,548 - INFO - Dataset tsoutvo in Y6-Metadata was created.
+2023-08-21 11:58:16,549 - INFO - Dataset dsf in Y6-Metadata was created.
+2023-08-21 11:58:16,549 - INFO - Dataset dsb in Y6-Metadata was created.
+2023-08-21 11:58:16,550 - INFO - Dataset dsu in Y6-Metadata was created.
+2023-08-21 11:58:16,550 - INFO - Dataset dsd in Y6-Metadata was created.
+2023-08-21 11:58:16,550 - INFO - Dataset dshg in Y6-Metadata was created.
+2023-08-21 11:58:16,552 - INFO - Dataset dsho in Y6-Metadata was created.
+2023-08-21 11:58:16,552 - INFO - Dataset dsvg in Y6-Metadata was created.
+2023-08-21 11:58:16,553 - INFO - Dataset dsvo in Y6-Metadata was created.
+2023-08-21 11:58:16,553 - INFO - Dataset samsp in Y6-Metadata was created.
+2023-08-21 11:58:16,554 - INFO - Dataset detsp in Y6-Metadata was created.
+2023-08-21 11:58:16,554 - INFO - Dataset tubex in Y6-Metadata was created.
+2023-08-21 11:58:16,555 - INFO - Dataset bstopx in Y6-Metadata was created.
+2023-08-21 11:58:16,555 - INFO - Dataset bstopz in Y6-Metadata was created.
+2023-08-21 11:58:16,556 - INFO - Dataset pilx in Y6-Metadata was created.
+2023-08-21 11:58:16,556 - INFO - Dataset pilz in Y6-Metadata was created.
+2023-08-21 11:58:16,557 - INFO - Dataset ehsp3 in Y6-Metadata was created.
+2023-08-21 11:58:16,557 - INFO - Dataset ehsp4 in Y6-Metadata was created.
+2023-08-21 11:58:16,558 - INFO - Dataset ehsp5 in Y6-Metadata was created.
+2023-08-21 11:58:16,558 - INFO - Dataset ehsp6 in Y6-Metadata was created.
+2023-08-21 11:58:16,559 - INFO - Dataset llth in Y6-Metadata was created.
+2023-08-21 11:58:16,559 - INFO - Dataset win in Y6-Metadata was created.
+2023-08-21 11:58:16,560 - INFO - Dataset amp1 in Y6-Metadata was created.
+2023-08-21 11:58:16,560 - INFO - Dataset freq1 in Y6-Metadata was created.
+2023-08-21 11:58:16,561 - INFO - Dataset dcoffs1 in Y6-Metadata was created.
+2023-08-21 11:58:16,561 - INFO - Dataset kepcoi in Y6-Metadata was created.
+2023-08-21 11:58:16,561 - INFO - Dataset dac1 in Y6-Metadata was created.
+2023-08-21 11:58:16,562 - INFO - Dataset samx in Y6-Metadata was created.
+2023-08-21 11:58:16,562 - INFO - Dataset euro_sp in Y6-Metadata was created.
+2023-08-21 11:58:16,563 - INFO - Dataset samz in Y6-Metadata was created.
+2023-08-21 11:58:16,563 - INFO - Dataset Emot in Y6-Metadata was created.
+2023-08-21 11:58:16,564 - INFO - Dataset euro in Y6-Metadata was created.
+2023-08-21 11:58:16,564 - INFO - Dataset curind in Y6-Metadata was created.
+2023-08-21 11:58:16,565 - INFO - Dataset thorx in Y6-Metadata was created.
+2023-08-21 11:58:16,565 - INFO - Dataset thorz in Y6-Metadata was created.
+2023-08-21 11:58:16,566 - INFO - Dataset sec in Y6-Metadata was created.
+2023-08-21 11:58:16,566 - INFO - Dataset srcur in Y6-Metadata was created.
+2023-08-21 11:58:16,567 - INFO - Dataset mon in Y6-Metadata was created.
+2023-08-21 11:58:16,568 - INFO - Dataset det in Y6-Metadata was created.
+2023-08-21 11:58:16,568 - INFO - Dataset pico1 in Y6-Metadata was created.
+2023-08-21 11:58:16,569 - INFO - Dataset Io in Y6-Metadata was created.
+2023-08-21 11:58:16,569 - INFO - Dataset p4 in Y6-Metadata was created.
+2023-08-21 11:58:16,570 - INFO - Dataset Iref in Y6-Metadata was created.
+2023-08-21 11:58:16,570 - INFO - Dataset pico2 in Y6-Metadata was created.
+2023-08-21 11:58:16,571 - INFO - Dataset lgm_enc in Y6-Metadata was created.
+2023-08-21 11:58:16,571 - INFO - Dataset lgf_enc in Y6-Metadata was created.
+2023-08-21 11:58:16,571 - INFO - Dataset lgb_enc in Y6-Metadata was created.
+2023-08-21 11:58:16,573 - INFO - Dataset x in Y6-Metadata was created.
+2023-08-21 11:58:16,573 - INFO - Dataset y in Y6-Metadata was created.
+2023-08-21 11:58:16,574 - INFO - Dataset fwhmx in Y6-Metadata was created.
+2023-08-21 11:58:16,574 - INFO - Dataset fwhmy in Y6-Metadata was created.
+2023-08-21 11:58:16,575 - INFO - Dataset intens in Y6-Metadata was created.
+2023-08-21 11:58:16,575 - INFO - Dataset iroi in Y6-Metadata was created.
+2023-08-21 11:58:16,576 - INFO - Dataset p6 in Y6-Metadata was created.
+2023-08-21 11:58:16,576 - INFO - Dataset p7 in Y6-Metadata was created.
+2023-08-21 11:58:16,577 - INFO - Dataset p8 in Y6-Metadata was created.
+2023-08-21 11:58:16,577 - INFO - Dataset It in Y6-Metadata was created.
+2023-08-21 11:58:16,578 - INFO - Dataset p10 in Y6-Metadata was created.
+2023-08-21 11:58:16,578 - INFO - Dataset Temp in Y6-Metadata was created.
+2023-08-21 11:58:16,579 - INFO - Dataset apd in Y6-Metadata was created.
+2023-08-21 11:58:16,579 - INFO - Dataset cdet in Y6-Metadata was created.
+2023-08-21 11:58:16,580 - INFO - Dataset trans in Y6-Metadata was created.
+2023-08-21 11:58:16,580 - INFO - Dataset attn in Y6-Metadata was created.
+2023-08-21 11:58:16,581 - INFO - Dataset iroi2 in Y6-Metadata was created.
+2023-08-21 11:58:16,581 - INFO - Dataset Qx in Y6-Metadata was created.
+2023-08-21 11:58:16,582 - INFO - Dataset Qz in Y6-Metadata was created.
+2023-08-21 11:58:16,582 - INFO - Dataset thc2 in Y6-Metadata was created.
+2023-08-21 11:58:16,582 - INFO - Dataset Qref in Y6-Metadata was created.
+2023-08-21 11:58:16,583 - INFO - Dataset ch1p in Y6-Metadata was created.
+2023-08-21 11:58:16,583 - INFO - Dataset Iop in Y6-Metadata was created.
+2023-08-21 11:58:16,584 - INFO - Dataset ch1n in Y6-Metadata was created.
+2023-08-21 11:58:16,584 - INFO - Dataset Ion in Y6-Metadata was created.
+2023-08-21 11:58:16,585 - INFO - Dataset diff1 in Y6-Metadata was created.
+2023-08-21 11:58:16,585 - INFO - Dataset sum1 in Y6-Metadata was created.
+2023-08-21 11:58:16,586 - INFO - Dataset R1 in Y6-Metadata was created.
+2023-08-21 11:58:16,586 - INFO - Dataset RCP1 in Y6-Metadata was created.
+2023-08-21 11:58:16,587 - INFO - Dataset LCP1 in Y6-Metadata was created.
+2023-08-21 11:58:16,587 - INFO - Dataset ediff1 in Y6-Metadata was created.
+2023-08-21 11:58:16,588 - INFO - Dataset eR1 in Y6-Metadata was created.
+2023-08-21 11:58:16,588 - INFO - Dataset eRCP1 in Y6-Metadata was created.
+2023-08-21 11:58:16,589 - INFO - Dataset eLCP1 in Y6-Metadata was created.
+2023-08-21 11:58:16,589 - INFO - Dataset rcp_ret in Y6-Metadata was created.
+2023-08-21 11:58:16,590 - INFO - Dataset lcp_ret in Y6-Metadata was created.
+2023-08-21 11:58:16,590 - INFO - Dataset euro_T in Y6-Metadata was created.
+2023-08-21 11:58:16,591 - INFO - Dataset mca0 in Y6-Metadata was created.
+2023-08-21 11:58:16,591 - INFO - Dataset mca1 in Y6-Metadata was created.
+2023-08-21 11:58:16,592 - INFO - Dataset Fe_fluo in Y6-Metadata was created.
+2023-08-21 11:58:16,592 - INFO - Dataset Ni_fluo in Y6-Metadata was created.
+2023-08-21 11:58:16,592 - INFO - Dataset Ce_fluo in Y6-Metadata was created.
+2023-08-21 11:58:16,594 - INFO - Dataset Mn_fluo in Y6-Metadata was created.
+2023-08-21 11:58:16,594 - INFO - Dataset Cr_fluo in Y6-Metadata was created.
+2023-08-21 11:58:16,595 - INFO - Dataset ge01 in Y6-Metadata was created.
+2023-08-21 11:58:16,595 - INFO - Dataset ge02 in Y6-Metadata was created.
+2023-08-21 11:58:16,596 - INFO - Dataset ge03 in Y6-Metadata was created.
+2023-08-21 11:58:16,596 - INFO - Dataset ge04 in Y6-Metadata was created.
+2023-08-21 11:58:16,597 - INFO - Dataset ge05 in Y6-Metadata was created.
+2023-08-21 11:58:16,597 - INFO - Dataset ge06 in Y6-Metadata was created.
+2023-08-21 11:58:16,598 - INFO - Dataset ge07 in Y6-Metadata was created.
+2023-08-21 11:58:16,598 - INFO - Dataset ge08 in Y6-Metadata was created.
+2023-08-21 11:58:16,599 - INFO - Dataset ge09 in Y6-Metadata was created.
+2023-08-21 11:58:16,599 - INFO - Dataset ge10 in Y6-Metadata was created.
+2023-08-21 11:58:16,600 - INFO - Dataset ge11 in Y6-Metadata was created.
+2023-08-21 11:58:16,601 - INFO - Dataset ge12 in Y6-Metadata was created.
+2023-08-21 11:58:16,601 - INFO - Dataset ge13 in Y6-Metadata was created.
+2023-08-21 11:58:16,602 - INFO - Dataset fluo01 in Y6-Metadata was created.
+2023-08-21 11:58:16,602 - INFO - Dataset fluo02 in Y6-Metadata was created.
+2023-08-21 11:58:16,602 - INFO - Dataset fluo03 in Y6-Metadata was created.
+2023-08-21 11:58:16,603 - INFO - Dataset fluo04 in Y6-Metadata was created.
+2023-08-21 11:58:16,603 - INFO - Dataset fluo05 in Y6-Metadata was created.
+2023-08-21 11:58:16,603 - INFO - Dataset fluo06 in Y6-Metadata was created.
+2023-08-21 11:58:16,604 - INFO - Dataset fluo07 in Y6-Metadata was created.
+2023-08-21 11:58:16,604 - INFO - Dataset fluo08 in Y6-Metadata was created.
+2023-08-21 11:58:16,606 - INFO - Dataset fluo09 in Y6-Metadata was created.
+2023-08-21 11:58:16,606 - INFO - Dataset fluo10 in Y6-Metadata was created.
+2023-08-21 11:58:16,607 - INFO - Dataset fluo11 in Y6-Metadata was created.
+2023-08-21 11:58:16,607 - INFO - Dataset fluo12 in Y6-Metadata was created.
+2023-08-21 11:58:16,608 - INFO - Dataset fluo13 in Y6-Metadata was created.
+2023-08-21 11:58:16,608 - INFO - Dataset ge_fall in Y6-Metadata was created.
+2023-08-21 11:58:16,609 - INFO - Dataset iroi1 in Y6-Metadata was created.
+2023-08-21 11:58:16,609 - INFO - Dataset iroiall in Y6-Metadata was created.
+2023-08-21 11:58:16,609 - INFO - Dataset magA in Y6-Metadata was created.
+2023-08-21 11:58:16,610 - INFO - Dataset magB in Y6-Metadata was created.
+2023-08-21 11:58:16,610 - INFO - Dataset magS in Y6-Metadata was created.
+2023-08-21 11:58:16,611 - INFO - Dataset magD in Y6-Metadata was created.
+2023-08-21 11:58:16,611 - INFO - Dataset magR in Y6-Metadata was created.
+2023-08-21 11:58:16,612 - INFO - Dataset magAE in Y6-Metadata was created.
+2023-08-21 11:58:16,612 - INFO - Dataset magBE in Y6-Metadata was created.
+2023-08-21 11:58:16,613 - INFO - Dataset magSE in Y6-Metadata was created.
+2023-08-21 11:58:16,613 - INFO - Dataset magDE in Y6-Metadata was created.
+2023-08-21 11:58:16,614 - INFO - Dataset magRE in Y6-Metadata was created.
+2023-08-21 11:58:16,614 - INFO - Dataset nomon in Y6-Metadata was created.
+2023-08-21 11:58:16,614 - INFO - Dataset apdmon in Y6-Metadata was created.
+2023-08-21 11:58:16,615 - INFO - Dataset mccdR in Y6-Metadata was created.
+2023-08-21 11:58:16,615 - INFO - Dataset temp_A in Y6-Metadata was created.
+2023-08-21 11:58:16,616 - INFO - Dataset temp_B in Y6-Metadata was created.
+2023-08-21 11:58:16,616 - INFO - Dataset c100 in Y6-Metadata was created.
+2023-08-21 11:58:16,617 - INFO - Dataset p11 in Y6-Metadata was created.
+2023-08-21 11:58:16,618 - INFO - Dataset Icnt in Y6-Metadata was created.
+2023-08-21 11:58:16,618 - INFO - Dataset euro_pv in Y6-Metadata was created.
+2023-08-21 11:58:16,619 - INFO - Dataset euro_ts in Y6-Metadata was created.
+2023-08-21 11:58:16,619 - INFO - Dataset euro_ws in Y6-Metadata was created.
+2023-08-21 11:58:16,619 - INFO - Dataset xicr in Y6-Metadata was created.
+2023-08-21 11:58:16,620 - INFO - Dataset xocr in Y6-Metadata was created.
+2023-08-21 11:58:16,620 - INFO - Dataset xlt in Y6-Metadata was created.
+2023-08-21 11:58:16,621 - INFO - Dataset xdt in Y6-Metadata was created.
+2023-08-21 11:58:16,621 - INFO - Dataset xicr00 in Y6-Metadata was created.
+2023-08-21 11:58:16,622 - INFO - Dataset xocr00 in Y6-Metadata was created.
+2023-08-21 11:58:16,622 - INFO - Dataset xlt00 in Y6-Metadata was created.
+2023-08-21 11:58:16,622 - INFO - Dataset xdt00 in Y6-Metadata was created.
+2023-08-21 11:58:16,623 - INFO - Dataset xicr01 in Y6-Metadata was created.
+2023-08-21 11:58:16,623 - INFO - Dataset xocr01 in Y6-Metadata was created.
+2023-08-21 11:58:16,624 - INFO - Dataset xlt01 in Y6-Metadata was created.
+2023-08-21 11:58:16,624 - INFO - Dataset xdt01 in Y6-Metadata was created.
+2023-08-21 11:58:16,624 - INFO - Dataset xicr02 in Y6-Metadata was created.
+2023-08-21 11:58:16,626 - INFO - Dataset xocr02 in Y6-Metadata was created.
+2023-08-21 11:58:16,626 - INFO - Dataset xlt02 in Y6-Metadata was created.
+2023-08-21 11:58:16,627 - INFO - Dataset xdt02 in Y6-Metadata was created.
+2023-08-21 11:58:16,627 - INFO - Dataset pm_enc in Y6-Metadata was created.
+2023-08-21 11:58:16,628 - INFO - Dataset TempOH in Y6-Metadata was created.
+2023-08-21 11:58:16,628 - INFO - Dataset Imon in Y6-Metadata was created.
+2023-08-21 11:58:16,629 - INFO - Dataset Vmon in Y6-Metadata was created.
+2023-08-21 11:58:16,629 - INFO - Dataset mca2 in Y6-Metadata was created.
+2023-08-21 11:58:16,630 - INFO - Dataset UB0 in Y6-Metadata was created.
+2023-08-21 11:58:16,630 - INFO - Dataset UB1 in Y6-Metadata was created.
+2023-08-21 11:58:16,631 - INFO - Dataset UB2 in Y6-Metadata was created.
+2023-08-21 11:58:16,631 - INFO - Dataset UB3 in Y6-Metadata was created.
+2023-08-21 11:58:16,632 - INFO - Dataset UB4 in Y6-Metadata was created.
+2023-08-21 11:58:16,632 - INFO - Dataset UB5 in Y6-Metadata was created.
+2023-08-21 11:58:16,633 - INFO - Dataset UB6 in Y6-Metadata was created.
+2023-08-21 11:58:16,633 - INFO - Dataset UB7 in Y6-Metadata was created.
+2023-08-21 11:58:16,634 - INFO - Dataset UB8 in Y6-Metadata was created.
+2023-08-21 11:58:16,634 - INFO - Finished with folder: Y6.
+2023-08-21 11:58:16,634 - INFO - Finished the update of all the new files.
+2023-08-21 11:58:16,635 - INFO - The .h5 file was updated.
+2023-08-21 11:58:16,635 - INFO - We entered into function: activate_h5file
+2023-08-21 11:58:16,635 - INFO - We entered into function: update_widgets
+2023-08-21 11:58:16,635 - INFO - Updated list widget.
+2023-08-21 11:58:16,635 - INFO - We entered into function: update_setup_info
+2023-08-21 11:58:16,636 - INFO - New setup dictionary was updated.
+2023-08-21 11:58:16,637 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:16,637 - INFO - We entered into function: update_table
+2023-08-21 11:58:16,637 - INFO - Table was reseted.
+2023-08-21 11:58:16,637 - INFO - No folder to display. Return.
+2023-08-21 11:58:16,638 - INFO - We entered into function: update_table
+2023-08-21 11:58:16,638 - INFO - Table was reseted.
+2023-08-21 11:58:16,638 - INFO - No folder to display. Return.
+2023-08-21 11:58:16,638 - INFO - We entered into function: update_table
+2023-08-21 11:58:16,639 - INFO - Table was reseted.
+2023-08-21 11:58:16,639 - INFO - No folder to display. Return.
+2023-08-21 11:58:17,875 - INFO - We entered into function: update_clicked_folder
+2023-08-21 11:58:17,876 - INFO - Clicked folder: LaB6
+2023-08-21 11:58:17,877 - INFO - We entered into function: contains_group
+2023-08-21 11:58:17,877 - INFO - New clicked folder: LaB6
+2023-08-21 11:58:17,877 - INFO - We entered into function: update_comboboxes_metadata
+2023-08-21 11:58:17,877 - INFO - We entered into function: generator_keys_in_folder
+2023-08-21 11:58:17,878 - INFO - Metadata keys: ['ByteOrder', 'DataType', 'Dim_1', 'Dim_2', 'HeaderID', 'Image', 'Size', 'VersionNumber']
+2023-08-21 11:58:17,878 - INFO - New metadata keys: ['ByteOrder', 'DataType', 'Dim_1', 'Dim_2', 'HeaderID', 'Image', 'Size', 'VersionNumber']
+2023-08-21 11:58:17,878 - INFO - We entered into function: update_table
+2023-08-21 11:58:17,878 - INFO - Table was reseted.
+2023-08-21 11:58:17,879 - INFO - Folder to display: LaB6.
+2023-08-21 11:58:17,879 - INFO - Keys to display: ['spitch', 'Monitor', 'exposure', 'ByteOrder'].
+2023-08-21 11:58:17,879 - INFO - We entered into function: get_metadata_dataframe
+2023-08-21 11:58:17,879 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,880 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,880 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,880 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,881 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,881 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,881 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,882 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,882 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,882 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,883 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,883 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,883 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,884 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,884 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,884 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,885 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,885 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,885 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,886 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,886 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,886 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,886 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,887 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,887 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,887 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,887 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,887 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,888 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,888 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,888 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,888 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,889 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,889 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,889 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,890 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,896 - INFO - This is the dataframe:         Filename spitch Monitor exposure        ByteOrder
+0  LaB6_0000.edf   None    None     None  b'LowByteFirst'
+1  LaB6_0001.edf   None    None     None  b'LowByteFirst'
+2  LaB6_0002.edf   None    None     None  b'LowByteFirst'
+3  LaB6_0003.edf   None    None     None  b'LowByteFirst'
+4  LaB6_0004.edf   None    None     None  b'LowByteFirst'
+5  LaB6_0005.edf   None    None     None  b'LowByteFirst'
+6  LaB6_0006.edf   None    None     None  b'LowByteFirst'
+7  LaB6_0007.edf   None    None     None  b'LowByteFirst'
+8  LaB6_0008.edf   None    None     None  b'LowByteFirst'
+2023-08-21 11:58:17,896 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-08-21 11:58:17,898 - INFO - Inserted columns: 5
+2023-08-21 11:58:17,898 - INFO - Inserted rows: 9
+2023-08-21 11:58:17,898 - INFO - Updated cell [0,0].
+2023-08-21 11:58:17,898 - INFO - Updated cell [0,1].
+2023-08-21 11:58:17,898 - INFO - Updated cell [0,2].
+2023-08-21 11:58:17,899 - INFO - Updated cell [0,3].
+2023-08-21 11:58:17,899 - INFO - Updated cell [0,4].
+2023-08-21 11:58:17,900 - INFO - Updated cell [1,0].
+2023-08-21 11:58:17,900 - INFO - Updated cell [1,1].
+2023-08-21 11:58:17,900 - INFO - Updated cell [1,2].
+2023-08-21 11:58:17,900 - INFO - Updated cell [1,3].
+2023-08-21 11:58:17,901 - INFO - Updated cell [1,4].
+2023-08-21 11:58:17,901 - INFO - Updated cell [2,0].
+2023-08-21 11:58:17,901 - INFO - Updated cell [2,1].
+2023-08-21 11:58:17,901 - INFO - Updated cell [2,2].
+2023-08-21 11:58:17,902 - INFO - Updated cell [2,3].
+2023-08-21 11:58:17,902 - INFO - Updated cell [2,4].
+2023-08-21 11:58:17,902 - INFO - Updated cell [3,0].
+2023-08-21 11:58:17,902 - INFO - Updated cell [3,1].
+2023-08-21 11:58:17,902 - INFO - Updated cell [3,2].
+2023-08-21 11:58:17,903 - INFO - Updated cell [3,3].
+2023-08-21 11:58:17,903 - INFO - Updated cell [3,4].
+2023-08-21 11:58:17,903 - INFO - Updated cell [4,0].
+2023-08-21 11:58:17,903 - INFO - Updated cell [4,1].
+2023-08-21 11:58:17,903 - INFO - Updated cell [4,2].
+2023-08-21 11:58:17,904 - INFO - Updated cell [4,3].
+2023-08-21 11:58:17,904 - INFO - Updated cell [4,4].
+2023-08-21 11:58:17,904 - INFO - Updated cell [5,0].
+2023-08-21 11:58:17,904 - INFO - Updated cell [5,1].
+2023-08-21 11:58:17,905 - INFO - Updated cell [5,2].
+2023-08-21 11:58:17,905 - INFO - Updated cell [5,3].
+2023-08-21 11:58:17,905 - INFO - Updated cell [5,4].
+2023-08-21 11:58:17,905 - INFO - Updated cell [6,0].
+2023-08-21 11:58:17,905 - INFO - Updated cell [6,1].
+2023-08-21 11:58:17,906 - INFO - Updated cell [6,2].
+2023-08-21 11:58:17,906 - INFO - Updated cell [6,3].
+2023-08-21 11:58:17,906 - INFO - Updated cell [6,4].
+2023-08-21 11:58:17,906 - INFO - Updated cell [7,0].
+2023-08-21 11:58:17,906 - INFO - Updated cell [7,1].
+2023-08-21 11:58:17,907 - INFO - Updated cell [7,2].
+2023-08-21 11:58:17,907 - INFO - Updated cell [7,3].
+2023-08-21 11:58:17,907 - INFO - Updated cell [7,4].
+2023-08-21 11:58:17,907 - INFO - Updated cell [8,0].
+2023-08-21 11:58:17,907 - INFO - Updated cell [8,1].
+2023-08-21 11:58:17,908 - INFO - Updated cell [8,2].
+2023-08-21 11:58:17,908 - INFO - Updated cell [8,3].
+2023-08-21 11:58:17,908 - INFO - Updated cell [8,4].
+2023-08-21 11:58:17,908 - INFO - Combobox header_items updated.
+2023-08-21 11:58:17,908 - INFO - Combobox header_items title updated.
+2023-08-21 11:58:17,908 - INFO - We entered into function: update_angle_parameter
+2023-08-21 11:58:17,909 - INFO - Combobox angle updated.
+2023-08-21 11:58:17,909 - INFO - We entered into function: update_tiltangle_parameter
+2023-08-21 11:58:17,909 - INFO - Combobox tilt angle updated.
+2023-08-21 11:58:17,909 - INFO - We entered into function: update_normfactor_parameter
+2023-08-21 11:58:17,909 - INFO - Combobox norm updated.
+2023-08-21 11:58:17,909 - INFO - We entered into function: update_exposure_parameter
+2023-08-21 11:58:17,909 - INFO - Combobox exposure updated.
+2023-08-21 11:58:17,909 - INFO - We entered into function: update_table
+2023-08-21 11:58:17,910 - INFO - Table was reseted.
+2023-08-21 11:58:17,910 - INFO - Folder to display: LaB6.
+2023-08-21 11:58:17,910 - INFO - Keys to display: ['spitch', 'Monitor', 'exposure', 'ByteOrder'].
+2023-08-21 11:58:17,910 - INFO - We entered into function: get_metadata_dataframe
+2023-08-21 11:58:17,911 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,911 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,911 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,911 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,912 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,912 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,912 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,912 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,912 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,913 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,913 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,913 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,913 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,914 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,914 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,914 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,914 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,914 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,915 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,915 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,915 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,915 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,916 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,916 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,916 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,916 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,916 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,916 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,917 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,917 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,917 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,917 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,917 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,918 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,918 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,918 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:17,924 - INFO - This is the dataframe:         Filename spitch Monitor exposure        ByteOrder
+0  LaB6_0000.edf   None    None     None  b'LowByteFirst'
+1  LaB6_0001.edf   None    None     None  b'LowByteFirst'
+2  LaB6_0002.edf   None    None     None  b'LowByteFirst'
+3  LaB6_0003.edf   None    None     None  b'LowByteFirst'
+4  LaB6_0004.edf   None    None     None  b'LowByteFirst'
+5  LaB6_0005.edf   None    None     None  b'LowByteFirst'
+6  LaB6_0006.edf   None    None     None  b'LowByteFirst'
+7  LaB6_0007.edf   None    None     None  b'LowByteFirst'
+8  LaB6_0008.edf   None    None     None  b'LowByteFirst'
+2023-08-21 11:58:17,924 - INFO - Dataframe: <class 'pandas.core.frame.DataFrame'>.
+2023-08-21 11:58:17,925 - INFO - Inserted columns: 5
+2023-08-21 11:58:17,925 - INFO - Inserted rows: 9
+2023-08-21 11:58:17,925 - INFO - Updated cell [0,0].
+2023-08-21 11:58:17,925 - INFO - Updated cell [0,1].
+2023-08-21 11:58:17,926 - INFO - Updated cell [0,2].
+2023-08-21 11:58:17,926 - INFO - Updated cell [0,3].
+2023-08-21 11:58:17,926 - INFO - Updated cell [0,4].
+2023-08-21 11:58:17,926 - INFO - Updated cell [1,0].
+2023-08-21 11:58:17,927 - INFO - Updated cell [1,1].
+2023-08-21 11:58:17,927 - INFO - Updated cell [1,2].
+2023-08-21 11:58:17,927 - INFO - Updated cell [1,3].
+2023-08-21 11:58:17,927 - INFO - Updated cell [1,4].
+2023-08-21 11:58:17,927 - INFO - Updated cell [2,0].
+2023-08-21 11:58:17,927 - INFO - Updated cell [2,1].
+2023-08-21 11:58:17,927 - INFO - Updated cell [2,2].
+2023-08-21 11:58:17,929 - INFO - Updated cell [2,3].
+2023-08-21 11:58:17,929 - INFO - Updated cell [2,4].
+2023-08-21 11:58:17,929 - INFO - Updated cell [3,0].
+2023-08-21 11:58:17,929 - INFO - Updated cell [3,1].
+2023-08-21 11:58:17,929 - INFO - Updated cell [3,2].
+2023-08-21 11:58:17,929 - INFO - Updated cell [3,3].
+2023-08-21 11:58:17,930 - INFO - Updated cell [3,4].
+2023-08-21 11:58:17,930 - INFO - Updated cell [4,0].
+2023-08-21 11:58:17,930 - INFO - Updated cell [4,1].
+2023-08-21 11:58:17,930 - INFO - Updated cell [4,2].
+2023-08-21 11:58:17,930 - INFO - Updated cell [4,3].
+2023-08-21 11:58:17,931 - INFO - Updated cell [4,4].
+2023-08-21 11:58:17,931 - INFO - Updated cell [5,0].
+2023-08-21 11:58:17,931 - INFO - Updated cell [5,1].
+2023-08-21 11:58:17,931 - INFO - Updated cell [5,2].
+2023-08-21 11:58:17,931 - INFO - Updated cell [5,3].
+2023-08-21 11:58:17,932 - INFO - Updated cell [5,4].
+2023-08-21 11:58:17,932 - INFO - Updated cell [6,0].
+2023-08-21 11:58:17,932 - INFO - Updated cell [6,1].
+2023-08-21 11:58:17,932 - INFO - Updated cell [6,2].
+2023-08-21 11:58:17,932 - INFO - Updated cell [6,3].
+2023-08-21 11:58:17,932 - INFO - Updated cell [6,4].
+2023-08-21 11:58:17,932 - INFO - Updated cell [7,0].
+2023-08-21 11:58:17,932 - INFO - Updated cell [7,1].
+2023-08-21 11:58:17,933 - INFO - Updated cell [7,2].
+2023-08-21 11:58:17,933 - INFO - Updated cell [7,3].
+2023-08-21 11:58:17,933 - INFO - Updated cell [7,4].
+2023-08-21 11:58:17,933 - INFO - Updated cell [8,0].
+2023-08-21 11:58:17,934 - INFO - Updated cell [8,1].
+2023-08-21 11:58:17,934 - INFO - Updated cell [8,2].
+2023-08-21 11:58:17,934 - INFO - Updated cell [8,3].
+2023-08-21 11:58:17,934 - INFO - Updated cell [8,4].
+2023-08-21 11:58:18,571 - INFO - We entered into function: update_clicked_filenames
+2023-08-21 11:58:18,572 - INFO - We entered into function: filename_fromrow
+2023-08-21 11:58:18,572 - INFO - New cache index: [0]
+2023-08-21 11:58:18,572 - INFO - New cache filenames: [None]
+2023-08-21 11:58:18,573 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:18,573 - INFO - We entered into function: get_Edf_data
+2023-08-21 11:58:18,573 - INFO - We entered into function: get_Edf_instance
+2023-08-21 11:58:18,573 - INFO - We entered into function: get_filename_from_index
+2023-08-21 11:58:18,574 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:18,574 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:18,575 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:18,605 - INFO - New data sample with shape: (2048, 2048)
+2023-08-21 11:58:18,605 - INFO - We entered into function: get_norm_factor
+2023-08-21 11:58:18,606 - INFO - We entered into function: get_dataset_norm_factor
+2023-08-21 11:58:18,606 - INFO - We entered into function: get_norm_key
+2023-08-21 11:58:18,606 - INFO - We entered into function: get_attrs_in_group
+2023-08-21 11:58:18,607 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:18,607 - INFO - Failed while getting norm factor.
+2023-08-21 11:58:18,607 - INFO - Got norm factor: 1.0
+2023-08-21 11:58:18,608 - INFO - We entered into function: update_2D_graph
+2023-08-21 11:58:18,608 - INFO - True
+2023-08-21 11:58:18,609 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-08-21 11:58:18,673 - INFO - (196.81101202964783, 3004.7332844221296)
+2023-08-21 11:58:18,711 - INFO - Filtered negative, nan and zero values.
+2023-08-21 11:58:18,761 - INFO - Displayed data.
+2023-08-21 11:58:18,762 - INFO - We entered into function: update_1D_graph
+2023-08-21 11:58:18,763 - INFO - Ponifile: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:18,763 - INFO - Dictionaries of integration: ['Bragg_rod']
+2023-08-21 11:58:18,763 - INFO - Dictionaries of integration: [{'Name': 'Bragg_rod', 'Suffix': 'bragg_rod', 'Type': 'Vertical', 'Ip_range': [3.1, 4.5], 'Oop_range': [0.0, 20.0], 'Unit': 'q_nm^-1', 'Unit_input': 'q_nm^-1'}]
+2023-08-21 11:58:18,764 - INFO - We entered into function: raw_integration
+2023-08-21 11:58:18,764 - INFO - We entered into function: get_norm_factor
+2023-08-21 11:58:18,764 - INFO - We entered into function: get_dataset_norm_factor
+2023-08-21 11:58:18,764 - INFO - We entered into function: get_norm_key
+2023-08-21 11:58:18,764 - INFO - We entered into function: get_attrs_in_group
+2023-08-21 11:58:18,765 - INFO - We entered into function: get_metadata_dataset
+2023-08-21 11:58:18,765 - INFO - Failed while getting norm factor.
+2023-08-21 11:58:18,766 - INFO - Got norm factor: 1.0
+2023-08-21 11:58:18,766 - INFO - We entered into function: raw_integration_box
+2023-08-21 11:58:18,766 - INFO - We entered into function: calculate_bins
+2023-08-21 11:58:18,766 - INFO - We entered into function: q_to_twotheta
+2023-08-21 11:58:18,766 - INFO - We entered into function: q_to_twotheta
+2023-08-21 11:58:18,767 - INFO - We entered into function: get_q_nm
+2023-08-21 11:58:18,767 - INFO - We entered into function: get_q_nm
+2023-08-21 11:58:18,767 - INFO - We entered into function: get_q_nm
+2023-08-21 11:58:18,767 - INFO - We entered into function: get_q_nm
+2023-08-21 11:58:18,767 - INFO - Trying box integration with: process=opbox, npt=963, p0_range=[0.0, 20.0], p1_range=[3.1, 4.5], unit=q_nm^-1
+2023-08-21 11:58:20,193 - INFO - Integration performed.
+2023-08-21 11:58:20,193 - INFO - New integration: 1
+2023-08-21 11:58:20,197 - INFO - We entered into function: update_label_displayed
+2023-08-21 11:58:20,197 - INFO - We entered into function: get_filename_from_index
+2023-08-21 11:58:20,198 - INFO - New label: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_0000.edf
+2023-08-21 11:58:24,500 - INFO - We entered into function: set_h5_instance
+2023-08-21 11:58:24,500 - INFO - H5Integrator instance was initialized
+2023-08-21 11:58:24,501 - INFO - The filename is C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\test_xmas.h5.
+2023-08-21 11:58:24,501 - INFO - We entered into function: create_h5_file
+2023-08-21 11:58:24,501 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\test_xmas.h5 already exists. Return.
+2023-08-21 11:58:24,504 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:58:24,504 - INFO - No ponifiles to be updated. Return.
+2023-08-21 11:58:24,505 - INFO - We entered into function: update_setup_keys
+2023-08-21 11:58:24,505 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:24,505 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:24,506 - INFO - Updated iangle_key = spitch
+2023-08-21 11:58:24,506 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:24,506 - INFO - Updated acq_key = exposure
+2023-08-21 11:58:24,507 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:24,507 - INFO - Updated norm_key = Monitor
+2023-08-21 11:58:24,507 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:24,507 - INFO - Updated tilt_key = 
+2023-08-21 11:58:24,508 - INFO - Inherited methods from pygix.transform
+2023-08-21 11:58:24,508 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:24,508 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:24,509 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:24,509 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:24,509 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:24,510 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:24,510 - INFO - Loaded poni file
+2023-08-21 11:58:24,510 - INFO - Incident angle set at 0.0
+2023-08-21 11:58:24,511 - INFO - Tilt angle set at 0.0
+2023-08-21 11:58:24,511 - INFO - We entered into function: update_orientation
+2023-08-21 11:58:24,511 - INFO - qz parallel is True
+2023-08-21 11:58:24,511 - INFO - qr parallel is True
+2023-08-21 11:58:24,511 - INFO - The sample orientation (pygix) is set at 1
+2023-08-21 11:58:24,522 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:58:24,522 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:24,522 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:24,523 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:24,523 - INFO - Ponifile to be activated: b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni'
+2023-08-21 11:58:24,524 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni' activated successfully.
+2023-08-21 11:58:24,524 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:24,524 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:24,525 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:24,525 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:24,525 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:24,525 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:24,527 - INFO - Loaded poni file
+2023-08-21 11:58:24,527 - INFO - Incident angle set at 0.0
+2023-08-21 11:58:24,527 - INFO - Tilt angle set at 0.0
+2023-08-21 11:58:24,527 - INFO - New ponifile updated.
+2023-08-21 11:58:24,528 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:24,528 - INFO - We entered into function: update_angle_parameter
+2023-08-21 11:58:24,528 - INFO - We entered into function: update_tiltangle_parameter
+2023-08-21 11:58:24,528 - INFO - We entered into function: update_exposure_parameter
+2023-08-21 11:58:24,529 - INFO - We entered into function: update_normfactor_parameter
+2023-08-21 11:58:24,529 - INFO - We entered into function: update_clicked_filenames
+2023-08-21 11:58:24,529 - INFO - New cache index: []
+2023-08-21 11:58:24,529 - INFO - New cache filenames: []
+2023-08-21 11:58:24,529 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:24,530 - INFO - We entered into function: update_label_displayed
+2023-08-21 11:58:24,530 - INFO - We entered into function: update_table
+2023-08-21 11:58:24,530 - INFO - Table was reseted.
+2023-08-21 11:58:24,530 - INFO - No folder to display. Return.
+2023-08-21 11:58:24,533 - INFO - The data parameters were reinitialized.
+2023-08-21 11:58:24,534 - INFO - We entered into function: set_main_directory
+2023-08-21 11:58:24,534 - INFO - New main directory set.
+2023-08-21 11:58:24,534 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:24,534 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-21 11:58:24,535 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-08-21 11:58:24,535 - INFO - We entered into function: search_and_update_ponifiles
+2023-08-21 11:58:24,535 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:24,536 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:24,536 - INFO - No ponifiles detected.
+2023-08-21 11:58:24,536 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:24,537 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:24,537 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:24,537 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:24,538 - INFO - Ponifile to be activated: b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni'
+2023-08-21 11:58:24,539 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni' activated successfully.
+2023-08-21 11:58:24,539 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:24,539 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:24,540 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:24,541 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:24,542 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:24,542 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:24,543 - INFO - Loaded poni file
+2023-08-21 11:58:24,543 - INFO - Incident angle set at 0.0
+2023-08-21 11:58:24,543 - INFO - Tilt angle set at 0.0
+2023-08-21 11:58:24,544 - INFO - New ponifile updated.
+2023-08-21 11:58:24,544 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:24,544 - INFO - Combobox of ponifiles was updated.
+2023-08-21 11:58:24,544 - INFO - We entered into function: search_and_update_new_files
+2023-08-21 11:58:24,545 - INFO - We entered into function: search_new_files_folders
+2023-08-21 11:58:24,545 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:24,549 - INFO - 0 New files were detected.
+2023-08-21 11:58:24,550 - INFO - The .h5 file was updated.
+2023-08-21 11:58:24,550 - INFO - We entered into function: update_widgets
+2023-08-21 11:58:24,550 - INFO - Updated list widget.
+2023-08-21 11:58:24,551 - INFO - We entered into function: update_setup_info
+2023-08-21 11:58:24,552 - INFO - New setup dictionary was updated.
+2023-08-21 11:58:24,552 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:24,553 - INFO - We entered into function: update_table
+2023-08-21 11:58:24,553 - INFO - Table was reseted.
+2023-08-21 11:58:24,553 - INFO - No folder to display. Return.
+2023-08-21 11:58:24,553 - INFO - We entered into function: update_table
+2023-08-21 11:58:24,553 - INFO - Table was reseted.
+2023-08-21 11:58:24,554 - INFO - No folder to display. Return.
+2023-08-21 11:58:24,554 - INFO - We entered into function: update_table
+2023-08-21 11:58:24,554 - INFO - Table was reseted.
+2023-08-21 11:58:24,554 - INFO - No folder to display. Return.
+2023-08-21 11:58:25,493 - INFO - We entered into function: set_h5_instance
+2023-08-21 11:58:25,493 - INFO - H5Integrator instance was initialized
+2023-08-21 11:58:25,494 - INFO - The filename is C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5.
+2023-08-21 11:58:25,494 - INFO - We entered into function: create_h5_file
+2023-08-21 11:58:25,494 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\test_NCD.h5 already exists. Return.
+2023-08-21 11:58:25,495 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:58:25,495 - INFO - No ponifiles to be updated. Return.
+2023-08-21 11:58:25,495 - INFO - We entered into function: update_setup_keys
+2023-08-21 11:58:25,496 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:25,496 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:25,496 - INFO - Updated iangle_key = spitch
+2023-08-21 11:58:25,496 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:25,497 - INFO - Updated acq_key = exposure
+2023-08-21 11:58:25,497 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:25,497 - INFO - Updated norm_key = Monitor
+2023-08-21 11:58:25,497 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:25,498 - INFO - Updated tilt_key = 
+2023-08-21 11:58:25,498 - INFO - Inherited methods from pygix.transform
+2023-08-21 11:58:25,498 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:25,498 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:25,498 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-08-21 11:58:25,499 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:25,499 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-08-21 11:58:25,499 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:25,500 - INFO - Loaded poni file
+2023-08-21 11:58:25,500 - INFO - Incident angle set at 0.0
+2023-08-21 11:58:25,500 - INFO - Tilt angle set at 0.0
+2023-08-21 11:58:25,500 - INFO - We entered into function: update_orientation
+2023-08-21 11:58:25,500 - INFO - qz parallel is True
+2023-08-21 11:58:25,500 - INFO - qr parallel is True
+2023-08-21 11:58:25,500 - INFO - The sample orientation (pygix) is set at 1
+2023-08-21 11:58:25,502 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:58:25,502 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:25,502 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:25,502 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:25,503 - INFO - Ponifile to be activated: b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni'
+2023-08-21 11:58:25,503 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni' activated successfully.
+2023-08-21 11:58:25,503 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:25,504 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:25,504 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-08-21 11:58:25,504 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:25,504 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-08-21 11:58:25,505 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:25,505 - INFO - Loaded poni file
+2023-08-21 11:58:25,505 - INFO - Incident angle set at 0.0
+2023-08-21 11:58:25,505 - INFO - Tilt angle set at 0.0
+2023-08-21 11:58:25,506 - INFO - New ponifile updated.
+2023-08-21 11:58:25,506 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:25,506 - INFO - We entered into function: update_table
+2023-08-21 11:58:25,506 - INFO - Table was reseted.
+2023-08-21 11:58:25,506 - INFO - No folder to display. Return.
+2023-08-21 11:58:25,506 - INFO - The data parameters were reinitialized.
+2023-08-21 11:58:25,507 - INFO - We entered into function: set_main_directory
+2023-08-21 11:58:25,507 - INFO - New main directory set.
+2023-08-21 11:58:25,507 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:58:25,507 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-21 11:58:25,507 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-08-21 11:58:25,508 - INFO - We entered into function: search_and_update_ponifiles
+2023-08-21 11:58:25,508 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:58:25,509 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:25,509 - INFO - No ponifiles detected.
+2023-08-21 11:58:25,509 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:25,510 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:25,510 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:25,510 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:25,510 - INFO - Ponifile to be activated: b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni'
+2023-08-21 11:58:25,511 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_NCD\\Cr2O3.poni' activated successfully.
+2023-08-21 11:58:25,511 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:25,511 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:25,511 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-08-21 11:58:25,511 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:25,511 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni
+2023-08-21 11:58:25,513 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD\Cr2O3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:25,513 - INFO - Loaded poni file
+2023-08-21 11:58:25,513 - INFO - Incident angle set at 0.0
+2023-08-21 11:58:25,513 - INFO - Tilt angle set at 0.0
+2023-08-21 11:58:25,514 - INFO - New ponifile updated.
+2023-08-21 11:58:25,514 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:25,514 - INFO - Combobox of ponifiles was updated.
+2023-08-21 11:58:25,514 - INFO - We entered into function: search_and_update_new_files
+2023-08-21 11:58:25,514 - INFO - We entered into function: search_new_files_folders
+2023-08-21 11:58:25,514 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_NCD
+2023-08-21 11:58:25,516 - INFO - 0 New files were detected.
+2023-08-21 11:58:25,517 - INFO - The .h5 file was updated.
+2023-08-21 11:58:25,517 - INFO - We entered into function: update_widgets
+2023-08-21 11:58:25,517 - INFO - Updated list widget.
+2023-08-21 11:58:25,517 - INFO - We entered into function: update_setup_info
+2023-08-21 11:58:25,518 - INFO - New setup dictionary was updated.
+2023-08-21 11:58:25,519 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:25,519 - INFO - We entered into function: update_table
+2023-08-21 11:58:25,519 - INFO - Table was reseted.
+2023-08-21 11:58:25,519 - INFO - No folder to display. Return.
+2023-08-21 11:58:25,519 - INFO - We entered into function: update_table
+2023-08-21 11:58:25,519 - INFO - Table was reseted.
+2023-08-21 11:58:25,520 - INFO - No folder to display. Return.
+2023-08-21 11:58:25,520 - INFO - We entered into function: update_table
+2023-08-21 11:58:25,520 - INFO - Table was reseted.
+2023-08-21 11:58:25,520 - INFO - No folder to display. Return.
+2023-08-21 11:58:26,404 - INFO - We entered into function: set_h5_instance
+2023-08-21 11:58:26,404 - INFO - H5Integrator instance was initialized
+2023-08-21 11:58:26,406 - INFO - The filename is C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\test_xmas.h5.
+2023-08-21 11:58:26,406 - INFO - We entered into function: create_h5_file
+2023-08-21 11:58:26,406 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\test_xmas.h5 already exists. Return.
+2023-08-21 11:58:26,407 - INFO - We entered into function: update_group_ponifile
+2023-08-21 11:58:26,407 - INFO - No ponifiles to be updated. Return.
+2023-08-21 11:58:26,408 - INFO - We entered into function: update_setup_keys
+2023-08-21 11:58:26,408 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:26,408 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:26,409 - INFO - Updated iangle_key = spitch
+2023-08-21 11:58:26,409 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:26,410 - INFO - Updated acq_key = exposure
+2023-08-21 11:58:26,410 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:26,410 - INFO - Updated norm_key = Monitor
+2023-08-21 11:58:26,410 - INFO - We entered into function: update_attributes_in_group
+2023-08-21 11:58:26,411 - INFO - Updated tilt_key = 
+2023-08-21 11:58:26,411 - INFO - Inherited methods from pygix.transform
+2023-08-21 11:58:26,411 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:26,411 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:26,412 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:26,412 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:26,412 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:26,413 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:26,413 - INFO - Loaded poni file
+2023-08-21 11:58:26,413 - INFO - Incident angle set at 0.0
+2023-08-21 11:58:26,414 - INFO - Tilt angle set at 0.0
+2023-08-21 11:58:26,414 - INFO - We entered into function: update_orientation
+2023-08-21 11:58:26,414 - INFO - qz parallel is True
+2023-08-21 11:58:26,414 - INFO - qr parallel is True
+2023-08-21 11:58:26,414 - INFO - The sample orientation (pygix) is set at 1
+2023-08-21 11:58:26,415 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:58:26,415 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:26,415 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:26,415 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:26,415 - INFO - Ponifile to be activated: b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni'
+2023-08-21 11:58:26,416 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni' activated successfully.
+2023-08-21 11:58:26,416 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:26,416 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:26,416 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:26,416 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:26,416 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:26,417 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:26,417 - INFO - Loaded poni file
+2023-08-21 11:58:26,417 - INFO - Incident angle set at 0.0
+2023-08-21 11:58:26,417 - INFO - Tilt angle set at 0.0
+2023-08-21 11:58:26,418 - INFO - New ponifile updated.
+2023-08-21 11:58:26,418 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:26,418 - INFO - We entered into function: update_table
+2023-08-21 11:58:26,418 - INFO - Table was reseted.
+2023-08-21 11:58:26,418 - INFO - No folder to display. Return.
+2023-08-21 11:58:26,418 - INFO - The data parameters were reinitialized.
+2023-08-21 11:58:26,418 - INFO - We entered into function: set_main_directory
+2023-08-21 11:58:26,419 - INFO - New main directory set.
+2023-08-21 11:58:26,419 - INFO - C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:26,419 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-21 11:58:26,419 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-08-21 11:58:26,419 - INFO - We entered into function: search_and_update_ponifiles
+2023-08-21 11:58:26,419 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:26,420 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:26,421 - INFO - No ponifiles detected.
+2023-08-21 11:58:26,421 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:26,421 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:26,421 - INFO - We entered into function: activate_ponifile
+2023-08-21 11:58:26,422 - INFO - We entered into function: generator_stored_ponifiles
+2023-08-21 11:58:26,422 - INFO - Ponifile to be activated: b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni'
+2023-08-21 11:58:26,423 - INFO - Ponifile b'C:\\Users\\edgar1993a\\Work Folders\\Documents\\Python\\pyxscat\\edf_examples\\test_xmas\\LaB6\\LaB6_3.poni' activated successfully.
+2023-08-21 11:58:26,423 - INFO - We entered into function: update_transformQ
+2023-08-21 11:58:26,423 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:26,423 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:26,423 - INFO - We entered into function: get_active_ponifile
+2023-08-21 11:58:26,424 - INFO - Ponifile active: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni
+2023-08-21 11:58:26,424 - INFO - Unable to parse C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas\LaB6\LaB6_3.poni as JSON file, defaulting to PoniParser
+2023-08-21 11:58:26,425 - INFO - Loaded poni file
+2023-08-21 11:58:26,425 - INFO - Incident angle set at 0.0
+2023-08-21 11:58:26,425 - INFO - Tilt angle set at 0.0
+2023-08-21 11:58:26,425 - INFO - New ponifile updated.
+2023-08-21 11:58:26,426 - INFO - We entered into function: update_graphs
+2023-08-21 11:58:26,426 - INFO - Combobox of ponifiles was updated.
+2023-08-21 11:58:26,427 - INFO - We entered into function: search_and_update_new_files
+2023-08-21 11:58:26,427 - INFO - We entered into function: search_new_files_folders
+2023-08-21 11:58:26,427 - INFO - Got main directory: C:\Users\edgar1993a\Work Folders\Documents\Python\pyxscat\edf_examples\test_xmas
+2023-08-21 11:58:26,431 - INFO - 0 New files were detected.
+2023-08-21 11:58:26,432 - INFO - The .h5 file was updated.
+2023-08-21 11:58:26,432 - INFO - We entered into function: update_widgets
+2023-08-21 11:58:26,432 - INFO - Updated list widget.
+2023-08-21 11:58:26,433 - INFO - We entered into function: update_setup_info
+2023-08-21 11:58:26,434 - INFO - New setup dictionary was updated.
+2023-08-21 11:58:26,434 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:58:26,434 - INFO - We entered into function: update_table
+2023-08-21 11:58:26,434 - INFO - Table was reseted.
+2023-08-21 11:58:26,434 - INFO - No folder to display. Return.
+2023-08-21 11:58:26,434 - INFO - We entered into function: update_table
+2023-08-21 11:58:26,435 - INFO - Table was reseted.
+2023-08-21 11:58:26,435 - INFO - No folder to display. Return.
+2023-08-21 11:58:26,435 - INFO - We entered into function: update_table
+2023-08-21 11:58:26,435 - INFO - Table was reseted.
+2023-08-21 11:58:26,435 - INFO - No folder to display. Return.

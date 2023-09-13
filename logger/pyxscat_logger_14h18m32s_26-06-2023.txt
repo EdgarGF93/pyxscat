@@ -1,0 +1,2 @@
+2023-06-26 14:18:32,145 - INFO - Logger was initialized.
+2023-06-26 14:18:33,472 - INFO - We entered into function: reset_attributes_and_widgets

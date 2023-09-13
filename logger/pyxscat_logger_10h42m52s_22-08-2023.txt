@@ -1,0 +1,33 @@
+2023-08-22 10:42:52,548 - INFO - Logger was initialized.
+2023-08-22 10:42:57,201 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-22 10:42:57,202 - INFO - The data parameters were reinitialized.
+2023-08-22 10:42:57,202 - INFO - We entered into function: init_callbacks
+2023-08-22 10:42:57,202 - INFO - We entered into function: update_setup_info
+2023-08-22 10:42:57,203 - INFO - New setup dictionary was updated.
+2023-08-22 10:42:57,203 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-22 10:42:57,204 - INFO - We entered into function: update_lims_ticks
+2023-08-22 10:42:57,208 - INFO - We entered into function: update_combobox_h5
+2023-08-22 10:42:57,209 - INFO - We entered into function: set_h5_instance
+2023-08-22 10:42:57,209 - INFO - The .h5 could not be found.
+2023-08-22 10:42:57,210 - INFO - We entered into function: update_h5_poni_and_files
+2023-08-22 10:42:57,210 - INFO - The H5 could not be updated.
+2023-08-22 10:42:57,210 - INFO - We entered into function: update_widgets
+2023-08-22 10:42:57,210 - INFO - There is no H5Integrator instance.
+2023-08-22 10:42:57,210 - INFO - We entered into function: update_setup_info
+2023-08-22 10:42:57,211 - INFO - New setup dictionary was updated.
+2023-08-22 10:42:57,211 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-22 10:42:57,211 - INFO - We entered into function: update_combobox_setups
+2023-08-22 10:42:57,214 - INFO - We entered into function: update_setup_info
+2023-08-22 10:42:57,215 - INFO - New setup dictionary was updated.
+2023-08-22 10:42:57,216 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-22 10:42:57,216 - INFO - We entered into function: update_table
+2023-08-22 10:42:57,216 - INFO - Table was reseted.
+2023-08-22 10:42:57,216 - INFO - No folder to display. Return.
+2023-08-22 10:42:57,217 - INFO - We entered into function: update_table
+2023-08-22 10:42:57,217 - INFO - Table was reseted.
+2023-08-22 10:42:57,217 - INFO - No folder to display. Return.
+2023-08-22 10:42:57,217 - INFO - We entered into function: update_table
+2023-08-22 10:42:57,217 - INFO - Table was reseted.
+2023-08-22 10:42:57,217 - INFO - No folder to display. Return.
+2023-08-22 10:42:57,218 - INFO - We entered into function: update_integration_widgets
+2023-08-22 10:42:57,223 - INFO - We entered into function: update_graphs

@@ -1,0 +1,28 @@
+2023-08-21 11:57:44,058 - INFO - Logger was initialized.
+2023-08-21 11:57:44,059 - INFO - Logger was initialized.
+2023-08-21 11:57:45,387 - INFO - We entered into function: reset_attributes_and_widgets
+2023-08-21 11:57:45,387 - INFO - The data parameters were reinitialized.
+2023-08-21 11:57:45,387 - INFO - We entered into function: init_callbacks
+2023-08-21 11:57:45,388 - INFO - We entered into function: update_setup_info
+2023-08-21 11:57:45,388 - INFO - New setup dictionary was updated.
+2023-08-21 11:57:45,388 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-08-21 11:57:45,389 - INFO - We entered into function: update_lims_ticks
+2023-08-21 11:57:45,405 - INFO - We entered into function: update_combobox_h5
+2023-08-21 11:57:45,406 - INFO - No .h5 files detected.
+2023-08-21 11:57:45,406 - INFO - We entered into function: update_combobox_setups
+2023-08-21 11:57:45,407 - INFO - We entered into function: update_setup_info
+2023-08-21 11:57:45,408 - INFO - New setup dictionary was updated.
+2023-08-21 11:57:45,408 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-08-21 11:57:45,408 - INFO - We entered into function: update_table
+2023-08-21 11:57:45,409 - INFO - Table was reseted.
+2023-08-21 11:57:45,409 - INFO - No folder to display. Return.
+2023-08-21 11:57:45,409 - INFO - We entered into function: update_table
+2023-08-21 11:57:45,409 - INFO - Table was reseted.
+2023-08-21 11:57:45,409 - INFO - No folder to display. Return.
+2023-08-21 11:57:45,409 - INFO - We entered into function: update_table
+2023-08-21 11:57:45,409 - INFO - Table was reseted.
+2023-08-21 11:57:45,409 - INFO - No folder to display. Return.
+2023-08-21 11:57:45,410 - INFO - We entered into function: update_integration_widgets
+2023-08-21 11:57:45,412 - INFO - We entered into function: update_graphs
+2023-08-21 11:57:46,291 - INFO - We entered into function: create_h5_file
+2023-08-21 11:57:46,291 - INFO - We entered into function: pick_main_directory
