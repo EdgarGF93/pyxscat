@@ -23,6 +23,9 @@ pyxscat/integration_dicts/*.json
 # .json with metadata parameters (except for the examples)
 pyxscat/integration_dicts/*.json
 
+# root jupyter notebooks
+/*.ipynb
+
 kk/
 dist/
 
