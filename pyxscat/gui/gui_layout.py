@@ -128,6 +128,12 @@ STEP_INTEGRATION_SPINBOX = 0.5
 STEP_BINS_SPINBOX = 1
 SPINBOX_BINS_MIN = 0
 SPINBOX_BINS_MAX = 1E9
+
+SPINBOX_RADIAL_MIN = 0
+SPINBOX_RADIAL_MAX = 1E9
+SPINBOX_AZIM_MIN = -180
+SPINBOX_AZIM_MAX = 180
+
 SPINBOX_RANGE_MIN = -100
 SPINBOX_RANGE_MAX = 100
 ERROR_OUTPUT = "Something went wrong with the output message..."
@@ -829,11 +835,11 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_radialmin_cake = QLabel(LABEL_MIN)
         self.spinbox_radialmin_cake = QDoubleSpinBox()
         self.spinbox_radialmin_cake.setSingleStep(STEP_INTEGRATION_SPINBOX)
-        self.spinbox_radialmin_cake.setRange(SPINBOX_RANGE_MIN, SPINBOX_RANGE_MAX)
+        self.spinbox_radialmin_cake.setRange(SPINBOX_RADIAL_MIN, SPINBOX_RADIAL_MAX)
         self.label_radialmax_cake = QLabel(LABEL_MAX)
         self.spinbox_radialmax_cake = QDoubleSpinBox()
         self.spinbox_radialmax_cake.setSingleStep(STEP_INTEGRATION_SPINBOX)
-        self.spinbox_radialmax_cake.setRange(SPINBOX_RANGE_MIN, SPINBOX_RANGE_MAX)
+        self.spinbox_radialmax_cake.setRange(SPINBOX_RADIAL_MIN, SPINBOX_RADIAL_MAX)
         self.grid_radialrange.addWidget(self.label_radialmin_cake,1,1)
         self.grid_radialrange.addWidget(self.spinbox_radialmin_cake,1,2)
         self.grid_radialrange.addWidget(self.label_radialmax_cake,1,3)
@@ -842,11 +848,11 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_azimmin_cake = QLabel(LABEL_MIN)
         self.spinbox_azimmin_cake = QDoubleSpinBox()
         self.spinbox_azimmin_cake.setSingleStep(STEP_INTEGRATION_SPINBOX)
-        self.spinbox_azimmin_cake.setRange(SPINBOX_RANGE_MIN, SPINBOX_RANGE_MAX)
+        self.spinbox_azimmin_cake.setRange(SPINBOX_AZIM_MIN, SPINBOX_AZIM_MAX)
         self.label_azimmax_cake = QLabel(LABEL_MAX)
         self.spinbox_azimmax_cake = QDoubleSpinBox()
         self.spinbox_azimmax_cake.setSingleStep(STEP_INTEGRATION_SPINBOX)
-        self.spinbox_azimmax_cake.setRange(SPINBOX_RANGE_MIN, SPINBOX_RANGE_MAX)
+        self.spinbox_azimmax_cake.setRange(SPINBOX_AZIM_MIN, SPINBOX_AZIM_MAX)
         self.grid_azimrange.addWidget(self.label_azimmin_cake,1,1)
         self.grid_azimrange.addWidget(self.spinbox_azimmin_cake,1,2)
         self.grid_azimrange.addWidget(self.label_azimmax_cake,1,3)
