@@ -10,12 +10,11 @@ PyXScat is a graphical user interface, python-based, designed to visualize and h
 PyXScat allows visualization of 2D scattering maps through silx tools, reduction of data through pyFAI integration methods; it incorporates grazing incidence corrections through pygix module.
 
 """
-
 __author__ = "E. Gutierrez-Fernandez"
 __contact__ = "edgar.gutierrez-fernandez@esrf.fr"
 __license__ = ""
 __copyright__ = "European Synchrotron Radiation Facility, Grenoble, France"
-__version__ = "0.6"
+__version__ = "0.7"
 
 @property
 def version():

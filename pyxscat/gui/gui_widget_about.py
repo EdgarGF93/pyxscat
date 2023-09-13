@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QGridLayout, QLabel
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize
 from . import GUI_PATH
-
+from pyxscat import version
 
 class AboutForm(QWidget):
 
@@ -21,7 +21,7 @@ class AboutForm(QWidget):
         self.setLayout(self.gridlayout)
         self.gridlayout.setRowStretch(1,1)
         self.gridlayout.setRowStretch(2,1)
-        self.about_label_1 = QLabel("PyXScat version 0.6")
+        self.about_label_1 = QLabel(f"PyXScat version {version}")
         self.about_label_2 = QLabel("Contact to Edgar Gutierrez Fernandez")
         self.about_label_3 = QLabel("edgar.gutierrez-fernandez@esrf.fr")
         self.about_label_4 = QLabel("XMaS (BM28) - The European Synchrotron")
