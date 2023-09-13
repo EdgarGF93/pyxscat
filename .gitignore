@@ -10,7 +10,9 @@
 **kk**
 
 # Logger files
-pyxscat\h5_recent_files.txt
+*logger/
+*logger/*
+pyxscat/h5_recent_files.txt
 kk/
 dist/
 
