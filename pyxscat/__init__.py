@@ -11,7 +11,12 @@ PyXScat allows visualization of 2D scattering maps through silx tools, reduction
 
 """
 from pathlib import Path
-PATH_TOML = Path(".").parent.joinpath("pyproject.toml")
+
+PATH_PYXSCAT = Path(__file__).parent.parent
+PATH_TOML = PATH_PYXSCAT.joinpath("pyproject.toml")
+
+
+
 
 __author__ = "E. Gutierrez-Fernandez"
 __contact__ = "edgar.gutierrez-fernandez@esrf.fr"
