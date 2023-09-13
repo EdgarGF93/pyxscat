@@ -12,7 +12,12 @@
 # Logger files
 .logger
 */.logger/*
+
+# H5 files and txt
 pyxscat/h5_recent_files.txt
+*.h5
+
+
 kk/
 dist/
 
