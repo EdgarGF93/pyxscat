@@ -559,7 +559,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         self.spinbox_sub.valueChanged.connect(
             lambda: (
-                self.update_graphs(new_data=False),
+                self.update_graphs(new_data=False, update_1D=True, update_2D=True),
             )
         )
 
