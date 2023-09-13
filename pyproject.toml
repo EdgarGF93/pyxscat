@@ -1,6 +1,6 @@
 [project]
 name = "pyxscat"
-version = 0.8
+version = "0.8"
 authors = [
     {name = "Edgar", email = "edgar.gutierrez-fernandez@esrf.fr"},
 ]

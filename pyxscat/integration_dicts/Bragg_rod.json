@@ -1,1 +1,1 @@
-{"Name": "Bragg_rod", "Suffix": "bragg_rod", "Type": "Vertical", "Ip_range": [3.1, 4.5], "Oop_range": [0.0, 20.0], "Unit": "q_nm^-1", "Unit_input": "q_nm^-1"}
+{"Name": "Bragg_rod", "Suffix": "bragg_rod", "Type": "Vertical", "Ip_range": [3.1, 6.5], "Oop_range": [0.0, 20.0], "Unit": "q_nm^-1", "Unit_input": "q_nm^-1"}
