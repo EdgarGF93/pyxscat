@@ -1,0 +1,38 @@
+2023-09-13 12:32:41,076 - INFO - Logger was initialized.
+2023-09-13 12:32:41,076 - INFO - Logger was initialized.
+2023-09-13 12:32:42,488 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-13 12:32:42,489 - INFO - The data parameters were reinitialized.
+2023-09-13 12:32:42,489 - INFO - We entered into function: init_callbacks
+2023-09-13 12:32:42,489 - INFO - We entered into function: update_setup_info
+2023-09-13 12:32:42,490 - INFO - New setup dictionary was updated.
+2023-09-13 12:32:42,490 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-13 12:32:42,491 - INFO - We entered into function: update_lims_ticks
+2023-09-13 12:32:42,507 - INFO - We entered into function: update_combobox_h5
+2023-09-13 12:32:42,508 - INFO - We entered into function: set_h5_instance
+2023-09-13 12:32:42,508 - INFO - The .h5 could not be found.
+2023-09-13 12:32:42,508 - INFO - We entered into function: update_h5_poni_and_files
+2023-09-13 12:32:42,509 - INFO - The H5 could not be updated.
+2023-09-13 12:32:42,509 - INFO - We entered into function: update_widgets
+2023-09-13 12:32:42,509 - INFO - There is no H5Integrator instance.
+2023-09-13 12:32:42,509 - INFO - We entered into function: update_setup_info
+2023-09-13 12:32:42,509 - INFO - New setup dictionary was updated.
+2023-09-13 12:32:42,509 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-13 12:32:42,510 - INFO - We entered into function: update_combobox_setups
+2023-09-13 12:32:42,511 - INFO - We entered into function: update_setup_info
+2023-09-13 12:32:42,512 - INFO - New setup dictionary was updated.
+2023-09-13 12:32:42,512 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-13 12:32:42,512 - INFO - We entered into function: update_table
+2023-09-13 12:32:42,512 - INFO - Table was reseted.
+2023-09-13 12:32:42,512 - INFO - No folder to display. Return.
+2023-09-13 12:32:42,512 - INFO - We entered into function: update_table
+2023-09-13 12:32:42,513 - INFO - Table was reseted.
+2023-09-13 12:32:42,513 - INFO - No folder to display. Return.
+2023-09-13 12:32:42,513 - INFO - We entered into function: update_table
+2023-09-13 12:32:42,513 - INFO - Table was reseted.
+2023-09-13 12:32:42,513 - INFO - No folder to display. Return.
+2023-09-13 12:32:42,513 - INFO - We entered into function: update_integration_widgets
+2023-09-13 12:32:42,516 - INFO - We entered into function: update_graphs
+2023-09-13 12:32:44,003 - INFO - We entered into function: open_pyFAI_calib2
+2023-09-13 12:32:44,004 - INFO - We entered into function: open_pyFAI_calib2_windows
+2023-09-13 12:32:44,076 - INFO - We entered into function: search_and_update_ponifiles_widgets
+2023-09-13 12:32:44,076 - INFO - The H5 could not be updated.

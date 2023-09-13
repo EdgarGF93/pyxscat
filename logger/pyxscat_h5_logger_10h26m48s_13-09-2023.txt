@@ -1,0 +1,26 @@
+2023-09-13 10:26:48,694 - INFO - Logger was initialized.
+2023-09-13 10:26:48,695 - INFO - Logger was initialized.
+2023-09-13 10:26:50,096 - INFO - We entered into function: reset_attributes_and_widgets
+2023-09-13 10:26:50,096 - INFO - The data parameters were reinitialized.
+2023-09-13 10:26:50,098 - INFO - We entered into function: init_callbacks
+2023-09-13 10:26:50,098 - INFO - We entered into function: update_setup_info
+2023-09-13 10:26:50,099 - INFO - New setup dictionary was updated.
+2023-09-13 10:26:50,099 - INFO - defaultdict(<class 'str'>, {'Name': '', 'Angle': '', 'Tilt angle': '', 'Norm': '', 'Exposure': ''})
+2023-09-13 10:26:50,100 - INFO - We entered into function: update_lims_ticks
+2023-09-13 10:26:50,117 - INFO - We entered into function: update_combobox_h5
+2023-09-13 10:26:50,117 - INFO - No .h5 files detected.
+2023-09-13 10:26:50,117 - INFO - We entered into function: update_combobox_setups
+2023-09-13 10:26:50,119 - INFO - We entered into function: update_setup_info
+2023-09-13 10:26:50,119 - INFO - New setup dictionary was updated.
+2023-09-13 10:26:50,119 - INFO - defaultdict(<class 'str'>, {'Name': 'ALBA_NCD', 'Angle': 'spitch', 'Tilt angle': '', 'Norm': 'Monitor', 'Exposure': 'exposure'})
+2023-09-13 10:26:50,120 - INFO - We entered into function: update_table
+2023-09-13 10:26:50,120 - INFO - Table was reseted.
+2023-09-13 10:26:50,120 - INFO - No folder to display. Return.
+2023-09-13 10:26:50,120 - INFO - We entered into function: update_table
+2023-09-13 10:26:50,120 - INFO - Table was reseted.
+2023-09-13 10:26:50,120 - INFO - No folder to display. Return.
+2023-09-13 10:26:50,120 - INFO - We entered into function: update_table
+2023-09-13 10:26:50,120 - INFO - Table was reseted.
+2023-09-13 10:26:50,121 - INFO - No folder to display. Return.
+2023-09-13 10:26:50,121 - INFO - We entered into function: update_integration_widgets
+2023-09-13 10:26:50,124 - INFO - We entered into function: update_graphs
