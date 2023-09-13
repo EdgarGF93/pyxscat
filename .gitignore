@@ -18,10 +18,10 @@ pyxscat/h5_recent_files.txt
 *.h5
 
 # .json with integration parameters (except for complete, oop, ip)
-#pyxscat/integration_dicts/*.json
+pyxscat/integration_dicts/*.json
 
 # .json with metadata parameters (except for the examples)
-#pyxscat/integration_dicts/*.json
+pyxscat/integration_dicts/*.json
 
 kk/
 dist/
