@@ -44,6 +44,6 @@ pyxscat
 ```
 Tutorial/pyxscat_tutorial.ppt
 ```
-## 5) The fundamental steps are summarized in the following video:
+<!-- ## 5) The fundamental steps are summarized in the following video:
 
-![](Tutorial/PyXSCat_steps.mp4)
+![](Tutorial/PyXSCat_steps.mp4) -->
