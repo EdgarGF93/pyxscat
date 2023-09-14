@@ -294,6 +294,15 @@ QPushButton:pressed  {
 """
 
 
+
+
+
+
+
+
+
+
+
 def set_bstyle(qlabels=[]):
     myFont=QFont("avenir.otf")
     myFont.setBold(True)

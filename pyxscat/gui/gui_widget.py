@@ -673,6 +673,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.clicked_folder = str()
         self.cache_index = []
         self._h5_file = str()
+        self._data_cache = None
+        self._data_ref_cache = None
+        self._norm_factor_cache = 1.0
 
         # Clear GUI widgets
         cb.clear(self.combobox_ponifile)
