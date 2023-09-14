@@ -1,4 +1,6 @@
 
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.figure import Figure
 from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QGridLayout, QListWidget, QTableWidget, QLabel, QComboBox, QCheckBox, QLineEdit, QDoubleSpinBox, QPlainTextEdit, QTabWidget
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import Qt
@@ -80,8 +82,8 @@ LABEL_YTICKS = "y-ticks:"
 
 # 1D CHART
 LABEL_1D_CHART = "====== 1D Plot Parameters ======"
-LABEL_RESHAPE = "2D Reshaping"
-LABEL_1D_INTEGRATION = "1D Integration"
+LABEL_Q_MAP = "Q-map"
+LABEL_RAW_MAP = "Raw Map"
 LABEL_SUB_FACTOR = "Subtraction scale factor (0.0 - 1.0):"
 BUTTON_CLEAR_PLOT = "CLEAR PLOT"
 BUTTON_SAVE_INTEGRATIONS = "SAVE INTEGRATIONS"
@@ -293,21 +295,18 @@ QPushButton:pressed  {
     }
 """
 
-
-
-
-
-
-
-
-
-
-
 def set_bstyle(qlabels=[]):
     myFont=QFont("avenir.otf")
     myFont.setBold(True)
     for qlabel in qlabels:
         qlabel.setFont(myFont)
+
+class MplCanvas(FigureCanvasQTAgg):
+
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(111)
+        super(MplCanvas, self).__init__(fig)
 
 
 class GUIPyX_Widget_layout(QWidget):
@@ -675,22 +674,22 @@ class GUIPyX_Widget_layout(QWidget):
         self.grid_input_graph = QGridLayout()
         self.grid_input_chart = QGridLayout()
 
-        
+        self.tab_graph_widget = QTabWidget()    
+
         self.graph_2D_widget = Plot2D()
-
-        self.tab_graph_widget = QTabWidget()
+        self.canvas_2D_matplotlib = MplCanvas(self, width=5, height=4, dpi=100)        
         self.graph_1D_widget = Plot1D()
-        self.graph_2D_reshape_widget = Plot2D()
-        self.tab_graph_widget.addTab(self.graph_1D_widget, LABEL_1D_INTEGRATION)
-        # self.tab_graph_widget.addTab(self.graph_2D_reshape_widget, LABEL_RESHAPE)
+        # self.graph_2D_matplotlib = Plot2D()
 
+        self.tab_graph_widget.addTab(self.graph_2D_widget, LABEL_RAW_MAP)
+        self.tab_graph_widget.addTab(self.canvas_2D_matplotlib, LABEL_Q_MAP)
 
         self.grid_input_and_graphs.addWidget(self.label_input_graph,1,1)
         self.grid_input_and_graphs.addWidget(self.label_input_chart,1,2)
         self.grid_input_and_graphs.addLayout(self.grid_input_graph,2,1)
         self.grid_input_and_graphs.addLayout(self.grid_input_chart,2,2)
-        self.grid_input_and_graphs.addWidget(self.graph_2D_widget,3,1)
-        self.grid_input_and_graphs.addWidget(self.tab_graph_widget,3,2)
+        self.grid_input_and_graphs.addWidget(self.tab_graph_widget,3,1)
+        self.grid_input_and_graphs.addWidget(self.graph_1D_widget,3,2)
 
         self.grid_units_graph = QGridLayout()
         self.grid_input_graph_buttons = QGridLayout()

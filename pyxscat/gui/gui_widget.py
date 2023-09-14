@@ -2744,7 +2744,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             data=data,
         )
         pass
-        self.graph_2D_reshape_widget.addImage(
+        self.graph_2D_matplotlib.addImage(
                     data=data_reshape,
                 )
 
@@ -3064,25 +3064,70 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         x_lims, y_lims = self.get_map_limits()
         x_ticks, y_ticks = self.get_map_ticks()        
 
-        # Plot the 2D map
-        error_mesh = plot_mesh(
-            mesh_horz=scat_x,
-            mesh_vert=scat_z,
-            data=data, 
-            unit=unit,
-            auto_lims=self._auto_lims,
-            xlim=x_lims,
-            ylim=y_lims,
-            xticks=x_ticks,
-            yticks=y_ticks,
-            title=title,
-            log=self._graph_log,
-            colorbar=self._colorbar,
-            color_lims=gm.get_zlims(self.graph_2D_widget),
-            show=show,
-            scatter_mode=True,
-        )
-        logger.info(error_mesh)
+        # Color lims
+        try:
+            color_lims = gm.get_zlims(self.graph_2D_widget)
+            log=self._graph_log
+        except Exception as e:
+            print(e)
+        
+        print(color_lims)
+        print(log)
+
+        try:
+            if color_lims:
+                if log:
+                    norm = colors.LogNorm(
+                        vmax=color_lims[1],
+                        vmin=color_lims[0],
+                    )
+                else:
+                    norm = colors.Normalize(
+                        vmax=color_lims[1],
+                        vmin=color_lims[0],
+                    )
+            else:
+                norm = None
+        except:
+            norm = None
+        
+        try:
+            self.canvas_2D_matplotlib.__init__(self, width=5, height=4, dpi=100)
+            print(1)
+            self.canvas_2D_matplotlib.axes.cla()
+            print(2)
+            self.canvas_2D_matplotlib.axes.scatter(
+                scat_x,
+                scat_z,
+                c=data,
+                s=0.6, 
+                norm=norm, 
+                edgecolors="None", 
+                marker=",",
+            )
+            print(3)
+        except Exception as e:
+            print(e)
+
+        # # Plot the 2D map
+        # error_mesh = plot_mesh(
+        #     mesh_horz=scat_x,
+        #     mesh_vert=scat_z,
+        #     data=data, 
+        #     unit=unit,
+        #     auto_lims=self._auto_lims,
+        #     xlim=x_lims,
+        #     ylim=y_lims,
+        #     xticks=x_ticks,
+        #     yticks=y_ticks,
+        #     title=title,
+        #     log=self._graph_log,
+        #     colorbar=self._colorbar,
+        #     color_lims=gm.get_zlims(self.graph_2D_widget),
+        #     show=show,
+        #     scatter_mode=True,
+        # )
+        # logger.info(error_mesh)
 
 
     @log_info
