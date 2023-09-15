@@ -577,6 +577,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         )
 
+        # visible tab
+        self.tab_graph_widget
+
         self.button_log.clicked.connect(
             lambda : self.update_graph_log(),
         )
