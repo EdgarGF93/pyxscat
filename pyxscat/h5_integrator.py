@@ -2039,7 +2039,7 @@ class H5GIIntegrator(Transform):
 
     @log_info
     @check_if_open
-    def get_mesh_matrix(self, data=None, unit='q_nm^-1', mirror=False):
+    def get_mesh_matrix(self, unit='q_nm^-1', shape=()):
         """
         Returns both horizontal and vertical mesh matrix for Grazing-Incidence geometry, returns also the corrected data without the missing wedge
         
@@ -2052,20 +2052,17 @@ class H5GIIntegrator(Transform):
         np.array(QZ)
         np.array(data)
         """
-        if data is None:
-            logger.info(f"Data is None. Returns.")
+        if not shape:
+            logger.info(f"Shape is None. Returns.")
             return
 
-        # Updates 
-
         # Get the detector array, it is always the same shape (RAW MATRIX SHAPE!), no rotations yet
-        shape = data.shape
+        # shape = data.shape
         det_array = self.get_detector_array(shape=shape)
 
         # Get the mesh matrix
         if unit in UNITS_Q:
             try:
-                print(self._incident_angle)
                 # calc_q will take into account the sample_orientation in GrazingGeometry instance
                 scat_z, scat_xy = self.calc_q(
                     d1=det_array[0,:,:],
@@ -2099,14 +2096,7 @@ class H5GIIntegrator(Transform):
         else:
             return
         
-        # Mirroring the data
-        if mirror:
-            if self.get_sample_orientation() in (1,3):
-                scat_xy = np.fliplr(scat_xy) * (-1)
-                data = np.fliplr(data)
-            elif self.get_sample_orientation() in (2,4):
-                scat_xy = np.flipud(scat_xy) * (-1)
-                data = np.flipud(data)    
+  
 
         # Defining the missing wedge
         # if unit in UNITS_Q:
@@ -2119,7 +2109,8 @@ class H5GIIntegrator(Transform):
         #         data[ind[0] - HALF_NUMBER: ind[0] + HALF_NUMBER, :] = np.nan
         #     logger.info(f"The missing wedge was removed from the 2D map.")
 
-        return scat_xy, scat_z, data
+        return scat_xy, scat_z
+        # return scat_xy, scat_z, data
 
     @log_info
     @check_if_open

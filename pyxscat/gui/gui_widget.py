@@ -6,6 +6,7 @@ from pyFAI import __file__ as pyfai_file
 from PyQt5.QtCore import QTimer, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QMessageBox
 from PyQt5.QtGui import QPixmap
+from scipy import ndimage
 
 from edf import DICT_SAMPLE_ORIENTATIONS
 from other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries
@@ -21,7 +22,8 @@ from gui import table_methods as tm
 from gui import graph_methods as gm
 from gui.gui_layout import GUIPyX_Widget_layout, BUTTON_MIRROR_DISABLE, BUTTON_MIRROR_ENABLE, BUTTON_QZ_PAR, BUTTON_QZ_ANTIPAR, BUTTON_QR_PAR, BUTTON_QR_ANTIPAR
 from gui.gui_layout import button_style_input, button_style_input_disable
-from gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND
+from gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND, BUTTON_LIVE, BUTTON_LIVE_ON
+from gui.gui_layout import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP
 from h5_integrator import H5GIIntegrator
 from h5_integrator import PONI_KEY_VERSION, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
 
@@ -32,6 +34,7 @@ import subprocess
 import sys
 import os
 import pandas as pd
+from matplotlib.cm import ScalarMappable
 
 ICON_SPLASH = join(ICON_PATH, 'pyxscat_logo_thumb.png')
 
@@ -97,6 +100,12 @@ COMMENT_NEW_FILE = ""
 
 TXT_FILE_H5 = SRC_PATH.joinpath("h5_recent_files.txt")
 
+DEFAULT_SCATTER_SIZE = 0.6
+DEFAULT_MAP_FONTSIZE = 10
+
+
+
+
  # Initialize logger
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -157,10 +166,19 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self._qz_parallel = True
         self._qr_parallel = True
         self._mirror = False
+
+        self.scat_horz_cache = None
+        self.scat_vert_cache = None
+        self.data_bin_cache = None
+
+
         self._auto_lims = True
         self._graph_log = True
         self._colorbar = False
+        self._fontsize_cache = DEFAULT_MAP_FONTSIZE
+        self._scattersize_cache = DEFAULT_SCATTER_SIZE
         self._terminal_visible = True
+        self._live = False
         self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
 
         self.reset_attributes_and_widgets()
@@ -202,7 +220,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         self.combobox_h5_files.currentTextChanged.connect(
             lambda : (
-                self.set_h5_instance(filename_h5=cb.value(self.combobox_h5_files)),
+                self.set_h5_instance(filename_h5=self.dict_recent_h5[cb.value(self.combobox_h5_files)]),
                 self.update_h5_poni_and_files(),
                 self.update_widgets(),
                 self.update_setup_info(),
@@ -232,60 +250,60 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.combobox_type_cake.currentTextChanged.connect(
             lambda : (
                 self.add_integration_cake(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
 
         self.combobox_units_cake.currentTextChanged.connect(
             lambda : (
                 self.add_integration_cake(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
 
         self.combobox_units_cake.currentTextChanged.connect(
             lambda : (
                 self.add_integration_cake(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )   
 
         self.spinbox_azimmin_cake.valueChanged.connect(
             lambda : (
                 self.add_integration_cake(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
         self.spinbox_azimmax_cake.valueChanged.connect(
             lambda : (
                 self.add_integration_cake(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
         self.spinbox_radialmin_cake.valueChanged.connect(
             lambda : (
                 self.add_integration_cake(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
         self.spinbox_radialmax_cake.valueChanged.connect(
             lambda : (
                 self.add_integration_cake(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
 
         self.spinbox_radialmax_cake.valueChanged.connect(
             lambda : (
                 self.add_integration_cake(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
 
         self.lineedit_azimbins_cake.textChanged.connect(
             lambda : (
                 self.add_integration_cake(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )    
 
@@ -297,43 +315,43 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.combobox_units_box.currentTextChanged.connect(
             lambda : (
                 self.add_integration_box(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
         self.combobox_direction_box.currentTextChanged.connect(
             lambda : (
                 self.add_integration_box(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
         self.combobox_outputunits_box.currentTextChanged.connect(
             lambda : (
                 self.add_integration_box(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
         self.spinbox_ipmin_box.valueChanged.connect(
             lambda : (
                 self.add_integration_box(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
         self.spinbox_ipmax_box.valueChanged.connect(
             lambda : (
                 self.add_integration_box(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
         self.spinbox_oopmin_box.valueChanged.connect(
             lambda : (
                 self.add_integration_box(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
         self.spinbox_oopmax_box.valueChanged.connect(
             lambda : (
                 self.add_integration_box(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),         
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
 
@@ -343,19 +361,20 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.button_mirror.clicked.connect(
             lambda : (
                 self.update_mirror(),
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=True),
             )
         )
 
         self.button_qz.clicked.connect(
             lambda : (
                 self.update_qz(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=True),
             )
         )
         self.button_qr.clicked.connect(
             lambda : (
                 self.update_qr(),
-                self.update_graphs(new_data=False, update_2D=False, update_1D=True),
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=True),
             )
         )
 
@@ -404,7 +423,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 self.update_ponifile_widgets(
                     dict_poni=self._dict_poni_cache,
                 ),
-                self.update_graphs(new_data=False),
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
         self.button_add_ponifile.clicked.connect(
@@ -425,7 +444,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.combobox_reffolder.currentTextChanged.connect(
             lambda : (
                 self.update_reference_widgets(),
-                self.update_graphs(new_data=False),
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         )
 
@@ -433,7 +452,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             lambda : (
                 self.enable_combobox_autoreffile(),
                 self.update_reference_widgets(),
-                self.update_graphs(new_data=False),
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=False, update_1D=True),
             )
         ) 
 
@@ -469,13 +488,21 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         # Checkbox to start live data searching
         #########################
-        self.checkbox_live.stateChanged.connect(
+        self.button_live.clicked.connect(
             lambda : (
                 self.update_h5_poni_and_files(),
                 self.update_widgets(),
+                self.update_live_state(),
                 self.update_live_searching(),
             )
-        ) 
+        )
+        # self.checkbox_live.stateChanged.connect(
+        #     lambda : (
+        #         self.update_h5_poni_and_files(),
+        #         self.update_widgets(),
+        #         self.update_live_searching(),
+        #     )
+        # ) 
 
         #####################################################################
         ##################  BROWSER CALLBACKS  ##############################
@@ -520,7 +547,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.table_files.itemSelectionChanged.connect(
             lambda : (
                 self.update_clicked_filenames(),
-                self.update_graphs(new_data=True),
+                self.update_graphs(new_data=True, update_2D_raw=True, update_2D_q=True, update_1D=True),
                 self.update_label_displayed(),
             )
 
@@ -536,14 +563,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         self.lineedit_integrations.textChanged.connect(
             lambda : (
-                self.update_graphs(new_data=False),
+                self.update_graphs(new_data=False, update_2D_q=False, update_2D_raw=False, update_1D=True),
             )
         )
 
         # Masked 2D for integrations
         self.checkbox_mask_integration.stateChanged.connect(
             lambda : (
-                self.update_graphs(new_data=False),
+                self.update_graphs(new_data=False, update_2D_raw=True, update_2D_q=False, update_1D=False),
             )
         ) 
 
@@ -559,7 +586,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         self.spinbox_sub.valueChanged.connect(
             lambda: (
-                self.update_graphs(new_data=False, update_1D=True, update_2D=True),
+                self.update_graphs(new_data=False, update_2D_raw=True, update_2D_q=True, update_1D=True),
             )
         )
 
@@ -570,22 +597,51 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         )
 
-        # Button to generate a matplotlib map
-        self.button_map.clicked.connect(
-            lambda: (
-                self.generate_q_map(),
+        # visible tab
+        self.tab_graph_widget.currentChanged.connect(
+            lambda : self.update_graphs(new_data=False, update_2D_raw=True, update_2D_q=True, update_1D=False),
+        )
+
+        #Q-MAP TOOLBAR
+        self.button_font_m.clicked.connect(
+            lambda : (
+                self.reduce_font(),
+            )
+            
+        )
+        self.button_font_M.clicked.connect(
+            lambda : (
+                self.increase_font(),
             )
         )
 
-        # visible tab
-        self.tab_graph_widget
+        self.button_reduce_comma.clicked.connect(
+            lambda : (
+                self.reduce_scattersize(),
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=False),    
+            )
+        )
+
+        self.button_enhance_comma.clicked.connect(
+            lambda : (
+                self.increase_scattersize(),
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=False),    
+            )
+        )
 
         self.button_log.clicked.connect(
-            lambda : self.update_graph_log(),
+            lambda : (
+                self.update_graph_log(),
+                self.update_q_map(use_cache=True),
+                # self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=False),
+            )
         )
 
         self.button_colorbar.clicked.connect(
-            lambda : (self.update_graph_colorbar())
+            lambda : (
+                self.update_graph_colorbar(),
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=False),
+            )
         )
 
         self.button_default_graph.clicked.connect(
@@ -648,7 +704,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 self.update_ponifile_parameters(
                     dict_poni=self.retrieve_poni_dict_from_widgets(),
                 ),
-                self.update_graphs(new_data=False),
+                self.update_graphs(new_data=False, update_2D_q=False, update_2D_raw=False, update_1D=True),
             )
         )
 
@@ -660,6 +716,20 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 self.search_and_update_ponifiles_widgets(),
             )
         )
+
+    def kkk(self):
+        print(1)
+
+
+
+        self.canvas_2D_matplotlib.axes.set_xlabel("HOLA")
+        self.canvas_2D_matplotlib.draw_idle()
+        self.canvas_2D_matplotlib.flush_events()
+        print(2)
+    def kkk_1(self):
+        self.canvas_2D_matplotlib.axes.set_xlabel("ADIOS")
+        self.canvas_2D_matplotlib.draw_idle()
+        self.canvas_2D_matplotlib.flush_events()
 
     @log_info
     def reset_attributes_and_widgets(self) -> None:
@@ -695,7 +765,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         le.clear(self.lineedit_headeritems)
         le.clear(self.lineedit_headeritems_title)
         self.graph_1D_widget.clear()
-        self.graph_2D_widget.clear()
+        self.graph_raw_widget.clear()
 
         self.write_terminal_and_logger(MSG_RESET_DATA)
 
@@ -726,10 +796,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         files_in_cb = cb.all_items(self.combobox_h5_files)        
         new_h5_files = [item for item in files_in_txt if item not in files_in_cb]
+        short_names = [Path(item).name for item in new_h5_files]
+
+        self.dict_recent_h5 = {s:f for f,s in zip(new_h5_files, short_names)}
 
         cb.insert_list(
             combobox=self.combobox_h5_files,
-            list_items=new_h5_files,
+            list_items=short_names,
             reset=True,
         )
 
@@ -2136,11 +2209,16 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         filenames_from_cb = cb.all_items(self.combobox_h5_files)
         if h5_path in filenames_from_cb:
             return
-        else:
-            cb.insert(
-                combobox=self.combobox_h5_files,
-                item=str(h5_path),
-            )
+
+        # Append to dictionary
+        h5_path = Path(h5_path)
+        short_name = str(Path(h5_path).name)
+        self.dict_recent_h5[short_name] = str(h5_path)
+
+        cb.insert(
+            combobox=self.combobox_h5_files,
+            item=short_name,
+        )
 
     @log_info
     def activate_h5file(self, h5_path=str()) -> None:
@@ -2243,13 +2321,27 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 self.clicked_folder = last_file_folder
                 self.cache_index = last_file_index
                 logger.info(f"Updated clicked folder: {self.clicked_folder} and cache index: {self.cache_index}")
-                self.update_graphs()
+                self.update_graphs(new_data=True, update_2D_raw=True, update_2D_q=True, update_1D=True)
             else:
                 logger.info("Last file was not updated.")
             
     @log_info
+    def update_live_state(self):
+        if self._live:
+            self._live = False
+            self.write_terminal_and_logger("Live mode disconnected.")
+            self.button_live.setText(BUTTON_LIVE)
+        else:
+            self._live = True
+            self.write_terminal_and_logger("Live mode connected. Searching...")
+            self.button_live.setText(BUTTON_LIVE_ON)            
+
+    @log_info
     def update_live_searching(self):
-       # # If live is on, start the live searching engine, only for Linux
+        # # If live is on, start the live searching engine, only for Linux
+        if not self._live:
+            return
+
         if 'linux' in sys.platform:
             if self.checkbox_live.isChecked():
                 self.timer_data = QTimer()
@@ -2444,8 +2536,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
         logger.info(f"Combobox exposure updated.")
 
+
+
+
+
+
+
     @log_info
-    def update_graphs(self, new_data=True, update_2D=True, update_1D=True) -> None:
+    def update_graphs(self, new_data=True, update_1D=True, update_2D_raw=True, update_2D_q=False,  ) -> None:
         """
         Updates both 2D and 1D graphs after the stored folder and index values in cache
 
@@ -2458,20 +2556,24 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if not self.clicked_folder or not self.cache_index:
             return 
 
-        # Get the data
+        # Get the data if there is None or it is new
         if new_data or self._data_cache is None:
             data = self.h5.get_Edf_data(
                 folder_name=self.clicked_folder,
                 index_list=self.cache_index,
             )
+            data = self.filter_data(
+                data=data,
+            )
             self._data_cache = data
         else:
             data = self._data_cache
 
+        # Return if there was an error
         if data is None:
             return
 
-        # Updates the incident and tilt angle
+        # Updates the incident and tilt angle (only if new data)
         if new_data:
             incident_angle = self.h5.get_incident_angle(
                 folder_name=self.clicked_folder,
@@ -2500,15 +2602,42 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         else:
             norm_factor = self._norm_factor_cache
        
-        # Update 2D graph
-        if update_2D or self.checkbox_mask_integration.isChecked():
+        # Update the 1D integration chart
+        if update_1D and self.tab_chart_widget.currentIndex() == INDEX_TAB_1D_INTEGRATION:
             try:
-                self.update_2D_graph(
+                self.update_1D_graph(
                     data=data,
                     norm_factor=norm_factor,
                 )
-            except:
-                self.write_terminal_and_logger("Error during updating 2D graph")
+            except Exception as e:
+                self.write_terminal_and_logger(f"{e}: Error during updating 1D graph")
+
+        # For 2D graphs, do the normalization
+        data = data / norm_factor
+
+        # Update 2D tab, raw map if its tab is active
+        
+        if update_2D_raw and self.tab_graph_widget.currentIndex() == INDEX_TAB_RAW_MAP:
+            try:
+                self.update_2D_graph(
+                    data=data,
+                    # norm_factor=norm_factor,
+                )
+            except Exception as e:
+                self.write_terminal_and_logger(f"{e}: Error during updating 2D raw map.")
+
+        # Update 2D tab, q-transformed map if its tab is active
+        if update_2D_q and self.tab_graph_widget.currentIndex() == INDEX_TAB_Q_MAP:
+            try:
+                # self.update_q_matrix_cache(
+                #     data=data,
+                # )
+                self.update_q_map(
+                    data=data,
+                )
+            except Exception as e:
+                self.write_terminal_and_logger(f"{e}: Error during updating q-map map.")
+
 
         # Update 2D reshaping (no need integration parameters)
         # try:
@@ -2519,14 +2648,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # except Exception as e:
         #     self.write_terminal_and_logger("Wrong reshaping update")
 
-        if update_1D:
-            try:
-                self.update_1D_graph(
-                    data=data,
-                    norm_factor=norm_factor,
-                )
-            except:
-                self.write_terminal_and_logger("Error during updating 1D graph")
+
 
     @log_info
     def get_subtracted_data(self, data=None, new_data=True):
@@ -2605,8 +2727,20 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         return full_reference_filename
 
+
     @log_info
-    def update_2D_graph(self, data, norm_factor=1.0):
+    def filter_data(self, data=None):
+        if data is None:
+            return
+        data=np.nan_to_num(data, nan=1e-9)
+        data[data==0] = 1e-9
+        data[data<0] = 1e-9
+        data = np.nan_to_num(data, nan=1e-9)
+        logger.info(f"Filtered negative, nan and zero values.")   
+        return data
+
+    @log_info
+    def update_2D_graph(self, data=None):
         """
         Updates the graph with input Data, allows to use normalization factor
 
@@ -2617,7 +2751,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         None
         """
-        graph_2D_widget = self.graph_2D_widget
+        if data is None:
+            return
+
+        graph_2D_widget = self.graph_raw_widget
         # print(graph_2D_widget.getDefaultColormap())
 
         if graph_2D_widget.getGraphXLimits() == (0, 100) and graph_2D_widget.getGraphYLimits() == (0, 100):
@@ -2632,7 +2769,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         logger.info(f"Data extracted from cache. Data: {type(data)}")
 
         # Normalize data
-        data = data/norm_factor
+        # data = data/norm_factor
 
         z_lims = np_weak_lims(
             data=data,
@@ -2646,16 +2783,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 ymax=graph_2D_widget.getGraphYLimits()[1],
             )
 
-        data=np.nan_to_num(data, nan=1e-9)
-        data[data==0] = 1e-9
-        data[data<0] = 1e-9
-        logger.info(f"Filtered negative, nan and zero values.")
+
 
         if self.checkbox_mask_integration.isChecked():
             data = self.get_masked_integration_array(data=data)
 
         graph_2D_widget.addImage(
-            data=np.nan_to_num(data, nan=1e-9),
+            data=data,
             colormap={
                 'name': 'viridis',
                 'normalization': 'log',
@@ -2740,6 +2874,34 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return [float(tick) for tick in x_ticks], [float(tick) for tick in y_ticks]
         except:
             return None, None
+
+    @log_info
+    def get_color_lims(self):
+        try:
+            color_lims = gm.get_zlims(self.graph_raw_widget)  
+        except Exception as e:
+            self.write_terminal_and_logger(f"{e}: Error at taking color limits.")
+
+    @log_info
+    def get_norm_colors(self, color_lims=[], log=False):
+        try:
+            if color_lims:
+                if log:
+                    norm = colors.LogNorm(
+                        vmax=color_lims[1],
+                        vmin=color_lims[0],
+                    )
+                else:
+                    norm = colors.Normalize(
+                        vmax=color_lims[1],
+                        vmin=color_lims[0],
+                    )
+            else:
+                norm = None
+        except:
+            norm = None
+        return norm
+
 
     @log_info
     def update_2D_reshape(self, data):
@@ -3001,7 +3163,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         try:
-            data = gm.get_array(self.graph_2D_widget)
+            data = gm.get_array(self.graph_raw_widget)
             logger.info(f"Data from the map. Shape: {data.shape}")
         except Exception as e:
             self.write_terminal_and_logger(f"{e}: Data could not be retrieved.")
@@ -3015,7 +3177,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger(f"{e}: Data could not be reshaped.")
             return
 
-        color_lims = gm.get_zlims(self.graph_2D_widget)
+        color_lims = gm.get_zlims(self.graph_raw_widget)
         
         plt.imshow(
             data_reshape,
@@ -3029,23 +3191,43 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         plt.xlabel("q(nm-1)")
         plt.show()
 
+
+
     @log_info
-    def generate_q_map(self, show=True):
-        """
-        Generates a pop-up window with a 2D map of the pattern transformed to q or theta units
+    def mirror_scat_matrix(self, data=None, scat_horz=None):
+        if data is None or scat_horz is None:
+            return
 
-        Parameters:
-        None
+        sample_orientation = DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
+        if sample_orientation in (1,3):
+            scat_horz = np.fliplr(scat_horz) * (-1)
+            data = np.fliplr(data)
+        elif sample_orientation in (2,4):
+            scat_horz = np.flipud(scat_horz) * (-1)
+            data = np.flipud(data)
+        return data, scat_horz
 
-        Returns:
-        None
-        """
-        # Get the map in the 2D graph widget
+    @log_info
+    def zoom_matrix(self, mat=None, binning=1):
+        if mat is None:
+            return
+    
         try:
-            data = gm.get_array(self.graph_2D_widget)
-            logger.info(f"Data from the map. Shape: {data.shape}")
+            mat = ndimage.zoom(mat, 1/binning)
         except Exception as e:
-            self.write_terminal_and_logger(f"Data could not be retrieved.")
+            self.write_terminal_and_logger(f"{e}: There was an error during data binning.")
+        return mat
+
+    @log_info
+    def update_q_matrix_cache(self, data=None):
+        if data is None:
+            return
+        
+        if not self.h5:
+            return
+
+        # Only proceed if the second tab is active
+        if self.tab_graph_widget.currentIndex() != 1:
             return
 
         # Get the unit of the generated map
@@ -3054,12 +3236,95 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         logger.info(f"Unit of the map: {unit}")
 
         # Get the grid of scattering units
-        scat_x, scat_z, data = self.h5.get_mesh_matrix(
-            unit=unit, 
-            data=data,
-            mirror=self._mirror,
+        scat_horz, scat_vert = self.h5.get_mesh_matrix(
+            unit=unit,
+            shape=data.shape,
         )
 
+        if (scat_horz is None) or (scat_vert is None):
+            return
+
+        # Mirror the matrix
+        if self._mirror:
+            data, scat_horz = self.mirror_scat_matrix(
+                data=data,
+                scat_horz=scat_horz,
+            )
+        
+        # Bin the matrix
+        data, scat_horz, scat_vert = self.zoom_scat_matrix(
+            data=data,
+            scat_horz=scat_horz,
+            scat_vert=scat_vert,
+        )
+
+        # Update the cache
+        self.scat_horz_cache = scat_horz
+        self.scat_vert_cache = scat_vert
+        self.data_bin_cache = data
+
+    @log_info
+    def update_q_map(self, data=None):
+        """
+        WORKS WITH CACHE MATRIX
+        Generates a pop-up window with a 2D map of the pattern transformed to q or theta units
+
+        Parameters:
+        None
+
+        Returns:
+        None
+        """
+        if not self.h5:
+            return
+
+        # Only proceed if the second tab is active
+        if self.tab_graph_widget.currentIndex() != 1:
+            return
+
+        if data is None:
+            return
+
+        # Get the unit of the generated map
+        unit = cb.value(self.combobox_units)
+        unit = get_pyfai_unit(unit)
+        logger.info(f"Unit of the map: {unit}")
+
+        # Get the binning
+        binning = int(self.spinbox_binnning_data.value())
+
+        # Get the grid of scattering units
+        if (self.scat_horz_cache is None) or (self.scat_vert_cache is None):
+            scat_horz, scat_vert = self.h5.get_mesh_matrix(
+                unit=unit,
+                shape=data.shape,
+            )
+            scat_horz = self.zoom_matrix(
+                mat=scat_horz,
+                binning=binning,
+            )
+            scat_vert = self.zoom_matrix(
+                mat=scat_vert,
+                binning=binning,
+            )
+            self.scat_horz_cache = scat_horz
+            self.scat_vert_cache = scat_vert
+        else:
+            scat_horz = self.scat_horz_cache
+            scat_vert = self.scat_vert_cache
+
+        # Get the zoomed data
+        if self.data_bin_cache is None:
+            data = self.zoom_matrix(
+                mat=data,
+                binning=binning,
+            )
+            self.data_bin_cache = data
+        else:
+            data = self.data_bin_cache
+
+    
+        # GET ELEMENTS OF STYLE
         # Get the title using the key metadata from lineedit
         title = self.get_title()
 
@@ -3068,70 +3333,146 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         x_ticks, y_ticks = self.get_map_ticks()        
 
         # Color lims
-        try:
-            color_lims = gm.get_zlims(self.graph_2D_widget)
-            log=self._graph_log
-        except Exception as e:
-            print(e)
-        
-        print(color_lims)
-        print(log)
+        color_lims = self.get_color_lims()
 
-        try:
-            if color_lims:
-                if log:
-                    norm = colors.LogNorm(
-                        vmax=color_lims[1],
-                        vmin=color_lims[0],
-                    )
-                else:
-                    norm = colors.Normalize(
-                        vmax=color_lims[1],
-                        vmin=color_lims[0],
-                    )
-            else:
-                norm = None
-        except:
-            norm = None
+        # Log scale
+        log=self._graph_log
+
+        # Normalization color
+        norm = self.get_norm_colors(
+            color_lims=color_lims,
+            log=log,
+        )
+
+        self.plot_q_map(
+            mesh_horz=scat_horz,
+            mesh_vert=scat_vert,
+            data=data,
+            unit=unit,
+            title=title,
+            norm=norm,
+            clear_axes=True,
+            xlim=x_lims,
+            ylim=y_lims,
+            xticks=x_ticks,
+            yticks=y_ticks,
+        )
+
+
+    @log_info
+    def plot_q_map(
+        self,
+        mesh_horz=None,
+        mesh_vert=None, 
+        data=None, 
+        unit='q_nm^-1', 
+        auto_lims=True, 
+        title='',
+        norm=None,
+        clear_axes=True,
+        **kwargs):
+
+        if not self.h5:
+            return
+
+        if (mesh_horz is None) or (mesh_vert is None) or (data is None):
+            self.write_terminal_and_logger("There is a None in the input matrix")
+            return
+
+        canvas = self.canvas_2D_matplotlib
+        if clear_axes:
+            canvas.axes.cla()
+
+        if not (mesh_horz.shape == mesh_vert.shape == data.shape):
+            self.write_terminal_and_logger("The shape of the mesh matrix do not match.")
+            self.write_terminal_and_logger(f"Mesh_horz.shape={mesh_horz.shape}.")
+            self.write_terminal_and_logger(f"Mesh_vert.shape={mesh_vert.shape}.")
+            self.write_terminal_and_logger(f"Data.shape={data.shape}.")
+            return
         
+        # Get the units and style parameters
+        DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
+        x_label = kwargs.get('xlabel', DICT_PLOT['X_LABEL'])
+        y_label = kwargs.get('ylabel', DICT_PLOT['Y_LABEL'])
+
+        if not auto_lims:
+            x_lims = kwargs.get('xlim', DICT_PLOT['X_LIMS'])
+            if x_lims == '':
+                x_lims = DICT_PLOT['X_LIMS']
+
+            y_lims = kwargs.get('ylim', DICT_PLOT['Y_LIMS'])
+            if y_lims == '':
+                y_lims = DICT_PLOT['Y_LIMS']
+
+            x_ticks = kwargs.get('xticks', DICT_PLOT['X_TICKS'])
+            if x_ticks == '':
+                x_ticks = DICT_PLOT['X_TICKS']
+
+            y_ticks = kwargs.get('yticks', DICT_PLOT['Y_TICKS'])
+            if y_ticks == '':
+                y_ticks = DICT_PLOT['Y_TICKS']
+
+            canvas.axes.set_xlim(x_lims)
+            canvas.axes.set_ylim(y_lims)
+        else:
+            x_ticks = canvas.axes.get_xticks()
+            y_ticks = canvas.axes.get_yticks()
+
+        # Plot the scatter
         try:
-            self.canvas_2D_matplotlib.__init__(self, width=5, height=4, dpi=100)
-            print(1)
-            self.canvas_2D_matplotlib.axes.cla()
-            print(2)
-            self.canvas_2D_matplotlib.axes.scatter(
-                scat_x,
-                scat_z,
+            canvas.axes.scatter(
+                mesh_horz,
+                mesh_vert,
                 c=data,
-                s=0.6, 
-                norm=norm, 
-                edgecolors="None", 
-                marker=",",
+                s=self._scattersize_cache,
+                norm=norm,
+                edgecolors="None",
+                marker=',',
+                cmap="viridis",
             )
-            print(3)
         except Exception as e:
-            print(e)
+            self.write_terminal_and_logger(f"{e}")
+        canvas.axes.set_xlabel(xlabel=x_label)
+        canvas.axes.set_ylabel(ylabel=y_label)
+        canvas.axes.set_xticks(x_ticks)
+        canvas.axes.set_yticks(y_ticks)
+        canvas.axes.set_title(title)
 
-        # # Plot the 2D map
-        # error_mesh = plot_mesh(
-        #     mesh_horz=scat_x,
-        #     mesh_vert=scat_z,
-        #     data=data, 
-        #     unit=unit,
-        #     auto_lims=self._auto_lims,
-        #     xlim=x_lims,
-        #     ylim=y_lims,
-        #     xticks=x_ticks,
-        #     yticks=y_ticks,
-        #     title=title,
-        #     log=self._graph_log,
-        #     colorbar=self._colorbar,
-        #     color_lims=gm.get_zlims(self.graph_2D_widget),
-        #     show=show,
-        #     scatter_mode=True,
-        # )
-        # logger.info(error_mesh)
+        # if colorbar:
+        #     canvas.fig.colorbar(ScalarMappable(norm=norm, cmap="viridis"))
+        # else:
+        #     canvas.fig.colorbar(ScalarMappable(norm=norm, cmap="viridis")).remove()
 
+        canvas.draw()
+
+    @log_info
+    def increase_font(self):
+        self._fontsize_cache += 2
+        self.update_font()     
+
+    @log_info
+    def reduce_font(self):
+        self._fontsize_cache -= 2
+        self.update_font()
+  
+    @log_info
+    def update_font(self):
+        canvas = self.canvas_2D_matplotlib
+        ax = canvas.axes
+        ax.set_xlabel(ax.get_xlabel(), fontsize=self._fontsize_cache)
+        ax.set_ylabel(ax.get_ylabel(), fontsize=self._fontsize_cache)
+        ax.set_xticks(ax.get_xticks(), ax.get_xticks(), fontsize=self._fontsize_cache)
+        ax.set_yticks(ax.get_yticks(), ax.get_yticks(), fontsize=self._fontsize_cache)
+        canvas.draw()
+
+
+    @log_info
+    def increase_scattersize(self):
+        self._scattersize_cache += 0.2
+
+    @log_info
+    def reduce_scattersize(self):
+        self._scattersize_cache -= 0.2
 
     @log_info
     def get_masked_integration_array(self, data):
@@ -3392,7 +3733,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.write_terminal_and_logger(f"Output filename for the image: {filename_out}")
  
         try:
-            self.generate_q_map(show=False)
+            self.update_q_map(show=False)
             plt.savefig(filename_out)
             plt.close()
             self.write_terminal_and_logger(f"Imaged was saved.")
@@ -3503,16 +3844,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.button_hide_terminal.setText("SHOW TERMINAL")
             self.plaintext_output.setVisible(False)
             self.grid_right.setRowStretch(1,1)
-            self.grid_right.setRowStretch(2,1)
-            self.grid_right.setRowStretch(3,20)
-            self.grid_right.setRowStretch(4,1)
-            self.grid_right.setRowStretch(5,0)
+            self.grid_right.setRowStretch(2,30)
+            self.grid_right.setRowStretch(3,1)
+            self.grid_right.setRowStretch(4,0)  
         else:
             self._terminal_visible = True
             self.button_hide_terminal.setText("HIDE TERMINAL")
             self.plaintext_output.setVisible(True)
             self.grid_right.setRowStretch(1,1)
-            self.grid_right.setRowStretch(2,1)
-            self.grid_right.setRowStretch(3,20)
-            self.grid_right.setRowStretch(4,1)
-            self.grid_right.setRowStretch(5,3)
+            self.grid_right.setRowStretch(2,30)
+            self.grid_right.setRowStretch(3,1)
+            self.grid_right.setRowStretch(4,2)
