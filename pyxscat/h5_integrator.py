@@ -2095,22 +2095,8 @@ class H5GIIntegrator(Transform):
             logger.info(f"Changing the scale of the matriz q units. Scale: {DICT_PLOT['SCALE']}")
         else:
             return
-        
-  
-
-        # Defining the missing wedge
-        # if unit in UNITS_Q:
-        #     NUMBER_COLUMNS_REMOVED = 10
-        #     HALF_NUMBER = int(NUMBER_COLUMNS_REMOVED / 2)
-        #     ind = np.unravel_index(np.argmin(abs(scat_xy), axis=None), scat_z.shape)
-        #     if self.get_sample_orientation() in (1,3):
-        #         data[:, ind[1] - HALF_NUMBER: ind[1] + HALF_NUMBER] = np.nan
-        #     elif self.get_sample_orientation() in (2,4):
-        #         data[ind[0] - HALF_NUMBER: ind[0] + HALF_NUMBER, :] = np.nan
-        #     logger.info(f"The missing wedge was removed from the 2D map.")
-
         return scat_xy, scat_z
-        # return scat_xy, scat_z, data
+
 
     @log_info
     @check_if_open

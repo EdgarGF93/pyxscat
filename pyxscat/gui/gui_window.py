@@ -1,5 +1,5 @@
 
-from . import ICON_PATH
+from . import ICON_DIRECTORY
 from gui.gui_widget import GUIPyX_Widget
 from gui.gui_widget_about import AboutForm
 
@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import QMainWindow, QMenu, QMenuBar, QAction
 from PyQt5 import QtGui, QtCore
 
 PYXSCAT_LOGO = "pyxscat_icon.png"
+WIDTH = 1280
+HEIGHT = 720
 
 class GUIPyX_Window(QMainWindow):
     def __init__(self, *args):
@@ -17,8 +19,11 @@ class GUIPyX_Window(QMainWindow):
         self.setCentralWidget(self._guiwidget)
         self.setWindowTitle("PyXScat")
 
+        self.setMinimumWidth(WIDTH)
+        self.setMinimumHeight(HEIGHT)
+
         app_icon = QtGui.QIcon()
-        icon_path = str(ICON_PATH.joinpath(PYXSCAT_LOGO))
+        icon_path = str(ICON_DIRECTORY.joinpath(PYXSCAT_LOGO))
         app_icon.addFile(icon_path, QtCore.QSize(256,256))
         self.setWindowIcon(app_icon)
 

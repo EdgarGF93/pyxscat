@@ -23,7 +23,7 @@ from gui import graph_methods as gm
 from gui.gui_layout import GUIPyX_Widget_layout, BUTTON_MIRROR_DISABLE, BUTTON_MIRROR_ENABLE, BUTTON_QZ_PAR, BUTTON_QZ_ANTIPAR, BUTTON_QR_PAR, BUTTON_QR_ANTIPAR
 from gui.gui_layout import button_style_input, button_style_input_disable
 from gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND, BUTTON_LIVE, BUTTON_LIVE_ON
-from gui.gui_layout import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP
+from gui.gui_layout import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
 from h5_integrator import H5GIIntegrator
 from h5_integrator import PONI_KEY_VERSION, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
 
@@ -36,7 +36,7 @@ import os
 import pandas as pd
 from matplotlib.cm import ScalarMappable
 
-ICON_SPLASH = join(ICON_PATH, 'pyxscat_logo_thumb.png')
+ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_logo_thumb.png')
 
 MSG_SETUP_UPDATED = "New setup dictionary was updated."
 MSG_SETUP_ERROR = "The setup dictionary could not be updated."
@@ -103,7 +103,8 @@ TXT_FILE_H5 = SRC_PATH.joinpath("h5_recent_files.txt")
 DEFAULT_SCATTER_SIZE = 0.6
 DEFAULT_MAP_FONTSIZE = 10
 
-
+DEFAULT_INCIDENT_ANGLE = 0.0
+DEFAULT_TILT_ANGLE = 0.0
 
 
  # Initialize logger
@@ -170,6 +171,15 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.scat_horz_cache = None
         self.scat_vert_cache = None
         self.data_bin_cache = None
+
+        self._dict_qmap_cache = {
+            'qz_parallel' : self._qz_parallel,
+            'qr_parallel' : self._qr_parallel,
+            'mirror' : self._mirror,
+            'binning' : DEFAULT_BINNING,
+            'incident_angle': DEFAULT_INCIDENT_ANGLE,
+            'tilt_angle' : DEFAULT_TILT_ANGLE,
+        }
 
 
         self._auto_lims = True
@@ -310,7 +320,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         ################
         #### BOXES #####
         ################
-        self.list_boxs.clicked.connect(lambda : self.update_box_parameters())
+        self.list_box.clicked.connect(lambda : self.update_box_parameters())
 
         self.combobox_units_box.currentTextChanged.connect(
             lambda : (
@@ -361,7 +371,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.button_mirror.clicked.connect(
             lambda : (
                 self.update_mirror(),
-                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=True),
+                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=False),
             )
         )
 
@@ -593,46 +603,56 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Button to show the reshape 2D map
         self.button_reshape_map.clicked.connect(
             lambda : (
-                self.generate_reshape_map(),
+                self.update_2D_reshape_map(),
             )
         )
 
         # visible tab
         self.tab_graph_widget.currentChanged.connect(
-            lambda : self.update_graphs(new_data=False, update_2D_raw=True, update_2D_q=True, update_1D=False),
+            lambda : self.update_graphs(
+                new_data=False, 
+                update_2D_raw=True,
+                update_2D_reshape=True,
+                update_2D_q=True,
+                update_1D=False,
+            ),
         )
 
         #Q-MAP TOOLBAR
         self.button_font_m.clicked.connect(
             lambda : (
                 self.reduce_font(),
+                self.update_qmap_style(),
             )
             
         )
         self.button_font_M.clicked.connect(
             lambda : (
                 self.increase_font(),
+                self.update_qmap_style(),
             )
         )
 
         self.button_reduce_comma.clicked.connect(
             lambda : (
                 self.reduce_scattersize(),
-                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=False),    
+                self.plot_qcache_matrix(),
+                # self.update_qmap_style(),
             )
         )
 
         self.button_enhance_comma.clicked.connect(
             lambda : (
                 self.increase_scattersize(),
-                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=False),    
+                self.plot_qcache_matrix(),
             )
         )
 
         self.button_log.clicked.connect(
             lambda : (
                 self.update_graph_log(),
-                self.update_q_map(use_cache=True),
+                self.plot_qcache_matrix(),
+                # self.update_q_map(use_cache=True),
                 # self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=False),
             )
         )
@@ -640,7 +660,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.button_colorbar.clicked.connect(
             lambda : (
                 self.update_graph_colorbar(),
-                self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=False),
+                # self.update_graphs(new_data=False, update_2D_raw=False, update_2D_q=True, update_1D=False),
             )
         )
 
@@ -651,6 +671,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.combobox_units.currentTextChanged.connect(
             lambda : (
                 self.update_lims_ticks(),
+                self.update_graphs(new_data=False, update_1D=False, update_2D_raw=False, update_2D_q=True)
             )
         )
 
@@ -717,20 +738,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
         )
 
-    def kkk(self):
-        print(1)
-
-
-
-        self.canvas_2D_matplotlib.axes.set_xlabel("HOLA")
-        self.canvas_2D_matplotlib.draw_idle()
-        self.canvas_2D_matplotlib.flush_events()
-        print(2)
-    def kkk_1(self):
-        self.canvas_2D_matplotlib.axes.set_xlabel("ADIOS")
-        self.canvas_2D_matplotlib.draw_idle()
-        self.canvas_2D_matplotlib.flush_events()
-
     @log_info
     def reset_attributes_and_widgets(self) -> None:
         """
@@ -753,7 +760,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Clear GUI widgets
         cb.clear(self.combobox_ponifile)
         cb.clear(self.combobox_reffolder)
-        cb.clear(self.combobox_maskfolder)
+        # cb.clear(self.combobox_maskfolder)
         cb.clear(self.combobox_headeritems)
         cb.clear(self.combobox_headeritems_title)
         cb.clear(self.combobox_angle)
@@ -1009,7 +1016,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         Updates the widgets of integration after clicking on the list_boxes
         """
-        clicked_integration = lt.click_values(self.list_boxs)[0]
+        clicked_integration = lt.click_values(self.list_box)[0]
         json_file = INTEGRATION_PATH.joinpath(f"{clicked_integration}.json")
         logger.info(f"Json file: {json_file}")
         dict_box = open_json(json_file)
@@ -1910,14 +1917,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger(f"{e}: Rotation 3 could not be retrieved from dictionary.")
             return
 
+        detector_info = f"{str(detector.name)} / {str(detector._binning)} / ({shape1},{shape2}) / ({pixel1},{pixel2})"
+
         if self.h5.get_active_ponifile():
             le.substitute(
                 lineedit=self.lineedit_detector,
-                new_text=detector.name,
-            )
-            le.substitute(
-                lineedit=self.lineedit_detector_binning,
-                new_text=str(detector._binning),
+                new_text=detector_info,
             )
             le.substitute(
                 lineedit=self.lineedit_wavelength,
@@ -1926,22 +1931,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             le.substitute(
                 lineedit=self.lineedit_distance,
                 new_text=dist,
-            )
-            le.substitute(
-                lineedit=self.lineedit_pixel1,
-                new_text=pixel1,
-            )
-            le.substitute(
-                lineedit=self.lineedit_pixel2,
-                new_text=pixel2,
-            )
-            le.substitute(
-                lineedit=self.lineedit_shape1,
-                new_text=shape1,
-            )
-            le.substitute(
-                lineedit=self.lineedit_shape2,
-                new_text=shape2,
             )
             le.substitute(
                 lineedit=self.lineedit_poni1,
@@ -2276,11 +2265,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     reset=False,
                 )
                 # Mask combobox
-                cb.insert_list(
-                    combobox=self.combobox_maskfolder,
-                    list_items=new_folders,
-                    reset=False,
-                )
+                # cb.insert_list(
+                #     combobox=self.combobox_maskfolder,
+                #     list_items=new_folders,
+                #     reset=False,
+                # )
             else:
                 logger.info(INFO_LIST_NO_FOLDERS_TO_UPDATE)
 
@@ -2434,10 +2423,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 combobox=self.combobox_reffolder,
                 list_items=list(self.h5.generator_folder_name()),
             )
-            cb.insert_list(
-                combobox=self.combobox_maskfolder,
-                list_items=list(self.h5.generator_folder_name()),
-            )
+            # cb.insert_list(
+            #     combobox=self.combobox_maskfolder,
+            #     list_items=list(self.h5.generator_folder_name()),
+            # )
 
     @log_info
     def update_clicked_folder(self) -> None:
@@ -2543,7 +2532,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
 
     @log_info
-    def update_graphs(self, new_data=True, update_1D=True, update_2D_raw=True, update_2D_q=False,  ) -> None:
+    def update_graphs(self, new_data=True, update_1D=True, update_2D_raw=True, update_2D_reshape=False, update_2D_q=False) -> None:
         """
         Updates both 2D and 1D graphs after the stored folder and index values in cache
 
@@ -2616,39 +2605,33 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         data = data / norm_factor
 
         # Update 2D tab, raw map if its tab is active
-        
         if update_2D_raw and self.tab_graph_widget.currentIndex() == INDEX_TAB_RAW_MAP:
             try:
                 self.update_2D_graph(
                     data=data,
-                    # norm_factor=norm_factor,
                 )
             except Exception as e:
                 self.write_terminal_and_logger(f"{e}: Error during updating 2D raw map.")
 
-        # Update 2D tab, q-transformed map if its tab is active
-        if update_2D_q and self.tab_graph_widget.currentIndex() == INDEX_TAB_Q_MAP:
+        # Update 2D reshape map if its tab is active
+        if update_2D_reshape and self.tab_graph_widget.currentIndex() == INDEX_TAB_RESHAPE_MAP:
             try:
-                # self.update_q_matrix_cache(
-                #     data=data,
-                # )
-                self.update_q_map(
+                self.update_2D_reshape_map(
                     data=data,
                 )
             except Exception as e:
+                self.write_terminal_and_logger(f"{e}: Error during 2D reshape map.")
+
+        # Update 2D tab, q-transformed map if its tab is active
+        if update_2D_q and self.tab_graph_widget.currentIndex() == INDEX_TAB_Q_MAP:
+            try:
+                self.update_q_matrix_cache(
+                    new_data=new_data,
+                )
+                self.plot_qcache_matrix()
+                self.update_qmap_style()
+            except Exception as e:
                 self.write_terminal_and_logger(f"{e}: Error during updating q-map map.")
-
-
-        # Update 2D reshaping (no need integration parameters)
-        # try:
-        #     self.update_2D_reshape(
-        #         data=data,
-        #         norm_factor=norm_factor,
-        #     )
-        # except Exception as e:
-        #     self.write_terminal_and_logger("Wrong reshaping update")
-
-
 
     @log_info
     def get_subtracted_data(self, data=None, new_data=True):
@@ -2783,8 +2766,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 ymax=graph_2D_widget.getGraphYLimits()[1],
             )
 
-
-
         if self.checkbox_mask_integration.isChecked():
             data = self.get_masked_integration_array(data=data)
 
@@ -2833,17 +2814,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         None
         """
-        try:
-            x_lims = [le.text(lineedit=self.lineedit_xmin), le.text(lineedit=self.lineedit_xmax)]
-        except:
-            x_lims = None
-        logger.info(f"X limits for the generated map: {x_lims}")
-        try:
-            y_lims = [le.text(lineedit=self.lineedit_ymin), le.text(lineedit=self.lineedit_ymax)]
-        except:
-            y_lims = None
-        logger.info(f"Y limits for the generated map: {y_lims}")
-        return x_lims, y_lims
+        pass
+        # try:
+        #     x_lims = [le.text(lineedit=self.lineedit_xmin), le.text(lineedit=self.lineedit_xmax)]
+        # except:
+        #     x_lims = None
+        # logger.info(f"X limits for the generated map: {x_lims}")
+        # try:
+        #     y_lims = [le.text(lineedit=self.lineedit_ymin), le.text(lineedit=self.lineedit_ymax)]
+        # except:
+        #     y_lims = None
+        # logger.info(f"Y limits for the generated map: {y_lims}")
+        # return x_lims, y_lims
 
     @log_info
     def get_map_ticks(self):
@@ -2856,29 +2838,31 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         None
         """
-        try:
-            x_ticks = le.get_clean_lineedit(
-                lineedit_widget=self.lineedit_xticks
-            )
-        except:
-            x_ticks = None
-        logger.info(f"X ticks for the generated map: {x_ticks}")
-        try:
-            y_ticks = le.get_clean_lineedit(
-                lineedit_widget=self.lineedit_yticks
-            )
-        except:
-            y_ticks = None
-        logger.info(f"Y ticks for the generated map: {y_ticks}")
-        try:
-            return [float(tick) for tick in x_ticks], [float(tick) for tick in y_ticks]
-        except:
-            return None, None
+        pass
+        # try:
+        #     x_ticks = le.get_clean_lineedit(
+        #         lineedit_widget=self.lineedit_xticks
+        #     )
+        # except:
+        #     x_ticks = None
+        # logger.info(f"X ticks for the generated map: {x_ticks}")
+        # try:
+        #     y_ticks = le.get_clean_lineedit(
+        #         lineedit_widget=self.lineedit_yticks
+        #     )
+        # except:
+        #     y_ticks = None
+        # logger.info(f"Y ticks for the generated map: {y_ticks}")
+        # try:
+        #     return [float(tick) for tick in x_ticks], [float(tick) for tick in y_ticks]
+        # except:
+        #     return None, None
 
     @log_info
     def get_color_lims(self):
         try:
-            color_lims = gm.get_zlims(self.graph_raw_widget)  
+            color_lims = gm.get_zlims(self.graph_raw_widget)
+            return color_lims
         except Exception as e:
             self.write_terminal_and_logger(f"{e}: Error at taking color limits.")
 
@@ -3158,15 +3142,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
     @log_info
-    def generate_reshape_map(self):
+    def update_2D_reshape_map(self, data=None):
         if not self.h5:
             return
 
-        try:
-            data = gm.get_array(self.graph_raw_widget)
-            logger.info(f"Data from the map. Shape: {data.shape}")
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Data could not be retrieved.")
+        if data is None:
             return
 
         try:
@@ -3177,21 +3157,25 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger(f"{e}: Data could not be reshaped.")
             return
 
-        color_lims = gm.get_zlims(self.graph_raw_widget)
-        
-        plt.imshow(
+        canvas = self.canvas_reshape_widget
+        z_lims = gm.get_zlims(self.graph_raw_widget)
+
+        canvas.axes.imshow(
             data_reshape,
             origin="lower", 
-            extent=[q.min(), q.max(), chi.min(), chi.max()], 
-            aspect="auto", 
-            vmin=color_lims[0], 
-            vmax=color_lims[1],
+            extent=[
+                q.min(),
+                q.max(), 
+                chi.min(), 
+                chi.max()], 
+            aspect="auto",
+            vmin=z_lims[0],
+            vmax=z_lims[1],
         )
-        plt.ylabel("Chi (degrees)")
-        plt.xlabel("q(nm-1)")
-        plt.show()
+        canvas.axes.set_xlabel("q (nm-1)")
+        canvas.axes.set_ylabel("Chi (deg)")        
 
-
+        logger.info(f"Displayed reshape data.")
 
     @log_info
     def mirror_scat_matrix(self, data=None, scat_horz=None):
@@ -3218,53 +3202,91 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger(f"{e}: There was an error during data binning.")
         return mat
 
-    @log_info
-    def update_q_matrix_cache(self, data=None):
-        if data is None:
-            return
+    # @log_info
+    # def update_q_matrix_cache(self, data=None):
+    #     if data is None:
+    #         return
         
-        if not self.h5:
-            return
+    #     if not self.h5:
+    #         return
 
-        # Only proceed if the second tab is active
-        if self.tab_graph_widget.currentIndex() != 1:
-            return
+    #     # Only proceed if its tab is active
+    #     if self.tab_graph_widget.currentIndex() != INDEX_TAB_Q_MAP:
+    #         return
 
-        # Get the unit of the generated map
-        unit = cb.value(self.combobox_units)
-        unit = get_pyfai_unit(unit)
-        logger.info(f"Unit of the map: {unit}")
+    #     # Get the unit of the generated map
+    #     unit = cb.value(self.combobox_units)
+    #     unit = get_pyfai_unit(unit)
+    #     logger.info(f"Unit of the map: {unit}")
 
-        # Get the grid of scattering units
-        scat_horz, scat_vert = self.h5.get_mesh_matrix(
-            unit=unit,
-            shape=data.shape,
-        )
+    #     # Get the grid of scattering units
+    #     scat_horz, scat_vert = self.h5.get_mesh_matrix(
+    #         unit=unit,
+    #         shape=data.shape,
+    #     )
 
-        if (scat_horz is None) or (scat_vert is None):
-            return
+    #     if (scat_horz is None) or (scat_vert is None):
+    #         return
 
-        # Mirror the matrix
-        if self._mirror:
-            data, scat_horz = self.mirror_scat_matrix(
-                data=data,
-                scat_horz=scat_horz,
-            )
+    #     # Mirror the matrix
+    #     if self._mirror:
+    #         data, scat_horz = self.mirror_scat_matrix(
+    #             data=data,
+    #             scat_horz=scat_horz,
+    #         )
         
-        # Bin the matrix
-        data, scat_horz, scat_vert = self.zoom_scat_matrix(
-            data=data,
-            scat_horz=scat_horz,
-            scat_vert=scat_vert,
-        )
+    #     # Bin the matrix
+    #     data, scat_horz, scat_vert = self.zoom_scat_matrix(
+    #         data=data,
+    #         scat_horz=scat_horz,
+    #         scat_vert=scat_vert,
+    #     )
 
-        # Update the cache
-        self.scat_horz_cache = scat_horz
-        self.scat_vert_cache = scat_vert
-        self.data_bin_cache = data
+    #     # Update the cache
+    #     self.scat_horz_cache = scat_horz
+    #     self.scat_vert_cache = scat_vert
+    #     self.data_bin_cache = data
+
+
+
+    # @log_info
+    # def update_q_map(self, new_data=True, update_cache=True):
+    #     # Update q matrix cache
+    #     if update_cache:
+    #         self.update_q_matrix_cache(new_data=new_data)
+
+    #     # GET ELEMENTS OF STYLE
+    #     # Get the title using the key metadata from lineedit
+    #     title = self.get_title()
+
+    #     # Color lims
+    #     color_lims = self.get_color_lims()
+
+    #     # Log scale
+    #     log=self._graph_log
+
+    #     # Normalization color
+    #     norm = self.get_norm_colors(
+    #         color_lims=color_lims,
+    #         log=log,
+    #     )
+
+    #     self.plot_q_map(
+    #         mesh_horz=self.scat_horz_cache,
+    #         mesh_vert=self.scat_vert_cache,
+    #         data=self.data_bin_cache,
+    #         unit=unit,
+    #         title=title,
+    #         norm=norm,
+    #         clear_axes=True,
+    #         xlim=x_lims,
+    #         ylim=y_lims,
+    #         xticks=x_ticks,
+    #         yticks=y_ticks,
+    #     )
 
     @log_info
-    def update_q_map(self, data=None):
+    def update_q_matrix_cache(self, new_data=True):
         """
         WORKS WITH CACHE MATRIX
         Generates a pop-up window with a 2D map of the pattern transformed to q or theta units
@@ -3279,85 +3301,192 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         # Only proceed if the second tab is active
-        if self.tab_graph_widget.currentIndex() != 1:
-            return
+        # if self.tab_graph_widget.currentIndex() != 1:
+        #     return
 
-        if data is None:
-            return
+        # Get cache versions of the scattering matrix
+        scat_horz = self.scat_horz_cache
+        scat_vert = self.scat_vert_cache
+        data_bin = self.data_bin_cache
 
-        # Get the unit of the generated map
-        unit = cb.value(self.combobox_units)
-        unit = get_pyfai_unit(unit)
-        logger.info(f"Unit of the map: {unit}")
+        # Check if the matrix needs to be redone
+        qz_prev = self._dict_qmap_cache['qz_parallel']
+        qr_prev = self._dict_qmap_cache['qr_parallel']
+        mirror_prev = self._dict_qmap_cache['mirror']
+        binning_prev = self._dict_qmap_cache['binning']
+        iangle_prev = self._dict_qmap_cache['incident_angle']
+        tangle_prev = self._dict_qmap_cache['tilt_angle']
 
-        # Get the binning
-        binning = int(self.spinbox_binnning_data.value())
+        qz_current = self._qz_parallel
+        qr_current = self._qr_parallel
+        mirror_current = self._mirror
+        binning_current = int(self.spinbox_binnning_data.value())
+        iangle_current = self.h5.get_incident_angle(
+            folder_name=self.clicked_folder,
+            index_list=self.cache_index,
+        )
+        tangle_current = self.h5.get_tilt_angle(
+            folder_name=self.clicked_folder,
+            index_list=self.cache_index,
+        )
 
-        # Get the grid of scattering units
-        if (self.scat_horz_cache is None) or (self.scat_vert_cache is None):
+        # Redone the data if new_data
+        if new_data:
+            data_bin = None
+
+        # Redone everything if the binning is different
+        if binning_prev != binning_current:
+            scat_horz, scat_vert, data_bin = None, None, None
+
+        # Redone the scattering matrix if the sample orientation is different
+        if (qz_prev != qz_current) or (qr_prev != qr_current):
+            scat_horz, scat_vert = None, None
+
+        # Redone the scattering matrix if some GI angle is different
+        if (iangle_prev != iangle_current) or (tangle_prev != tangle_current):
+            scat_horz, scat_vert = None, None
+        
+        # If data_bin is None, zoom the data again
+        if data_bin is None:
+            data_bin = self._data_cache
+            data_bin = self.zoom_matrix(
+                mat=data_bin,
+                binning=binning_current,
+            )
+
+        print(self.h5.sample_orientation)
+        print(self.h5._qz_parallel)
+        print(self.h5._qr_parallel)
+        # If scat matrix are None, generate them again and zoom
+        if (scat_horz is None) or (scat_vert is None):
+            # Get the unit of the generated map
+            unit = cb.value(self.combobox_units)
+            unit = get_pyfai_unit(unit)
+
             scat_horz, scat_vert = self.h5.get_mesh_matrix(
                 unit=unit,
-                shape=data.shape,
+                shape=self._data_cache.shape,
             )
+            print(scat_horz)
             scat_horz = self.zoom_matrix(
                 mat=scat_horz,
-                binning=binning,
+                binning=binning_current,
             )
             scat_vert = self.zoom_matrix(
                 mat=scat_vert,
-                binning=binning,
+                binning=binning_current,
             )
-            self.scat_horz_cache = scat_horz
-            self.scat_vert_cache = scat_vert
-        else:
-            scat_horz = self.scat_horz_cache
-            scat_vert = self.scat_vert_cache
-
-        # Get the zoomed data
-        if self.data_bin_cache is None:
-            data = self.zoom_matrix(
-                mat=data,
-                binning=binning,
+            
+        if (scat_horz is None) or (scat_vert is None) or (data_bin is None):
+            self.write_terminal_and_logger("Scattering matrix are None.")
+            return
+        
+        # Mirror if needed
+        if mirror_prev != mirror_current:
+            data_bin, scat_horz = self.mirror_scat_matrix(
+                data=data_bin,
+                scat_horz=scat_horz,
             )
-            self.data_bin_cache = data
-        else:
-            data = self.data_bin_cache
 
-    
-        # GET ELEMENTS OF STYLE
-        # Get the title using the key metadata from lineedit
-        title = self.get_title()
+        # Update all cache vars
+        self.scat_horz_cache = scat_horz
+        self.scat_vert_cache = scat_vert
+        self.data_bin_cache = data_bin
 
-        # Get the limits and ticks
-        x_lims, y_lims = self.get_map_limits()
-        x_ticks, y_ticks = self.get_map_ticks()        
+        self.write_terminal_and_logger(f"Updated cache matrix.")
+        logger.info(f"Updated scat_horz_cache with shape {scat_horz.shape}")
+        logger.info(f"Updated scat_vert_cache with shape {scat_vert.shape}")
+        logger.info(f"Updated data_bin_cache with shape {data_bin.shape}")
 
-        # Color lims
+        self._dict_qmap_cache = {
+            'qz_parallel' : qz_current,
+            'qr_parallel' : qr_current,
+            'mirror' : mirror_current,
+            'binning' : binning_current,
+            'incident_angle': iangle_current,
+            'tilt_angle' : tangle_current,
+        }
+        logger.info(f"Updated cache dictionary: {str(self._dict_qmap_cache)}")
+
+
+    @log_info
+    def plot_qcache_matrix(self):
+        scat_horz = self.scat_horz_cache
+        scat_vert = self.scat_vert_cache
+        data_bin = self.data_bin_cache
+
+        canvas = self.canvas_2d_q
+
+        # Return if there are no matrix or the shapes do not match
+        if (scat_horz is None) or (scat_vert is None) or (data_bin is None):
+            self.write_terminal_and_logger("Impossible to plot.")
+        
+        if not (scat_horz.shape == scat_vert.shape == data_bin.shape):
+            self.write_terminal_and_logger("The shape of scat matrix do not match.")
+            return
+        
+        # Get the size of the comma
+        size_comma = self._scattersize_cache
+
+        # Get the color normalization
         color_lims = self.get_color_lims()
-
-        # Log scale
-        log=self._graph_log
-
-        # Normalization color
+        log = self._graph_log
         norm = self.get_norm_colors(
             color_lims=color_lims,
             log=log,
-        )
+        ) 
 
-        self.plot_q_map(
-            mesh_horz=scat_horz,
-            mesh_vert=scat_vert,
-            data=data,
-            unit=unit,
-            title=title,
-            norm=norm,
-            clear_axes=True,
-            xlim=x_lims,
-            ylim=y_lims,
-            xticks=x_ticks,
-            yticks=y_ticks,
-        )
+        # Plot the scatter
+        try:
+            canvas.axes.cla()
+            canvas.axes.scatter(
+                scat_horz,
+                scat_vert,
+                c=data_bin,
+                s=size_comma,
+                norm=norm,
+                edgecolors="None",
+                marker=',',
+                cmap="viridis",
+            )
+            canvas.draw()
+        except Exception as e:
+            self.write_terminal_and_logger(f"{e}")
+            
+    @log_info
+    def update_qmap_style(self):
+        canvas = self.canvas_reshape_widget
+        
+        # Get the title
+        title = self.get_title()
 
+        # Get the limits and ticks
+        x_lims = canvas.axes.get_xlim()
+        y_lims = canvas.axes.get_ylim()
+        x_ticks = canvas.axes.get_xticks()
+        y_ticks = canvas.axes.get_yticks()
+
+        # x_ticks, y_ticks = self.get_map_ticks()        
+
+        # Get the font size
+        font_size = self._fontsize_cache
+
+        # Get the labels
+        unit = cb.value(self.combobox_units)
+        unit = get_pyfai_unit(unit)
+        DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
+        x_label = DICT_PLOT.get('X_LABEL', 'x')
+        y_label = DICT_PLOT.get('Y_LABEL', 'y')
+
+        canvas.axes.set_xlabel(xlabel=x_label, fontsize=font_size)
+        canvas.axes.set_ylabel(ylabel=y_label, fontsize=font_size)
+        canvas.axes.set_xlim(x_lims)
+        canvas.axes.set_ylim(y_lims)
+        canvas.axes.set_xticks(x_ticks, x_ticks, fontsize=font_size)
+        canvas.axes.set_yticks(y_ticks, y_ticks, fontsize=font_size)
+        canvas.axes.set_title(title, fontsize=font_size)
+
+        canvas.draw()
 
     @log_info
     def plot_q_map(
@@ -3379,7 +3508,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger("There is a None in the input matrix")
             return
 
-        canvas = self.canvas_2D_matplotlib
+        canvas = self.canvas_reshape_widget
         if clear_axes:
             canvas.axes.cla()
 
@@ -3448,24 +3577,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
     @log_info
     def increase_font(self):
         self._fontsize_cache += 2
-        self.update_font()     
 
     @log_info
     def reduce_font(self):
         self._fontsize_cache -= 2
-        self.update_font()
   
-    @log_info
-    def update_font(self):
-        canvas = self.canvas_2D_matplotlib
-        ax = canvas.axes
-        ax.set_xlabel(ax.get_xlabel(), fontsize=self._fontsize_cache)
-        ax.set_ylabel(ax.get_ylabel(), fontsize=self._fontsize_cache)
-        ax.set_xticks(ax.get_xticks(), ax.get_xticks(), fontsize=self._fontsize_cache)
-        ax.set_yticks(ax.get_yticks(), ax.get_yticks(), fontsize=self._fontsize_cache)
-        canvas.draw()
-
-
     @log_info
     def increase_scattersize(self):
         self._scattersize_cache += 0.2
@@ -3764,7 +3880,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         # Update the listwidget for BOX integration
         lt.insert_list(
-            listwidget=self.list_boxs,
+            listwidget=self.list_box,
             item_list=list_integration_boxes,
             reset=True,
         )
