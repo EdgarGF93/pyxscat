@@ -1555,6 +1555,7 @@ class H5GIIntegrator(Transform):
         folder_reference_name=str(),
         file_reference_name=str(),
         reference_factor=0.0,
+        normalized=False,
         ) -> np.array:
         """
         Returns the data array from a file stored in the h5 file.
@@ -1587,39 +1588,46 @@ class H5GIIntegrator(Transform):
             data_sample = None
             logger.info(f"Data sample could not be uploaded.")
         
-        # Subtract reference if asked
-        if folder_reference_name:
-            # Take the data from a specific reference file
-            if file_reference_name:
-                try:
-                    full_reference_filename = str(Path(folder_reference_name).joinpath(Path(file_reference_name)))
-                    logger.info(f"Take specific reference file: {file_reference_name} in {folder_reference_name}.")
-                    data_ref = EdfClass(
-                        filename=full_reference_filename,
-                        ponifile_path=self.get_active_ponifile(),
-                        qz_parallel=self._qz_parallel,
-                        qr_parallel=self._qr_parallel,
-                    ).get_data()
-                    data_sample = data_sample - reference_factor * data_ref
-                except Exception as e:
-                    logger.info(f"{e}: Specific reference data could not be loaded.")
+        # # Subtract reference if asked
+        # if folder_reference_name:
+        #     # Take the data from a specific reference file
+        #     if file_reference_name:
+        #         try:
+        #             full_reference_filename = str(Path(folder_reference_name).joinpath(Path(file_reference_name)))
+        #             logger.info(f"Take specific reference file: {file_reference_name} in {folder_reference_name}.")
+        #             data_ref = EdfClass(
+        #                 filename=full_reference_filename,
+        #                 ponifile_path=self.get_active_ponifile(),
+        #                 qz_parallel=self._qz_parallel,
+        #                 qr_parallel=self._qr_parallel,
+        #             ).get_data()
+        #             data_sample = data_sample - reference_factor * data_ref
+        #         except Exception as e:
+        #             logger.info(f"{e}: Specific reference data could not be loaded.")
             
-            # Automatic search of reference file after acquisition time
-            else:
-                try:
-                    acq_sample = self.get_acquisition_time(folder_name, index_list[0])
-                    logger.info(f"Acquisition time of the sample is {acq_sample}.")
-                    acq_ref_dataset = self.get_dataset_acquisition_time(folder_reference_name)
-                    logger.info(f"Acquisition dataset of the reference folder is {acq_ref_dataset}.")
-                    for index, exp_ref in enumerate(acq_ref_dataset):
-                        if exp_ref == acq_sample:
-                            data_ref = self.get_Edf_instance(
-                                folder_name=folder_reference_name,
-                                index_file=index,
-                            ).get_data()
-                            data_sample = data_sample - reference_factor * data_ref
-                except Exception as e:
-                    logger.info(f"{e}: Automatic reference data could not be loaded.")
+        #     # Automatic search of reference file after acquisition time
+        #     else:
+        #         try:
+        #             acq_sample = self.get_acquisition_time(folder_name, index_list[0])
+        #             logger.info(f"Acquisition time of the sample is {acq_sample}.")
+        #             acq_ref_dataset = self.get_dataset_acquisition_time(folder_reference_name)
+        #             logger.info(f"Acquisition dataset of the reference folder is {acq_ref_dataset}.")
+        #             for index, exp_ref in enumerate(acq_ref_dataset):
+        #                 if exp_ref == acq_sample:
+        #                     data_ref = self.get_Edf_instance(
+        #                         folder_name=folder_reference_name,
+        #                         index_file=index,
+        #                     ).get_data()
+        #                     data_sample = data_sample - reference_factor * data_ref
+        #         except Exception as e:
+        #             logger.info(f"{e}: Automatic reference data could not be loaded.")
+
+        if normalized:
+            norm_factor = self.get_norm_factor(
+                folder_name=folder_name,
+                index_list=index_list,
+            )
+            data_sample = data_sample.astype('float32') / norm_factor
 
         return data_sample
 

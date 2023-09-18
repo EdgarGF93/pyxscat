@@ -1,8 +1,8 @@
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from matplotlib.figure import Figure
-from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QGridLayout, QListWidget, QTableWidget, QLabel, QComboBox
-from PyQt5.QtWidgets import QSizePolicy, QCheckBox, QLineEdit, QDoubleSpinBox, QPlainTextEdit, QTabWidget, QSpinBox, QSplitter, QHBoxLayout, QVBoxLayout, QFrame
+from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QListWidget, QTableWidget, QLabel, QComboBox
+from PyQt5.QtWidgets import QCheckBox, QLineEdit, QDoubleSpinBox, QPlainTextEdit, QTabWidget, QSpinBox, QSplitter, QHBoxLayout, QVBoxLayout, QFrame
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import Qt
 from silx.gui.plot.PlotWindow import Plot1D, Plot2D
@@ -73,7 +73,6 @@ LABEL_SAVE_FOLDER = "Save folder:"
 # OUTPUT TERMINAL
 LABEL_TERMINAL = "Output Terminal"
 BUTTON_HIDE_TERMINAL = "HIDE TERMINAL"
-
 
 LABEL_FILENAME = "Current displayed file:"
 
@@ -468,8 +467,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.hbox_reffolder.setContentsMargins(1, 0, 1, 0)
         self.hbox_reffile = QHBoxLayout()
         self.hbox_reffile.setContentsMargins(1, 0, 1, 0)
-        self.hbox_savefolder = QHBoxLayout()
-        self.hbox_savefolder.setContentsMargins(1, 0, 1, 0)
+
         self.hbox_sample_orientation = QHBoxLayout()
         self.hbox_sample_orientation.setContentsMargins(1, 0, 1, 0)
         self.hbox_pyfai = QHBoxLayout()
@@ -481,7 +479,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.widget_poni = QWidget()
         self.widget_reffolder = QWidget()
         self.widget_reffile = QWidget()
-        self.widget_savefolder = QWidget()
+
         self.widget_sample_orientation = QWidget()
         self.widget_pyfai = QWidget()
 
@@ -491,7 +489,6 @@ class GUIPyX_Widget_layout(QWidget):
         self.widget_poni.setLayout(self.hbox_poni)
         self.widget_reffolder.setLayout(self.hbox_reffolder)
         self.widget_reffile.setLayout(self.hbox_reffile)
-        self.widget_savefolder.setLayout(self.hbox_savefolder)
         self.widget_sample_orientation.setLayout(self.hbox_sample_orientation)
         self.widget_pyfai.setLayout(self.hbox_pyfai)
 
@@ -501,7 +498,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.vbox_input.addWidget(self.widget_poni)
         self.vbox_input.addWidget(self.widget_reffolder)
         self.vbox_input.addWidget(self.widget_reffile)
-        self.vbox_input.addWidget(self.widget_savefolder)
+        # self.vbox_input.addWidget(self.widget_savefolder)
         self.vbox_input.addWidget(self.widget_sample_orientation)
         self.vbox_input.addWidget(self.widget_pyfai)
 
@@ -571,6 +568,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.combobox_reffile = QComboBox()
         self.combobox_reffile.setEnabled(False)
         self.checkbox_auto_reffile = QCheckBox(LABEL_AUTO_REFERENCE)
+        self.checkbox_auto_reffile.setChecked(True)
 
         self.hbox_reffile.addWidget(self.label_reffile, Qt.AlignLeft)
         self.hbox_reffile.addWidget(self.combobox_reffile, Qt.AlignLeft)
@@ -579,12 +577,6 @@ class GUIPyX_Widget_layout(QWidget):
         self.hbox_reffile.setStretch(0,1)
         self.hbox_reffile.setStretch(1,10)
         self.hbox_reffile.setStretch(2,1)
-
-        self.label_savefolder = QLabel(LABEL_SAVE_FOLDER)
-        self.lineedit_savefolder = QLineEdit()
-
-        self.hbox_savefolder.addWidget(self.label_savefolder)
-        self.hbox_savefolder.addWidget(self.lineedit_savefolder)
 
         self.label_sample_orientation = QLabel(LABEL_SAMPLE_ORIENTATION)
         self.button_mirror = QPushButton(BUTTON_MIRROR_DISABLE)
@@ -1189,22 +1181,16 @@ class GUIPyX_Widget_layout(QWidget):
         self.hbox_graph_toolbar_1.addWidget(self.combobox_headeritems_title)
         self.hbox_graph_toolbar_1.addWidget(self.lineedit_headeritems_title)
 
-        self.xlims = QLabel(LABEL_XLIMS)
-        self.lineedit_xmin = QLineEdit()
-        self.lineedit_xmin.setEnabled(False)
-        self.lineedit_xmax = QLineEdit()
-        self.lineedit_xmax.setEnabled(False)
-        self.ylims = QLabel(LABEL_YLIMS)
-        self.lineedit_ymin = QLineEdit()
-        self.lineedit_ymin.setEnabled(False)
-        self.lineedit_ymax = QLineEdit()
-        self.lineedit_ymax.setEnabled(False)
-        self.xticks = QLabel(LABEL_XTICKS)
-        self.lineedit_xticks = QLineEdit()
-        self.lineedit_xticks.setEnabled(False)
-        self.yticks = QLabel(LABEL_YTICKS)
-        self.lineedit_yticks = QLineEdit()
-        self.lineedit_yticks.setEnabled(False)
+        # self.xlims = QLabel(LABEL_XLIMS)
+        # self.lineedit_xmin = QLineEdit()
+        # self.lineedit_xmin.setEnabled(False)
+        # self.lineedit_xmax = QLineEdit()
+        # self.lineedit_xmax.setEnabled(False)
+        # self.ylims = QLabel(LABEL_YLIMS)
+        # self.lineedit_ymin = QLineEdit()
+        # self.lineedit_ymin.setEnabled(False)
+        # self.lineedit_ymax = QLineEdit()
+        # self.lineedit_ymax.setEnabled(False)
 
         self.button_font_m = QPushButton(BUTTON_LABEL_MINUS)
         self.button_font_m.setStyleSheet(button_style_thin)
@@ -1231,23 +1217,32 @@ class GUIPyX_Widget_layout(QWidget):
         self.hbox_graph_toolbar_2.addWidget(self.button_log)
         self.hbox_graph_toolbar_2.addWidget(self.label_binning_data)
         self.hbox_graph_toolbar_2.addWidget(self.spinbox_binnning_data)
-        self.hbox_graph_toolbar_2.addWidget(self.button_savemap)
+        # self.hbox_graph_toolbar_2.addWidget(self.button_savemap)
+
+        self.label_xticks = QLabel(LABEL_XTICKS)
+        self.lineedit_xticks = QLineEdit()
+        self.label_yticks = QLabel(LABEL_YTICKS)
+        self.lineedit_yticks = QLineEdit()
+
+        self.hbox_graph_toolbar_3.addWidget(self.label_xticks)
+        self.hbox_graph_toolbar_3.addWidget(self.lineedit_xticks)
+        self.hbox_graph_toolbar_3.addWidget(self.label_yticks)
+        self.hbox_graph_toolbar_3.addWidget(self.lineedit_yticks)
 
         self.canvas_2d_q = MplCanvas(self, width=4, height=3, dpi=50)
         self.toolbar_q_matplotlib = NavigationToolbar2QT(self.canvas_2d_q, self)
 
         self.vbox_graph_q.addWidget(self.widget_graph_toolbar_1)
+        self.vbox_graph_q.addWidget(self.widget_graph_toolbar_3)
         self.vbox_graph_q.addWidget(self.widget_graph_toolbar_2)
         self.vbox_graph_q.addWidget(self.toolbar_q_matplotlib)
         self.vbox_graph_q.addWidget(self.canvas_2d_q)
 
-        self.vbox_graph_q.setStretch(0,1)
-        self.vbox_graph_q.setStretch(1,1)
-        self.vbox_graph_q.setStretch(2,1)
-        self.vbox_graph_q.setStretch(3,20)
+        self.vbox_graph_q.setStretch(4,20)
 
         self.hbox_graph_toolbar_1.setContentsMargins(1,1,1,0)
         self.hbox_graph_toolbar_2.setContentsMargins(1,0,1,0)
+        self.hbox_graph_toolbar_3.setContentsMargins(1,0,1,0)
         self.toolbar_q_matplotlib.setContentsMargins(1,0,1,0)
         self.canvas_2d_q.setContentsMargins(1,0,1,0)
 
@@ -1261,13 +1256,16 @@ class GUIPyX_Widget_layout(QWidget):
         self.hbox_chart_toolbar_1 = QHBoxLayout()
         self.hbox_chart_toolbar_2 = QHBoxLayout()
         self.hbox_chart_toolbar_3 = QHBoxLayout()
+        self.hbox_savefolder = QHBoxLayout()
 
         self.widget_chart_toolbar_1 = QWidget()
         self.widget_chart_toolbar_2 = QWidget()
         self.widget_chart_toolbar_3 = QWidget()
+        self.widget_savefolder = QWidget()
 
         self.widget_chart_toolbar_1.setLayout(self.hbox_chart_toolbar_1)
         self.widget_chart_toolbar_2.setLayout(self.hbox_chart_toolbar_2)
+        self.widget_savefolder.setLayout(self.hbox_savefolder)        
         self.widget_chart_toolbar_3.setLayout(self.hbox_chart_toolbar_3)
 
         self.label_integrations = QLabel(LABEL_INTEGRATIONS)
@@ -1296,21 +1294,24 @@ class GUIPyX_Widget_layout(QWidget):
         self.hbox_chart_toolbar_2.addWidget(self.button_saveplot)
         self.hbox_chart_toolbar_2.addWidget(self.button_batch)
 
-        self.button_fit = QPushButton(BUTTON_FITTING)
-        self.button_fit.setStyleSheet(button_style_thin)
+        self.label_savefolder = QLabel(LABEL_SAVE_FOLDER)
+        self.lineedit_savefolder = QLineEdit()
+
+        self.hbox_savefolder.addWidget(self.label_savefolder)
+        self.hbox_savefolder.addWidget(self.lineedit_savefolder)
 
         self.graph_1D_widget = Plot1D()
 
         self.vbox_chart.addWidget(self.widget_chart_toolbar_1)
+        self.vbox_chart.addWidget(self.widget_savefolder)        
         self.vbox_chart.addWidget(self.widget_chart_toolbar_2)
         self.vbox_chart.addWidget(self.graph_1D_widget)
 
-        self.vbox_chart.setStretch(0,1)
-        self.vbox_chart.setStretch(1,1)
-        self.vbox_chart.setStretch(2,20)
+        self.vbox_chart.setStretch(3,20)
 
         self.hbox_chart_toolbar_1.setContentsMargins(1,1,1,0)
         self.hbox_chart_toolbar_2.setContentsMargins(1,0,1,0)
+        self.hbox_savefolder.setContentsMargins(1, 0, 1, 0)
         self.graph_1D_widget.setContentsMargins(1,0,1,0)
 
         #######################################
