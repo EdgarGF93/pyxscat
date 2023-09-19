@@ -25,7 +25,7 @@ from gui.gui_layout import button_style_input, button_style_input_disable
 from gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND, BUTTON_LIVE, BUTTON_LIVE_ON
 from gui.gui_layout import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
 from h5_integrator import H5GIIntegrator
-from h5_integrator import PONI_KEY_VERSION, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
+from h5_integrator import PONI_KEY_VERSION, PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
 
 import json
 import logging
@@ -698,7 +698,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.button_update_poni_parameters.clicked.connect(
             lambda : (
                 self.update_ponifile_parameters(
-                    dict_poni=self.retrieve_poni_dict_from_widgets(),
+                    dict_poni=self.get_poni_dict_from_widgets(),
                 ),
                 self.update_2D_q(),
                 self.update_1D_graph(),
@@ -707,8 +707,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         self.button_save_poni_parameters.clicked.connect(
             lambda : (
+                self.update_dict_poni_cache(),
                 self.save_poni_dict(
-                    dict_poni=self.retrieve_poni_dict_from_widgets(),
+                    dict_poni=self._dict_poni_cache,
                 ),
                 self.search_and_update_ponifiles_widgets(),
             )
@@ -1472,7 +1473,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 cb.insert_list(
                     combobox=self.combobox_ponifile,
                     list_items=new_ponifiles,
-                    reset=False,
+                    reset=True,
                 )
                 self.write_terminal_and_logger(INFO_H5_PONIFILE_CB_UPDATED)                
         else:
@@ -1561,14 +1562,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger(f"{e}: Version could not be retrieved from dictionary.")
             return
         try:
-            detector = dict_poni[PONI_KEY_DETECTOR]
+            detector_name = dict_poni[PONI_KEY_DETECTOR]
         except Exception as e:
             self.write_terminal_and_logger(f"{e}: Detector could not be retrieved from dictionary.")
             return
         try:
-            detector_config = dict_poni[PONI_KEY_DETECTOR_CONFIG]
+            detector_bin = dict_poni[PONI_KEY_BINNING]
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Detector config could not be retrieved from dictionary.")
+            self.write_terminal_and_logger(f"{e}: Detector could not be retrieved from dictionary.")
             return
         try:
             wave = dict_poni[PONI_KEY_WAVELENGTH]
@@ -1627,8 +1628,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         self._dict_poni_cache[PONI_KEY_VERSION] = version
-        self._dict_poni_cache[PONI_KEY_DETECTOR] = detector
-        self._dict_poni_cache[PONI_KEY_DETECTOR_CONFIG] = detector_config
+        self._dict_poni_cache[PONI_KEY_DETECTOR] = detector_name
+        self._dict_poni_cache[PONI_KEY_BINNING] = detector_bin
         self._dict_poni_cache[PONI_KEY_WAVELENGTH] = wave
         self._dict_poni_cache[PONI_KEY_DISTANCE] = dist
         self._dict_poni_cache[PONI_KEY_PIXEL1] = pixel1
@@ -1719,7 +1720,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         poni_dict = {
             PONI_KEY_VERSION : 2,
-            PONI_KEY_DETECTOR : detector,
+            PONI_KEY_DETECTOR : detector.name,
+            PONI_KEY_BINNING : detector._binning,
             PONI_KEY_DETECTOR_CONFIG : detector_config,
             PONI_KEY_WAVELENGTH : wave,
             PONI_KEY_DISTANCE : dist,
@@ -1734,10 +1736,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             PONI_KEY_ROT3 : rot3,
         }
 
+        print(poni_dict)
+
         return poni_dict
 
+
     @log_info
-    def retrieve_poni_dict_from_widgets(self) -> dict:
+    def get_poni_dict_from_widgets(self) -> dict:
         """
         Returns a dictionary with poni parameters from the widgets
         """
@@ -1755,24 +1760,60 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger(f"{e}: Distance could not be retrieved from widget.")
             return
         try:
-            pixel1 = float(le.text(self.lineedit_pixel1))
+            poni1 = float(le.text(self.lineedit_poni1))
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Pixel 1 could not be retrieved from widget.")
+            self.write_terminal_and_logger(f"{e}: PONI 1 could not be retrieved from widget.")
             return
         try:
-            pixel2 = float(le.text(self.lineedit_pixel2))
+            poni2 = float(le.text(self.lineedit_poni2))
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Pixel 2 could not be retrieved from widget.")
+            self.write_terminal_and_logger(f"{e}: PONI 2 could not be retrieved from widget.")
             return
         try:
-            shape1 = int(le.text(self.lineedit_shape1))
+            rot1 = float(le.text(self.lineedit_rot1))
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Shape 1 could not be retrieved from widget.")
+            self.write_terminal_and_logger(f"{e}: Rotation 1 could not be retrieved from widget.")
             return
         try:
-            shape2 = int(le.text(self.lineedit_shape2))
+            rot2 = float(le.text(self.lineedit_rot2))
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Shape 2 could not be retrieved from widget.")
+            self.write_terminal_and_logger(f"{e}: Rotation 2 could not be retrieved from widget.")
+            return
+        try:
+            rot3 = float(le.text(self.lineedit_rot3))
+        except Exception as e:
+            self.write_terminal_and_logger(f"{e}: Rotation 3 could not be retrieved from widget.")
+            return
+        
+        dict_poni = self._dict_poni_cache.copy()
+        dict_poni[PONI_KEY_WAVELENGTH] = wave
+        dict_poni[PONI_KEY_DISTANCE] = dist
+        dict_poni[PONI_KEY_PONI1] = poni1
+        dict_poni[PONI_KEY_PONI2] = poni2
+        dict_poni[PONI_KEY_ROT1] = rot1
+        dict_poni[PONI_KEY_ROT2] = rot2
+        dict_poni[PONI_KEY_ROT3] = rot3
+
+        return dict_poni
+        
+
+    @log_info
+    def update_dict_poni_cache(self) -> dict:
+        """
+        Returns a dictionary with poni parameters from the widgets
+        """
+        if not self.h5:
+            return
+
+        try:
+            wave = float(le.text(self.lineedit_wavelength))
+        except Exception as e:
+            self.write_terminal_and_logger(f"{e}: Wavelength could not be retrieved from widget.")
+            return
+        try:
+            dist = float(le.text(self.lineedit_distance))
+        except Exception as e:
+            self.write_terminal_and_logger(f"{e}: Distance could not be retrieved from widget.")
             return
         try:
             poni1 = float(le.text(self.lineedit_poni1))
@@ -1800,21 +1841,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger(f"{e}: Rotation 3 could not be retrieved from widget.")
             return
 
-        poni_dict = {
-            PONI_KEY_VERSION : 2,
-            PONI_KEY_DETECTOR : self.h5.detector.name,
-            PONI_KEY_DETECTOR_CONFIG : self.h5.detector.get_config(),
-            PONI_KEY_WAVELENGTH : wave,
-            PONI_KEY_DISTANCE : dist,
-            PONI_KEY_PIXEL1 : pixel1,
-            PONI_KEY_PIXEL2 : pixel2,
-            PONI_KEY_PONI1 : poni1,
-            PONI_KEY_PONI2 : poni2,
-            PONI_KEY_ROT1 : rot1,
-            PONI_KEY_ROT2 : rot2,
-            PONI_KEY_ROT3 : rot3,
-        }
-        return poni_dict
+        self._dict_poni_cache[PONI_KEY_WAVELENGTH] = wave
+        self._dict_poni_cache[PONI_KEY_DISTANCE] = dist
+        self._dict_poni_cache[PONI_KEY_PONI1] = poni1
+        self._dict_poni_cache[PONI_KEY_PONI2] = poni2
+        self._dict_poni_cache[PONI_KEY_ROT1] = rot1
+        self._dict_poni_cache[PONI_KEY_ROT2] = rot2
+        self._dict_poni_cache[PONI_KEY_ROT3] = rot3
 
     @log_info
     def update_ponifile_widgets(self, dict_poni=dict()) -> None:
@@ -1824,9 +1857,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if not self.h5:
             return
         try:
-            detector = dict_poni[PONI_KEY_DETECTOR]
+            detector_name = dict_poni[PONI_KEY_DETECTOR]
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Detector could not be retrieved from dictionary.")
+            self.write_terminal_and_logger(f"{e}: Detector name could not be retrieved from dictionary.")
+            return
+        try:
+            detector_bin = dict_poni[PONI_KEY_BINNING]
+        except Exception as e:
+            self.write_terminal_and_logger(f"{e}: Detector bin could not be retrieved from dictionary.")
             return
         try:
             wave = dict_poni[PONI_KEY_WAVELENGTH]
@@ -1884,7 +1922,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger(f"{e}: Rotation 3 could not be retrieved from dictionary.")
             return
 
-        detector_info = f"{str(detector.name)} / {str(detector._binning)} / ({shape1},{shape2}) / ({pixel1},{pixel2})"
+        detector_info = f"{str(detector_name)} / {str(detector_bin)} / ({shape1},{shape2}) / ({pixel1},{pixel2})"
 
         if self.h5.get_active_ponifile():
             le.substitute(

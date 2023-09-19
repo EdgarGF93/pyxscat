@@ -44,6 +44,7 @@ DICT_SAMPLE_ORIENTATIONS = {
 }
 
 PONI_KEY_VERSION = "poni_version"
+PONI_KEY_BINNING = "binning"
 PONI_KEY_DISTANCE = "dist"
 PONI_KEY_WAVELENGTH = "wavelength"
 PONI_KEY_SHAPE1 = "shape1"
@@ -1795,6 +1796,7 @@ class H5GIIntegrator(Transform):
             logger.info("Integration performed.")
         except:
             logger.info("Error during azimuthal integration.")
+            return
 
         return np.array([x_vector, y_vector])
 
