@@ -1850,6 +1850,7 @@ class H5GIIntegrator(Transform):
             logger.info("Integration performed.")
         except:
             logger.info("Error during radial integration.")
+            return
         return np.array([x_vector, y_vector])
 
     @log_info
@@ -1925,6 +1926,8 @@ class H5GIIntegrator(Transform):
             logger.info("Integration performed.")
         except:
             logger.info("Error during box integration.")
+            return
+
         return np.array([x_vector, y_vector])
 
     @log_info
