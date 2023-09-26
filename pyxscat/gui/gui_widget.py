@@ -164,6 +164,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self._qz_parallel = True
         self._qr_parallel = True
         self._mirror = False
+        self.dict_recent_h5 = {}
 
         self.scat_horz_cache = None
         self.scat_vert_cache = None
