@@ -5,10 +5,10 @@ from datetime import datetime
 from os.path import basename, dirname, exists, getctime, splitext
 from pygix.transform import Transform
 
-from other.setup_methods import get_dict_setup
-from other.other_functions import np_weak_lims
-from other.plots import plot_mesh, plot_image
-from other.units import *
+from pyxscat.other.setup_methods import get_dict_setup
+from pyxscat.other.other_functions import np_weak_lims
+from pyxscat.other.plots import plot_mesh, plot_image
+from pyxscat.other.units import *
 
 import fabio
 import numpy as np
