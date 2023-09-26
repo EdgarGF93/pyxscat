@@ -35,12 +35,21 @@ cd pyxscat
 pip install -e .
 ```
 
-## 3) Once the module is installed in the path of your environment, open the GUI:
+## 3) The last version of numexpr raises Error from the pyFAI module, so the numexpr should be downgraded to 2.8.5:
+```
+pip install numexpr==2.8.5
+
+or
+
+conda install numexpr=2.8.5
+```
+
+## 4) Once the module is installed in the path of your environment, open the GUI:
 ```
 pyxscat
 ```
 
-## 4) Tutorial of the GUI. You have a .ppt file in the PyXScat folder, to learn a minimum set of steps to start handlind your data:
+## 5) Tutorial of the GUI. You have a .ppt file in the PyXScat folder, to learn a minimum set of steps to start handlind your data:
 ```
 Tutorial/pyxscat_tutorial.ppt
 ```
