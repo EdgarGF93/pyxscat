@@ -19,7 +19,7 @@ from pyxscat.gui import combobox_methods as cb
 from pyxscat.gui import listwidget_methods as lt
 from pyxscat.gui import table_methods as tm
 from pyxscat.gui import graph_methods as gm
-from pyxscat.gui.gui_layout import GUIPyX_Widget_layout, BUTTON_MIRROR_DISABLE, BUTTON_MIRROR_ENABLE, BUTTON_QZ_PAR, BUTTON_QZ_ANTIPAR, BUTTON_QR_PAR, BUTTON_QR_ANTIPAR
+from pyxscat.gui.gui_layout import GUIPyXLayout, BUTTON_MIRROR_DISABLE, BUTTON_MIRROR_ENABLE, BUTTON_QZ_PAR, BUTTON_QZ_ANTIPAR, BUTTON_QR_PAR, BUTTON_QR_ANTIPAR
 from pyxscat.gui.gui_layout import button_style_input, button_style_input_disable
 from pyxscat.gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND
 from pyxscat.h5_integrator import H5GIIntegrator
@@ -126,7 +126,7 @@ def log_info(func):
         return func(*args, **kwargs)
     return wrapper
 
-class GUIPyX_Widget(GUIPyX_Widget_layout):
+class GUIPyXMWidget(GUIPyXLayout):
     """
     Class to create a GUI widget, with methods and callbacks
     """
@@ -134,7 +134,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
     signal = pyqtSignal(int)
 
     def __init__(self):
-        super(GUIPyX_Widget, self).__init__()
+        super(GUIPyXMWidget, self).__init__()
 
         # Splash screen
         pixmap = QPixmap(ICON_SPLASH)

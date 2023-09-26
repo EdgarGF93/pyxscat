@@ -1,6 +1,6 @@
 
 from . import ICON_PATH
-from pyxscat.gui.gui_widget import GUIPyX_Widget
+from pyxscat.gui.gui_widget import GUIPyXMWidget
 from pyxscat.gui.gui_widget_about import AboutForm
 
 
@@ -9,11 +9,11 @@ from PyQt5 import QtGui, QtCore
 
 PYXSCAT_LOGO = "pyxscat_icon.png"
 
-class GUIPyX_Window(QMainWindow):
+class GUIPyXMWindow(QMainWindow):
     def __init__(self, *args):
         QMainWindow.__init__(self, *args)
         self._build_menubar()
-        self._guiwidget = GUIPyX_Widget()
+        self._guiwidget = GUIPyXMWidget()
         self.setCentralWidget(self._guiwidget)
         self.setWindowTitle("PyXScat")
 

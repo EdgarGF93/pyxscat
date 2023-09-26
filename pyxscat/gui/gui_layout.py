@@ -310,7 +310,7 @@ def set_bstyle(qlabels=[]):
         qlabel.setFont(myFont)
 
 
-class GUIPyX_Widget_layout(QWidget):
+class GUIPyXLayout(QWidget):
 
     def __init__(self, *args):
         QMainWindow.__init__(self, *args)
