@@ -20,12 +20,14 @@ from pyxscat.gui import combobox_methods as cb
 from pyxscat.gui import listwidget_methods as lt
 from pyxscat.gui import table_methods as tm
 from pyxscat.gui import graph_methods as gm
-from pyxscat.gui.gui_layout_alternative import GUIPyX_Widget_layout, BUTTON_MIRROR_DISABLE, BUTTON_MIRROR_ENABLE, BUTTON_QZ_PAR, BUTTON_QZ_ANTIPAR, BUTTON_QR_PAR, BUTTON_QR_ANTIPAR
-from pyxscat.gui.gui_layout_alternative import button_style_input, button_style_input_disable
+from pyxscat.gui.gui_layout_alternative import GUIPyX_Widget_layout
 from pyxscat.gui.gui_layout_alternative import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND, BUTTON_LIVE, BUTTON_LIVE_ON
 from pyxscat.gui.gui_layout_alternative import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
 from pyxscat.h5_integrator import H5GIIntegrator
 from pyxscat.h5_integrator import PONI_KEY_VERSION, PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
+
+from pyxscat.gui.gui_layout_alternative import QZ_BUTTON_LABEL, QR_BUTTON_LABEL, MIRROR_BUTTON_LABEL
+
 
 import json
 import logging
@@ -40,8 +42,7 @@ ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_logo_thumb.png')
 MSG_SETUP_UPDATED = "New setup dictionary was updated."
 MSG_SETUP_ERROR = "The setup dictionary could not be updated."
 MSG_ROTATED_UPDATED = "Rotation state was updated."
-MSG_QZ_DIRECTION_UPDATED = "The qz direction was updated."
-MSG_QR_DIRECTION_UPDATED = "The qr direction was updated."
+
 MSG_MAIN_DIRECTORY = "New main directory updated."
 MSG_MAIN_DIRECTORY_ERROR = "No main directory was detected."
 MSG_PATTERN_UPDATED = "The file pattern was updated."
@@ -88,8 +89,7 @@ INFO_H5_PONIFILE_CB_UPDATED = "Combobox of ponifiles was updated."
 INFO_LIST_FOLDERS_UPDATED = "Updated list widget."
 INFO_LIST_NO_FOLDERS_TO_UPDATE = "No new folders."
 
-INFO_MIRROR_DISABLE = "Mirror transformation disable."
-INFO_MIRROR_ENABLE = "Mirror transformation enable. 2D map has been flipped left-right."
+
 
 MSG_H5FILE_CHOICE = "An .h5 file will be created. Do you want to save it in the same directory?"
 MSG_H5FILE_OVERWRITE = "There is an h5 file with the same name. Do you want to overwite it?"
@@ -158,12 +158,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.active_ponifile = str()
         self._dict_poni_cache = dict()
         self.clicked_folder = str()
-        self._pattern = '*.edf'
+        # self._pattern = '*.edf'
         self.list_results_cache = []
         self.list_dict_integration_cache = []
-        self._qz_parallel = True
-        self._qr_parallel = True
-        self._mirror = False
+        # self._qz_parallel = True
+        # self._qr_parallel = True
+        # self._mirror = False
         self.dict_recent_h5 = {}
 
         self.scat_horz_cache = None
@@ -172,9 +172,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         self._dict_qmap_cache = {
             'acq_time' : None,
-            'qz_parallel' : self._qz_parallel,
-            'qr_parallel' : self._qr_parallel,
-            'mirror' : self._mirror,
+            'qz_parallel' : self.state_qz,
+            'qr_parallel' : self.state_qr,
+            'mirror' : self.state_mirror,
             'binning' : DEFAULT_BINNING,
             'incident_angle': DEFAULT_INCIDENT_ANGLE,
             'tilt_angle' : DEFAULT_TILT_ANGLE,
@@ -185,7 +185,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self._scattersize_cache = DEFAULT_SCATTER_SIZE
         self._terminal_visible = True
         self._live = False
-        self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+        # self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
 
         self.reset_attributes_and_widgets()
         self.init_callbacks()
@@ -364,41 +364,15 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         # Callbacks for mirror rotation and parallel/antiparallel axis
         #########################
-        self.button_mirror.clicked.connect(
-            lambda : (
-                self.update_mirror(),
-                self.update_2D_q(new_data=False),
-            )
-        )
-
-        self.button_qz.clicked.connect(
-            lambda : (
-                self.update_qz(),
-                self.update_2D_q(new_data=False),
-                self.update_1D_graph(),
-            )
-        )
-        self.button_qr.clicked.connect(
-            lambda : (
-                self.update_qr(),
-                self.update_2D_q(new_data=False),
-                self.update_1D_graph(),
-            )
-        )
+        self.button_mirror.clicked.connect(self.button_mirror_clicked)
+        self.button_qz.clicked.connect(self.button_qz_clicked)
+        self.button_qr.clicked.connect(self.button_qr_clicked)
 
         #########################
         # Extension and wildcards callback
         #########################
-        self.combobox_extension.currentTextChanged.connect(
-            lambda : (
-                self.update_pattern(),
-            )            
-        )
-        self.lineedit_wildcards.textChanged.connect(
-            lambda : (
-                self.update_pattern(),
-            )   
-        )
+        # self.combobox_extension.currentTextChanged.connect(self.extension_changed)
+        # self.lineedit_wildcards.textChanged.connect(self.wildcards_changed)
 
         #########################
         # Pick main directory
@@ -1068,95 +1042,47 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             json.dump(compiled_dict, fp)
         self.update_integration_widgets()
 
-    # @log_info
-    # def disable_ponifile_mod(self) -> None:
-    #     """
-    #     Enable or disable the lineedits to modify ponifile parameters
-    #     """
-    #     if self.checkbox_poni_mod.isChecked():
-    #         state = True
-    #     else:
-    #         state = False
-    #         # self.update_ponifile_widgets(
-    #         #     dict_poni=self._dict_poni_cache,
-    #         # )            
-    #     self.lineedit_wavelength.setEnabled(state)
-    #     self.lineedit_distance.setEnabled(state)
-    #     self.lineedit_poni1.setEnabled(state)
-    #     self.lineedit_poni2.setEnabled(state)
-    #     self.lineedit_rot1.setEnabled(state)
-    #     self.lineedit_rot2.setEnabled(state)
-    #     self.lineedit_rot3.setEnabled(state)
 
-    # @log_info
-    # def update_mirror(self) -> None:
-    #     """
-    #     Performs a left-right flip of the 2D matrix
-        
-    #     Parameters:
-    #     None
+    @log_info
+    def button_mirror_clicked(self, state_mirror):
 
-    #     Returns:
-    #     None
-    #     """
-    #     if self._mirror:
-    #         self._mirror = False
-    #         self.button_mirror.setText(BUTTON_MIRROR_DISABLE)
-    #         self.button_mirror.setStyleSheet(button_style_input)
-    #         self.write_terminal_and_logger(INFO_MIRROR_DISABLE)
-    #     else:
-    #         self._mirror = True
-    #         self.button_mirror.setText(BUTTON_MIRROR_ENABLE)
-    #         self.button_mirror.setStyleSheet(button_style_input_disable)
-    #         self.write_terminal_and_logger(INFO_MIRROR_ENABLE)
+        # Update the label and style of button
+        self.update_button_orientation(
+            button_label=MIRROR_BUTTON_LABEL,
+            new_state=state_mirror,
+        )
 
-    # # @log_info
-    # def update_qz(self) -> None:
-    #     """
-    #         Update the state of qz (parallel or antiparallel to PONI)
-    #     """
-    #     if self._qz_parallel:
-    #         self._qz_parallel = False
-    #         self.button_qz.setText(BUTTON_QZ_ANTIPAR)
-    #         self.button_qz.setStyleSheet(button_style_input_disable)
-    #         self._write_output(MSG_QZ_DIRECTION_UPDATED)
-    #         self._write_output(f"Now, the qz negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
-    #     else:
-    #         self._qz_parallel = True
-    #         self.button_qz.setText(BUTTON_QZ_PAR)
-    #         self.button_qz.setStyleSheet(button_style_input)
-    #         self._write_output(MSG_QZ_DIRECTION_UPDATED)
-    #         self._write_output(f"Now, the qz positive axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+        if self.h5:
+            self.update_2D_q(new_data=False)
 
-    #     if self.h5:
-    #         self.h5.update_orientation(
-    #             qz_parallel=self._qz_parallel,
-    #             qr_parallel=self._qr_parallel,
-    #         )
+    @log_info
+    def button_qz_clicked(self, state_qz):
+        # Update the label and style of button
+        self.update_button_orientation(
+            button_label=QZ_BUTTON_LABEL,
+            new_state=state_qz,
+        )
 
-    # @log_info
-    # def update_qr(self) -> None:
-    #     """
-    #         Update the state of qr (parallel or antiparallel to PONI)
-    #     """
-    #     if self._qr_parallel:
-    #         self._qr_parallel = False       
-    #         self.button_qr.setText(BUTTON_QR_ANTIPAR)
-    #         self.button_qr.setStyleSheet(button_style_input_disable)
-    #         self._write_output(MSG_QR_DIRECTION_UPDATED)
-    #         self._write_output(f"Now, the qr negative axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
-    #     else:
-    #         self._qr_parallel = True            
-    #         self.button_qr.setText(BUTTON_QR_PAR)
-    #         self.button_qr.setStyleSheet(button_style_input)
-    #         self._write_output(MSG_QR_DIRECTION_UPDATED)
-    #         self._write_output(f"Now, the qr positiveS axis goes with the detector axis. Pygix orientation: {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")        
-        
-    #     if self.h5:
-    #         self.h5.update_orientation(
-    #             qz_parallel=self._qz_parallel,
-    #             qr_parallel=self._qr_parallel,
-    #         )
+        # Update the h5 integrator instance
+        if self.h5:
+            self.h5.update_qz(qz_parallel=state_qz)
+            self.update_2D_q(new_data=False)
+            self.update_1D_graph()
+
+    @log_info
+    def button_qr_clicked(self, state_qr):
+
+        # Update the label and style of button
+        self.update_button_orientation(
+            button_label=QR_BUTTON_LABEL,
+            new_state=state_qr,
+        )
+
+        # Update the h5 integrator instance
+        if self.h5:
+            self.h5.update_qr(qr_parallel=state_qr)
+            self.update_2D_q(new_data=False)
+            self.update_1D_graph()
 
     @log_info
     def create_h5_file(self, main_directory=str()):
@@ -1186,8 +1112,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             filename_h5=str(h5_filename),
             main_directory=str(main_directory),
             setup_keys_metadata=self._dict_setup,
-            qz_parallel=self._qz_parallel,
-            qr_parallel=self._qr_parallel,
+            qz_parallel=self.state_qz,
+            qr_parallel=self.state_qr,
             overwrite=True,
         )
 
@@ -1197,12 +1123,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             logger.info(h5_filename)
             logger.info(str(self.main_directory))
             logger.info(self._dict_setup)
-            logger.info(self._qz_parallel)
-            logger.info(self._qr_parallel)
+            logger.info(self.state_qz)
+            logger.info(self.state_qr)
             return
         else:
             self.write_terminal_and_logger(INFO_H5_CREATION)
-            logger.info(f"sPonifile: {self.active_ponifile}. Keys_metadata: {self._dict_setup}. qz:{self._qz_parallel}, qr:{self._qr_parallel}")
+            logger.info(f"sPonifile: {self.active_ponifile}. Keys_metadata: {self._dict_setup}.")
             self.reset_attributes_and_widgets()
 
     @log_info
@@ -1390,8 +1316,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.h5 = H5GIIntegrator(
             filename_h5=filename_h5,
             setup_keys_metadata=self._dict_setup,
-            qz_parallel=self._qz_parallel,
-            qr_parallel=self._qr_parallel,
+            qz_parallel=self.state_qz,
+            qr_parallel=self.state_qr,
         )
         
         # If self.h5 is None, register
@@ -1399,8 +1325,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger(ERROR_H5_INSTANCE)
             logger.info(filename_h5)
             logger.info(self._dict_setup)
-            logger.info(self._qz_parallel)
-            logger.info(self._qr_parallel)
+            logger.info(self.state_qz)
+            logger.info(self.state_qr)
             return
 
         # If new h5 instance was created, reset GUI
@@ -2014,24 +1940,46 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         else:
             self.combobox_reffile.setEnabled(True)
 
+    # @log_info
+    # def extension_changed(self, new_extension):
+    #     new_wildcards = le.text(self.lineedit_wildcards).strip()
+    #     self.update_pattern(
+    #         extension=new_extension,
+    #         wildcards=new_wildcards,
+    #     )
+
+    # @log_info
+    # def wildcards_changed(self, new_wildcards):
+    #     new_extension = cb.value(self.combobox_extension)
+    #     self.update_pattern(
+    #         extension=new_extension,
+    #         wildcards=new_wildcards,
+    #     )
+
+    # @log_info
+    # def update_pattern(self, extension, wildcards) -> None:
+    #     """
+    #     Updates the pattern to search files
+
+    #     Parameters:
+    #     None
+
+    #     Returns:
+    #     None
+    #     """
+    #     pattern = wildcards + extension
+    #     pattern = pattern.replace('**', '*')
+    #     self._pattern = pattern
+    #     self.write_terminal_and_logger(MSG_PATTERN_UPDATED)
+    #     self.write_terminal_and_logger(f"New pattern: {self._pattern}")
+
     @log_info
-    def update_pattern(self) -> None:
-        """
-        Updates the pattern to search files
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
+    def get_pattern(self):
         wildcards = le.text(self.lineedit_wildcards).strip()
         extension = cb.value(self.combobox_extension)
         pattern = wildcards + extension
         pattern = pattern.replace('**', '*')
-        self._pattern = pattern
-        self.write_terminal_and_logger(MSG_PATTERN_UPDATED)
-        self.write_terminal_and_logger(f"New pattern: {self._pattern}")
+        return pattern
 
     @log_info
     def open_pyFAI_calib2(self) -> None:
@@ -2099,7 +2047,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         None
         """
         list_files_1s = []
-        cmd = f"find {str(self.main_directory)} -name {self._pattern} -newermt '-1 seconds'"
+        cmd = f"find {str(self.main_directory)} -name {self.get_pattern()} -newermt '-1 seconds'"
         try:
             list_files_1s = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True).stdout.decode().strip().split('\n')
             # Clean empty items
@@ -2136,7 +2084,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
             # Searches files and update the Data/Metadat in Groups and Datasets in the .h5 file
             self.h5.search_and_update_new_files(
-                pattern=self._pattern,
+                pattern=self.get_pattern(),
             )
             self.write_terminal_and_logger(INFO_H5_UPDATED)
         else:
@@ -3109,7 +3057,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if data is None or scat_horz is None:
             return
 
-        sample_orientation = DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
+        sample_orientation = self.state_orientation
+
         if sample_orientation in (1,3):
             scat_horz = np.fliplr(scat_horz) * (-1)
             data = np.fliplr(data)
@@ -3157,9 +3106,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         iangle_prev = self._dict_qmap_cache['incident_angle']
         tangle_prev = self._dict_qmap_cache['tilt_angle']
 
-        qz_current = self._qz_parallel
-        qr_current = self._qr_parallel
-        mirror_current = self._mirror
+        # qz_current = self._qz_parallel
+        # qr_current = self._qr_parallel
+        # mirror_current = self._mirror
+        qz_current = self.state_qz()
+        qr_current = self.state_qr()
+        mirror_current = self.state_mirror()
         binning_current = int(self.spinbox_binnning_data.value())
         iangle_current = self.h5.get_incident_angle(
             folder_name=self.clicked_folder,

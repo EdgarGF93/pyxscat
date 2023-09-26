@@ -833,6 +833,32 @@ class H5GIIntegrator(Transform):
         except Exception as e:
             logger.info(f"{e}: Tilt angle could not be updated.")
 
+
+    @log_info
+    def update_qz(self, qz_parallel=True):
+        self._qz_parallel = qz_parallel
+        logger.info(f"qz parallel is {qz_parallel}")
+        try:
+            self.set_sample_orientation(
+                sample_orientation=DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
+            )
+            logger.info(f"The sample orientation (pygix) is set at {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+        except:
+            pass
+
+    @log_info
+    def update_qr(self, qr_parallel=True):
+        self._qr_parallel = qr_parallel
+        logger.info(f"qz parallel is {qr_parallel}")
+        try:
+            self.set_sample_orientation(
+                sample_orientation=DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
+            )
+            logger.info(f"The sample orientation (pygix) is set at {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+        except:
+            pass 
+
+
     @log_info
     def update_orientation(self, qz_parallel=True, qr_parallel=True) -> None:
         """
