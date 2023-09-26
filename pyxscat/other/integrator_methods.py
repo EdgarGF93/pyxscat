@@ -1,7 +1,6 @@
 from pathlib import Path
 import json
-# DIRECTORY_INTEGRATIONS = Path(__file__).parent.joinpath("integration")
-
+from pyxscat.gui import INTEGRATION_PATH
 
 def open_json(json_path=str()) -> dict:
     """
@@ -44,3 +43,18 @@ def get_dict_from_name(name=str(), path_integration=str()) -> dict:
     dict_json = open_json(json_file)
     return dict_json
 
+def fetch_integration_dictionary(filename_json=str()) -> dict:
+    """
+    Open a json file and return a dictionary
+    """
+    filename_json = Path(filename_json)
+    dict_json = open_json(filename_json)
+    return dict_json
+
+def locate_integration_file(name_integration=str()):
+    full_filename = Path(INTEGRATION_PATH).joinpath(f"{name_integration}.json")
+    print(str(full_filename))
+    if full_filename.is_file():
+        return full_filename
+    else:
+        return

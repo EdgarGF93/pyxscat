@@ -882,10 +882,10 @@ class GUIPyX_Widget_layout(QWidget):
         self.spinbox_azimmin_cake.setMaximumWidth(WIDTH_SPINBOX_MAX)
         self.spinbox_azimmax_cake.setMaximumWidth(WIDTH_SPINBOX_MAX)
         
-        label_azimbins_cake = QLabel(LABEL_CAKE_BINS_OPT) 
+        self.label_azimbins_cake = QLabel(LABEL_CAKE_BINS_OPT) 
         self.lineedit_azimbins_cake = QLineEdit()
 
-        hbox_cake_bins.addWidget(label_azimbins_cake)
+        hbox_cake_bins.addWidget(self.label_azimbins_cake)
         hbox_cake_bins.addWidget(self.lineedit_azimbins_cake)
 
         # BOX INTEGRATION TAB

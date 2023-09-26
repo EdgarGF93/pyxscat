@@ -8,11 +8,9 @@ from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QMessageBox
 from PyQt5.QtGui import QPixmap
 from scipy import ndimage
 
-from pyxscat.edf import DICT_SAMPLE_ORIENTATIONS
 from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries
 from pyxscat.other.plots import *
-from pyxscat.other.search_functions import makedir
-from pyxscat.other.integrator_methods import search_integration_names, open_json, get_dict_from_name
+from pyxscat.other.integrator_methods import locate_integration_file, fetch_integration_dictionary, search_integration_names, get_dict_from_name
 from pyxscat.other.setup_methods import search_dictionaries_setup, get_empty_setup_dict, get_dict_setup_from_name, filter_dict_setup
 from pyxscat.gui import LOGGER_PATH, SRC_PATH, GUI_PATH
 from pyxscat.gui import lineedit_methods as le
@@ -251,115 +249,28 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #### CAKES #####
         ################
 
-        self.list_cakes.clicked.connect(lambda : self.update_cake_parameters())
-
-        self.combobox_type_cake.currentTextChanged.connect(
-            lambda : (
-                self.add_integration_cake(),
-                self.update_1D_graph(),
-            )
-        )
-
-        self.combobox_units_cake.currentTextChanged.connect(
-            lambda : (
-                self.add_integration_cake(),
-                self.update_1D_graph(),
-            )
-        )
-
-        self.combobox_units_cake.currentTextChanged.connect(
-            lambda : (
-                self.add_integration_cake(),
-                self.update_1D_graph(),
-            )
-        )   
-
-        self.spinbox_azimmin_cake.valueChanged.connect(
-            lambda : (
-                self.add_integration_cake(),
-                self.update_1D_graph(),
-            )
-        )
-        self.spinbox_azimmax_cake.valueChanged.connect(
-            lambda : (
-                self.add_integration_cake(),
-                self.update_1D_graph(),
-            )
-        )
-        self.spinbox_radialmin_cake.valueChanged.connect(
-            lambda : (
-                self.add_integration_cake(),
-                self.update_1D_graph(),
-            )
-        )
-        self.spinbox_radialmax_cake.valueChanged.connect(
-            lambda : (
-                self.add_integration_cake(),
-                self.update_1D_graph(),
-            )
-        )
-
-        self.spinbox_radialmax_cake.valueChanged.connect(
-            lambda : (
-                self.add_integration_cake(),
-                self.update_1D_graph(),
-            )
-        )
-
-        self.lineedit_azimbins_cake.textChanged.connect(
-            lambda : (
-                self.add_integration_cake(),
-                self.update_1D_graph(),
-            )
-        )    
+        self.list_cakes.itemClicked.connect(self.listcakes_clicked)
+        self.combobox_type_cake.currentTextChanged.connect(self.cake_parameter_changed)
+        self.combobox_units_cake.currentTextChanged.connect(self.cake_parameter_changed)
+        self.combobox_units_cake.currentTextChanged.connect(self.cake_parameter_changed)
+        self.spinbox_azimmin_cake.valueChanged.connect(self.cake_parameter_changed)
+        self.spinbox_azimmax_cake.valueChanged.connect(self.cake_parameter_changed)
+        self.spinbox_radialmin_cake.valueChanged.connect(self.cake_parameter_changed)
+        self.spinbox_radialmax_cake.valueChanged.connect(self.cake_parameter_changed)
+        self.spinbox_radialmax_cake.valueChanged.connect(self.cake_parameter_changed)
+        self.lineedit_azimbins_cake.textChanged.connect(self.cake_parameter_changed)
 
         ################
         #### BOXES #####
         ################
-        self.list_box.clicked.connect(lambda : self.update_box_parameters())
-
-        self.combobox_units_box.currentTextChanged.connect(
-            lambda : (
-                self.add_integration_box(),
-                self.update_1D_graph(),
-            )
-        )
-        self.combobox_direction_box.currentTextChanged.connect(
-            lambda : (
-                self.add_integration_box(),
-                self.update_1D_graph(),
-            )
-        )
-        self.combobox_outputunits_box.currentTextChanged.connect(
-            lambda : (
-                self.add_integration_box(),
-                self.update_1D_graph(),
-            )
-        )
-        self.spinbox_ipmin_box.valueChanged.connect(
-            lambda : (
-                self.add_integration_box(),
-                self.update_1D_graph(),
-            )
-        )
-        self.spinbox_ipmax_box.valueChanged.connect(
-            lambda : (
-                self.add_integration_box(),
-                self.update_1D_graph(),
-            )
-        )
-        self.spinbox_oopmin_box.valueChanged.connect(
-            lambda : (
-                self.add_integration_box(),
-                self.update_1D_graph(),
-            )
-        )
-        self.spinbox_oopmax_box.valueChanged.connect(
-            lambda : (
-                self.add_integration_box(),
-                self.update_1D_graph(),
-            )
-        )
+        self.list_box.itemClicked.connect(self.listbox_clicked)
+        self.combobox_units_box.currentTextChanged.connect(self.box_parameter_changed)
+        self.combobox_direction_box.currentTextChanged.connect(self.box_parameter_changed)
+        self.combobox_outputunits_box.currentTextChanged.connect(self.box_parameter_changed)
+        self.spinbox_ipmin_box.valueChanged.connect(self.box_parameter_changed)
+        self.spinbox_ipmax_box.valueChanged.connect(self.box_parameter_changed)
+        self.spinbox_oopmin_box.valueChanged.connect(self.box_parameter_changed)
+        self.spinbox_oopmax_box.valueChanged.connect(self.box_parameter_changed)
 
         #########################
         # Callbacks for mirror rotation and parallel/antiparallel axis
@@ -481,15 +392,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         # List_widget folder callback
         #########################
-        self.listwidget_folders.clicked.connect(
-            lambda : (
-                self.update_clicked_folder(),
-                self.update_comboboxes_metadata(),
-                self.update_table(
-                    reset=True,
-                ),
-            )
-        )
+        self.listwidget_folders.clicked.connect(self.listfolders_clicked)
 
         #########################
         # Combobox header items updates its lineedit
@@ -701,8 +604,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         None
         """
-        self.metadata_keys = list()
-        self.clicked_folder = str()
+        # self.metadata_keys_cache = list()
+        # self.clicked_folder = str()
         self.cache_index = []
         self._h5_file = str()
         self._data_cache = None
@@ -940,46 +843,79 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         else:
             return
 
+
     @log_info
-    def update_cake_parameters(self):
+    def listcakes_clicked(self, list_item):
+        name_cake_integration = list_item.text()
+
+        # Check if a file with this name does exist
+        filename_integration = locate_integration_file(name_integration=name_cake_integration)
+        if not filename_integration:
+            return
+        
+        # Fetch the dictionary
+        dict_cake_integration = fetch_integration_dictionary(filename_json=filename_integration)
+        # Update cake widgets
+        self.update_cake_widgets(dict_integration=dict_cake_integration)
+
+    @log_info
+    def update_cake_widgets(self, dict_integration=dict()):
         """
         Updates the widgets of integration after clicking on the list_cakes
         """
-        clicked_integration = lt.click_values(self.list_cakes)[0]
-        json_file = INTEGRATION_PATH.joinpath(f"{clicked_integration}.json")
-        logger.info(f"Json file: {json_file}")
-        dict_cake = open_json(json_file)
-        le.substitute(self.lineedit_name_cake, dict_cake["Name"])
-        le.substitute(self.lineedit_suffix_cake, dict_cake["Suffix"])
-        cb.set_text(self.combobox_type_cake, dict_cake["Type"])
-        self.spinbox_radialmin_cake.setValue(dict_cake["Radial_range"][0])
-        self.spinbox_radialmax_cake.setValue(dict_cake["Radial_range"][1])
-        self.spinbox_azimmin_cake.setValue(dict_cake["Azimuth_range"][0])
-        self.spinbox_azimmax_cake.setValue(dict_cake["Azimuth_range"][1])
-        cb.set_text(self.combobox_units_cake, dict_cake["Unit"])
-        le.substitute(self.lineedit_azimbins_cake, dict_cake["Bins_azimut"])
+        # clicked_integration = lt.click_values(self.list_cakes)[0]
+        # json_file = INTEGRATION_PATH.joinpath(f"{clicked_integration}.json")
+        # logger.info(f"Json file: {json_file}")
+        # dict_cake = open_json(json_file)
+        le.substitute(self.lineedit_name_cake, dict_integration["Name"])
+        le.substitute(self.lineedit_suffix_cake, dict_integration["Suffix"])
+        cb.set_text(self.combobox_type_cake, dict_integration["Type"])
+        self.spinbox_radialmin_cake.setValue(dict_integration["Radial_range"][0])
+        self.spinbox_radialmax_cake.setValue(dict_integration["Radial_range"][1])
+        self.spinbox_azimmin_cake.setValue(dict_integration["Azimuth_range"][0])
+        self.spinbox_azimmax_cake.setValue(dict_integration["Azimuth_range"][1])
+        cb.set_text(self.combobox_units_cake, dict_integration["Unit"])
+        le.substitute(self.lineedit_azimbins_cake, dict_integration["Bins_azimut"])
         logger.info(f"Updated widgets with cake integration values.")
 
+
     @log_info
-    def update_box_parameters(self):
+    def listbox_clicked(self, list_item):
+        name_box_integration = list_item.text()
+
+        # Check if a file with this name does exist
+        filename_integration = locate_integration_file(name_integration=name_box_integration)
+        if not filename_integration:
+            return
+        
+        # Fetch the dictionary
+        dict_box_integration = fetch_integration_dictionary(filename_json=filename_integration)
+        
+        # Update cake widgets
+        self.update_box_parameters(dict_integration=dict_box_integration)
+
+
+    @log_info
+    def update_box_parameters(self, dict_integration=dict()):
         """
         Updates the widgets of integration after clicking on the list_boxes
         """
-        clicked_integration = lt.click_values(self.list_box)[0]
-        json_file = INTEGRATION_PATH.joinpath(f"{clicked_integration}.json")
-        logger.info(f"Json file: {json_file}")
-        dict_box = open_json(json_file)
-        le.substitute(self.lineedit_name_box, dict_box["Name"])
-        le.substitute(self.lineedit_suffix_box, dict_box["Suffix"])
-        cb.set_text(self.combobox_direction_box, dict_box["Type"])
-        cb.set_text(self.combobox_units_box, dict_box["Unit_input"])
-        self.spinbox_ipmin_box.setValue(dict_box["Ip_range"][0])
-        self.spinbox_ipmax_box.setValue(dict_box["Ip_range"][1])
-        self.spinbox_oopmin_box.setValue(dict_box["Oop_range"][0])
-        self.spinbox_oopmax_box.setValue(dict_box["Oop_range"][1])
-
-        cb.set_text(self.combobox_outputunits_box, dict_box["Unit"])
+        le.substitute(self.lineedit_name_box, dict_integration["Name"])
+        le.substitute(self.lineedit_suffix_box, dict_integration["Suffix"])
+        cb.set_text(self.combobox_direction_box, dict_integration["Type"])
+        cb.set_text(self.combobox_units_box, dict_integration["Unit_input"])
+        self.spinbox_ipmin_box.setValue(dict_integration["Ip_range"][0])
+        self.spinbox_ipmax_box.setValue(dict_integration["Ip_range"][1])
+        self.spinbox_oopmin_box.setValue(dict_integration["Oop_range"][0])
+        self.spinbox_oopmax_box.setValue(dict_integration["Oop_range"][1])
+        cb.set_text(self.combobox_outputunits_box, dict_integration["Unit"])
         logger.info(f"Updated widgets with box integration values.")
+
+
+    @log_info
+    def cake_parameter_changed(self):
+        self.add_integration_cake()
+        self.update_1D_graph()
 
     @log_info
     def add_integration_cake(self):
@@ -1014,6 +950,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         with open(json_file, 'w+') as fp:
             json.dump(compiled_dict, fp)
         self.update_integration_widgets()
+
+    @log_info
+    def box_parameter_changed(self):
+        self.add_integration_box()
+        self.update_1D_graph()
+
 
     @log_info
     def add_integration_box(self):
@@ -2230,9 +2172,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 filename=last_file,
             )
             if last_file_folder and last_file_index:
-                self.clicked_folder = last_file_folder
+                # self.clicked_folder = last_file_folder
                 self.cache_index = last_file_index
-                logger.info(f"Updated clicked folder: {self.clicked_folder} and cache index: {self.cache_index}")
+                # logger.info(f"Updated clicked folder: {self.clicked_folder} and cache index: {self.cache_index}")
                 self.update_cache_data(),
                 self.update_1D_graph(),
                 self.update_2D_raw(),
@@ -2352,31 +2294,94 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
 
     @log_info
-    def update_clicked_folder(self) -> None:
-        """
-        Updates the value of the clicked folder and checks it in the H5 container
+    def listfolders_clicked(self, clicked_folder_name):
 
-        Parameters:
-        None
+        # Check if there is a Sample with that name in the .h5
+        if not self.does_sample_exist(sample_name=clicked_folder_name):
+            return
 
-        Returns:
-        None
-        """
-        # Take the folder from the clicked value
-        folder_name = lt.click_values(self.listwidget_folders)[0]
-        logger.info(f"Clicked folder: {folder_name}")
+        # Update the metadata combobox if needed
+        self.check_and_update_cb_metadata(
+            sample_name=clicked_folder_name,
+        )
 
-        if self.h5.contains_group(folder_name):
-            if folder_name == self.clicked_folder:
-                self.write_terminal_and_logger(F"Clicked folder, same as before: {folder_name}")
-            else:
-                self.write_terminal_and_logger(F"New clicked folder: {folder_name}")
-                self.clicked_folder = folder_name
-        else:
-            self.write_terminal_and_logger(MSG_CLICKED_FLODER_ERROR)
+        # Update the table widget
+        self.update_table(
+            sample_name=clicked_folder_name,
+            reset=True,
+        )
+
+        
+    @log_info
+    def active_sample(self):
+        if not self.h5:
+            return
+        sample_name = lt.click_values(self.listfolders_clicked)
+        return sample_name
 
     @log_info
-    def update_comboboxes_metadata(self) -> None:
+    def does_sample_exist(self, sample_name=str()) -> bool:
+        if not self.h5:
+            return
+
+        if not self.h5.contains_group(sample_name):
+            self.write_terminal_and_logger("The Sample does not exist in the .h5.")
+            return False
+        else:
+            self.write_terminal_and_logger(f"New active Sample: {sample_name}")
+            return True
+
+
+    # @log_info
+    # def update_clicked_folder(self) -> None:
+    #     """
+    #     Updates the value of the clicked folder and checks it in the H5 container
+
+    #     Parameters:
+    #     None
+
+    #     Returns:
+    #     None
+    #     """
+    #     # Take the folder from the clicked value
+    #     folder_name = lt.click_values(self.listwidget_folders)[0]
+    #     logger.info(f"Clicked folder: {folder_name}")
+
+    #     if self.h5.contains_group(folder_name):
+    #         if folder_name == self.clicked_folder:
+    #             self.write_terminal_and_logger(F"Clicked folder, same as before: {folder_name}")
+    #         else:
+    #             self.write_terminal_and_logger(F"New clicked folder: {folder_name}")
+    #             self.clicked_folder = folder_name
+    #     else:
+    #         self.write_terminal_and_logger(MSG_CLICKED_FLODER_ERROR)
+
+
+    @log_info
+    def check_and_update_cb_metadata(self, sample_name=str()):
+        if not sample_name:
+            sample_name = self.active_sample()
+
+        # Fetch the list of metadata keys in that sample
+        metadata_keys = sorted(
+            self.h5.generator_keys_in_folder(
+                folder_name=sample_name,
+            )
+        )
+
+        # Update the comboboxes if it is different
+        metadata_keys_displayed = cb.all_items(self.combobox_headeritems)
+
+        if metadata_keys != metadata_keys_displayed:
+            self.update_comboboxes_metadata(
+                metadata_keys=metadata_keys,
+                reset=True,
+            )
+            # self.metadata_keys_cache =  metadata_keys
+
+
+    @log_info
+    def update_comboboxes_metadata(self, metadata_keys=list(), reset=True) -> None:
         """
         Feeds the comboboxes with the same metadata, stored in the clicked folder
         
@@ -2386,79 +2391,84 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         None
         """
-        # Update the combobox with metadata keys
-        metadata_keys = list(
-            self.h5.generator_keys_in_folder(
-                folder_name=self.clicked_folder,
-            )
-        )
-        logger.info(f"Metadata keys: {metadata_keys}")
+        # if not sample_name:
+        #     sample_name = self.active_sample_name()
+
+        # # Update the combobox with metadata keys
+        # metadata_keys = list(
+        #     self.h5.generator_keys_in_folder(
+        #         folder_name=sample_name,
+        #     )
+        # )
+        # logger.info(f"Metadata keys: {metadata_keys}")
 
         # Is there are not different keys, do not change anything
-        if metadata_keys == self.metadata_keys:
-            return
-        else:
-            new_keys = sorted(set(metadata_keys).difference(set(self.metadata_keys)))
-            logger.info(f"New metadata keys: {new_keys}")
-            self.metadata_keys += new_keys
-            self.metadata_keys.sort()
+        # if metadata_keys == self.metadata_keys_cache:
+        #     return
+        # else:
+        #     new_keys = sorted(set(metadata_keys).difference(set(self.metadata_keys_cache)))
+        #     logger.info(f"New metadata keys: {new_keys}")
+        #     self.metadata_keys_cache += new_keys
+        #     self.metadata_keys_cache.sort()
         
         # Combobox for table columns
         cb.insert_list(
             combobox=self.combobox_headeritems,
-            list_items=new_keys,
-            reset=True,
+            list_items=metadata_keys,
+            reset=reset,
         )
         logger.info(f"Combobox header_items updated.")
 
         # Combobox for title
         cb.insert_list(
             combobox=self.combobox_headeritems_title,
-            list_items=new_keys,
-            reset=True,
+            list_items=metadata_keys,
+            reset=reset,
         )
         logger.info(f"Combobox header_items title updated.")
 
         # Combobox for dict_setup keys
         cb.insert_list(
             combobox=self.combobox_angle,
-            list_items=new_keys,
-            reset=True,
+            list_items=metadata_keys,
+            reset=reset,
         )
         logger.info(f"Combobox angle updated.")
 
         cb.insert_list(
             combobox=self.combobox_tilt_angle,
-            list_items=new_keys,
-            reset=True,
+            list_items=metadata_keys,
+            reset=reset,
         )
         logger.info(f"Combobox tilt angle updated.")
 
         cb.insert_list(
             combobox=self.combobox_normfactor,
-            list_items=new_keys,
-            reset=True,
+            list_items=metadata_keys,
+            reset=reset,
         )
         logger.info(f"Combobox norm updated.")
 
         cb.insert_list(
             combobox=self.combobox_exposure,
-            list_items=new_keys,
-            reset=True,
+            list_items=metadata_keys,
+            reset=reset,
         )
         logger.info(f"Combobox exposure updated.")
 
     @log_info
     def update_sample_orientation(self):
-        if not self.clicked_folder or not self.cache_index:
+        active_sample = self.active_sample()
+
+        if not active_sample or not self.cache_index:
             return
 
         incident_angle = self.h5.get_incident_angle(
-            folder_name=self.clicked_folder,
+            folder_name=active_sample,
             index_list=self.cache_index,
         )
         tilt_angle = self.h5.get_tilt_angle(
-            folder_name=self.clicked_folder,
+            folder_name=active_sample,
             index_list=self.cache_index,
         )
         self.h5.update_incident_tilt_angle(
@@ -2875,7 +2885,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         dataframe.to_csv(filename_out, sep='\t', mode='a', index=False, header=True)
 
     @log_info
-    def update_table(self, folder_to_display=str(), keys_to_display=list(), reset=True):
+    def update_table(self, sample_name=str(), keys_to_display=list(), reset=True):
         """
         Updates the table with new files (rows) and keys (columns)
 
@@ -2893,14 +2903,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
             logger.info("Table was reseted.")
 
-        if not folder_to_display:
-            folder_to_display = self.clicked_folder
+        if not sample_name:
+            sample_name = self.active_sample()
 
-        if not folder_to_display:
+        if not sample_name:
             logger.info("No folder to display. Return.")
             return
         else:
-            logger.info(f"Folder to display: {folder_to_display}.")
+            logger.info(f"Folder to display: {sample_name}.")
 
         # Take the list of keys from the lineedit widget
         if not keys_to_display:
@@ -2911,7 +2921,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         try:
             dataframe = self.h5.get_metadata_dataframe(
-                folder_name=folder_to_display,
+                folder_name=sample_name,
                 list_keys=keys_to_display,
             )
             logger.info(f"Dataframe: {type(dataframe)}.")       
