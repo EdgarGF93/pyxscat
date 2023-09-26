@@ -10,8 +10,8 @@ from scipy import ndimage
 
 from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries
 from pyxscat.other.plots import *
-from pyxscat.other.integrator_methods import locate_integration_file, fetch_integration_dictionary, search_integration_names, get_dict_from_name
-from pyxscat.other.setup_methods import search_dictionaries_setup, get_empty_setup_dict, get_dict_setup_from_name, filter_dict_setup
+from pyxscat.other.integrator_methods import save_integration_dictionary, locate_integration_file, fetch_dictionary_from_json, search_integration_names, get_dict_from_name
+from pyxscat.other.setup_methods import save_setup_dictionary, locate_setup_file, search_metadata_names, get_empty_setup_dict, get_dict_setup_from_name, filter_dict_setup
 from pyxscat.gui import LOGGER_PATH, SRC_PATH, GUI_PATH
 from pyxscat.gui import lineedit_methods as le
 from pyxscat.gui import combobox_methods as cb
@@ -188,7 +188,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.reset_attributes_and_widgets()
         self.init_callbacks()
         
-        self.update_setup_info()
+        # self.update_setup_info()
         self.update_lims_ticks()
 
     def write_terminal_and_logger(self, msg=str()):
@@ -227,21 +227,21 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 self.set_h5_instance(filename_h5=self.dict_recent_h5[cb.value(self.combobox_h5_files)]),
                 self.update_h5_poni_and_files(),
                 self.update_widgets(),
-                self.update_setup_info(),
+                # self.update_setup_info(),
             )
         )
 
         #########################
         # Setup dictionary callback
         #########################
-        self.combobox_setup.currentTextChanged.connect(self.update_setup_info)
-        self.combobox_angle.currentTextChanged.connect(self.update_angle_parameter)
-        self.combobox_tilt_angle.currentTextChanged.connect(self.update_tiltangle_parameter)
-        self.combobox_normfactor.currentTextChanged.connect(self.update_normfactor_parameter)
-        self.combobox_exposure.currentTextChanged.connect(self.update_exposure_parameter)
-        self.button_setup_save.clicked.connect(lambda : self.save_new_setup())
-        self.button_setup.clicked.connect(lambda : self.pick_json_file())
-        self.button_setup_update.clicked.connect(lambda : self.update_setup_parameter())
+        self.combobox_setup.currentTextChanged.connect(self.cb_setup_changed)
+        self.combobox_angle.currentTextChanged.connect(self.cb_iangle_changed)
+        self.combobox_tilt_angle.currentTextChanged.connect(self.cb_tangle_changed)
+        self.combobox_normfactor.currentTextChanged.connect(self.cb_normfactor_changed)
+        self.combobox_exposure.currentTextChanged.connect(self.cb_acquisition_changed)
+        self.button_pick_json.clicked.connect(self.pick_json_clicked)
+        self.button_metadata_update.clicked.connect(self.metadata_update_clicked)
+        self.button_metadata_save.clicked.connect(self.metadata_save_clicked)
 
         #########################
         # Integration dictionary callback
@@ -302,7 +302,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 self.pick_and_activate_hdf5_file(),
                 self.update_h5_poni_and_files(),
                 self.update_widgets(),   
-                self.update_setup_info(),             
+                # self.update_setup_info(),             
             )
         )
 
@@ -666,7 +666,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
     @log_info
-    def update_combobox_setups(self) -> None:
+    def update_combobox_metadata(self) -> None:
         """
         Take the .json files from the setup directory and feed the combobox_setups
 
@@ -676,18 +676,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         None
         """
-        combobox_setup = self.combobox_setup
-        list_dict_setups = search_dictionaries_setup(directory_setups=SETUP_PATH)
-        list_name_setups = [d['Name'] for d in list_dict_setups]
+        # Get the list of stored metadata .json files 
+        list_name_setups = search_metadata_names(directory_setups=SETUP_PATH)
 
+        # Feed the combobox
         cb.insert_list(
-            combobox=combobox_setup,
+            combobox=self.combobox_setup,
             list_items=list_name_setups,
             reset=True,
         )
 
     @log_info
-    def read_dict_setup(self) -> defaultdict:
+    def fetch_dict_metadata(self) -> defaultdict:
         """
         Retrieves the values for the setup dictionary from the correct lineedits and returns a defaultdict
 
@@ -713,135 +713,192 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         return new_setup_dict
 
     @log_info
-    def update_setup_info(self, new_name_setup=str(), new_dict=defaultdict) -> None:
-        """
-        Declare the setup dictionary of the GUI searching by name (string) or declaring a new one
+    def cb_setup_changed(self, name_setup):
+        # Check if the .json file exists
+        filename_setup = locate_setup_file(name_integration=name_setup)
+        if not filename_setup:
+            return
+        
+        # Fetch the dictionary
+        dict_cake_integration = fetch_dictionary_from_json(filename_json=filename_setup)
 
-        Parameters:
-        new_name_setup(str) : key 'Name' of the (already saved) setup dictionary in a .json file
-        new_dict(defaultdict) : contains the new values for the setup dictionary
+        # Update the widgets
+        self.update_metadata_widgets(dict_setup=dict_cake_integration)
+    
 
-        Returns:
-        None
-        """
-        if not new_name_setup:
-            new_name_setup = cb.value(self.combobox_setup)
+    # @log_info
+    # def update_setup_info(self, name_setup=str(), new_dict=defaultdict) -> None:
+    #     """
+    #     Declare the setup dictionary of the GUI searching by name (string) or declaring a new one
 
-        # Search for a .json file with the name_setup string
-        if new_name_setup:
-            new_dict_setup = get_dict_setup_from_name(
-                name=new_name_setup,
-                directory_setups=SETUP_PATH,
-            )
-        # Directly update with a defaultdict  
-        elif new_dict:
-            new_dict_setup = new_dict
-        else:
-            new_dict_setup = get_empty_setup_dict()
+    #     Parameters:
+    #     new_name_setup(str) : key 'Name' of the (already saved) setup dictionary in a .json file
+    #     new_dict(defaultdict) : contains the new values for the setup dictionary
 
-        new_dict_setup = filter_dict_setup(
-            dictionary=new_dict_setup,
-        )
+    #     Returns:
+    #     None
+    #     """
+    #     if not name_setup:
+    #         name_setup = cb.value(self.combobox_setup)
 
-        # Updates the instance variable
-        self._dict_setup = new_dict_setup
+    #     # Search for a .json file with the name_setup string
+    #     if name_setup:
+    #         new_dict_setup = get_dict_setup_from_name(
+    #             name=name_setup,
+    #             directory_setups=SETUP_PATH,
+    #         )
+    #     # Directly update with a defaultdict  
+    #     elif new_dict:
+    #         new_dict_setup = new_dict
+    #     else:
+    #         new_dict_setup = get_empty_setup_dict()
 
-        self.write_terminal_and_logger(MSG_SETUP_UPDATED)
-        self.write_terminal_and_logger(self._dict_setup)
+    #     new_dict_setup = filter_dict_setup(
+    #         dictionary=new_dict_setup,
+    #     )
+
+    #     # Updates the instance variable
+    #     self._dict_setup = new_dict_setup
+
+    #     self.write_terminal_and_logger(MSG_SETUP_UPDATED)
+    #     self.write_terminal_and_logger(self._dict_setup)
+
+    @log_info
+    def update_metadata_widgets(self, dict_setup=dict()):
 
         # Fill the lineedits
-        le.substitute(self.lineedit_setup_name, self._dict_setup['Name'])
-        le.substitute(self.lineedit_angle, self._dict_setup['Angle'])
-        le.substitute(self.lineedit_tilt_angle, self._dict_setup['Tilt angle'])
-        le.substitute(self.lineedit_normfactor, self._dict_setup['Norm'])
-        le.substitute(self.lineedit_exposure, self._dict_setup['Exposure'])
+        le.substitute(self.lineedit_setup_name, dict_setup['Name'])
+        le.substitute(self.lineedit_angle, dict_setup['Angle'])
+        le.substitute(self.lineedit_tilt_angle, dict_setup['Tilt angle'])
+        le.substitute(self.lineedit_normfactor, dict_setup['Norm'])
+        le.substitute(self.lineedit_exposure, dict_setup['Exposure'])
 
         # Reset and fill the lineedits of items
         le.clear(self.lineedit_headeritems)
-        le.insert(self.lineedit_headeritems,self._dict_setup['Angle'])
-        le.insert(self.lineedit_headeritems,self._dict_setup['Tilt angle'])
-        le.insert(self.lineedit_headeritems,self._dict_setup['Norm'])
-        le.insert(self.lineedit_headeritems,self._dict_setup['Exposure'])
+        le.insert(self.lineedit_headeritems, dict_setup['Angle'])
+        le.insert(self.lineedit_headeritems, dict_setup['Tilt angle'])
+        le.insert(self.lineedit_headeritems, dict_setup['Norm'])
+        le.insert(self.lineedit_headeritems, dict_setup['Exposure'])
 
     @log_info
-    def update_angle_parameter(self, text=str()) -> None:
+    def cb_iangle_changed(self, iangle_key) -> None:
         """
             Update the incident angle parameter
         """
-        if text:
-            le.substitute(self.lineedit_angle, text)
+        if iangle_key:
+            le.substitute(self.lineedit_angle, iangle_key)
 
     @log_info
-    def update_tiltangle_parameter(self, text=str()) -> None:
+    def cb_tangle_changed(self, tangle_key) -> None:
         """
             Update the tilt angle parameter
         """
-        if text:
-            le.substitute(self.lineedit_tilt_angle, text)
+        if tangle_key:
+            le.substitute(self.lineedit_tilt_angle, tangle_key)
 
     @log_info
-    def update_normfactor_parameter(self, text=str()) -> None:
+    def cb_normfactor_changed(self, normfactor_key) -> None:
         """
             Update the normalization factor parameter
         """
-        if text:
-            le.substitute(self.lineedit_normfactor, text)
+        if normfactor_key:
+            le.substitute(self.lineedit_normfactor, normfactor_key)
 
     @log_info
-    def update_exposure_parameter(self, text=str()) -> None:
+    def cb_acquisition_changed(self, acq_key) -> None:
         """
             Update the exposition time parameter
         """
-        if text:
-            le.substitute(self.lineedit_exposure, text)
+        if acq_key:
+            le.substitute(self.lineedit_exposure, acq_key)
 
     @log_info
-    def update_setup_parameter(self) -> None:
-        """
-            Update the dictionary of setup information from changing the lineedits
-        """
-        new_dict_info = self.read_dict_setup()
-        for key, value in new_dict_info.items():
-            if self._dict_setup[key] != value:
-                self._dict_setup[key] = value
-                self.write_terminal_and_logger(MSG_SETUP_UPDATED)
-                self.write_terminal_and_logger(self._dict_setup)
+    def pick_json_clicked(self, _):
+        # Get the address of the .json file
+        json_filename = self.pick_json_file()
+        if not json_filename:
+            return
+
+        # Fetch the dictionary
+        dict_setup = fetch_dictionary_from_json(
+            filename_json=json_filename,
+        )
+
+        # Update metadata widgets
+        self.update_metadata_widgets(
+            dict_setup=dict_setup,
+
+        )
+
+    @log_info
+    def pick_json_file(self):
+        json_file = QFileDialog.getOpenFileNames(self, 'Pick .json file', '.', "*.json")
+        try:
+            json_filename = json_file[0][0]
+            return json_filename
+        except Exception as e:
+            return
+
+    @log_info
+    def metadata_update_clicked(self, _):
+        # Fetch a dictionary with metadata keys from widgets
+        dict_metadata = self.fetch_dict_metadata()
+
+        # Updates the h5 instance
         if self.h5:
             self.h5.update_setup_keys(
-                dict_keys=self._dict_setup,
+                dict_keys=dict_metadata,
             )
 
+        
+    # @log_info
+    # def update_metadata_keys(self) -> None:
+    #     """
+    #         Update the dictionary of setup information from changing the lineedits
+    #     """
+    #     new_dict_info = self.fetch_dict_metadata()
+    #     for key, value in new_dict_info.items():
+    #         if self._dict_setup[key] != value:
+    #             self._dict_setup[key] = value
+    #             self.write_terminal_and_logger(MSG_SETUP_UPDATED)
+    #             self.write_terminal_and_logger(self._dict_setup)
+    #     if self.h5:
+    #         self.h5.update_setup_keys(
+    #             dict_keys=self._dict_setup,
+    #         )
     @log_info
-    def save_new_setup(self) -> None:
-        """
-            Collect the dictionary and save a .json file
-        """
-        new_dict_info = self.read_dict_setup()
-        file_json = join(SETUP_PATH, f"{new_dict_info['Name']}.json")
-        with open(file_json, 'w+') as fp:
-            json.dump(new_dict_info, fp)
-        self.update_combobox_setups()
+    def metadata_save_clicked(self, _):
+        # Fetch a dictionary with metadata keys from widgets
+        dict_metadata = self.fetch_dict_metadata()
 
-    @log_info
-    def pick_json_file(self) -> None:
-        """
-            Open a browser to pick a .json file with setup information
-        """
-        if self.main_directory:
-            json_file = QFileDialog.getOpenFileNames(self, 'Pick .json file', str(self.main_directory), "*.json")
-        else:
-            json_file = QFileDialog.getOpenFileNames(self, 'Pick .json file', '.', "*.json")
-
-        if json_file:
-            try:
-                json_file = json_file[0][0]
-                with open(json_file) as jf:
-                    new_dict_setup = json.load(jf)
-                self.update_setup_info(new_dict=new_dict_setup)
-            except:
-                pass
-        else:
+        if not dict_metadata['Name']:
             return
+
+        # Save the metadata as a .json file
+        save_setup_dictionary(dict_setup=dict_metadata)
+
+        # Update the combobox
+        self.update_combobox_metadata()
+
+        # Change the combobox to the last one
+        cb.set_text(
+            combobox=self.combobox_setup,
+            text=dict_metadata["Name"],
+        )
+
+
+
+    # @log_info
+    # def save_metadata(self, dict_setup=dict()) -> None:
+    #     """
+    #         Collect the dictionary and save a .json file
+    #     """
+    #     file_json = join(SETUP_PATH, f"{new_dict_info['Name']}.json")
+    #     with open(file_json, 'w+') as fp:
+    #         json.dump(new_dict_info, fp)
+    #     self.update_combobox_setups()
+
+
 
 
     @log_info
@@ -854,7 +911,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
         
         # Fetch the dictionary
-        dict_cake_integration = fetch_integration_dictionary(filename_json=filename_integration)
+        dict_cake_integration = fetch_dictionary_from_json(filename_json=filename_integration)
         # Update cake widgets
         self.update_cake_widgets(dict_integration=dict_cake_integration)
 
@@ -889,7 +946,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
         
         # Fetch the dictionary
-        dict_box_integration = fetch_integration_dictionary(filename_json=filename_integration)
+        dict_box_integration = fetch_dictionary_from_json(filename_json=filename_integration)
         
         # Update cake widgets
         self.update_box_parameters(dict_integration=dict_box_integration)
@@ -913,7 +970,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
 
     @log_info
-    def cake_parameter_changed(self):
+    def cake_parameter_changed(self,_):
         self.add_integration_cake()
         self.update_1D_graph()
 
@@ -952,7 +1009,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.update_integration_widgets()
 
     @log_info
-    def box_parameter_changed(self):
+    def box_parameter_changed(self,_):
         self.add_integration_box()
         self.update_1D_graph()
 
@@ -2099,7 +2156,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                  self.write_terminal_and_logger(ERROR_H5_NOTEXISTS)
                  return
         self.update_widgets()
-        self.update_setup_info()
+        # self.update_setup_info()
 
     @log_info
     def update_widgets(self) -> None:
@@ -2146,7 +2203,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             num_files_in_h5 = self.h5.number_files_in_sample(self.clicked_folder)
             logger.info(f"There are {num_files_in_table} files in the table and {num_files_in_h5} files in the .h5")
             if num_files_in_h5 != num_files_in_table:
-                self.update_comboboxes_metadata()
+                self.update_comboboxes_metadata_items()
                 self.update_table(
                     reset=True,
                 )
@@ -2373,7 +2430,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         metadata_keys_displayed = cb.all_items(self.combobox_headeritems)
 
         if metadata_keys != metadata_keys_displayed:
-            self.update_comboboxes_metadata(
+            self.update_comboboxes_metadata_items(
                 metadata_keys=metadata_keys,
                 reset=True,
             )
@@ -2381,7 +2438,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
 
     @log_info
-    def update_comboboxes_metadata(self, metadata_keys=list(), reset=True) -> None:
+    def update_comboboxes_metadata_items(self, metadata_keys=list(), reset=True) -> None:
         """
         Feeds the comboboxes with the same metadata, stored in the clicked folder
         

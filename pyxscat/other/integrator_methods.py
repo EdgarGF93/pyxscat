@@ -43,7 +43,7 @@ def get_dict_from_name(name=str(), path_integration=str()) -> dict:
     dict_json = open_json(json_file)
     return dict_json
 
-def fetch_integration_dictionary(filename_json=str()) -> dict:
+def fetch_dictionary_from_json(filename_json=str()) -> dict:
     """
     Open a json file and return a dictionary
     """
@@ -53,8 +53,12 @@ def fetch_integration_dictionary(filename_json=str()) -> dict:
 
 def locate_integration_file(name_integration=str()):
     full_filename = Path(INTEGRATION_PATH).joinpath(f"{name_integration}.json")
-    print(str(full_filename))
     if full_filename.is_file():
         return full_filename
     else:
         return
+    
+def save_integration_dictionary(dict_integration=dict()):
+    output_filename = Path(INTEGRATION_PATH).joinpath(f"{dict_integration['Name']}.json")
+    with open(output_filename, 'w+') as fp:
+        json.dump(dict_integration, fp)

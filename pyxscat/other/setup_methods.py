@@ -1,7 +1,10 @@
 from .search_functions import search_files_recursively
-from os.path import dirname, exists, join
+from os.path import exists
+from pathlib import Path
 from collections import defaultdict
 import json
+from pyxscat.gui import SETUP_PATH
+
 
 # DIRECTORY_SETUPS = join(dirname(__file__), 'setup')
 KEYS_SETUP_DICTIONARY = ['Name', 'Angle', 'Tilt angle', 'Norm', 'Exposure']
@@ -78,7 +81,7 @@ def get_dict_setup_from_name(name=str(), directory_setups=str()) -> defaultdict:
     Returns:
     defaultdict : matched defaultdict with the key 'Name', None if there is no match
     """
-    list_dict_setups = search_dictionaries_setup(directory_setups=directory_setups)
+    list_dict_setups = search_metadata_names(directory_setups=directory_setups)
     for d in list_dict_setups:
         if d['Name'] == name:
             filtered_dict = filter_dict_setup(
@@ -123,7 +126,7 @@ def get_dict_setup(dict_setup=defaultdict, name_dict_setup=str(), path_json=str(
 
     return get_empty_setup_dict()
 
-def search_dictionaries_setup(directory_setups=str()) -> list:
+def search_metadata_names(directory_setups=str()) -> list:
     """
     Return a list with the dictionaries of all the available setups
 
@@ -133,17 +136,36 @@ def search_dictionaries_setup(directory_setups=str()) -> list:
     Returns:
     list : contains the defaultdict with only correct keys and keys (already filtered)
     """
-    list_dict_setups = []
+    # list_dict_setups = []
+    list_json_files = SETUP_PATH.glob("*.json")
+    list_metadata_names = [file.stem for file in list_json_files]
+    list_metadata_names.sort()
+    return list_metadata_names
+    #     d["Name"] for d in 
+    # ]
 
-    list_json_files = search_files_recursively(
-        directory=directory_setups,
-        extension='.json',
-    )
+    # list_json_files = search_files_recursively(
+    #     directory=directory_setups,
+    #     extension='.json',
+    # )
 
-    for json_file in list_json_files:
-        dict_setup = get_dict_setup_from_json(json_file)
+    # for json_file in list_json_files:
+    #     dict_setup = get_dict_setup_from_json(json_file)
 
-        if dict_setup:
-            list_dict_setups.append(dict_setup)
+    #     if dict_setup:
+    #         list_dict_setups.append(dict_setup)
 
-    return list_dict_setups
+    # return list_dict_setups
+
+def locate_setup_file(name_integration=str()):
+    full_filename = Path(SETUP_PATH).joinpath(f"{name_integration}.json")
+    if full_filename.is_file():
+        return full_filename
+    else:
+        return
+    
+def save_setup_dictionary(dict_setup=dict()):
+
+    output_filename = Path(SETUP_PATH).joinpath(f"{dict_setup['Name']}.json")
+    with open(output_filename, 'w+') as fp:
+        json.dump(dict_setup, fp)

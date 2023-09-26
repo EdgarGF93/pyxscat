@@ -706,12 +706,12 @@ class GUIPyX_Widget_layout(QWidget):
 
         label_setup = QLabel(LABEL_DICT_SETUP)
         self.combobox_setup = QComboBox()
-        self.button_setup = QPushButton(BUTTON_PICK_JSON)
-        self.button_setup.setStyleSheet(BUTTON_STYLE_ENABLE)
+        self.button_pick_json = QPushButton(BUTTON_PICK_JSON)
+        self.button_pick_json.setStyleSheet(BUTTON_STYLE_ENABLE)
 
         hbox_metadata_choose.addWidget(label_setup, Qt.AlignLeft)
         hbox_metadata_choose.addWidget(self.combobox_setup, Qt.AlignLeft)
-        hbox_metadata_choose.addWidget(self.button_setup, Qt.AlignLeft)
+        hbox_metadata_choose.addWidget(self.button_pick_json, Qt.AlignLeft)
 
         hbox_metadata_choose.setStretch(1,10)
 
@@ -749,16 +749,16 @@ class GUIPyX_Widget_layout(QWidget):
 
         label_setup_name = QLabel(LABEL_SETUP_NAME)
         self.lineedit_setup_name = QLineEdit()   
-        self.button_setup_save = QPushButton(BUTTON_JSON_FILE)
-        self.button_setup_save.setStyleSheet(BUTTON_STYLE_ENABLE)
-        self.button_setup_save.setIcon(QIcon(ICON_SAVE_PATH))
+        self.button_metadata_save = QPushButton(BUTTON_JSON_FILE)
+        self.button_metadata_save.setStyleSheet(BUTTON_STYLE_ENABLE)
+        self.button_metadata_save.setIcon(QIcon(ICON_SAVE_PATH))
 
         hbox_metadata_name.addWidget(label_setup_name)
         hbox_metadata_name.addWidget(self.lineedit_setup_name)
-        hbox_metadata_name.addWidget(self.button_setup_save)
+        hbox_metadata_name.addWidget(self.button_metadata_save)
 
-        self.button_setup_update = QPushButton(BUTTON_UPDATE_KEYS)
-        self.button_setup_update.setStyleSheet(BUTTON_STYLE_ENABLE)
+        self.button_metadata_update = QPushButton(BUTTON_UPDATE_KEYS)
+        self.button_metadata_update.setStyleSheet(BUTTON_STYLE_ENABLE)
 
         vbox_metadata.addWidget(widget_metadata_choose)
         vbox_metadata.addWidget(widget_metadata_iangle)
@@ -766,7 +766,7 @@ class GUIPyX_Widget_layout(QWidget):
         vbox_metadata.addWidget(widget_metadata_norm)
         vbox_metadata.addWidget(widget_metadata_acq)
         vbox_metadata.addWidget(widget_metadata_name)
-        vbox_metadata.addWidget(self.button_setup_update)
+        vbox_metadata.addWidget(self.button_metadata_update)
 
         ## CAKE INTEGRATION TAB
 

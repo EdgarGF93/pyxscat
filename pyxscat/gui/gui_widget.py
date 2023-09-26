@@ -13,7 +13,7 @@ from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix
 from pyxscat.other.plots import *
 from pyxscat.other.search_functions import makedir
 from pyxscat.other.integrator_methods import search_integration_names, open_json, get_dict_from_name
-from pyxscat.other.setup_methods import search_dictionaries_setup, get_empty_setup_dict, get_dict_setup_from_name, filter_dict_setup
+from pyxscat.other.setup_methods import search_metadata_names, get_empty_setup_dict, get_dict_setup_from_name, filter_dict_setup
 from pyxscat.gui import LOGGER_PATH, SRC_PATH, GUI_PATH
 from pyxscat.gui import lineedit_methods as le
 from pyxscat.gui import combobox_methods as cb
@@ -800,7 +800,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         None
         """
         combobox_setup = self.combobox_setup
-        list_dict_setups = search_dictionaries_setup(directory_setups=SETUP_PATH)
+        list_dict_setups = search_metadata_names(directory_setups=SETUP_PATH)
         list_name_setups = [d['Name'] for d in list_dict_setups]
 
         cb.insert_list(
