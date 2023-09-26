@@ -6,10 +6,10 @@ from pygix.transform import Transform
 from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
 from os.path import getctime
 
-from edf import EdfClass
-from other.other_functions import date_prefix, float_str, get_dict_files
-from gui import GLOBAL_PATH, LOGGER_PATH
-from other.units import *
+from pyxscat.edf import EdfClass
+from pyxscat.other.other_functions import date_prefix, float_str, get_dict_files
+from pyxscat.gui import GLOBAL_PATH, LOGGER_PATH
+from pyxscat.other.units import *
 
 import functools
 import h5py

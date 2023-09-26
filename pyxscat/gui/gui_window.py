@@ -1,7 +1,7 @@
 
 from . import ICON_DIRECTORY
-from gui.gui_widget import GUIPyX_Widget
-from gui.gui_widget_about import AboutForm
+from pyxscat.gui.gui_widget import GUIPyX_Widget
+from pyxscat.gui.gui_widget_about import AboutForm
 
 
 from PyQt5.QtWidgets import QMainWindow, QMenu, QMenuBar, QAction

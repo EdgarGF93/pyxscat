@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QCheckBox, QLineEdit, QDoubleSpinBox, QPlainTextEdit
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import Qt
 from silx.gui.plot.PlotWindow import Plot1D, Plot2D
-from other.units import DICT_UNIT_ALIAS, CAKE_INTEGRATIONS, BOX_INTEGRATIONS
+from pyxscat.other.units import DICT_UNIT_ALIAS, CAKE_INTEGRATIONS, BOX_INTEGRATIONS
 from . import ICON_DIRECTORY
 
 # TABS

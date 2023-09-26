@@ -8,24 +8,24 @@ from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QMessageBox
 from PyQt5.QtGui import QPixmap
 from scipy import ndimage
 
-from edf import DICT_SAMPLE_ORIENTATIONS
-from other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries
-from other.plots import *
-from other.search_functions import makedir
-from other.integrator_methods import search_integration_names, open_json, get_dict_from_name
-from other.setup_methods import search_dictionaries_setup, get_empty_setup_dict, get_dict_setup_from_name, filter_dict_setup
-from gui import LOGGER_PATH, SRC_PATH, GUI_PATH
-from gui import lineedit_methods as le
-from gui import combobox_methods as cb
-from gui import listwidget_methods as lt
-from gui import table_methods as tm
-from gui import graph_methods as gm
-from gui.gui_layout import GUIPyX_Widget_layout, BUTTON_MIRROR_DISABLE, BUTTON_MIRROR_ENABLE, BUTTON_QZ_PAR, BUTTON_QZ_ANTIPAR, BUTTON_QR_PAR, BUTTON_QR_ANTIPAR
-from gui.gui_layout import button_style_input, button_style_input_disable
-from gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND, BUTTON_LIVE, BUTTON_LIVE_ON
-from gui.gui_layout import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
-from h5_integrator import H5GIIntegrator
-from h5_integrator import PONI_KEY_VERSION, PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
+from pyxscat.edf import DICT_SAMPLE_ORIENTATIONS
+from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries
+from pyxscat.other.plots import *
+from pyxscat.other.search_functions import makedir
+from pyxscat.other.integrator_methods import search_integration_names, open_json, get_dict_from_name
+from pyxscat.other.setup_methods import search_dictionaries_setup, get_empty_setup_dict, get_dict_setup_from_name, filter_dict_setup
+from pyxscat.gui import LOGGER_PATH, SRC_PATH, GUI_PATH
+from pyxscat.gui import lineedit_methods as le
+from pyxscat.gui import combobox_methods as cb
+from pyxscat.gui import listwidget_methods as lt
+from pyxscat.gui import table_methods as tm
+from pyxscat.gui import graph_methods as gm
+from pyxscat.gui.gui_layout import GUIPyX_Widget_layout, BUTTON_MIRROR_DISABLE, BUTTON_MIRROR_ENABLE, BUTTON_QZ_PAR, BUTTON_QZ_ANTIPAR, BUTTON_QR_PAR, BUTTON_QR_ANTIPAR
+from pyxscat.gui.gui_layout import button_style_input, button_style_input_disable
+from pyxscat.gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND, BUTTON_LIVE, BUTTON_LIVE_ON
+from pyxscat.gui.gui_layout import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
+from pyxscat.h5_integrator import H5GIIntegrator
+from pyxscat.h5_integrator import PONI_KEY_VERSION, PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
 
 import json
 import logging
