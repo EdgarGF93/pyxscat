@@ -109,14 +109,15 @@ class H5GIIntegrator(Transform):
 
     def __init__(
         self,
-        filename_h5=str(),
-        main_directory=str(),
-        ponifile_list=list(),
-        setup_keys_metadata=dict(),
-        key_incident_angle=str(),
-        key_tilt_angle=str(),
-        key_acquisition_time=str(),
-        key_normalization_factor=str(),
+        input_filename_h5=str(),
+        new_filename_h5=str(),
+        root_directory=str(),
+        # ponifile_list=list(),
+        # dict_keys_metadata=dict(),
+        # key_incident_angle=str(),
+        # key_tilt_angle=str(),
+        # key_acquisition_time=str(),
+        # key_normalization_factor=str(),
         qz_parallel=True, 
         qr_parallel=True,
         overwrite=False,
@@ -143,25 +144,26 @@ class H5GIIntegrator(Transform):
         Returns:
         None
         """
+        # If there is no imported .h5 file
+        if not input_filename_h5:
+            self.create_h5_file(
+                file_name=new_filename_h5,
+                overwrite=overwrite,
+                main_directory=root_directory,
+                description=description,
+                comment=comment,
+                beamline=beamline,
+                **kwargs,
+            )
+            input_filename_h5 = new_filename_h5      
         
-
-        logger.info("H5Integrator instance was initialized")
-        self._number_samples = 0
-        self._number_dataset = 0
-        self._number_data_images = 0
-        self.filename_h5 = filename_h5
+        # Create if there is not input filename
+        # logger.info("H5Integrator instance was initialized")
+        # self._number_samples = 0
+        # self._number_dataset = 0
+        # self._number_data_images = 0
+        self.filename_h5 = input_filename_h5
         logger.info(f"The filename is {self.filename_h5}.")
-
-        # Create or not create
-        self.create_h5_file(
-            file_name=filename_h5,
-            overwrite=overwrite,
-            main_directory=main_directory,
-            description=description,
-            comment=comment,
-            beamline=beamline,
-            **kwargs,
-        )
 
         self.open_h5
         self.close_h5
@@ -169,19 +171,19 @@ class H5GIIntegrator(Transform):
         self.close_at_end = True
 
         # Update the ponifile path
-        self.update_group_ponifile(
-            group_address=ADDRESS_PONIFILE,
-            ponifile_list=ponifile_list,
-        )
+        # self.update_group_ponifile(
+        #     group_address=ADDRESS_PONIFILE,
+        #     ponifile_list=ponifile_list,
+        # )
 
         # Update the dictionary with keys
-        self.update_setup_keys(
-            dict_keys=setup_keys_metadata,
-            key_incident_angle=key_incident_angle,
-            key_tilt_angle=key_tilt_angle,
-            key_acquisition_time=key_acquisition_time,
-            key_normalization_factor=key_normalization_factor,
-        )
+        # self.update_setup_keys(
+        #     dict_keys=dict_keys_metadata,
+        #     key_incident_angle=key_incident_angle,
+        #     key_tilt_angle=key_tilt_angle,
+        #     key_acquisition_time=key_acquisition_time,
+        #     key_normalization_factor=key_normalization_factor,
+        # )
 
         # Get attributes from Transform class (pygix module)
         super().__init__()
@@ -284,16 +286,24 @@ class H5GIIntegrator(Transform):
             return
 
         logger.info(f"Attributes for h5: {kwargs.items()}")
+        self._file.attrs['Filename'] = str(file_name)
+        self._file.attrs['Name'] = Path(file_name).name
+
+        self._file.attrs[INCIDENT_ANGLE_KEY] = ''
+        self._file.attrs[TILT_ANGLE_KEY] = ''
+        self._file.attrs[NORMALIZATION_KEY] = ''
+        self._file.attrs[ACQUISITION_KEY] = ''
+
         dp = date_prefix()
         self._file.attrs['Datetime'] = dp
         logger.info(f"New attribute. Datetime : {dp}")
         for k,v in kwargs.items():
             self._file.attrs[k] = v
             logger.info(f"New attribute. {k} : {v}")
-        self._file.close()
+        # self._file.close()
 
     @check_if_open
-    def get_main_directory(self) -> Path:
+    def get_root_directory(self) -> Path:
         """
         Returns a Path instance with the main_directory stored in h5 file
         Main directory is the root folder where all the data files and poni files are stored
@@ -312,6 +322,24 @@ class H5GIIntegrator(Transform):
             logger.info(f"Main directory could not be read as attribute. Used parent of the .h5 as main_dir.")
         return main_dir
 
+    @check_if_open
+    def get_name(self):
+        try:
+            name = self._file.attrs['Name']
+        except:
+            name = self.filename_h5
+        return name
+
+
+
+
+    @log_info
+    @check_if_open
+    def get_attrs(self) -> dict:
+        d = {}
+        for k,v in self._file.attrs.items():
+            d[k] = v
+        return d
 
     #########################################################
     ######### METHODS FOR KEY METADATA ######################
@@ -397,6 +425,17 @@ class H5GIIntegrator(Transform):
             self.update_attributes_in_group(group_address=ADDRESS_METADATA_KEYS, norm_key=key_normalization_factor)
             self.update_attributes_in_group(group_address=ADDRESS_METADATA_KEYS, tilt_key=key_tilt_angle)
     
+    @log_info
+    @check_if_open
+    def get_metadata_keys(self):
+        list_metadata_keys = []
+        list_metadata_keys.append(self.get_iangle_key())
+        list_metadata_keys.append(self.get_tiltangle_key())
+        list_metadata_keys.append(self.get_norm_key())
+        list_metadata_keys.append(self.get_acquisition_key())
+        list_metadata_keys = [item for item in list_metadata_keys if item]
+        return list_metadata_keys
+
     @log_info
     @check_if_open
     def get_iangle_key(self):
@@ -712,6 +751,8 @@ class H5GIIntegrator(Transform):
             if ponifile in current_list:
                 continue
             try:
+                print(5555555)
+                print(ponifile)
                 ponifile = str(ponifile).encode()
                 ind = self._file[group_address]['Ponifiles'].len()
                 self._file[group_address]['Ponifiles'][ind - 1] = ponifile
@@ -722,7 +763,7 @@ class H5GIIntegrator(Transform):
 
     @log_info
     @check_if_open
-    def activate_ponifile(self, ponifile=str(), index=int()) -> None:
+    def activate_ponifile(self, ponifile=str()) -> None:
         """
         Updates the dataset with the active ponifile.
         The active ponifile is the filename that will be used by pygix-pyFAI to integrate 2D patterns
@@ -735,30 +776,45 @@ class H5GIIntegrator(Transform):
         Returns:
         None
         """
-        stored_ponifiles = list(self.generator_stored_ponifiles())
-
-        if not stored_ponifiles:
-            logger.info(f"No ponifile was added to dataset: {ponifile}")
-            return
-            
-        if ponifile and (ponifile in stored_ponifiles):
-            target_ponifile = str(ponifile).encode()
-        elif index:
-            try:
-                target_ponifile = str(stored_ponifiles[index]).encode()
-            except:
-                target_ponifile = str(stored_ponifiles[0]).encode()
+        if ponifile:
+            if ponifile in self.generator_stored_ponifiles():
+                try:
+                    self._file['Active_ponifile'][0] = str(ponifile).encode()
+                    logger.info(f"Ponifile {ponifile} activated successfully.")
+                except Exception as e:
+                    logger.info(f"{e}: Ponifile {ponifile} could not be activated.")
+            else:
+                logger.info(f"Ponifile {ponifile} is not stored in the .h5")
         else:
-            target_ponifile = str(stored_ponifiles[0]).encode()
-
-        logger.info(f"Ponifile to be activated: {target_ponifile}")
-        try:
-            self._file['Active_ponifile'][0] = target_ponifile
-            logger.info(f"Ponifile {target_ponifile} activated successfully.")
-        except:
-            logger.info("Ponifile could not be activated.")
+            return
 
         self.update_transformQ()
+
+
+        # stored_ponifiles = list(self.generator_stored_ponifiles())
+
+        # if not stored_ponifiles:
+        #     logger.info(f"No ponifile was added to dataset: {ponifile}")
+        #     return
+            
+        # if ponifile and (ponifile in stored_ponifiles):
+        #     ponifile_b = str(ponifile).encode()
+        # elif index:
+        #     try:
+        #         ponifile_b = str(stored_ponifiles[index]).encode()
+        #     except:
+        #         ponifile_b = str(stored_ponifiles[0]).encode()
+        # else:
+        #     ponifile_b = str(stored_ponifiles[0]).encode()
+
+        # logger.info(f"Ponifile to be activated: {ponifile_b}")
+        # try:
+        #     self._file['Active_ponifile'][0] = ponifile_b
+        #     logger.info(f"Ponifile {ponifile_b} activated successfully.")
+        # except:
+        #     logger.info("Ponifile could not be activated.")
+
+
 
     @log_info
     @check_if_open
@@ -803,9 +859,11 @@ class H5GIIntegrator(Transform):
         Returns:
         None
         """
-        if self.get_active_ponifile():
+        poni_filename = str(self.get_root_directory().joinpath(self.get_active_ponifile()))
+        if poni_filename:
             try:
-                self.load(self.get_active_ponifile())
+                self.load(poni_filename)
+                print(self.poni)
                 logger.info("Loaded poni file")
                 self.update_incident_tilt_angle(
                     incident_angle=0.0,
@@ -1143,6 +1201,7 @@ class H5GIIntegrator(Transform):
         Yields:
         str : folder_name of the Group
         """
+        self.open_h5
         for sample_name in self._file.keys():
             try:
                 if not isinstance(self._file[sample_name], h5py.Group):
@@ -1233,12 +1292,16 @@ class H5GIIntegrator(Transform):
         Returns:
         list : list of strings with the full paths of poni files, only if return_list is True
         """
-        # Search any new file with .poni extension inside the main directory
-        ponifile_list = set([str(item) for item in self.get_main_directory().rglob("*.poni")])
 
-        # Identify new ponifiles
-        stored_poni_list = set(self.generator_stored_ponifiles())
-        new_ponifiles = [item for item in ponifile_list.difference(stored_poni_list)]
+        # Search any new file with .poni extension inside the main directory
+        ponifile_list = self.get_root_directory().rglob("*.poni")
+
+        # Get the relative name for poni files
+        ponifile_list = [poni.relative_to(self.get_root_directory()) for poni in ponifile_list]
+
+        # Filter only new ponifiles
+        stored_poni_list = sorted(self.generator_stored_ponifiles())
+        new_ponifiles = sorted(set(ponifile_list).difference(set(stored_poni_list)))
 
         if new_ponifiles:
             logger.info(INFO_H5_PONIFILES_DETECTED)
@@ -1278,7 +1341,7 @@ class H5GIIntegrator(Transform):
 
     @log_info
     @check_if_open
-    def search_and_update_new_files(self, pattern='*.edf'):
+    def search_and_update_datafiles(self, pattern='*.edf'):
         """
         Run the search engine, get new files and folders taken the pattern and stored main directory, and update the storage
 
@@ -1312,7 +1375,7 @@ class H5GIIntegrator(Transform):
         list : list of strings with the full directions of the new detected filenames
         #list : if there are new detected filenames, list of strings with the new detected folders (could be empty)
         """
-        main_directory = Path(self.get_main_directory())
+        main_directory = Path(self.get_root_directory())
         if main_directory and main_directory.exists():
 
             # Global search according to pattern
@@ -1353,7 +1416,7 @@ class H5GIIntegrator(Transform):
 
         # Store in the .h5 file by folder and its own list of files
         for folder, file_list in dict_new_files.items():
-            folder_name = str(Path(folder).relative_to(self.get_main_directory())) 
+            folder_name = str(Path(folder).relative_to(self.get_root_directory())) 
             self.update_folder_from_files(
                 folder_name=folder_name,
                 filename_list=file_list,
@@ -1531,7 +1594,7 @@ class H5GIIntegrator(Transform):
         str : string with the name of the folder in the .h5 file
         int : index of the filename inside the folder
         """
-        folder_name = str(Path(filename).relative_to(self.get_main_directory()))
+        folder_name = str(Path(filename).relative_to(self.get_root_directory()))
 
         if not self._file.__contains__(folder_name):
             logger.info("There is no Group with the name {folder_name}. Returns.")

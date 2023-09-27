@@ -7,6 +7,7 @@ GLOBAL_PATH = SRC_PATH.parent
 LOGGER_PATH = GLOBAL_PATH.joinpath('logger')
 INTEGRATION_PATH = SRC_PATH.joinpath('integration_dicts')
 SETUP_PATH = SRC_PATH.joinpath('setup_dicts')
+H5_FILES_PATH = SRC_PATH.joinpath('h5_files_dicts')
 SYMBOL_CHECK = '\u2705'
 SYMBOL_X = '\u274C'
 SEPARATOR_CONDITIONS = ','

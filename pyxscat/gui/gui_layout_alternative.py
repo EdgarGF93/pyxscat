@@ -11,6 +11,8 @@ from pyxscat.edf import DICT_SAMPLE_ORIENTATIONS
 from pyxscat.other.units import DICT_UNIT_ALIAS, CAKE_INTEGRATIONS, BOX_INTEGRATIONS
 from . import ICON_DIRECTORY
 
+from .multi_combobox import CheckableComboBox
+
 
 BUTTON_STYLE_ENABLE = """
 QPushButton {
@@ -74,6 +76,7 @@ LABEL_TAB_SETUP = "Metadata"
 LABEL_TAB_CAKE = "Cake Int."
 LABEL_TAB_BOX = "Box Int."
 LABEL_TAB_PONIFILE = "Ponifile"
+LABEL_TAB_H5 = "HDF5 File"
 
 # INPUT FILE PARAMETERS
 LABEL_INPUT_PARAMETERS = "====== Input File Parameters ======"
@@ -290,7 +293,13 @@ BUTTON_UPDATE_PONI_PARAMETERS = "UPDATE"
 BUTTON_UPDATE_OLD_PONI_PARAMETERS = "RETRIEVE"
 BUTTON_SAVE_PONI_PARAMETERS = "SAVE"
 
-
+LABEL_H5_H5FILE = "H5 file:"
+LABEL_H5_MAINDIR = "Root Directory:"
+LABEL_H5_IANGLE_KEY = "Inc. angle (key):"
+LABEL_H5_TANGLE_KEY = "Tilt angle (key)"
+LABEL_H5_NORM_KEY = "Norm. factor (key)"
+LABEL_H5_ACQ_KEY = "Acq. time (key)"
+LABEL_H5_NFILES = "Number of files:"
 
 MSG_QZ_DIRECTION_UPDATED = "The qz direction was updated."
 MSG_QR_DIRECTION_UPDATED = "The qr direction was updated."
@@ -481,6 +490,7 @@ class GUIPyX_Widget_layout(QWidget):
         hbox_cake = QHBoxLayout()
         hbox_box = QHBoxLayout()
         vbox_poni = QVBoxLayout()
+        vbox_h5 = QVBoxLayout()
 
         vbox_metadata.setStretch(0,1)
         vbox_metadata.setStretch(1,1)
@@ -493,18 +503,21 @@ class GUIPyX_Widget_layout(QWidget):
         widget_cake = QWidget()
         widget_box = QWidget()
         widget_vbox_poni = QWidget()
+        widget_vbox_h5 = QWidget()
 
         widget_vbox_input.setLayout(vbox_input)        
         widget_vbox_metadata.setLayout(vbox_metadata)
         widget_cake.setLayout(hbox_cake)
         widget_box.setLayout(hbox_box)
         widget_vbox_poni.setLayout(vbox_poni)
+        widget_vbox_h5.setLayout(vbox_h5)
 
         widget_tabs.addTab(widget_vbox_input, LABEL_TAB_FILES)
         widget_tabs.addTab(widget_vbox_metadata, LABEL_TAB_SETUP)
         widget_tabs.addTab(widget_cake, LABEL_TAB_CAKE)
         widget_tabs.addTab(widget_box, LABEL_TAB_BOX)
         widget_tabs.addTab(widget_vbox_poni, LABEL_TAB_PONIFILE)
+        widget_tabs.addTab(widget_vbox_h5, LABEL_TAB_H5)
 
         ### INPUT TAB ###
 
@@ -882,11 +895,13 @@ class GUIPyX_Widget_layout(QWidget):
         self.spinbox_azimmin_cake.setMaximumWidth(WIDTH_SPINBOX_MAX)
         self.spinbox_azimmax_cake.setMaximumWidth(WIDTH_SPINBOX_MAX)
         
-        self.label_azimbins_cake = QLabel(LABEL_CAKE_BINS_OPT) 
-        self.lineedit_azimbins_cake = QLineEdit()
+        self.label_azimbins_cake = QLabel(LABEL_CAKE_BINS_OPT)
+        self.spinbox_azimbins_cake = QDoubleSpinBox()
+        self.spinbox_azimbins_cake.setSingleStep(1)
+        self.spinbox_azimbins_cake.setRange(0, 1e9)
 
         hbox_cake_bins.addWidget(self.label_azimbins_cake)
-        hbox_cake_bins.addWidget(self.lineedit_azimbins_cake)
+        hbox_cake_bins.addWidget(self.spinbox_azimbins_cake)
 
         # BOX INTEGRATION TAB
 
@@ -1130,6 +1145,112 @@ class GUIPyX_Widget_layout(QWidget):
         vbox_poni.addWidget(widget_poni_rot_3)
         vbox_poni.addWidget(widget_poni_buttons)
 
+        # H5 PARAMETERS TAB
+        hbox_h5_h5file = QHBoxLayout()
+        hbox_h5_h5file.setContentsMargins(1,0,1,0)
+        hbox_h5_attrs = QHBoxLayout()
+        hbox_h5_attrs.setContentsMargins(1,0,1,0)
+
+        widget_h5_h5file = QWidget()
+        widget_h5_attrs = QWidget()
+        widget_h5_h5file.setLayout(hbox_h5_h5file)
+        widget_h5_attrs.setLayout(hbox_h5_attrs)
+
+        label_h5_h5file = QLabel(LABEL_H5_H5FILE)
+        self.lineedit_h5file = QLineEdit()
+        self.lineedit_h5file.setEnabled(False)
+
+        hbox_h5_h5file.addWidget(label_h5_h5file)
+        hbox_h5_h5file.addWidget(self.lineedit_h5file)
+
+        self.h5_plaintext = QPlainTextEdit()
+        self.h5_plaintext.setReadOnly(True)
+
+        hbox_h5_attrs.addWidget(self.h5_plaintext)
+
+        vbox_h5.addWidget(widget_h5_h5file)
+        vbox_h5.addWidget(widget_h5_attrs)
+
+
+        # class H5Params:
+            # hbox_h5_h5file = QHBoxLayout()
+            # hbox_h5_h5file.setContentsMargins(1,0,1,0)
+            # hbox_h5_maindir = QHBoxLayout()
+            # hbox_h5_maindir.setContentsMargins(1,0,1,0)
+            # hbox_h5_iangle_key = QHBoxLayout()
+            # hbox_h5_iangle_key.setContentsMargins(1,0,1,0)
+            # hbox_h5_tangle_key = QHBoxLayout()
+            # hbox_h5_tangle_key.setContentsMargins(1,0,1,0)
+            # hbox_h5_norm_key = QHBoxLayout()
+            # hbox_h5_norm_key.setContentsMargins(1,0,1,0)
+            # hbox_h5_acq_key = QHBoxLayout()
+            # hbox_h5_acq_key.setContentsMargins(1,0,1,0)
+            # hbox_h5_nfiles = QHBoxLayout()
+            # hbox_h5_nfiles.setContentsMargins(1,0,1,0)
+
+            # widget_h5_h5file = QWidget()
+            # widget_h5_maindir = QWidget()
+            # widget_h5_iangle_key = QWidget()
+            # widget_h5_tangle_key = QWidget()
+            # widget_h5_norm_key = QWidget()
+            # widget_h5_acq_key = QWidget()
+            # widget_h5_nfiles = QWidget()
+
+            # widget_h5_h5file.setLayout(hbox_h5_h5file)
+            # widget_h5_maindir.setLayout(hbox_h5_maindir)
+            # widget_h5_iangle_key.setLayout(hbox_h5_iangle_key)
+            # widget_h5_tangle_key.setLayout(hbox_h5_tangle_key)
+            # widget_h5_norm_key.setLayout(hbox_h5_norm_key)
+            # widget_h5_acq_key.setLayout(hbox_h5_acq_key)
+            # widget_h5_nfiles.setLayout(hbox_h5_nfiles)
+
+            # label_h5_h5file = QLabel(LABEL_H5_H5FILE)
+            # self.lineedit_h5file = QLineEdit()
+            # self.lineedit_h5file.setEnabled(False)
+            # label_h5_maindir = QLabel(LABEL_H5_MAINDIR)
+            # self.lineedit_h5_maindir = QLineEdit()
+            # self.lineedit_h5_maindir.setEnabled(False)
+            # label_h5_iangle_key = QLabel(LABEL_H5_IANGLE_KEY)
+            # self.lineedit_h5_iangle_key = QLineEdit()
+            # self.lineedit_h5_iangle_key.setEnabled(False)
+            # label_h5_tangle_key = QLabel(LABEL_H5_TANGLE_KEY)
+            # self.lineedit_h5_tangle_key = QLineEdit()
+            # self.lineedit_h5_tangle_key.setEnabled(False)
+            # label_h5_norm_key = QLabel(LABEL_H5_NORM_KEY)
+            # self.lineedit_h5_norm_key = QLineEdit()
+            # self.lineedit_h5_norm_key.setEnabled(False)
+            # label_h5_acq_key = QLabel(LABEL_H5_ACQ_KEY)
+            # self.lineedit_h5_acq_key = QLineEdit()
+            # self.lineedit_h5_acq_key.setEnabled(False)
+            # label_h5_nfiles = QLabel(LABEL_H5_NFILES)
+            # self.lineedit_h5_nfiles = QLineEdit()
+            # self.lineedit_h5_nfiles.setEnabled(False)
+
+            # hbox_h5_h5file.addWidget(label_h5_h5file)
+            # hbox_h5_h5file.addWidget(self.lineedit_h5file)
+            # hbox_h5_maindir.addWidget(label_h5_maindir)
+            # hbox_h5_maindir.addWidget(self.lineedit_h5_maindir)
+            # hbox_h5_iangle_key.addWidget(label_h5_iangle_key)
+            # hbox_h5_iangle_key.addWidget(self.lineedit_h5_iangle_key)
+            # hbox_h5_tangle_key.addWidget(label_h5_tangle_key)
+            # hbox_h5_tangle_key.addWidget(self.lineedit_h5_tangle_key)
+            # hbox_h5_norm_key.addWidget(label_h5_norm_key)
+            # hbox_h5_norm_key.addWidget(self.lineedit_h5_norm_key)
+            # hbox_h5_acq_key.addWidget(label_h5_acq_key)
+            # hbox_h5_acq_key.addWidget(self.lineedit_h5_acq_key)
+            # hbox_h5_nfiles.addWidget(label_h5_nfiles)
+            # hbox_h5_nfiles.addWidget(self.lineedit_h5_nfiles)
+
+            # vbox_h5.addWidget(widget_h5_h5file)
+            # vbox_h5.addWidget(widget_h5_maindir)
+            # vbox_h5.addWidget(widget_h5_iangle_key)
+            # vbox_h5.addWidget(widget_h5_tangle_key)
+            # vbox_h5.addWidget(widget_h5_norm_key)
+            # vbox_h5.addWidget(widget_h5_acq_key)
+            # vbox_h5.addWidget(widget_h5_nfiles)
+
+
+
         #######################################
         ####### SPLITTER FOLDER-FILES##########
         #######################################
@@ -1152,9 +1273,13 @@ class GUIPyX_Widget_layout(QWidget):
         self.combobox_headeritems = QComboBox()
         self.lineedit_headeritems = QLineEdit()
 
+        self.combobox_multi = CheckableComboBox()
+
         hbox_metadata_items.addWidget(label_headeritems)
-        hbox_metadata_items.addWidget(self.combobox_headeritems)
-        hbox_metadata_items.addWidget(self.lineedit_headeritems)
+        # hbox_metadata_items.addWidget(self.combobox_headeritems)
+        # hbox_metadata_items.addWidget(self.lineedit_headeritems)
+        hbox_metadata_items.addWidget(self.combobox_multi)
+        hbox_metadata_items.setStretch(1,15)
 
         self.table_files = QTableWidget()
 

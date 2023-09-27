@@ -29,7 +29,7 @@ class GUIPyX_Window(QMainWindow):
 
         self._guiwidget.update_combobox_h5()
         self._guiwidget.update_combobox_metadata()
-        self._guiwidget.update_integration_widgets()
+        self._guiwidget.feed_integration_widgets()
 
     def _build_menubar(self):
         menubar = QMenuBar()

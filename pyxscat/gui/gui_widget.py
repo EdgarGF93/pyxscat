@@ -1191,8 +1191,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Create the H5 instance, which will create the .h5 file
         self.h5 = H5GIIntegrator(
             filename_h5=str(h5_filename),
-            main_directory=str(main_directory),
-            setup_keys_metadata=self._dict_setup,
+            root_directory=str(main_directory),
+            dict_keys_metadata=self._dict_setup,
             qz_parallel=self._qz_parallel,
             qr_parallel=self._qr_parallel,
             overwrite=True,
@@ -1396,7 +1396,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Create the H5Integrator instance
         self.h5 = H5GIIntegrator(
             filename_h5=filename_h5,
-            setup_keys_metadata=self._dict_setup,
+            dict_keys_metadata=self._dict_setup,
             qz_parallel=self._qz_parallel,
             qr_parallel=self._qr_parallel,
         )
@@ -1468,7 +1468,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
             if new_ponifiles:
                 new_ponifiles = [item for item in new_ponifiles if item]
-                new_ponifiles = [str(Path(item).relative_to(self.h5.get_main_directory())) for item in new_ponifiles]
+                new_ponifiles = [str(Path(item).relative_to(self.h5.get_root_directory())) for item in new_ponifiles]
 
                 # Update combobox of ponifiles
                 cb.insert_list(
@@ -1529,7 +1529,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         ponifile_short = cb.value(
             self.combobox_ponifile,
         )
-        ponifile = str(self.h5.get_main_directory().joinpath(Path(ponifile_short)))
+        ponifile = str(self.h5.get_root_directory().joinpath(Path(ponifile_short)))
         self.active_ponifile = ponifile
 
         if self.h5:
@@ -2077,7 +2077,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             If the OS is Windows, open pyFAI-calib2 GUI
         """
         if self.h5:
-            open_directory = self.h5.get_main_directory()
+            open_directory = self.h5.get_root_directory()
         else:
             open_directory = ""
 
@@ -2142,7 +2142,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.search_and_update_ponifiles_widgets()
 
             # Searches files and update the Data/Metadat in Groups and Datasets in the .h5 file
-            self.h5.search_and_update_new_files(
+            self.h5.search_and_update_datafiles(
                 pattern=self._pattern,
             )
             self.write_terminal_and_logger(INFO_H5_UPDATED)
@@ -2378,7 +2378,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         if self.h5:
             # Update the main directory, files and folder attributes
-            self.main_directory = self.h5.get_main_directory()
+            self.main_directory = self.h5.get_root_directory()
             # self.lineedit_maindir.setText(str(self.main_directory))
             self.write_terminal_and_logger(MSG_MAIN_DIRECTORY)
             self.write_terminal_and_logger(f"New main directory: {str(self.main_directory)}")
@@ -2638,7 +2638,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Specific reference file
         else:
             file_reference_name = cb.value(self.combobox_reffile)
-            full_reference_filename = str(self.h5.get_main_directory().joinpath(Path(folder_ref), Path(file_reference_name)))
+            full_reference_filename = str(self.h5.get_root_directory().joinpath(Path(folder_ref), Path(file_reference_name)))
             logger.info(f"Chosen reference file: {full_reference_filename}.")
 
         if return_index:

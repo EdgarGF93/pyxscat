@@ -165,7 +165,6 @@ def locate_setup_file(name_integration=str()):
         return
     
 def save_setup_dictionary(dict_setup=dict()):
-
     output_filename = Path(SETUP_PATH).joinpath(f"{dict_setup['Name']}.json")
     with open(output_filename, 'w+') as fp:
         json.dump(dict_setup, fp)
