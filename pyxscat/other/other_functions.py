@@ -17,7 +17,7 @@ messages = ['ALL ANIMALS CAN SCREAM',
             ]
 
 
-def get_dict_files(list_files=list()) -> defaultdict:
+def get_dict_files(list_files=list(), relative_root=str()) -> defaultdict:
     """
     Transforms a list of new files into a defaultdict
 
@@ -27,14 +27,20 @@ def get_dict_files(list_files=list()) -> defaultdict:
     Returns:
     None
     """
-    if list_files:
-        dict_new_files = defaultdict(list)
+    if relative_root:
+        dict_files = defaultdict(list)
+        for file in list_files:
+            file = Path(file)
+            folder_name = str(file.parent.relative_to(relative_root))
+            file = file.name
+            dict_files[folder_name].append(file)
+    else:
+        dict_files = defaultdict(list)
         for file in list_files:
             folder_name = str(Path(file).parent)
-            dict_new_files[folder_name].append(str(file))
-        return dict_new_files
-    else:
-        return defaultdict(list)
+            dict_files[folder_name].append(str(file))
+    
+    return dict_files
 
 def print_percent_done(index, total, bar_len=50, title='Processing'):
     '''

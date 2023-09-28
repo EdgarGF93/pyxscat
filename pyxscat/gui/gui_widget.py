@@ -1499,9 +1499,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             ponifile_path = ponifile_path[0][0]
 
             if self.h5:
-                self.h5.update_folder_from_files(
-                    folder_name='Ponifiles',
-                    filename_list=[ponifile_path],
+                self.h5.update_sample(
+                    sample_name='Ponifiles',
+                    data_filenames=[ponifile_path],
                 )
                 cb.insert_list(
                     combobox=self.combobox_ponifile,
@@ -2117,7 +2117,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if list_files_1s:
             logger.info(f"Found new files LIVE: {list_files_1s}")
             self.h5.update_datafiles(
-                new_files=list_files_1s,
+                list_files=list_files_1s,
             )
             self.update_widgets()
             self.update_widgets_to_last_file(

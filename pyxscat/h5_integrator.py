@@ -130,90 +130,31 @@ class H5GIIntegrator(Transform):
     """
     Creates an HDF5 file and provides methods to read/write the file following the hierarchy of XMaS-BM28
     """
-
     def __init__(
         self,
         root_directory=str(),
         output_filename_h5=str(),
         input_filename_h5=str(),
-    ) -> None:
+        ) -> None:
 
-        # If there is no imported .h5 file
-        if not input_filename_h5:
+        # Create the .h5 file if needed
+        if input_filename_h5:
+            self.filename_h5 = input_filename_h5
+            self.number_samples = len(self.generator_samples())
+            logger.info(f"H5Integrator instance was initialized from file {input_filename_h5}.")
+        elif root_directory:
             self.create_h5_file(
                 root_directory=root_directory,
                 output_h5_filename=output_filename_h5,
             )
-            self.filename_h5 = output_filename_h5
+            self.number_samples = 0
+            logger.info(f"H5Integrator instance was initialized with root directory: {root_directory}.")
         else:
-            self.filename_h5 = input_filename_h5
+            logger.info(f"H5Integrator was not created.")        
         
-        logger.info("H5Integrator instance was initialized")
-        self._number_samples = 0
-        # self._number_dataset = 0
-        # self._number_data_images = 0
-        
-        logger.info(f"The filename is {self.filename_h5}.")
-
-        # self.open_h5
-        # self.close_h5
-        # self._is_open = False
-        # self.close_at_end = True
-
-        # Update the ponifile path
-        # self.update_group_ponifile(
-        #     group_address=ADDRESS_PONIFILE,
-        #     ponifile_list=ponifile_list,
-        # )
-
-        # Update the dictionary with keys
-        # self.update_setup_keys(
-        #     dict_keys=dict_keys_metadata,
-        #     key_incident_angle=key_incident_angle,
-        #     key_tilt_angle=key_tilt_angle,
-        #     key_acquisition_time=key_acquisition_time,
-        #     key_normalization_factor=key_normalization_factor,
-        # )
-
         # Get attributes from Transform class (pygix module)
         super().__init__()
         logger.info("Inherited methods from pygix.transform")
-        # self.update_transformQ()
-
-        # Update rotation, orientation parameters
-        # self.update_orientation(
-        #     qz_parallel=qz_parallel,
-        #     qr_parallel=qr_parallel,
-        # )
-
-    # @property
-    # def open_h5(self):
-    #     """
-    #     Open the .h5 file with reading and writing permissions
-
-    #     Parameters:
-    #     None
-
-    #     Returns:
-    #     None
-    #     """
-    #     self._file = h5py.File(self.filename_h5, 'r+')
-    #     self._is_open = True
-
-    # @property
-    # def close_h5(self):
-    #     """
-    #     Closes the .h5 file
-
-    #     Parameters:
-    #     None
-
-    #     Returns:
-    #     None
-    #     """
-    #     self._file.close()
-    #     self._is_open = False
-
 
     @property
     def _open_r(self):
@@ -239,38 +180,6 @@ class H5GIIntegrator(Transform):
         Closes the h5 file
         """        
         self._file.close()
-
-    def generate_all_samples(self):
-        for sample in h5u.top_level_names(self.filename_h5):
-            yield sample
-
-    def check_if_open(func):
-        """
-        To be used as decorator, opens the .h5 file if it is closed, do not do anything if it is open
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
-        pass
-        # @functools.wraps(func)
-        # def wrapper(self, *args, **kwargs):
-
-        #     if self._is_open:
-        #         self.close_at_end = False
-        #     else:
-        #         self.open_h5
-        #         self.close_at_end = True
-
-        #     res = func(self, *args, **kwargs)
-
-        #     if self.close_at_end:
-        #         self.close_h5
-
-        #     return res
-        # return wrapper
 
     @log_info
     def create_h5_file(
@@ -1052,7 +961,7 @@ class H5GIIntegrator(Transform):
 
         # If not index, append to the end
         if not folder_index:
-            folder_index = self._number_samples
+            folder_index = self.number_samples
         
         # Check if the sample does exist
         if not self.contains_group(
@@ -1081,7 +990,7 @@ class H5GIIntegrator(Transform):
             self.write_attr(key=k, value=v)
 
         # Increase the number of samples
-        self._number_samples += 1
+        self.number_samples += 1
 
     @log_info
     def contains_group(self, folder_name=str(), group_address='.') -> bool:
@@ -1103,7 +1012,7 @@ class H5GIIntegrator(Transform):
         
         try:
             self._open_r
-            is_inside = self._file.__contains__(str(folder_name)):
+            is_inside = self._file.__contains__(str(folder_name))
             self._close
             return is_inside
         except Exception as e:
@@ -1151,7 +1060,7 @@ class H5GIIntegrator(Transform):
         self._close
 
     @log_info
-    def update_folder_from_files(self, folder_name=str(), filename_list=list(), get_2D_array=True) -> None:
+    def update_sample(self, sample_name=str(), data_filenames=list(), get_2D_array=False) -> None:
         """
         Creates or updates a folder (Group) with data and metadata from a list of files
 
@@ -1160,53 +1069,50 @@ class H5GIIntegrator(Transform):
             filename_list -- list of path filenames where the data/metadata will be extracted (default: {list()})
             get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
         """
-
-
         # Create the group if needed
         self.new_sample(
-            name=folder_name,
+            name=sample_name,
         )
 
         # Get the packed data and metadata for every filename
         merged_data, merged_metadata = self.get_merged_data_and_metadata(
-            filenames=filename_list, 
+            filenames=data_filenames, 
             get_2D_array=get_2D_array,
         )  
 
         # Create or update DATA dataset
-        if not self._file[folder_name].__contains__('Data'):
-            self._file[folder_name].create_dataset(
-                'Data', 
+        if not self._file[sample_name].__contains__(DATA_KEY):
+            self._file[sample_name].create_dataset(
+                DATA_KEY, 
                 data=merged_data, 
                 chunks=True, 
                 maxshape=(None, None, None),
                 # dtype=h5py.string_dtype(encoding='utf-8'),
             )
-            logger.info(f"Data dataset in {folder_name} group created.")
-            logger.info(f"Added in {folder_name}-Data shape: {merged_data.shape}")
+            logger.info(f"Data dataset in {sample_name} group created.")
+            logger.info(f"Added in {sample_name}-Data shape: {merged_data.shape}")
         else:
-            logger.info(f"Data dataset in {folder_name} group already existed. Go to append.")
-            self.append_to_dataset(folder_name=folder_name, new_data=merged_data)
-
+            logger.info(f"Data dataset in {sample_name} group already existed. Go to append.")
+            self.append_to_dataset(folder_name=sample_name, new_data=merged_data)
 
         # Create or update METADATA group with datasets
-        if not self._file[folder_name].__contains__('Metadata'):
-            self._file[folder_name].create_group('Metadata')
-            logger.info(f"Metadata group in {folder_name} group created.")
+        if not self._file[sample_name].__contains__('Metadata'):
+            self._file[sample_name].create_group('Metadata')
+            logger.info(f"Metadata group in {sample_name} group created.")
         else:
-            logger.info(f"Metadata group in {folder_name} group already existed. Continue.")
+            logger.info(f"Metadata group in {sample_name} group already existed. Continue.")
 
         for key,value in merged_metadata.items():
             # Value is a list here! Convert to np.array
             value = np.array(value)
 
             # Creates dataset for the key
-            if not self._file[folder_name]['Metadata'].__contains__(key):
+            if not self._file[sample_name]['Metadata'].__contains__(key):
 
                 # Try to create dataset with the standard format (floats)
                 try:
-                    self._file[folder_name]['Metadata'].create_dataset(key, data=np.array(value), chunks=True, maxshape=(None,))
-                    logger.info(f"Dataset {key} in {folder_name}-Metadata was created.")
+                    self._file[sample_name]['Metadata'].create_dataset(key, data=np.array(value), chunks=True, maxshape=(None,))
+                    logger.info(f"Dataset {key} in {sample_name}-Metadata was created.")
                     continue
                 except:
                     logger.info(f"Dataset could not be created with the standard format for the key {key}, value {value}.")
@@ -1215,15 +1121,15 @@ class H5GIIntegrator(Transform):
                 try:
                     logger.info("Trying to create dataset with encoded data.")
                     bytes_array = np.array([str(item).encode() for item in value])
-                    self._file[folder_name]['Metadata'].create_dataset(key, data=bytes_array, chunks=True, maxshape=(None,))
-                    logger.info(f"Dataset {key} in {folder_name}-Metadata was created. Encoding worked.")
+                    self._file[sample_name]['Metadata'].create_dataset(key, data=bytes_array, chunks=True, maxshape=(None,))
+                    logger.info(f"Dataset {key} in {sample_name}-Metadata was created. Encoding worked.")
                     continue
                 except:
                     logger.info(f"Dataset could not be created with the encoded format for the key {key}, value {value}.")
 
             # Appends dataset for the key if the dataset already existed
             else:
-                subfolder = f"{folder_name}/{'Metadata'}"
+                subfolder = f"{sample_name}/{'Metadata'}"
                 # Try to append dataset with the standard format (floats)
 
                 try:
@@ -1238,7 +1144,7 @@ class H5GIIntegrator(Transform):
                     logger.info("Trying to append dataset with encoded data.")
                     bytes_array = np.array([str(item).encode() for item in value])
                     self.append_to_dataset(folder_name=subfolder, new_data=bytes_array, dataset_name=key)
-                    logger.info(f"Dataset {key} in {folder_name}-Metadata was appended. Encoding worked.")
+                    logger.info(f"Dataset {key} in {sample_name}-Metadata was appended. Encoding worked.")
                     continue
                 except:
                     logger.info(f"Dataset could not be appended with the encoded format for the key {key}, value {value}.")
@@ -1312,7 +1218,7 @@ class H5GIIntegrator(Transform):
                 data, header = None, None
             yield data, header
 
-    @check_if_open
+    @log_info
     def generator_samples(self) -> str:
         """
         Yields the folder_name of every data Group at the first level of hierarchy
@@ -1337,7 +1243,7 @@ class H5GIIntegrator(Transform):
                 self._close
             except Exception as e:
                 logger.info(f"{e}: List of samples could not be retrieved anyway.")
-                return
+                return []
         
         # Generate the name of the samples
         for sample in list_samples:
@@ -1356,7 +1262,7 @@ class H5GIIntegrator(Transform):
         #     except:
         #         logger.info(f"Error while generating folder: {sample_name}")
 
-    @check_if_open
+    @log_info
     def generator_all_files(self, yield_decode=True) -> str:
         """
         Yields the names of every file stored in the .h5 file
@@ -1371,7 +1277,7 @@ class H5GIIntegrator(Transform):
             for file in self.generator_filenames_in_folder(folder_name=folder, yield_decode=yield_decode):
                 yield file
 
-    @check_if_open
+    @log_info
     def generator_folder_group(self) -> h5py.Group:
         """
         Yields every Group at the first level of hierarchy of the h5 file
@@ -1386,7 +1292,6 @@ class H5GIIntegrator(Transform):
             yield self._file[sample_name]
 
     @log_info
-    @check_if_open
     def number_samples(self) -> float:
         """
         Returns the number of samples (folders) already in the h5 file
@@ -1402,7 +1307,6 @@ class H5GIIntegrator(Transform):
         return n_samples
 
     @log_info
-    @check_if_open
     def number_files_in_sample(self, sample_name=str()):
         """
         Returns the number of files inside a sample (folder)
@@ -1422,62 +1326,58 @@ class H5GIIntegrator(Transform):
     ############# SAMPLES/FILES METHODS ##############
     ##################################################
 
-    @log_info
-    @check_if_open
-    def search_and_update_datafiles(self, pattern='*.edf'):
-        """
-        Run the search engine, get new files and folders taken the pattern and stored main directory, and update the storage
+    # @log_info
+    # @check_if_open
+    # def search_and_update_datafiles(self, pattern='*.edf'):
+    #     """
+    #     Run the search engine, get new files and folders taken the pattern and stored main directory, and update the storage
 
-        Parameters:
-        pattern(str) : wildcards used in method Path.rglob to search files recursively
+    #     Parameters:
+    #     pattern(str) : wildcards used in method Path.rglob to search files recursively
+
+    #     Returns:
+    #     None
+    #     """
+    #     # Get the list of new files and new folders
+    #     new_files = self.search_datafiles(
+    #         pattern=pattern,
+    #     )
+
+    #     # If there are new detected files, updates the memory of the h5 file
+    #     if new_files:
+    #         self.update_datafiles(
+    #             new_files=new_files,
+    #         )
+
+    @log_info
+    def search_datafiles(self, pattern='*.edf') -> list:
+        """
+        Search new files inside the root directory, according to the pattern
+
+        Keyword Arguments:
+            pattern -- _description_ (default: {'*.edf'})
 
         Returns:
-        None
+            list : list of strings with the full directions of the new detected filenames
         """
-        # Get the list of new files and new folders
-        new_files = self.search_new_files_folders(
-            pattern=pattern,
-        )
+        # Retrieve the root directory
+        root_directory = self.get_root_directory()
+        if not root_directory:
+            logger.info("There is no root directory to search files.")
+            return
 
-        # If there are new detected files, updates the memory of the h5 file
-        if new_files:
-            self.update_datafiles(
-                new_files=new_files,
-            )
+        # Global search according to pattern
+        set_searched_files = set(str(item).encode() for item in root_directory.rglob(pattern) if str(item.parent) != str(root_directory))
+
+        # Filter for new files
+        set_stored_files = set(self.generator_all_files(yield_decode=False))
+        new_files = [bytes.decode(item) for item in set_searched_files.difference(set_stored_files)]
+        new_files.sort()
+        logger.info(f"{len(new_files)} {INFO_H5_NEW_FILES_DETECTED}")
+        return new_files
 
     @log_info
-    @check_if_open
-    def search_new_files_folders(self, pattern='*.edf') -> list:
-        """
-        Search new files inside the main directory, according to the pattern and returns both lists of new files and new folders
-
-        Parameters:
-        None
-
-        Returns:
-        list : list of strings with the full directions of the new detected filenames
-        #list : if there are new detected filenames, list of strings with the new detected folders (could be empty)
-        """
-        main_directory = Path(self.get_root_directory())
-        if main_directory and main_directory.exists():
-
-            # Global search according to pattern
-            set_searched_files = set(str(item).encode() for item in main_directory.rglob(pattern) if str(item.parent) != str(main_directory))
-
-            # Filter for new files
-            set_stored_files = set(self.generator_all_files(yield_decode=False))
-            new_files = [bytes.decode(item) for item in set_searched_files.difference(set_stored_files)]
-            logger.info(f"{len(new_files)} {INFO_H5_NEW_FILES_DETECTED}")
-
-            if new_files:
-                new_files.sort()
-
-            return new_files
-        else:
-            logger.info(ERROR_MAIN_DIRECTORY)
-
-    @log_info
-    def update_datafiles(self, new_files=list(), search=False):
+    def update_datafiles(self, list_files=list(), search=False):
         """
         Updates the h5 file with new Groups associated with the folders and new Data/Metadata associated with the files
         This method can be used with any new file list,
@@ -1490,24 +1390,29 @@ class H5GIIntegrator(Transform):
         Returns:
         None
         """
-        # Get a dictionary from the list of files
-        dict_new_files = get_dict_files(
-            list_files=new_files,
+        # Search for new files
+        if search:
+            searched_files = self.search_datafiles()
+            list_files += searched_files
+
+        # Transform the list into a dictionary
+        dict_files = get_dict_files(
+            list_files=list_files,
+            relative_root=self.get_root_directory(),
         )
         logger.info(INFO_H5_NEW_DICTIONARY_FILES)
 
         # Store in the .h5 file by folder and its own list of files
-        for folder, file_list in dict_new_files.items():
-            folder_name = str(Path(folder).relative_to(self.get_root_directory())) 
-            self.update_folder_from_files(
-                folder_name=folder_name,
-                filename_list=file_list,
+        for sample_name, file_list in dict_files.items():
+            self.update_sample(
+                sample_name=sample_name,
+                data_filenames=file_list,
                 get_2D_array=False,
             )
             logger.info(f"Finished with folder: {folder_name}.")
         logger.info(INFO_H5_FILES_UPDATED)
 
-    @check_if_open
+    @log_info
     def get_base_filename(self, filename_full_path=str()) -> str:
         """
         Returns the basename from a full address filename
@@ -1515,7 +1420,7 @@ class H5GIIntegrator(Transform):
         basename = Path(filename_full_path).name
         return basename
 
-    @check_if_open
+    @log_info
     def generator_filenames_in_folder(self, folder_name=str(), yield_decode=True, basename=False):
         """
         Yields the name of every file stored in a specific folder
@@ -1607,7 +1512,6 @@ class H5GIIntegrator(Transform):
         return avg_value
 
     @log_info
-    @check_if_open
     def get_metadata_dataframe(self, folder_name=str(), list_keys=list()) -> pd.DataFrame:
         """
         Gather the dataset in a specific folder (Group) and builds a pandas dataframe
@@ -1703,7 +1607,6 @@ class H5GIIntegrator(Transform):
         return filename
 
     @log_info
-    @check_if_open
     def get_folder_index_from_filename(self, filename=str()):
         """
         Searches the filename in the .h5 Groups and returns the name of the folder and the index of the file in the Group
@@ -1809,27 +1712,6 @@ class H5GIIntegrator(Transform):
             data_sample = data_sample.astype('float32') / norm_factor
 
         return data_sample
-
-    # @log_info
-    # @check_if_open
-    # def get_Edf_random(self):
-    #     """
-    #     Returns a Edf instance from a random folder and random index
-
-    #     Parameters:
-    #     None
-
-    #     Returns:
-    #     None
-    #     """
-    #     random_sample_index = int(random.random() * self.number_samples())
-    #     random_sample = list(self.generator_samples())[random_sample_index]
-
-    #     random_file_index = int(random.random() * self.number_files_in_sample(random_sample))
-    #     return self.get_Edf_instance(
-    #         folder_name=random_sample,
-    #         index_file=random_file_index,
-    #     )
 
     #####################################
     ###### INTEGRATION METHODS ##########
@@ -2228,7 +2110,6 @@ class H5GIIntegrator(Transform):
             return None
 
     @log_info
-    @check_if_open
     def get_mesh_matrix(self, unit='q_nm^-1', shape=()):
         """
         Returns both horizontal and vertical mesh matrix for Grazing-Incidence geometry, returns also the corrected data without the missing wedge
@@ -2289,7 +2170,6 @@ class H5GIIntegrator(Transform):
 
 
     @log_info
-    @check_if_open
     def get_last_file(self, list_files=list()) -> str:
         """
         Returns the file with the highest epoch, time of creation
