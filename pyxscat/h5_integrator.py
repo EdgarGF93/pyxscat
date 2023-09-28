@@ -17,10 +17,28 @@ import logging
 import numpy as np
 import pandas as pd
 import random
+import silx.io.commonh5 as h5c
+import silx.io.h5py_utils as h5u
+import silx.io.utils as utils
+from silx.io import open
+from silx.io.commonh5 import Group, Dataset, Node
+from silx.io.h5py_utils import File
+
+ENCODING_FORMAT = "UTF-8"
 
 DESCRIPTION_HDF5 = "HDF5 file with Scattering methods."
 BEAMLINE = "BM28-XMaS"
 COMMENT_NEW_FILE = ""
+
+NAME_H5_KEY = "name"
+ROOT_DIRECTORY_KEY = "root_directory"
+DATETIME_KEY = "datetime"
+SAMPLE_KEY = "sample"
+CLASS_KEY = "class"
+INDEX_KEY = "index"
+DATA_KEY = "data"
+METADATA_KEY = "metadata"
+FILENAME_KEY = "filename"
 
 INCIDENT_ANGLE_KEY = 'iangle_key'
 TILT_ANGLE_KEY = 'tilt_key'
@@ -29,6 +47,12 @@ NORMALIZATION_KEY = 'norm_key'
 
 ADDRESS_METADATA_KEYS = '.'
 ADDRESS_PONIFILE = '.'
+
+PONIFILE_KEY = "ponifiles"
+PONIFILE_ACTIVE_KEY = "active_ponifile"
+
+DEFAULT_INCIDENT_ANGLE = 0.0
+DEFAULT_TILT_ANGLE = 0.0
 
 DIGITS_SAMPLE = 4
 DIGITS_FILE = 4
@@ -109,66 +133,32 @@ class H5GIIntegrator(Transform):
 
     def __init__(
         self,
-        input_filename_h5=str(),
-        new_filename_h5=str(),
         root_directory=str(),
-        # ponifile_list=list(),
-        # dict_keys_metadata=dict(),
-        # key_incident_angle=str(),
-        # key_tilt_angle=str(),
-        # key_acquisition_time=str(),
-        # key_normalization_factor=str(),
-        qz_parallel=True, 
-        qr_parallel=True,
-        overwrite=False,
-        description=DESCRIPTION_HDF5,
-        beamline=BEAMLINE,
-        comment=COMMENT_NEW_FILE,
-        **kwargs,
+        output_filename_h5=str(),
+        input_filename_h5=str(),
     ) -> None:
-        """
-        Parameters:
-        filename_h5(str) : full path of the new or already existing .h5 file
-        main_directory(str) : full path of the folder where all the data/poni files will be searched recursively
-        ponifile_list(list, str) : string or list of strings of new ponifiles to be stored at the first level of hierarchy
-        setup_keys_metadata(dict) : dictionary with the name of the metadata keys that will be used during data reduction
-        key_incident_angle(str) : name of the key for the incident angle value.
-        key_tilt_angle(str) : name of the key for the tilt angle value
-        key_acquisition_time(str) : name of the key for the acquisition time value
-        key_normalization_factor(str) : name of the key for the normalization factor value
-        qz_parallel(bool) : inversion of the qz axis (usually vertical axis of the detector)
-        qr_parallel(bool) : inversion of the qr axis (usually horizontal axis of the detector)
-        overwrite(bool) : overwrite the .h5 file if it already exists
-        kwargs : key-values to be written as attributes in the first level of hierarchy of the .h5 file.
 
-        Returns:
-        None
-        """
         # If there is no imported .h5 file
         if not input_filename_h5:
             self.create_h5_file(
-                file_name=new_filename_h5,
-                overwrite=overwrite,
-                main_directory=root_directory,
-                description=description,
-                comment=comment,
-                beamline=beamline,
-                **kwargs,
+                root_directory=root_directory,
+                output_h5_filename=output_filename_h5,
             )
-            input_filename_h5 = new_filename_h5      
+            self.filename_h5 = output_filename_h5
+        else:
+            self.filename_h5 = input_filename_h5
         
-        # Create if there is not input filename
-        # logger.info("H5Integrator instance was initialized")
-        # self._number_samples = 0
+        logger.info("H5Integrator instance was initialized")
+        self._number_samples = 0
         # self._number_dataset = 0
         # self._number_data_images = 0
-        self.filename_h5 = input_filename_h5
+        
         logger.info(f"The filename is {self.filename_h5}.")
 
-        self.open_h5
-        self.close_h5
-        self._is_open = False
-        self.close_at_end = True
+        # self.open_h5
+        # self.close_h5
+        # self._is_open = False
+        # self.close_at_end = True
 
         # Update the ponifile path
         # self.update_group_ponifile(
@@ -188,41 +178,71 @@ class H5GIIntegrator(Transform):
         # Get attributes from Transform class (pygix module)
         super().__init__()
         logger.info("Inherited methods from pygix.transform")
-        self.update_transformQ()
+        # self.update_transformQ()
 
         # Update rotation, orientation parameters
-        self.update_orientation(
-            qz_parallel=qz_parallel,
-            qr_parallel=qr_parallel,
-        )
+        # self.update_orientation(
+        #     qz_parallel=qz_parallel,
+        #     qr_parallel=qr_parallel,
+        # )
+
+    # @property
+    # def open_h5(self):
+    #     """
+    #     Open the .h5 file with reading and writing permissions
+
+    #     Parameters:
+    #     None
+
+    #     Returns:
+    #     None
+    #     """
+    #     self._file = h5py.File(self.filename_h5, 'r+')
+    #     self._is_open = True
+
+    # @property
+    # def close_h5(self):
+    #     """
+    #     Closes the .h5 file
+
+    #     Parameters:
+    #     None
+
+    #     Returns:
+    #     None
+    #     """
+    #     self._file.close()
+    #     self._is_open = False
+
 
     @property
-    def open_h5(self):
+    def _open_r(self):
         """
-        Open the .h5 file with reading and writing permissions
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
-        self._file = h5py.File(self.filename_h5, 'r+')
-        self._is_open = True
+        Opens the h5 file with reading permises
+        """   
+        self._file = File(self.filename_h5, 'r')
 
     @property
-    def close_h5(self):
+    def _open(self):
+        self._open_w
+        
+    @property
+    def _open_w(self):
         """
-        Closes the .h5 file
+        Opens the h5 file with reading/writing permises
+        """        
+        self._file = File(self.filename_h5, 'r+')
 
-        Parameters:
-        None
-
-        Returns:
-        None
+    @property
+    def _close(self):
         """
+        Closes the h5 file
+        """        
         self._file.close()
-        self._is_open = False
+
+    def generate_all_samples(self):
+        for sample in h5u.top_level_names(self.filename_h5):
+            yield sample
 
     def check_if_open(func):
         """
@@ -234,250 +254,267 @@ class H5GIIntegrator(Transform):
         Returns:
         None
         """
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):
+        pass
+        # @functools.wraps(func)
+        # def wrapper(self, *args, **kwargs):
 
-            if self._is_open:
-                self.close_at_end = False
-            else:
-                self.open_h5
-                self.close_at_end = True
+        #     if self._is_open:
+        #         self.close_at_end = False
+        #     else:
+        #         self.open_h5
+        #         self.close_at_end = True
 
-            res = func(self, *args, **kwargs)
+        #     res = func(self, *args, **kwargs)
 
-            if self.close_at_end:
-                self.close_h5
+        #     if self.close_at_end:
+        #         self.close_h5
 
-            return res
-        return wrapper
+        #     return res
+        # return wrapper
 
     @log_info
-    def create_h5_file(self, file_name=str(), overwrite=False, **kwargs):
+    def create_h5_file(
+        self,
+        root_directory=str(),
+        output_h5_filename=str(),
+        ):
         """
-        Creates a new .h5 file, after a file path and some attributes
+        Creates (overwrites if needed) an .h5 file with some initial attributes
 
-        Parameters:
-        file_name(str) : full path of the new generated .h5 file
-        kwargs : key-values will be written as attributes in the first level of hierarchy in the new .h5 file
-
-        Returns:
-        None
-        """
-        if not Path(file_name).is_file():
-            create_h5 = True
-        else:
-            if overwrite:
-                create_h5 = True
-            else:
-                create_h5 = False
-
-        if create_h5:
-            logger.info(f"{file_name} is going to be created.")
-        else:
-            logger.info(f"{file_name} already exists. Return.")
-            return
-
+        Keyword Arguments:
+            root_directory -- string to be saved as attribute (default: {str()})
+            output_h5_filename -- string to be saved as attribute (default: {str()})
+        """        
         try:
-            self._file = h5py.File(file_name, 'w')
-            logger.info(f"The file was created ")
-        except:
-            self._file = None
-            logger.info(f"The file could not be created. Return.")
+            self._file = File(output_h5_filename, 'w')
+            self._file.close()
+            self.filename_h5 = output_h5_filename
+            logger.info(f"The file {output_h5_filename} was created ")
+        except Exception as e:
+            logger.info(f"{e}: The file {output_h5_filename} could not be created. Return.")
             return
 
-        logger.info(f"Attributes for h5: {kwargs.items()}")
-        self._file.attrs['Filename'] = str(file_name)
-        self._file.attrs['Name'] = Path(file_name).name
+        self.write_attrs(
+            dict_attrs={
+                NAME_H5_KEY : Path(output_h5_filename).name,
+                ROOT_DIRECTORY_KEY : root_directory,
+                DATETIME_KEY : date_prefix(),
+            }
+        )
 
-        self._file.attrs[INCIDENT_ANGLE_KEY] = ''
-        self._file.attrs[TILT_ANGLE_KEY] = ''
-        self._file.attrs[NORMALIZATION_KEY] = ''
-        self._file.attrs[ACQUISITION_KEY] = ''
+    @log_info
+    def write_attrs(self, dict_attrs=dict(), address='.'):
+        """
+        Write the key-values from a dictionary as attributes at the root level of h5 file
 
-        dp = date_prefix()
-        self._file.attrs['Datetime'] = dp
-        logger.info(f"New attribute. Datetime : {dp}")
-        for k,v in kwargs.items():
-            self._file.attrs[k] = v
-            logger.info(f"New attribute. {k} : {v}")
-        # self._file.close()
+        Keyword Arguments:
+            dict_attrs -- dictionary with root attribute information (default: {dict()})
+            address -- path of the Group inside the h5 File (default: {'.'})
+        """        
+        self._open_w
+        for k, v in dict_attrs.items():
+            self.write_attr(
+                key=k,
+                value=v,
+                address=address,
+            )
+        self._close
 
-    @check_if_open
+    @log_info
+    def write_attr(self, key=str(), value=str(), address='/'):
+        """
+        Write a key-value attribute into a specific h5 address
+
+        Keyword Arguments:
+            key -- name of the attribute (default: {str()})
+            value -- value of the attribute (default: {str()})
+            address -- address of Group in the h5 file (default: {'/'})
+        """        
+        # Encode the string
+        value = value.encode(ENCODING_FORMAT)     
+
+        # Try to write directly
+        try:
+            self._file[address].attrs[key] = value
+            logger.info(f"{e}: The key-value {key}:{value} was written.")
+            return
+        except Exception as e:
+            logger.info(f"{e}: The key-value {key}:{value} could not be written. Trying to open the h5 File...")
+        
+        # Try to open the File and write then
+        try:
+            self._open_w
+            self._file[address].attrs[key] = value
+            logger.info(f"{e}: The key-value {key}:{value} was written.")
+        except Exception as e:
+            logger.info(f"{e}: The key-value {key}:{value} could not be written anyway.")
+        finally:
+            self._close
+
+    @log_info
+    def update_metadata_keys(self, dict_metadata_keys=dict(), iangle_key=str(), tangle_key=str(), norm_factor=str(), acq_key=str()):
+        """
+        Write important metadata keys as attributes at the root level of the .h5 File
+
+        Keyword Arguments:
+            dict_metadata_keys -- dictionary with metadata keys (default: {dict()})
+            iangle_key -- name of the motor for incident angle (default: {str()})
+            tangle_key -- name of the motor for tilt angle (default: {str()})
+            norm_factor -- name of the counter for normalization factor (default: {str()})
+            acq_key -- name of the counter for the acquisition time (default: {str()})
+        """        
+        if dict_metadata_keys:
+            pass
+        else:
+            dict_metadata_keys = {
+                INCIDENT_ANGLE_KEY : iangle_key,
+                TILT_ANGLE_KEY : tangle_key,
+                NORMALIZATION_KEY : norm_factor,
+                ACQUISITION_KEY : acq_key,
+            }
+
+        # Write the dictionary as attributes
+        self.write_attrs(
+            dict_attrs=dict_metadata_keys,
+        )
+
+    @log_info
     def get_root_directory(self) -> Path:
         """
-        Returns a Path instance with the main_directory stored in h5 file
-        Main directory is the root folder where all the data files and poni files are stored
-
-        Parameters:
-        None
+        Returns the root_directory stored as attribute at the root level during the creation of the .h5 File
 
         Returns:
-        Path : pathlib.Path instance with the main directory
-        """
-        try:
-            main_dir = Path(self._file.attrs['main_directory'])
-            logger.info(f"Got main directory: {str(main_dir)}")
-        except:
-            main_dir = Path(self.filename_h5).parent
-            logger.info(f"Main directory could not be read as attribute. Used parent of the .h5 as main_dir.")
-        return main_dir
-
-    @check_if_open
-    def get_name(self):
-        try:
-            name = self._file.attrs['Name']
-        except:
-            name = self.filename_h5
-        return name
-
-
-
+            Path with the root directory where data files are searched
+        """        
+        root_dir = Path(self.get_attr(attr_key=ROOT_DIRECTORY_KEY))
+        return root_dir
 
     @log_info
-    @check_if_open
-    def get_attrs(self) -> dict:
-        d = {}
-        for k,v in self._file.attrs.items():
-            d[k] = v
-        return d
+    def get_name(self) -> str:
+        """
+        Returns the name stored as attribute at the root level during the creation of the .h5 File
+
+        Returns:
+            name of the .h5 file, without the directories, with the extension
+        """
+        name = self.get_attr(attr_key=NAME_H5_KEY)
+        return name
+
+    @log_info
+    def get_attr(self, attr_key=str(), group_address='.') -> str:
+        """
+        Returns the attribute value from a specific Group
+
+        Keyword Arguments:
+            attr_key -- name of the attribute (default: {str()})
+            group_address -- address of the H5 Group (default: {'.'})
+
+        Returns:
+            value of the attribute
+        """
+        try:
+            attr = self._file[group_address].attrs[attr_key]
+        except Exception as e:
+            attr = None
+            logger.info(f"{e}: attribute {attr} could not be read. Trying to open the file...")
+
+        # Try to access after opening the File
+        if not attr:
+            try:
+                self._open_r
+                attr = self._file[group_address].attrs[attr_key]
+                self._close
+            except Exception as e:
+                logger.info(f"{e}: attribute {attr} could not be read anyway.")
+                return
+        
+        # Retrieve decoded string
+        if isinstance(attr, bytes):
+            attr = bytes.decode(attr, encoding=ENCODING_FORMAT)
+        return attr
+
+    @log_info
+    def get_dict_attrs(self, group_address='.') -> dict:
+        """
+        Returns a dictionary with the key-value attributes of a Group
+
+        Keyword Arguments:
+            group_address -- address of the Group inside the H5 File (default: {'.'})
+
+        Returns:
+            dictionary with the key-value attributes
+        """
+        try:
+            dict_attrs = {k:v for k,v in self._file[group_address].attrs.items()}
+            return dict_attrs
+        except Exception as e:
+            logger.info(f"{e}: Attributes could not be retrieved. Trying to open the File...")
+        
+        try:
+            self._open_r
+            dict_attrs = {k:v for k,v in self._file[group_address].attrs.items()}
+            self._close
+            return dict_attrs
+        except Exception as e:
+            logger.info(f"{e}: Attributes could not be retrieved anyway.")
+        return
+
+    @log_info
+    def get_iangle_key(self):
+        """
+        Returns the string of the stored key for incident angle
+        """
+        iangle_key = self.get_attr(attr_key=INCIDENT_ANGLE_KEY)
+        return iangle_key
+
+    @log_info
+    def get_tiltangle_key(self):
+        """
+        Returns the string of the stored key for tilt angle
+        """
+        tangle_key = self.get_attr(attr_key=TILT_ANGLE_KEY)
+        return tangle_key
+
+    @log_info
+    def get_norm_key(self):
+        """
+        Returns the string of the stored key for normalization factor
+        """
+        norm_key = self.get_attr(attr_key=NORMALIZATION_KEY)
+        return norm_key
+
+    @log_info
+    def get_acquisition_key(self):
+        """
+        Returns the string of the stored key for acquisition time
+        """
+        acq_key = self.get_attr(attr_key=ACQUISITION_KEY)
+        return acq_key
+
+    @log_info
+    def get_metadata_dict(self) -> dict:
+        """
+        Returns a dictionary with the key-value metadata information
+
+        Keyword Arguments:
+            group_address -- address of the Group inside the H5 File (default: {'.'})
+
+        Returns:
+            dictionary with the metadata key-values
+        """
+        dict_attrs = self.get_dict_attrs(group_address=ADDRESS_METADATA_KEYS)
+        dict_metadata = {}
+        dict_metadata[INCIDENT_ANGLE_KEY] = dict_attrs[INCIDENT_ANGLE_KEY]
+        dict_metadata[TILT_ANGLE_KEY] = dict_attrs[TILT_ANGLE_KEY]
+        dict_metadata[NORMALIZATION_KEY] = dict_attrs[NORMALIZATION_KEY]
+        dict_metadata[ACQUISITION_KEY] = dict_attrs[ACQUISITION_KEY]
+        return dict_metadata
 
     #########################################################
     ######### METHODS FOR KEY METADATA ######################
     #########################################################
 
-
     @log_info
-    @check_if_open
-    def update_attributes_in_group(self, group_address='.', **kwargs):
-        """
-        Writes attributes in a specific h5 Group.
-        If the group does not exists, it creates a new one
-
-        Parameters:
-        group_address(str) : h5 address for the group
-        **kwargs : key = value as attribute
-
-        Returns:
-        None
-        """
-        if not self._file.__contains__(group_address):
-            self._file.create_group(group_address)
-            logger.info(f"New group was created: {group_address}")
-
-        for k,v in kwargs.items():
-            try:
-                self._file[group_address].attrs[k] = v
-                logger.info(f"Updated {k} = {v}")
-            except:
-                logger.info(f"Error during writing the attribute: {k} = {v}")
-
-    @log_info
-    @check_if_open
-    def get_attrs_in_group(self, group_address='.'):
-        """
-        Return the dictionary of attributes in a Group
-
-        Parameters:
-        group_address(str) : h5 address for the group
-
-        Returns:
-        dict : key-value for attributes in a Group
-        """
-        dict_attrs = {k:v for k,v in self._file[group_address].attrs.items()}
-        return dict_attrs
-
-    @log_info
-    @check_if_open    
-    def update_setup_keys(
-        self,
-        dict_keys=dict(),
-        key_incident_angle=str(), 
-        key_tilt_angle=str(), 
-        key_acquisition_time=str(), 
-        key_normalization_factor=str(),
-        ) -> None:
-        """
-        Creates or changes attributes in the first level of hierarchy of the h5 file
-        Four attributes associated with the name of the key metadata that will be used during data reduction
-        Incident angle, tilt angle, acquisition (exposition) time and normalization factor
-
-        Parameters:
-        dict_keys(dict) : dictionary with values which are the name of the metadata keys
-        key_incident_angle(str) : name of the key for the incident angle value.
-        key_tilt_angle(str) : name of the key for the tilt angle value
-        key_acquisition_time(str) : name of the key for the acquisition time value
-        key_normalization_factor(str) : name of the key for the normalization factor value
-
-        Returns:
-        None
-        """
-        if dict_keys:
-            logger.info(dict_keys)
-            self.update_attributes_in_group(group_address=ADDRESS_METADATA_KEYS, iangle_key=dict_keys["Angle"])
-            self.update_attributes_in_group(group_address=ADDRESS_METADATA_KEYS, acq_key = dict_keys["Exposure"])
-            self.update_attributes_in_group(group_address=ADDRESS_METADATA_KEYS, norm_key = dict_keys["Norm"])
-            self.update_attributes_in_group(group_address=ADDRESS_METADATA_KEYS, tilt_key = dict_keys["Tilt angle"])
-
-        else:
-            logger.info(f"Keys: iangle {key_incident_angle}, exposure {key_acquisition_time}, norm {key_normalization_factor}, tilt {key_tilt_angle}")
-            self.update_attributes_in_group(group_address=ADDRESS_METADATA_KEYS, iangle_key=key_incident_angle)
-            self.update_attributes_in_group(group_address=ADDRESS_METADATA_KEYS, acq_key=key_acquisition_time)
-            self.update_attributes_in_group(group_address=ADDRESS_METADATA_KEYS, norm_key=key_normalization_factor)
-            self.update_attributes_in_group(group_address=ADDRESS_METADATA_KEYS, tilt_key=key_tilt_angle)
-    
-    @log_info
-    @check_if_open
-    def get_metadata_keys(self):
-        list_metadata_keys = []
-        list_metadata_keys.append(self.get_iangle_key())
-        list_metadata_keys.append(self.get_tiltangle_key())
-        list_metadata_keys.append(self.get_norm_key())
-        list_metadata_keys.append(self.get_acquisition_key())
-        list_metadata_keys = [item for item in list_metadata_keys if item]
-        return list_metadata_keys
-
-    @log_info
-    @check_if_open
-    def get_iangle_key(self):
-        """
-        Returns the string of the stored key for incident angle
-        """
-        attrs = self.get_attrs_in_group(group_address=ADDRESS_METADATA_KEYS)
-        iangle_key = attrs[INCIDENT_ANGLE_KEY]
-        return iangle_key
-
-    @log_info
-    @check_if_open
-    def get_tiltangle_key(self):
-        """
-        Returns the string of the stored key for tilt angle
-        """
-        attrs = self.get_attrs_in_group(group_address=ADDRESS_METADATA_KEYS)
-        tangle_key = attrs[TILT_ANGLE_KEY]
-        return tangle_key
-
-    @log_info
-    @check_if_open
-    def get_norm_key(self):
-        """
-        Returns the string of the stored key for normalization factor
-        """
-        attrs = self.get_attrs_in_group(group_address=ADDRESS_METADATA_KEYS)
-        norm_key = attrs[NORMALIZATION_KEY]
-        return norm_key
-
-    @log_info
-    @check_if_open
-    def get_acquisition_key(self):
-        """
-        Returns the string of the stored key for acquisition time
-        """
-        attrs = self.get_attrs_in_group(group_address=ADDRESS_METADATA_KEYS)
-        acq_key = attrs[ACQUISITION_KEY]
-        return acq_key
-
-    @log_info
-    @check_if_open
     def get_dataset_acquisition_time(self, folder_name=str()) -> np.array:
         """
         Returns the numpy array which is the dataset of acquistion times associated with the files of a folder (Group)
@@ -499,7 +536,6 @@ class H5GIIntegrator(Transform):
         return dataset
 
     @log_info
-    @check_if_open
     def get_dataset_incident_angle(self, folder_name=str()) -> np.array:
         """
         Returns the numpy array which is the dataset of incident angles associated with the files of a folder (Group)
@@ -521,7 +557,6 @@ class H5GIIntegrator(Transform):
         return dataset
 
     @log_info
-    @check_if_open
     def get_dataset_tilt_angle(self, folder_name=str()) -> np.array:
         """
         Returns the numpy array which is the dataset of tilt angles associated with the files of a folder (Group)
@@ -543,7 +578,6 @@ class H5GIIntegrator(Transform):
         return dataset
 
     @log_info
-    @check_if_open
     def get_dataset_norm_factor(self, folder_name=str()) -> np.array:
         """
         Returns the numpy array which is the dataset of normalization factors associated with the files of a folder (Group)
@@ -565,7 +599,6 @@ class H5GIIntegrator(Transform):
         return dataset
 
     @log_info
-    @check_if_open
     def get_acquisition_time(self, folder_name=str(), index_list=int()) -> float:
         """
         Returns the acquisition time of a file or the average from a list of files (index)
@@ -596,7 +629,6 @@ class H5GIIntegrator(Transform):
         return acq
 
     @log_info
-    @check_if_open
     def get_incident_angle(self, folder_name=str(), index_list=int()) -> float:
         """
         Returns the incident angle of a file or the average from a list of files (index)
@@ -627,7 +659,6 @@ class H5GIIntegrator(Transform):
         return iangle
 
     @log_info
-    @check_if_open
     def get_tilt_angle(self, folder_name=str(), index_list=int()) -> float:
         """
         Returns the tit angle of a file or the average from a list of files (index)
@@ -659,7 +690,6 @@ class H5GIIntegrator(Transform):
         return tilt
 
     @log_info
-    @check_if_open
     def get_norm_factor(self, folder_name=str(), index_list=int()) -> float:
         """
         Returns the normalization factor of a file or the average from a list of files (index)
@@ -701,10 +731,25 @@ class H5GIIntegrator(Transform):
     ######### METHODS FOR PONIFILES ######################
     #########################################################
 
+    @log_info
+    def search_ponifiles(self) -> list:
+        """
+        Searches for .poni files in the root directory
+
+        Returns:
+            list of .poni files recursively in the root directory
+        """        
+        
+        root_directory = self.get_root_directory()
+        if not root_directory:
+            return
+        searched_ponifiles = root_directory.rglob("*.poni")
+        searched_ponifiles = [str(file) for file in searched_ponifiles]
+        searched_ponifiles.sort()
+        return searched_ponifiles
 
     @log_info
-    @check_if_open
-    def update_group_ponifile(self, group_address='.', ponifile_list=list()):
+    def update_ponifiles(self, group_address='.', ponifile_list=list(), search=False):
         """
         Creates/updates the dataset of ponifiles at the first level of hierarchy
 
@@ -714,10 +759,13 @@ class H5GIIntegrator(Transform):
         Returns:
         None
         """
-        # Creates the dataset
-        if not self._file[group_address].__contains__('Ponifiles'):
+        # Opens the h5 File
+        self._open_w
+
+        # Creates the dataset for ponifiles if needed
+        if not self._file[group_address].__contains__(PONIFILE_KEY):
             self._file[group_address].create_dataset(
-                'Ponifiles', 
+                PONIFILE_KEY, 
                 data=np.array([str().encode()]), 
                 # compression="gzip", 
                 # chunks=True, 
@@ -727,8 +775,10 @@ class H5GIIntegrator(Transform):
             )
             logger.info("Ponifile dataset was created.")
 
+        # Creates the dataset for active ponifile if needed
+        if not self._file[group_address].__contains__(PONIFILE_ACTIVE_KEY):
             self._file[group_address].create_dataset(
-                'Active_ponifile', 
+                PONIFILE_ACTIVE_KEY, 
                 data=np.array([str().encode()]), 
                 # compression="gzip", 
                 # chunks=True, 
@@ -738,105 +788,111 @@ class H5GIIntegrator(Transform):
             )
             logger.info("Active_ponifile dataset was created.")
 
+        # Searches if requested
+        if search:
+            searched_ponifiles = self.search_ponifiles()
+            ponifile_list += searched_ponifiles
+
         if not ponifile_list:
             logger.info("No ponifiles to be updated. Return.")
             return
 
+        # Make a list if there is only one item
         if isinstance(ponifile_list, str):
             ponifile_list = [ponifile_list]
 
-        current_list = list(self.generator_stored_ponifiles())
+        # Take only the new files
+        stored_ponifiles = list(self.generate_ponifiles())
+        new_ponifiles = [file for file in ponifile_list if file not in stored_ponifiles]
 
-        for ponifile in ponifile_list:
-            if ponifile in current_list:
-                continue
+        # Return if no new ponifiles
+        if not new_ponifiles:
+            logger.info(f"No new ponifiles to append.")
+            return
+
+        # Append the new .poni files
+        for ponifile in new_ponifiles:
+            dataset = self._file[group_address][PONIFILE_KEY]
             try:
-                print(5555555)
-                print(ponifile)
-                ponifile = str(ponifile).encode()
-                ind = self._file[group_address]['Ponifiles'].len()
-                self._file[group_address]['Ponifiles'][ind - 1] = ponifile
-                self._file[group_address]['Ponifiles'].resize((ind + 1,))
+                # Encode the string
+                ponifile = str(ponifile).encode(ENCODING_FORMAT)
+                # Append the encoded string into the dataset and enlarge
+                ind = dataset.len()
+                dataset[ind - 1] = ponifile
+                dataset.resize((ind + 1,))
                 logger.info(f"Ponifile {ponifile} was appended to dataset.")
             except:
                 logger.info(f"Ponifile {ponifile} could not be updated.")
 
+        # Close the h5
+        self._close
+
     @log_info
-    @check_if_open
-    def activate_ponifile(self, ponifile=str()) -> None:
+    def activate_ponifile(self, poni_filename=str()) -> None:
         """
         Updates the dataset with the active ponifile.
-        The active ponifile is the filename that will be used by pygix-pyFAI to integrate 2D patterns
-        To be activated, the ponifile has to be stored before using def update_ponifile_list
 
-        Parameters:
-        ponifile(str) : full path of the ponifile that will be activated
-        index(int) : index of the ponifile stored in the Ponifiles dataset, to be activated
+        Keyword Arguments:
+            poni_filename -- full path of the ponifile that will be activated (default: {str()})
+        """        
+        if not poni_filename:
+            return
+        
+        # Open the h5 File
+        self._open_w
 
-        Returns:
-        None
-        """
-        if ponifile:
-            if ponifile in self.generator_stored_ponifiles():
-                try:
-                    self._file['Active_ponifile'][0] = str(ponifile).encode()
-                    logger.info(f"Ponifile {ponifile} activated successfully.")
-                except Exception as e:
-                    logger.info(f"{e}: Ponifile {ponifile} could not be activated.")
-            else:
-                logger.info(f"Ponifile {ponifile} is not stored in the .h5")
-        else:
+        # Proceed only if the requested ponifiles is already stored
+        stored_ponifiles = list(self.generate_ponifiles())
+        if poni_filename not in stored_ponifiles:
+            logger.info(f"Ponifile {poni_filename} is not stored in the .h5")
             return
 
-        self.update_transformQ()
+        try:
+            poni_filename = str(poni_filename).encode(ENCODING_FORMAT)
+            self._file[PONIFILE_ACTIVE_KEY][0] = poni_filename
+            logger.info(f"Ponifile {poni_filename} activated successfully.")
+        except Exception as e:
+            logger.info(f"{e}: Ponifile {poni_filename} could not be activated.")
 
+        # Close the h5 file
+        self._close
 
-        # stored_ponifiles = list(self.generator_stored_ponifiles())
-
-        # if not stored_ponifiles:
-        #     logger.info(f"No ponifile was added to dataset: {ponifile}")
-        #     return
-            
-        # if ponifile and (ponifile in stored_ponifiles):
-        #     ponifile_b = str(ponifile).encode()
-        # elif index:
-        #     try:
-        #         ponifile_b = str(stored_ponifiles[index]).encode()
-        #     except:
-        #         ponifile_b = str(stored_ponifiles[0]).encode()
-        # else:
-        #     ponifile_b = str(stored_ponifiles[0]).encode()
-
-        # logger.info(f"Ponifile to be activated: {ponifile_b}")
-        # try:
-        #     self._file['Active_ponifile'][0] = ponifile_b
-        #     logger.info(f"Ponifile {ponifile_b} activated successfully.")
-        # except:
-        #     logger.info("Ponifile could not be activated.")
-
-
+        # Update the GrazingGeometry instance
+        self.update_grazinggeometry()
 
     @log_info
-    @check_if_open
-    def get_active_ponifile(self) -> str:
+    def get_active_ponifile(self) -> Path:
         """
-        Get the active ponifile string from the dataset at the first level of hierarchy
-
-        Parameters:
-        None
+        Returns the active ponifile string from the dataset at the first level of hierarchy
 
         Returns:
-        str : full path of the active ponifile
-        """
+            Path of the active ponifile
+        """        
         try:
-            ponifile_active = bytes.decode(self._file['Active_ponifile'][()][0])
-        except:
-            ponifile_active = str()
-        logger.info(f"Ponifile active: {ponifile_active}")
+            ponifile_active = self._file[PONIFILE_ACTIVE_KEY][()][0]
+        except Exception as e:
+            logger.info(f"{e}: active ponifile could not be retrieved. Trying to open the file...")
+            ponifile_active =None
+        
+        # Try after opening the h5 File
+        if ponifile_active is None:
+            try:
+                self._open_r
+                ponifile_active = self._file[PONIFILE_ACTIVE_KEY][()][0]
+                self._close
+            except Exception as e:
+                logger.info(f"{e}: active ponifile could not be retrieved anyway.")
+                return
+        
+        # Decode if necessary
+        if isinstance(ponifile_active, bytes):
+            ponifile_active = bytes.decode(ponifile_active, encoding=ENCODING_FORMAT)
+        
+        # Use Path instance
+        ponifile_active = Path(ponifile_active)
         return ponifile_active
 
     @log_info
-    @check_if_open
     def update_ponifile_parameters(self, dict_poni=dict()) -> None:
         """
         Changes manually the functional poni parameters of pygix
@@ -844,38 +900,81 @@ class H5GIIntegrator(Transform):
         new_poni = PoniFile(data=dict_poni)
         self._init_from_poni(new_poni)
 
+    @log_info
+    def generate_ponifiles(self, decoded=True) -> str:
+        """
+        Yields the names of ponifiles stored in the Ponifile Group, at the first level of .h5 file
+
+        Parameters:
+        None
+
+        Yields:
+        str : str with the address of the stored .poni files
+        """
+        try:
+            dataset_ponifile = self._file[PONIFILE_KEY][()]
+        except Exception as e:
+            dataset_ponifile = None
+            logger.info(f"{e}: Dataset ponifiles could not be accessed. Trying to open the file...")
+        
+        # Try after opening the file
+        if dataset_ponifile is None:
+            try:
+                self._open_r
+                dataset_ponifile = self._file[PONIFILE_KEY][()]
+                self._close
+            except Exception as e:
+                logger.info(f"{e}: Dataset ponifiles could not be accessed anyway.")
+                return
+
+        # Generate data
+        for data in dataset_ponifile:
+            if decoded:
+                data = bytes.decode(data, encoding=ENCODING_FORMAT)
+            yield data
+
     #########################################################
     ######### PYGIX CONNECTIONS ######################
     #########################################################
 
     @log_info
-    def update_transformQ(self) -> None:
+    def update_grazinggeometry(self) -> None:
         """
-        If there is a ponifile, inherits the methods from Transform class (pygix module)
+        If there is an active ponifile, inherits the methods from Transform class (pygix module)
+        """        
+        # Fetch the active ponifile
+        ponifile_active = str(self.get_active_ponifile())
 
-        Parameters:
-        None
+        if not ponifile_active:
+            logger.info(f"No active ponifile. GrazingGeometry was not updated")
+            return
 
-        Returns:
-        None
-        """
-        poni_filename = str(self.get_root_directory().joinpath(self.get_active_ponifile()))
-        if poni_filename:
-            try:
-                self.load(poni_filename)
-                print(self.poni)
-                logger.info("Loaded poni file")
-                self.update_incident_tilt_angle(
-                    incident_angle=0.0,
-                    tilt_angle=0.0,
-                )
-            except:
-                pass
-        else:
-            pass
+        # Load the ponifile        
+        try:
+            self.load(ponifile_active)
+            logger.info("Loaded poni file")
+        except Exception as e:
+            logger.info(f"{e}: Ponifile could not be loaded to GrazingGeometry")
+        
+        # Update default incident and tilt angles
+        try:
+            self.update_incident_tilt_angle(
+                incident_angle=DEFAULT_INCIDENT_ANGLE,
+                tilt_angle=DEFAULT_TILT_ANGLE,
+            )
+        except Exception as e:
+            logger.info(f"{e}: angles could not be updated.")
 
     @log_info
     def update_incident_tilt_angle(self, incident_angle=0.0, tilt_angle=0.0):
+        """
+        Update the incident and tilt angles inherited from GrazingGeometry
+
+        Keyword Arguments:
+            incident_angle -- (default: {0.0})
+            tilt_angle --  (default: {0.0})
+        """        
+        # Incident angle
         try:
             self.set_incident_angle(
                 incident_angle=incident_angle,
@@ -883,6 +982,8 @@ class H5GIIntegrator(Transform):
             logger.info(f"Incident angle set at {incident_angle}")
         except Exception as e:
             logger.info(f"{e}: Incident angle could not be updated.")
+
+        # Tilt angle
         try:
             self.set_tilt_angle(
                 tilt_angle=tilt_angle,
@@ -891,31 +992,29 @@ class H5GIIntegrator(Transform):
         except Exception as e:
             logger.info(f"{e}: Tilt angle could not be updated.")
 
+    # @log_info
+    # def update_qz(self, qz_parallel=True):
+    #     self._qz_parallel = qz_parallel
+    #     logger.info(f"qz parallel is {qz_parallel}")
+    #     try:
+    #         self.set_sample_orientation(
+    #             sample_orientation=DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
+    #         )
+    #         logger.info(f"The sample orientation (pygix) is set at {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+    #     except:
+    #         pass
 
-    @log_info
-    def update_qz(self, qz_parallel=True):
-        self._qz_parallel = qz_parallel
-        logger.info(f"qz parallel is {qz_parallel}")
-        try:
-            self.set_sample_orientation(
-                sample_orientation=DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
-            )
-            logger.info(f"The sample orientation (pygix) is set at {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
-        except:
-            pass
-
-    @log_info
-    def update_qr(self, qr_parallel=True):
-        self._qr_parallel = qr_parallel
-        logger.info(f"qz parallel is {qr_parallel}")
-        try:
-            self.set_sample_orientation(
-                sample_orientation=DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
-            )
-            logger.info(f"The sample orientation (pygix) is set at {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
-        except:
-            pass 
-
+    # @log_info
+    # def update_qr(self, qr_parallel=True):
+    #     self._qr_parallel = qr_parallel
+    #     logger.info(f"qz parallel is {qr_parallel}")
+    #     try:
+    #         self.set_sample_orientation(
+    #             sample_orientation=DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
+    #         )
+    #         logger.info(f"The sample orientation (pygix) is set at {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
+    #     except:
+    #         pass 
 
     @log_info
     def update_orientation(self, qz_parallel=True, qr_parallel=True) -> None:
@@ -923,95 +1022,107 @@ class H5GIIntegrator(Transform):
         Updates two parameters to define the rotation of the detector and the orientation of the sample axis
         Pygix defined a sample orientation upon 1-4 values
 
-        Parameters:
-        qz_parallel(bool) : inversion of the qz axis (usually vertical axis of the detector)
-        qr_parallel(bool) : inversion of the qr axis (usually horizontal axis of the detector)
-
-        Returns:
-        None
+        Keyword Arguments:
+            qz_parallel -- inversion of the qz axis (default: {True})
+            qr_parallel -- inversion of the qr axis (default: {True})
         """
-        self._qz_parallel = qz_parallel
-        logger.info(f"qz parallel is {qz_parallel}")
-        self._qr_parallel = qr_parallel
-        logger.info(f"qr parallel is {qz_parallel}")
         try:
+            sample_orientation = DICT_SAMPLE_ORIENTATIONS[(qz_parallel, qr_parallel)]
             self.set_sample_orientation(
-                sample_orientation=DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
+                sample_orientation=sample_orientation,
             )
-            logger.info(f"The sample orientation (pygix) is set at {DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]}")
-        except:
-            pass
+            logger.info(f"The sample orientation (pygix) is set at {sample_orientation}.")
+        except Exception as e:
+            logger.info(f"The sample orientation (pygix) could not be updated.")
 
     #####################################
     ###### HDF5 METHODS #################
     #####################################
 
     @log_info
-    @check_if_open
-    def h5_new_folder(self, folder_index=int(), name=str(), **kwargs):
+    def new_sample(self, folder_index=int(), name=str(), **kwargs):
         """
         Creates a new folder (Group) at the first level of hierarchy in the h5 file
 
-        Parameters:
-        folder_index(int) : associated index with the new folder
-        name(str) : name of the new folder (Group)
-        kwargs : attributes that will be written in the new Group
-
-        Returns:
-        None
+        Keyword Arguments:
+            folder_index -- associated index with the new folder (default: {int()})
+            name -- name of the new folder (Group) (default: {str()})
         """
+        self._open_w
+
+        # If not index, append to the end
         if not folder_index:
             folder_index = self._number_samples
         
-        if self._file.__contains__(str(name)):
+        # Check if the sample does exist
+        if not self.contains_group(
+            folder_name=name,
+            ):
             logger.info(f"The folder {name} already exists.")
+            self._close
             return
-            
+        
+        # Create new Group
         self._file.create_group(name)
-        self._file[name].attrs['Class'] = 'Sample'
-        self._file[name].attrs['Index'] = int(folder_index)
-        self._file[name].attrs['Datetime'] = date_prefix()
-        self._file[name].attrs['Name'] = name
-        logger.info(f"The folder {name} was successfully created.")
+        logger.info(f"The folder {name} was successfully created.")   
 
+        # Write some attributes     
+        dict_init_sample = {
+            CLASS_KEY : SAMPLE_KEY,
+            INDEX_KEY : int(folder_index),
+            DATETIME_KEY : date_prefix(),
+            NAME_H5_KEY : name,
+        }
+        self.write_attrs(
+            dict_attrs=dict_init_sample,
+            address=name,
+        )
         for k,v in kwargs.items():
-            self._file[name].attrs[k] = v
+            self.write_attr(key=k, value=v)
 
+        # Increase the number of samples
         self._number_samples += 1
 
     @log_info
-    @check_if_open
-    def contains_group(self, folder_name=str()):
+    def contains_group(self, folder_name=str(), group_address='.') -> bool:
         """
-        Checks if the folder already exist in the first level of hierarchy
+        Checks if the folder already exist in a specific address
 
-        Parameters:
-        folder_name(str) : name of the new folder (Group)
+        Keyword Arguments:
+            folder_name -- name of the new folder (Group) (default: {str()})
+            group_address -- address of the Group inside the H5 file (default: {str()})
 
         Returns:
-        bool : exists (True) or not (False)
+            exists (True) or not (False)
         """
-        if self._file.__contains__(str(folder_name)):
-            is_inside = True
-        else:
-            is_inside = False
-        return is_inside
+        try:
+            is_inside = self._file.__contains__(str(folder_name))
+            return is_inside
+        except Exception as e:
+            logger.info(f"{e}")
+        
+        try:
+            self._open_r
+            is_inside = self._file.__contains__(str(folder_name)):
+            self._close
+            return is_inside
+        except Exception as e:
+            logger.info(f"{e}")
 
     @log_info
-    @check_if_open
-    def append_to_dataset(self, folder_name=str(), dataset_name='Data', new_data=np.array([])):
+    def append_to_dataset(self, folder_name=str(), dataset_name='Data', new_data=np.array([])) -> None:
         """
         Append new data to 'Data' dataset, inside a specific folder
 
-        Parameters:
-        folder_name(str) : name of the new folder (Group)
-        dataset_name(str) : 'Data' is the name of the dataset where the 2D maps or just the addresses of the files are stored
-        new_data(np.array, list) : list of data to be iterated and appended in the dataset
-
-        Returns:
-        None
+        Keyword Arguments:
+            folder_name -- name of the new folder (Group) (default: {str()})
+            dataset_name -- 'Data' is the name of the dataset where the 2D maps or just the addresses of the files are stored (default: {'Data'})
+            new_data -- list of data to be iterated and appended in the dataset (default: {np.array([])})
         """
-        # Current shape of the dataset
+        # Open the File
+        self._open_w
+        
+        # Get the current shape of the dataset
         initial_shape = np.array(self._file[folder_name][dataset_name].shape)
         expanded_shape = np.copy(initial_shape)
         num_files = initial_shape[0]
@@ -1025,38 +1136,42 @@ class H5GIIntegrator(Transform):
         try:
             self._file[folder_name][dataset_name].resize((expanded_shape))
             logger.info(f"Shape of dataset reseted from {tuple(initial_shape)} to {expanded_shape}")
-        except:
-            logger.info(f"Error during reshaping the dataset {dataset_name} from {tuple(initial_shape)} to {expanded_shape}")
+        except Exception as e:
+            logger.info(f"{e} Error during reshaping the dataset {dataset_name} from {tuple(initial_shape)} to {expanded_shape}")
 
         # Appending
         for ind in range(new_layers):
             try:
                 self._file[folder_name][dataset_name][num_files + ind] = new_data[ind]
                 logger.info(f"Appended data with index {ind} successfully.")
-            except:
-                logger.info(f"Error while appending {new_data[ind]}.")
+            except Exception as e:
+                logger.info(f"{e}: Error while appending {new_data[ind]}.")
+
+        # Close
+        self._close
 
     @log_info
-    @check_if_open
-    def update_folder_from_files(self, folder_name=str(), filename_list=list(), get_2D_array=True):
+    def update_folder_from_files(self, folder_name=str(), filename_list=list(), get_2D_array=True) -> None:
         """
         Creates or updates a folder (Group) with data and metadata from a list of files
 
-        Parameters:
-        folder_name(str) : name of the folder (Group) where the data/metadata will be stored
-        filename_list(list) : list of path filenames where the data/metadata will be extracted
-        get_2D_array(bool) : yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False
-
-        Returns:
-        None
+        Keyword Arguments:
+            folder_name -- name of the folder (Group) where the data/metadata will be stored (default: {str()})
+            filename_list -- list of path filenames where the data/metadata will be extracted (default: {list()})
+            get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
         """
+
+
         # Create the group if needed
-        self.h5_new_folder(
+        self.new_sample(
             name=folder_name,
         )
 
         # Get the packed data and metadata for every filename
-        merged_data, merged_metadata = self.get_merged_data_and_metadata(filenames=filename_list, get_2D_array=get_2D_array)  
+        merged_data, merged_metadata = self.get_merged_data_and_metadata(
+            filenames=filename_list, 
+            get_2D_array=get_2D_array,
+        )  
 
         # Create or update DATA dataset
         if not self._file[folder_name].__contains__('Data'):
@@ -1134,36 +1249,34 @@ class H5GIIntegrator(Transform):
         Use FabIO module to get the data (arrays) and metadata from 2D detector patterns
         If not get_2D_array, it yields the encoded name of the file, not the real 2D array
 
-        Parameters:
-        filenames(list) : list of strings with the full address of the data files
-        get_2D_array(bool) : yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False
-        
+        Keyword Arguments:
+            filenames -- list of strings with the full address of the data files (default: {list()})
+            get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
+
         Returns:
-        np.array : packed data
-        defaultdict : packed metadata
+            _description_
         """
+        # Init dataset and header
         merged_dataset = np.array([])
         merged_header = defaultdict(list)            
         
         for index_file, (data, header) in enumerate(self.generator_fabio_data_header(filenames, get_2D_array)):
-
             # Pack data
             try:
                 if index_file == 0:
                     merged_dataset = np.array([data])
                 else:
                     merged_dataset = np.concatenate((merged_dataset, [data]), axis=0)
-            except:
-                logger.info(f"Error while packing data at {index_file}")
+            except Exception as e:
+                logger.info(f"{e}: Error while packing data at {index_file}")
             
             # Pack metadata
             for key,value in header.items():
                 try:
                     value = float_str(value)
                     merged_header[key].append(value)
-                except:
-                    logger.info(f"Error while packing metadata at key: {key}, value {value}")
-
+                except Exception as e:
+                    logger.info(f"{e}: Error while packing metadata at key: {key}, value {value}")
         return merged_dataset, merged_header
 
     @log_info
@@ -1172,26 +1285,35 @@ class H5GIIntegrator(Transform):
         Use FabIO module to generate the data and metadata from a list of files
         If not get_2D_array, it yields the encoded name of the file, not the real 2D array
 
-        Parameters:
-        filenames(list) : list of strings with the full address of the data files
-        get_2D_array(bool) : yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False
-        
+        Keyword Arguments:
+            filenames -- list of strings with the full address of the data files (default: {[]})
+            get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
+
         Yields:
-        np.array : 2D map or encoded filename
-        dict : header dictionary from FabIO
+            np.array : 2D map or encoded filename
+            dict : header dictionary from FabIO
         """
         for file in filenames:
+            # Open a EdfClass instance
             try:
                 edf = EdfClass(file)
+            except Exception as e:
+                logger.info(f"{e}: EdfClass instance could not be created.")
+                continue
+
+            # Yield data or data addresses and header
+            try:
                 if get_2D_array:
-                    yield edf.get_data(), edf.get_header()
+                    data, header = edf.get_data(), edf.get_header()
                 else:
-                    yield np.array(([[str(file).encode()]])), edf.get_header()
-            except:
-                logger.info(f"Error while fabio handling at {file}")
+                    data, header = np.array(([[str(file).encode()]])), edf.get_header()
+            except Exception as e:
+                logger.info(f"{e}: Error while fabio handling at {file}")
+                data, header = None, None
+            yield data, header
 
     @check_if_open
-    def generator_folder_name(self) -> str:
+    def generator_samples(self) -> str:
         """
         Yields the folder_name of every data Group at the first level of hierarchy
 
@@ -1201,17 +1323,38 @@ class H5GIIntegrator(Transform):
         Yields:
         str : folder_name of the Group
         """
-        self.open_h5
-        for sample_name in self._file.keys():
+        try:
+            list_samples = [item for item in self._file.keys() if item[CLASS_KEY] == SAMPLE_KEY]
+        except Exception as e:
+            list_samples = None
+            logger.info(f"{e}: List of samples could not be retrieved. Trying to open the file...")
+        
+        # Try to open the h5 File
+        if list_samples is None:
             try:
-                if not isinstance(self._file[sample_name], h5py.Group):
-                    continue
-                elif sample_name == 'Metadata':
-                    continue
-                else:
-                    yield sample_name
-            except:
-                logger.info(f"Error while generating folder: {sample_name}")
+                self._open_r
+                list_samples = [item for item in self._file.keys() if item[CLASS_KEY] == SAMPLE_KEY]
+                self._close
+            except Exception as e:
+                logger.info(f"{e}: List of samples could not be retrieved anyway.")
+                return
+        
+        # Generate the name of the samples
+        for sample in list_samples:
+            yield sample
+
+    
+        # self.open_h5
+        # for sample_name in self._file.keys():
+        #     try:
+        #         if not isinstance(self._file[sample_name], h5py.Group):
+        #             continue
+        #         elif sample_name == 'Metadata':
+        #             continue
+        #         else:
+        #             yield sample_name
+        #     except:
+        #         logger.info(f"Error while generating folder: {sample_name}")
 
     @check_if_open
     def generator_all_files(self, yield_decode=True) -> str:
@@ -1224,7 +1367,7 @@ class H5GIIntegrator(Transform):
         Yields:
         str : fullpath of stored filenames
         """
-        for folder in self.generator_folder_name():
+        for folder in self.generator_samples():
             for file in self.generator_filenames_in_folder(folder_name=folder, yield_decode=yield_decode):
                 yield file
 
@@ -1276,68 +1419,8 @@ class H5GIIntegrator(Transform):
 
 
     ##################################################
-    ############# PONIFILE METHODS ###################
+    ############# SAMPLES/FILES METHODS ##############
     ##################################################
-
-
-    @log_info
-    @check_if_open
-    def search_and_update_ponifiles(self, return_list=False) -> list:
-        """
-        Searches new .poni files in the main directory and stores them in the Group at the first level
-
-        Parameters:
-        return_list(bool) : if True, returns the list of new ponifiles
-
-        Returns:
-        list : list of strings with the full paths of poni files, only if return_list is True
-        """
-
-        # Search any new file with .poni extension inside the main directory
-        ponifile_list = self.get_root_directory().rglob("*.poni")
-
-        # Get the relative name for poni files
-        ponifile_list = [poni.relative_to(self.get_root_directory()) for poni in ponifile_list]
-
-        # Filter only new ponifiles
-        stored_poni_list = sorted(self.generator_stored_ponifiles())
-        new_ponifiles = sorted(set(ponifile_list).difference(set(stored_poni_list)))
-
-        if new_ponifiles:
-            logger.info(INFO_H5_PONIFILES_DETECTED)
-            logger.info(f"{new_ponifiles}")
-            self.update_group_ponifile(
-                group_address=ADDRESS_PONIFILE,
-                ponifile_list=new_ponifiles,
-            )
-        else:
-            logger.info(INFO_H5_NO_PONIFILES_DETECTED)
-
-        if return_list:
-            return new_ponifiles
-        else:
-            return False
-
-    @log_info
-    @check_if_open
-    def generator_stored_ponifiles(self) -> str:
-        """
-        Yields the names of ponifiles stored in the Ponifile Group, at the first level of .h5 file
-
-        Parameters:
-        None
-
-        Yields:
-        str : str with the address of the stored .poni files
-        """
-        try:
-            dataset_ponifile = self._file['Ponifiles'][()]
-        except:
-            logger.info("Dataset ponifiles could not be accessed.")
-            return
-
-        for data in dataset_ponifile:
-            yield bytes.decode(data)
 
     @log_info
     @check_if_open
@@ -1358,7 +1441,7 @@ class H5GIIntegrator(Transform):
 
         # If there are new detected files, updates the memory of the h5 file
         if new_files:
-            self.update_new_files(
+            self.update_datafiles(
                 new_files=new_files,
             )
 
@@ -1393,9 +1476,8 @@ class H5GIIntegrator(Transform):
         else:
             logger.info(ERROR_MAIN_DIRECTORY)
 
-    @check_if_open
     @log_info
-    def update_new_files(self, new_files=list()):
+    def update_datafiles(self, new_files=list(), search=False):
         """
         Updates the h5 file with new Groups associated with the folders and new Data/Metadata associated with the files
         This method can be used with any new file list,
@@ -1462,26 +1544,33 @@ class H5GIIntegrator(Transform):
             yield item
 
     @log_info
-    @check_if_open
     def get_metadata_dataset(self, group_address=str(), key_metadata=str()) -> np.array:
         """
         Returns the dataset (np.array like) of metadata inside a specific folder (Group)
 
-        Parameters:
-        group_address(str) : name of the folder (Group) in the first level of hierarchy
-        key_metadata(str) : key(name) of the asked counter/motor
+        Keyword Arguments:
+            group_address -- name of the folder (Group) in the first level of hierarchy (default: {str()})
+            key_metadata -- key(name) of the asked counter/motor (default: {str()})
 
         Returns:
-        np.array : HDF5 dataset
+            np.array : HDF5 dataset
         """
         try:
-            dataset = self._file[group_address]['Metadata'][key_metadata]
-        except:
-            dataset = None
-        return dataset
+            dataset = self._file[group_address][METADATA_KEY][key_metadata]
+            return dataset
+        except Exception as e:
+            logger.info(f"{e}: dataset {key_metadata} could not be accessed. Trying to open the file...")
+        
+        try:
+            self._open_r
+            dataset = self._file[group_address][METADATA_KEY][key_metadata]
+            self._close
+            return dataset
+        except Exception as e:
+            logger.info(f"{e}: dataset {key_metadata} could not be accessed anyway.")
+        return
 
     @log_info
-    @check_if_open
     def get_metadata_value(self, folder_name=str(), key_metadata=str(), index_list=list()) -> float:
         """
         Returns the metadata value of a specific folder and file (associated to index)
@@ -1534,7 +1623,7 @@ class H5GIIntegrator(Transform):
 
         for filename in self.generator_filenames_in_folder(folder_name=folder_name):
             # Always append the name of the file
-            short_metadata['Filename'].append(str(Path(filename).name))
+            short_metadata[FILENAME_KEY].append(str(Path(filename).name))
 
             for key in list_keys:
                 try:
@@ -1551,7 +1640,6 @@ class H5GIIntegrator(Transform):
         return dataframe
 
     @log_info
-    @check_if_open
     def generator_keys_in_folder(self, folder_name=str()):
         """
         Returns the generator of the metadata key that is stored in the Metadata Group inside a specific folder (Group)
@@ -1562,23 +1650,56 @@ class H5GIIntegrator(Transform):
         Returns:
         Generator of metadata keys
         """
-        return self._file[folder_name]['Metadata'].keys()
+        try:
+            list_keys = self._file[folder_name][METADATA_KEY].keys()
+        except Exception as e:
+            list_keys = None
+            logger.info(f"{e}: List of keys could not be retrieved. Trying to open the file...")
+        
+        # Try to open the h5 file
+        if list_keys is None:
+            try:
+                list_keys = self._file[folder_name][METADATA_KEY].keys()
+            except Exception as e:
+                logger.info(f"{e}: List of keys could not be retrieved anyway.")
+                return
+
+        # Generate keys
+        for key in list_keys:
+            yield key   
 
     @log_info
-    @check_if_open
     def get_filename_from_index(self, folder_name=str(), index_list=list()):
+        try:
+            if isinstance(index_list, int):
+                index_list = [index_list]
 
-        if isinstance(index_list, int):
-            index_list = [index_list]
+            if len(index_list) == 1:
+                filename = bytes.decode(self._file[folder_name]['Data'][()][index_list[0]][0][0])
 
-        if len(index_list) == 1:
-            filename = bytes.decode(self._file[folder_name]['Data'][()][index_list[0]][0][0])
+            elif len(index_list) > 1:
+                filename = bytes.decode(self._file[folder_name]['Data'][()][index_list[-1]][0][0])
+                new_extension = f"{Path(filename).stem}_average.edf"
+                filename = Path(filename).parent.joinpath(new_extension)
+        except Exception as e:
+            filename = None
+            logger.info(f"{e}")
+        
+        if filename is None:
+            try:
+                if isinstance(index_list, int):
+                    index_list = [index_list]
 
-        elif len(index_list) > 1:
-            filename = bytes.decode(self._file[folder_name]['Data'][()][index_list[-1]][0][0])
-            new_extension = f"{Path(filename).stem}_average.edf"
-            filename = Path(filename).parent.joinpath(new_extension)
+                if len(index_list) == 1:
+                    filename = bytes.decode(self._file[folder_name]['Data'][()][index_list[0]][0][0])
 
+                elif len(index_list) > 1:
+                    filename = bytes.decode(self._file[folder_name]['Data'][()][index_list[-1]][0][0])
+                    new_extension = f"{Path(filename).stem}_average.edf"
+                    filename = Path(filename).parent.joinpath(new_extension)
+            except Exception as e:
+                logger.info(f"{e}")
+                return
         return filename
 
     @log_info
@@ -1607,8 +1728,11 @@ class H5GIIntegrator(Transform):
         logger.info(f"No matches were found with the filename {filename}")
         return None, None
 
+    #####################################
+    ###### EDF METHODS ##########
+    #####################################
+
     @log_info
-    @check_if_open
     def get_Edf_instance(self, full_filename=str(), folder_name=str(), index_file=int()):
 
         # Take the full filename
@@ -1637,7 +1761,6 @@ class H5GIIntegrator(Transform):
         return Edf_instance
 
     @log_info
-    @check_if_open
     def get_Edf_data(
         self, 
         folder_name=str(), 
@@ -1677,40 +1800,6 @@ class H5GIIntegrator(Transform):
         except:
             data_sample = None
             logger.info(f"Data sample could not be uploaded.")
-        
-        # # Subtract reference if asked
-        # if folder_reference_name:
-        #     # Take the data from a specific reference file
-        #     if file_reference_name:
-        #         try:
-        #             full_reference_filename = str(Path(folder_reference_name).joinpath(Path(file_reference_name)))
-        #             logger.info(f"Take specific reference file: {file_reference_name} in {folder_reference_name}.")
-        #             data_ref = EdfClass(
-        #                 filename=full_reference_filename,
-        #                 ponifile_path=self.get_active_ponifile(),
-        #                 qz_parallel=self._qz_parallel,
-        #                 qr_parallel=self._qr_parallel,
-        #             ).get_data()
-        #             data_sample = data_sample - reference_factor * data_ref
-        #         except Exception as e:
-        #             logger.info(f"{e}: Specific reference data could not be loaded.")
-            
-        #     # Automatic search of reference file after acquisition time
-        #     else:
-        #         try:
-        #             acq_sample = self.get_acquisition_time(folder_name, index_list[0])
-        #             logger.info(f"Acquisition time of the sample is {acq_sample}.")
-        #             acq_ref_dataset = self.get_dataset_acquisition_time(folder_reference_name)
-        #             logger.info(f"Acquisition dataset of the reference folder is {acq_ref_dataset}.")
-        #             for index, exp_ref in enumerate(acq_ref_dataset):
-        #                 if exp_ref == acq_sample:
-        #                     data_ref = self.get_Edf_instance(
-        #                         folder_name=folder_reference_name,
-        #                         index_file=index,
-        #                     ).get_data()
-        #                     data_sample = data_sample - reference_factor * data_ref
-        #         except Exception as e:
-        #             logger.info(f"{e}: Automatic reference data could not be loaded.")
 
         if normalized:
             norm_factor = self.get_norm_factor(
@@ -1721,28 +1810,27 @@ class H5GIIntegrator(Transform):
 
         return data_sample
 
-    @log_info
-    @check_if_open
-    def get_Edf_random(self):
-        """
-        Returns a Edf instance from a random folder and random index
+    # @log_info
+    # @check_if_open
+    # def get_Edf_random(self):
+    #     """
+    #     Returns a Edf instance from a random folder and random index
 
-        Parameters:
-        None
+    #     Parameters:
+    #     None
 
-        Returns:
-        None
-        """
-        random_sample_index = int(random.random() * self.number_samples())
-        random_sample = list(self.generator_folder_name())[random_sample_index]
+    #     Returns:
+    #     None
+    #     """
+    #     random_sample_index = int(random.random() * self.number_samples())
+    #     random_sample = list(self.generator_samples())[random_sample_index]
 
-        random_file_index = int(random.random() * self.number_files_in_sample(random_sample))
-        return self.get_Edf_instance(
-            folder_name=random_sample,
-            index_file=random_file_index,
-        )
+    #     random_file_index = int(random.random() * self.number_files_in_sample(random_sample))
+    #     return self.get_Edf_instance(
+    #         folder_name=random_sample,
+    #         index_file=random_file_index,
+    #     )
 
-    
     #####################################
     ###### INTEGRATION METHODS ##########
     #####################################

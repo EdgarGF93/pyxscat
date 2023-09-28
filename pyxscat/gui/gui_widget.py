@@ -1462,7 +1462,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.h5.search_and_update_ponifiles(return_list=False)
 
             ponifiles_in_cb = set(cb.all_items(self.combobox_ponifile))
-            ponifiles_in_h5 = set(self.h5.generator_stored_ponifiles())
+            ponifiles_in_h5 = set(self.h5.generate_ponifiles())
 
             new_ponifiles = [item for item in ponifiles_in_h5.difference(ponifiles_in_cb)]
 
@@ -1536,7 +1536,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             try:
                 # Activate pyFAI/pygix parameters through h5
                 self.h5.activate_ponifile(
-                    ponifile=self.active_ponifile,
+                    poni_filename=self.active_ponifile,
                 )
 
                 # Save cache dictionary
@@ -2116,7 +2116,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         if list_files_1s:
             logger.info(f"Found new files LIVE: {list_files_1s}")
-            self.h5.update_new_files(
+            self.h5.update_datafiles(
                 new_files=list_files_1s,
             )
             self.update_widgets()
@@ -2233,7 +2233,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
             # Check if new folders to update the list_widget and reference folder combobox
             folders_in_list = set(lt.all_items(self.listwidget_folders))
-            folders_in_h5 = set(self.h5.generator_folder_name())
+            folders_in_h5 = set(self.h5.generator_samples())
             new_folders = [item for item in folders_in_h5.difference(folders_in_list)]
             new_folders.sort()
 
@@ -2384,7 +2384,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger(f"New main directory: {str(self.main_directory)}")
 
             # Update file and folder attributes
-            self.list_folders = list(self.h5.generator_folder_name())
+            self.list_folders = list(self.h5.generator_samples())
             self.write_terminal_and_logger(f"Added {len(self.list_folders)} folders.")
 
             # Feed the ponifile combobox
@@ -2400,14 +2400,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             # Reset and fill the list widget with folders
             lt.insert_list(
                 listwidget=self.listwidget_folders,
-                item_list=list(self.h5.generator_folder_name()),
+                item_list=list(self.h5.generator_samples()),
                 reset=True,
             )
 
             # Feed the combobox of reference folder and masks
             cb.insert_list(
                 combobox=self.combobox_reffolder,
-                list_items=list(self.h5.generator_folder_name()),
+                list_items=list(self.h5.generator_samples()),
             )
 
     @log_info
