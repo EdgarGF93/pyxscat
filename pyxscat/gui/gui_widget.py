@@ -2001,8 +2001,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         name_ref_folder = cb.value(self.combobox_reffolder)
 
         # Get the list of files
-        list_ref_files = sorted(self.h5.generator_filenames_in_folder(
-            folder_name=name_ref_folder,
+        list_ref_files = sorted(self.h5.generator_files_in_sample(
+            sample_name=name_ref_folder,
             basename=True,
         ))
         cb.insert_list(
@@ -2447,8 +2447,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         # Update the combobox with metadata keys
         metadata_keys = list(
-            self.h5.generator_keys_in_folder(
-                folder_name=self.clicked_folder,
+            self.h5.generator_metadata_keys_from_sample(
+                sample_name=self.clicked_folder,
             )
         )
         logger.info(f"Metadata keys: {metadata_keys}")
@@ -2592,7 +2592,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 )
 
             data_ref = self.h5.get_Edf_data(
-                folder_name=reference_folder_name,
+                sample_name=reference_folder_name,
                 index_list=index_ref,
                 normalized=True,
             )
@@ -2627,7 +2627,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 for index, exp_ref in enumerate(acq_ref_dataset):
                     if exp_ref == acq_time_file:
                         full_reference_filename = self.h5.get_filename_from_index(
-                            folder_name=folder_ref,
+                            sample_name=folder_ref,
                             index_list=index,
                         )
                         logger.info(f"Auto reference file: {full_reference_filename}")
@@ -2735,7 +2735,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if not self.clicked_folder or not self.cache_index:
             return
         new_label = self.h5.get_filename_from_index(
-            folder_name=self.clicked_folder,
+            sample_name=self.clicked_folder,
             index_list=self.cache_index,
         )
         logger.info(f"New label: {new_label}")
@@ -3035,7 +3035,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         current_index = self.cache_index
 
         data = self.h5.get_Edf_data(
-            folder_name=current_folder,
+            sample_name=current_folder,
             index_list=current_index,
             normalized=normalized,
         )

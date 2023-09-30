@@ -577,9 +577,9 @@ class GUIPyX_Widget_layout(QWidget):
         hbox_recent_h5.setStretch(0,1)
         hbox_recent_h5.setStretch(1,10)
 
-        label_h5file = QLabel(LABEL_H5_FILE)
-        self.lineedit_h5file = QLineEdit()
-        self.lineedit_h5file.setEnabled(False)
+        self.label_h5file = QLabel(LABEL_H5_FILE)
+        self.lineedit_h5file_1 = QLineEdit()
+        self.lineedit_h5file_1.setReadOnly(True)
         self.button_pick_maindir = QPushButton()
         self.button_pick_maindir.setIcon(QIcon(ICON_FOLDER_PATH))
         self.button_pick_maindir.setToolTip(LABEL_PICK_MAINDIR)    
@@ -589,8 +589,8 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_pick_hdf5.setToolTip(LABEL_PICK_H5)
         self.button_pick_hdf5.setStyleSheet(BUTTON_STYLE_ENABLE)
 
-        hbox_maindir.addWidget(label_h5file)
-        hbox_maindir.addWidget(self.lineedit_h5file)
+        hbox_maindir.addWidget(self.label_h5file)
+        hbox_maindir.addWidget(self.lineedit_h5file_1)
         hbox_maindir.addWidget(self.button_pick_maindir)
         hbox_maindir.addWidget(self.button_pick_hdf5)
 
@@ -1522,17 +1522,10 @@ class GUIPyX_Widget_layout(QWidget):
             )
         )
 
-    def disable_ponifile_mod(self) -> None:
+    def disable_ponifile_mod(self, state) -> None:
         """
         Enable or disable the lineedits to modify ponifile parameters
-        """
-        if self.checkbox_poni_mod.isChecked():
-            state = True
-        else:
-            state = False
-            # self.update_ponifile_widgets(
-            #     dict_poni=self._dict_poni_cache,
-            # )            
+        """       
         self.lineedit_wavelength.setEnabled(state)
         self.lineedit_distance.setEnabled(state)
         self.lineedit_poni1.setEnabled(state)

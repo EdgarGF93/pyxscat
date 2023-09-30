@@ -2,7 +2,7 @@ from pathlib import Path
 import json
 from pyxscat.gui import INTEGRATION_PATH
 
-CAKE_KEY_INTEGRATION = "integration"
+KEY_INTEGRATION = "integration"
 CAKE_LABEL = "cake"
 CAKE_KEY_NAME = "name"
 CAKE_KEY_SUFFIX = "suffix"
@@ -16,7 +16,7 @@ CAKE_KEY_TYPE_AZIM = "Azimuthal"
 CAKE_KEY_TYPE_RADIAL = "Radial"
 
 CAKE_KEY_TYPES = {
-    CAKE_KEY_INTEGRATION : str(),
+    KEY_INTEGRATION : str(),
     CAKE_KEY_NAME : str(),
     CAKE_KEY_SUFFIX : str(),
     CAKE_KEY_UNIT : str(),
@@ -26,7 +26,6 @@ CAKE_KEY_TYPES = {
     CAKE_KEY_ABINS : int(),
 }
 
-BOX_KEY_INTEGRATION = "integration"
 BOX_LABEL = "box"
 BOX_KEY_NAME = "name"
 BOX_KEY_SUFFIX = "suffix"
@@ -40,7 +39,7 @@ BOX_KEY_TYPE_HORZ = "Horizontal"
 BOX_KEY_TYPE_VERT = "Vertical"
 
 BOX_KEY_TYPES = {
-    BOX_KEY_INTEGRATION : str(),
+    KEY_INTEGRATION : str(),
     BOX_KEY_NAME : str(),
     BOX_KEY_SUFFIX : str(),
     BOX_KEY_DIRECTION : str(),

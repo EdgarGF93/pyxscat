@@ -23,11 +23,9 @@ from pyxscat.gui.gui_layout_alternative import LABEL_CAKE_BINS_OPT, LABEL_CAKE_B
 from pyxscat.gui.gui_layout_alternative import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
 from pyxscat.h5_integrator import H5GIIntegrator
 from pyxscat.h5_integrator import PONI_KEY_VERSION, PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
+from pyxscat.h5_integrator import FILENAME_H5_KEY, ROOT_DIRECTORY_KEY, SAMPLE_GROUP_KEY, FILENAME_KEY
 
 from pyxscat.gui.gui_layout_alternative import QZ_BUTTON_LABEL, QR_BUTTON_LABEL, MIRROR_BUTTON_LABEL
-
-
-
 
 import json
 import logging
@@ -36,6 +34,8 @@ import subprocess
 import sys
 import os
 import pandas as pd
+
+from pyxscat.other.setup_methods import *
 
 ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_logo_thumb.png')
 
@@ -155,7 +155,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.h5 = None
         self._data_cache = None
         self.main_directory = Path()
-        self.active_ponifile = str()
+        # self.active_ponifile = str()
         self._dict_poni_cache = dict()
         self.clicked_folder = str()
         # self._pattern = '*.edf'
@@ -225,13 +225,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # H5 combobox callback
         #########################
         self.combobox_h5_files.currentTextChanged.connect(self.cb_h5_changed)
-        #     lambda : (
-        #         self.set_h5_instance(filename_h5=self.dict_recent_h5[cb.value(self.combobox_h5_files)]),
-        #         self.update_h5_poni_and_files(),
-        #         self.update_widgets(),
-        #         # self.update_setup_info(),
-        #     )
-        # )
 
         #########################
         # Setup dictionary callback
@@ -282,31 +275,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.button_qr.clicked.connect(self.button_qr_clicked)
 
         #########################
-        # Extension and wildcards callback
-        #########################
-        # self.combobox_extension.currentTextChanged.connect(self.extension_changed)
-        # self.lineedit_wildcards.textChanged.connect(self.wildcards_changed)
-
-        #########################
         # Pick main directory
         #########################
         self.button_pick_maindir.clicked.connect(self.pick_maindir_clicked)
-        #     lambda : (
-        #         self.create_h5_file(),
-        #         self.append_h5file(),                
-        #         self.update_h5_poni_and_files(),
-        #         self.activate_h5file(),
-        #     )
-        # )
-
         self.button_pick_hdf5.clicked.connect(self.pick_h5file_clicked)
-        #     lambda : (
-        #         self.pick_and_activate_hdf5_file(),
-        #         self.update_h5_poni_and_files(),
-        #         self.update_widgets(),   
-        #         self.update_setup_info(),             
-        #     )
-        # )
 
         #########################
         # Ponifile callbacks
@@ -329,16 +301,16 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Reference callbacks
         #########################
 
-        self.combobox_reffolder.currentTextChanged.connect(
-            lambda : (
-                self.update_reference_widgets(),
-                self.update_cache_data(),
-                self.update_1D_graph(),
-                self.update_2D_raw(),
-                self.update_2D_reshape_map(),
-                self.update_2D_q(new_data=False),
-            )
-        )
+        # self.combobox_reffolder.currentTextChanged.connect(
+        #     lambda : (
+        #         self.update_reference_widgets(),
+        #         self.update_cache_data(),
+        #         self.update_1D_graph(),
+        #         self.update_2D_raw(),
+        #         self.update_2D_reshape_map(),
+        #         self.update_2D_q(new_data=False),
+        #     )
+        # )
 
         self.checkbox_auto_reffile.stateChanged.connect(
             lambda : (
@@ -397,48 +369,22 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.listwidget_folders.itemClicked.connect(self.listfolders_clicked)
 
         #########################
-        # Combobox header items updates its lineedit
-        #########################
-        # self.combobox_headeritems.currentTextChanged.connect(
-        #     lambda: (
-        #         le.insert(
-        #             self.lineedit_headeritems,
-        #             cb.value(self.combobox_headeritems)
-        #         ),
-        #     )  
-        # )
-        # self.combobox_multi.textActivated.connect(self.cb_multi_activated)
-        #     lambda: (
-        #         le.insert(
-        #             self.lineedit_headeritems,
-        #             cb.value(self.combobox_headeritems)
-        #         ),
-        #     )  
-        # )
-
-        #########################
         # Lineedit_items header updates the table of files
         #########################
 
-        # self.lineedit_headeritems.textChanged.connect(
-        #     lambda: self.update_table(
-        #         reset=True,
-        #     )
-        # )
-
         # Click on the table updates the chart
-        self.table_files.itemSelectionChanged.connect(
-            lambda : (
-                self.update_clicked_filenames(),
-                self.update_cache_data(),
-                self.update_1D_graph(),
-                self.update_2D_raw(),
-                self.update_2D_reshape_map(),
-                self.update_2D_q(),
-                self.update_label_displayed(),
-            )
+        self.table_files.itemSelectionChanged.connect(self.table_clicked)
+        #     lambda : (
+        #         self.update_clicked_filenames(),
+        #         self.update_cache_data(),
+        #         self.update_1D_graph(),
+        #         self.update_2D_raw(),
+        #         self.update_2D_reshape_map(),
+        #         self.update_2D_q(),
+        #         self.update_label_displayed(),
+        #     )
 
-        )
+        # )
 
         # Combobox_integrations, updates its corresponding lineedit
         self.combobox_integration.currentTextChanged.connect(
@@ -569,39 +515,29 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         ### PONIFILE PARAMETERS
         #########################
-        # self.checkbox_poni_mod.stateChanged.connect(
+        self.checkbox_poni_mod.stateChanged.connect(self.disable_ponifile_mod)
+
+        self.button_update_old_poni_parameters.clicked.connect(self.retrieve_old_poni_clicked)
+
+        self.button_update_poni_parameters.clicked.connect(self.update_poni_clicked)
         #     lambda : (
-        #         self.disable_ponifile_mod(),
+        #         self.update_ponifile_parameters(
+        #             dict_poni=self.get_poni_dict_from_widgets(),
+        #         ),
+        #         self.update_2D_q(),
+        #         self.update_1D_graph(),
         #     )
         # )
 
-        self.button_update_old_poni_parameters.clicked.connect(
-            lambda : (
-                self.update_ponifile_widgets(
-                    dict_poni=self._dict_poni_cache,
-                )
-            )
-        )
-
-        self.button_update_poni_parameters.clicked.connect(
-            lambda : (
-                self.update_ponifile_parameters(
-                    dict_poni=self.get_poni_dict_from_widgets(),
-                ),
-                self.update_2D_q(),
-                self.update_1D_graph(),
-            )
-        )
-
-        self.button_save_poni_parameters.clicked.connect(
-            lambda : (
-                self.update_dict_poni_cache(),
-                self.save_poni_dict(
-                    dict_poni=self._dict_poni_cache,
-                ),
-                self.search_and_update_ponifiles_widgets(),
-            )
-        )
+        self.button_save_poni_parameters.clicked.connect(self.save_poni_clicked)
+        #     lambda : (
+        #         self.update_dict_poni_cache(),
+        #         self.save_poni_dict(
+        #             dict_poni=self._dict_poni_cache,
+        #         ),
+        #         self.search_and_update_ponifiles_widgets(),
+        #     )
+        # )
 
     @log_info
     def reset_attributes_and_widgets(self) -> None:
@@ -635,7 +571,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         le.clear(self.lineedit_headeritems_title)
         self.graph_1D_widget.clear()
         self.graph_raw_widget.clear()
-        print(3)
 
         self.write_terminal_and_logger(MSG_RESET_DATA)
 
@@ -653,12 +588,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         None
         """
+        combobox = self.combobox_h5_files
+
         json_files = H5_FILES_PATH.rglob("*.json")
         json_list_names = [file.name for file in json_files]
         json_list_names.insert(0, " ")
 
         cb.insert_list(
-            combobox=self.combobox_h5_files,
+            combobox=combobox,
             list_items=json_list_names,
             reset=True,
         )
@@ -695,18 +632,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Returns:
         defaultdict: with the correct keys for setup dictionary and values read from lineedits in GUI
         """
-        new_setup_dict = get_empty_setup_dict()
+        new_setup_dict = defaultdict(str)
+        name = le.text(self.lineedit_setup_name)
+        iangle_key = le.text(self.lineedit_angle)
+        tangle_key = le.text(self.lineedit_tilt_angle)
+        norm_key = le.text(self.lineedit_normfactor)
+        acq_key = le.text(self.lineedit_exposure)
 
-        list_lineedits = [
-            self.lineedit_setup_name,
-            self.lineedit_angle,
-            self.lineedit_tilt_angle,
-            self.lineedit_normfactor,
-            self.lineedit_exposure,
-        ]
-
-        for key, lineedit in zip(new_setup_dict.keys(), list_lineedits):
-            new_setup_dict[key] = le.text(lineedit)
+        new_setup_dict[NAME_METADATA_KEY] = name
+        new_setup_dict[INCIDENT_ANGLE_KEY] = iangle_key
+        new_setup_dict[TILT_ANGLE_KEY] = tangle_key
+        new_setup_dict[NORMALIZATION_KEY] = norm_key
+        new_setup_dict[ACQUISITION_KEY] = acq_key
 
         return new_setup_dict
 
@@ -846,8 +783,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         dict_metadata = self.fetch_dict_metadata()
 
         # Update the attributes in the .h5 file
-        self.h5.update_setup_keys(
-            dict_keys=dict_metadata,
+        self.h5.update_metadata_keys(
+            dict_metadata_keys=dict_metadata,
         )
 
         # Update the Metadata widgets
@@ -1022,7 +959,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         az_bins = int(az_bins)
         dict_cake[CAKE_KEY_ABINS] = az_bins
 
-        dict_cake[CAKE_KEY_INTEGRATION] = CAKE_LABEL
+        dict_cake[KEY_INTEGRATION] = CAKE_LABEL
 
         return dict_cake
 
@@ -1081,7 +1018,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         dict_box[BOX_KEY_OUTPUT_UNIT] = output_unit
         dict_box[BOX_KEY_INPUT_UNIT] = input_unit
 
-        dict_box[BOX_KEY_INTEGRATION] = BOX_LABEL
+        dict_box[KEY_INTEGRATION] = BOX_LABEL
 
         return dict_box
 
@@ -1126,9 +1063,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.update_2D_q(new_data=False)
             self.update_1D_graph()
 
-
-
-
     @log_info
     def pick_maindir_clicked(self,_):
         # Get the address of a root directory
@@ -1143,27 +1077,30 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if not h5_filename:
             return
 
-        # Fetch a metadata key from the widgets
-        # dict_metadata = self.fetch_dict_metadata()
-
         # Create the H5 instance from a root directory
-        if not self.create_h5_instance(
-            h5_filename=str(h5_filename),
-            root_directory=str(root_directory),
-            # dict_keys_metadata=dict_metadata,
-            qz_parallel=self.state_qz,
-            qr_parallel=self.state_qr,
-            overwrite=True,
+        if not self.init_h5_instance(
+            root_directory=root_directory,
+            output_filename_h5=h5_filename,
+            input_filename_h5=None,
             ):
             return
 
-        # Feed the h5 file with .poni files
-        self.h5.search_and_update_ponifiles(return_list=False)
+        # Feed data files and ponifiles within the h5 instance
+        self.h5.update_datafiles(search=True)
+        self.h5.update_ponifiles(search=True)
 
-        # Feed the h5 file with data files
-        self.h5.search_and_update_datafiles(
-            pattern=self.get_pattern(),
-        )
+        # Update combobox of ponifiles
+        # self.update_cb_ponifiles(
+        #     from_h5=True,
+        #     reset=True,
+        # )
+
+        # Update list of samples
+        # self.update_listwidget_with_samples(
+        #     listwidget=self.listwidget_folders,
+        #     from_h5=True,
+        #     reset=True,
+        # )
 
         # Save a .json file with the attributes of the new h5 instance
         self.save_h5_dict()
@@ -1171,134 +1108,25 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Update the combobox of h5 files
         self.update_combobox_h5()
 
-
-
-
-
-
-        # self.append_h5file_totxt(h5_path=h5_filename)
-
-        # # Reset and feed the combobox of recent h5 files
-        # recent_h5_files = self.get_recent_h5_files()
-        # cb.insert_list(
-        #     combobox=self.combobox_h5_files,
-        #     list_items=recent_h5_files,
-        #     reset=True,
-        # )
-
     @log_info
-    def create_h5_instance(
+    def init_h5_instance(
         self,
-        h5_filename=str(),
         root_directory=str(),
-        # dict_keys_metadata=dict(),
-        qz_parallel=True,
-        qr_parallel=True,
-        overwrite=True,
+        output_filename_h5=str(),
+        input_filename_h5=str(),
         ):
         try:
             self.h5 = H5GIIntegrator(
-                input_filename_h5=None,
-                output_filename_h5=h5_filename,
                 root_directory=root_directory,
-                # dict_keys_metadata=dict_keys_metadata,
-                qz_parallel=qz_parallel,
-                qr_parallel=qr_parallel,
-                overwrite=overwrite,
+                output_filename_h5=output_filename_h5,
+                input_filename_h5=input_filename_h5,
             )
-            self.write_terminal_and_logger("H5 instance was created from root directory.")
+            self.write_terminal_and_logger("H5 instance was initialized.")
             return True
         except Exception as e:
             self.h5 = None
-            self.write_terminal_and_logger(f"{e}: H5 instance could not be created from root directory: \
-                h5:{h5_filename}, root:{root_directory}")
+            self.write_terminal_and_logger(f"{e}: H5 instance could not be initiliazed.")
             return False
-
-
-
-    # @log_info
-    # def init_h5_instance(
-    #     self,
-    #     h5_filename=str(),
-    #     root_directory=str(),
-    #     dict_keys_metadata=dict(),
-    #     qz_parallel=True,
-    #     qr_parallel=True,
-    #     overwrite=True,
-    #     ):
-    #     try:
-    #         self.h5 = H5GIIntegrator(
-    #             filename_h5=h5_filename,
-    #             root_directory=root_directory,
-    #             dict_keys_metadata=dict_keys_metadata,
-    #             qz_parallel=qz_parallel,
-    #             qr_parallel=qr_parallel,
-    #             overwrite=overwrite,
-    #         )
-    #         self.write_terminal_and_logger("H5 instance was created from root directory.")
-    #         return True
-    #     except Exception as e:
-    #         self.h5 = None
-    #         self.write_terminal_and_logger(f"{e}: H5 instance could not be created from root directory: \
-    #             h5:{h5_filename}, root:{root_directory}, dict_metadata:{dict_keys_metadata}.")
-    #         return
-
-
-
-
-
-
-
-
-
-
-
-    @log_info
-    def create_h5_file(self, root_directory=str()):
-        """
-        Creates an .h5 file as a container of the data within the directory
-
-        Parameters:
-        main_directory (str, Path) : path of the root directory where all the data/metadata will be located recursively
-
-        Return:
-        None
-        """
-        if not root_directory:
-            root_directory = self.pick_root_directory()
-
-        # Generate a filename for the .h5 file
-        h5_filename = self.pick_h5_filename(
-            root_directory=root_directory,
-        )
-
-        if not h5_filename:
-            self.write_terminal_and_logger(ERROR_H5_FILECREATION)
-            return
-
-        # Create the H5 instance, which will create the .h5 file
-        self.h5 = H5GIIntegrator(
-            filename_h5=str(h5_filename),
-            root_directory=str(root_directory),
-            dict_keys_metadata=self._dict_setup,
-            qz_parallel=self.state_qz,
-            qr_parallel=self.state_qr,
-            overwrite=True,
-        )
-
-        # If there was an error, register it
-        if not self.h5:
-            self.write_terminal_and_logger(ERROR_H5_FILECREATION)
-            logger.info(h5_filename)
-            logger.info(str(self.main_directory))
-            logger.info(self._dict_setup)
-            logger.info(self.state_qz)
-            logger.info(self.state_qr)
-            return
-        else:
-            self.write_terminal_and_logger(INFO_H5_CREATION)
-            logger.info(f"sPonifile: {self.active_ponifile}. Keys_metadata: {self._dict_setup}.")
-            self.reset_attributes_and_widgets()
 
     @log_info
     def pick_h5_filename(self, root_directory=str()):
@@ -1511,51 +1339,54 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
     def cb_h5_changed(self, json_name):
         # Return if empty
         if not json_name:
+            self.reset_attributes_and_widgets()
             return
 
         # Fetch the full filename
         json_filename = H5_FILES_PATH.joinpath(json_name)
         try:
             dict_h5 = open_json(json_filename)
-            filename_h5 = dict_h5["Filename"]
         except Exception as e:
             self.write_terminal_and_logger(f"{e}: The .json does not contain a valid filename: {json_filename}")
             return
 
         # Check if this file still exists
+        filename_h5 = dict_h5[FILENAME_H5_KEY]
         if not Path(filename_h5).is_file():
             self.write_terminal_and_logger(f"The file {filename_h5} does not exists.")
             return
         
         # Create the h5 instance from an existing .h5 file
-        # dict_metadata = self.fetch_dict_metadata()
         self.init_h5_instance(
-            filename_h5=filename_h5,
-            # dict_metadata=dict_metadata,
-            qz_parallel=self.state_qz,
-            qr_parallel=self.state_qr,
+            input_filename_h5=filename_h5,
         )
         if not self.h5:
             return
+        
+        # Update label
+        le.substitute(
+            lineedit=self.lineedit_h5file_1,
+            new_text=str(filename_h5),
+        )
 
         # Update plain text with h5 information
         self.update_h5_plaintext()
 
-
-        # Feed combobox with ponifiles from the .h5
-        ponifiles_from_h5 = self.h5.generate_ponifiles()
-        ponifiles_from_h5 = sorted(filter(None, ponifiles_from_h5))
-        cb.insert_list(
-            combobox=self.combobox_ponifile,
-            list_items=ponifiles_from_h5,
+        # Update combobox of ponifiles
+        self.update_cb_ponifiles(
+            from_h5=True,
             reset=True,
         )
 
-        # Feed the listfolder widget
-        samples_from_h5 = sorted(self.h5.generator_samples())
-        lt.insert_list(
+        # Update list of samples and reference combobox
+        self.update_listwidget_with_samples(
             listwidget=self.listwidget_folders,
-            item_list=samples_from_h5,
+            from_h5=True,
+            reset=True,
+        )
+        self.update_combobox_with_samples(
+            combobox=self.combobox_reffolder,
+            from_h5=True,
             reset=True,
         )
 
@@ -1563,210 +1394,124 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
     def update_h5_plaintext(self):
         self.h5_plaintext.clear()
         if self.h5:
-            d = self.h5.get_attrs()
+            d = self.h5.get_dict_attrs()
             for k,v in d.items():
                 self.h5_plaintext.appendPlainText(f"{str(k)} : {str(v)}\n")
 
+    # @log_info
+    # def set_h5_instance(self, filename_h5=str()):
+    #     """
+    #     Creates an instance of H5Integrator after the name of the file
 
-    @log_info
-    def init_h5_instance(
-        self, 
-        filename_h5=str(), 
-        # dict_metadata=dict(),
-        qz_parallel=True, 
-        qr_parallel=True,
-        ):
-        try:
-            self.h5 = H5GIIntegrator(
-                input_filename_h5=filename_h5,
-                # filename_h5=filename_h5,
-                # dict_keys_metadata=dict_metadata,
-                qz_parallel=qz_parallel,
-                qr_parallel=qr_parallel,
-            )
-            self.reset_attributes_and_widgets()
-            self.write_terminal_and_logger(f"H5 instance was initialized.")
-            return True
-        except Exception as e:
-            self.h5 = None
-            self.write_terminal_and_logger(f"{e}: H5 instance could not be created: {filename_h5}.")
-            return False
+    #     Parameters:
+    #     filename_h5(str, Path) : path of the .h5 file
 
+    #     Returns:
+    #     None
+    #     """
 
-
-        # If new h5 instance was created, reset GUI
+    #     Check if the file exists
+    #     if Path(filename_h5).is_file():
+    #         filename_h5 = str(filename_h5)
+    #         parent_h5 = Path(filename_h5).parent
+    #     else:
+    #         self.write_terminal_and_logger(ERROR_H5_FILENOTFOUND)
+    #         return
         
-
-        # New main directory
-        # self.set_main_directory(
-        #     new_main_directory=parent_h5,
-        # )
-
-
-
-
-    @log_info
-    def set_h5_instance(self, filename_h5=str()):
-        """
-        Creates an instance of H5Integrator after the name of the file
-
-        Parameters:
-        filename_h5(str, Path) : path of the .h5 file
-
-        Returns:
-        None
-        """
-
-        # Check if the file exists
-        if Path(filename_h5).is_file():
-            filename_h5 = str(filename_h5)
-            parent_h5 = Path(filename_h5).parent
-        else:
-            self.write_terminal_and_logger(ERROR_H5_FILENOTFOUND)
-            return
+    #     Create the H5Integrator instance
+    #     self.h5 = H5GIIntegrator(
+    #         filename_h5=filename_h5,
+    #         dict_keys_metadata=self._dict_setup,
+    #         qz_parallel=self.state_qz,
+    #         qr_parallel=self.state_qr,
+    #     )
         
-        # Create the H5Integrator instance
-        self.h5 = H5GIIntegrator(
-            filename_h5=filename_h5,
-            dict_keys_metadata=self._dict_setup,
-            qz_parallel=self.state_qz,
-            qr_parallel=self.state_qr,
-        )
-        
-        # If self.h5 is None, register
-        if not self.h5:
-            self.write_terminal_and_logger(ERROR_H5_INSTANCE)
-            logger.info(filename_h5)
-            logger.info(self._dict_setup)
-            logger.info(self.state_qz)
-            logger.info(self.state_qr)
-            return
+    #     If self.h5 is None, register
+    #     if not self.h5:
+    #         self.write_terminal_and_logger(ERROR_H5_INSTANCE)
+    #         logger.info(filename_h5)
+    #         logger.info(self._dict_setup)
+    #         logger.info(self.state_qz)
+    #         logger.info(self.state_qr)
+    #         return
 
-        # If new h5 instance was created, reset GUI
-        self.reset_attributes_and_widgets()
+    #     If new h5 instance was created, reset GUI
+    #     self.reset_attributes_and_widgets()
 
-        # New main directory
-        self.set_main_directory(
-            new_main_directory=parent_h5,
-        )
+    #     New main directory
+    #     self.set_main_directory(
+    #         new_main_directory=parent_h5,
+    #     )
 
-    @log_info
-    def set_main_directory(self, new_main_directory=str()):
-        """
-        Returns the new main directory, which is the path where the H5 instance is searching files
+    # @log_info
+    # def set_main_directory(self, new_main_directory=str()):
+    #     """
+    #     Returns the new main directory, which is the path where the H5 instance is searching files
 
-        Parameters:
-        new_main_directory(str, Path) : directory of the new h5 file
+    #     Parameters:
+    #     new_main_directory(str, Path) : directory of the new h5 file
 
-        Return:
-        None
-        """
-        # Try to set the new string
-        try:
-            self.main_directory = Path(new_main_directory)
-        except NotImplementedError:
-            self.main_directory = ""
-            self.write_terminal_and_logger(ERROR_MAINDIR)
-            logger.info(str(new_main_directory))
-            return
+    #     Return:
+    #     None
+    #     """
+    #     # Try to set the new string
+    #     try:
+    #         self.main_directory = Path(new_main_directory)
+    #     except NotImplementedError:
+    #         self.main_directory = ""
+    #         self.write_terminal_and_logger(ERROR_MAINDIR)
+    #         logger.info(str(new_main_directory))
+    #         return
 
-        self.write_terminal_and_logger(INFO_NEW_MAINDIR)
-        self.write_terminal_and_logger(str(new_main_directory))
+    #     self.write_terminal_and_logger(INFO_NEW_MAINDIR)
+    #     self.write_terminal_and_logger(str(new_main_directory))
 
     ##################################################
     ############# PONIFILE METHODS ###################
     ##################################################
 
     @log_info
-    def update_cb_ponifiles(self, ponifile_list=list(), reset=True):
+    def update_cb_ponifiles(
+        self, 
+        from_h5=False, 
+        ponifile_list=list(), 
+        reset=True, 
+        relative_to=True,
+        ):
+        # Combobox
         cb_ponifile = self.combobox_ponifile
 
+        # Add ponifiles from h5 instance
+        if from_h5:
+            if not self.h5:
+                return
+            # Fetch ponifiles from h5 instance
+            ponifiles_in_h5 = self.h5.get_all_ponifiles()
+            ponifile_list = ponifiles_in_h5
+
+        # Make it relative
+        if relative_to:
+            root_dir = Path(self.h5._root_dir)
+            ponifile_list = [str(Path(file).relative_to(root_dir)) for file in ponifile_list]
+
         if reset:
-            cb.clear(cb_ponifile)
-        
-        ponifiles_in_cb = cb.all_items(cb_ponifile)
-        new_ponifiles = [file for file in ponifile_list if file not in ponifiles_in_cb]
-        new_ponifiles = [file for file in new_ponifiles if file]
-        new_ponifiles.sort()
-
-        cb.insert_list(
-            combobox=self.combobox_ponifile,
-            list_items=new_ponifiles,
-            reset=False,
-        )
-
-    @log_info
-    def search_and_update_ponifiles_widgets(self) -> None:
-        """
-        Runs the search engine in the .h5 file for ponifiles and updates the widgets if needed
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
-        # Get the new ponifiles
-        if self.h5:
-            # Search and update the h5
-            self.h5.search_and_update_ponifiles(return_list=False)
-
-            ponifiles_in_cb = set(cb.all_items(self.combobox_ponifile))
-            ponifiles_in_h5 = set(self.h5.generate_ponifiles())
-
-            new_ponifiles = [item for item in ponifiles_in_h5.difference(ponifiles_in_cb)]
-
-            if new_ponifiles:
-                new_ponifiles = [item for item in new_ponifiles if item]
-                new_ponifiles = [str(Path(item).relative_to(self.h5.get_root_directory())) for item in new_ponifiles]
-
-                # Update combobox of ponifiles
-                cb.insert_list(
-                    combobox=self.combobox_ponifile,
-                    list_items=new_ponifiles,
-                    reset=True,
-                )
-                self.write_terminal_and_logger(INFO_H5_PONIFILE_CB_UPDATED)                
+            cb.insert_list(
+                combobox=cb_ponifile,
+                list_items=ponifile_list,
+                reset=True,
+            )
         else:
-            self.write_terminal_and_logger(ERROR_H5_UPDATED)
+            # Filter the new files
+            ponifiles_in_cb = cb.all_items(cb_ponifile)
+            new_ponifiles = [file for file in ponifile_list if file not in ponifiles_in_cb]
+            new_ponifiles = [file for file in new_ponifiles if file]
+            new_ponifiles.sort()
 
-    @log_info
-    def pick_new_ponifile_and_update(self) -> None:
-        """
-        Picks a new ponifile and updates combobox and h5 file
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
-        if self.main_directory:
-            ponifile_path = QFileDialog.getOpenFileNames(self, 'Pick .poni file', str(self.main_directory), "*.poni")
-        else:
-            ponifile_path = QFileDialog.getOpenFileNames(self, 'Pick .poni file', '.', "*.poni")
-        try:
-            ponifile_path = ponifile_path[0][0]
-
-            if self.h5:
-                self.h5.update_sample(
-                    sample_name='Ponifiles',
-                    data_filenames=[ponifile_path],
-                )
-                cb.insert_list(
-                    combobox=self.combobox_ponifile,
-                    list_items=[ponifile_path],
-                    reset=False,
-                )
-                self.write_terminal_and_logger(f"Combobox of ponifiles was updated.")
-                self.write_terminal_and_logger("Picked ponifile was updated.")
-                self.write_terminal_and_logger(ponifile_path)
-        except:
-            self.write_terminal_and_logger("Picked ponifile was not updated.")
-            pass
-
-
-
+            cb.insert_list(
+                combobox=cb_ponifile,
+                list_items=new_ponifiles,
+                reset=False,
+            )
 
     @log_info
     def cb_ponifile_changed(self, poni_name):
@@ -1774,275 +1519,97 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         # Activate the .poni file in the h5 instance
-        self.h5.activate_ponifile(poni_filename=poni_name)
+        poni_filename = str(self.h5._root_dir.joinpath(poni_name) )       
+        self.h5.activate_ponifile(poni_filename=poni_filename)
         
-        # Fetch the filename of the .poni file
-        poni_filename = self.h5.get_root_directory().joinpath(poni_name)
-
         # Check if the .poni file does exist
-        if not poni_filename.is_file():
+        if not Path(poni_filename).is_file():
             self.write_terminal_and_logger(f"The .poni file {str(poni_filename)} does not exist.")
             return
         
         # Update the .poni tab widgets
-        dict_poni = self.fetch_poni_dict_from_h5()
+        dict_poni = self.h5.get_poni_dict()
         self.update_ponifile_widgets(
             dict_poni=dict_poni,
         )
 
-        # Update graphs
-        self.update_1D_graph()
-        self.update_2D_raw()
-        self.update_2D_reshape_map()
-        self.update_2D_q(new_data=False)
+        # # Update graphs
+        # self.update_1D_graph()
+        # self.update_2D_raw()
+        # self.update_2D_reshape_map()
+        # self.update_2D_q(new_data=False)
 
+    # @log_info
+    # def activate_ponifile(self) -> None:
+    #     """
+    #     Activates the ponifile from the combobox
 
+    #     Parameters:
+    #     ponifile_path(str) : string with the full path of the poni file
 
+    #     Returns:
+    #     None
+    #     """
+    #     ponifile_short = cb.value(
+    #         self.combobox_ponifile,
+    #     )
+    #     # ponifile = str(self.h5.get_root_directory().joinpath(Path(ponifile_short)))
+    #     # self.active_ponifile = ponifile
 
-    @log_info
-    def activate_ponifile(self) -> None:
-        """
-        Activates the ponifile from the combobox
+    #     if self.h5:
+    #         try:
+    #             # Activate pyFAI/pygix parameters through h5
+    #             self.h5.activate_ponifile(
+    #                 poni_filename=ponifile_short,
+    #             )
 
-        Parameters:
-        ponifile_path(str) : string with the full path of the poni file
+    #             # Save cache dictionary
+    #             # self.update_poni_cache(
+    #             #     dict_poni=self.fetch_poni_dict_from_h5(),
+    #             # )
 
-        Returns:
-        None
-        """
-        ponifile_short = cb.value(
-            self.combobox_ponifile,
-        )
-        ponifile = str(self.h5.get_root_directory().joinpath(Path(ponifile_short)))
-        self.active_ponifile = ponifile
-
-        if self.h5:
-            try:
-                # Activate pyFAI/pygix parameters through h5
-                self.h5.activate_ponifile(
-                    poni_filename=self.active_ponifile,
-                )
-
-                # Save cache dictionary
-                self.update_poni_cache(
-                    dict_poni=self.fetch_poni_dict_from_h5(),
-                )
-
-                self.write_terminal_and_logger(MSG_PONIFILE_UPDATED)
-            except:
-                self.write_terminal_and_logger(MSG_PONIFILE_ERROR)
-        else:
-            self.write_terminal_and_logger(MSG_PONIFILE_ERROR)
+    #             self.write_terminal_and_logger(MSG_PONIFILE_UPDATED)
+    #         except:
+    #             self.write_terminal_and_logger(MSG_PONIFILE_ERROR)
+    #     else:
+    #         self.write_terminal_and_logger(MSG_PONIFILE_ERROR)
 
     @log_info
-    def update_poni_cache(self, dict_poni=dict()):
-        """
-        Update the cache dictionary with poni parameters
-        """
+    def retrieve_old_poni_clicked(self,_):
         if not self.h5:
             return
-        try:
-            version = dict_poni[PONI_KEY_VERSION]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Version could not be retrieved from dictionary.")
-            return
-        try:
-            detector_name = dict_poni[PONI_KEY_DETECTOR]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Detector could not be retrieved from dictionary.")
-            return
-        try:
-            detector_bin = dict_poni[PONI_KEY_BINNING]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Detector could not be retrieved from dictionary.")
-            return
-        try:
-            wave = dict_poni[PONI_KEY_WAVELENGTH]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Wavelength could not be retrieved from dictionary.")
-            return
-        try:
-            dist = dict_poni[PONI_KEY_DISTANCE]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Distance could not be retrieved from dictionary.")
-            return
-        try:
-            pixel1 = dict_poni[PONI_KEY_PIXEL1]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Pixel 1 could not be retrieved from dictionary.")
-            return
-        try:
-            pixel2 = dict_poni[PONI_KEY_PIXEL2]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Pixel 2 could not be retrieved from dictionary.")
-            return
-        try:
-            shape1 = dict_poni[PONI_KEY_SHAPE1]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Shape 1 could not be retrieved from dictionary.")
-            return
-        try:
-            shape2 = dict_poni[PONI_KEY_SHAPE2]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Shape 2 could not be retrieved from dictionary.")
-            return
-        try:
-            poni1 = dict_poni[PONI_KEY_PONI1]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: PONI 1 could not be retrieved from dictionary.")
-            return
-        try:
-            poni2 = dict_poni[PONI_KEY_PONI2]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: PONI 2 could not be retrieved from dictionary.")
-            return
-        try:
-            rot1 = dict_poni[PONI_KEY_ROT1]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Rotation 1 could not be retrieved from dictionary.")
-            return
-        try:
-            rot2 = dict_poni[PONI_KEY_ROT2]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Rotation 2 could not be retrieved from dictionary.")
-            return
-        try:
-            rot3 = dict_poni[PONI_KEY_ROT3]
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Rotation 3 could not be retrieved from dictionary.")
-            return
-
-        self._dict_poni_cache[PONI_KEY_VERSION] = version
-        self._dict_poni_cache[PONI_KEY_DETECTOR] = detector_name
-        self._dict_poni_cache[PONI_KEY_BINNING] = detector_bin
-        self._dict_poni_cache[PONI_KEY_WAVELENGTH] = wave
-        self._dict_poni_cache[PONI_KEY_DISTANCE] = dist
-        self._dict_poni_cache[PONI_KEY_PIXEL1] = pixel1
-        self._dict_poni_cache[PONI_KEY_PIXEL2] = pixel2
-        self._dict_poni_cache[PONI_KEY_SHAPE1] = shape1
-        self._dict_poni_cache[PONI_KEY_SHAPE2] = shape2
-        self._dict_poni_cache[PONI_KEY_PONI1] = poni1
-        self._dict_poni_cache[PONI_KEY_PONI2] = poni2
-        self._dict_poni_cache[PONI_KEY_ROT1] = rot1
-        self._dict_poni_cache[PONI_KEY_ROT2] = rot2
-        self._dict_poni_cache[PONI_KEY_ROT3] = rot3
-
-        self.write_terminal_and_logger(f"Updated poni cache: {self._dict_poni_cache}")
-
-    @log_info
-    def fetch_poni_dict_from_h5(self) -> dict:
-        """
-        Returns a dictionary with poni parameters retrieved from h5 instance
-        """
-        if not self.h5:
-            return
-        try:
-            detector = self.h5.detector
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Detector could not be retrieved from h5.")
-            return
-        try:
-            detector_config = self.h5.detector.get_config()
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Detector could not be retrieved from h5.")
-            return
-        try:
-            wave = self.h5._wavelength
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Wavelength could not be retrieved from h5.")
-            return
-        try:
-            dist = self.h5._dist
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Distance could not be retrieved from h5.")
-            return
-
-        # Pixel 1
-        try:
-            pixel1 = self.h5.pixel1
-        except Exception as e:
-            pixel1 = None
-            self.write_terminal_and_logger(f"{e}: Pixel 1 could not be retrieved from h5.")
-            return
-        if not pixel1:
-            try:
-                pixel1 = detector_config.pixel1
-            except Exception as e:
-                self.write_terminal_and_logger(f"{e}: Pixel 1 could not be retrieved from h5.")
-                return
-
-        # Pixel 2
-        try:
-            pixel2 = self.h5.pixel2
-        except Exception as e:
-            pixel2 = None
-            self.write_terminal_and_logger(f"{e}: Pixel 2 could not be retrieved from h5.")
-            return
-        if not pixel2:
-            try:
-                pixel2 = detector_config.pixel2
-            except Exception as e:
-                self.write_terminal_and_logger(f"{e}: Pixel 2 could not be retrieved from h5.")
-                return
-
-        # Shape
-        try:
-            shape = self.h5.detector.max_shape
-        except Exception as e:
-            shape = None
-            self.write_terminal_and_logger(f"{e}: Shape could not be retrieved from detector.")
-        if not shape:
-            try:
-                shape = detector_config.max_shape
-            except Exception as e:
-                self.write_terminal_and_logger(f"{e}: Shape could not be retrieved from detector-config.")
-                return
         
-        try:
-            poni1 = self.h5._poni1
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: PONI 1 could not be retrieved from h5.")
+        dict_poni = self.h5.get_poni_dict()
+        self.update_ponifile_widgets(
+            dict_poni=dict_poni,
+        )
+    
+    @log_info
+    def update_poni_clicked(self,_):
+        if not self.h5:
             return
-        try:
-            poni2 = self.h5._poni2
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: PONI 2 could not be retrieved from h5.")
-            return
-        try:
-            rot1 = self.h5._rot1
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Rotation 1 could not be retrieved from h5.")
-            return
-        try:
-            rot2 = self.h5._rot2
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Rotation 2 could not be retrieved from h5.")
-            return
-        try:
-            rot3 = self.h5._rot3
-        except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Rotation 3 could not be retrieved from h5.")
-            return
+        
+        dict_poni = self.get_poni_dict_from_widgets()
+        self.h5.update_ponifile_parameters(
+            dict_poni=dict_poni,
+        )
 
-        poni_dict = {
-            PONI_KEY_VERSION : 2,
-            PONI_KEY_DETECTOR : detector.name,
-            PONI_KEY_BINNING : detector._binning,
-            PONI_KEY_DETECTOR_CONFIG : detector_config,
-            PONI_KEY_WAVELENGTH : wave,
-            PONI_KEY_DISTANCE : dist,
-            PONI_KEY_PIXEL1 : pixel1,
-            PONI_KEY_PIXEL2 : pixel2,
-            PONI_KEY_SHAPE1 : shape[0],
-            PONI_KEY_SHAPE2 : shape[1],
-            PONI_KEY_PONI1 : poni1,
-            PONI_KEY_PONI2 : poni2,
-            PONI_KEY_ROT1 : rot1,
-            PONI_KEY_ROT2 : rot2,
-            PONI_KEY_ROT3 : rot3,
-        }
-        return poni_dict
+    @log_info
+    def save_poni_clicked(self,_):
+        if not self.h5:
+            return
+        
+        # Get a full poni dictionary from the widgets and h5
+        dict_poni = self.get_poni_dict_from_widgets()
 
+        # Save a .poni file
+        self.save_poni_dict(
+            dict_poni=dict_poni,
+        )
+
+        # Update the h5 and combobox
+        self.h5.update_ponifiles(search=True)
+        self.update_cb_ponifiles(from_h5=True)
 
     @log_info
     def get_poni_dict_from_widgets(self) -> dict:
@@ -2087,7 +1654,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.write_terminal_and_logger(f"{e}: Rotation 3 could not be retrieved from widget.")
             return
         
-        dict_poni = self._dict_poni_cache.copy()
+        dict_poni = self.h5.get_poni_dict()
         dict_poni[PONI_KEY_WAVELENGTH] = wave
         dict_poni[PONI_KEY_DISTANCE] = dist
         dict_poni[PONI_KEY_PONI1] = poni1
@@ -2098,7 +1665,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         return dict_poni
         
-
     @log_info
     def update_dict_poni_cache(self) -> dict:
         """
@@ -2156,6 +1722,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         Update the ponifile widgets from a poni dictionary
         """
+        print(dict_poni)
         if not self.h5:
             return
         try:
@@ -2279,7 +1846,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         if not self.h5:
             return
-        ponifile = self.h5.get_active_ponifile()
+        ponifile = str(self.h5.get_active_ponifile())
         ponifile = ponifile.replace(".poni", f"_{date_prefix()}.poni")
 
         with open(ponifile, "w+") as fp:
@@ -2302,8 +1869,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         name_ref_folder = cb.value(self.combobox_reffolder)
 
         # Get the list of files
-        list_ref_files = sorted(self.h5.generator_filenames_in_folder(
-            folder_name=name_ref_folder,
+        list_ref_files = sorted(self.h5.generator_files_in_sample(
+            sample_name=name_ref_folder,
             basename=True,
         ))
         cb.insert_list(
@@ -2362,6 +1929,87 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         pattern = wildcards + extension
         pattern = pattern.replace('**', '*')
         return pattern
+
+    @log_info
+    def update_listwidget_with_samples(
+        self, 
+        listwidget,
+        from_h5=False, 
+        list_samples=list(),
+        reset=True,
+        relative_to=True,
+        ):
+        
+        # Add samples from h5 instance
+        if from_h5:
+            if not self.h5:
+                return
+            # Fetch samples from h5 instance
+            samples_in_h5 = self.h5.get_all_samples()
+            list_samples = samples_in_h5
+        
+        # Make it relative
+        if relative_to:
+            root_dir = Path(self.h5._root_dir)
+            list_samples = [str(Path(file).relative_to(root_dir)) for file in list_samples]
+
+        if reset:
+            lt.insert_list(
+                listwidget=listwidget,
+                item_list=list_samples,
+                reset=True,
+            )
+        else:
+            # Filter the new files
+            samples_in_widget = lt.all_items(listwidget=listwidget)
+            new_samples = [s for s in list_samples if s not in samples_in_widget]
+            new_samples = [s for s in new_samples if s]
+            new_samples.sort()
+            lt.insert_list(
+                listwidget=listwidget,
+                item_list=new_samples,
+                reset=False,
+            )
+
+    @log_info
+    def update_combobox_with_samples(
+        self, 
+        combobox=None,
+        from_h5=False, 
+        list_samples=list(),
+        reset=True,
+        relative_to=True,
+        ):
+
+        # Add samples from h5 instance
+        if from_h5:
+            if not self.h5:
+                return
+            # Fetch samples from h5 instance
+            samples_in_h5 = self.h5.get_all_samples()
+            list_samples = samples_in_h5
+        # Make it relative
+        if relative_to:
+            root_dir = Path(self.h5._root_dir)
+            list_samples = [str(Path(file).relative_to(root_dir)) for file in list_samples]
+
+        if reset:
+            cb.insert_list(
+                combobox=combobox,
+                list_items=list_samples,
+                reset=True,
+            )
+        else:
+            # Filter the new files
+            samples_in_widget = cb.all_items(combobox=combobox)
+            new_samples = [s for s in list_samples if s not in samples_in_widget]
+            new_samples = [s for s in new_samples if s]
+            new_samples.sort()
+            cb.insert_list(
+                combobox=combobox,
+                list_items=new_samples,
+                reset=False,
+            )
 
     @log_info
     def open_pyFAI_calib2(self) -> None:
@@ -2501,11 +2149,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         # Get the output name for the .json
-        name_json = self.h5.get_name().replace(".h5", ".json")
+        name_json = self.h5._name.replace(".h5", ".json")
         filename_out = H5_FILES_PATH.joinpath(f"{name_json}")
 
         # Fetch the dictionary of attributes from the h5 instance
-        dict_h5 = self.h5.get_attrs()
+        dict_h5 = self.h5.get_dict_attrs()
 
         # Save the dictionary as a .json file
         with open(filename_out, 'w+') as fp:
@@ -2792,12 +2440,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
     @log_info
     def listfolders_clicked(self, clicked_folder_name):
+        if not self.h5:
+            return
+        
         # Fetch the name of the integration
         clicked_folder_name = clicked_folder_name.text()
 
+        # Get the full filename
+        # full_samplename = self.h5._root_dir.joinpath(clicked_folder_name)
+
         # Check if there is a Sample with that name in the .h5
-        if not self.does_sample_exist(sample_name=clicked_folder_name):
-            return
+        # if not self.does_sample_exist(sample_name=full_samplename):
+        #     return
 
         # Update the metadata combobox if needed
         self.check_and_update_cb_metadata(
@@ -2807,7 +2461,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Reset and feed the table widget with default metadata keys if needed
         displayed_metadata_keys = self.combobox_multi.currentData()
         if not displayed_metadata_keys:
-            metadata_keys = self.h5.get_metadata_keys()
+            metadata_keys = self.h5.get_metadata_dict()
             self.mark_metadata_keys(metadata_keys)
 
         self.update_table(
@@ -2829,17 +2483,21 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         sample_name = lt.click_values(self.listwidget_folders)
         return sample_name
 
-    @log_info
-    def does_sample_exist(self, sample_name=str()) -> bool:
-        if not self.h5:
-            return
+    # @log_info
+    # def does_sample_exist(self, sample_name=str()) -> bool:
+    #     if not self.h5:
+    #         return
 
-        if not self.h5.contains_group(sample_name):
-            self.write_terminal_and_logger("The Sample does not exist in the .h5.")
-            return False
-        else:
-            self.write_terminal_and_logger(f"New active Sample: {sample_name}")
-            return True
+    #     full_samplename = f"{self._root}"
+    #     if not self.h5.contains_group(
+    #         group_address=SAMPLE_GROUP_KEY,
+    #         folder_name=sample_name,
+    #     ):
+    #         self.write_terminal_and_logger("The Sample does not exist in the .h5.")
+    #         return False
+    #     else:
+    #         self.write_terminal_and_logger(f"New active Sample: {sample_name}")
+    #         return True
 
 
     # @log_info
@@ -2873,14 +2531,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             sample_name = self.active_sample()
 
         # Fetch the list of metadata keys in that sample
-        metadata_keys = sorted(
-            self.h5.generator_keys_in_folder(
-                folder_name=sample_name,
-            )
-        )
+        metadata_keys = self.h5.get_all_metadata_keys_from_sample(sample_name=sample_name)
 
         # Update the comboboxes if it is different
-        metadata_keys_displayed = cb.all_items(self.combobox_headeritems)
+        metadata_keys_displayed = cb.all_items(self.combobox_multi)
 
         if metadata_keys != metadata_keys_displayed:
             self.update_comboboxes_metadata_items(
@@ -2991,14 +2645,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
     @log_info
-    def update_cache_data(
-        self, 
-        # new_data=True, 
-        # update_ref=False,         
-        ):
-        if not self.clicked_folder or not self.cache_index:
-            return
-
+    def update_cache_data(self):  
         # Take the new data from new folder/index
         data = self.get_clicked_data()
 
@@ -3057,7 +2704,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 )
 
             data_ref = self.h5.get_Edf_data(
-                folder_name=reference_folder_name,
+                sample_name=reference_folder_name,
                 index_list=index_ref,
                 normalized=True,
             )
@@ -3092,7 +2739,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 for index, exp_ref in enumerate(acq_ref_dataset):
                     if exp_ref == acq_time_file:
                         full_reference_filename = self.h5.get_filename_from_index(
-                            folder_name=folder_ref,
+                            sample_name=folder_ref,
                             index_list=index,
                         )
                         logger.info(f"Auto reference file: {full_reference_filename}")
@@ -3200,7 +2847,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if not self.clicked_folder or not self.cache_index:
             return
         new_label = self.h5.get_filename_from_index(
-            folder_name=self.clicked_folder,
+            sample_name=self.clicked_folder,
             index_list=self.cache_index,
         )
         logger.info(f"New label: {new_label}")
@@ -3287,9 +2934,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if self.tab_chart_widget.currentIndex() != INDEX_TAB_1D_INTEGRATION:
             return
 
-        logger.info(f"Ponifile: {self.active_ponifile}")
-        if not self.active_ponifile:
-            return
+        # logger.info(f"Ponifile: {self.h5.get_active_ponifile()}")
+        # if not self.active_ponifile:
+        #     return
             
         list_integration_names = le.get_clean_list(
             lineedit=self.lineedit_integrations,
@@ -3405,9 +3052,23 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.combobox_multi.markItems(metadata_keys)
 
 
-    # @log_info
-    # def cb_multi_activated(self,_):
-    #     print("holaaa")
+    @log_info
+    def table_clicked(self):
+        # Save the clicked index of clicked data
+        self.cache_index = tm.selected_rows(self.table_files)
+        logger.info(f"New index {self.cache_index}")
+
+        # Update data cache
+        self.update_cache_data()
+
+
+        self.update_1D_graph(),
+        self.update_2D_raw(),
+        self.update_2D_reshape_map(),
+        self.update_2D_q(),
+        self.update_label_displayed(),
+
+
 
 
     @log_info
@@ -3451,10 +3112,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         try:
             dataframe = self.h5.get_metadata_dataframe(
-                folder_name=sample_name,
+                sample_name=sample_name,
                 list_keys=keys_to_display,
             )
-            logger.info(f"Dataframe: {type(dataframe)}.")       
+            logger.info(f"Dataframe: {type(dataframe)}.")      
+            print(dataframe) 
         except:
             return
 
@@ -3474,7 +3136,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         logger.info(f"Inserted rows: {len(dataframe)}")
 
         # Add the new key values for every file
-        for ind_row, _ in enumerate(dataframe['Filename']):
+        for ind_row, _ in enumerate(dataframe[FILENAME_KEY]):
             for ind_column, key in enumerate(dataframe):
                 try:
                     tm.update_cell(
@@ -3512,15 +3174,18 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         Return a normalized array using the cache index and clicked folder
         """
-        current_folder = self.clicked_folder
+        current_sample = self.active_sample()
         current_index = self.cache_index
 
-        data = self.h5.get_Edf_data(
-            folder_name=current_folder,
-            index_list=current_index,
-            normalized=normalized,
-        )
-
+        try:
+            data = self.h5.get_Edf_data(
+                sample_name=current_sample[0],
+                index_list=current_index,
+                normalized=normalized,
+            )
+        except Exception as e:
+            logger.info(f"{e}: Data could not be retrieved with sample {current_sample} and index {current_index}.")
+            data = None
         return data
 
     @log_info
@@ -3539,16 +3204,17 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             row=row_index,
             column=0
         )
+        return clicked_filename
 
-        full_filename = self.main_directory.joinpath(
-            self.clicked_folder,
-            clicked_filename,
-        )
+        # full_filename = self.main_directory.joinpath(
+        #     self.clicked_folder,
+        #     clicked_filename,
+        # )
 
-        if full_filename.is_file():
-            return full_filename
-        else:
-            return
+        # if full_filename.is_file():
+        #     return full_filename
+        # else:
+        #     return
 
     @log_info
     def update_2D_reshape_map(self, data=None):

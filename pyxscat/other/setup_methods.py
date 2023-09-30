@@ -5,6 +5,11 @@ from collections import defaultdict
 import json
 from pyxscat.gui import SETUP_PATH
 
+NAME_METADATA_KEY = "name"
+INCIDENT_ANGLE_KEY = 'iangle_key'
+TILT_ANGLE_KEY = 'tilt_key'
+ACQUISITION_KEY = 'acq_key'
+NORMALIZATION_KEY = 'norm_key'
 
 # DIRECTORY_SETUPS = join(dirname(__file__), 'setup')
 KEYS_SETUP_DICTIONARY = ['Name', 'Angle', 'Tilt angle', 'Norm', 'Exposure']
