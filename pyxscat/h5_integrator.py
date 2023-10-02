@@ -172,6 +172,8 @@ class H5GIIntegrator(Transform):
         super().__init__()
         logger.info("Inherited methods from pygix.transform")
 
+        self.active_ponifile = ''
+
     @property
     def _open_r(self):
         """
@@ -692,10 +694,10 @@ class H5GIIntegrator(Transform):
                 norm_factor = 1.0
 
         else:
-            logger.info("Failed while getting norm factor.")
+            logger.error("Failed while getting norm factor. Norm. factor set to 1.0.")
             norm_factor = 1.0
 
-        logger.info(f"Got norm factor: {norm_factor}")
+        logger.info(f"Norm factor: {norm_factor}")
         return norm_factor
 
 
@@ -717,13 +719,38 @@ class H5GIIntegrator(Transform):
             searched_ponifiles = self._root_dir.rglob("*.poni")
             searched_ponifiles = [str(file) for file in searched_ponifiles]
             searched_ponifiles.sort()
+            logger.info(f"Found {len(searched_ponifiles)} .poni files in {self._root_dir}.")
         except Exception as e:
-            logger.info(f"{e}: there was an error during searching ponifiles in {self._root_dir}.")
+            logger.error(f"{e}: there was an error during searching ponifiles in {self._root_dir}.")
             return
         return searched_ponifiles
 
     @log_info
-    def update_ponifiles(self, group_address=PONI_GROUP_KEY, ponifile_list=list(), search=False):
+    def update_ponifiles(
+        self,
+        group_address=PONI_GROUP_KEY, 
+        ponifile_list=list(), 
+        search=False,
+        relative_to_root=True,
+        ):
+        self._open
+        self._update_ponifiles(
+            group_address=group_address,
+            ponifile_list=ponifile_list,
+            search=search,
+            relative_to_root=relative_to_root,
+        )
+        self._close
+
+
+    @log_info
+    def _update_ponifiles(
+        self,
+        group_address='.', 
+        ponifile_list=list(), 
+        search=False,
+        relative_to_root=True,
+        ):
         """
         Creates/updates the dataset of ponifiles at the first level of hierarchy
 
@@ -733,9 +760,6 @@ class H5GIIntegrator(Transform):
         Returns:
         None
         """
-        # Opens the h5 File
-        self._open_w
-
         # Creates the dataset for ponifiles if needed
         if not self._file[group_address].__contains__(PONIFILE_KEY):
             self._file[group_address].create_dataset(
@@ -749,18 +773,18 @@ class H5GIIntegrator(Transform):
             )
             logger.info("Ponifile dataset was created.")
 
-        # Creates the dataset for active ponifile if needed
-        if not self._file[group_address].__contains__(PONIFILE_ACTIVE_KEY):
-            self._file[group_address].create_dataset(
-                PONIFILE_ACTIVE_KEY, 
-                data=np.array([str().encode()]), 
-                # compression="gzip", 
-                # chunks=True, 
-                maxshape=(None,),
-                # dtype=h5py.string_dtype(encoding='utf-8'),
-                dtype=h5py.string_dtype(),
-            )
-            logger.info("Active_ponifile dataset was created.")
+        # # Creates the dataset for active ponifile if needed
+        # if not self._file[group_address].__contains__(PONIFILE_ACTIVE_KEY):
+        #     self._file[group_address].create_dataset(
+        #         PONIFILE_ACTIVE_KEY, 
+        #         data=np.array([str().encode()]), 
+        #         # compression="gzip", 
+        #         # chunks=True, 
+        #         maxshape=(None,),
+        #         # dtype=h5py.string_dtype(encoding='utf-8'),
+        #         dtype=h5py.string_dtype(),
+        #     )
+        #     logger.info("Active_ponifile dataset was created.")
 
         # Searches if requested
         if search:
@@ -774,6 +798,10 @@ class H5GIIntegrator(Transform):
         # Make a list if there is only one item
         if isinstance(ponifile_list, str):
             ponifile_list = [ponifile_list]
+
+        # Make them relative to root if required
+        if relative_to_root:
+            ponifile_list = [str(Path(file).relative_to(self._root_dir)) for file in ponifile_list]
 
         # Take only the new files
         stored_ponifiles = list(self.generate_ponifiles())
@@ -798,11 +826,8 @@ class H5GIIntegrator(Transform):
             except:
                 logger.info(f"Ponifile {ponifile} could not be updated.")
 
-        # Close the h5
-        self._close
-
     @log_info
-    def activate_ponifile(self, poni_filename=str()) -> None:
+    def activate_ponifile(self, poni_filename=str(), relative_to_root=True) -> None:
         """
         Updates the dataset with the active ponifile.
 
@@ -811,7 +836,7 @@ class H5GIIntegrator(Transform):
         """        
         if not poni_filename:
             return
-        
+
         # Open the h5 File
         self._open_w
 
@@ -819,14 +844,21 @@ class H5GIIntegrator(Transform):
         stored_ponifiles = list(self.generate_ponifiles())
         if poni_filename not in stored_ponifiles:
             logger.info(f"Ponifile {poni_filename} is not stored in the .h5")
+            self.active_ponifile = None
             return
 
-        try:
-            poni_filename = str(poni_filename).encode(ENCODING_FORMAT)
-            self._file[PONI_GROUP_KEY][PONIFILE_ACTIVE_KEY][0] = poni_filename
-            logger.info(f"Ponifile {poni_filename} activated successfully.")
-        except Exception as e:
-            logger.info(f"{e}: Ponifile {poni_filename} could not be activated.")
+        # Build the whole name if relative_to_root
+        if relative_to_root:
+            self.active_ponifile = str(self._root_dir.joinpath(poni_filename))
+        else:
+            self.active_ponifile = str(poni_filename)     
+
+        # try:
+        #     poni_filename = str(poni_filename).encode(ENCODING_FORMAT)
+        #     self._file[PONI_GROUP_KEY][PONIFILE_ACTIVE_KEY][0] = poni_filename
+        #     logger.info(f"Ponifile {poni_filename} activated successfully.")
+        # except Exception as e:
+        #     logger.error(f"{e}: Ponifile {poni_filename} could not be activated.")
 
         # Close the h5 file
         self._close
@@ -834,37 +866,37 @@ class H5GIIntegrator(Transform):
         # Update the GrazingGeometry instance
         self.update_grazinggeometry()
 
-    @log_info
-    def get_active_ponifile(self) -> Path:
-        """
-        Returns the active ponifile string from the dataset at the first level of hierarchy
+    # @log_info
+    # def get_active_ponifile(self) -> Path:
+    #     """
+    #     Returns the active ponifile string from the dataset at the first level of hierarchy
 
-        Returns:
-            Path of the active ponifile
-        """        
-        try:
-            ponifile_active = self._file[PONI_GROUP_KEY][PONIFILE_ACTIVE_KEY][()][0]
-        except Exception as e:
-            logger.info(f"{e}: active ponifile could not be retrieved. Trying to open the file...")
-            ponifile_active =None
+    #     Returns:
+    #         Path of the active ponifile
+    #     """        
+    #     try:
+    #         ponifile_active = self._file[PONI_GROUP_KEY][PONIFILE_ACTIVE_KEY][()][0]
+    #     except Exception as e:
+    #         logger.info(f"{e}: active ponifile could not be retrieved. Trying to open the file...")
+    #         ponifile_active =None
         
-        # Try after opening the h5 File
-        if ponifile_active is None:
-            try:
-                self._open_r
-                ponifile_active = self._file[PONI_GROUP_KEY][PONIFILE_ACTIVE_KEY][()][0]
-                self._close
-            except Exception as e:
-                logger.info(f"{e}: active ponifile could not be retrieved anyway.")
-                return
+    #     # Try after opening the h5 File
+    #     if ponifile_active is None:
+    #         try:
+    #             self._open_r
+    #             ponifile_active = self._file[PONI_GROUP_KEY][PONIFILE_ACTIVE_KEY][()][0]
+    #             self._close
+    #         except Exception as e:
+    #             logger.info(f"{e}: active ponifile could not be retrieved anyway.")
+    #             return
         
-        # Decode if necessary
-        if isinstance(ponifile_active, bytes):
-            ponifile_active = bytes.decode(ponifile_active, encoding=ENCODING_FORMAT)
+    #     # Decode if necessary
+    #     if isinstance(ponifile_active, bytes):
+    #         ponifile_active = bytes.decode(ponifile_active, encoding=ENCODING_FORMAT)
         
-        # Use Path instance
-        ponifile_active = Path(ponifile_active)
-        return ponifile_active
+    #     # Use Path instance
+    #     ponifile_active = Path(ponifile_active)
+    #     return ponifile_active
 
     @log_info
     def update_ponifile_parameters(self, dict_poni=dict()) -> None:
@@ -928,22 +960,22 @@ class H5GIIntegrator(Transform):
         try:
             detector = self.detector
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Detector could not be retrieved.")
+            logger.error(f"{e}: Detector could not be retrieved.")
             return
         try:
             detector_config = self.detector.get_config()
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Detector could not be retrieved.")
+            logger.error(f"{e}: Detector could not be retrieved.")
             return
         try:
             wave = self._wavelength
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Wavelength could not be retrieved.")
+            logger.error(f"{e}: Wavelength could not be retrieved.")
             return
         try:
             dist = self._dist
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Distance could not be retrieved.")
+            logger.error(f"{e}: Distance could not be retrieved.")
             return
         
         # Pixel 1
@@ -951,26 +983,26 @@ class H5GIIntegrator(Transform):
             pixel1 = self.pixel1
         except Exception as e:
             pixel1 = None
-            self.write_terminal_and_logger(f"{e}: Pixel 1 could not be retrieved.")
+            logger.error(f"{e}: Pixel 1 could not be retrieved.")
             return
         if not pixel1:
             try:
                 pixel1 = detector_config.pixel1
             except Exception as e:
-                self.write_terminal_and_logger(f"{e}: Pixel 1 could not be retrieved.")
+                logger.error(f"{e}: Pixel 1 could not be retrieved.")
                 return
         # Pixel 2
         try:
             pixel2 = self.pixel2
         except Exception as e:
             pixel2 = None
-            self.write_terminal_and_logger(f"{e}: Pixel 2 could not be retrieved.")
+            logger.error(f"{e}: Pixel 2 could not be retrieved.")
             return
         if not pixel2:
             try:
                 pixel2 = detector_config.pixel2
             except Exception as e:
-                self.write_terminal_and_logger(f"{e}: Pixel 2 could not be retrieved.")
+                logger.error(f"{e}: Pixel 2 could not be retrieved.")
                 return
 
         # Shape
@@ -978,38 +1010,38 @@ class H5GIIntegrator(Transform):
             shape = self.detector.max_shape
         except Exception as e:
             shape = None
-            self.write_terminal_and_logger(f"{e}: Shape could not be retrieved from detector.")
+            logger.error(f"{e}: Shape could not be retrieved from detector.")
         if not shape:
             try:
                 shape = detector_config.max_shape
             except Exception as e:
-                self.write_terminal_and_logger(f"{e}: Shape could not be retrieved from detector-config.")
+                logger.error(f"{e}: Shape could not be retrieved from detector-config.")
                 return
 
         try:
             poni1 = self._poni1
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: PONI 1 could not be retrieved from h5.")
+            logger.error(f"{e}: PONI 1 could not be retrieved from h5.")
             return
         try:
             poni2 = self._poni2
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: PONI 2 could not be retrieved from h5.")
+            logger.error(f"{e}: PONI 2 could not be retrieved from h5.")
             return
         try:
             rot1 = self._rot1
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Rotation 1 could not be retrieved from h5.")
+            logger.error(f"{e}: Rotation 1 could not be retrieved from h5.")
             return
         try:
             rot2 = self._rot2
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Rotation 2 could not be retrieved from h5.")
+            logger.error(f"{e}: Rotation 2 could not be retrieved from h5.")
             return
         try:
             rot3 = self._rot3
         except Exception as e:
-            self.write_terminal_and_logger(f"{e}: Rotation 3 could not be retrieved from h5.")
+            logger.error(f"{e}: Rotation 3 could not be retrieved from h5.")
             return
         
         poni_dict = {
@@ -1040,18 +1072,19 @@ class H5GIIntegrator(Transform):
         """
         If there is an active ponifile, inherits the methods from Transform class (pygix module)
         """        
-        # Fetch the active ponifile
-        ponifile_active = str(self.get_active_ponifile()) 
-        if not ponifile_active:
-            logger.info(f"No active ponifile. GrazingGeometry was not updated")
+        if not self.active_ponifile:
+            logger.info(f"No active ponifile. GrazingGeometry was not updated")            
+            return
+        if not Path(self.active_ponifile).is_file():
+            logger.info(f"The .poni file {self.activate_ponifile} does not exist.")
             return
 
         # Load the ponifile
         try:
-            self.load(ponifile_active)
-            logger.info("Loaded poni file")
+            self.load(self.active_ponifile)
+            logger.info(f"Loaded poni file: {self.active_ponifile}")
         except Exception as e:
-            logger.info(f"{e}: Ponifile could not be loaded to GrazingGeometry")
+            logger.error(f"{e}: Ponifile could not be loaded to GrazingGeometry")
         
         # Update default incident and tilt angles
         try:
@@ -1060,7 +1093,7 @@ class H5GIIntegrator(Transform):
                 tilt_angle=DEFAULT_TILT_ANGLE,
             )
         except Exception as e:
-            logger.info(f"{e}: angles could not be updated.")
+            logger.error(f"{e}: angles could not be updated.")
 
     @log_info
     def update_incident_tilt_angle(self, incident_angle=0.0, tilt_angle=0.0):
@@ -1078,7 +1111,7 @@ class H5GIIntegrator(Transform):
             )
             logger.info(f"Incident angle set at {incident_angle}")
         except Exception as e:
-            logger.info(f"{e}: Incident angle could not be updated.")
+            logger.error(f"{e}: Incident angle could not be updated.")
 
         # Tilt angle
         try:
@@ -1087,7 +1120,7 @@ class H5GIIntegrator(Transform):
             )
             logger.info(f"Tilt angle set at {tilt_angle}")
         except Exception as e:
-            logger.info(f"{e}: Tilt angle could not be updated.")
+            logger.error(f"{e}: Tilt angle could not be updated.")
 
     @log_info
     def update_orientation(self, qz_parallel=True, qr_parallel=True) -> None:
@@ -1106,14 +1139,14 @@ class H5GIIntegrator(Transform):
             )
             logger.info(f"The sample orientation (pygix) is set at {sample_orientation}.")
         except Exception as e:
-            logger.info(f"The sample orientation (pygix) could not be updated.")
+            logger.error(f"The sample orientation (pygix) could not be updated.")
 
     #####################################
     ###### HDF5 METHODS #################
     #####################################
 
     @log_info
-    def new_sample(self, folder_index=int(), name=str(), **kwargs):
+    def new_sample(self, folder_index=int(), sample_name=str(), **kwargs):
         """
         Creates a new folder (Group) at the first level of hierarchy in the h5 file
 
@@ -1121,38 +1154,38 @@ class H5GIIntegrator(Transform):
             folder_index -- associated index with the new folder (default: {int()})
             name -- name of the new folder (Group) (default: {str()})
         """
+
         # If not index, append to the end
         if not folder_index:
             folder_index = self.number_samples
         
         # Check if the sample does exist
         if self.contains_group(
-            folder_name=f"{SAMPLE_GROUP_KEY}/{name}",
+            group_address=SAMPLE_GROUP_KEY,
+            sample_name=sample_name,
             ):
-            logger.info(f"The folder {name} already exists.")
-            self._close
+            logger.info(f"The sample {sample_name} already exists.")
             return
         
         # Create new Group
         try:
-            self._file[SAMPLE_GROUP_KEY].create_group(name)
-            logger.info(f"The folder {name} was successfully created.")
+            self._file[SAMPLE_GROUP_KEY].create_group(sample_name)
+            logger.info(f"The sample {sample_name} was successfully created.")
         except Exception as e:
             self._open
-            self._file[SAMPLE_GROUP_KEY].create_group(name)
-            logger.info(f"The folder {name} was successfully created.")
+            self._file[SAMPLE_GROUP_KEY].create_group(sample_name)
+            logger.info(f"The sample {sample_name} was successfully created.")
 
-
-        # Write some attributes     
+        # Write some attributes
         dict_init_sample = {
             CLASS_KEY : SAMPLE_KEY,
             INDEX_KEY : int(folder_index),
             DATETIME_KEY : date_prefix(),
-            NAME_H5_KEY : name,
+            NAME_H5_KEY : sample_name,
         }
         self.write_attrs(
             dict_attrs=dict_init_sample,
-            address=f"{SAMPLE_GROUP_KEY}/{name}",
+            address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
         )
         for k,v in kwargs.items():
             self.write_attr(key=k, value=v)
@@ -1160,8 +1193,9 @@ class H5GIIntegrator(Transform):
         # Increase the number of samples
         self.number_samples += 1
 
+
     @log_info
-    def contains_group(self, folder_name=str(), group_address='.') -> bool:
+    def contains_group(self, sample_name=str(), group_address='.') -> bool:
         """
         Checks if the folder already exist in a specific address
 
@@ -1173,18 +1207,17 @@ class H5GIIntegrator(Transform):
             exists (True) or not (False)
         """
         try:
-            is_inside = self._file[group_address].__contains__(str(folder_name))
+            is_inside = self._file[group_address].__contains__(str(sample_name))
             return is_inside
         except Exception as e:
-            logger.info(f"{e}")
-        
+            logger.error(f"{e}Error while opening Group {group_address} to check {sample_name} Group. Trying to opening the file")
         try:
-            self._open_r
-            is_inside = self._file[group_address].__contains__(str(folder_name))
+            self._open
+            is_inside = self._file[group_address].__contains__(str(sample_name))
             self._close
             return is_inside
         except Exception as e:
-            logger.info(f"{e}")
+            logger.error(f"{e}Error while opening Group {group_address} to check {sample_name} Group again.")
 
     @log_info
     def append_to_dataset(self, folder_name=str(), dataset_name='Data', new_data=np.array([])) -> None:
@@ -1229,7 +1262,7 @@ class H5GIIntegrator(Transform):
 
 
     @log_info
-    def update_sample(self, sample_name=str(), data_filenames=list(), get_2D_array=False) -> None:
+    def update_sample(self, sample_name=str(), data_filenames=list(), get_2D_array=False, relative_to_root=True) -> None:
         """
         Creates or updates a folder (Group) with data and metadata from a list of files
 
@@ -1242,12 +1275,13 @@ class H5GIIntegrator(Transform):
         self._update_sample(
             sample_name=sample_name,
             data_filenames=data_filenames,
+            relative_to_root=relative_to_root,
             get_2D_array=get_2D_array,
         )
         self._close
 
     @log_info
-    def _update_sample(self, sample_name=str(), data_filenames=list(), get_2D_array=False) -> None:
+    def _update_sample(self, sample_name=str(), data_filenames=list(), relative_to_root=True, get_2D_array=False) -> None:
         """
         Creates or updates a folder (Group) with data and metadata from a list of files
 
@@ -1256,17 +1290,27 @@ class H5GIIntegrator(Transform):
             filename_list -- list of path filenames where the data/metadata will be extracted (default: {list()})
             get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
         """
-        # Create the group if needed
-        self.new_sample(
-            name=sample_name,
-        )
 
-        # Get the packed data and metadata for every filename
+
+        # First, get the packed data and metadata for every filename
         merged_data, merged_metadata = self.get_merged_data_and_metadata(
             filenames=data_filenames, 
             get_2D_array=get_2D_array,
+            relative_to_root=relative_to_root,
         )
 
+        # Get the names of samples and files to write in the .h5 file
+        if relative_to_root:
+            sample_name = Path(sample_name)
+            data_filenames = [str(Path(file).relative_to(sample_name)) for file in data_filenames]            
+            sample_name = str(sample_name.relative_to(self._root_dir))
+
+        # Create the group if needed
+        self.new_sample(
+            sample_name=sample_name,
+        )
+
+        # Create the DataSet 'data'
         if not self._file[SAMPLE_GROUP_KEY][sample_name].__contains__(DATA_KEY):
             self._file[SAMPLE_GROUP_KEY][sample_name].create_dataset(
                 DATA_KEY, 
@@ -1336,7 +1380,7 @@ class H5GIIntegrator(Transform):
                     logger.info(f"Dataset could not be appended with the encoded format for the key {key}, value {value}.")
                     
     @log_info
-    def get_merged_data_and_metadata(self, filenames=list(), get_2D_array=True):
+    def get_merged_data_and_metadata(self, filenames=list(), get_2D_array=True, relative_to_root=True):
         """
         Use FabIO module to get the data (arrays) and metadata from 2D detector patterns
         If not get_2D_array, it yields the encoded name of the file, not the real 2D array
@@ -1352,15 +1396,21 @@ class H5GIIntegrator(Transform):
         merged_dataset = np.array([])
         merged_header = defaultdict(list)            
         
-        for index_file, (data, header) in enumerate(self.generator_fabio_data_header(filenames, get_2D_array)):
+        for index_file, (data, header) in enumerate(
+            self.generator_fabio_data_header(
+                filename_list=filenames,
+                get_2D_array=get_2D_array,
+                relative_to_root=relative_to_root,
+            )):
             # Pack data
             try:
                 if index_file == 0:
                     merged_dataset = np.array([data])
                 else:
                     merged_dataset = np.concatenate((merged_dataset, [data]), axis=0)
+                logger.info(f"Merged Data dataset was extracted.")
             except Exception as e:
-                logger.info(f"{e}: Error while packing data at {index_file}")
+                logger.error(f"{e}: Error while packing data at {index_file}")
             
             # Pack metadata
             for key,value in header.items():
@@ -1368,11 +1418,37 @@ class H5GIIntegrator(Transform):
                     value = float_str(value)
                     merged_header[key].append(value)
                 except Exception as e:
-                    logger.info(f"{e}: Error while packing metadata at key: {key}, value {value}")
+                    logger.error(f"{e}: Error while packing metadata at key: {key}, value {value}")
+            logger.info(f"Merged all Metadata datasets.")
         return merged_dataset, merged_header
 
+
+
     @log_info
-    def generator_fabio_data_header(self, filenames=[], get_2D_array=True, relative_to_root=True):
+    def generator_file_header(self, filenames=list()):
+        for file in filenames:
+            # Open a EdfClass instance
+            try:
+                edf = EdfClass(
+                    filename=file,
+                )
+                logger.info(f"EdfClass with filename {file} was created.")
+            except Exception as e:
+                logger.error(f"{e}: EdfClass instance with filename {file} could not be created.")
+                continue
+        
+            # Yield data or data addresses and header
+            try:
+                header = edf.get_header()
+                logger.info(f"Data and header extracted successfully.")
+            except Exception as e:
+                logger.error(f"{e}: Error while fabio handling at {file}")
+                header = None, None
+            yield header
+
+
+    @log_info
+    def generator_fabio_data_header(self, filename_list=[], get_2D_array=True, relative_to_root=True):
         """
         Use FabIO module to generate the data and metadata from a list of files
         If not get_2D_array, it yields the encoded name of the file, not the real 2D array
@@ -1385,12 +1461,15 @@ class H5GIIntegrator(Transform):
             np.array : 2D map or encoded filename
             dict : header dictionary from FabIO
         """
-        for file in filenames:
+        for file in filename_list:
             # Open a EdfClass instance
             try:
-                edf = EdfClass(file)
+                edf = EdfClass(
+                    filename=file,
+                )
+                logger.info(f"EdfClass with filename {file} was created.")
             except Exception as e:
-                logger.info(f"{e}: EdfClass instance could not be created.")
+                logger.error(f"{e}: EdfClass instance with filename {file} could not be created.")
                 continue
 
             # Yield data or data addresses and header
@@ -1398,9 +1477,16 @@ class H5GIIntegrator(Transform):
                 if get_2D_array:
                     data, header = edf.get_data(), edf.get_header()
                 else:
-                    data, header = np.array(([[str(file).encode()]])), edf.get_header()
+                    if relative_to_root:
+                        filename = Path(file)
+                        sample_name = filename.parent
+                        filename = filename.relative_to(sample_name)
+                    else:
+                        filename = file
+                    data, header = np.array(([[str(filename).encode()]])), edf.get_header()
+                logger.info(f"Data and header extracted successfully.")
             except Exception as e:
-                logger.info(f"{e}: Error while fabio handling at {file}")
+                logger.error(f"{e}: Error while fabio handling at {filename}")
                 data, header = None, None
             yield data, header
 
@@ -1600,7 +1686,7 @@ class H5GIIntegrator(Transform):
         return new_files
 
     @log_info
-    def update_datafiles(self, list_files=list(), search=False):
+    def update_datafiles(self, list_files=list(), search=False, relative_to_root=True):
         """
         Updates the h5 file with new Groups associated with the folders and new Data/Metadata associated with the files
         This method can be used with any new file list,
@@ -1618,19 +1704,22 @@ class H5GIIntegrator(Transform):
             searched_files = self.search_datafiles()
             list_files += searched_files
 
-        # Transform the list into a dictionary
+        # Transform the list into a dictionary with full filenames
         dict_files = get_dict_files(
             list_files=list_files,
-            # relative_root=self._root_dir,
+            relative_root=None,
         )
-        logger.info(INFO_H5_NEW_DICTIONARY_FILES)
+
+        logger.info(f"{INFO_H5_NEW_DICTIONARY_FILES}: {str(dict_files)}")
 
         # Store in the .h5 file by folder and its own list of files
         for sample_name, file_list in dict_files.items():
+            data_filenames = sorted(file_list)
             self.update_sample(
                 sample_name=sample_name,
-                data_filenames=file_list,
+                data_filenames=data_filenames,
                 get_2D_array=False,
+                relative_to_root=relative_to_root,
             )
             logger.info(f"Finished with folder: {sample_name}.")
         logger.info(INFO_H5_FILES_UPDATED)
@@ -1646,9 +1735,9 @@ class H5GIIntegrator(Transform):
     @log_info
     def get_all_files_from_sample(self, sample_name=str(), yield_decode=True, basename=False):
         self._open
-        full_samplename = str(self._root_dir.joinpath(sample_name))        
+        # full_samplename = str(self._root_dir.joinpath(sample_name))        
         list_files = sorted(self.generator_files_in_sample(
-            sample_name=full_samplename,
+            sample_name=sample_name,
             yield_decode=yield_decode,
             basename=basename,
         ))
@@ -1695,20 +1784,20 @@ class H5GIIntegrator(Transform):
         Returns:
             np.array : HDF5 dataset
         """
-        full_filename = str(self._root_dir.joinpath(sample_name))
+        # full_filename = str(self._root_dir.joinpath(sample_name))
         try:
-            dataset = self._file[SAMPLE_GROUP_KEY][full_filename][METADATA_KEY][key_metadata][()]
+            dataset = self._file[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY][key_metadata][()]
             return dataset
         except Exception as e:
-            logger.info(f"{e}: dataset {key_metadata} could not be accessed. Trying to open the file...")
+            logger.error(f"{e}: dataset {key_metadata} could not be accessed. Trying to open the file...")
         
         try:
             self._open_r
-            dataset = self._file[SAMPLE_GROUP_KEY][full_filename][METADATA_KEY][key_metadata][()]
+            dataset = self._file[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY][key_metadata][()]
             self._close
             return dataset
         except Exception as e:
-            logger.info(f"{e}: dataset {key_metadata} could not be accessed anyway.")
+            logger.error(f"{e}: dataset {key_metadata} could not be accessed anyway.")
         return
 
     @log_info
@@ -1760,12 +1849,11 @@ class H5GIIntegrator(Transform):
         pandas.DataFrame : dataframe with filenames as rows and metadata keys as columns
         """
         short_metadata = defaultdict(list)
-
         list_files_in_sample = self.get_all_files_from_sample(sample_name=sample_name)
 
         for filename in list_files_in_sample:
             # Always append the name of the file
-            short_metadata[FILENAME_KEY].append(str(Path(filename).name))
+            short_metadata[FILENAME_KEY].append(filename)
 
             for key in list_keys:
                 try:
@@ -1776,9 +1864,9 @@ class H5GIIntegrator(Transform):
                     short_metadata[key] = dataset_key
                     # short_metadata[key] = list(self._file[folder_name]['Metadata'][key][()])
                 except:
-                    logger.info(f"Error during acceeding to Metadata dataset with key: {key}")
+                    logger.error(f"Error during acceeding to Metadata dataset with key: {key}")
         dataframe = pd.DataFrame(short_metadata)
-        logger.info(f"This is the dataframe: {dataframe}")
+        logger.info(f"The dataframe has size {dataframe.size}.")
         return dataframe
 
 
@@ -1800,19 +1888,19 @@ class H5GIIntegrator(Transform):
         Returns:
         Generator of metadata keys
         """
-        full_samplename = str(Path(self._root_dir).joinpath(sample_name))
+        # full_samplename = str(Path(self._root_dir).joinpath(sample_name))
         try:
-            list_keys = self._file[SAMPLE_GROUP_KEY][full_samplename][METADATA_KEY].keys()
+            list_keys = self._file[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY].keys()
         except Exception as e:
             list_keys = None
-            logger.info(f"{e}: List of keys could not be retrieved. Trying to open the file...")
+            logger.error(f"{e}: List of keys could not be retrieved. Trying to open the file...")
         
         # Try to open the h5 file
         if list_keys is None:
             try:
-                list_keys = self._file[SAMPLE_GROUP_KEY][full_samplename][METADATA_KEY].keys()
+                list_keys = self._file[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY].keys()
             except Exception as e:
-                logger.info(f"{e}: List of keys could not be retrieved anyway.")
+                logger.error(f"{e}: List of keys could not be retrieved anyway.")
                 return
 
         # Generate keys
@@ -1820,42 +1908,44 @@ class H5GIIntegrator(Transform):
             yield key   
 
     @log_info
-    def get_filename_from_index(self, sample_name=str(), index_list=list()):
-        self._open
+    def get_filename_from_index(self, sample_name=str(), index_list=list(), relative_to_root=True):
         # Get the full samplename
-        sample_name = str(self._root_dir.joinpath(sample_name))
-
         try:
             if isinstance(index_list, int):
                 index_list = [index_list]
 
             if len(index_list) == 1:
                 filename = bytes.decode(self._file[SAMPLE_GROUP_KEY][sample_name][DATA_KEY][()][index_list[0]][0][0])
-
-            elif len(index_list) > 1:
+            else:
                 filename = bytes.decode(self._file[SAMPLE_GROUP_KEY][sample_name][DATA_KEY][()][index_list[-1]][0][0])
-                new_extension = f"{Path(filename).stem}_average.edf"
-                filename = Path(filename).parent.joinpath(new_extension)
+                filename.replace(".edf", "_average.edf")
+            
+            if relative_to_root:
+                filename = str(self._root_dir.joinpath(sample_name, filename))
+
         except Exception as e:
             filename = None
-            logger.info(f"{e}. Error with sample_name{sample_name}, index_list{index_list}")
+            logger.error(f"{e}. Error with sample_name{sample_name}, index_list{index_list}")
         
         if filename is None:
+            self._open
             try:
                 if isinstance(index_list, int):
                     index_list = [index_list]
 
                 if len(index_list) == 1:
                     filename = bytes.decode(self._file[SAMPLE_GROUP_KEY][sample_name][DATA_KEY][()][index_list[0]][0][0])
-
-                elif len(index_list) > 1:
+                else:
                     filename = bytes.decode(self._file[SAMPLE_GROUP_KEY][sample_name][DATA_KEY][()][index_list[-1]][0][0])
-                    new_extension = f"{Path(filename).stem}_average.edf"
-                    filename = Path(filename).parent.joinpath(new_extension)
+                    filename.replace(".edf", "_average.edf")
+                
+                if relative_to_root:
+                    filename = str(self._root_dir.joinpath(sample_name, filename))
+
             except Exception as e:
-                logger.info(f"{e}")
+                logger.error(f"{e}")
                 return
-        self._close
+            self._close
         return filename
 
     @log_info
@@ -1888,7 +1978,7 @@ class H5GIIntegrator(Transform):
     #####################################
 
     @log_info
-    def get_Edf_instance(self, full_filename=str(), sample_name=str(), index_file=int()):
+    def get_Edf_instance(self, full_filename=str(), sample_name=str(), index_file=int(), relative_to_root=True):
 
         # Take the full filename
         if full_filename:
@@ -1898,21 +1988,19 @@ class H5GIIntegrator(Transform):
                 filename = self.get_filename_from_index(
                     sample_name=sample_name,
                     index_list=index_file,
+                    relative_to_root=relative_to_root,
                 )
                 logger.info(f"Trying to open sample name {filename}")
             except Exception as e:
-                logger.info(f"{e}: file could not be found in the repository. Sample name {sample_name}, index {index_file}.")
+                logger.error(f"{e}: file could not be found in the repository. Sample name {sample_name}, index {index_file}.")
 
         # Open the Edf instance
         try:
             Edf_instance = EdfClass(
                 filename=filename,
-                # ponifile_path=self.get_active_ponifile(),
-                # qz_parallel=self._qz_parallel,
-                # qr_parallel=self._qr_parallel,
             )
         except Exception as e:
-            logger.info(f"{e}: Edf instance could not be created.")
+            logger.error(f"{e}: Edf instance could not be created.")
             Edf_instance = None
         return Edf_instance
 
@@ -1953,9 +2041,10 @@ class H5GIIntegrator(Transform):
                 ]
             ) / len(index_list)
             logger.info(f"New data sample with shape: {data_sample.shape}")
-        except:
+        except Exception as e:
             data_sample = None
-            logger.info(f"Data sample could not be uploaded.")
+            logger.error(f"{e}: Data sample could not be uploaded.")
+            return
 
         if normalized:
             norm_factor = self.get_norm_factor(

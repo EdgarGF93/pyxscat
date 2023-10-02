@@ -1255,9 +1255,9 @@ class GUIPyX_Widget_layout(QWidget):
         ####### SPLITTER FOLDER-FILES##########
         #######################################
 
-        self.listwidget_folders = QListWidget()
+        self.listwidget_samples = QListWidget()
 
-        widget_folder_tab.addTab(self.listwidget_folders, LABEL_LIST_FOLDERS)
+        widget_folder_tab.addTab(self.listwidget_samples, LABEL_LIST_FOLDERS)
 
         vbox_files = QVBoxLayout()
         widget_files = QWidget()
@@ -1451,13 +1451,14 @@ class GUIPyX_Widget_layout(QWidget):
         widget_chart_toolbar_3.setLayout(hbox_chart_toolbar_3)
 
         label_integrations = QLabel(LABEL_INTEGRATIONS)
-        self.combobox_integration = QComboBox()
+        # self.combobox_integration = QComboBox()
+        self.combobox_integration = CheckableComboBox()
         self.lineedit_integrations = QLineEdit()
         self.checkbox_mask_integration = QCheckBox(LABEL_MASK_MAP)
 
         hbox_chart_toolbar_1.addWidget(label_integrations)
         hbox_chart_toolbar_1.addWidget(self.combobox_integration)
-        hbox_chart_toolbar_1.addWidget(self.lineedit_integrations)
+        # hbox_chart_toolbar_1.addWidget(self.lineedit_integrations)
         hbox_chart_toolbar_1.addWidget(self.checkbox_mask_integration)
 
         label_sub = QLabel(LABEL_SUB_FACTOR)
@@ -1495,6 +1496,8 @@ class GUIPyX_Widget_layout(QWidget):
         hbox_chart_toolbar_2.setContentsMargins(1,0,1,0)
         hbox_savefolder.setContentsMargins(1, 0, 1, 0)
         self.graph_1D_widget.setContentsMargins(1,0,1,0)
+        hbox_chart_toolbar_1.setStretch(1,20)
+
 
         #######################################
         ########## TERMINAL OUTPUT  ###########

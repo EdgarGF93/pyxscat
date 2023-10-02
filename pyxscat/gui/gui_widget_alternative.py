@@ -23,7 +23,7 @@ from pyxscat.gui.gui_layout_alternative import LABEL_CAKE_BINS_OPT, LABEL_CAKE_B
 from pyxscat.gui.gui_layout_alternative import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
 from pyxscat.h5_integrator import H5GIIntegrator
 from pyxscat.h5_integrator import PONI_KEY_VERSION, PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
-from pyxscat.h5_integrator import FILENAME_H5_KEY, ROOT_DIRECTORY_KEY, SAMPLE_GROUP_KEY, FILENAME_KEY
+from pyxscat.h5_integrator import FILENAME_H5_KEY, FILENAME_KEY, DICT_SAMPLE_ORIENTATIONS
 
 from pyxscat.gui.gui_layout_alternative import QZ_BUTTON_LABEL, QR_BUTTON_LABEL, MIRROR_BUTTON_LABEL
 
@@ -105,6 +105,7 @@ DEFAULT_MAP_FONTSIZE = 10
 DEFAULT_INCIDENT_ANGLE = 0.0
 DEFAULT_TILT_ANGLE = 0.0
 
+RELATIVE_TO_ROOT = True
 
  # Initialize logger
 logger = logging.getLogger()
@@ -366,7 +367,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         # List_widget folder callback
         #########################
-        self.listwidget_folders.itemClicked.connect(self.listfolders_clicked)
+        self.listwidget_samples.itemClicked.connect(self.listsamples_clicked)
 
         #########################
         # Lineedit_items header updates the table of files
@@ -565,7 +566,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         cb.clear(self.combobox_tilt_angle)
         cb.clear(self.combobox_exposure)
         cb.clear(self.combobox_normfactor)
-        lt.clear(self.listwidget_folders)
+        lt.clear(self.listwidget_samples)
         tm.reset(self.table_files)
         le.clear(self.lineedit_headeritems)
         le.clear(self.lineedit_headeritems_title)
@@ -787,8 +788,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             dict_metadata_keys=dict_metadata,
         )
 
-        # Update the Metadata widgets
-        self.update_metadata_widgets(dict_setup=dict_metadata)
+        # Update the h5 information
+        self.update_h5_plaintext()
+
 
     @log_info
     def metadata_save_clicked(self, _):
@@ -1044,9 +1046,19 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         # Update the h5 integrator instance
         if self.h5:
-            self.h5.update_qz(qz_parallel=state_qz)
-            self.update_2D_q(new_data=False)
-            self.update_1D_graph()
+            qz_parallel = self.state_qz
+            qr_parallel = self.state_qr
+            sample_or = DICT_SAMPLE_ORIENTATIONS[(qz_parallel, qr_parallel)]
+
+            self.h5.update_orientation(
+                qz_parallel=qz_parallel,
+                qr_parallel=qr_parallel,
+            )
+            self.write_terminal_and_logger(f"New sample orientation: {sample_or}")
+            self.update_graphs(
+                graph_1D=True,
+                graph_2D_q=True,
+            )
 
     @log_info
     def button_qr_clicked(self, state_qr):
@@ -1059,9 +1071,19 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         # Update the h5 integrator instance
         if self.h5:
-            self.h5.update_qr(qr_parallel=state_qr)
-            self.update_2D_q(new_data=False)
-            self.update_1D_graph()
+            qz_parallel = self.state_qz
+            qr_parallel = self.state_qr
+            sample_or = DICT_SAMPLE_ORIENTATIONS[(qz_parallel, qr_parallel)]
+
+            self.h5.update_orientation(
+                qz_parallel=qz_parallel,
+                qr_parallel=qr_parallel,
+            )
+            self.write_terminal_and_logger(f"New sample orientation: {sample_or}")
+            self.update_graphs(
+                graph_1D=True,
+                graph_2D_q=True,
+            )
 
     @log_info
     def pick_maindir_clicked(self,_):
@@ -1086,21 +1108,31 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         # Feed data files and ponifiles within the h5 instance
-        self.h5.update_datafiles(search=True)
-        self.h5.update_ponifiles(search=True)
+        self.h5.update_datafiles(
+            list_files=[],
+            search=True,
+            relative_to_root=RELATIVE_TO_ROOT,
+        )
+        self.h5.update_ponifiles(
+            ponifile_list=[],
+            search=True,
+            relative_to_root=RELATIVE_TO_ROOT,
+        )
 
         # Update combobox of ponifiles
-        # self.update_cb_ponifiles(
-        #     from_h5=True,
-        #     reset=True,
-        # )
+        self.update_cb_ponifiles(
+            from_h5=True,
+            reset=True,
+            # relative_to_root=RELATIVE_TO_ROOT,
+        )
 
         # Update list of samples
-        # self.update_listwidget_with_samples(
-        #     listwidget=self.listwidget_folders,
-        #     from_h5=True,
-        #     reset=True,
-        # )
+        self.update_listwidget_with_samples(
+            listwidget=self.listwidget_samples,
+            from_h5=True,
+            reset=True,
+            # relative_to_root=RELATIVE_TO_ROOT,
+        )
 
         # Save a .json file with the attributes of the new h5 instance
         self.save_h5_dict()
@@ -1288,7 +1320,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Feed the listfolder widget
         samples_from_h5 = sorted(self.h5.generator_samples())
         lt.insert_list(
-            listwidget=self.listwidget_folders,
+            listwidget=self.listwidget_samples,
             item_list=samples_from_h5,
             reset=True,
         )
@@ -1380,7 +1412,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         # Update list of samples and reference combobox
         self.update_listwidget_with_samples(
-            listwidget=self.listwidget_folders,
+            listwidget=self.listwidget_samples,
             from_h5=True,
             reset=True,
         )
@@ -1476,7 +1508,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         from_h5=False, 
         ponifile_list=list(), 
         reset=True, 
-        relative_to=True,
+        # relative_to_root=True,
         ):
         # Combobox
         cb_ponifile = self.combobox_ponifile
@@ -1490,9 +1522,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             ponifile_list = ponifiles_in_h5
 
         # Make it relative
-        if relative_to:
-            root_dir = Path(self.h5._root_dir)
-            ponifile_list = [str(Path(file).relative_to(root_dir)) for file in ponifile_list]
+        # if relative_to_root:
+        #     root_dir = Path(self.h5._root_dir)
+        #     ponifile_list = [str(Path(file).relative_to(root_dir)) for file in ponifile_list]
 
         if reset:
             cb.insert_list(
@@ -1519,12 +1551,17 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         # Activate the .poni file in the h5 instance
-        poni_filename = str(self.h5._root_dir.joinpath(poni_name) )       
-        self.h5.activate_ponifile(poni_filename=poni_filename)
+        # poni_filename = str(self.h5._root_dir.joinpath(poni_name) )       
+        self.h5.activate_ponifile(
+            poni_filename=poni_name,
+            relative_to_root=RELATIVE_TO_ROOT,
+        )
         
         # Check if the .poni file does exist
-        if not Path(poni_filename).is_file():
-            self.write_terminal_and_logger(f"The .poni file {str(poni_filename)} does not exist.")
+        if not self.h5.active_ponifile:
+            return
+        if not Path(self.h5.active_ponifile).is_file():
+            self.write_terminal_and_logger(f"The .poni file {str(self.h5.active_ponifile)} does not exist.")
             return
         
         # Update the .poni tab widgets
@@ -1722,7 +1759,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         Update the ponifile widgets from a poni dictionary
         """
-        print(dict_poni)
         if not self.h5:
             return
         try:
@@ -1793,7 +1829,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         detector_info = f"{str(detector_name)} / {str(detector_bin)} / ({shape1},{shape2}) / ({pixel1},{pixel2})"
 
-        if self.h5.get_active_ponifile():
+        if self.h5.active_ponifile:
             le.substitute(
                 lineedit=self.lineedit_detector,
                 new_text=detector_info,
@@ -1937,7 +1973,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         from_h5=False, 
         list_samples=list(),
         reset=True,
-        relative_to=True,
+        # relative_to_root=True,
         ):
         
         # Add samples from h5 instance
@@ -1949,9 +1985,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             list_samples = samples_in_h5
         
         # Make it relative
-        if relative_to:
-            root_dir = Path(self.h5._root_dir)
-            list_samples = [str(Path(file).relative_to(root_dir)) for file in list_samples]
+        # if relative_to_root:
+        #     root_dir = Path(self.h5._root_dir)
+        #     list_samples = [str(Path(file).relative_to(root_dir)) for file in list_samples]
 
         if reset:
             lt.insert_list(
@@ -1978,7 +2014,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         from_h5=False, 
         list_samples=list(),
         reset=True,
-        relative_to=True,
+        # relative_to=True,
         ):
 
         # Add samples from h5 instance
@@ -1988,10 +2024,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             # Fetch samples from h5 instance
             samples_in_h5 = self.h5.get_all_samples()
             list_samples = samples_in_h5
+
         # Make it relative
-        if relative_to:
-            root_dir = Path(self.h5._root_dir)
-            list_samples = [str(Path(file).relative_to(root_dir)) for file in list_samples]
+        # if relative_to:
+        #     root_dir = Path(self.h5._root_dir)
+        #     list_samples = [str(Path(file).relative_to(root_dir)) for file in list_samples]
 
         if reset:
             cb.insert_list(
@@ -2260,7 +2297,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
 
             # Check if new folders to update the list_widget and reference folder combobox
-            folders_in_list = set(lt.all_items(self.listwidget_folders))
+            folders_in_list = set(lt.all_items(self.listwidget_samples))
             folders_in_h5 = set(self.h5.generator_samples())
             new_folders = [item for item in folders_in_h5.difference(folders_in_list)]
             new_folders.sort()
@@ -2268,7 +2305,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             if new_folders:
                 # List widget
                 lt.insert_list(
-                    listwidget=self.listwidget_folders,
+                    listwidget=self.listwidget_samples,
                     item_list=new_folders,
                     reset=False,
                 )
@@ -2427,7 +2464,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
             # Reset and fill the list widget with folders
             lt.insert_list(
-                listwidget=self.listwidget_folders,
+                listwidget=self.listwidget_samples,
                 item_list=list(self.h5.generator_samples()),
                 reset=True,
             )
@@ -2439,34 +2476,28 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
 
     @log_info
-    def listfolders_clicked(self, clicked_folder_name):
+    def listsamples_clicked(self, clicked_sample_name):
         if not self.h5:
             return
         
         # Fetch the name of the integration
-        clicked_folder_name = clicked_folder_name.text()
-
-        # Get the full filename
-        # full_samplename = self.h5._root_dir.joinpath(clicked_folder_name)
-
-        # Check if there is a Sample with that name in the .h5
-        # if not self.does_sample_exist(sample_name=full_samplename):
-        #     return
+        clicked_sample_name = clicked_sample_name.text()
 
         # Update the metadata combobox if needed
         self.check_and_update_cb_metadata(
-            sample_name=clicked_folder_name,
+            sample_name=clicked_sample_name,
+        )
+
+        # Get a Pandas.DataFrame to upload the table
+        keys_to_display = self.combobox_multi.currentData()
+        dataframe = self.h5.get_metadata_dataframe(
+            sample_name=clicked_sample_name,
+            list_keys=keys_to_display,
         )
 
         # Reset and feed the table widget with default metadata keys if needed
-        displayed_metadata_keys = self.combobox_multi.currentData()
-        if not displayed_metadata_keys:
-            metadata_keys = self.h5.get_metadata_dict()
-            self.mark_metadata_keys(metadata_keys)
-
         self.update_table(
-            sample_name=clicked_folder_name,
-            # keys_to_display=metadata_keys,
+            dataframe=dataframe,
             reset=True,
         )
 
@@ -2477,10 +2508,10 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         return metadata_keys
         
     @log_info
-    def active_sample(self):
+    def get_active_sample(self):
         if not self.h5:
             return
-        sample_name = lt.click_values(self.listwidget_folders)
+        sample_name = lt.click_values(self.listwidget_samples)[0]
         return sample_name
 
     # @log_info
@@ -2528,7 +2559,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
     @log_info
     def check_and_update_cb_metadata(self, sample_name=str()):
         if not sample_name:
-            sample_name = self.active_sample()
+            sample_name = self.get_active_sample()
 
         # Fetch the list of metadata keys in that sample
         metadata_keys = self.h5.get_all_metadata_keys_from_sample(sample_name=sample_name)
@@ -2577,8 +2608,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Multi
         self.combobox_multi.addItems(texts=metadata_keys)
 
-
-
         # Combobox for table columns
         cb.insert_list(
             combobox=self.combobox_headeritems,
@@ -2626,7 +2655,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
     @log_info
     def update_sample_orientation(self):
-        active_sample = self.active_sample()
+        active_sample = self.get_active_sample()
 
         if not active_sample or not self.cache_index:
             return
@@ -2645,9 +2674,14 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
     @log_info
-    def update_cache_data(self):  
+    def update_cache_data(self, sample_name=str(), list_index=list()):  
         # Take the new data from new folder/index
-        data = self.get_clicked_data()
+        data = self.get_data(
+            sample_name=sample_name,
+            list_index=list_index,
+        )
+        if data is None:
+            return
 
         # Subtract the reference
         if self.spinbox_sub.value() != 0.0:
@@ -2846,10 +2880,12 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         """
         if not self.clicked_folder or not self.cache_index:
             return
+
         new_label = self.h5.get_filename_from_index(
-            sample_name=self.clicked_folder,
+            sample_name=self.get_active_sample(),
             index_list=self.cache_index,
         )
+
         logger.info(f"New label: {new_label}")
         self.lineedit_filename.setText(f"{new_label}")
 
@@ -2910,6 +2946,45 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         except:
             norm = None
         return norm
+
+    @log_info
+    def update_graphs(
+        self,
+        data=None,
+        norm_factor=1.0,
+        graph_1D=False,
+        graph_2D_raw=False,
+        graph_2D_reshape=False,
+        graph_2D_q=False,
+        ):
+        if data is None:
+            data = self._data_cache
+        
+        if data is None:
+            return
+
+        # Update 1D integration graph
+        if graph_1D:
+            self.update_1D_graph(
+                data=data,
+                norm_factor=norm_factor,
+            )
+
+        # Update 2D Raw Map
+        if graph_2D_raw:
+            self.update_2D_raw(
+                data=data,
+            )
+
+        # Update 2D Reshape
+        if graph_2D_reshape:
+            self.update_2D_reshape_map(
+                data=data,
+            )
+
+        # Update 2D q map
+        if graph_2D_q:
+            self.update_2D_q()
 
     @log_info
     def update_1D_graph(self, data=None, norm_factor=1.0):
@@ -3056,68 +3131,39 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
     def table_clicked(self):
         # Save the clicked index of clicked data
         self.cache_index = tm.selected_rows(self.table_files)
-        logger.info(f"New index {self.cache_index}")
+        # logger.info(f"New index after clicking {self.cache_index}")
 
         # Update data cache
-        self.update_cache_data()
+        self.update_cache_data(
+            sample_name=self.get_active_sample(),
+            list_index=self.cache_index,
+        )
 
+        # Update label dislayed
+        self.update_label_displayed()
 
-        self.update_1D_graph(),
-        self.update_2D_raw(),
-        self.update_2D_reshape_map(),
-        self.update_2D_q(),
-        self.update_label_displayed(),
-
-
-
+        # Update graphs
+        self.update_graphs(
+            graph_1D=True,
+            graph_2D_raw=True,
+            graph_2D_reshape=True,
+            graph_2D_q=True,
+        )
+        # self.update_1D_graph()
+        # self.update_2D_raw()
+        # self.update_2D_reshape_map()
+        # self.update_2D_q()
 
     @log_info
-    def update_table(self, sample_name=str(), reset=True):
-        """
-        Updates the table with new files (rows) and keys (columns)
+    def update_table(self, dataframe=None, reset=True):
 
-        Parameters:
-        folder_to_display(str) : string with the name of the folder to display
-        keys_to_display(list) : list of strings with the metadata keys to display
-        reset(bool) : if True, clear the table before update
-
-        Returns:
-        None
-        """
         if reset:
             tm.reset(
                 table=self.table_files,
             )
             logger.info("Table was reseted.")
 
-        # if not sample_name:
-        #     return
-            # sample_name = self.active_sample()
-
-        if not sample_name:
-            logger.info("No folder to display. Return.")
-            return
-        # else:
-        #     logger.info(f"Folder to display: {sample_name}.")
-
-        # Take the list of keys from the lineedit widget
-        # if not keys_to_display:
-        #     keys_to_display = le.get_clean_list(
-        #         lineedit=self.lineedit_headeritems,
-        #     )
-        # logger.info(f"Keys to display: {keys_to_display}.")       
-
-        # Take the marked items in multi-combobox
-        keys_to_display = self.combobox_multi.currentData()
-
-        try:
-            dataframe = self.h5.get_metadata_dataframe(
-                sample_name=sample_name,
-                list_keys=keys_to_display,
-            )
-            logger.info(f"Dataframe: {type(dataframe)}.")      
-            print(dataframe) 
-        except:
+        if dataframe is None:
             return
 
         # Add columns for the displayed metadata keys
@@ -3170,22 +3216,24 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
 
     @log_info
-    def get_clicked_data(self, normalized=True):
+    def get_data(self, sample_name=str(), list_index=list(), normalized=True) -> np.array:
         """
         Return a normalized array using the cache index and clicked folder
         """
-        current_sample = self.active_sample()
-        current_index = self.cache_index
+        # current_sample = self.get_active_sample()
+        # current_index = self.cache_index
 
         try:
             data = self.h5.get_Edf_data(
-                sample_name=current_sample[0],
-                index_list=current_index,
+                sample_name=sample_name,
+                index_list=list_index,
                 normalized=normalized,
             )
+            self.write_terminal_and_logger(f"Retrieved data. Sample_name:{sample_name}, index {str(list_index)}.")
         except Exception as e:
-            logger.info(f"{e}: Data could not be retrieved with sample {current_sample} and index {current_index}.")
+            logger.error(f"{e}: Data could not be retrieved with sample {sample_name} and index {str(list_index)}.")
             data = None
+
         return data
 
     @log_info
@@ -3829,7 +3877,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         list_integration_cakes, list_integration_boxes = search_integration_names()
         list_integration = list_integration_cakes + list_integration_boxes
 
-        print(list_integration)
         # Update the listwidget for CAKE integration
         lt.insert_list(
             listwidget=self.list_cakes,
