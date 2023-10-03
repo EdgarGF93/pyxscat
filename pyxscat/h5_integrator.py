@@ -1762,7 +1762,7 @@ class H5GIIntegrator(Transform):
     def get_all_files_from_sample(self, sample_name=str(), yield_decode=True, basename=False, relative_to_root=True):
         self._open
         # full_samplename = str(self._root_dir.joinpath(sample_name))        
-        list_files = sorted(self.generator_files_in_sample(
+        list_files = list(self.generator_files_in_sample(
             sample_name=sample_name,
             yield_decode=yield_decode,
             basename=basename,
@@ -1978,7 +1978,7 @@ class H5GIIntegrator(Transform):
         return filename
 
     @log_info
-    def get_folder_index_from_filename(self, filename=str()):
+    def get_sample_index_from_filename(self, filename=str()):
         """
         Searches the filename in the .h5 Groups and returns the name of the folder and the index of the file in the Group
 
@@ -1989,16 +1989,16 @@ class H5GIIntegrator(Transform):
         str : string with the name of the folder in the .h5 file
         int : index of the filename inside the folder
         """
-        folder_name = str(Path(filename).relative_to(self.get_root_directory()))
+        sample_name = str(Path(filename).parent.relative_to(self._root_dir))
 
-        if not self._file.__contains__(folder_name):
-            logger.info("There is no Group with the name {folder_name}. Returns.")
+        if not self.contains_group(sample_name=sample_name, group_address=SAMPLE_GROUP_KEY):
+            logger.info(f"There is no Group with the name {sample_name}. Returns.")
             return
 
-        for index, file in enumerate(self.generator_files_in_sample(sample_name=folder_name)):
+        for index, file in enumerate(self.generator_files_in_sample(sample_name=sample_name)):
             if file == filename:
                 logger.info(f"Found match with the filename at index {index}")
-                return folder_name, index
+                return sample_name, index
         logger.info(f"No matches were found with the filename {filename}")
         return None, None
 

@@ -2169,7 +2169,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
     def search_live_files(self, pattern=None) -> None:
         list_files_1s = []
-        cmd = f"find {str(self.h5.absa_delta_array_root_dir)} -name {pattern} -newermt '-1 seconds'"
+        cmd = f"find {str(self.h5._root_dir)} -name {pattern} -newermt '-1 seconds'"
         try:
             list_files_1s = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True).stdout.decode().strip().split('\n')
             # Clean empty items
@@ -2210,7 +2210,22 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 reset=True,
             )
 
-            return dict_files_1s
+            # Go to the last file
+            last_file = self.h5.get_last_file(list_files=list_files_1s)
+            sample, index = self.h5.get_sample_index_from_filename(filename=last_file)
+            self.sample_cache = sample
+            self.cache_index = index
+            self.update_cache_data(
+                sample_name=sample,
+                list_index=index,
+            )
+            self.update_label_displayed()
+            self.update_graphs(
+                graph_1D=True,
+                graph_2D_q=True,
+                graph_2D_raw=True,
+                graph_2D_reshape=True,
+            )
         else:
             return
 
@@ -2434,7 +2449,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if self.h5:
             if not last_file:
                 last_file = self.h5.get_last_file()
-            last_file_folder, last_file_index = self.h5.get_folder_index_from_filename(
+            last_file_folder, last_file_index = self.h5.get_sample_index_from_filename(
                 filename=last_file,
             )
             if last_file_folder and last_file_index:
@@ -2462,28 +2477,28 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
 
 
-    @log_info
-    def search_live_files(self) -> list:
-        """
-            Run bash script to find newly created files
-        """
-        try:
-            list_files_1s = subprocess.run([join(GUI_PATH, 'bash_files', BASH_FILE_1S), self.main_directory, f"{self._wildcards}{self._extension}"],
-                                    stdout=subprocess.PIPE).stdout.decode().strip().split('\n')
-            # Clean empty items
-            list_files_1s = [item for item in list_files_1s if item]
-            new_files = list(set(list_files_1s).difference(self.set_files))
+    # @log_info
+    # def search_live_files(self) -> list:
+    #     """
+    #         Run bash script to find newly created files
+    #     """
+    #     try:
+    #         list_files_1s = subprocess.run([join(GUI_PATH, 'bash_files', BASH_FILE_1S), self.main_directory, f"{self._wildcards}{self._extension}"],
+    #                                 stdout=subprocess.PIPE).stdout.decode().strip().split('\n')
+    #         # Clean empty items
+    #         list_files_1s = [item for item in list_files_1s if item]
+    #         new_files = list(set(list_files_1s).difference(self.set_files))
 
-        except:
-            new_files = list()
-            self.timer_data.stop()
-            self._write_output(MSG_ERROR_BASH)
-            self._write_output("LIVE OFF. The script now is static.")
+    #     except:
+    #         new_files = list()
+    #         self.timer_data.stop()
+    #         self._write_output(MSG_ERROR_BASH)
+    #         self._write_output("LIVE OFF. The script now is static.")
 
-        if new_files:
-            return new_files
-        else:
-            pass   
+    #     if new_files:
+    #         return new_files
+    #     else:
+    #         pass   
 
     # #########################
     # # Updating widgets

@@ -2285,7 +2285,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if self.h5:
             if not last_file:
                 last_file = self.h5.get_last_file()
-            last_file_folder, last_file_index = self.h5.get_folder_index_from_filename(
+            last_file_folder, last_file_index = self.h5.get_sample_index_from_filename(
                 filename=last_file,
             )
             if last_file_folder and last_file_index:
