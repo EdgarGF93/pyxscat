@@ -63,6 +63,9 @@ MSG_RESET_DATA = "The data parameters were reinitialized."
 MSG_ERROR_BASH = "There was an error during some bash file running. Allow permission with > chmod 777 -R pyxscat-directory"
 
 
+INTERVAL_SEARCH_DATA = 1000
+
+
 MSG_LOGGER_INIT = "Logger was initialized."
 MSG_LOGGER_UPDATE_CB_SETUPS = "The combobox of setups was updated."
 
@@ -2116,6 +2119,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         if not state_live:
+
             self.h5.stop_live_mode()
             self.write_terminal_and_loggerinfo(f"LIVE Mode OFF")
             return
@@ -2124,9 +2128,95 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.update_all_files(None)
 
         # Start live mode
-        self.h5.start_live_mode(
+        self.start_live_mode(
             pattern=self.get_pattern(),
         )
+
+    @log_info
+    def start_live_mode(self, pattern=None):
+        if pattern is None:
+            logger.info(f"No pattern to search in live mode.")
+            return
+
+        # # If live is on, start the live searching engine, only for Linux
+        platform = sys.platform
+        if 'linux' in platform:
+            self.timer_data = QTimer()
+
+            # Start the loop each second
+            self.timer_data.timeout.connect(
+                lambda: (
+                    self.search_live_files(pattern=pattern),
+                )
+            )
+
+            # Get last file and update
+            # self.update_widgets_to_last_file()
+
+            self.timer_data.start(INTERVAL_SEARCH_DATA)
+            logger.info("LIVE ON: Now, the script is looking for new files...")
+        else:
+            logger.info(f"The operating system {platform} is not compatible with live searching.")
+
+    @log_info
+    def stop_live_mode(self):
+        # # If live is on, start the live searching engine, only for Linux
+        if self.timer_data:
+            self.timer_data.stop()
+            logger.info("LIVE: OFF. The script stopped looking for new files.")
+        else:
+            logger.info(f"LIVE: OFF. The script stopped looking for new files.")
+
+    def search_live_files(self, pattern=None) -> None:
+        list_files_1s = []
+        cmd = f"find {str(self.h5.absa_delta_array_root_dir)} -name {pattern} -newermt '-1 seconds'"
+        try:
+            list_files_1s = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True).stdout.decode().strip().split('\n')
+            # Clean empty items
+            list_files_1s = [item for item in list_files_1s if item]
+        except:
+            logger.info(f"Error while running the bash script.")
+
+        if list_files_1s:
+            logger.info(f"Found new files LIVE: {list_files_1s}")
+
+            # Upload the new files to h5
+            dict_files_1s = get_dict_files(list_files=list_files_1s, relative_root=None)
+            self.h5.update_datafiles(          
+                dict_new_files=dict_files_1s,
+                search=False,
+                relative_to_root=RELATIVE_TO_ROOT,
+            )
+
+            # Update list of samples
+            self.update_listwidget_with_samples(
+                listwidget=self.listwidget_samples,
+                from_h5=True,
+                reset=True,
+                # relative_to_root=RELATIVE_TO_ROOT,
+            )
+
+            # Update table if needed
+            # Get a Pandas.DataFrame to upload the table
+            keys_to_display = self.combobox_metadata.currentData()
+            dataframe = self.h5.get_metadata_dataframe(
+                sample_name=self.sample_cache,
+                list_keys=keys_to_display,
+            )
+
+            # Reset and feed the table widget with default metadata keys if needed
+            self.update_table(
+                dataframe=dataframe,
+                reset=True,
+            )
+
+            return dict_files_1s
+        else:
+            return
+
+
+
+
 
     @log_info
     def update_h5_poni_and_files(self) -> None:

@@ -29,7 +29,7 @@ import subprocess
 
 ENCODING_FORMAT = "UTF-8"
 
-INTERVAL_SEARCH_DATA = 1000
+
 
 DESCRIPTION_HDF5 = "HDF5 file with Scattering methods."
 BEAMLINE = "BM28-XMaS"
@@ -1710,60 +1710,7 @@ class H5GIIntegrator(Transform):
         )
         return dict_new_files
 
-    @log_info
-    def start_live_mode(self, pattern=None):
-        if pattern is None:
-            logger.info(f"No pattern to search in live mode.")
-            return
 
-        # # If live is on, start the live searching engine, only for Linux
-        platform = sys.platform
-        if 'linux' in platform:
-            self.timer_data = QTimer()
-
-            # Start the loop each second
-            self.timer_data.timeout.connect(
-                lambda: (
-                    self.search_live_files(pattern=pattern),
-                )
-            )
-
-            # Get last file and update
-            # self.update_widgets_to_last_file()
-
-            self.timer_data.start(INTERVAL_SEARCH_DATA)
-            logger.info("LIVE ON: Now, the script is looking for new files...")
-        else:
-            logger.info(f"The operating system {platform} is not compatible with live searching.")
-
-    @log_info
-    def stop_live_mode(self):
-        # # If live is on, start the live searching engine, only for Linux
-        if self.timer_data:
-            self.timer_data.stop()
-            logger.info("LIVE: OFF. The script stopped looking for new files.")
-        else:
-            logger.info(f"LIVE: OFF. The script stopped looking for new files.")
-
-    def search_live_files(self, pattern=None) -> None:
-        list_files_1s = []
-        cmd = f"find {str(self._root_dir)} -name {pattern} -newermt '-1 seconds'"
-        try:
-            list_files_1s = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True).stdout.decode().strip().split('\n')
-            # Clean empty items
-            list_files_1s = [item for item in list_files_1s if item]
-        except:
-            logger.info(f"Error while running the bash script.")
-
-        if list_files_1s:
-            logger.info(f"Found new files LIVE: {list_files_1s}")
-
-            # Upload the new files to h5
-            dict_files_1s = get_dict_files(list_files=list_files_1s, relative_root=None)
-            self.update_datafiles(
-                dict_new_files=dict_files_1s,
-                search=False,
-            )
             
 
 
@@ -1773,8 +1720,8 @@ class H5GIIntegrator(Transform):
             # self.update_widgets_to_last_file(
             #     last_file=list_files_1s,
             # )
-        else:
-            return
+        # else:
+        #     return
 
 
 
