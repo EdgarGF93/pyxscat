@@ -1729,7 +1729,7 @@ class H5GIIntegrator(Transform):
             )
 
             # Get last file and update
-            self.update_widgets_to_last_file()
+            # self.update_widgets_to_last_file()
 
             self.timer_data.start(INTERVAL_SEARCH_DATA)
             logger.info("LIVE ON: Now, the script is looking for new files...")
@@ -1745,11 +1745,9 @@ class H5GIIntegrator(Transform):
         else:
             logger.info(f"LIVE: OFF. The script stopped looking for new files.")
 
-    @log_info
     def search_live_files(self, pattern=None) -> None:
-
         list_files_1s = []
-        cmd = f"find {str(self._root_dir)} -name {self.get_pattern()} -newermt '-1 seconds'"
+        cmd = f"find {str(self._root_dir)} -name {pattern} -newermt '-1 seconds'"
         try:
             list_files_1s = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True).stdout.decode().strip().split('\n')
             # Clean empty items
@@ -1766,14 +1764,16 @@ class H5GIIntegrator(Transform):
                 dict_new_files=dict_files_1s,
                 search=False,
             )
-            print(dict_files_1s)
+            
+
+
+
 
             # self.update_widgets()
             # self.update_widgets_to_last_file(
             #     last_file=list_files_1s,
             # )
         else:
-            print("Nada")
             return
 
 

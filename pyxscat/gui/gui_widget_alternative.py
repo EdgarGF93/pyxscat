@@ -3166,7 +3166,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 table=self.table_files,
             )
             logger.info("Table was reseted.")
-
         if dataframe is None:
             return
 
