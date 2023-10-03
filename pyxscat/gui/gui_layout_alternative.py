@@ -678,6 +678,8 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_start.setStyleSheet(BUTTON_STYLE_ENABLE)
         self.button_live = QPushButton(BUTTON_LIVE)
         self.button_live.setStyleSheet(BUTTON_STYLE_ENABLE)
+        self.button_live.setCheckable(True)
+        self.button_live.setChecked(False)
 
         hbox_pyfai.addWidget(self.button_pyfaicalib)
         hbox_pyfai.addWidget(self.button_start)
@@ -1273,12 +1275,12 @@ class GUIPyX_Widget_layout(QWidget):
         self.combobox_headeritems = QComboBox()
         self.lineedit_headeritems = QLineEdit()
 
-        self.combobox_multi = CheckableComboBox()
+        self.combobox_metadata = CheckableComboBox()
 
         hbox_metadata_items.addWidget(label_headeritems)
         # hbox_metadata_items.addWidget(self.combobox_headeritems)
         # hbox_metadata_items.addWidget(self.lineedit_headeritems)
-        hbox_metadata_items.addWidget(self.combobox_multi)
+        hbox_metadata_items.addWidget(self.combobox_metadata)
         hbox_metadata_items.setStretch(1,15)
 
         self.table_files = QTableWidget()
@@ -1352,7 +1354,8 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_default_graph = QPushButton(BUTTON_AUTO)
         self.button_default_graph.setStyleSheet(button_on)
         label_title = QLabel(LABEL_MAP_TITLES)
-        self.combobox_headeritems_title = QComboBox()
+        # self.combobox_headeritems_title = QComboBox()
+        self.combobox_headeritems_title = CheckableComboBox()
         self.lineedit_headeritems_title = QLineEdit()
         self.button_reshape_map = QPushButton(BUTTON_SHOW_RESHAPE)
         self.button_reshape_map.setStyleSheet(button_style_thin)
@@ -1361,7 +1364,8 @@ class GUIPyX_Widget_layout(QWidget):
         hbox_graph_toolbar_1.addWidget(self.combobox_units)
         hbox_graph_toolbar_1.addWidget(label_title)
         hbox_graph_toolbar_1.addWidget(self.combobox_headeritems_title)
-        hbox_graph_toolbar_1.addWidget(self.lineedit_headeritems_title)
+        hbox_graph_toolbar_1.setStretch(3,15)
+        # hbox_graph_toolbar_1.addWidget(self.lineedit_headeritems_title)
 
         # self.xlims = QLabel(LABEL_XLIMS)
         # self.lineedit_xmin = QLineEdit()
@@ -1562,10 +1566,16 @@ class GUIPyX_Widget_layout(QWidget):
     def state_orientation(self):
         qz = self.state_qz()
         qr = self.state_qr()
-        so = DICT_SAMPLE_ORIENTATIONS[(self._qz_parallel, self._qr_parallel)]
+        so = DICT_SAMPLE_ORIENTATIONS[(qz, qr)]
         return so
 
     @property
     def state_mirror(self):
         state = self.button_mirror.isChecked()
         return state
+
+    def update_button_live(self, new_state=True):
+        if new_state:
+            self.button_live.setText(BUTTON_LIVE_ON)
+        else:
+            self.button_live.setText(BUTTON_LIVE)   
