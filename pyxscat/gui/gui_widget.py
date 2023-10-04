@@ -3549,7 +3549,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             title_str = ''
             for key in keys_title:
                 metadata_value = self.h5.get_metadata_value(
-                    folder_name=self.clicked_folder,
+                    sample_name=self.clicked_folder,
                     key_metadata=key,
                     index_list=self.cache_index,
                 )

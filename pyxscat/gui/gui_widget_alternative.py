@@ -108,7 +108,7 @@ DEFAULT_MAP_FONTSIZE = 10
 DEFAULT_INCIDENT_ANGLE = 0.0
 DEFAULT_TILT_ANGLE = 0.0
 
-RELATIVE_TO_ROOT = True
+RELATIVE_TO_ROOT = False
 
  # Initialize logger
 logger = logging.getLogger()
@@ -1035,32 +1035,32 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             pattern=self.get_pattern(),
             relative_to_root=RELATIVE_TO_ROOT,
         )
-        self.h5.update_ponifiles(
+        self.h5.h5_update_ponifiles(
             ponifile_list=[],
             search=True,
             relative_to_root=RELATIVE_TO_ROOT,
         )
 
-        # Update combobox of ponifiles
-        self.update_cb_ponifiles(
-            from_h5=True,
-            reset=True,
-            # relative_to_root=RELATIVE_TO_ROOT,
-        )
+        # # Update combobox of ponifiles
+        # self.update_cb_ponifiles(
+        #     from_h5=True,
+        #     reset=True,
+        #     # relative_to_root=RELATIVE_TO_ROOT,
+        # )
 
-        # Update list of samples
-        self.update_listwidget_with_samples(
-            listwidget=self.listwidget_samples,
-            from_h5=True,
-            reset=True,
-            # relative_to_root=RELATIVE_TO_ROOT,
-        )
+        # # Update list of samples
+        # self.update_listwidget_with_samples(
+        #     listwidget=self.listwidget_samples,
+        #     from_h5=True,
+        #     reset=True,
+        #     # relative_to_root=RELATIVE_TO_ROOT,
+        # )
 
-        # Save a .json file with the attributes of the new h5 instance
-        self.save_h5_dict()
+        # # Save a .json file with the attributes of the new h5 instance
+        # self.save_h5_dict()
 
-        # Update the combobox of h5 files
-        self.update_combobox_h5()
+        # # Update the combobox of h5 files
+        # self.update_combobox_h5()
 
     @log_info
     def init_h5_instance(
@@ -1356,7 +1356,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
     def update_h5_plaintext(self):
         self.h5_plaintext.clear()
         if self.h5:
-            d = self.h5.get_dict_attrs()
+            d = self.h5.h5_get_dict_attrs()
             for k,v in d.items():
                 self.h5_plaintext.appendPlainText(f"{str(k)} : {str(v)}\n")
 
@@ -1575,7 +1575,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
         # Update the h5 and combobox
-        self.h5.update_ponifiles(search=True)
+        self.h5.h5_update_ponifiles(search=True)
         self.update_cb_ponifiles(from_h5=True)
 
     @log_info
@@ -2068,7 +2068,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             search=False,
             relative_to_root=RELATIVE_TO_ROOT,
         )
-        self.h5.update_ponifiles(
+        self.h5.h5_update_ponifiles(
             ponifile_list=[],
             search=True,
             relative_to_root=RELATIVE_TO_ROOT,
@@ -2289,7 +2289,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         filename_out = H5_FILES_PATH.joinpath(f"{name_json}")
 
         # Fetch the dictionary of attributes from the h5 instance
-        dict_h5 = self.h5.get_dict_attrs()
+        dict_h5 = self.h5.h5_get_dict_attrs()
 
         # Save the dictionary as a .json file
         with open(filename_out, 'w+') as fp:
@@ -3890,7 +3890,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             title_str = ''
             for key in keys_title:
                 metadata_value = self.h5.get_metadata_value(
-                    folder_name=self.clicked_folder,
+                    sample_name=self.clicked_folder,
                     key_metadata=key,
                     index_list=self.cache_index,
                 )
