@@ -732,36 +732,45 @@ class GUIPyX_Widget_layout(QWidget):
 
         label_angle = QLabel(LABEL_IANGLE)
         self.lineedit_angle = QLineEdit()
-        self.combobox_angle = QComboBox()
+        self.combobox_angle = CheckableComboBox()
 
         hbox_metadata_iangle.addWidget(label_angle)
         hbox_metadata_iangle.addWidget(self.lineedit_angle)
         hbox_metadata_iangle.addWidget(self.combobox_angle)
 
+        hbox_metadata_iangle.setStretch(2,5)
+
+
+
+
         label_tilt_angle = QLabel(LABEL_TILTANGLE)
         self.lineedit_tilt_angle = QLineEdit()
-        self.combobox_tilt_angle = QComboBox()
+        self.combobox_tilt_angle = CheckableComboBox()
 
         hbox_metadata_tangle.addWidget(label_tilt_angle)
         hbox_metadata_tangle.addWidget(self.lineedit_tilt_angle)
         hbox_metadata_tangle.addWidget(self.combobox_tilt_angle)
 
+        hbox_metadata_tangle.setStretch(2,5)        
+
         label_normfactor = QLabel(LABEL_NORMFACTOR)
         self.lineedit_normfactor = QLineEdit()
-        self.combobox_normfactor = QComboBox()
+        self.combobox_normfactor = CheckableComboBox()
 
         hbox_metadata_norm.addWidget(label_normfactor)
         hbox_metadata_norm.addWidget(self.lineedit_normfactor)
         hbox_metadata_norm.addWidget(self.combobox_normfactor)
+        hbox_metadata_norm.setStretch(2,5)
 
         label_exposure = QLabel(LABEL_EXPOSURE)
         self.lineedit_exposure = QLineEdit()
-        self.combobox_exposure = QComboBox()
+        self.combobox_acquisition = CheckableComboBox()
 
         hbox_metadata_acq.addWidget(label_exposure)
         hbox_metadata_acq.addWidget(self.lineedit_exposure)
-        hbox_metadata_acq.addWidget(self.combobox_exposure)
-
+        hbox_metadata_acq.addWidget(self.combobox_acquisition)
+        hbox_metadata_acq.setStretch(2,5)
+        
         label_setup_name = QLabel(LABEL_SETUP_NAME)
         self.lineedit_setup_name = QLineEdit()   
         self.button_metadata_save = QPushButton(BUTTON_JSON_FILE)
@@ -1272,7 +1281,7 @@ class GUIPyX_Widget_layout(QWidget):
         widget_metadata_items.setLayout(hbox_metadata_items)
 
         label_headeritems = QLabel(LABEL_METADATA)
-        self.combobox_headeritems = QComboBox()
+        # self.combobox_headeritems = QComboBox()
         self.lineedit_headeritems = QLineEdit()
 
         self.combobox_metadata = CheckableComboBox()
@@ -1409,11 +1418,19 @@ class GUIPyX_Widget_layout(QWidget):
         self.lineedit_xticks = QLineEdit()
         label_yticks = QLabel(LABEL_YTICKS)
         self.lineedit_yticks = QLineEdit()
+        label_xlims = QLabel(LABEL_XLIMS)
+        self.lineedit_xlims = QLineEdit()
+        label_ylims = QLabel(LABEL_YLIMS)
+        self.lineedit_ylims = QLineEdit()
 
         hbox_graph_toolbar_3.addWidget(label_xticks)
         hbox_graph_toolbar_3.addWidget(self.lineedit_xticks)
         hbox_graph_toolbar_3.addWidget(label_yticks)
         hbox_graph_toolbar_3.addWidget(self.lineedit_yticks)
+        hbox_graph_toolbar_3.addWidget(label_xlims)
+        hbox_graph_toolbar_3.addWidget(self.lineedit_xlims)
+        hbox_graph_toolbar_3.addWidget(label_ylims)
+        hbox_graph_toolbar_3.addWidget(self.lineedit_ylims)
 
         self.canvas_2d_q = MplCanvas(self, width=4, height=3, dpi=50)
         toolbar_q_matplotlib = NavigationToolbar2QT(self.canvas_2d_q, self)

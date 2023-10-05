@@ -1,1 +1,1 @@
-{"name": "complete", "suffix": "complete", "type": "Azimuthal", "unit": "q_nm^-1", "radial_range": [0.0, 30.0], "azimuth_range": [0.0, 90.0], "azim_bins": 0, "integration": "cake"}
+{"name": "complete", "suffix": "complete", "type": "azimuthal", "unit": "q_nm^-1", "radial_range": [0.0, 30.0], "azimuth_range": [0.0, 90.0], "azim_bins": 0, "integration": "cake"}

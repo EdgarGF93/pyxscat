@@ -5,27 +5,19 @@ from pyFAI.io.ponifile import PoniFile
 from pygix.transform import Transform
 from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
 from os.path import getctime
-from PyQt5.QtCore import QTimer, pyqtSignal
 
 from pyxscat.edf import EdfClass
-from pyxscat.other.other_functions import date_prefix, float_str, get_dict_files, get_dict_difference
-from pyxscat.gui import GLOBAL_PATH, LOGGER_PATH
+from pyxscat.other.other_functions import date_prefix, get_dict_files, get_dict_difference
+from pyxscat.gui import LOGGER_PATH
 from pyxscat.other.units import *
 
 import h5py
 import logging
 import numpy as np
 import pandas as pd
-import silx.io.commonh5 as h5c
-import silx.io.h5py_utils as h5u
-import silx.io.utils as utils
-from silx.io import open
-from silx.io.commonh5 import Group, Dataset, Node
 from silx.io.h5py_utils import File
 from pyxscat.other.integrator_methods import *
 from pyxscat.other.setup_methods import *
-import sys
-import subprocess
 
 ENCODING_FORMAT = "UTF-8"
 FORMAT_STRING = h5py.string_dtype(ENCODING_FORMAT)
@@ -35,6 +27,12 @@ DEFAULT_SHAPE_1D = (0,)
 MAXSHAPE_1D_RESIZE = (None,)
 DEFAULT_H5_PATH = '.'
 
+UNIT_GI = {
+    'q_nm^-1' : Q_NM,
+    'q_A^-1' : Q_A,
+    '2th_deg' : TTH_DEG,
+    '2th_rad' : TTH_RAD,
+}
 
 DESCRIPTION_HDF5 = "HDF5 file with Scattering methods."
 BEAMLINE = "BM28-XMaS"
@@ -98,14 +96,14 @@ PONI_KEY_ROT2 = "rot2"
 PONI_KEY_ROT3 = "rot3"
 
 DICT_BOX_ORIENTATION = {
-    'Horizontal' : 'ipbox',
-    'Vertical' : 'opbox',
+    'horizontal' : 'ipbox',
+    'vertical' : 'opbox',
 }
 
-AZIMUTH_NAME = 'Azimuthal'
-RADIAL_NAME = 'Radial'
-HORIZONTAL_NAME = 'Horizontal'
-VERTICAL_NAME = 'Vertical'
+AZIMUTH_NAME = 'azimuthal'
+RADIAL_NAME = 'radial'
+HORIZONTAL_NAME = 'horizontal'
+VERTICAL_NAME = 'vertical'
 
 ERROR_RAW_INTEGRATION = "Failed at detect integration type."
 MSG_LOGGER_INIT = "Logger was initialized."
@@ -174,9 +172,7 @@ class H5GIIntegrator(Transform):
             logger.info(f"H5Integrator instance was initialized with root directory: {root_directory}.") 
         
         # Init these attributes as global variables
-        self._open_r
         self.init_attrs()
-        self._close
 
         # Get attributes from Transform class (pygix module)
         super().__init__()
@@ -287,6 +283,11 @@ class H5GIIntegrator(Transform):
         """
         Declare attributes to easy access
         """
+        self._iangle_key = ''
+        self._tangle_key = ''
+        self._norm_key = ''
+        self._acq_key = ''
+
         try:
             self._h5_filename = Path(self.h5_get_attr(attr_key=FILENAME_H5_KEY))
             self._root_dir = Path(self.h5_get_attr(attr_key=ROOT_DIRECTORY_KEY))
@@ -374,24 +375,6 @@ class H5GIIntegrator(Transform):
             dict_attrs = {k:v for k,v in f[group_address].attrs.items()}
         return dict_attrs
 
-
-
-        # try:
-        #     dict_attrs = {k:v for k,v in self._file[group_address].attrs.items()}
-        #     return dict_attrs
-        # except Exception as e:
-        #     logger.info(f"{e}: Attributes could not be retrieved. Trying to open the File...")
-        
-        # try:
-        #     self._open_r
-        #     dict_attrs = {k:v for k,v in self._file[group_address].attrs.items()}
-        #     self._close
-        # except Exception as e:
-        #     logger.info(f"{e}: Attributes could not be retrieved anyway.")
-        # finally:
-        #     self._close
-        # return dict_attrs
-
     #########################################################
     ######### METHODS FOR KEY METADATA ######################
     #########################################################
@@ -424,18 +407,18 @@ class H5GIIntegrator(Transform):
                 NORMALIZATION_KEY : norm_factor,
                 ACQUISITION_KEY : acq_key,
             }
-
-        # Write the dictionary as attributes
-        self.h5_write_attrs_in_group(
-            dict_attrs=dict_metadata_keys,
-        )
+        
+        self._iangle_key = dict_metadata_keys[INCIDENT_ANGLE_KEY]
+        self._tangle_key = dict_metadata_keys[TILT_ANGLE_KEY]
+        self._norm_key = dict_metadata_keys[NORMALIZATION_KEY]
+        self._acq_key = dict_metadata_keys[ACQUISITION_KEY]
 
     @debug_info
     def get_iangle_key(self):
         """
         Returns the string of the stored key for incident angle
         """
-        iangle_key = self.h5_get_attr(attr_key=INCIDENT_ANGLE_KEY)
+        iangle_key = self._iangle_key
         return iangle_key
 
     @debug_info
@@ -443,7 +426,7 @@ class H5GIIntegrator(Transform):
         """
         Returns the string of the stored key for tilt angle
         """
-        tangle_key = self.h5_get_attr(attr_key=TILT_ANGLE_KEY)
+        tangle_key = self._tangle_key
         return tangle_key
 
     @debug_info
@@ -451,7 +434,7 @@ class H5GIIntegrator(Transform):
         """
         Returns the string of the stored key for normalization factor
         """
-        norm_key = self.h5_get_attr(attr_key=NORMALIZATION_KEY)
+        norm_key = self._norm_key
         return norm_key
 
     @debug_info
@@ -459,7 +442,7 @@ class H5GIIntegrator(Transform):
         """
         Returns the string of the stored key for acquisition time
         """
-        acq_key = self.h5_get_attr(attr_key=ACQUISITION_KEY)
+        acq_key = self._acq_key
         return acq_key
 
     @debug_info
@@ -473,16 +456,19 @@ class H5GIIntegrator(Transform):
         Returns:
             dictionary with the metadata key-values
         """
-        dict_attrs = self.h5_get_dict_attrs(group_address=ADDRESS_METADATA_KEYS)
         dict_metadata = dict()
-        dict_metadata[INCIDENT_ANGLE_KEY] = dict_attrs[INCIDENT_ANGLE_KEY]
-        dict_metadata[TILT_ANGLE_KEY] = dict_attrs[TILT_ANGLE_KEY]
-        dict_metadata[NORMALIZATION_KEY] = dict_attrs[NORMALIZATION_KEY]
-        dict_metadata[ACQUISITION_KEY] = dict_attrs[ACQUISITION_KEY]
+        dict_metadata[INCIDENT_ANGLE_KEY] = self._iangle_key
+        dict_metadata[TILT_ANGLE_KEY] = self._tangle_key
+        dict_metadata[NORMALIZATION_KEY] = self._norm_key
+        dict_metadata[ACQUISITION_KEY] = self._acq_key
         return dict_metadata
 
     @debug_info
-    def get_dataset_acquisition_time(self, folder_name=str()) -> np.array:
+    def get_dataset_acquisition_time(
+        self, 
+        sample_name=str(),
+        sample_relative_address=True,
+        ) -> np.array:
         """
         Returns the numpy array which is the dataset of acquistion times associated with the files of a folder (Group)
 
@@ -495,15 +481,20 @@ class H5GIIntegrator(Transform):
         key_acq = self.get_acquisition_key()
         try:
             dataset = self.get_metadata_dataset(
-                sample_name=folder_name,
+                sample_name=sample_name,
                 key_metadata=key_acq,
+                sample_relative_address=sample_relative_address,
             )
         except:
             dataset = None
         return dataset
 
     @debug_info
-    def get_dataset_incident_angle(self, folder_name=str()) -> np.array:
+    def get_dataset_incident_angle(
+        self, 
+        sample_name=str(), 
+        sample_relative_address=True,
+        ) -> np.array:
         """
         Returns the numpy array which is the dataset of incident angles associated with the files of a folder (Group)
 
@@ -516,7 +507,8 @@ class H5GIIntegrator(Transform):
         key_iangle = self.get_iangle_key()
         try:
             dataset = self.get_metadata_dataset(
-                sample_name=folder_name,
+                sample_name=sample_name,
+                sample_relative_address=sample_relative_address,
                 key_metadata=key_iangle,
             )
         except:
@@ -524,7 +516,11 @@ class H5GIIntegrator(Transform):
         return dataset
 
     @debug_info
-    def get_dataset_tilt_angle(self, folder_name=str()) -> np.array:
+    def get_dataset_tilt_angle(
+        self, 
+        sample_name=str(), 
+        sample_relative_address=True,
+        ) -> np.array:
         """
         Returns the numpy array which is the dataset of tilt angles associated with the files of a folder (Group)
 
@@ -537,7 +533,8 @@ class H5GIIntegrator(Transform):
         key_tangle = self.get_tiltangle_key()
         try:
             dataset = self.get_metadata_dataset(
-                sample_name=folder_name,
+                sample_name=sample_name,
+                sample_relative_address=sample_relative_address,
                 key_metadata=key_tangle,
             )
         except:
@@ -545,7 +542,11 @@ class H5GIIntegrator(Transform):
         return dataset
 
     @debug_info
-    def get_dataset_norm_factor(self, folder_name=str()) -> np.array:
+    def get_dataset_norm_factor(
+        self, 
+        sample_name=str(),
+        sample_relative_address=True,
+        ) -> np.array:
         """
         Returns the numpy array which is the dataset of normalization factors associated with the files of a folder (Group)
 
@@ -558,8 +559,8 @@ class H5GIIntegrator(Transform):
         key_norm = self.get_norm_key()
         try:
             dataset = self.get_metadata_dataset(
-                sample_name=folder_name,
-                # filename=
+                sample_name=sample_name,
+                sample_relative_address=sample_relative_address,
                 key_metadata=key_norm,
             )
         except:
@@ -567,7 +568,12 @@ class H5GIIntegrator(Transform):
         return dataset
 
     @debug_info
-    def get_acquisition_time(self, folder_name=str(), index_list=int()) -> float:
+    def get_acquisition_time(
+        self, 
+        folder_name=str(), 
+        index_list=int(),
+        sample_relative_address=True,
+        ) -> float:
         """
         Returns the acquisition time of a file or the average from a list of files (index)
 
@@ -579,7 +585,8 @@ class H5GIIntegrator(Transform):
         float : the acquisition time of one file or the average of different from the same Group
         """
         dataset = self.get_dataset_acquisition_time(
-            folder_name=folder_name,
+            sample_name=folder_name,
+            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -597,7 +604,12 @@ class H5GIIntegrator(Transform):
         return acq
 
     @debug_info
-    def get_incident_angle(self, folder_name=str(), index_list=int()) -> float:
+    def get_incident_angle(
+        self, 
+        sample_name=str(),
+        sample_relative_address=True,
+        index_list=int(),
+        ) -> float:
         """
         Returns the incident angle of a file or the average from a list of files (index)
 
@@ -609,7 +621,8 @@ class H5GIIntegrator(Transform):
         float : the incident angle of one file or the average of different from the same Group
         """
         dataset = self.get_dataset_incident_angle(
-            folder_name=folder_name,
+            sample_name=sample_name,
+            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -627,7 +640,12 @@ class H5GIIntegrator(Transform):
         return iangle
 
     @debug_info
-    def get_tilt_angle(self, folder_name=str(), index_list=int()) -> float:
+    def get_tilt_angle(
+        self, 
+        sample_name=str(),
+        sample_relative_address=True,
+        index_list=int(),
+        ) -> float:
         """
         Returns the tit angle of a file or the average from a list of files (index)
 
@@ -639,7 +657,8 @@ class H5GIIntegrator(Transform):
         float : the tilt angle of one file or the average of different from the same Group
         """
         dataset = self.get_dataset_tilt_angle(
-            folder_name=folder_name,
+            sample_name=sample_name,
+            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -658,7 +677,11 @@ class H5GIIntegrator(Transform):
         return tilt
 
     @debug_info
-    def get_norm_factor(self, sample_name=str(), index_list=int()) -> float:
+    def get_norm_factor(
+        self, 
+        sample_name=str(), 
+        sample_relative_address=True,
+        index_list=int()) -> float:
         """
         Returns the normalization factor of a file or the average from a list of files (index)
 
@@ -670,7 +693,8 @@ class H5GIIntegrator(Transform):
         float : the normalization factor of one file or the average of different from the same Group
         """
         dataset = self.get_dataset_norm_factor(
-            folder_name=sample_name,
+            sample_name=sample_name,
+            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -771,10 +795,8 @@ class H5GIIntegrator(Transform):
     @debug_info
     def update_ponifiles(
         self,
-        dataset_address=f"{PONI_GROUP_KEY}/{PONIFILE_DATASET_KEY}", 
         ponifile_list=list(), 
         search=False,
-        save_absolute=True,
         ):
 
         # Creates the dataset for ponifiles if needed
@@ -789,18 +811,6 @@ class H5GIIntegrator(Transform):
             logger.info("No ponifiles to be updated. Return.")
             return
 
-        # Make a list if there is only one item
-        # if isinstance(ponifile_list, str):
-        #     ponifile_list = [ponifile_list]
-
-        # Make them relative to root if required
-        # if save_absolute:
-        #     ponifile_list = [str(Path(file).relative_to(self._root_dir)) for file in ponifile_list]
-
-        # Take only the new files
-        # stored_ponifiles = list(self.generate_ponifiles())
-        # new_ponifiles = [file for file in ponifile_list if file not in stored_ponifiles]
-
         # Return if no new ponifiles
         if not ponifile_list:
             logger.info(f"No ponifiles to update.")
@@ -808,28 +818,6 @@ class H5GIIntegrator(Transform):
         self.append_ponifile_list(
             ponifile_list=ponifile_list,
         )
-
-
-
-
-        # # Append the new .poni files
-        # for ponifile in new_ponifiles:
-        #     dataset = self._file[group_address][PONIFILE_DATASET_KEY]
-        #     try:
-        #         # Encode the string
-        #         ponifile = str(ponifile).encode(ENCODING_FORMAT)
-        #         # Append the encoded string into the dataset and enlarge
-        #         ind = dataset.len()
-        #         dataset[ind - 1] = ponifile
-        #         dataset.resize((ind + 1,))
-        #         logger.info(f"Ponifile {ponifile} was appended to dataset.")
-        #     except:
-        #         logger.info(f"Ponifile {ponifile} could not be updated.")
-
-
-
-
-
 
     @debug_info
     def append_metadata_values(self, sample_name=str(), metadata_key=str(), value_list=list()):
@@ -920,127 +908,42 @@ class H5GIIntegrator(Transform):
 
 
     @debug_info
-    def generate_ponifiles(self) -> str:
+    def generate_ponifiles(self, get_relative_address=True) -> str:
         with File(self._h5_filename, 'r+') as f:
             dataset = f[PONI_GROUP_KEY][PONIFILE_DATASET_KEY]
             for ponifile in dataset:
-                yield ponifile.decode(ENCODING_FORMAT)
+                ponifile = ponifile.decode(ENCODING_FORMAT)
+                if get_relative_address:
+                    ponifile = str(Path(ponifile).relative_to(self._root_dir)) 
+                yield ponifile
         
-
     @debug_info
-    def get_all_ponifiles(self) -> list:
-        ponifile_list = list(self.generate_ponifiles())
+    def get_all_ponifiles(self, get_relative_address=True) -> list:
+        ponifile_list = list(self.generate_ponifiles(get_relative_address=get_relative_address))
         return ponifile_list
-        # with File(self._h5_filename, 'r+') as f:
-        #     dataset = f[PONI_GROUP_KEY][PONIFILE_DATASET_KEY]
-        #     for ponifile in dataset:
-        #         yield ponifile.decode(ENCODING_FORMAT)
-
 
     @debug_info
-    def activate_ponifile(self, poni_filename=str()) -> None:
-        """
-        Updates the dataset with the active ponifile.
-
-        Keyword Arguments:
-            poni_filename -- full path of the ponifile that will be activated (default: {str()})
-        """        
+    def activate_ponifile(self, poni_filename=str()) -> None:     
         if not poni_filename:
             return
-
-        try:
-            poni_filename = Path(poni_filename)
-        except Exception as e:
-            logger.error(f"{e}: the poni file {poni_filename} is not a valid address.")
         
-        # Transform to absolute address
-        poni_filename = Path(poni_filename)
-        if not poni_filename.is_absolute():
-            poni_filename = str(self._root_dir.joinpath(poni_filename))
-        else:
-            poni_filename = str(poni_filename)
-
         # Proceed only if the requested ponifiles is already stored
-        stored_ponifiles = self.get_all_ponifiles()
-        if poni_filename not in stored_ponifiles:
+        stored_ponifiles = self.get_all_ponifiles(get_relative_address=True)
+
+        if poni_filename in stored_ponifiles:
+            poni_filename = Path(poni_filename)
+            if poni_filename.is_absolute():
+                poni_filename = str(poni_filename)
+            else:
+                poni_filename = str(self._root_dir.joinpath(poni_filename))
+            self.active_ponifile = poni_filename
+        else:
             logger.info(f"Ponifile {poni_filename} is not stored in the .h5")
             self.active_ponifile = None
-            return
-        else:
-            self.active_ponifile = poni_filename
-
-        # # Build the whole name if relative_to_root
-        # if relative_to_root:
-        #     self.active_ponifile = str(self._root_dir.joinpath(poni_filename))
-        # else:
-        #     self.active_ponifile = str(poni_filename)     
-
-        # try:
-        #     poni_filename = str(poni_filename).encode(ENCODING_FORMAT)
-        #     self._file[PONI_GROUP_KEY][PONIFILE_ACTIVE_KEY][0] = poni_filename
-        #     logger.info(f"Ponifile {poni_filename} activated successfully.")
-        # except Exception as e:
-        #     logger.error(f"{e}: Ponifile {poni_filename} could not be activated.")
-
-        # Close the h5 file
-        # self._close
+            return           
 
         # Update the GrazingGeometry instance
         self.update_grazinggeometry()
-
-
-
-
-
-
-    # @log_info
-    # def generate_ponifiles(self, decoded=True) -> str:
-    #     """
-    #     Yields the names of ponifiles stored in the Ponifile Group, at the first level of .h5 file
-
-    #     Parameters:
-    #     None
-
-    #     Yields:
-    #     str : str with the address of the stored .poni files
-    #     """
-    #     try:
-    #         dataset_ponifile = self._file[PONI_GROUP_KEY][PONIFILE_DATASET_KEY][()]
-    #     except Exception as e:
-    #         dataset_ponifile = None
-    #         logger.info(f"{e}: Dataset ponifiles could not be accessed. Trying to open the file...")
-        
-    #     # Try after opening the file
-    #     if dataset_ponifile is None:
-    #         try:
-    #             self._open_r
-    #             dataset_ponifile = self._file[PONI_GROUP_KEY][PONIFILE_DATASET_KEY][()]
-    #             self._close
-    #         except Exception as e:
-    #             logger.info(f"{e}: Dataset ponifiles could not be accessed anyway.")
-    #             return
-
-    #     # Generate data
-    #     for data in dataset_ponifile:
-    #         if decoded:
-    #             data = bytes.decode(data, encoding=ENCODING_FORMAT)
-    #         yield data
-    
-    # @log_info
-    # def get_all_ponifiles(self, decode=True) -> list:
-    #     """
-    #     Returns a list with all the stored ponifiles in the h5 File
-
-    #     Keyword Arguments:
-    #         decode -- _description_ (default: {True})
-
-    #     Returns:
-    #         _description_
-    #     """
-    #     self._open_r
-    #     stored_ponifiles = sorted(filter(None, self.generate_ponifiles()))
-    #     self._close
-    #     return stored_ponifiles
 
     @debug_info
     def get_poni_dict(self):
@@ -1175,12 +1078,26 @@ class H5GIIntegrator(Transform):
         
         # Update default incident and tilt angles
         try:
-            self.update_incident_tilt_angle(
-                incident_angle=DEFAULT_INCIDENT_ANGLE,
-                tilt_angle=DEFAULT_TILT_ANGLE,
-            )
+            self.update_incident_tilt_angle()
         except Exception as e:
             logger.error(f"{e}: angles could not be updated.")
+
+    @debug_info
+    def update_angles(self, sample_name=str(), list_index=list()):
+        iangle = self.get_incident_angle(
+            sample_name=sample_name,
+            sample_relative_address=True,
+            index_list=list_index,
+        )
+        tangle = self.get_tilt_angle(
+            sample_name=sample_name,
+            sample_relative_address=True,
+            index_list=list_index,
+        )
+        self.update_incident_tilt_angle(
+            incident_angle=iangle,
+            tilt_angle=tangle,
+        )
 
     @debug_info
     def update_incident_tilt_angle(self, incident_angle=0.0, tilt_angle=0.0):
@@ -1716,76 +1633,19 @@ class H5GIIntegrator(Transform):
     #         yield data, header
 
     @debug_info
-    def generator_samples(self) -> str:
-        """
-        Yields the folder_name of every data Group at the first level of hierarchy
-
-        Parameters:
-        None
-
-        Yields:
-        str : folder_name of the Group
-        """
+    def generator_samples(self, relative_address=True) -> str:
         with File(self._h5_filename, 'r+') as f:
             for sample in  f[SAMPLE_GROUP_KEY].keys():
-                yield sample
-
-
-
-
-        # try:
-        #     list_samples = [item for item in self._file[SAMPLE_GROUP_KEY].keys()]
-        # except Exception as e:
-        #     list_samples = None
-        #     logger.info(f"{e}: List of samples could not be retrieved. Trying to open the file...")
-        
-        # # Try to open the h5 File
-        # if list_samples is None:
-        #     try:
-        #         self._open_r
-        #         list_samples = [item for item in self._file[SAMPLE_GROUP_KEY].keys()]
-        #         self._close
-        #     except Exception as e:
-        #         logger.info(f"{e}: List of samples could not be retrieved anyway.")
-        #         return []
-        
-        # # Generate the name of the samples
-        # for sample in list_samples:
-        #     yield sample
+                if relative_address:
+                    sample_name = f[SAMPLE_GROUP_KEY][sample].attrs[REL_ADDRESS_KEY]
+                else:
+                    sample_name = f[SAMPLE_GROUP_KEY][sample].attrs[ABS_ADDRESS_KEY]
+                yield sample_name
 
     @debug_info
-    def get_all_samples(self) -> list:
-        """
-        Returns a list with all the stored samples in the h5 File
-
-        Keyword Arguments:
-            decode -- _description_ (default: {True})
-
-        Returns:
-            _description_
-        """
-        list_samples = sorted(self.generator_samples())
+    def get_all_samples(self, get_relative_address=True) -> list:
+        list_samples = sorted(self.generator_samples(relative_address=get_relative_address))
         return list_samples
-
-        # self._open_r
-        # stored_samples = sorted(self.h5_generator_samples())
-        # self._close
-        # return stored_samples
-
-
-
-
-        # self.open_h5
-        # for sample_name in self._file.keys():
-        #     try:
-        #         if not isinstance(self._file[sample_name], h5py.Group):
-        #             continue
-        #         elif sample_name == 'Metadata':
-        #             continue
-        #         else:
-        #             yield sample_name
-        #     except:
-        #         logger.info(f"Error while generating folder: {sample_name}")
 
     @debug_info
     def generator_all_files(self, yield_decode=True, relative_to_root=True) -> str:
@@ -1973,53 +1833,46 @@ class H5GIIntegrator(Transform):
         logger.info(INFO_H5_FILES_UPDATED)
 
     @debug_info
-    def get_all_files_from_sample(self, sample_name=str(), absolute_address=str(), relative_address=str()):
+    def get_all_files_from_sample(
+        self, 
+        sample_name=str(),
+        sample_relative_address=True, 
+        get_relative_address=True,
+        ):
         list_files = sorted(
             self.generator_files_in_sample(
                 sample_name=sample_name,
-                absolute_address=absolute_address,
-                relative_address=relative_address,
+                sample_relative_address=sample_relative_address,
+                get_relative_address=get_relative_address,
             ))
         return list_files
 
     @debug_info
-    def get_sample_address(self, sample_name=str(), absolute_address=str(), relative_address=str()):
+    def get_sample_address(self, sample_name=str(), sample_relative_address=True):
         with File(self._h5_filename, 'r+') as f:
-            if sample_name:
-                if f[SAMPLE_GROUP_KEY].__contains__(sample_name):
-                    return sample_name
-                else:
-                    logger.info(f"There is no sample {sample_name} in {SAMPLE_GROUP_KEY}.")
-                    return
-
-            elif absolute_address:
+            if sample_relative_address:
                 for sample in f[SAMPLE_GROUP_KEY].keys():
-                    if f[SAMPLE_GROUP_KEY][sample].attrs[ABS_ADDRESS_KEY] == absolute_address:
+                    if f[SAMPLE_GROUP_KEY][sample].attrs[REL_ADDRESS_KEY] == sample_name:
                         return sample
-                logger.info(f"There is no sample with abs. address {absolute_address}.")
+                logger.info(f"There is no sample with rel. address {sample_name}.")
                 return
-
-            elif relative_address:
+            else:
                 for sample in f[SAMPLE_GROUP_KEY].keys():
-                    if f[SAMPLE_GROUP_KEY][sample].attrs[REL_ADDRESS_KEY] == relative_address:
+                    if f[SAMPLE_GROUP_KEY][sample].attrs[ABS_ADDRESS_KEY] == sample_name:
                         return sample
-                        dataset = f[SAMPLE_GROUP_KEY][sample][DATA_KEY]
-                logger.info(f"There is no sample with rel. address {relative_address}.")
+                logger.info(f"There is no sample with abs. address {sample_name}.")
                 return
 
     @debug_info
-    def generator_files_in_sample(self, sample_name=str(), absolute_address=str(), relative_address=str()):
-        """
-        Yields the name of every file stored in a specific folder
-
-        Parameters:
-        folder_name(str) : name of the folder (Group) at the first level of hierarchy
-        full_path(bool) : yields the fullpath of the file (True) or just the basename (False)
-        """
+    def generator_files_in_sample(
+        self, 
+        sample_name=str(), 
+        sample_relative_address=True, 
+        get_relative_address=True,
+        ):
         sample_name = self.get_sample_address(
             sample_name=sample_name,
-            absolute_address=absolute_address,
-            relative_address=relative_address,
+            sample_relative_address=sample_relative_address
         )
 
         if not sample_name:
@@ -2028,21 +1881,22 @@ class H5GIIntegrator(Transform):
         with File(self._h5_filename, 'r+') as f:
             dataset = f[SAMPLE_GROUP_KEY][sample_name][DATA_KEY]
             for filename in dataset:
-                    yield filename.decode(ENCODING_FORMAT)
+                filename = filename.decode(ENCODING_FORMAT)
+                if get_relative_address:
+                    filename = str(Path(filename).relative_to(sample_name))                    
+                yield filename
 
     @debug_info
     def get_metadata_dataset(
         self, 
         sample_name=str(), 
-        absolute_address=str(), 
-        relative_address=str(),
+        sample_relative_address=True,
         key_metadata=str(),
         ) -> np.array:
 
         sample_name = self.get_sample_address(
             sample_name=sample_name,
-            absolute_address=absolute_address,
-            relative_address=relative_address,
+            sample_relative_address=sample_relative_address,
         )
 
         if not sample_name:
@@ -2060,8 +1914,7 @@ class H5GIIntegrator(Transform):
     def get_metadata_value(
         self, 
         sample_name=str(),
-        absolute_address=str(), 
-        relative_address=str(),
+        sample_relative_address=True,
         key_metadata=str(), 
         index_list=list(),
         ) -> float:
@@ -2078,8 +1931,7 @@ class H5GIIntegrator(Transform):
         """
         dataset = self.get_metadata_dataset(
             sample_name=sample_name,
-            relative_address=relative_address,
-            absolute_address=absolute_address,
+            sample_relative_address=sample_relative_address,
             key_metadata=key_metadata,
         )
 
@@ -2103,15 +1955,13 @@ class H5GIIntegrator(Transform):
     def get_metadata_dataframe(
         self, 
         sample_name=str(),
-        absolute_address=str(), 
-        relative_address=str(),
+        sample_relative_address=True,
         list_keys=list(),
         ) -> pd.DataFrame:
 
         list_files_in_sample = self.get_all_files_from_sample(
             sample_name=sample_name,
-            absolute_address=absolute_address,
-            relative_address=relative_address,
+            sample_relative_address=sample_relative_address,
         )
 
         if not list_files_in_sample:
@@ -2128,8 +1978,7 @@ class H5GIIntegrator(Transform):
                 try:
                     dataset_key = self.get_metadata_dataset(
                         sample_name=sample_name,
-                        absolute_address=absolute_address,
-                        relative_address=relative_address,
+                        sample_relative_address=sample_relative_address,
                         key_metadata=key,
                     )
                     short_metadata[key] = list(dataset_key)
@@ -2141,21 +1990,27 @@ class H5GIIntegrator(Transform):
 
 
     @debug_info
-    def get_all_metadata_keys_from_sample(self, sample_name=str(), absolute_address=str(), relative_address=str()):
+    def get_all_metadata_keys_from_sample(
+        self, 
+        sample_name=str(), 
+        sample_relative_address=True,
+        ):
         list_keys = sorted(
             self.generator_metadata_keys_from_sample(
                 sample_name=sample_name,
-                absolute_address=absolute_address,
-                relative_address=relative_address,
+                sample_relative_address=sample_relative_address,
                 ))
         return list_keys
 
     @debug_info
-    def generator_metadata_keys_from_sample(self, sample_name=str(), absolute_address=str(), relative_address=str()):
+    def generator_metadata_keys_from_sample(
+        self, 
+        sample_name=str(), 
+        sample_relative_address=True,
+        ):
         sample_name = self.get_sample_address(
             sample_name=sample_name,
-            absolute_address=absolute_address,
-            relative_address=relative_address,
+            sample_relative_address=sample_relative_address,
         )
 
         if not sample_name:
@@ -2163,22 +2018,19 @@ class H5GIIntegrator(Transform):
         
         with File(self._h5_filename, 'r+') as f:
             list_keys = f[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY].keys()
-        
-        for key in list_keys:
-            yield key
+            for key in list_keys:
+                yield key
 
     @debug_info
     def get_filename_from_index(
         self, 
-        sample_name=str(), 
-        absolute_address=str(), 
-        relative_address=str(),
+        sample_name=str(),
+        sample_relative_address=True,
         index_list=list(),
         ):
         sample_name = self.get_sample_address(
             sample_name=sample_name,
-            absolute_address=absolute_address,
-            relative_address=relative_address,
+            sample_relative_address=sample_relative_address,
         )
 
         if not sample_name:
@@ -2228,8 +2080,7 @@ class H5GIIntegrator(Transform):
         self, 
         full_filename=str(),
         sample_name=str(),
-        absolute_address=str(),
-        relative_address=str(),
+        sample_relative_address=True,
         index_file=int(),
         ):
 
@@ -2240,10 +2091,10 @@ class H5GIIntegrator(Transform):
             try:
                 filename = self.get_filename_from_index(
                     sample_name=sample_name,
-                    absolute_address=absolute_address,
-                    relative_address=relative_address,
+                    sample_relative_address=sample_relative_address,
                     index_list=index_file,
                 )
+
                 logger.info(f"Trying to open sample name {filename}")
             except Exception as e:
                 logger.error(f"{e}: file could not be found in the repository. Sample name {sample_name}, index {index_file}.")
@@ -2262,8 +2113,7 @@ class H5GIIntegrator(Transform):
     def get_Edf_data(
         self, 
         sample_name=str(),
-        absolute_address=str(),
-        relative_address=str(),
+        sample_relative_address=True,
         index_list=list(), 
         full_filename=str(),
         folder_reference_name=str(),
@@ -2294,8 +2144,7 @@ class H5GIIntegrator(Transform):
                     self.get_Edf_instance(
                         full_filename=full_filename,
                         sample_name=sample_name,
-                        absolute_address=absolute_address,
-                        relative_address=relative_address,
+                        sample_relative_address=sample_relative_address,
                         index_file=index,
                     ).get_data() for index in index_list
                 ]
@@ -2395,20 +2244,20 @@ class H5GIIntegrator(Transform):
 
         array_compiled = []
         for dict_integration in list_dict_integration:
-            if dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_AZIM:
-                res = self.raw_integration_azimuthal(
-                    data=data,
-                    norm_factor=norm_factor,
-                    dict_integration=dict_integration,
-                )
+            if dict_integration[KEY_INTEGRATION] == CAKE_LABEL:
+                if dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_AZIM:
+                    res = self.raw_integration_azimuthal(
+                        data=data,
+                        norm_factor=norm_factor,
+                        dict_integration=dict_integration,
+                    )
 
-            elif dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_RADIAL:
-                res = self.raw_integration_radial(
-                    data=data,
-                    norm_factor=norm_factor,
-                    dict_integration=dict_integration,
-                )
-
+                elif dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_RADIAL:
+                    res = self.raw_integration_radial(
+                        data=data,
+                        norm_factor=norm_factor,
+                        dict_integration=dict_integration,
+                    )
             elif dict_integration[KEY_INTEGRATION] == BOX_LABEL:
                 res = self.raw_integration_box(
                     data=data,
@@ -2498,13 +2347,8 @@ class H5GIIntegrator(Transform):
         p0_range = dict_integration[CAKE_KEY_RRANGE]
         p1_range = dict_integration[CAKE_KEY_ARANGE]
 
-        unit_gi = {
-            'q_nm^-1' : Q_NM,
-            'q_A^-1' : Q_A,
-            '2th_deg' : TTH_DEG,
-            '2th_rad' : TTH_RAD,
-        }
-        unit = unit_gi[dict_integration[CAKE_KEY_UNIT]]
+        
+        unit = UNIT_GI[dict_integration[CAKE_KEY_UNIT]]
         
         try:
             logger.info(f"Trying radial integration with: npt={npt}, p0_range={p0_range}, p1_range={p1_range}, unit={unit}")
@@ -2589,11 +2433,18 @@ class H5GIIntegrator(Transform):
                 npt=npt,
                 p0_range=p0_range,
                 p1_range=p1_range,
-                unit=unit,
+                unit=UNIT_GI[unit],
                 normalization_factor=float(norm_factor),
                 polarization_factor=POLARIZATION_FACTOR,
                 # method='bbox',
             )
+            x_vector = self.transform_q_units(
+                x_vector=x_vector,
+                input_unit=dict_integration[BOX_KEY_INPUT_UNIT],
+                output_unit=dict_integration[BOX_KEY_OUTPUT_UNIT],
+                direction=dict_integration[BOX_KEY_DIRECTION],
+            )
+
             logger.info("Integration performed.")
         except:
             logger.info("Error during box integration.")
@@ -2660,7 +2511,7 @@ class H5GIIntegrator(Transform):
         if input_unit == 'q_nm^-1':
             return value
         elif input_unit == 'q_A^-1':
-            return value * 10
+            return value
         elif input_unit == '2th_deg':
             return self.twotheta_to_q(twotheta=value, direction=direction, deg=True)
         elif input_unit == '2th_rad':
@@ -2669,7 +2520,7 @@ class H5GIIntegrator(Transform):
             return None
 
     @debug_info
-    def twotheta_to_q(self, twotheta=0.0, direction='Vertical', deg=True) -> float:
+    def twotheta_to_q(self, twotheta=0.0, direction='vertical', deg=True) -> float:
         """
             Returns the q(nm-1) from the 2theta value
         """
@@ -2681,7 +2532,7 @@ class H5GIIntegrator(Transform):
             return
         
         try:
-            alpha_inc = np.radians(self.incident_angle)
+            alpha_inc = np.radians(self._incident_angle)
         except:
             alpha_inc = 0.0
         
@@ -2694,6 +2545,81 @@ class H5GIIntegrator(Transform):
             return q_vert
         else:
             return
+
+
+    @debug_info
+    def transform_q_units(
+        self, 
+        x_vector=None, 
+        input_unit=None, 
+        output_unit=None, 
+        direction='vertical',
+        ):
+
+        if x_vector is None:
+            return
+
+        if input_unit == output_unit:
+            return x_vector
+        
+        # From Q
+        if input_unit in UNITS_Q:
+            if output_unit in UNITS_Q:
+                if output_unit in QNM_ALIAS:
+                    x_vector *= 10
+                elif output_unit in QA_ALIAS:
+                    x_vector /= 10
+                return x_vector
+
+            elif output_unit in UNITS_THETA:
+                if output_unit in DEG_ALIAS:
+                    x_vector = self.q_to_twotheta(
+                        q=x_vector,
+                        unit=input_unit,
+                        degree=True,
+                    )
+                    return x_vector
+                elif output_unit in RAD_ALIAS:
+                    x_vector = self.q_to_twotheta(
+                        q=x_vector,
+                        unit=input_unit,
+                        degree=False,
+                    )
+                    return x_vector
+        # From TTH
+        elif input_unit in UNITS_THETA:
+            if output_unit in UNITS_THETA:
+                if output_unit in DEG_ALIAS:
+                    return x_vector*180/np.pi
+                elif output_unit in RAD_ALIAS:
+                    return x_vector*np.pi/180
+            elif output_unit in UNITS_Q:
+                if input_unit in DEG_ALIAS:
+                    vector_nm = self.twotheta_to_q(
+                        twotheta=x_vector,
+                        direction=direction,
+                        deg=True,
+                    )
+                elif input_unit in RAD_ALIAS:
+                    vector_nm = self.twotheta_to_q(
+                        twotheta=x_vector,
+                        direction=direction,
+                        deg=False,
+                    )
+
+                if output_unit in QNM_ALIAS:
+                    return vector_nm
+                elif output_unit in QA_ALIAS:
+                    return vector_nm/10
+
+
+
+
+
+
+
+
+
 
     @debug_info
     def get_detector_array(self, shape=()) -> np.array:

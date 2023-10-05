@@ -27,7 +27,7 @@ class GUIPyX_Window(QMainWindow):
         app_icon.addFile(icon_path, QtCore.QSize(256,256))
         self.setWindowIcon(app_icon)
 
-        self._guiwidget.update_combobox_h5()
+        self._guiwidget.update_combobox_h5(change_to_last=False)
         self._guiwidget.update_combobox_metadata()
         self._guiwidget.feed_integration_widgets()
 

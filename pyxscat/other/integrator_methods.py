@@ -12,8 +12,8 @@ CAKE_KEY_RRANGE = "radial_range"
 CAKE_KEY_ARANGE = "azimuth_range"
 CAKE_KEY_ABINS = "azim_bins"
 
-CAKE_KEY_TYPE_AZIM = "Azimuthal"
-CAKE_KEY_TYPE_RADIAL = "Radial"
+CAKE_KEY_TYPE_AZIM = "azimuthal"
+CAKE_KEY_TYPE_RADIAL = "radial"
 
 CAKE_KEY_TYPES = {
     KEY_INTEGRATION : str(),
@@ -35,8 +35,8 @@ BOX_KEY_OUTPUT_UNIT = "output_unit"
 BOX_KEY_IPRANGE = "ip_range"
 BOX_KEY_OOPRANGE = "oop_range"
 
-BOX_KEY_TYPE_HORZ = "Horizontal"
-BOX_KEY_TYPE_VERT = "Vertical"
+BOX_KEY_TYPE_HORZ = "horizontal"
+BOX_KEY_TYPE_VERT = "vertical"
 
 BOX_KEY_TYPES = {
     KEY_INTEGRATION : str(),
@@ -45,8 +45,8 @@ BOX_KEY_TYPES = {
     BOX_KEY_DIRECTION : str(),
     BOX_KEY_INPUT_UNIT : str(),
     BOX_KEY_OUTPUT_UNIT : str(),
-    CAKE_KEY_RRANGE : list(),
-    CAKE_KEY_ARANGE : list(),
+    BOX_KEY_OOPRANGE : list(),
+    BOX_KEY_IPRANGE : list(),
 }
 
 def open_json(json_path=str()) -> dict:
@@ -76,10 +76,10 @@ def search_integration_names(path_integration=INTEGRATION_PATH) -> list:
 
     for file_json in list_json_files:
         dict_integration = open_json(file_json)
-        if is_cake_dictionary(dict_integration=dict_integration):
+        if dict_integration[KEY_INTEGRATION] == CAKE_LABEL:
             name = dict_integration[CAKE_KEY_NAME]
             list_integration_cakes.append(name)
-        elif is_box_dictionary(dict_integration=dict_integration):
+        elif dict_integration[KEY_INTEGRATION] == BOX_LABEL:
             name = dict_integration[BOX_KEY_NAME]
             list_integration_boxes.append(name)
         else:

@@ -2513,11 +2513,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
 
         incident_angle = self.h5.get_incident_angle(
-            folder_name=self.clicked_folder,
+            sample_name=self.clicked_folder,
             index_list=self.cache_index,
         )
         tilt_angle = self.h5.get_tilt_angle(
-            folder_name=self.clicked_folder,
+            sample_name=self.clicked_folder,
             index_list=self.cache_index,
         )
         self.h5.update_incident_tilt_angle(
@@ -2618,7 +2618,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             logger.info(f"Acquisition time of the sample is {acq_time_file}.")
 
             acq_ref_dataset = self.h5.get_dataset_acquisition_time(
-                folder_name=folder_ref,
+                sample_name=folder_ref,
             )
             logger.info(f"Acquisition dataset of the reference folder is {acq_ref_dataset}.")
             full_reference_filename = ""
@@ -3169,11 +3169,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         mirror_current = self._mirror
         binning_current = int(self.spinbox_binnning_data.value())
         iangle_current = self.h5.get_incident_angle(
-            folder_name=self.clicked_folder,
+            sample_name=self.clicked_folder,
             index_list=self.cache_index,
         )
         tangle_current = self.h5.get_tilt_angle(
-            folder_name=self.clicked_folder,
+            sample_name=self.clicked_folder,
             index_list=self.cache_index,
         )
 
