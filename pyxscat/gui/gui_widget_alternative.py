@@ -1861,9 +1861,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
     def update_all_files(self,_):
         if not self.h5:
             return
-        
-        dict_new_files = self.h5.search_new_files(
-            relative_to_root=RELATIVE_TO_ROOT, 
+        # Get a dictionary with the new files (not stored in h5)
+        dict_new_files = self.h5.search_new_datafiles(
             pattern=self.get_pattern(),
         )
         self.write_terminal_and_loggerinfo(f"New detected files: {str(dict_new_files)}.")
@@ -1873,7 +1872,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             search=False,
         )
         self.h5.update_ponifiles(
-            ponifile_list=[],
             search=True,
         )
 

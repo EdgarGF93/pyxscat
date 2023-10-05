@@ -17,7 +17,7 @@ messages = ['ALL ANIMALS CAN SCREAM',
             ]
 
 
-def get_dict_files(list_files=list(), relative_root=None) -> defaultdict:
+def get_dict_files(list_files=list()) -> defaultdict:
     """
     Transforms a list of new files into a defaultdict
 
@@ -28,20 +28,10 @@ def get_dict_files(list_files=list(), relative_root=None) -> defaultdict:
     None
 
     """
-    if relative_root:
-        relative_root = Path(relative_root)        
-        dict_files = defaultdict(set)
-        for file in list_files:
-            file = Path(file)
-            folder_name = str(file.parent.relative_to(relative_root))
-            file = file.name
-            dict_files[folder_name].add(file)
-    else:
-        dict_files = defaultdict(set)
-        for file in list_files:
-            folder_name = str(Path(file).parent)
-            dict_files[folder_name].add(str(file))
-    
+    dict_files = defaultdict(set)
+    for file in list_files:
+        folder_name = file.parent.as_posix()
+        dict_files[folder_name].add(file.as_posix())
     return dict_files
 
 

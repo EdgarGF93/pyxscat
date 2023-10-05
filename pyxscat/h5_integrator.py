@@ -1648,7 +1648,7 @@ class H5GIIntegrator(Transform):
         return list_samples
 
     @debug_info
-    def generator_all_files(self, yield_decode=True, relative_to_root=True) -> str:
+    def generator_all_files(self) -> str:
         """
         Yields the names of every file stored in the .h5 file
 
@@ -1661,17 +1661,17 @@ class H5GIIntegrator(Transform):
         for sample in self.generator_samples():
             for file in self.generator_files_in_sample(sample_name=sample):
                 yield file
-                # sample_name=folder, 
-                # yield_decode=yield_decode,
-                # relative_to_root=relative_to_root,
-                # ):
-                # yield file
 
     @debug_info
-    def get_dict_files(self, relative_to_root=True):
-        all_files = self.get_all_files()
-        dict_files = get_dict_files(list_files=all_files)
+    def get_dict_files(self):
+        # all_files = self.get_all_files()
+        dict_files = defaultdict(set)
+        for file in self.generator_all_files():
+            folder_name = Path(file).parent.as_posix()
+            dict_files[folder_name].add(Path(file).as_posix())
         return dict_files
+        # dict_files = get_dict_files(list_files=all_files)
+        # return dict_files
 
     @debug_info
     def get_all_files(self) -> list:
@@ -1763,46 +1763,49 @@ class H5GIIntegrator(Transform):
     def set_pattern(self, pattern=".edf"):
         self._pattern = pattern
 
+    # @debug_info
+    # def search_datafiles(self, pattern='*.edf') -> list:
+    #     """
+    #     Search new files inside the root directory, according to the pattern
+
+    #     Keyword Arguments:
+    #         pattern -- _description_ (default: {'*.edf'})
+
+    #     Returns:
+    #         list : list of strings with the full directions of the new detected filenames
+    #     """
+    #     # Retrieve the root directory
+    #     if not self._root_dir:
+    #         logger.info("There is no root directory to search files.")
+    #         return
+
+    #     # Global search according to pattern without files in the root
+    #     searched_files = [file for file in self._root_dir.rglob(pattern) if file.parent != self._root_dir]
+
+    #     # Encode and set
+    #     set_searched_files = set(str(file).encode(ENCODING_FORMAT) for file in searched_files)
+
+    #     # Filter for new files
+    #     set_stored_files = self.get_all_files()
+    #     new_files = [bytes.decode(item, encoding=ENCODING_FORMAT) for item in set_searched_files.difference(set_stored_files)]
+    #     new_files.sort()
+
+    #     logger.info(f"{len(new_files)} {INFO_H5_NEW_FILES_DETECTED}")
+    #     return new_files
+
     @debug_info
-    def search_datafiles(self, pattern='*.edf') -> list:
-        """
-        Search new files inside the root directory, according to the pattern
-
-        Keyword Arguments:
-            pattern -- _description_ (default: {'*.edf'})
-
-        Returns:
-            list : list of strings with the full directions of the new detected filenames
-        """
-        # Retrieve the root directory
-        if not self._root_dir:
-            logger.info("There is no root directory to search files.")
-            return
-
-        # Global search according to pattern without files in the root
-        searched_files = [file for file in self._root_dir.rglob(pattern) if file.parent != self._root_dir]
-
-        # Encode and set
-        set_searched_files = set(str(file).encode(ENCODING_FORMAT) for file in searched_files)
-
-        # Filter for new files
-        set_stored_files = self.get_all_files()
-        new_files = [bytes.decode(item, encoding=ENCODING_FORMAT) for item in set_searched_files.difference(set_stored_files)]
-        new_files.sort()
-
-        logger.info(f"{len(new_files)} {INFO_H5_NEW_FILES_DETECTED}")
-        return new_files
-
-    @debug_info
-    def search_new_files(self, pattern="*.edf", relative_to_root=True):
-        searched_files = self.search_datafiles(pattern=pattern)
+    def search_new_datafiles(
+        self, 
+        pattern="*.edf",
+        ):
+        # searched_files = [file.as_posix() for file in self._root_dir.rglob(pattern) if file.parent != self._root_dir]
+        searched_files = self._root_dir.rglob(pattern)
         dict_files = get_dict_files(
             list_files=searched_files,
-            relative_root=None,
         )
 
         # Filter only the new data
-        dict_files_in_h5 = self.get_dict_files(relative_to_root=relative_to_root)
+        dict_files_in_h5 = self.get_dict_files()
         dict_new_files = get_dict_difference(
             large_dict=dict_files,
             small_dict=dict_files_in_h5,
@@ -1816,7 +1819,7 @@ class H5GIIntegrator(Transform):
         if dict_new_files:
             dict_new_files = dict_new_files
         elif search:
-            dict_new_files = self.search_new_files(
+            dict_new_files = self.search_new_datafiles(
                 pattern=pattern,
             )
         logger.info(f"{INFO_H5_NEW_DICTIONARY_FILES}: {str(dict_new_files)}")
