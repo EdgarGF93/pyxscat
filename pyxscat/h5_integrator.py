@@ -140,7 +140,10 @@ def debug_info(func):
 
 INPUT_FILE_NOT_VALID = 'The input file does not exist.'
 ROOT_DIR_NOT_VALID = 'The root directory is not valid.'
+ROOT_DIR_NOT_ACCESIBLE = 'The access to root directory is not available.'
 INPUT_ROOT_DIR_NOT_VALID = 'There is no valid root directory nor input file.'
+H5_FILENAME_NOT_VALID = 'No valid path for the .h5 file'
+
 
 class H5GIIntegrator(Transform):
     """
@@ -153,127 +156,199 @@ class H5GIIntegrator(Transform):
         output_filename_h5='',
         ) -> None:
 
-        # if input_h5_filename:
-        #     self.input_file_exists(
-        #         input_filename=input_h5_filename,
-        #     )
-        #     self._init_variables(
-        #         input_h5_filename=input_h5_filename,
-        #         root_directory=root_directory,
-        #         output_filename_h5=output_filename_h5,
-        #     )
-        # elif root_directory:
-        #     self.root_directory_exists(
-        #         root_directory=root_directory,
-        #     )
-        #     self._init_variables(
-        #         input_h5_filename=input_h5_filename,
-        #         root_directory=root_directory,
-        #         output_filename_h5=output_filename_h5,
-        #     )
-        # else:
-        #     raise Exception(INPUT_ROOT_DIR_NOT_VALID)
-
-
-        
-            
-
-    # def _init_variables(
-    #     self,
-    #     input_h5_filename='',
-    #     root_directory='',
-    #     output_filename_h5='',
-    # ):
-    #     # if input_h5_filename:
-        #     root_directory = self.h5_get_attr(
-        #         attr_key=ROOT_DIRECTORY_KEY,
-        #         group_address=DEFAULT_H5_PATH,
-        #     )
-
-        #     self.root_directory_exists(
-        #         root_directory=root_directory,
-        #     )
-
-        #     self._root_dir = root_directory
-        #     self._h5_filename = input_h5_filename
-        # elif root_directory:
-        #     output_filename_h5 = self.get
-        #     if output_filename_h5:
-        
-
-        # Create the .h5 file if needed
         if input_h5_filename:
-            self._h5_filename = input_h5_filename
-            self.number_samples = len(self.get_all_samples())
-            logger.info(f"H5Integrator instance was initialized from file {input_h5_filename}.")
-        else:
-            if not root_directory:
-                logger.info("There is no root directory. The H5 instance was not created.")
-                return
-            if not output_filename_h5:
-                name_file = f"{Path(root_directory).name}.h5"                
-                output_filename_h5 = Path(root_directory).joinpath(name_file)
-            self._h5_filename = output_filename_h5
-
-            self.create_h5_file(
-                root_directory=root_directory,
-                output_h5_filename=output_filename_h5,
+            
+            self.input_file_exists(
+                input_filename=input_h5_filename,
             )
 
-            self.number_samples = 0
-            logger.info(f"H5Integrator instance was initialized with root directory: {root_directory}.") 
+        elif root_directory:
+
+            self.directory_valid(
+                directory=root_directory,
+            )
+
+            output_filename_h5 = self.get_h5_output_filename(
+                h5_output_file=output_filename_h5,
+                root_directory=root_directory,
+            )
+
+            self.create_h5_file(
+                h5_filename=output_filename_h5,
+            )         
+
+        else:
+            raise Exception(INPUT_ROOT_DIR_NOT_VALID)
+
+        self.init_root_and_h5(
+            input_h5_filename=input_h5_filename,
+            root_directory=root_directory,
+            output_filename_h5=output_filename_h5,
+        )
+
+    def init_root_and_h5(
+        self,
+        input_h5_filename='',
+        root_directory='',
+        output_filename_h5='',
+    ):
+        if input_h5_filename:
+
+            root_directory = self.h5_get_attr(
+                attr_key=ROOT_DIRECTORY_KEY,
+                group_address=DEFAULT_H5_PATH,
+            )
+
+            self.root_directory_exists(
+                root_directory=root_directory,
+            )
+
+            self.set_root_directory(
+                root_directory=root_directory,
+            )
+
+            self.set_h5_filename(
+                h5_filename=input_h5_filename
+            )
+
+        elif root_directory:
+
+            self.set_root_directory(root_directory=root_directory)
+
+            if output_filename_h5:
+                if self.filename_valid(filename=output_filename_h5):
+                    self.set_h5_filename(h5_filename=output_filename_h5)
+                    return
+                else:
+                    logger.info(f"{output_filename_h5} is not a valid path for the .h5 file.")
+            else:
+                new_h5_basename = f'{Path(root_directory).name}.h5'
+                new_h5_filename = Path(root_directory).joinpath(new_h5_basename)
+                if self.filename_valid(filename=new_h5_filename):
+                    self.set_h5_filename(h5_filename=new_h5_filename)
+                else:
+                    raise Exception(H5_FILENAME_NOT_VALID)
+        else:
+            raise Exception(INPUT_ROOT_DIR_NOT_VALID)
+            
+
+    def set_root_directory(self, root_directory=''):
+        self._root_dir = Path(root_directory)
+
+    def set_h5_filename(self, h5_filename=''):
+        self._h5_filename = Path(h5_filename)
+
+    def filename_valid(self, filename=''):
+        parent_path = Path(filename).parent
+        if parent_path.exists() and os.access(parent_path, os.W_OK):
+            return True
+        else:
+            return False
+
+    def input_file_exists(self, input_filename=''):
+        if not Path(input_filename).is_file():
+            raise Exception(f'{INPUT_FILE_NOT_VALID: {input_filename}}')
+
+    def directory_valid(self, directory=''):
+        if directory:
+            directory = Path(directory)
+        else:
+            return
+
+        if not directory.exists():
+            raise Exception(ROOT_DIR_NOT_VALID)
+
+        if not os.access(directory, os.W_OK):
+            raise Exception(ROOT_DIR_NOT_ACCESIBLE)
+
+    def get_h5_output_filename(self, h5_output_file='', root_directory=''):
+        if h5_output_file:
+            if self.filename_valid(filename=h5_output_file):
+                return h5_output_file
+            else:
+                logger.info(f"{h5_output_file} is not a valid filename.")
+                pass
         
-        # Init these attributes as global variables
-        self.init_attrs()
-
-        # Get attributes from Transform class (pygix module)
-        super().__init__()
-        logger.info("Inherited methods from pygix.transform")
-
-        self.active_ponifile = ''
-        self.timer_data = None
-
-    # def input_file_exists(self, input_filename=''):
-    #     if not Path(input_filename).is_file():
-    #         raise Exception(f'{INPUT_FILE_NOT_VALID: {input_filename}}')
-
-    # def root_directory_exists(self, root_directory=''):
-    #     if not Path(root_directory).exists():
-    #         raise Exception(ROOT_DIR_NOT_VALID)
-
-    # def get_h5_output_Path(self, root_directory='', h5_output_file=''):
-    #     if h5_output_file:
-    #         parent_path = Path(h5_output_file).parent
-    #         if parent_path.exists() and os.access(parent_path, os.W_OK):
-    #             /
-
-
-
-    #         if Path(h5_output_file)
-    #         return Path(h5_output_file)
-    #     elif root_directory:
-    #         name = Path(root_directory).name
-    #         h5_output_file = Path(root_directory).joinpath(name).with_suffix(".h5")
-    #         return h5_output_file
-
-
+        if root_directory:
+            name = Path(root_directory).name
+            h5_output_file = Path(root_directory).joinpath(name).with_suffix(".h5")
+            return h5_output_file
 
     @debug_info
     def create_h5_file(
         self,
-        root_directory=str(),
-        output_h5_filename=str(),
+        h5_filename='',
         ):
-        """
-        Creates (overwrites if needed) an .h5 file with some initial attributes
 
-        Keyword Arguments:
-            root_directory -- string to be saved as attribute (default: {str()})
-            output_h5_filename -- string to be saved as attribute (default: {str()})
-        """      
-        # Create the File  
+        if not self.filename_valid(filename=h5_filename):
+            logger.error(f"{e}: The file {h5_filename} is not valid to create an .h5 file.")
+            self._file = None
+            return
+        
         try:
-            self._h5_filename = Path(output_h5_filename)
+            self._file = File(h5_filename, MODE_OVERWRITE)
+            self._file.close()
+            logger.info(f"The file {h5_filename} was created ")
+        except Exception as e:
+            self._file = None
+            logger.error(f"{e}: The file {h5_filename} could not be created.")
+
+
+
+
+        # Create the .h5 file if needed
+        # if input_h5_filename:
+        #     self._h5_filename = input_h5_filename
+        #     self.number_samples = len(self.get_all_samples())
+        #     logger.info(f"H5Integrator instance was initialized from file {input_h5_filename}.")
+        # else:
+        #     if not root_directory:
+        #         logger.info("There is no root directory. The H5 instance was not created.")
+        #         return
+        #     if not output_filename_h5:
+        #         name_file = f"{Path(root_directory).name}.h5"                
+        #         output_filename_h5 = Path(root_directory).joinpath(name_file)
+        #     self._h5_filename = output_filename_h5
+
+        #     self.create_h5_file(
+        #         root_directory=root_directory,
+        #         output_h5_filename=output_filename_h5,
+        #     )
+
+        #     self.number_samples = 0
+        #     logger.info(f"H5Integrator instance was initialized with root directory: {root_directory}.") 
+        
+        # # Init these attributes as global variables
+        # self.init_attrs()
+
+        # # Get attributes from Transform class (pygix module)
+        # super().__init__()
+        # logger.info("Inherited methods from pygix.transform")
+
+        # self.active_ponifile = ''
+        # self.timer_data = None
+
+
+
+
+
+
+    @debug_info
+    def write_root_attributes(
+        self,
+        root_directory='',
+        output_h5_filename='',
+        ):
+
+        self.root_directory_exists(
+            root_directory=root_directory,
+        )
+
+        self.filename_valid(
+            filename=output_h5_filename,
+        )
+
+        try:
             self._file = File(output_h5_filename, MODE_OVERWRITE)
             self._file.close()
             logger.info(f"The file {output_h5_filename} was created ")
@@ -1423,7 +1498,7 @@ class H5GIIntegrator(Transform):
             get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
         """
         sample_name = sample_name.replace('/', '\\')
-        
+
         # Create the sample Group
         self.new_sample(
             sample_name=sample_name,
