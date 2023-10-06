@@ -18,6 +18,7 @@ import pandas as pd
 from silx.io.h5py_utils import File
 from pyxscat.other.integrator_methods import *
 from pyxscat.other.setup_methods import *
+import os
 
 ENCODING_FORMAT = "UTF-8"
 FORMAT_STRING = h5py.string_dtype(ENCODING_FORMAT)
@@ -137,6 +138,9 @@ def debug_info(func):
         return func(*args, **kwargs)
     return wrapper
 
+INPUT_FILE_NOT_VALID = 'The input file does not exist.'
+ROOT_DIR_NOT_VALID = 'The root directory is not valid.'
+INPUT_ROOT_DIR_NOT_VALID = 'There is no valid root directory nor input file.'
 
 class H5GIIntegrator(Transform):
     """
@@ -144,16 +148,64 @@ class H5GIIntegrator(Transform):
     """
     def __init__(
         self,
-        root_directory=str(),
-        output_filename_h5=str(),
-        input_filename_h5=str(),
+        input_h5_filename='',        
+        root_directory='',
+        output_filename_h5='',
         ) -> None:
 
+        # if input_h5_filename:
+        #     self.input_file_exists(
+        #         input_filename=input_h5_filename,
+        #     )
+        #     self._init_variables(
+        #         input_h5_filename=input_h5_filename,
+        #         root_directory=root_directory,
+        #         output_filename_h5=output_filename_h5,
+        #     )
+        # elif root_directory:
+        #     self.root_directory_exists(
+        #         root_directory=root_directory,
+        #     )
+        #     self._init_variables(
+        #         input_h5_filename=input_h5_filename,
+        #         root_directory=root_directory,
+        #         output_filename_h5=output_filename_h5,
+        #     )
+        # else:
+        #     raise Exception(INPUT_ROOT_DIR_NOT_VALID)
+
+
+        
+            
+
+    # def _init_variables(
+    #     self,
+    #     input_h5_filename='',
+    #     root_directory='',
+    #     output_filename_h5='',
+    # ):
+    #     # if input_h5_filename:
+        #     root_directory = self.h5_get_attr(
+        #         attr_key=ROOT_DIRECTORY_KEY,
+        #         group_address=DEFAULT_H5_PATH,
+        #     )
+
+        #     self.root_directory_exists(
+        #         root_directory=root_directory,
+        #     )
+
+        #     self._root_dir = root_directory
+        #     self._h5_filename = input_h5_filename
+        # elif root_directory:
+        #     output_filename_h5 = self.get
+        #     if output_filename_h5:
+        
+
         # Create the .h5 file if needed
-        if input_filename_h5:
-            self._h5_filename = input_filename_h5
+        if input_h5_filename:
+            self._h5_filename = input_h5_filename
             self.number_samples = len(self.get_all_samples())
-            logger.info(f"H5Integrator instance was initialized from file {input_filename_h5}.")
+            logger.info(f"H5Integrator instance was initialized from file {input_h5_filename}.")
         else:
             if not root_directory:
                 logger.info("There is no root directory. The H5 instance was not created.")
@@ -181,44 +233,30 @@ class H5GIIntegrator(Transform):
         self.active_ponifile = ''
         self.timer_data = None
 
-    @property
-    def _open_r(self):
-        """
-        Opens the h5 file with reading permises
-        """   
-        # self._file = File(str(self._h5_filename), MODE_READ)
-        self._open_w
+    # def input_file_exists(self, input_filename=''):
+    #     if not Path(input_filename).is_file():
+    #         raise Exception(f'{INPUT_FILE_NOT_VALID: {input_filename}}')
 
-    @property
-    def _open(self):
-        self._open_w
-        
-    @property
-    def _open_w(self):
-        """
-        Opens the h5 file with reading/writing permises
-        """        
-        self._file = File(str(self._h5_filename), MODE_WRITE)
-        logger.info("H5 OPEN TO READ/WRITE")
+    # def root_directory_exists(self, root_directory=''):
+    #     if not Path(root_directory).exists():
+    #         raise Exception(ROOT_DIR_NOT_VALID)
 
-    @property
-    def _close(self):
-        """
-        Closes the h5 file
-        """
-        self._file.close()
-        logger.info("H5 CLOSED")
+    # def get_h5_output_Path(self, root_directory='', h5_output_file=''):
+    #     if h5_output_file:
+    #         parent_path = Path(h5_output_file).parent
+    #         if parent_path.exists() and os.access(parent_path, os.W_OK):
+    #             /
 
-    @property
-    def is_open(self):
-        return bool(self._file)
 
-    @property
-    def get_mode(self):
-        if self.is_open:
-            return self._file.mode
-        else:
-            return False
+
+    #         if Path(h5_output_file)
+    #         return Path(h5_output_file)
+    #     elif root_directory:
+    #         name = Path(root_directory).name
+    #         h5_output_file = Path(root_directory).joinpath(name).with_suffix(".h5")
+    #         return h5_output_file
+
+
 
     @debug_info
     def create_h5_file(
@@ -262,6 +300,50 @@ class H5GIIntegrator(Transform):
         # Write default metadata keys
         self.update_metadata_keys()
         
+
+
+
+
+
+    @property
+    def _open_r(self):
+        """
+        Opens the h5 file with reading permises
+        """   
+        # self._file = File(str(self._h5_filename), MODE_READ)
+        self._open_w
+
+    @property
+    def _open(self):
+        self._open_w
+        
+    @property
+    def _open_w(self):
+        """
+        Opens the h5 file with reading/writing permises
+        """        
+        self._file = File(str(self._h5_filename), MODE_WRITE)
+        logger.info("H5 OPEN TO READ/WRITE")
+
+    @property
+    def _close(self):
+        """
+        Closes the h5 file
+        """
+        self._file.close()
+        logger.info("H5 CLOSED")
+
+    @property
+    def is_open(self):
+        return bool(self._file)
+
+    @property
+    def get_mode(self):
+        if self.is_open:
+            return self._file.mode
+        else:
+            return False
+
     @debug_info
     def h5_write_attrs_in_group(self, dict_attrs=dict(), group_address='.'):
         """
@@ -335,30 +417,11 @@ class H5GIIntegrator(Transform):
             value of the attribute
         """
         with File(self._h5_filename, 'r+') as f:
-            attr = f[group_address].attrs[attr_key]
+            try:
+                attr = f[group_address].attrs[attr_key]
+            except Exception as e:
+                logger.error(f"{e}: attr {attr_key} does not exists in {group_address}")
         return attr
-
-        # try:
-        #     attr = self._file[group_address].attrs[attr_key]
-        # except Exception as e:
-        #     attr = None            
-        #     logger.info(f"{e}: attribute {attr_key} could not be read. Trying to open the file...")            
-
-        # # Try to access after opening the File
-        # if attr is None:
-        #     try:
-        #         self._open_r
-        #         attr = self._file[group_address].attrs[attr_key]
-        #     except Exception as e:
-        #         logger.info(f"{e}: attribute {attr_key} could not be read anyway.")
-        #         return
-        #     finally:
-        #         self._close
-        
-        # Retrieve decoded string
-        # if isinstance(attr, bytes):
-        #     attr = bytes.decode(attr, encoding=ENCODING_FORMAT)
-        # return attr
 
     @debug_info
     def h5_get_dict_attrs(self, group_address='.') -> dict:
@@ -1159,7 +1222,7 @@ class H5GIIntegrator(Transform):
             else:
                 try:
                     f[root_group_address].create_group(
-                        name=group_name,
+                        name=str(group_name),
                     )
                     logger.info(f"{group_name} was created in {root_group_address}.")
                 except Exception as e:
@@ -1236,6 +1299,7 @@ class H5GIIntegrator(Transform):
 
     @debug_info
     def new_sample(self, sample_name=str()):
+        # sample_name = sample_name.replace('/', '_')
 
         # Check if the sample does exist
         self.create_sample(
@@ -1358,6 +1422,8 @@ class H5GIIntegrator(Transform):
             filename_list -- list of path filenames where the data/metadata will be extracted (default: {list()})
             get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
         """
+        sample_name = sample_name.replace('/', '\\')
+        
         # Create the sample Group
         self.new_sample(
             sample_name=sample_name,
@@ -1827,6 +1893,7 @@ class H5GIIntegrator(Transform):
         # Store in the .h5 file by folder and its own list of files
         for sample_name, file_list in dict_new_files.items():
             data_filenames = sorted(file_list)
+
             self.update_sample(
                 sample_name=sample_name,
                 data_filenames=data_filenames,

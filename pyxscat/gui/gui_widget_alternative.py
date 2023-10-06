@@ -1014,7 +1014,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             self.h5 = H5GIIntegrator(
                 root_directory=root_directory,
                 output_filename_h5=output_filename_h5,
-                input_filename_h5=input_filename_h5,
+                input_h5_filename=input_filename_h5,
             )
             self.write_terminal_and_loggerinfo("H5 instance was initialized.")
             return True
