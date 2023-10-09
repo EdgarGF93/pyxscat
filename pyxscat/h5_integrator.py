@@ -157,10 +157,18 @@ class H5GIIntegrator(Transform):
         ) -> None:
 
         if input_h5_filename:
-            
+
             self.input_file_exists(
                 input_filename=input_h5_filename,
             )
+
+            self.init_root_h5_attributes(
+                input_h5_filename=input_h5_filename,
+                root_directory=root_directory,
+                output_filename_h5=output_filename_h5,
+            )
+
+            self.init_metadata_attrs()
 
         elif root_directory:
 
@@ -173,20 +181,29 @@ class H5GIIntegrator(Transform):
                 root_directory=root_directory,
             )
 
+            self.init_root_h5_attributes(
+                input_h5_filename=input_h5_filename,
+                root_directory=root_directory,
+                output_filename_h5=output_filename_h5,
+            )
+
+            self.init_metadata_attrs()
+
             self.create_h5_file(
                 h5_filename=output_filename_h5,
-            )         
+            )
+
+            self.write_root_attributes(
+                root_directory=root_directory,
+                h5_filename=output_filename_h5,
+            )     
+
+            self.init_h5_groups()
 
         else:
-            raise Exception(INPUT_ROOT_DIR_NOT_VALID)
+            raise Exception(INPUT_ROOT_DIR_NOT_VALID) 
 
-        self.init_root_and_h5(
-            input_h5_filename=input_h5_filename,
-            root_directory=root_directory,
-            output_filename_h5=output_filename_h5,
-        )
-
-    def init_root_and_h5(
+    def init_root_h5_attributes(
         self,
         input_h5_filename='',
         root_directory='',
@@ -194,49 +211,44 @@ class H5GIIntegrator(Transform):
     ):
         if input_h5_filename:
 
+            self.set_h5_filename(
+                h5_filename=input_h5_filename
+            )            
+
             root_directory = self.h5_get_attr(
                 attr_key=ROOT_DIRECTORY_KEY,
                 group_address=DEFAULT_H5_PATH,
             )
 
-            self.root_directory_exists(
-                root_directory=root_directory,
+            self.directory_valid(
+                directory=root_directory,
             )
 
             self.set_root_directory(
                 root_directory=root_directory,
             )
 
-            self.set_h5_filename(
-                h5_filename=input_h5_filename
-            )
-
         elif root_directory:
 
             self.set_root_directory(root_directory=root_directory)
 
-            if output_filename_h5:
-                if self.filename_valid(filename=output_filename_h5):
-                    self.set_h5_filename(h5_filename=output_filename_h5)
-                    return
-                else:
-                    logger.info(f"{output_filename_h5} is not a valid path for the .h5 file.")
-            else:
-                new_h5_basename = f'{Path(root_directory).name}.h5'
-                new_h5_filename = Path(root_directory).joinpath(new_h5_basename)
-                if self.filename_valid(filename=new_h5_filename):
-                    self.set_h5_filename(h5_filename=new_h5_filename)
-                else:
-                    raise Exception(H5_FILENAME_NOT_VALID)
+            output_filename_h5 = self.get_h5_output_filename(
+                h5_output_file=output_filename_h5,
+                root_directory=root_directory,
+            )
+
+            self.set_h5_filename(h5_filename=output_filename_h5)
+
         else:
             raise Exception(INPUT_ROOT_DIR_NOT_VALID)
-            
+                    
 
     def set_root_directory(self, root_directory=''):
         self._root_dir = Path(root_directory)
 
     def set_h5_filename(self, h5_filename=''):
         self._h5_filename = Path(h5_filename)
+        self._name = self._h5_filename.name
 
     def filename_valid(self, filename=''):
         parent_path = Path(filename).parent
@@ -247,19 +259,21 @@ class H5GIIntegrator(Transform):
 
     def input_file_exists(self, input_filename=''):
         if not Path(input_filename).is_file():
-            raise Exception(f'{INPUT_FILE_NOT_VALID: {input_filename}}')
+            raise Exception(f'{INPUT_FILE_NOT_VALID}: {input_filename}')
 
     def directory_valid(self, directory=''):
         if directory:
             directory = Path(directory)
+
+            if not directory.exists():
+                raise Exception(ROOT_DIR_NOT_VALID)
+
+            if not os.access(directory, os.W_OK):
+                raise Exception(ROOT_DIR_NOT_ACCESIBLE)
+
+            return True
         else:
             return
-
-        if not directory.exists():
-            raise Exception(ROOT_DIR_NOT_VALID)
-
-        if not os.access(directory, os.W_OK):
-            raise Exception(ROOT_DIR_NOT_ACCESIBLE)
 
     def get_h5_output_filename(self, h5_output_file='', root_directory=''):
         if h5_output_file:
@@ -272,13 +286,15 @@ class H5GIIntegrator(Transform):
         if root_directory:
             name = Path(root_directory).name
             h5_output_file = Path(root_directory).joinpath(name).with_suffix(".h5")
-            return h5_output_file
+            if self.filename_valid(filename=h5_output_file):
+                return h5_output_file
+            else:
+                raise Exception(H5_FILENAME_NOT_VALID)
 
     @debug_info
-    def create_h5_file(
-        self,
-        h5_filename='',
-        ):
+    def create_h5_file(self, h5_filename=''):
+        if not h5_filename:
+            h5_filename = self._h5_filename
 
         if not self.filename_valid(filename=h5_filename):
             logger.error(f"{e}: The file {h5_filename} is not valid to create an .h5 file.")
@@ -288,97 +304,33 @@ class H5GIIntegrator(Transform):
         try:
             self._file = File(h5_filename, MODE_OVERWRITE)
             self._file.close()
-            logger.info(f"The file {h5_filename} was created ")
+            logger.debug(f"The file {h5_filename} was created ")
         except Exception as e:
             self._file = None
             logger.error(f"{e}: The file {h5_filename} could not be created.")
 
-
-
-
-        # Create the .h5 file if needed
-        # if input_h5_filename:
-        #     self._h5_filename = input_h5_filename
-        #     self.number_samples = len(self.get_all_samples())
-        #     logger.info(f"H5Integrator instance was initialized from file {input_h5_filename}.")
-        # else:
-        #     if not root_directory:
-        #         logger.info("There is no root directory. The H5 instance was not created.")
-        #         return
-        #     if not output_filename_h5:
-        #         name_file = f"{Path(root_directory).name}.h5"                
-        #         output_filename_h5 = Path(root_directory).joinpath(name_file)
-        #     self._h5_filename = output_filename_h5
-
-        #     self.create_h5_file(
-        #         root_directory=root_directory,
-        #         output_h5_filename=output_filename_h5,
-        #     )
-
-        #     self.number_samples = 0
-        #     logger.info(f"H5Integrator instance was initialized with root directory: {root_directory}.") 
-        
-        # # Init these attributes as global variables
-        # self.init_attrs()
-
-        # # Get attributes from Transform class (pygix module)
-        # super().__init__()
-        # logger.info("Inherited methods from pygix.transform")
-
-        # self.active_ponifile = ''
-        # self.timer_data = None
-
-
-
-
-
+    @debug_info
+    def init_h5_groups(self, h5_filename=''):
+        self.create_group_samples(h5_filename=h5_filename)
+        self.create_group_ponifiles(h5_filename=h5_filename)
 
     @debug_info
     def write_root_attributes(
         self,
         root_directory='',
-        output_h5_filename='',
+        h5_filename='',
         ):
-
-        self.root_directory_exists(
-            root_directory=root_directory,
-        )
-
-        self.filename_valid(
-            filename=output_h5_filename,
-        )
-
-        try:
-            self._file = File(output_h5_filename, MODE_OVERWRITE)
-            self._file.close()
-            logger.info(f"The file {output_h5_filename} was created ")
-        except Exception as e:
-            logger.error(f"{e}: The file {output_h5_filename} could not be created. Return.")
-            return
-
-        # Create initial Groups
-        self.create_group_samples()
-        self.create_group_ponifiles()
-
         # Write the attributes into the .h5 file
         dict_attrs = {
-            NAME_H5_KEY : Path(output_h5_filename).name,
-            ROOT_DIRECTORY_KEY : str(root_directory),
+            NAME_H5_KEY : Path(h5_filename).name,
+            ROOT_DIRECTORY_KEY : Path(root_directory).as_posix(),
             DATETIME_KEY : date_prefix(),
-            FILENAME_H5_KEY : str(output_h5_filename),
+            FILENAME_H5_KEY : Path(h5_filename).as_posix(),
         }
-        self.h5_write_attrs_in_group(
-            group_address=DEFAULT_H5_PATH,
-            dict_attrs=dict_attrs,
-        )
 
-        # Write default metadata keys
-        self.update_metadata_keys()
-        
-
-
-
-
+        with File(h5_filename, 'r+') as f:
+            for k, v in dict_attrs.items():
+                f.attrs[k] = v
 
     @property
     def _open_r(self):
@@ -436,7 +388,7 @@ class H5GIIntegrator(Transform):
             )
 
     @debug_info
-    def init_attrs(self) -> None:
+    def init_metadata_attrs(self) -> None:
         """
         Declare attributes to easy access
         """
@@ -444,23 +396,6 @@ class H5GIIntegrator(Transform):
         self._tangle_key = ''
         self._norm_key = ''
         self._acq_key = ''
-
-        try:
-            self._h5_filename = Path(self.h5_get_attr(attr_key=FILENAME_H5_KEY))
-            self._root_dir = Path(self.h5_get_attr(attr_key=ROOT_DIRECTORY_KEY))
-            self._name = self.h5_get_attr(attr_key=NAME_H5_KEY)
-        except Exception as e:
-            logger.info(f"{e}: attributes could not be declared. Trying to open the file...")
-
-        try:
-            self._open_r
-            self._h5_filename = Path(self.h5_get_attr(attr_key=FILENAME_H5_KEY))
-            self._root_dir = Path(self.h5_get_attr(attr_key=ROOT_DIRECTORY_KEY))
-            self._name = self.h5_get_attr(attr_key=NAME_H5_KEY)
-        except Exception as e:
-            logger.info(f"{e}: attributes could not be declared anyway.")
-        finally:
-            self._close
 
     @debug_info
     def h5_write_attr_in_group(self, key=str(), value=str(), group_address='.'):
@@ -872,15 +807,17 @@ class H5GIIntegrator(Transform):
         if not self._root_dir:
             return
         try:
-            searched_ponifiles = [str(file) for file in self._root_dir.rglob("*.poni")]
+            searched_ponifiles = [file.as_posix() for file in self._root_dir.rglob("*.poni")]
+
             if new_files:
-                stored_ponifiles = self.get_all_ponifiles()
+                stored_ponifiles = self.get_all_ponifiles(get_relative_address=False)
                 searched_ponifiles = [file for file in searched_ponifiles if file not in stored_ponifiles]
 
             logger.info(f"Found {len(searched_ponifiles)} .poni files in {self._root_dir}")
         except Exception as e:
             logger.error(f"{e}: there was an error during searching ponifiles in {self._root_dir}.")
             return
+
         return searched_ponifiles
 
     # @log_info
@@ -927,23 +864,14 @@ class H5GIIntegrator(Transform):
             dset_name=metadata_key,
         )
 
-
-
-
     @debug_info
-    def update_ponifiles(
-        self,
-        ponifile_list=list(), 
-        search=False,
-        ):
+    def update_ponifiles(self):
 
         # Creates the dataset for ponifiles if needed
         self.create_ponifile_dset()
 
         # Search new files if requested
-        if search:
-            searched_ponifiles = self.search_ponifiles(new_files=True)
-            ponifile_list += searched_ponifiles
+        ponifile_list = self.search_ponifiles(new_files=True)
 
         if not ponifile_list:
             logger.info("No ponifiles to be updated. Return.")
@@ -953,6 +881,7 @@ class H5GIIntegrator(Transform):
         if not ponifile_list:
             logger.info(f"No ponifiles to update.")
             return
+
         self.append_ponifile_list(
             ponifile_list=ponifile_list,
         )
@@ -1065,15 +994,21 @@ class H5GIIntegrator(Transform):
         if not poni_filename:
             return
         
+        poni_filename = Path(poni_filename)
+
+        try:
+            if poni_filename.is_absolute():
+                poni_filename = poni_filename.as_posix()            
+            else:
+                poni_filename = self._root_dir.joinpath(poni_filename).as_posix()
+        except Exception as e:
+            self.active_ponifile = None
+            return    
+
         # Proceed only if the requested ponifiles is already stored
-        stored_ponifiles = self.get_all_ponifiles(get_relative_address=True)
+        stored_ponifiles = self.get_all_ponifiles(get_relative_address=False)
 
         if poni_filename in stored_ponifiles:
-            poni_filename = Path(poni_filename)
-            if poni_filename.is_absolute():
-                poni_filename = str(poni_filename)
-            else:
-                poni_filename = str(self._root_dir.joinpath(poni_filename))
             self.active_ponifile = poni_filename
         else:
             logger.info(f"Ponifile {poni_filename} is not stored in the .h5")
@@ -1081,7 +1016,7 @@ class H5GIIntegrator(Transform):
             return           
 
         # Update the GrazingGeometry instance
-        self.update_grazinggeometry()
+        # self.update_grazinggeometry()
 
     @debug_info
     def get_poni_dict(self):
@@ -1196,21 +1131,24 @@ class H5GIIntegrator(Transform):
     #########################################################
 
     @debug_info
-    def update_grazinggeometry(self) -> None:
+    def update_grazinggeometry(self, poni_filename='') -> None:
         """
         If there is an active ponifile, inherits the methods from Transform class (pygix module)
         """        
-        if not self.active_ponifile:
+        if not poni_filename:
+            poni_filename = self.active_ponifile
+
+        if not poni_filename:
             logger.info(f"No active ponifile. GrazingGeometry was not updated")            
             return
-        if not Path(self.active_ponifile).is_file():
-            logger.info(f"The .poni file {self.activate_ponifile} does not exist.")
+        if not Path(poni_filename).is_file():
+            logger.info(f"The .poni file {poni_filename} does not exist.")
             return
 
         # Load the ponifile
         try:
-            self.load(self.active_ponifile)
-            logger.info(f"Loaded poni file: {self.active_ponifile}")
+            self.load(poni_filename)
+            logger.info(f"Loaded poni file: {poni_filename}")
         except Exception as e:
             logger.error(f"{e}: Ponifile could not be loaded to GrazingGeometry")
         
@@ -1288,7 +1226,15 @@ class H5GIIntegrator(Transform):
     #####################################
 
     @debug_info
-    def create_group(self, root_group_address='.', group_name=str()):
+    def create_group(
+        self,
+        h5_filename='',
+        root_group_address='.', 
+        group_name=str(),
+        ):
+        if not h5_filename:
+            h5_filename = self._h5_filename
+
         with File(self._h5_filename, 'r+') as f:
             # Returns if it contains the dataset already
             if f[root_group_address].__contains__(group_name):
@@ -1299,7 +1245,7 @@ class H5GIIntegrator(Transform):
                     f[root_group_address].create_group(
                         name=str(group_name),
                     )
-                    logger.info(f"{group_name} was created in {root_group_address}.")
+                    logger.debug(f"{group_name} was created in {root_group_address}.")
                 except Exception as e:
                     logger.error(f"{e}: {group_name} could not be created in {root_group_address}.")
 
@@ -1318,7 +1264,7 @@ class H5GIIntegrator(Transform):
                         maxshape=maxshape,
                         dtype=dtype,
                     )
-                    logger.info(f"{dset_name} was created in {group_address}")
+                    logger.debug(f"{dset_name} was created in {group_address}")
                 except Exception as e:
                     logger.error(f"{e}: {dset_name} could not be created in {group_address}")
 
@@ -1338,19 +1284,21 @@ class H5GIIntegrator(Transform):
                         maxshape=maxshape,
                         dtype=dtype,
                     )
-                    logger.info(f"{dset_name} was created in {group_address}")
+                    logger.debug(f"{dset_name} was created in {group_address}")
                 except Exception as e:
                     logger.error(f"{e}: {dset_name} could not be created in {group_address}")
 
     @debug_info
-    def create_group_samples(self):
+    def create_group_samples(self, h5_filename=''):
         self.create_group(
+            h5_filename=h5_filename,
             group_name=SAMPLE_GROUP_KEY,
         )
 
     @debug_info
-    def create_group_ponifiles(self):
+    def create_group_ponifiles(self, h5_filename):
         self.create_group(
+            h5_filename=h5_filename,
             group_name=PONI_GROUP_KEY,
         )
         self.create_ponifile_dset()
@@ -1382,12 +1330,14 @@ class H5GIIntegrator(Transform):
         )
 
         # Define relative and absolute addresses
-        if Path(sample_name).is_absolute():
-            abs_address = str(sample_name)
-            rel_address = str(Path(sample_name).relative_to(self._root_dir))
+        sample_name = Path(sample_name)
+
+        if sample_name.is_absolute():
+            abs_address = sample_name.as_posix()
+            rel_address = sample_name.relative_to(self._root_dir).as_posix()
         else:
-            abs_address = str(self._root_dir.joinpath(sample_name))
-            rel_address = str(sample_name)
+            abs_address = self._root_dir.joinpath(sample_name).as_posix()
+            rel_address = sample_name.as_posix()
 
         # Write some attributes
         dict_init_sample = {
@@ -1514,35 +1464,39 @@ class H5GIIntegrator(Transform):
             )
         
         # Append MetaData values
+        dict_metadata = defaultdict(list)
+
         for header in self.generator_file_header(filenames=data_filenames):
             for k,v in header.items():
                 try:
                     v = float(v)
-                    self.create_metadata_dset_float(
-                        sample_name=sample_name,
-                        metadata_key=k,
-                    )
-                    self.append_metadata_values(
-                        sample_name=sample_name,
-                        metadata_key=k,
-                        value_list=[v],
-                    )
                 except Exception as e:
-                    logger.error(f"{e}: {v} is not a valid float.")
+                    v = str(v)
+                finally:
+                    dict_metadata[k].append(v)
 
-                    try:
-                        v = str(v)
-                        self.create_metadata_dset_str(
-                            sample_name=sample_name,
-                            metadata_key=k,
-                        )
-                        self.append_metadata_values(
-                            sample_name=sample_name,
-                            metadata_key=k,
-                            value_list=[v],
-                        )
-                    except Exception as e:
-                        logger.error(f"{e}: {v} is not a valid string.")
+        # print(dict_metadata)
+        for k,v in dict_metadata.items():
+
+            if isinstance(v[0], float):
+                self.create_metadata_dset_float(
+                        sample_name=sample_name,
+                        metadata_key=k,
+                    )
+            elif isinstance(v[0], str):
+                self.create_metadata_dset_str(
+                        sample_name=sample_name,
+                        metadata_key=k,
+                    )
+            else:
+                continue
+
+            self.append_metadata_values(
+                    sample_name=sample_name,
+                    metadata_key=k,
+                    value_list=v,
+                )                
+
 
         # First, get the packed data and metadata for every filename
         # merged_data, merged_metadata = self.get_merged_data_and_metadata(
@@ -1789,7 +1743,7 @@ class H5GIIntegrator(Transform):
         return list_samples
 
     @debug_info
-    def generator_all_files(self) -> str:
+    def generator_all_files(self, relative_address=True) -> str:
         """
         Yields the names of every file stored in the .h5 file
 
@@ -1799,20 +1753,28 @@ class H5GIIntegrator(Transform):
         Yields:
         str : fullpath of stored filenames
         """
-        for sample in self.generator_samples():
-            for file in self.generator_files_in_sample(sample_name=sample):
+        for sample in self.generator_samples(relative_address=relative_address):
+            for file in self.generator_files_in_sample(
+                sample_name=sample,
+                sample_relative_address=relative_address,
+                get_relative_address=relative_address,
+                ):
                 yield file
 
     @debug_info
-    def get_dict_files(self):
-        # all_files = self.get_all_files()
+    def get_dict_files(self, relative_address=True):
         dict_files = defaultdict(set)
-        for file in self.generator_all_files():
-            folder_name = Path(file).parent.as_posix()
-            dict_files[folder_name].add(Path(file).as_posix())
+        for file in self.generator_all_files(relative_address=False):
+            sample_name = Path(file).parent
+            if relative_address:
+                file = Path(file).relative_to(sample_name).as_posix()
+                sample_name = sample_name.relative_to(self._root_dir).as_posix()
+            else:
+                file = Path(file).as_posix()
+                sample_name = sample_name.as_posix()
+
+            dict_files[sample_name].add(file)
         return dict_files
-        # dict_files = get_dict_files(list_files=all_files)
-        # return dict_files
 
     @debug_info
     def get_all_files(self) -> list:
@@ -1828,111 +1790,13 @@ class H5GIIntegrator(Transform):
         list_files = sorted(self.generator_all_files())
         return list_files
 
-    # @debug_info
-    # def generator_folder_group(self) -> h5py.Group:
-    #     """
-    #     Yields every Group at the first level of hierarchy of the h5 file
-
-    #     Parameters:
-    #     None
-
-    #     Yields:
-    #     h5py.Group
-    #     """
-    #     for sample_name in np.array([item for item in self._file.keys() if 'Metadata' not in item]):
-    #         yield self._file[sample_name]
-
-    # @debug_info
-    # def number_samples(self) -> float:
-    #     """
-    #     Returns the number of samples (folders) already in the h5 file
-
-    #     Parameters:
-    #     None
-
-    #     Returns:
-    #     float : number of folders
-    #     """
-    #     n_samples = len(list(self._file.keys()))
-    #     logger.info(f"Number of sample: {n_samples}")
-    #     return n_samples
-
-    # @debug_info
-    # def number_files_in_sample(self, sample_name=str()):
-    #     """
-    #     Returns the number of files inside a sample (folder)
-
-    #     Parameters:
-    #     sample_name(str) : name of the folder (Group) at the first level of hierarchy
-
-    #     Returns:
-    #     float : number of files in the folder
-    #     """
-    #     n_files = len(list(self._file[sample_name].keys()))
-    #     logger.info(f"There are {n_files} in {sample_name}")
-    #     return n_files
-
-
     ##################################################
     ############# SAMPLES/FILES METHODS ##############
     ##################################################
 
-    # @log_info
-    # @check_if_open
-    # def search_and_update_datafiles(self, pattern='*.edf'):
-    #     """
-    #     Run the search engine, get new files and folders taken the pattern and stored main directory, and update the storage
-
-    #     Parameters:
-    #     pattern(str) : wildcards used in method Path.rglob to search files recursively
-
-    #     Returns:
-    #     None
-    #     """
-    #     # Get the list of new files and new folders
-    #     new_files = self.search_datafiles(
-    #         pattern=pattern,
-    #     )
-
-    #     # If there are new detected files, updates the memory of the h5 file
-    #     if new_files:
-    #         self.update_datafiles(
-    #             new_files=new_files,
-    #         )
-
     @debug_info
     def set_pattern(self, pattern=".edf"):
         self._pattern = pattern
-
-    # @debug_info
-    # def search_datafiles(self, pattern='*.edf') -> list:
-    #     """
-    #     Search new files inside the root directory, according to the pattern
-
-    #     Keyword Arguments:
-    #         pattern -- _description_ (default: {'*.edf'})
-
-    #     Returns:
-    #         list : list of strings with the full directions of the new detected filenames
-    #     """
-    #     # Retrieve the root directory
-    #     if not self._root_dir:
-    #         logger.info("There is no root directory to search files.")
-    #         return
-
-    #     # Global search according to pattern without files in the root
-    #     searched_files = [file for file in self._root_dir.rglob(pattern) if file.parent != self._root_dir]
-
-    #     # Encode and set
-    #     set_searched_files = set(str(file).encode(ENCODING_FORMAT) for file in searched_files)
-
-    #     # Filter for new files
-    #     set_stored_files = self.get_all_files()
-    #     new_files = [bytes.decode(item, encoding=ENCODING_FORMAT) for item in set_searched_files.difference(set_stored_files)]
-    #     new_files.sort()
-
-    #     logger.info(f"{len(new_files)} {INFO_H5_NEW_FILES_DETECTED}")
-    #     return new_files
 
     @debug_info
     def search_new_datafiles(
@@ -1954,7 +1818,12 @@ class H5GIIntegrator(Transform):
         return dict_new_files
 
     @debug_info
-    def update_datafiles(self, dict_new_files=dict(), pattern="*.edf", search=False):
+    def update_datafiles(
+        self, 
+        dict_new_files=dict(), 
+        pattern='*.edf', 
+        search=False,
+        ):
 
         # Search for new files
         if dict_new_files:
@@ -1974,6 +1843,7 @@ class H5GIIntegrator(Transform):
                 data_filenames=data_filenames,
                 get_2D_array=False,
             )
+
             logger.info(f"Finished with folder: {sample_name}.")
         logger.info(INFO_H5_FILES_UPDATED)
 
@@ -2132,7 +2002,6 @@ class H5GIIntegrator(Transform):
         dataframe = pd.DataFrame(short_metadata)
         logger.info(f"The dataframe has size {dataframe.size}.")
         return dataframe
-
 
     @debug_info
     def get_all_metadata_keys_from_sample(

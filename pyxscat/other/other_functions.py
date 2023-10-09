@@ -17,6 +17,7 @@ messages = ['ALL ANIMALS CAN SCREAM',
             ]
 
 
+
 def get_dict_files(list_files=list()) -> defaultdict:
     """
     Transforms a list of new files into a defaultdict

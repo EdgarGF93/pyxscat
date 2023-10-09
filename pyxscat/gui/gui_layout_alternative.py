@@ -580,10 +580,10 @@ class GUIPyX_Widget_layout(QWidget):
         self.label_h5file = QLabel(LABEL_H5_FILE)
         self.lineedit_h5file_1 = QLineEdit()
         self.lineedit_h5file_1.setReadOnly(True)
-        self.button_pick_maindir = QPushButton()
-        self.button_pick_maindir.setIcon(QIcon(ICON_FOLDER_PATH))
-        self.button_pick_maindir.setToolTip(LABEL_PICK_MAINDIR)    
-        self.button_pick_maindir.setStyleSheet(BUTTON_STYLE_ENABLE)    
+        self.button_pick_rootdir = QPushButton()
+        self.button_pick_rootdir.setIcon(QIcon(ICON_FOLDER_PATH))
+        self.button_pick_rootdir.setToolTip(LABEL_PICK_MAINDIR)    
+        self.button_pick_rootdir.setStyleSheet(BUTTON_STYLE_ENABLE)    
         self.button_pick_hdf5 = QPushButton()
         self.button_pick_hdf5.setIcon(QIcon(H5_ICON_PATH))
         self.button_pick_hdf5.setToolTip(LABEL_PICK_H5)
@@ -591,7 +591,7 @@ class GUIPyX_Widget_layout(QWidget):
 
         hbox_maindir.addWidget(self.label_h5file)
         hbox_maindir.addWidget(self.lineedit_h5file_1)
-        hbox_maindir.addWidget(self.button_pick_maindir)
+        hbox_maindir.addWidget(self.button_pick_rootdir)
         hbox_maindir.addWidget(self.button_pick_hdf5)
 
         label_extension = QLabel(LABEL_EXTENSION)

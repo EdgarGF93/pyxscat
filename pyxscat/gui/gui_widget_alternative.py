@@ -281,7 +281,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         #########################
         # Pick main directory
         #########################
-        self.button_pick_maindir.clicked.connect(self.pick_maindir_clicked)
+        self.button_pick_rootdir.clicked.connect(self.pick_rootdir_clicked)
         self.button_pick_hdf5.clicked.connect(self.pick_h5file_clicked)
 
         #########################
@@ -950,7 +950,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             )
 
     @log_info
-    def pick_maindir_clicked(self,_):
+    def pick_rootdir_clicked(self,_):
         # Get the address of a root directory
         root_directory = self.pick_root_directory()
         if not root_directory:
@@ -976,10 +976,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             search=True,
             pattern=self.get_pattern(),
         )
-        self.h5.update_ponifiles(
-            ponifile_list=[],
-            search=True,
-        )
+        self.h5.update_ponifiles()
 
         # Update combobox of ponifiles
         self.update_cb_ponifiles(
@@ -1084,7 +1081,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
 
     @log_info
-    def pick_root_directory(self) -> Path:
+    def pick_root_directory(self, timeout=1e9) -> Path:
         """
         Picks a folder as main directory, the root where the data files are searched recursively
 
@@ -1095,19 +1092,24 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         Path: path instance of the root directory to search data files
         """
         # Pick the folder after pop-up browser window
-        dialog_maindir = QFileDialog.getExistingDirectory(self, 'Choose main directory', str(GLOBAL_PATH))
+        self.dialog_maindir = QFileDialog()
+        get_directory = self.dialog_maindir.getExistingDirectory(self, 'Choose main directory', str(GLOBAL_PATH))
+
 
         # Returns if is not valid, or the dialog was cancelled
-        if not dialog_maindir:
+        if not get_directory:
             main_directory = ""
             self.write_terminal_and_loggerinfo(ERROR_PICK_FOLDER)
         else:
             try:
-                main_directory = Path(dialog_maindir)
+                main_directory = Path(get_directory)
             except NotImplementedError:
                 main_directory = ""
                 self.write_terminal_and_loggerinfo(ERROR_PICK_FOLDER)
         return main_directory
+
+
+
 
     @log_info
     def get_full_folderpath(self, folder_relative_name=str()) -> Path:
@@ -1363,7 +1365,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         # Check if the .poni file does exist
         if self.h5.active_ponifile:
             self.write_terminal_and_loggerinfo(f"Activated {self.h5.active_ponifile}")
-            self.write_terminal_and_loggerinfo(self.h5)
+            # self.write_terminal_and_loggerinfo(self.h5)
         else:
             self.write_terminal_and_loggerinfo(f"No active ponifile.")
             return
