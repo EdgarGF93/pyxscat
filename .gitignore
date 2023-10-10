@@ -18,7 +18,7 @@
 *.h5
 
 # .json with recent h5 files
-pyxscat/h5_files_dicts/*.json
+*/h5_files_dicts/*.json
 
 # .json with integration parameters (except for complete, oop, ip)
 # pyxscat/integration_dicts/*.json
