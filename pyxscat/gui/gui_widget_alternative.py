@@ -2765,7 +2765,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                 )
                 graph_1D_widget.setGraphYLabel(label='Intensity (arb. units)')
                 if list_dict_integration[ind].get(KEY_INTEGRATION) == CAKE_LABEL:
-                    graph_1D_widget.setGraphXLabel(label=list_dict_integration[ind][CAKE_KEY_UNIT])
+                    if list_dict_integration[ind].get(CAKE_KEY_TYPE) == CAKE_KEY_TYPE_AZIM:
+                        xlabel = list_dict_integration[ind][CAKE_KEY_UNIT]
+                    elif list_dict_integration[ind].get(CAKE_KEY_TYPE) == CAKE_KEY_TYPE_RADIAL:
+                        xlabel = f'\u03c7 (deg)'
+                    graph_1D_widget.setGraphXLabel(label=xlabel)
                 elif list_dict_integration[ind].get(KEY_INTEGRATION) == BOX_LABEL:
                     graph_1D_widget.setGraphXLabel(label=list_dict_integration[ind][BOX_KEY_OUTPUT_UNIT])
             except:
