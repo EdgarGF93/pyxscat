@@ -35,7 +35,7 @@ conda install python=3.10
 
 ```
 cd /user/Python
-git clone -b h5_based https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat.git
+git clone -b main_matplotlit_3 https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat.git
 ```
 
 ## 2) Install locally the package, including all its sub-packages
@@ -48,25 +48,20 @@ pip install -e .
 
 ## 1) Download the requirements.txt file from the GitLab
 
-## 2) Go to your python destinated directory and install the required packages (where the requiremens.txt is stored)
+## 2) Go to your python destinated directory and install the required packages (where the requirements.txt is stored)
 ```
 cd /user/Python
 pip install -r requirements.txt
 ```
 
+# Run pyxscat
 
-
-
-## 3) Once the module is installed in the path of your environment, open the GUI:
+## 1) Once the module is installed in the path of your environment, open the GUI:
 ```
 pyxscat
 ```
 
-
-
-
-
-## 4) Tutorial of the GUI. You have a .ppt file in the PyXScat folder, to learn a minimum set of steps to start handlind your data:
+## 2) Tutorial of the GUI. You have a .ppt file in the PyXScat folder, to learn a minimum set of steps to start handlind your data:
 ```
 Tutorial/pyxscat_tutorial.ppt
 ```
