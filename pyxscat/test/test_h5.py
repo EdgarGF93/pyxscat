@@ -7,6 +7,8 @@ import fabio
 from pyxscat import PATH_PYXSCAT
 import pytest
 from pyFAI.io.ponifile import PoniFile
+from pyxscat.other.integrator_methods import get_dict_from_name
+from pyxscat.gui import INTEGRATION_PATH
 
 EDF_EXAMPLES_PATH = 'edf_examples'
 NCD_PATH = 'test_NCD'
@@ -51,15 +53,15 @@ def test_invalid_root_dir_and_input_file():
         scope='session', 
         params=[
             # From Root Directory
-            # (GLOBAL_PATH, '', ''),
+            (GLOBAL_PATH, '', ''),
             (NCD_EXAMPLE_PATH, '', ''),
-            # (XMAS_EXAMPLE_PATH, '', ''),
-            # (DUBBLE_EXAMPLE_PATH, '', ''),
+            (XMAS_EXAMPLE_PATH, '', ''),
+            (DUBBLE_EXAMPLE_PATH, '', ''),
             # # From input h5 filename
-            # ('', GLOBAL_INIT_H5, ''),
-            # ('', NCD_INIT_H5, ''),
-            # ('', XMAS_INIT_H5, ''),
-            # ('', DUBBLE_INIT_H5, ''),
+            ('', GLOBAL_INIT_H5, ''),
+            ('', NCD_INIT_H5, ''),
+            ('', XMAS_INIT_H5, ''),
+            ('', DUBBLE_INIT_H5, ''),
 
         ]
     )
@@ -214,19 +216,21 @@ class TestH5GI:
         h5.update_grazinggeometry()
         poni_instance = PoniFile(data=h5.active_ponifile)
 
-        assert poni_instance.dist == h5._dist
-        assert poni_instance.wavelength == h5._wavelength
-        assert poni_instance.poni1 == h5._poni1
-        assert poni_instance.poni2 == h5._poni2
-        assert poni_instance.rot1 == h5._rot1
-        assert poni_instance.rot2 == h5._rot2
-        assert poni_instance.rot3 == h5._rot3
+        transform_instance = h5._transform
 
-        assert poni_instance.detector.name == h5.detector.name
-        assert poni_instance.detector.binning == h5.detector.binning
-        assert poni_instance.detector.shape == h5.detector.shape
-        assert poni_instance.detector.pixel1 == h5.detector.pixel1
-        assert poni_instance.detector.pixel2 == h5.detector.pixel2
+        assert poni_instance.dist == transform_instance._dist
+        assert poni_instance.wavelength == transform_instance._wavelength
+        assert poni_instance.poni1 == transform_instance._poni1
+        assert poni_instance.poni2 == transform_instance._poni2
+        assert poni_instance.rot1 == transform_instance._rot1
+        assert poni_instance.rot2 == transform_instance._rot2
+        assert poni_instance.rot3 == transform_instance._rot3
+
+        assert poni_instance.detector.name == transform_instance.detector.name
+        assert poni_instance.detector.binning == transform_instance.detector.binning
+        assert poni_instance.detector.shape == transform_instance.detector.shape
+        assert poni_instance.detector.pixel1 == transform_instance.detector.pixel1
+        assert poni_instance.detector.pixel2 == transform_instance.detector.pixel2
     
     def test_upload_datafiles(self, h5):
         print('testing the uploading of datafiles')
@@ -241,10 +245,11 @@ class TestH5GI:
         
     def test_upload_samples_valid(self, h5):
         print('testing a valid uploading of samples')
-        dict_files = h5.search_new_datafiles()
-        samples_in_root = set(dict_files.keys())
-
+        samples_in_root = set(h5.get_all_samples(get_relative_address=False))
         samples_in_h5 = set(h5.get_all_samples(get_relative_address=False))
+
+        print(samples_in_h5)
+        print(samples_in_root)
 
         assert samples_in_root == samples_in_h5
 
@@ -348,7 +353,22 @@ class TestH5GI:
         assert data_from_fabio.all() == data_from_h5.all()
 
     def test_azim_integration(self, h5):
-        pass
+        rel_samples_in_h5 = h5.get_all_samples(get_relative_address=True)
+        list_integration_names = ['complete', 'oop']
+
+        list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
+
+        list_results = h5.raw_integration(
+            sample_name=rel_samples_in_h5[0],
+            sample_relative_address=True,
+            index_list=0,
+            data=None,
+            norm_factor=1.0,
+            list_dict_integration=list_dict_integration,
+        )
+
+        assert list_results[0] is not None
+        assert list_results[1] is not None
 
     def test_radial_integration(self, h5):
         pass

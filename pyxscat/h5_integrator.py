@@ -145,7 +145,8 @@ INPUT_ROOT_DIR_NOT_VALID = 'There is no valid root directory nor input file.'
 H5_FILENAME_NOT_VALID = 'No valid path for the .h5 file'
 
 
-class H5GIIntegrator(Transform):
+class H5GIIntegrator():
+# class H5GIIntegrator(Transform):
     """
     Creates an HDF5 file and provides methods to read/write the file following the hierarchy of XMaS-BM28
     """
@@ -241,6 +242,8 @@ class H5GIIntegrator(Transform):
 
         else:
             raise Exception(INPUT_ROOT_DIR_NOT_VALID)
+        
+        self._transform = Transform()
                     
 
     def set_root_directory(self, root_directory=''):
@@ -1009,7 +1012,12 @@ class H5GIIntegrator(Transform):
         stored_ponifiles = self.get_all_ponifiles(get_relative_address=False)
 
         if poni_filename in stored_ponifiles:
+
             self.active_ponifile = poni_filename
+
+            self.update_grazinggeometry()
+
+
         else:
             logger.info(f"Ponifile {poni_filename} is not stored in the .h5")
             self.active_ponifile = None
@@ -1021,29 +1029,29 @@ class H5GIIntegrator(Transform):
     @debug_info
     def get_poni_dict(self):
         try:
-            detector = self.detector
+            detector = self._transform.detector
         except Exception as e:
             logger.error(f"{e}: Detector could not be retrieved.")
             return
         try:
-            detector_config = self.detector.get_config()
+            detector_config = self._transform.detector.get_config()
         except Exception as e:
             logger.error(f"{e}: Detector could not be retrieved.")
             return
         try:
-            wave = self._wavelength
+            wave = self._transform._wavelength
         except Exception as e:
             logger.error(f"{e}: Wavelength could not be retrieved.")
             return
         try:
-            dist = self._dist
+            dist = self._transform._dist
         except Exception as e:
             logger.error(f"{e}: Distance could not be retrieved.")
             return
         
         # Pixel 1
         try:
-            pixel1 = self.pixel1
+            pixel1 = self._transform.pixel1
         except Exception as e:
             pixel1 = None
             logger.error(f"{e}: Pixel 1 could not be retrieved.")
@@ -1056,7 +1064,7 @@ class H5GIIntegrator(Transform):
                 return
         # Pixel 2
         try:
-            pixel2 = self.pixel2
+            pixel2 = self._transform.pixel2
         except Exception as e:
             pixel2 = None
             logger.error(f"{e}: Pixel 2 could not be retrieved.")
@@ -1070,7 +1078,7 @@ class H5GIIntegrator(Transform):
 
         # Shape
         try:
-            shape = self.detector.max_shape
+            shape = self._transform.detector.max_shape
         except Exception as e:
             shape = None
             logger.error(f"{e}: Shape could not be retrieved from detector.")
@@ -1082,27 +1090,27 @@ class H5GIIntegrator(Transform):
                 return
 
         try:
-            poni1 = self._poni1
+            poni1 = self._transform._poni1
         except Exception as e:
             logger.error(f"{e}: PONI 1 could not be retrieved from h5.")
             return
         try:
-            poni2 = self._poni2
+            poni2 = self._transform._poni2
         except Exception as e:
             logger.error(f"{e}: PONI 2 could not be retrieved from h5.")
             return
         try:
-            rot1 = self._rot1
+            rot1 = self._transform._rot1
         except Exception as e:
             logger.error(f"{e}: Rotation 1 could not be retrieved from h5.")
             return
         try:
-            rot2 = self._rot2
+            rot2 = self._transform._rot2
         except Exception as e:
             logger.error(f"{e}: Rotation 2 could not be retrieved from h5.")
             return
         try:
-            rot3 = self._rot3
+            rot3 = self._transform._rot3
         except Exception as e:
             logger.error(f"{e}: Rotation 3 could not be retrieved from h5.")
             return
@@ -1147,6 +1155,7 @@ class H5GIIntegrator(Transform):
 
         # Load the ponifile
         try:
+            self._transform.load(poni_filename)
             self.load(poni_filename)
             logger.info(f"Loaded poni file: {poni_filename}")
         except Exception as e:
@@ -1186,7 +1195,7 @@ class H5GIIntegrator(Transform):
         """        
         # Incident angle
         try:
-            self.set_incident_angle(
+            self._transform.set_incident_angle(
                 incident_angle=incident_angle,
             )
             logger.info(f"Incident angle set at {incident_angle}")
@@ -1195,7 +1204,7 @@ class H5GIIntegrator(Transform):
 
         # Tilt angle
         try:
-            self.set_tilt_angle(
+            self._transform.set_tilt_angle(
                 tilt_angle=tilt_angle,
             )
             logger.info(f"Tilt angle set at {tilt_angle}")
@@ -1214,7 +1223,7 @@ class H5GIIntegrator(Transform):
         """
         try:
             sample_orientation = DICT_SAMPLE_ORIENTATIONS[(qz_parallel, qr_parallel)]
-            self.set_sample_orientation(
+            self._transform.set_sample_orientation(
                 sample_orientation=sample_orientation,
             )
             logger.info(f"The sample orientation (pygix) is set at {sample_orientation}.")
@@ -1810,7 +1819,7 @@ class H5GIIntegrator(Transform):
         )
 
         # Filter only the new data
-        dict_files_in_h5 = self.get_dict_files()
+        dict_files_in_h5 = self.get_dict_files(relative_address=False)
         dict_new_files = get_dict_difference(
             large_dict=dict_files,
             small_dict=dict_files_in_h5,
@@ -2042,6 +2051,9 @@ class H5GIIntegrator(Transform):
         sample_relative_address=True,
         index_list=list(),
         ):
+        print(sample_name)
+        print(sample_relative_address)
+        print(index_list)
         sample_name = self.get_sample_address(
             sample_name=sample_name,
             sample_relative_address=sample_relative_address,
@@ -2206,8 +2218,7 @@ class H5GIIntegrator(Transform):
     def raw_integration(
         self,
         sample_name=str(),
-        absolute_address=str(),
-        relative_address=str(),
+        sample_relative_address=True,
         index_list=list(),
         data=None,
         norm_factor=1.0,
@@ -2230,8 +2241,7 @@ class H5GIIntegrator(Transform):
         if data is None:
             data = self.get_Edf_data(
                 sample_name=sample_name,
-                absolute_address=absolute_address,
-                relative_address=relative_address,
+                sample_relative_address=sample_relative_address,
                 index_list=index_list,
             )
 
@@ -2257,6 +2267,7 @@ class H5GIIntegrator(Transform):
             )
 
         array_compiled = []
+
         for dict_integration in list_dict_integration:
             if dict_integration[KEY_INTEGRATION] == CAKE_LABEL:
                 if dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_AZIM:
@@ -2306,30 +2317,34 @@ class H5GIIntegrator(Transform):
         # Take the array of intensity
         if (data is None) or (not dict_integration):
             return
+        
         p0_range=dict_integration[CAKE_KEY_RRANGE]
         p1_range=dict_integration[CAKE_KEY_ARANGE]
         unit=dict_integration[CAKE_KEY_UNIT]
-        npt=self.calculate_bins(
-                    radial_range=p0_range,
-                    unit=unit,
-        )
+        npt = dict_integration[CAKE_KEY_ABINS]
+
+        if npt == 0:
+            npt=self.calculate_bins(
+                radial_range=p0_range,
+                unit=unit,
+            )
 
         # Do the integration with pygix/pyFAI
         try:
             logger.info(f"Trying azimuthal integration with: data-shape={data.shape} bins={npt}, p0_range={p0_range}, p1_range={p1_range}, unit={unit}")
-            y_vector, x_vector = self.integrate_1d(
+            y_vector, x_vector = self._transform.integrate_1d(
                 process='sector',
                 data=data,
                 npt=npt,
                 p0_range=p0_range,
                 p1_range=p1_range,
-                unit=unit,
+                unit=UNIT_GI[unit],
                 normalization_factor=float(norm_factor),
                 polarization_factor=POLARIZATION_FACTOR,
             )
             logger.info("Integration performed.")
-        except:
-            logger.info("Error during azimuthal integration.")
+        except Exception as e:
+            logger.error(f"{e}: Error during azimuthal integration.")
             return
 
         return np.array([x_vector, y_vector])
@@ -2366,7 +2381,7 @@ class H5GIIntegrator(Transform):
         
         try:
             logger.info(f"Trying radial integration with: npt={npt}, p0_range={p0_range}, p1_range={p1_range}, unit={unit}")
-            y_vector, x_vector = self.integrate_1d(
+            y_vector, x_vector = self._transform.integrate_1d(
                 process='chi',
                 data=data,
                 npt=npt,
@@ -2441,7 +2456,7 @@ class H5GIIntegrator(Transform):
         # Do the integration with pygix/pyFAI
         try:
             logger.info(f"Trying box integration with: process={process}, npt={npt}, p0_range={p0_range}, p1_range={p1_range}, unit={unit}")
-            y_vector, x_vector = self.integrate_1d(
+            y_vector, x_vector = self._transform.integrate_1d(
                 process=process,
                 data=data,
                 npt=npt,
@@ -2494,7 +2509,7 @@ class H5GIIntegrator(Transform):
             twotheta1, twotheta2 = radial_range[0], radial_range[1]
         else:
             return
-        return int(round(self._dist / self.get_pixel1() * (np.tan(twotheta2) - np.tan(twotheta1))))
+        return int(round(self._transform._dist / self._transform.get_pixel1() * (np.tan(twotheta2) - np.tan(twotheta1))))
 
     @debug_info
     def q_to_twotheta(self, q=0.0, unit='q_nm^-1', degree=False) -> float:
@@ -2510,9 +2525,9 @@ class H5GIIntegrator(Transform):
         float : twotheta value
         """
         if unit == 'q_nm^-1':
-            twotheta = 2 * np.arcsin((q*self._wavelength * 1e9)/(4*np.pi))
+            twotheta = 2 * np.arcsin((q*self._transform._wavelength * 1e9)/(4*np.pi))
         elif unit == 'q_A^-1':
-            twotheta = 2 * np.arcsin((q*self._wavelength * 1e10)/(4*np.pi))
+            twotheta = 2 * np.arcsin((q*self._transform._wavelength * 1e10)/(4*np.pi))
         else:
             return
         return np.rad2deg(twotheta) if degree else twotheta
@@ -2541,12 +2556,12 @@ class H5GIIntegrator(Transform):
         if deg:
             twotheta = np.radians(twotheta)
         try:
-            wavelength_nm = self._wavelength * 1e9
+            wavelength_nm = self._transform._wavelength * 1e9
         except:
             return
         
         try:
-            alpha_inc = np.radians(self._incident_angle)
+            alpha_inc = np.radians(self._transform._incident_angle)
         except:
             alpha_inc = 0.0
         
@@ -2649,7 +2664,7 @@ class H5GIIntegrator(Transform):
         try:
             # This method does not work with ALBA_NCD_Nov2022
             if not shape:
-                shape = self.get_shape()
+                shape = self._transform.get_shape()
 
             logger.info(f"Shape of the detector: {shape}")
             d2,d1 = np.meshgrid(
@@ -2687,7 +2702,7 @@ class H5GIIntegrator(Transform):
         if unit in UNITS_Q:
             try:
                 # calc_q will take into account the sample_orientation in GrazingGeometry instance
-                scat_z, scat_xy = self.calc_q(
+                scat_z, scat_xy = self._transform.calc_q(
                     d1=det_array[0,:,:],
                     d2=det_array[1,:,:],
                 )
@@ -2699,7 +2714,7 @@ class H5GIIntegrator(Transform):
                 logger.info(f"Scat_x matrix could not be generated.")
         elif unit in UNITS_THETA:
             try:
-                scat_z, scat_xy = self.calc_angles(
+                scat_z, scat_xy = self._transform.calc_angles(
                     d1=det_array[0,:,:],
                     d2=det_array[1,:,:],
                 )

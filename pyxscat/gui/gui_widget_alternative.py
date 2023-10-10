@@ -1361,6 +1361,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         self.h5.activate_ponifile(
             poni_filename=poni_name,
         )
+
+        # Update the inherited instance of Grazing Geometry
+        # self.h5.update_grazinggeometry()
         
         # Check if the .poni file does exist
         if self.h5.active_ponifile:
@@ -1832,7 +1835,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: pyFAI GUI could not be opened.")
         finally:
-            self.search_and_update_ponifiles_widgets()
+            self.h5.update_ponifiles()
+
+            # Update combobox of ponifiles
+            self.update_cb_ponifiles(
+                from_h5=True,
+                reset=True,
+            )
 
     @log_info
     def open_pyFAI_calib2_windows(self) -> None:
@@ -1852,7 +1861,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: pyFAI GUI could not be opened.")
         finally:
-            self.search_and_update_ponifiles_widgets()
+            self.h5.update_ponifiles()
+
+            # Update combobox of ponifiles
+            self.update_cb_ponifiles(
+                from_h5=True,
+                reset=True,
+            )
            
     # #########################
     # # Search engines
@@ -1873,9 +1888,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             dict_new_files=dict_new_files,
             search=False,
         )
-        self.h5.update_ponifiles(
-            search=True,
-        )
+        self.h5.update_ponifiles()
 
         # Update combobox of ponifiles
         self.update_cb_ponifiles(
@@ -2567,6 +2580,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         if self.checkbox_mask_integration.isChecked():
             data = self.get_masked_integration_array(data=data)
 
+        print(data.shape)
+
         graph_2D_widget.addImage(
             data=data,
             colormap={
@@ -2726,10 +2741,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         if self.tab_chart_widget.currentIndex() != INDEX_TAB_1D_INTEGRATION:
             return
-
-        # logger.info(f"Ponifile: {self.h5.get_active_ponifile()}")
-        # if not self.active_ponifile:
-        #     return
             
         list_integration_names = self.combobox_integration.currentData()
         logger.info(f"Dictionaries of integration: {list_integration_names}")
@@ -3463,7 +3474,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
                 logger.info(f"Parameters to mask the array. Shape: {shape}, unit: {unit}, \
                     p0_range: {p0_range}, p1_range: {p1_range}, pos0_scale: {pos0_scale}.")
-                chi, pos0 = self.h5.giarray_from_unit(shape, "sector", "center", unit)
+                chi, pos0 = self.h5._transform.giarray_from_unit(shape, "sector", "center", unit)
             except:
                 logger.error(f"Chi and pos0 matrix could not be generated. The parameters were: \
                     Shape: {shape}, unit: {unit}, p0_range: {p0_range}, p1_range: {p1_range}, pos0_scale: {pos0_scale}.")
@@ -3494,9 +3505,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
                 logger.info(f"Parameters to mask the array. Shape: {shape}, unit: {unit}, \
                     oop_range: {oop_range}, ip_range: {ip_range}, q_scale: {q_scale}.")
-                horz_q, vert_q = self.h5.giarray_from_unit(shape, "opbox", "center", unit_gi)
-                print(self.h5._incident_angle)
-                print(666)
+                horz_q, vert_q = self.h5._transform.giarray_from_unit(shape, "opbox", "center", unit_gi)
             except Exception as e:
                 logger.error(f"{e} horz_q and vert_q matrix could not be generated with {dict_integration} and shape {shape}")
                 return

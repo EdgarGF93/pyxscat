@@ -23,10 +23,10 @@ from PyQt5.QtWidgets import QApplication
 from pyxscat.gui.gui_window import GUIPyX_Window
 import sys
 
-from pyxscat.test.test_h5 import NCD_EXAMPLE_PATH
+from pyxscat.test.test_h5 import NCD_EXAMPLE_PATH, XMAS_EXAMPLE_PATH
 # Open the GUI
 
-
+EXAMPLE_PATH = XMAS_EXAMPLE_PATH
 class TestGUI:
 
     @classmethod
@@ -90,7 +90,7 @@ class TestGUI:
         # Wait for the dialog to open
         QTest.qWait(5000)
         # Interact with QFileDialog
-        pyautogui.write(str(Path(NCD_EXAMPLE_PATH)))
+        pyautogui.write(str(Path(EXAMPLE_PATH)))
         # time.sleep(5)
         pyautogui.press('tab')
         pyautogui.press('enter')
@@ -100,30 +100,72 @@ class TestGUI:
         pyautogui.press('enter')
 
 
-    def test_2(self):
+    def test_click_list_widget(self):
         self.poll_timer = QTimer()
         self.poll_timer.timeout.connect(self.check_list_widget_state)
-        self.poll_timer.start(100)   
+        self.poll_timer.start(100)
+
+        listWidget = self.w.listwidget_samples
+
+        for ind in range(listWidget.count()+1):
+            self.click_list_widget(ind=ind)
+
+        self.click_list_widget(ind=0)
+
+    def click_list_widget(self, ind=0):
+        listWidget = self.w.listwidget_samples
+
+        item = listWidget.item(ind)
+        listWidget.scrollToItem(item)        
+
+        # Get the rectangle (position and size) of the item
+        item_rect = listWidget.visualItemRect(item)
+            
+        # Calculate the global position of the center of the item
+        global_pos = listWidget.mapToGlobal(item_rect.center())
+        local_pos = listWidget.viewport().mapFromGlobal(global_pos)
+            
+        # Simulate the mouse click
+        QTest.mouseClick(listWidget.viewport(), Qt.LeftButton, pos=local_pos)
+        QTest.qWait(1000)
 
     def check_list_widget_state(self):
         if self.w.listwidget_samples.count() > 0:
             self.poll_timer.stop() 
     
-    def test_3(self):
+    def test_click_table(self):
+        self.poll_timer = QTimer()
+        self.poll_timer.timeout.connect(self.check_table_widget_state)
+        self.poll_timer.start(100)
+
+        tableWidget = self.w.table_files
+
+        for row in range(tableWidget.rowCount()+2):
+            item = tableWidget.item(row+1,0)
+            tableWidget.scrollToItem(item)
+
+            item_rect = tableWidget.visualItemRect(item)
+            global_pos = tableWidget.mapToGlobal(item_rect.center())
+            local_pos = tableWidget.viewport().mapFromGlobal(global_pos)
+            QTest.mouseClick(tableWidget.viewport(), Qt.LeftButton, pos=local_pos)
+            QTest.qWait(1000)
+
+    def check_table_widget_state(self):
+        if self.w.table_files.rowCount() > 0:
+            self.poll_timer.stop()
+
+
+    def test_active_integration(self):
+        cb = self.w.combobox_integration
+        cb.markItems(list_items=['complete', 'oop'])
+
+
+
+
+
+
+
+
+
+    def test_final_wait(self):
         QTest.qWait(10000)
-    # def start_timer(self):
-    #     self.timer = QTimer()
-    #     self.timer.timeout.connect(self.on_timeout)
-    #     self.timer.start(20000)  # Wait for 2 seconds (2000 milliseconds)
-
-    # def on_timeout(self):
-    #     self.timer.stop()
-
-    # def test_click_sample(self):
-    #     self.start_timer()
-    #     item_index = 0
-    #     widget = self.w.listwidget_samples
-
-    #     item = widget.item(item_index)
-
-    #     widget.scrollToItem(item)
