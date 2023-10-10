@@ -1287,8 +1287,6 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
 
-
-
     @log_info
     def update_h5_plaintext(self):
         self.h5_plaintext.clear()
@@ -2065,6 +2063,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         # Get the output name for the .json
         name_json = self.h5._name.replace(".h5", ".json")
+        H5_FILES_PATH.mkdir(parents=True, exist_ok=True)
+
         filename_out = H5_FILES_PATH.joinpath(f"{name_json}")
 
         # Fetch the dictionary of attributes from the h5 instance
