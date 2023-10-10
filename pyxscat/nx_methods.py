@@ -1,6 +1,6 @@
 from pathlib import Path
 from silx.io import fabioh5, convert
-from other.search_functions import search_files
+from pyxscat.other.search_functions import search_files
 
 EXTENSION_H5 = '.h5'
 

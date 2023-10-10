@@ -1,6 +1,6 @@
 
 from PyQt5.QtWidgets import QApplication
-from gui.gui_window import GUIPyX_Window
+from pyxscat.gui.gui_window import GUIPyX_Window
 import sys
 # Open the GUI
 
