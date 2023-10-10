@@ -974,8 +974,9 @@ class H5GIIntegrator():
             dataset = f[PONI_GROUP_KEY][PONIFILE_DATASET_KEY]
             for ponifile in dataset:
                 ponifile = ponifile.decode(ENCODING_FORMAT)
+                ponifile = Path(ponifile).as_posix()
                 if get_relative_address:
-                    ponifile = str(Path(ponifile).relative_to(self._root_dir)) 
+                    ponifile = Path(ponifile).relative_to(self._root_dir).as_posix()
                 yield ponifile
         
     @logger_info
