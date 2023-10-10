@@ -118,32 +118,21 @@ INFO_H5_FILES_UPDATED = "Finished the update of all the new files."
 
 ERROR_MAIN_DIRECTORY = "No main directory was detected."
 
- # Initialize logger
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
-if not Path(LOGGER_PATH).exists():
-    Path(LOGGER_PATH).mkdir()
-
-logger_file = Path(LOGGER_PATH).joinpath(f'pyxscat_h5_logger_{date_prefix()}.txt')
-file_handler = logging.FileHandler(logger_file)
-file_handler.setLevel(logging.INFO)
-file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-logger.addHandler(file_handler)
-logger.info(MSG_LOGGER_INIT)
-
-def debug_info(func):
-    def wrapper(*args, **kwargs):
-        logger.debug(f'We entered into function: {func.__name__}')
-        return func(*args, **kwargs)
-    return wrapper
-
 INPUT_FILE_NOT_VALID = 'The input file does not exist.'
 ROOT_DIR_NOT_VALID = 'The root directory is not valid.'
 ROOT_DIR_NOT_ACCESIBLE = 'The access to root directory is not available.'
 INPUT_ROOT_DIR_NOT_VALID = 'There is no valid root directory nor input file.'
 H5_FILENAME_NOT_VALID = 'No valid path for the .h5 file'
 
+from pyxscat.logger_config import setup_logger
+logger = setup_logger()
+
+
+def logger_info(func):
+    def wrapper(*args, **kwargs):
+        logger.info(f'We entered into function: {func.__name__}')
+        return func(*args, **kwargs)
+    return wrapper
 
 class H5GIIntegrator():
 # class H5GIIntegrator(Transform):
@@ -156,6 +145,8 @@ class H5GIIntegrator():
         root_directory='',
         output_filename_h5='',
         ) -> None:
+
+        logger.info("H5GIIntegrator instance was created.")
 
         if input_h5_filename:
 
@@ -294,7 +285,7 @@ class H5GIIntegrator():
             else:
                 raise Exception(H5_FILENAME_NOT_VALID)
 
-    @debug_info
+    @logger_info
     def create_h5_file(self, h5_filename=''):
         if not h5_filename:
             h5_filename = self._h5_filename
@@ -312,12 +303,12 @@ class H5GIIntegrator():
             self._file = None
             logger.error(f"{e}: The file {h5_filename} could not be created.")
 
-    @debug_info
+    @logger_info
     def init_h5_groups(self, h5_filename=''):
         self.create_group_samples(h5_filename=h5_filename)
         self.create_group_ponifiles(h5_filename=h5_filename)
 
-    @debug_info
+    @logger_info
     def write_root_attributes(
         self,
         root_directory='',
@@ -374,7 +365,7 @@ class H5GIIntegrator():
         else:
             return False
 
-    @debug_info
+    @logger_info
     def h5_write_attrs_in_group(self, dict_attrs=dict(), group_address='.'):
         """
         Write the key-values from a dictionary as attributes at the root level of h5 file
@@ -390,7 +381,7 @@ class H5GIIntegrator():
                 group_address=group_address,
             )
 
-    @debug_info
+    @logger_info
     def init_metadata_attrs(self) -> None:
         """
         Declare attributes to easy access
@@ -400,7 +391,7 @@ class H5GIIntegrator():
         self._norm_key = ''
         self._acq_key = ''
 
-    @debug_info
+    @logger_info
     def h5_write_attr_in_group(self, key=str(), value=str(), group_address='.'):
         """
         Write a key-value attribute into a specific h5 address
@@ -417,7 +408,7 @@ class H5GIIntegrator():
         with File(self._h5_filename, 'r+') as f:
             f[group_address].attrs[key] = value
 
-    @debug_info
+    @logger_info
     def h5_get_attr(self, attr_key=str(), group_address='.') -> str:
         """
         Returns the attribute value from a specific Group
@@ -436,7 +427,7 @@ class H5GIIntegrator():
                 logger.error(f"{e}: attr {attr_key} does not exists in {group_address}")
         return attr
 
-    @debug_info
+    @logger_info
     def h5_get_dict_attrs(self, group_address='.') -> dict:
         """
         Returns a dictionary with the key-value attributes of a Group
@@ -455,7 +446,7 @@ class H5GIIntegrator():
     ######### METHODS FOR KEY METADATA ######################
     #########################################################
 
-    @debug_info
+    @logger_info
     def update_metadata_keys(
         self, 
         dict_metadata_keys=dict(), 
@@ -489,7 +480,7 @@ class H5GIIntegrator():
         self._norm_key = dict_metadata_keys[NORMALIZATION_KEY]
         self._acq_key = dict_metadata_keys[ACQUISITION_KEY]
 
-    @debug_info
+    @logger_info
     def get_iangle_key(self):
         """
         Returns the string of the stored key for incident angle
@@ -497,7 +488,7 @@ class H5GIIntegrator():
         iangle_key = self._iangle_key
         return iangle_key
 
-    @debug_info
+    @logger_info
     def get_tiltangle_key(self):
         """
         Returns the string of the stored key for tilt angle
@@ -505,7 +496,7 @@ class H5GIIntegrator():
         tangle_key = self._tangle_key
         return tangle_key
 
-    @debug_info
+    @logger_info
     def get_norm_key(self):
         """
         Returns the string of the stored key for normalization factor
@@ -513,7 +504,7 @@ class H5GIIntegrator():
         norm_key = self._norm_key
         return norm_key
 
-    @debug_info
+    @logger_info
     def get_acquisition_key(self):
         """
         Returns the string of the stored key for acquisition time
@@ -521,7 +512,7 @@ class H5GIIntegrator():
         acq_key = self._acq_key
         return acq_key
 
-    @debug_info
+    @logger_info
     def get_metadata_dict(self) -> dict:
         """
         Returns a dictionary with the key-value metadata information
@@ -539,7 +530,7 @@ class H5GIIntegrator():
         dict_metadata[ACQUISITION_KEY] = self._acq_key
         return dict_metadata
 
-    @debug_info
+    @logger_info
     def get_dataset_acquisition_time(
         self, 
         sample_name=str(),
@@ -565,7 +556,7 @@ class H5GIIntegrator():
             dataset = None
         return dataset
 
-    @debug_info
+    @logger_info
     def get_dataset_incident_angle(
         self, 
         sample_name=str(), 
@@ -591,7 +582,7 @@ class H5GIIntegrator():
             dataset = None
         return dataset
 
-    @debug_info
+    @logger_info
     def get_dataset_tilt_angle(
         self, 
         sample_name=str(), 
@@ -617,7 +608,7 @@ class H5GIIntegrator():
             dataset = None
         return dataset
 
-    @debug_info
+    @logger_info
     def get_dataset_norm_factor(
         self, 
         sample_name=str(),
@@ -643,7 +634,7 @@ class H5GIIntegrator():
             dataset = None
         return dataset
 
-    @debug_info
+    @logger_info
     def get_acquisition_time(
         self, 
         folder_name=str(), 
@@ -679,7 +670,7 @@ class H5GIIntegrator():
         logger.info(f"Got acquistion time: {acq}")
         return acq
 
-    @debug_info
+    @logger_info
     def get_incident_angle(
         self, 
         sample_name=str(),
@@ -715,7 +706,7 @@ class H5GIIntegrator():
         logger.info(f"Got incident angle: {iangle}")
         return iangle
 
-    @debug_info
+    @logger_info
     def get_tilt_angle(
         self, 
         sample_name=str(),
@@ -752,7 +743,7 @@ class H5GIIntegrator():
         logger.info(f"Got tilt angle: {tilt}")
         return tilt
 
-    @debug_info
+    @logger_info
     def get_norm_factor(
         self, 
         sample_name=str(), 
@@ -799,7 +790,7 @@ class H5GIIntegrator():
     ######### METHODS FOR PONIFILES ######################
     #########################################################
 
-    @debug_info
+    @logger_info
     def search_ponifiles(self, new_files=True) -> list:
         """
         Searches for .poni files in the root directory
@@ -867,7 +858,7 @@ class H5GIIntegrator():
             dset_name=metadata_key,
         )
 
-    @debug_info
+    @logger_info
     def update_ponifiles(self):
 
         # Creates the dataset for ponifiles if needed
@@ -889,7 +880,7 @@ class H5GIIntegrator():
             ponifile_list=ponifile_list,
         )
 
-    @debug_info
+    @logger_info
     def append_metadata_values(self, sample_name=str(), metadata_key=str(), value_list=list()):
         self.append_stringlist_to_dataset(
             group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}/{METADATA_KEY}",
@@ -898,7 +889,7 @@ class H5GIIntegrator():
         )
 
 
-    @debug_info
+    @logger_info
     def append_datafile_list(self, sample_name=str(), datafile_list=list()):
         self.append_stringlist_to_dataset(
             group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
@@ -907,7 +898,7 @@ class H5GIIntegrator():
         )
 
 
-    @debug_info
+    @logger_info
     def append_ponifile_list(self, ponifile_list=list()):
         self.append_stringlist_to_dataset(
             group_address=PONI_GROUP_KEY,
@@ -915,7 +906,7 @@ class H5GIIntegrator():
             list_to_append=ponifile_list,
         )
 
-    @debug_info
+    @logger_info
     def append_stringlist_to_dataset(self, group_address='.', dataset_name=str(), list_to_append=list()):
         if isinstance(list_to_append, str):
             list_to_append = [list_to_append]
@@ -966,7 +957,7 @@ class H5GIIntegrator():
     #     ponifile_active = Path(ponifile_active)
     #     return ponifile_active
 
-    @debug_info
+    @logger_info
     def update_ponifile_parameters(self, dict_poni=dict()) -> None:
         """
         Changes manually the functional poni parameters of pygix
@@ -977,7 +968,7 @@ class H5GIIntegrator():
 
 
 
-    @debug_info
+    @logger_info
     def generate_ponifiles(self, get_relative_address=True) -> str:
         with File(self._h5_filename, 'r+') as f:
             dataset = f[PONI_GROUP_KEY][PONIFILE_DATASET_KEY]
@@ -987,12 +978,12 @@ class H5GIIntegrator():
                     ponifile = str(Path(ponifile).relative_to(self._root_dir)) 
                 yield ponifile
         
-    @debug_info
+    @logger_info
     def get_all_ponifiles(self, get_relative_address=True) -> list:
         ponifile_list = list(self.generate_ponifiles(get_relative_address=get_relative_address))
         return ponifile_list
 
-    @debug_info
+    @logger_info
     def activate_ponifile(self, poni_filename=str()) -> None:     
         if not poni_filename:
             return
@@ -1026,7 +1017,7 @@ class H5GIIntegrator():
         # Update the GrazingGeometry instance
         # self.update_grazinggeometry()
 
-    @debug_info
+    @logger_info
     def get_poni_dict(self):
         try:
             detector = self._transform.detector
@@ -1138,7 +1129,7 @@ class H5GIIntegrator():
     ######### PYGIX CONNECTIONS ######################
     #########################################################
 
-    @debug_info
+    @logger_info
     def update_grazinggeometry(self, poni_filename='') -> None:
         """
         If there is an active ponifile, inherits the methods from Transform class (pygix module)
@@ -1167,7 +1158,7 @@ class H5GIIntegrator():
         except Exception as e:
             logger.error(f"{e}: angles could not be updated.")
 
-    @debug_info
+    @logger_info
     def update_angles(self, sample_name=str(), list_index=list()):
         iangle = self.get_incident_angle(
             sample_name=sample_name,
@@ -1184,7 +1175,7 @@ class H5GIIntegrator():
             tilt_angle=tangle,
         )
 
-    @debug_info
+    @logger_info
     def update_incident_tilt_angle(self, incident_angle=0.0, tilt_angle=0.0):
         """
         Update the incident and tilt angles inherited from GrazingGeometry
@@ -1211,7 +1202,7 @@ class H5GIIntegrator():
         except Exception as e:
             logger.error(f"{e}: Tilt angle could not be updated.")
 
-    @debug_info
+    @logger_info
     def update_orientation(self, qz_parallel=True, qr_parallel=True) -> None:
         """
         Updates two parameters to define the rotation of the detector and the orientation of the sample axis
@@ -1234,7 +1225,7 @@ class H5GIIntegrator():
     ###### HDF5 METHODS #################
     #####################################
 
-    @debug_info
+    @logger_info
     def create_group(
         self,
         h5_filename='',
@@ -1258,7 +1249,7 @@ class H5GIIntegrator():
                 except Exception as e:
                     logger.error(f"{e}: {group_name} could not be created in {root_group_address}.")
 
-    @debug_info
+    @logger_info
     def create_dataset_path(self, group_address='.', dset_name=str(), dtype=FORMAT_STRING, shape=DEFAULT_SHAPE_1D, maxshape=MAXSHAPE_1D_RESIZE,):
         with File(self._h5_filename, 'r+') as f:
             # Returns if it contains the dataset already
@@ -1278,7 +1269,7 @@ class H5GIIntegrator():
                     logger.error(f"{e}: {dset_name} could not be created in {group_address}")
 
 
-    @debug_info
+    @logger_info
     def create_dataset_float(self, group_address='.', dset_name=str(), dtype=FORMAT_FLOAT, shape=DEFAULT_SHAPE_1D, maxshape=MAXSHAPE_1D_RESIZE,):
         with File(self._h5_filename, 'r+') as f:
             # Returns if it contains the dataset already
@@ -1297,14 +1288,14 @@ class H5GIIntegrator():
                 except Exception as e:
                     logger.error(f"{e}: {dset_name} could not be created in {group_address}")
 
-    @debug_info
+    @logger_info
     def create_group_samples(self, h5_filename=''):
         self.create_group(
             h5_filename=h5_filename,
             group_name=SAMPLE_GROUP_KEY,
         )
 
-    @debug_info
+    @logger_info
     def create_group_ponifiles(self, h5_filename):
         self.create_group(
             h5_filename=h5_filename,
@@ -1313,7 +1304,7 @@ class H5GIIntegrator():
         self.create_ponifile_dset()
 
 
-    @debug_info
+    @logger_info
     def create_ponifile_dset(self):
         self.create_dataset_path(
             group_address=PONI_GROUP_KEY,
@@ -1321,7 +1312,7 @@ class H5GIIntegrator():
         )
 
 
-    @debug_info
+    @logger_info
     def create_sample(self, sample_name=str()):
         self.create_group(
             root_group_address=SAMPLE_GROUP_KEY,
@@ -1329,7 +1320,7 @@ class H5GIIntegrator():
         )
 
 
-    @debug_info
+    @logger_info
     def new_sample(self, sample_name=str()):
         # sample_name = sample_name.replace('/', '_')
 
@@ -1446,7 +1437,7 @@ class H5GIIntegrator():
     #     )
     #     self._close
 
-    @debug_info
+    @logger_info
     def update_sample(self, sample_name=str(), data_filenames=list(), get_2D_array=False) -> None:
         """
         Creates or updates a folder (Group) with data and metadata from a list of files
@@ -1670,7 +1661,7 @@ class H5GIIntegrator():
 
 
 
-    @debug_info
+    @logger_info
     def generator_file_header(self, filenames=list()):
         for file in filenames:
             # Open a EdfClass instance
@@ -1736,7 +1727,7 @@ class H5GIIntegrator():
     #             data, header = None, None
     #         yield data, header
 
-    @debug_info
+    @logger_info
     def generator_samples(self, relative_address=True) -> str:
         with File(self._h5_filename, 'r+') as f:
             for sample in  f[SAMPLE_GROUP_KEY].keys():
@@ -1746,12 +1737,12 @@ class H5GIIntegrator():
                     sample_name = f[SAMPLE_GROUP_KEY][sample].attrs[ABS_ADDRESS_KEY]
                 yield sample_name
 
-    @debug_info
+    @logger_info
     def get_all_samples(self, get_relative_address=True) -> list:
         list_samples = sorted(self.generator_samples(relative_address=get_relative_address))
         return list_samples
 
-    @debug_info
+    @logger_info
     def generator_all_files(self, relative_address=True) -> str:
         """
         Yields the names of every file stored in the .h5 file
@@ -1770,7 +1761,7 @@ class H5GIIntegrator():
                 ):
                 yield file
 
-    @debug_info
+    @logger_info
     def get_dict_files(self, relative_address=True):
         dict_files = defaultdict(set)
         for file in self.generator_all_files(relative_address=False):
@@ -1785,7 +1776,7 @@ class H5GIIntegrator():
             dict_files[sample_name].add(file)
         return dict_files
 
-    @debug_info
+    @logger_info
     def get_all_files(self) -> list:
         """
         Returns a list with all the stored files in the h5 File
@@ -1803,11 +1794,11 @@ class H5GIIntegrator():
     ############# SAMPLES/FILES METHODS ##############
     ##################################################
 
-    @debug_info
+    @logger_info
     def set_pattern(self, pattern=".edf"):
         self._pattern = pattern
 
-    @debug_info
+    @logger_info
     def search_new_datafiles(
         self, 
         pattern="*.edf",
@@ -1826,7 +1817,7 @@ class H5GIIntegrator():
         )
         return dict_new_files
 
-    @debug_info
+    @logger_info
     def update_datafiles(
         self, 
         dict_new_files=dict(), 
@@ -1856,7 +1847,7 @@ class H5GIIntegrator():
             logger.info(f"Finished with folder: {sample_name}.")
         logger.info(INFO_H5_FILES_UPDATED)
 
-    @debug_info
+    @logger_info
     def get_all_files_from_sample(
         self, 
         sample_name=str(),
@@ -1871,7 +1862,7 @@ class H5GIIntegrator():
             ))
         return list_files
 
-    @debug_info
+    @logger_info
     def get_sample_address(self, sample_name=str(), sample_relative_address=True):
         with File(self._h5_filename, 'r+') as f:
             if sample_relative_address:
@@ -1887,7 +1878,7 @@ class H5GIIntegrator():
                 logger.info(f"There is no sample with abs. address {sample_name}.")
                 return
 
-    @debug_info
+    @logger_info
     def generator_files_in_sample(
         self, 
         sample_name=str(), 
@@ -1910,7 +1901,7 @@ class H5GIIntegrator():
                     filename = str(Path(filename).relative_to(sample_name))                    
                 yield filename
 
-    @debug_info
+    @logger_info
     def get_metadata_dataset(
         self, 
         sample_name=str(), 
@@ -1934,7 +1925,7 @@ class H5GIIntegrator():
                 return
             return dataset
 
-    @debug_info
+    @logger_info
     def get_metadata_value(
         self, 
         sample_name=str(),
@@ -1975,7 +1966,7 @@ class H5GIIntegrator():
                 value = dataset[index_list[-1]]
         return value
 
-    @debug_info
+    @logger_info
     def get_metadata_dataframe(
         self, 
         sample_name=str(),
@@ -2012,7 +2003,7 @@ class H5GIIntegrator():
         logger.info(f"The dataframe has size {dataframe.size}.")
         return dataframe
 
-    @debug_info
+    @logger_info
     def get_all_metadata_keys_from_sample(
         self, 
         sample_name=str(), 
@@ -2025,7 +2016,7 @@ class H5GIIntegrator():
                 ))
         return list_keys
 
-    @debug_info
+    @logger_info
     def generator_metadata_keys_from_sample(
         self, 
         sample_name=str(), 
@@ -2044,7 +2035,7 @@ class H5GIIntegrator():
             for key in list_keys:
                 yield key
 
-    @debug_info
+    @logger_info
     def get_filename_from_index(
         self, 
         sample_name=str(),
@@ -2072,7 +2063,7 @@ class H5GIIntegrator():
                 filename = filename.replace(".edf", "_average.edf")
         return filename
 
-    @debug_info
+    @logger_info
     def get_sample_index_from_filename(self, filename=str()):
         """
         Searches the filename in the .h5 Groups and returns the name of the folder and the index of the file in the Group
@@ -2101,7 +2092,7 @@ class H5GIIntegrator():
     ###### EDF METHODS ##########
     #####################################
 
-    @debug_info
+    @logger_info
     def get_Edf_instance(
         self, 
         full_filename=str(),
@@ -2135,7 +2126,7 @@ class H5GIIntegrator():
             Edf_instance = None
         return Edf_instance
 
-    @debug_info
+    @logger_info
     def get_Edf_data(
         self, 
         sample_name=str(),
@@ -2194,7 +2185,7 @@ class H5GIIntegrator():
     ###### INTEGRATION METHODS ##########
     #####################################
 
-    @debug_info
+    @logger_info
     def map_reshaping(
         self,
         data=None,
@@ -2214,7 +2205,7 @@ class H5GIIntegrator():
 
         return data_reshape, q, chi
 
-    @debug_info
+    @logger_info
     def raw_integration(
         self,
         sample_name=str(),
@@ -2296,7 +2287,7 @@ class H5GIIntegrator():
             array_compiled.append(res)
         return array_compiled
 
-    @debug_info
+    @logger_info
     def raw_integration_azimuthal(
         self, 
         data=None,
@@ -2349,7 +2340,7 @@ class H5GIIntegrator():
 
         return np.array([x_vector, y_vector])
 
-    @debug_info
+    @logger_info
     def raw_integration_radial(
         self, 
         data=None,
@@ -2397,7 +2388,7 @@ class H5GIIntegrator():
             return
         return np.array([x_vector, y_vector])
 
-    @debug_info
+    @logger_info
     def raw_integration_box(
         self, 
         data=None,
@@ -2481,7 +2472,7 @@ class H5GIIntegrator():
 
         return np.array([x_vector, y_vector])
 
-    @debug_info
+    @logger_info
     def calculate_bins(self, radial_range=[], unit='q_nm^-1') -> int:
         """
         Calculates the bins between two q values
@@ -2511,7 +2502,7 @@ class H5GIIntegrator():
             return
         return int(round(self._transform._dist / self._transform.get_pixel1() * (np.tan(twotheta2) - np.tan(twotheta1))))
 
-    @debug_info
+    @logger_info
     def q_to_twotheta(self, q=0.0, unit='q_nm^-1', degree=False) -> float:
         """
         Transforms from q to 2theta (rad)
@@ -2532,7 +2523,7 @@ class H5GIIntegrator():
             return
         return np.rad2deg(twotheta) if degree else twotheta
 
-    @debug_info
+    @logger_info
     def get_q_nm(self, value=0.0, direction='Vertical', input_unit='q_nm^-1') -> float:
         """
             Return a q(nm-1) value from another unit
@@ -2548,7 +2539,7 @@ class H5GIIntegrator():
         else:
             return None
 
-    @debug_info
+    @logger_info
     def twotheta_to_q(self, twotheta=0.0, direction='vertical', deg=True) -> float:
         """
             Returns the q(nm-1) from the 2theta value
@@ -2576,7 +2567,7 @@ class H5GIIntegrator():
             return
 
 
-    @debug_info
+    @logger_info
     def transform_q_units(
         self, 
         x_vector=None, 
@@ -2650,7 +2641,7 @@ class H5GIIntegrator():
 
 
 
-    @debug_info
+    @logger_info
     def get_detector_array(self, shape=()) -> np.array:
         """
         Returns an array with detector shape and rotated, according to sample orientation (pygix-pyFAI)
@@ -2676,7 +2667,7 @@ class H5GIIntegrator():
         except:
             return None
 
-    @debug_info
+    @logger_info
     def get_mesh_matrix(self, unit='q_nm^-1', shape=()):
         """
         Returns both horizontal and vertical mesh matrix for Grazing-Incidence geometry, returns also the corrected data without the missing wedge
@@ -2736,7 +2727,7 @@ class H5GIIntegrator():
         return scat_xy, scat_z
 
 
-    @debug_info
+    @logger_info
     def get_last_file(self, list_files=list()) -> str:
         """
         Returns the file with the highest epoch, time of creation

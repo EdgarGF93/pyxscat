@@ -92,8 +92,6 @@ INFO_H5_PONIFILE_CB_UPDATED = "Combobox of ponifiles was updated."
 INFO_LIST_FOLDERS_UPDATED = "Updated list widget."
 INFO_LIST_NO_FOLDERS_TO_UPDATE = "No new folders."
 
-
-
 MSG_H5FILE_CHOICE = "An .h5 file will be created. Do you want to save it in the same directory?"
 MSG_H5FILE_OVERWRITE = "There is an h5 file with the same name. Do you want to overwite it?"
 
@@ -110,19 +108,8 @@ DEFAULT_TILT_ANGLE = 0.0
 
 RELATIVE_TO_ROOT = False
 
- # Initialize logger
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
-if not Path(LOGGER_PATH).exists():
-    Path(LOGGER_PATH).mkdir()
-
-logger_file = LOGGER_PATH.joinpath(f'pyxscat_logger_{date_prefix()}.txt')
-file_handler = logging.FileHandler(logger_file)
-file_handler.setLevel(logging.INFO)
-file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-logger.addHandler(file_handler)
-logger.info(MSG_LOGGER_INIT)
+from pyxscat.logger_config import setup_logger
+logger = setup_logger()
 
 def log_info(func):
     """
@@ -148,6 +135,8 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
     def __init__(self):
         super(GUIPyX_Widget, self).__init__()
+
+        logger.info("GUIPyX_Widget was created.")
 
         # Splash screen
         pixmap = QPixmap(ICON_SPLASH)
