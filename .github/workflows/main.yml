@@ -1,10 +1,12 @@
 name: cosas
 
 on:
-  push:
-    branches: [ main_matplotlib_3 ]
-  pull_request:
-    branches: [ main_matplotlib_3 ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'     
+        required: true
+        default: 'production'
 
 
 jobs:
