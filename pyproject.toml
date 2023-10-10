@@ -20,4 +20,4 @@ dependencies = [
 where = ["."]
 
 [project.scripts]
-pyxscat = "gui.run:run"
+pyxscat = "pyxscat.gui.run:run"

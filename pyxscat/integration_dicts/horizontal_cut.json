@@ -1,0 +1,1 @@
+{"name": "horizontal_cut", "suffix": "horz_cut", "direction": "horizontal", "ip_range": [-20.0, 20.0], "oop_range": [3.0, 5.0], "output_unit": "q_nm^-1", "input_unit": "q_nm^-1", "integration": "box"}
