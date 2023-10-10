@@ -18,7 +18,6 @@ PyQt5-Qt5==5.15.2
 PyQt5-sip==12.12.2
 python-dateutil==2.8.2
 pytz==2023.3.post1
--e git+https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat.git@7a4087454b770dd24615dd2072cfad498b5efc28#egg=pyxscat
 scipy==1.11.3
 silx==1.1.2
 six==1.16.0
