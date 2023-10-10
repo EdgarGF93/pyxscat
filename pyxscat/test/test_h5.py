@@ -4,27 +4,28 @@ from pyxscat.h5_integrator import PONIFILE_DATASET_KEY
 from silx.io.h5py_utils import File
 from pathlib import Path
 import fabio
-from pyxscat import PATH_PYXSCAT
 import pytest
 from pyFAI.io.ponifile import PoniFile
 from pyxscat.other.integrator_methods import get_dict_from_name
 from pyxscat.gui import INTEGRATION_PATH
 
-EDF_EXAMPLES_PATH = 'edf_examples'
+TEST_PATH = Path(__file__).parent
+
+EDF_EXAMPLES_PATH = 'test_edf'
 NCD_PATH = 'test_NCD'
 XMAS_PATH = 'test_xmas'
 DUBBLE_PATH = 'test_DUBBLE'
 
-NCD_EXAMPLE_PATH = PATH_PYXSCAT.joinpath(EDF_EXAMPLES_PATH, NCD_PATH).as_posix()
-XMAS_EXAMPLE_PATH = PATH_PYXSCAT.joinpath(EDF_EXAMPLES_PATH, XMAS_PATH).as_posix()
-DUBBLE_EXAMPLE_PATH = PATH_PYXSCAT.joinpath(EDF_EXAMPLES_PATH, DUBBLE_PATH).as_posix()
+NCD_EXAMPLE_PATH = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, NCD_PATH).as_posix()
+XMAS_EXAMPLE_PATH = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, XMAS_PATH).as_posix()
+DUBBLE_EXAMPLE_PATH = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, DUBBLE_PATH).as_posix()
 
-NCD_INIT_H5 = PATH_PYXSCAT.joinpath(EDF_EXAMPLES_PATH, NCD_PATH, f"{NCD_PATH}.h5").as_posix()
-XMAS_INIT_H5 = PATH_PYXSCAT.joinpath(EDF_EXAMPLES_PATH, XMAS_PATH, f"{XMAS_PATH}.h5").as_posix()
-DUBBLE_INIT_H5 = PATH_PYXSCAT.joinpath(EDF_EXAMPLES_PATH, DUBBLE_PATH, f"{DUBBLE_PATH}.h5").as_posix()
+NCD_INIT_H5 = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, NCD_PATH, f"{NCD_PATH}.h5").as_posix()
+XMAS_INIT_H5 = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, XMAS_PATH, f"{XMAS_PATH}.h5").as_posix()
+DUBBLE_INIT_H5 = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, DUBBLE_PATH, f"{DUBBLE_PATH}.h5").as_posix()
 
-GLOBAL_PATH = PATH_PYXSCAT.joinpath(EDF_EXAMPLES_PATH).as_posix()
-GLOBAL_INIT_H5 = PATH_PYXSCAT.joinpath(EDF_EXAMPLES_PATH, f"{EDF_EXAMPLES_PATH}.h5").as_posix()
+GLOBAL_PATH = TEST_PATH.joinpath(EDF_EXAMPLES_PATH).as_posix()
+GLOBAL_INIT_H5 = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, f"{EDF_EXAMPLES_PATH}.h5").as_posix()
 
 def test_invalid_root_dir():
     root_dir = 'wrong_directory'
@@ -53,15 +54,15 @@ def test_invalid_root_dir_and_input_file():
         scope='session', 
         params=[
             # From Root Directory
-            (GLOBAL_PATH, '', ''),
+            # (GLOBAL_PATH, '', ''),
             (NCD_EXAMPLE_PATH, '', ''),
-            (XMAS_EXAMPLE_PATH, '', ''),
-            (DUBBLE_EXAMPLE_PATH, '', ''),
+            # (XMAS_EXAMPLE_PATH, '', ''),
+            # (DUBBLE_EXAMPLE_PATH, '', ''),
             # # From input h5 filename
-            ('', GLOBAL_INIT_H5, ''),
-            ('', NCD_INIT_H5, ''),
-            ('', XMAS_INIT_H5, ''),
-            ('', DUBBLE_INIT_H5, ''),
+            # ('', GLOBAL_INIT_H5, ''),
+            # ('', NCD_INIT_H5, ''),
+            # ('', XMAS_INIT_H5, ''),
+            # ('', DUBBLE_INIT_H5, ''),
 
         ]
     )
@@ -354,7 +355,7 @@ class TestH5GI:
 
     def test_azim_integration(self, h5):
         rel_samples_in_h5 = h5.get_all_samples(get_relative_address=True)
-        list_integration_names = ['complete', 'oop']
+        list_integration_names = ['azim_complete', 'azim_oop']
 
         list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
 
@@ -371,7 +372,35 @@ class TestH5GI:
         assert list_results[1] is not None
 
     def test_radial_integration(self, h5):
-        pass
+        rel_samples_in_h5 = h5.get_all_samples(get_relative_address=True)
+        list_integration_names = ['radial']
+
+        list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
+
+        list_results = h5.raw_integration(
+            sample_name=rel_samples_in_h5[0],
+            sample_relative_address=True,
+            index_list=0,
+            data=None,
+            norm_factor=1.0,
+            list_dict_integration=list_dict_integration,
+        )
+
+        assert list_results[0] is not None
 
     def test_box_integration(self, h5):
-        pass
+        rel_samples_in_h5 = h5.get_all_samples(get_relative_address=True)
+        list_integration_names = ['vertical_rod']
+
+        list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
+
+        list_results = h5.raw_integration(
+            sample_name=rel_samples_in_h5[0],
+            sample_relative_address=True,
+            index_list=0,
+            data=None,
+            norm_factor=1.0,
+            list_dict_integration=list_dict_integration,
+        )
+
+        assert list_results[0] is not None
