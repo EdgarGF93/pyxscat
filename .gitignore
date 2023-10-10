@@ -261,3 +261,6 @@ $RECYCLE.BIN/
 
 # json files
 .json
+
+# log files
+*.log

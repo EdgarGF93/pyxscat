@@ -23,8 +23,7 @@ from pyxscat.gui.gui_layout_alternative import LABEL_CAKE_BINS_OPT, LABEL_CAKE_B
 from pyxscat.gui.gui_layout_alternative import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
 from pyxscat.h5_integrator import H5GIIntegrator
 from pyxscat.h5_integrator import PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
-from pyxscat.h5_integrator import FILENAME_H5_KEY, FILENAME_KEY, DICT_SAMPLE_ORIENTATIONS
-from pyxscat.h5_integrator import UNIT_GI
+from pyxscat.h5_integrator import *
 from pyxscat.gui.gui_layout_alternative import QZ_BUTTON_LABEL, QR_BUTTON_LABEL, MIRROR_BUTTON_LABEL
 
 import json
@@ -2764,8 +2763,11 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
                     legend=f"{ind}",
                     resetzoom=True,
                 )
-                graph_1D_widget.setGraphXLabel(label=list_dict_integration[ind]["Unit"]),
-                graph_1D_widget.setGraphYLabel(label='Intensity (arb. units)'),
+                graph_1D_widget.setGraphYLabel(label='Intensity (arb. units)')
+                if list_dict_integration[ind].get(KEY_INTEGRATION) == CAKE_LABEL:
+                    graph_1D_widget.setGraphXLabel(label=list_dict_integration[ind][CAKE_KEY_UNIT])
+                elif list_dict_integration[ind].get(KEY_INTEGRATION) == BOX_LABEL:
+                    graph_1D_widget.setGraphXLabel(label=list_dict_integration[ind][BOX_KEY_OUTPUT_UNIT])
             except:
                 pass
 

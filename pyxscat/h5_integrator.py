@@ -984,8 +984,9 @@ class H5GIIntegrator():
         return ponifile_list
 
     @logger_info
-    def activate_ponifile(self, poni_filename=str()) -> None:     
+    def activate_ponifile(self, poni_filename=str()) -> None:    
         if not poni_filename:
+            self.active_ponifile = None
             return
         
         poni_filename = Path(poni_filename)
