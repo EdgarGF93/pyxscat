@@ -1,4 +1,4 @@
-name: cosas
+name: test_h5_gi_integrator
 
 on:
   workflow_dispatch:
