@@ -121,7 +121,7 @@ def log_info(func):
     None
     """
     def wrapper(*args, **kwargs):
-        logger.info(f'We entered into function: {func.__name__}')
+        logger.debug(f'We entered into function: {func.__name__}')
         return func(*args, **kwargs)
     return wrapper
 
@@ -135,7 +135,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
     def __init__(self):
         super(GUIPyX_Widget, self).__init__()
 
-        logger.info("GUIPyX_Widget was created.")
+        logger.debug("GUIPyX_Widget was created.")
 
         # Splash screen
         pixmap = QPixmap(ICON_SPLASH)

@@ -1737,6 +1737,7 @@ class H5GIIntegrator():
                     sample_name = f[SAMPLE_GROUP_KEY][sample].attrs[REL_ADDRESS_KEY]
                 else:
                     sample_name = f[SAMPLE_GROUP_KEY][sample].attrs[ABS_ADDRESS_KEY]
+                sample = Path(sample).as_posix()
                 yield sample_name
 
     @logger_info
@@ -1779,7 +1780,7 @@ class H5GIIntegrator():
         return dict_files
 
     @logger_info
-    def get_all_files(self) -> list:
+    def get_all_files(self, get_relative_address=True) -> list:
         """
         Returns a list with all the stored files in the h5 File
 
@@ -1789,7 +1790,7 @@ class H5GIIntegrator():
         Returns:
             _description_
         """
-        list_files = sorted(self.generator_all_files())
+        list_files = sorted(self.generator_all_files(relative_address=get_relative_address))
         return list_files
 
     ##################################################
@@ -1900,7 +1901,8 @@ class H5GIIntegrator():
             for filename in dataset:
                 filename = filename.decode(ENCODING_FORMAT)
                 if get_relative_address:
-                    filename = str(Path(filename).relative_to(sample_name))                    
+                    filename = Path(filename).relative_to(sample_name)
+                filename = Path(filename).as_posix()                
                 yield filename
 
     @logger_info
