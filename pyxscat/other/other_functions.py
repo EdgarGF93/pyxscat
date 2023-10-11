@@ -31,6 +31,7 @@ def get_dict_files(list_files=list()) -> defaultdict:
     """
     dict_files = defaultdict(set)
     for file in list_files:
+        file = Path(file)
         folder_name = file.parent.as_posix()
         dict_files[folder_name].add(file.as_posix())
     return dict_files

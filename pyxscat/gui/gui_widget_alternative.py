@@ -1992,11 +1992,13 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             logger.info(f"Found new files LIVE: {list_files_1s}")
 
             # Upload the new files to h5
-            dict_files_1s = get_dict_files(list_files=list_files_1s, relative_root=None)
+            print(999)
+            print(list_files_1s)
+            dict_files_1s = get_dict_files(list_files=list_files_1s)
+            print(dict_files_1s)
             self.h5.update_datafiles(          
                 dict_new_files=dict_files_1s,
                 search=False,
-                relative_to_root=RELATIVE_TO_ROOT,
             )
 
             # Update list of samples
