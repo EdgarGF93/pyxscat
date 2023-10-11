@@ -1,0 +1,26 @@
+name: test_h5_gi_integrator
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+        ls -l
+        pwd
+        pip install -r ./requirements.txt
+    - name: Run tests
+      run: pytest -v pyxscat/test/test_h5.py
