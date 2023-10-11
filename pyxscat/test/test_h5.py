@@ -59,10 +59,10 @@ def test_invalid_root_dir_and_input_file():
             (XMAS_EXAMPLE_PATH, '', ''),
             (DUBBLE_EXAMPLE_PATH, '', ''),
             # From input h5 filename
-            # ('', GLOBAL_INIT_H5, ''),
-            # ('', NCD_INIT_H5, ''),
-            # ('', XMAS_INIT_H5, ''),
-            # ('', DUBBLE_INIT_H5, ''),
+            ('', GLOBAL_INIT_H5, ''),
+            ('', NCD_INIT_H5, ''),
+            ('', XMAS_INIT_H5, ''),
+            ('', DUBBLE_INIT_H5, ''),
 
         ]
     )
