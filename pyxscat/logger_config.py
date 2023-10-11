@@ -13,7 +13,7 @@ def setup_logger():
     cleanup_old_logs()
 
     logger = logging.getLogger('PyXScatLogger')
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.WARNING)
     log_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     log_filename = LOGGER_PATH.joinpath(f'pyxscat_logger_{date_prefix()}.log')
 
@@ -64,7 +64,7 @@ def setup_logger():
         # Console Handler
         stream_handler = logging.StreamHandler()
         stream_handler.setFormatter(log_formatter)        
-        stream_handler.setLevel(logging.CRITICAL)
+        stream_handler.setLevel(logging.WARNING)
 
         # File Handler
 
@@ -74,7 +74,7 @@ def setup_logger():
            backupCount=10,
         )
         file_handler.setFormatter(log_formatter)        
-        file_handler.setLevel(logging.DEBUG)
+        file_handler.setLevel(logging.WARNING)
 
         logger.addHandler(stream_handler)        
         logger.addHandler(file_handler)

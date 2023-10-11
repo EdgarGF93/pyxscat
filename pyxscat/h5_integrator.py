@@ -882,6 +882,9 @@ class H5GIIntegrator():
 
     @logger_info
     def append_metadata_values(self, sample_name=str(), metadata_key=str(), value_list=list()):
+    
+        
+        
         self.append_stringlist_to_dataset(
             group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}/{METADATA_KEY}",
             dataset_name=metadata_key,
@@ -891,6 +894,7 @@ class H5GIIntegrator():
 
     @logger_info
     def append_datafile_list(self, sample_name=str(), datafile_list=list()):
+
         self.append_stringlist_to_dataset(
             group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
             dataset_name=DATA_KEY,
@@ -1240,6 +1244,10 @@ class H5GIIntegrator():
         if not h5_filename:
             h5_filename = self._h5_filename
 
+        print(000000)
+        print(group_name)
+        
+
         with File(self._h5_filename, 'r+') as f:
             # Returns if it contains the dataset already
             if f[root_group_address].__contains__(group_name):
@@ -1319,22 +1327,8 @@ class H5GIIntegrator():
 
     @logger_info
     def create_sample(self, sample_name=str()):
-        self.create_group(
-            root_group_address=SAMPLE_GROUP_KEY,
-            group_name=sample_name,
-        )
 
-
-    @logger_info
-    def new_sample(self, sample_name=str()):
-        # sample_name = sample_name.replace('/', '_')
-
-        # Check if the sample does exist
-        self.create_sample(
-            sample_name=sample_name,
-        )
-
-        # Define relative and absolute addresses
+        # Define the name, absolute and relative
         sample_name = Path(sample_name)
 
         if sample_name.is_absolute():
@@ -1352,6 +1346,11 @@ class H5GIIntegrator():
             REL_ADDRESS_KEY : rel_address,
         }
 
+        sample_name = sample_name.as_posix().replace('/', '\\')
+        self.create_group(
+            root_group_address=SAMPLE_GROUP_KEY,
+            group_name=sample_name,
+        )
         self.h5_write_attrs_in_group(
             dict_attrs=dict_init_sample,
             group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
@@ -1359,6 +1358,47 @@ class H5GIIntegrator():
 
         self.create_data_dset(sample_name=sample_name)
         self.create_metadata_group(sample_name=sample_name)
+
+
+
+
+    # @logger_info
+    # def new_sample(self, sample_name=str()):
+    #     # sample_name = sample_name.replace('/', '_')
+    #     sample_name = Path(sample_name)     
+
+
+    #     if sample_name.is_absolute():
+    #         abs_address = sample_name.as_posix()
+    #         rel_address = sample_name.relative_to(self._root_dir).as_posix()
+    #     else:
+    #         abs_address = self._root_dir.joinpath(sample_name).as_posix()
+    #         rel_address = sample_name.as_posix()
+
+    #     # Write some attributes
+    #     dict_init_sample = {
+    #         CLASS_KEY : SAMPLE_KEY,
+    #         DATETIME_KEY : date_prefix(),
+    #         ABS_ADDRESS_KEY : abs_address,
+    #         REL_ADDRESS_KEY : rel_address,
+    #     }
+
+    #     # Define relative and absolute addresses
+    #     # 
+    #     sample_name = sample_name.as_posix().replace('/', '\\')
+
+    #     # Check if the sample does exist
+    #     self.create_sample(
+    #         sample_name=sample_name,
+    #     )
+
+    #     self.h5_write_attrs_in_group(
+    #         dict_attrs=dict_init_sample,
+    #         group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
+    #     )
+
+    #     self.create_data_dset(sample_name=sample_name)
+    #     self.create_metadata_group(sample_name=sample_name)
 
 
     # @debug_info
@@ -1452,12 +1492,20 @@ class H5GIIntegrator():
             filename_list -- list of path filenames where the data/metadata will be extracted (default: {list()})
             get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
         """
-        sample_name = sample_name.replace('/', '\\')
-
-        # Create the sample Group
-        self.new_sample(
+        # Create the sample first
+        print(1111)
+        print(sample_name)
+        self.create_sample(
             sample_name=sample_name,
         )
+
+        sample_name = self.get_sample_address(
+            sample_name=sample_name,
+            sample_relative_address=False,
+        )
+        print(333333)
+        print(sample_name)
+
 
         # Append Data filenames
         if get_2D_array:
@@ -1824,10 +1872,12 @@ class H5GIIntegrator():
 
         # Filter only the new data
         dict_files_in_h5 = self.get_dict_files(relative_address=False)
+
         dict_new_files = get_dict_difference(
             large_dict=dict_files,
             small_dict=dict_files_in_h5,
         )
+
         return dict_new_files
 
     @logger_info
