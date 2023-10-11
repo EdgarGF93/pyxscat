@@ -1921,9 +1921,13 @@ class H5GIIntegrator():
             dataset = f[SAMPLE_GROUP_KEY][sample_name][DATA_KEY]
             for filename in dataset:
                 filename = filename.decode(ENCODING_FORMAT)
-                filename = Path(filename).as_posix()                     
                 if get_relative_address:
-                    filename = Path(filename).relative_to(sample_name).as_posix()
+                    # sample_name = f[SAMPLE_GROUP_KEY][sample_name].attrs[ABS_ADDRESS_KEY]
+                    # print(5555)
+                    # print(filename)
+                    # print(sample_name)
+                    # filename = Path(filename).relative_to(Path(sample_name).as_posix()).as_posix()
+                    filename = Path(filename).name
                 yield filename
 
     @logger_info
