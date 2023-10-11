@@ -6,6 +6,6 @@ import sys
 
 def run():
     app = QApplication(sys.argv)
-    main_window = GUIPyX_Window()
+    main_window = GUIPyXMWindow()
     main_window.show()
     app.exec_()

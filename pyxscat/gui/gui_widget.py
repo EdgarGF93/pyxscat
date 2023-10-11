@@ -135,7 +135,7 @@ def log_info(func):
         return func(*args, **kwargs)
     return wrapper
 
-class GUIPyX_Widget(GUIPyX_Widget_layout):
+class GUIPyXMWidget(GUIPyXLayout):
     """
     Class to create a GUI widget, with methods and callbacks
     """
@@ -143,7 +143,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
     signal = pyqtSignal(int)
 
     def __init__(self):
-        super(GUIPyX_Widget, self).__init__()
+        super(GUIPyXMWidget, self).__init__()
 
         # Splash screen
         pixmap = QPixmap(ICON_SPLASH)

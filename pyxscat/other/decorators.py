@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from other_functions import messages
+from .other_functions import messages
 
 import functools
 import matplotlib.pyplot as plt

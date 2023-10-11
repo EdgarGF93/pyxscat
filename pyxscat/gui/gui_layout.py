@@ -341,7 +341,7 @@ class MplCanvas(FigureCanvasQTAgg):
         super(MplCanvas, self).__init__(self.fig)
 
 
-class GUIPyX_Widget_layout(QWidget):
+class GUIPyXLayout(QWidget):
 
     def __init__(self, *args):
         QMainWindow.__init__(self, *args)
