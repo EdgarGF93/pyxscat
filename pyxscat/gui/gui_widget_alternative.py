@@ -1392,8 +1392,15 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             return
         
         dict_poni = self.get_poni_dict_from_widgets()
+
         self.h5.update_ponifile_parameters(
             dict_poni=dict_poni,
+        )
+
+        self.update_graphs(
+            graph_1D=True,
+            graph_2D_reshape=True,
+            graph_2D_q=True,
         )
 
     @log_info
@@ -1410,7 +1417,7 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
         )
 
         # Update the h5 and combobox
-        self.h5.h5_update_ponifiles(search=True)
+        self.h5.update_ponifiles()
         self.update_cb_ponifiles(from_h5=True)
 
     @log_info
