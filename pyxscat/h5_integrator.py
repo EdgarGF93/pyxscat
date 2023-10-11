@@ -962,11 +962,14 @@ class H5GIIntegrator():
         """
         Changes manually the functional poni parameters of pygix
         """
-        new_poni = PoniFile(data=dict_poni)
-        self._init_from_poni(new_poni)
-
-
-
+        if not self._transform:
+            return
+        
+        try:
+            new_poni = PoniFile(data=dict_poni)
+            self._transform._init_from_poni(new_poni)
+        except Exception as e:
+            logger.error(e)
 
     @logger_info
     def generate_ponifiles(self, get_relative_address=True) -> str:
@@ -1998,6 +2001,7 @@ class H5GIIntegrator():
 
         list_files_in_sample = self.get_all_files_from_sample(
             sample_name=sample_name,
+            is_group_name=False,
             sample_relative_address=sample_relative_address,
         )
 

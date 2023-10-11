@@ -54,15 +54,15 @@ def test_invalid_root_dir_and_input_file():
         scope='session', 
         params=[
             # From Root Directory
-            # (GLOBAL_PATH, '', ''),
+            (GLOBAL_PATH, '', ''),
             (NCD_EXAMPLE_PATH, '', ''),
-            # (XMAS_EXAMPLE_PATH, '', ''),
-            # (DUBBLE_EXAMPLE_PATH, '', ''),
+            (XMAS_EXAMPLE_PATH, '', ''),
+            (DUBBLE_EXAMPLE_PATH, '', ''),
             # From input h5 filename
-            # ('', GLOBAL_INIT_H5, ''),
-            # ('', NCD_INIT_H5, ''),
-            # ('', XMAS_INIT_H5, ''),
-            # ('', DUBBLE_INIT_H5, ''),
+            ('', GLOBAL_INIT_H5, ''),
+            ('', NCD_INIT_H5, ''),
+            ('', XMAS_INIT_H5, ''),
+            ('', DUBBLE_INIT_H5, ''),
 
         ]
     )

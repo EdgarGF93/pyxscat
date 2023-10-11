@@ -1,1 +1,1 @@
-{"name": "azim_ip", "suffix": "ip", "type": "azimuthal", "unit": "q_nm^-1", "radial_range": [0.0, 30.0], "azimuth_range": [70.0, 90.0], "azim_bins": 0, "integration": "cake"}
+{"name": "azim_ip", "suffix": "azim_ip", "type": "azimuthal", "unit": "q_nm^-1", "radial_range": [0.0, 30.0], "azimuth_range": [70.0, 90.0], "azim_bins": 0, "integration": "cake"}
