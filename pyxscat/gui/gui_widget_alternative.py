@@ -1727,7 +1727,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
 
         # Add samples from h5 instance
         if from_h5:
-            samples_in_h5 = self.h5.get_all_samples(get_relative_address=relative_address)
+            samples_in_h5 = self.h5.get_all_samples(
+                get_relative_address=True,
+            )
             list_samples = samples_in_h5
         
         if not list_samples:
@@ -1766,7 +1768,9 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             if not self.h5:
                 return
             # Fetch samples from h5 instance
-            samples_in_h5 = self.h5.get_all_samples()
+            samples_in_h5 = self.h5.get_all_samples(
+                get_relative_address=True,
+            )
             list_samples = samples_in_h5
 
         # Make it relative
@@ -2122,59 +2126,59 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             item=short_name,
         )
 
-    @log_info
-    def update_widgets(self) -> None:
-        """
-        To be used after updating the .h5 file
-        This method may update the list_widget of folders and the table_widget with files and metadata
-        """
-        if self.h5:
-            # Main lineedit
-            le.substitute(
-                lineedit=self.lineedit_h5file,
-                new_text=self.h5.filename_h5,
-            )
+    # @log_info
+    # def update_widgets(self) -> None:
+    #     """
+    #     To be used after updating the .h5 file
+    #     This method may update the list_widget of folders and the table_widget with files and metadata
+    #     """
+    #     if self.h5:
+    #         # Main lineedit
+    #         le.substitute(
+    #             lineedit=self.lineedit_h5file,
+    #             new_text=self.h5.filename_h5,
+    #         )
 
-            # Check if new folders to update the list_widget and reference folder combobox
-            folders_in_list = set(lt.all_items(self.listwidget_samples))
-            folders_in_h5 = set(self.h5.generator_samples())
-            new_folders = [item for item in folders_in_h5.difference(folders_in_list)]
-            new_folders.sort()
+    #         # Check if new folders to update the list_widget and reference folder combobox
+    #         folders_in_list = set(lt.all_items(self.listwidget_samples))
+    #         folders_in_h5 = set(self.h5.generator_samples())
+    #         new_folders = [item for item in folders_in_h5.difference(folders_in_list)]
+    #         new_folders.sort()
 
-            if new_folders:
-                # List widget
-                lt.insert_list(
-                    listwidget=self.listwidget_samples,
-                    item_list=new_folders,
-                    reset=False,
-                )
-                logger.info(INFO_LIST_FOLDERS_UPDATED)
+    #         if new_folders:
+    #             # List widget
+    #             lt.insert_list(
+    #                 listwidget=self.listwidget_samples,
+    #                 item_list=new_folders,
+    #                 reset=False,
+    #             )
+    #             logger.info(INFO_LIST_FOLDERS_UPDATED)
 
-                # Reference combobox
-                cb.insert_list(
-                    combobox=self.combobox_reffolder,
-                    list_items=new_folders,
-                    reset=False,
-                )
-            else:
-                logger.info(INFO_LIST_NO_FOLDERS_TO_UPDATE)
+    #             # Reference combobox
+    #             cb.insert_list(
+    #                 combobox=self.combobox_reffolder,
+    #                 list_items=new_folders,
+    #                 reset=False,
+    #             )
+    #         else:
+    #             logger.info(INFO_LIST_NO_FOLDERS_TO_UPDATE)
 
-            # Check if the table (click_folder) should be updated
-            if not self.clicked_folder:
-                return
+    #         # Check if the table (click_folder) should be updated
+    #         if not self.clicked_folder:
+    #             return
 
-            num_files_in_table = tm.get_row_count(self.table_files)
-            num_files_in_h5 = self.h5.number_files_in_sample(self.clicked_folder)
-            logger.info(f"There are {num_files_in_table} files in the table and {num_files_in_h5} files in the .h5")
-            if num_files_in_h5 != num_files_in_table:
-                self.update_comboboxes_metadata_items()
-                self.update_table(
-                    reset=True,
-                )
-            else:
-                logger.info("The table was not updated.")
-        else:
-            self.write_terminal_and_loggerinfo(ERROR_H5_NOTEXISTS)
+    #         num_files_in_table = tm.get_row_count(self.table_files)
+    #         num_files_in_h5 = self.h5.number_files_in_sample(self.clicked_folder)
+    #         logger.info(f"There are {num_files_in_table} files in the table and {num_files_in_h5} files in the .h5")
+    #         if num_files_in_h5 != num_files_in_table:
+    #             self.update_comboboxes_metadata_items()
+    #             self.update_table(
+    #                 reset=True,
+    #             )
+    #         else:
+    #             logger.info("The table was not updated.")
+    #     else:
+    #         self.write_terminal_and_loggerinfo(ERROR_H5_NOTEXISTS)
 
     def update_widgets_to_last_file(self, last_file=str()):
         """
@@ -2204,42 +2208,42 @@ class GUIPyX_Widget(GUIPyX_Widget_layout):
             else:
                 logger.info("Last file was not updated.")
             
-    @log_info
-    def update_widgets_from_h5(self):
+    # @log_info
+    # def update_widgets_from_h5(self):
 
-        if self.h5:
-            # Update the main directory, files and folder attributes
-            self.main_directory = self.h5.get_root_directory()
-            # self.lineedit_maindir.setText(str(self.main_directory))
-            self.write_terminal_and_loggerinfo(MSG_MAIN_DIRECTORY)
-            self.write_terminal_and_loggerinfo(f"New main directory: {str(self.main_directory)}")
+    #     if self.h5:
+    #         # Update the main directory, files and folder attributes
+    #         self.main_directory = self.h5.get_root_directory()
+    #         # self.lineedit_maindir.setText(str(self.main_directory))
+    #         self.write_terminal_and_loggerinfo(MSG_MAIN_DIRECTORY)
+    #         self.write_terminal_and_loggerinfo(f"New main directory: {str(self.main_directory)}")
 
-            # Update file and folder attributes
-            self.list_folders = list(self.h5.generator_samples())
-            self.write_terminal_and_loggerinfo(f"Added {len(self.list_folders)} folders.")
+    #         # Update file and folder attributes
+    #         self.list_folders = list(self.h5.generator_samples())
+    #         self.write_terminal_and_loggerinfo(f"Added {len(self.list_folders)} folders.")
 
-            # Feed the ponifile combobox
-            ponifile_list = self.h5.get_ponifile_list()
-            ponifile_list = [str(Path(item).relative_to(self.main_directory)) for item in ponifile_list]
+    #         # Feed the ponifile combobox
+    #         ponifile_list = self.h5.get_ponifile_list()
+    #         ponifile_list = [str(Path(item).relative_to(self.main_directory)) for item in ponifile_list]
 
-            cb.insert_list(
-                combobox=self.combobox_ponifile,
-                list_items=ponifile_list,
-                reset=True,
-            )
+    #         cb.insert_list(
+    #             combobox=self.combobox_ponifile,
+    #             list_items=ponifile_list,
+    #             reset=True,
+    #         )
 
-            # Reset and fill the list widget with folders
-            lt.insert_list(
-                listwidget=self.listwidget_samples,
-                item_list=list(self.h5.generator_samples()),
-                reset=True,
-            )
+    #         # Reset and fill the list widget with folders
+    #         lt.insert_list(
+    #             listwidget=self.listwidget_samples,
+    #             item_list=list(self.h5.generator_samples()),
+    #             reset=True,
+    #         )
 
-            # Feed the combobox of reference folder and masks
-            cb.insert_list(
-                combobox=self.combobox_reffolder,
-                list_items=list(self.h5.generator_samples()),
-            )
+    #         # Feed the combobox of reference folder and masks
+    #         cb.insert_list(
+    #             combobox=self.combobox_reffolder,
+    #             list_items=list(self.h5.generator_samples()),
+    #         )
 
     @log_info
     def listsamples_clicked(self, clicked_sample_name, sample_relative_address=GET_RELATIVE_ADDRESS):
