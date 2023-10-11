@@ -1927,7 +1927,7 @@ class H5GIIntegrator():
                     # print(filename)
                     # print(sample_name)
                     # filename = Path(filename).relative_to(Path(sample_name).as_posix()).as_posix()
-                    filename = Path(filename).name.as_posix()
+                    filename = Path(filename).name
                 yield filename
 
     @logger_info
