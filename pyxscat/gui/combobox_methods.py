@@ -14,6 +14,7 @@ def all_items(combobox):
     """
     num_items = combobox.count()
     list_items = [combobox.itemText(index) for index in range(num_items)]
+    list_items.sort()
     return list_items
 
 def insert(combobox, item):

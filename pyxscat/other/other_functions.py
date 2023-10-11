@@ -17,6 +17,7 @@ messages = ['ALL ANIMALS CAN SCREAM',
             ]
 
 
+
 def get_dict_files(list_files=list()) -> defaultdict:
     """
     Transforms a list of new files into a defaultdict
@@ -26,15 +27,40 @@ def get_dict_files(list_files=list()) -> defaultdict:
 
     Returns:
     None
+
     """
-    if list_files:
-        dict_new_files = defaultdict(list)
-        for file in list_files:
-            folder_name = str(Path(file).parent)
-            dict_new_files[folder_name].append(str(file))
-        return dict_new_files
-    else:
-        return defaultdict(list)
+    dict_files = defaultdict(set)
+    for file in list_files:
+        folder_name = file.parent.as_posix()
+        dict_files[folder_name].add(file.as_posix())
+    return dict_files
+
+
+def get_dict_difference(large_dict=dict(), small_dict=dict()):
+    large_dict_set = {k:set(v) for k,v in large_dict.items()}
+    small_dict_set = {k:set(v) for k,v in small_dict.items()}
+
+    dict_diff = defaultdict(set)
+    for key, value in large_dict_set.items():
+        # If it's a new sample, create directly
+        if key not in small_dict_set.keys():
+            dict_diff[key] = value
+        else:
+            # If the sets do not match, add the difference
+            if value != small_dict_set.get(key):
+                new_datafiles = value.difference(small_dict_set.get(key))
+                dict_diff[key].update(new_datafiles)
+            else:
+                pass
+    return dict_diff
+
+
+
+
+
+
+
+
 
 def print_percent_done(index, total, bar_len=50, title='Processing'):
     '''
