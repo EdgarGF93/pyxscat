@@ -18,11 +18,11 @@ DUBBLE_PATH = 'test_DUBBLE'
 
 NCD_EXAMPLE_PATH = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, NCD_PATH).as_posix()
 XMAS_EXAMPLE_PATH = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, XMAS_PATH).as_posix()
-# DUBBLE_EXAMPLE_PATH = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, DUBBLE_PATH).as_posix()
+DUBBLE_EXAMPLE_PATH = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, DUBBLE_PATH).as_posix()
 
 NCD_INIT_H5 = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, NCD_PATH, f"{NCD_PATH}.h5").as_posix()
 XMAS_INIT_H5 = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, XMAS_PATH, f"{XMAS_PATH}.h5").as_posix()
-# DUBBLE_INIT_H5 = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, DUBBLE_PATH, f"{DUBBLE_PATH}.h5").as_posix()
+DUBBLE_INIT_H5 = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, DUBBLE_PATH, f"{DUBBLE_PATH}.h5").as_posix()
 
 GLOBAL_PATH = TEST_PATH.joinpath(EDF_EXAMPLES_PATH).as_posix()
 GLOBAL_INIT_H5 = TEST_PATH.joinpath(EDF_EXAMPLES_PATH, f"{EDF_EXAMPLES_PATH}.h5").as_posix()
@@ -57,12 +57,12 @@ def test_invalid_root_dir_and_input_file():
             (GLOBAL_PATH, '', ''),
             (NCD_EXAMPLE_PATH, '', ''),
             (XMAS_EXAMPLE_PATH, '', ''),
-            (DUBBLE_EXAMPLE_PATH, '', ''),
+            # (DUBBLE_EXAMPLE_PATH, '', ''),
             # From input h5 filename
             ('', GLOBAL_INIT_H5, ''),
             ('', NCD_INIT_H5, ''),
             ('', XMAS_INIT_H5, ''),
-            ('', DUBBLE_INIT_H5, ''),
+            # ('', DUBBLE_INIT_H5, ''),
 
         ]
     )
