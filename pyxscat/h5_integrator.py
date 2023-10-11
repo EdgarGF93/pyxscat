@@ -1730,23 +1730,30 @@ class H5GIIntegrator():
     #         yield data, header
 
     @logger_info
-    def generator_samples(self, relative_address=True) -> str:
+    def generator_samples(self, get_group_name=True, get_relative_address=False) -> str:
         with File(self._h5_filename, 'r+') as f:
             for sample in  f[SAMPLE_GROUP_KEY].keys():
-                if relative_address:
-                    sample_name = f[SAMPLE_GROUP_KEY][sample].attrs[REL_ADDRESS_KEY]
+                if get_group_name:
+                    yield sample
                 else:
-                    sample_name = f[SAMPLE_GROUP_KEY][sample].attrs[ABS_ADDRESS_KEY]
-                sample = Path(sample).as_posix()
-                yield sample_name
+                    if get_relative_address:
+                        sample_name = f[SAMPLE_GROUP_KEY][sample].attrs[REL_ADDRESS_KEY]
+                    else:
+                        sample_name = f[SAMPLE_GROUP_KEY][sample].attrs[ABS_ADDRESS_KEY]        
+                    yield sample_name
 
     @logger_info
     def get_all_samples(self, get_relative_address=True) -> list:
-        list_samples = sorted(self.generator_samples(relative_address=get_relative_address))
+        list_samples = sorted(
+            self.generator_samples(
+                get_group_name=False,
+                get_relative_address=get_relative_address,
+            ),
+        )
         return list_samples
 
     @logger_info
-    def generator_all_files(self, relative_address=True) -> str:
+    def generator_all_files(self) -> str:
         """
         Yields the names of every file stored in the .h5 file
 
@@ -1756,18 +1763,18 @@ class H5GIIntegrator():
         Yields:
         str : fullpath of stored filenames
         """
-        for sample in self.generator_samples(relative_address=relative_address):
+        for sample in self.generator_samples(get_group_name=True):
             for file in self.generator_files_in_sample(
                 sample_name=sample,
-                sample_relative_address=relative_address,
-                get_relative_address=relative_address,
+                is_group_name=True,
+                get_relative_address=False,
                 ):
                 yield file
 
     @logger_info
     def get_dict_files(self, relative_address=True):
         dict_files = defaultdict(set)
-        for file in self.generator_all_files(relative_address=False):
+        for file in self.generator_all_files():
             sample_name = Path(file).parent
             if relative_address:
                 file = Path(file).relative_to(sample_name).as_posix()
@@ -1780,7 +1787,7 @@ class H5GIIntegrator():
         return dict_files
 
     @logger_info
-    def get_all_files(self, get_relative_address=True) -> list:
+    def get_all_files(self) -> list:
         """
         Returns a list with all the stored files in the h5 File
 
@@ -1790,7 +1797,7 @@ class H5GIIntegrator():
         Returns:
             _description_
         """
-        list_files = sorted(self.generator_all_files(relative_address=get_relative_address))
+        list_files = sorted(self.generator_all_files())
         return list_files
 
     ##################################################
@@ -1854,19 +1861,25 @@ class H5GIIntegrator():
     def get_all_files_from_sample(
         self, 
         sample_name=str(),
+        is_group_name=True,
         sample_relative_address=True, 
         get_relative_address=True,
         ):
         list_files = sorted(
             self.generator_files_in_sample(
                 sample_name=sample_name,
+                is_group_name=is_group_name,
                 sample_relative_address=sample_relative_address,
                 get_relative_address=get_relative_address,
             ))
         return list_files
 
     @logger_info
-    def get_sample_address(self, sample_name=str(), sample_relative_address=True):
+    def get_sample_address(
+        self, 
+        sample_name='', 
+        sample_relative_address=True,
+        ):
         with File(self._h5_filename, 'r+') as f:
             if sample_relative_address:
                 for sample in f[SAMPLE_GROUP_KEY].keys():
@@ -1884,14 +1897,19 @@ class H5GIIntegrator():
     @logger_info
     def generator_files_in_sample(
         self, 
-        sample_name=str(), 
+        sample_name=str(),
+        is_group_name=True,
         sample_relative_address=True, 
         get_relative_address=True,
         ):
-        sample_name = self.get_sample_address(
-            sample_name=sample_name,
-            sample_relative_address=sample_relative_address
-        )
+
+        if is_group_name:
+            sample_name=sample_name
+        else:
+            sample_name = self.get_sample_address(
+                sample_name=sample_name,
+                sample_relative_address=sample_relative_address,
+            )
 
         if not sample_name:
             return
@@ -1900,9 +1918,9 @@ class H5GIIntegrator():
             dataset = f[SAMPLE_GROUP_KEY][sample_name][DATA_KEY]
             for filename in dataset:
                 filename = filename.decode(ENCODING_FORMAT)
+                filename = Path(filename).as_posix()                     
                 if get_relative_address:
-                    filename = Path(filename).relative_to(sample_name)
-                filename = Path(filename).as_posix()                
+                    filename = Path(filename).relative_to(sample_name).as_posix()
                 yield filename
 
     @logger_info
@@ -2079,13 +2097,26 @@ class H5GIIntegrator():
         str : string with the name of the folder in the .h5 file
         int : index of the filename inside the folder
         """
-        sample_name = str(Path(filename).parent.relative_to(self._root_dir))
+        # sample_name = str(Path(filename).parent.relative_to(self._root_dir))
+        sample_name_abs = Path(filename).parent.as_posix()
 
-        if not self.contains_group(sample_name=sample_name, group_address=SAMPLE_GROUP_KEY):
-            logger.info(f"There is no Group with the name {sample_name}. Returns.")
+        sample_address = self.get_sample_address(
+            sample_name=sample_name_abs,
+            sample_relative_address=False,
+        )
+
+        if not sample_address:
             return
 
-        for index, file in enumerate(self.generator_files_in_sample(sample_name=sample_name)):
+        # if not self.contains_group(sample_name=sample_name, group_address=SAMPLE_GROUP_KEY):
+        #     logger.info(f"There is no Group with the name {sample_name}. Returns.")
+        #     return
+
+        for index, file in enumerate(
+            self.generator_files_in_sample(
+                sample_name=sample_address,
+                is_group_name=True,
+            )):
             if file == filename:
                 logger.info(f"Found match with the filename at index {index}")
                 return sample_name, index
