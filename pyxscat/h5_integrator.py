@@ -1923,6 +1923,9 @@ class H5GIIntegrator():
                 filename = filename.decode(ENCODING_FORMAT)
                 filename = Path(filename).as_posix()                     
                 if get_relative_address:
+                    print(55555)
+                    print(filename)
+                    print(sample_name)
                     filename = Path(filename).relative_to(Path(sample_name).as_posix()).as_posix()
                 yield filename
 
