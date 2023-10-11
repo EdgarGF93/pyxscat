@@ -13,19 +13,71 @@ def setup_logger():
     cleanup_old_logs()
 
     logger = logging.getLogger('PyXScatLogger')
+    logger.setLevel(logging.DEBUG)
+    log_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    log_filename = LOGGER_PATH.joinpath(f'pyxscat_logger_{date_prefix()}.log')
 
     if not logger.handlers:
-        logger.setLevel(logging.INFO)
-        log_filename = LOGGER_PATH.joinpath(f'pyxscat_logger_{date_prefix()}.log')
-        handler = RotatingFileHandler(
+
+
+
+        # logging_config = {
+        #     "version": 1,
+        #     'disable_existing_loggers': False,
+        #     "formatters": {
+        #         'standard': {
+        #             'format': log_formatter
+        #         }
+        #     },
+        #     "handlers": {
+        #         'default': {
+        #             'class': 'logging.StreamHandler',
+        #             'formatter': 'standard',
+        #             'level': logging.INFO,
+        #             'stream': 'ext://sys.stdout'
+        #         },
+        #         'file': {
+        #             'class': 'logging.handlers.TimedRotatingFileHandler',
+        #             'when': 'midnight',
+        #             'utc': True,
+        #             'backupCount': 5,
+        #             'level': logging.DEBUG,
+        #             'filename': log_filename,
+        #             'formatter': 'standard',
+        #         },
+        #     },
+        #     "loggers": {
+        #         "": {
+        #             'handlers': ['default', 'file'],
+        #             'level': logging.DEBUG,
+        #         },
+        #     }
+        # }
+
+        # logging.config.dictConfig(logging_config)
+
+
+
+
+
+
+        # Console Handler
+        stream_handler = logging.StreamHandler()
+        stream_handler.setFormatter(log_formatter)        
+        stream_handler.setLevel(logging.CRITICAL)
+
+        # File Handler
+
+        file_handler = RotatingFileHandler(
            log_filename,
            maxBytes=10*1024*1024,
-           backupCount=3,
+           backupCount=10,
         )
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
+        file_handler.setFormatter(log_formatter)        
+        file_handler.setLevel(logging.DEBUG)
 
-        logger.addHandler(handler)
+        logger.addHandler(stream_handler)        
+        logger.addHandler(file_handler)
 
     return logger
 
