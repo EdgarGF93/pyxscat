@@ -30,6 +30,17 @@ conda activate my_env
 conda install python=3.10
 ```
 
+## 0) From scratch using virtual environment
+```
+cd /users/.../python
+mkdir my_env
+cd my_env
+python -m venv .
+cd Scripts
+activate.bat
+```
+
+
 # Install using clone
 ## 1) Clone the project into your directory (e.g. /user/Python/)
 
