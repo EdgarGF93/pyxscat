@@ -46,7 +46,7 @@ activate.bat
 
 ```
 cd /user/Python
-git clone https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat.git
+git clone -b main_matplotlit_3 https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat.git
 ```
 
 ## 2) Install locally the package, including all its sub-packages

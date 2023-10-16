@@ -20,7 +20,7 @@ from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtTest import QTest
 
 from PyQt5.QtWidgets import QApplication
-from gui.gui_window import GUIPyXMWindow
+from pyxscat.gui.gui_window import GUIPyX_Window
 import sys
 
 from pyxscat.test.test_h5 import NCD_EXAMPLE_PATH, XMAS_EXAMPLE_PATH
@@ -34,7 +34,7 @@ class TestGUI:
         print("Setting up setup class")
 
         cls.app = QApplication(sys.argv)
-        cls.main_window = GUIPyXMWindow()
+        cls.main_window = GUIPyX_Window()
         cls.main_window.show()
         cls.w = cls.main_window._guiwidget
         # cls.app.exec_()
