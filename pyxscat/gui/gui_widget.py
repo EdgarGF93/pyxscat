@@ -1734,7 +1734,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Add samples from h5 instance
         if from_h5:
-            samples_in_h5 = self.h5.get_all_samples(
+            samples_in_h5 = self.h5.get_all_entries(
                 get_relative_address=True,
             )
             list_samples = samples_in_h5
@@ -1775,7 +1775,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             if not self.h5:
                 return
             # Fetch samples from h5 instance
-            samples_in_h5 = self.h5.get_all_samples(
+            samples_in_h5 = self.h5.get_all_entries(
                 get_relative_address=True,
             )
             list_samples = samples_in_h5
