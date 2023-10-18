@@ -54,15 +54,15 @@ def test_invalid_root_dir_and_input_file():
         scope='session', 
         params=[
             # From Root Directory
-            # (GLOBAL_PATH, '', ''),
+            (GLOBAL_PATH, '', ''),
             (NCD_EXAMPLE_PATH, '', ''),
-            # (XMAS_EXAMPLE_PATH, '', ''),
-            # (DUBBLE_EXAMPLE_PATH, '', ''),
+            (XMAS_EXAMPLE_PATH, '', ''),
+            (DUBBLE_EXAMPLE_PATH, '', ''),
             # From input h5 filename
-            # ('', GLOBAL_INIT_H5, ''),
+            ('', GLOBAL_INIT_H5, ''),
             ('', NCD_INIT_H5, ''),
-            # ('', XMAS_INIT_H5, ''),
-            # ('', DUBBLE_INIT_H5, ''),
+            ('', XMAS_INIT_H5, ''),
+            ('', DUBBLE_INIT_H5, ''),
 
         ]
     )
@@ -152,20 +152,20 @@ class TestH5GI:
             _h5_filename = f['.'].attrs[FILENAME_H5_KEY]
             assert Path(_h5_filename).as_posix() == h5_filename.as_posix()
 
-    def test_creation_sample_group(self, h5):
-        print('testing the creation of sample group')
-        with File(h5._h5_filename, 'r+') as f:
-            assert f.__contains__(SAMPLE_GROUP_KEY)
+    # def test_creation_sample_group(self, h5):
+    #     print('testing the creation of sample group')
+    #     with File(h5._h5_filename, 'r+') as f:
+    #         assert f.__contains__(SAMPLE_GROUP_KEY)
 
-    def test_creation_ponifile_group(self, h5):
-        print('testing the creation of ponifile group')
-        with File(h5._h5_filename, 'r+') as f:
-            assert f.__contains__(PONI_GROUP_KEY)
+    # def test_creation_ponifile_group(self, h5):
+    #     print('testing the creation of ponifile group')
+    #     with File(h5._h5_filename, 'r+') as f:
+    #         assert f.__contains__(PONI_GROUP_KEY)
 
-    def test_creation_ponifile_dataset(self, h5):
-        print('testing the creation of ponifile dataset')
-        with File(h5._h5_filename, 'r+') as f:
-            assert f[PONI_GROUP_KEY].__contains__(PONIFILE_DATASET_KEY)
+    # def test_creation_ponifile_dataset(self, h5):
+    #     print('testing the creation of ponifile dataset')
+    #     with File(h5._h5_filename, 'r+') as f:
+    #         assert f[PONI_GROUP_KEY].__contains__(PONIFILE_DATASET_KEY)
     
     def test_upload_ponifiles(self, h5):
         print('testing the uploading of .poni files')
@@ -234,7 +234,6 @@ class TestH5GI:
         assert poni_instance.detector.pixel2 == transform_instance.detector.pixel2
     
     def test_upload_datafiles(self, h5):
-        print('testing the uploading of datafiles')
         h5.update_datafiles(
             pattern='*.edf',
             search=True,
@@ -242,15 +241,12 @@ class TestH5GI:
 
     def test_generate_samples(self, h5):
         print('testing the sample-generator method')
-        samples_in_h5 = h5.get_all_samples()
+        samples_in_h5 = h5.get_all_entries()
         
     def test_upload_samples_valid(self, h5):
         print('testing a valid uploading of samples')
-        samples_in_root = set(h5.get_all_samples(get_relative_address=False))
-        samples_in_h5 = set(h5.get_all_samples(get_relative_address=False))
-
-        print(samples_in_h5)
-        print(samples_in_root)
+        samples_in_root = set(h5.get_all_entries(get_relative_address=False))
+        samples_in_h5 = set(h5.get_all_entries(get_relative_address=False))
 
         assert samples_in_root == samples_in_h5
 
@@ -260,7 +256,7 @@ class TestH5GI:
 
     def test_upload_datafiles_valid(self, h5):
         print('testing a valid storage of sample-datafiles')
-        dict_files_in_h5 = h5.get_dict_files(relative_address=False)
+        dict_files_in_h5 = h5.get_dict_files()
         dict_files = h5.search_new_datafiles()
 
         samples = set(dict_files.keys())
@@ -277,12 +273,12 @@ class TestH5GI:
             pattern='*.edf',
             search=True,
         )
-        dict_files_1 = h5.get_dict_files(relative_address=False)
+        dict_files_1 = h5.get_dict_files()
         h5.update_datafiles(
             pattern='*.edf',
             search=True,
         )
-        dict_files_2 = h5.get_dict_files(relative_address=False)
+        dict_files_2 = h5.get_dict_files()
 
         samples = set(dict_files_1.keys())
 
@@ -296,19 +292,17 @@ class TestH5GI:
     def test_retrieve_filenames(self, h5):
         print('testing the valid retrieving of data filenames using relative or absolute address')
 
-        rel_samples_in_h5 = h5.get_all_samples(get_relative_address=True)
+        rel_samples_in_h5 = h5.get_all_entries(get_relative_address=True)
 
         filename_from_relative = h5.get_filename_from_index(
             sample_name=rel_samples_in_h5[0],
-            sample_relative_address=True,
             index_list=0,
         )
 
-        abs_samples_in_h5 = h5.get_all_samples(get_relative_address=False)
+        abs_samples_in_h5 = h5.get_all_entries(get_relative_address=False)
 
         filename_from_absolute = h5.get_filename_from_index(
             sample_name=abs_samples_in_h5[0],
-            sample_relative_address=False,
             index_list=0,
         )
 
@@ -316,7 +310,7 @@ class TestH5GI:
 
     def test_retrieve_data(self, h5):
         print('testing the valid retrieving of data using relative or absolute address')
-        rel_samples_in_h5 = h5.get_all_samples(get_relative_address=True)
+        rel_samples_in_h5 = h5.get_all_entries(get_relative_address=True)
 
         data_from_rel = h5.get_Edf_data(
             sample_name=rel_samples_in_h5[0],
@@ -324,7 +318,7 @@ class TestH5GI:
             index_list=0,
         )
 
-        abs_samples_in_h5 = h5.get_all_samples(get_relative_address=False)
+        abs_samples_in_h5 = h5.get_all_entries(get_relative_address=False)
 
         data_from_abs = h5.get_Edf_data(
             sample_name=abs_samples_in_h5[0],
@@ -336,25 +330,23 @@ class TestH5GI:
 
     def test_retrieve_data_valid(self, h5):
         print('testing the valid retrieving of data')
-        samples_in_h5 = h5.get_all_samples(get_relative_address=True)
+        samples_in_h5 = h5.get_all_entries(get_relative_address=True)
 
         data_filename = h5.get_filename_from_index(
             sample_name=samples_in_h5[0],
-            sample_relative_address=True,
             index_list=0,
         )
         data_from_fabio = fabio.open(data_filename).data
 
         data_from_h5 = h5.get_Edf_data(
             sample_name=samples_in_h5[0],
-            sample_relative_address=True,
             index_list=0,
         )
 
         assert data_from_fabio.all() == data_from_h5.all()
 
     def test_azim_integration(self, h5):
-        rel_samples_in_h5 = h5.get_all_samples(get_relative_address=True)
+        rel_samples_in_h5 = h5.get_all_entries(get_relative_address=True)
         list_integration_names = ['azim_complete', 'azim_oop']
 
         list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
@@ -372,7 +364,7 @@ class TestH5GI:
         assert list_results[1] is not None
 
     def test_radial_integration(self, h5):
-        rel_samples_in_h5 = h5.get_all_samples(get_relative_address=True)
+        rel_samples_in_h5 = h5.get_all_entries(get_relative_address=True)
         list_integration_names = ['radial']
 
         list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
@@ -389,7 +381,7 @@ class TestH5GI:
         assert list_results[0] is not None
 
     def test_box_integration(self, h5):
-        rel_samples_in_h5 = h5.get_all_samples(get_relative_address=True)
+        rel_samples_in_h5 = h5.get_all_entries(get_relative_address=True)
         list_integration_names = ['vertical_rod']
 
         list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]

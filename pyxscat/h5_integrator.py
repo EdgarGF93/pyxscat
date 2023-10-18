@@ -1,6 +1,6 @@
 from collections import defaultdict
 from pathlib import Path
-from pyFAI import load
+from pyFAI import AzimuthalIntegrator
 from pyFAI.io.ponifile import PoniFile
 from pygix.transform import Transform
 from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
@@ -59,6 +59,9 @@ REL_ADDRESS_KEY = "relative_address"
 DATAFILE_KEY = "data_filename"
 DATANAME_KEY = "data_name"
 SAMPLEPATH_KEY = "sample_address"
+
+ENTRY_PONIFILE_KEY = 'entry_ponifiles'
+
 
 ADDRESS_METADATA_KEYS = '.'
 ADDRESS_PONIFILE = '.'
@@ -243,6 +246,7 @@ class H5GIIntegrator():
             raise Exception(INPUT_ROOT_DIR_NOT_VALID)
         
         self._transform = Transform()
+        self.active_ponifile = ''
                     
 
     def set_root_directory(self, root_directory=''):
@@ -799,7 +803,7 @@ class H5GIIntegrator():
     #########################################################
 
     @logger_info
-    def search_ponifiles(self, new_files=True) -> list:
+    def search_ponifiles(self) -> list:
         """
         Searches for .poni files in the root directory
 
@@ -809,18 +813,18 @@ class H5GIIntegrator():
         if not self._root_dir:
             return
         try:
-            searched_ponifiles = [file.as_posix() for file in self._root_dir.rglob("*.poni")]
+            searched_ponifiles = sorted(file.as_posix() for file in self._root_dir.rglob("*.poni"))
 
-            if new_files:
-                stored_ponifiles = self.get_all_ponifiles(get_relative_address=False)
-                searched_ponifiles = [file for file in searched_ponifiles if file not in stored_ponifiles]
+            # if new_files:
+            #     stored_ponifiles = self.get_all_ponifiles(get_relative_address=False)
+            #     searched_ponifiles = [file for file in searched_ponifiles if file not in stored_ponifiles]
 
             logger.info(f"Found {len(searched_ponifiles)} .poni files in {self._root_dir}")
+            return searched_ponifiles
         except Exception as e:
             logger.error(f"{e}: there was an error during searching ponifiles in {self._root_dir}.")
             return
 
-        return searched_ponifiles
 
     def create_data_dset(self, sample_name=str()):
         self.create_dataset_path(
@@ -850,23 +854,37 @@ class H5GIIntegrator():
     def update_ponifiles(self):
 
         # Creates the dataset for ponifiles if needed
-        self.create_ponifile_dset()
+        # self.create_ponifile_dset()
 
         # Search new files if requested
-        ponifile_list = self.search_ponifiles(new_files=True)
+        searched_ponifiles = self.search_ponifiles()
 
-        if not ponifile_list:
+        if not searched_ponifiles:
             logger.info("No ponifiles to be updated. Return.")
             return
+        else:
+            if self.check_ponifile_entry():
+                self.delete_nx_group(entry=ENTRY_PONIFILE_KEY)
+            
+            save_NXdata(
+                filename=self._h5_filename,
+                signal_name=PONI_GROUP_KEY,
+                signal=searched_ponifiles,
+                interpretation='spectrum',
+                nxentry_name=ENTRY_PONIFILE_KEY,
+                nxdata_name=PONI_GROUP_KEY,
+            )
+            
+                    
 
-        # Return if no new ponifiles
-        if not ponifile_list:
-            logger.info(f"No ponifiles to update.")
-            return
+        # # Return if no new ponifiles
+        # if not ponifile_list:
+        #     logger.info(f"No ponifiles to update.")
+        #     return
 
-        self.append_ponifile_list(
-            ponifile_list=ponifile_list,
-        )
+        # self.append_ponifile_list(
+        #     ponifile_list=ponifile_list,
+        # )
 
     @logger_info
     def append_metadata_values(self, sample_name=str(), metadata_key=str(), value_list=list()):
@@ -919,17 +937,26 @@ class H5GIIntegrator():
         """
         if not self._transform:
             return
-        
-        try:
-            new_poni = PoniFile(data=dict_poni)
-            self._transform._init_from_poni(new_poni)
-        except Exception as e:
-            logger.error(e)
+
+        if dict_poni:
+            try:
+                new_poni = PoniFile(data=dict_poni)
+                self._transform._init_from_poni(new_poni)
+            except Exception as e:
+                logger.error(e)
+        else:
+            if self.active_ponifile:
+                self._transform.load(self.active_ponifile)
+
 
     @logger_info
     def generate_ponifiles(self, get_relative_address=True) -> str:
         with File(self._h5_filename, 'r+') as f:
-            dataset = f[PONI_GROUP_KEY][PONIFILE_DATASET_KEY]
+            if not self.check_ponifile_entry():
+                logger.info('There is no ponifiles yet.')
+                return
+
+            dataset = f[ENTRY_PONIFILE_KEY][PONI_GROUP_KEY][PONI_GROUP_KEY]
             for ponifile in dataset:
                 ponifile = ponifile.decode(ENCODING_FORMAT)
                 ponifile = Path(ponifile).as_posix()
@@ -939,13 +966,13 @@ class H5GIIntegrator():
         
     @logger_info
     def get_all_ponifiles(self, get_relative_address=True) -> list:
-        ponifile_list = list(self.generate_ponifiles(get_relative_address=get_relative_address))
+        ponifile_list = sorted(self.generate_ponifiles(get_relative_address=get_relative_address))
         return ponifile_list
 
     @logger_info
-    def activate_ponifile(self, poni_filename=str()) -> None:    
+    def activate_ponifile(self, poni_filename='') -> None:    
         if not poni_filename:
-            self.active_ponifile = None
+            self.active_ponifile = ''
             return
         
         poni_filename = Path(poni_filename)
@@ -956,7 +983,7 @@ class H5GIIntegrator():
             else:
                 poni_filename = self._root_dir.joinpath(poni_filename).as_posix()
         except Exception as e:
-            self.active_ponifile = None
+            self.active_ponifile = ''
             return    
 
         # Proceed only if the requested ponifiles is already stored
@@ -966,7 +993,9 @@ class H5GIIntegrator():
 
             self.active_ponifile = poni_filename
 
-            self.update_grazinggeometry()
+            self.update_ponifile_parameters
+
+            self.update_ponifile_parameters()
 
 
         else:
@@ -1107,7 +1136,6 @@ class H5GIIntegrator():
         # Load the ponifile
         try:
             self._transform.load(poni_filename)
-            self.load(poni_filename)
             logger.info(f"Loaded poni file: {poni_filename}")
         except Exception as e:
             logger.error(f"{e}: Ponifile could not be loaded to GrazingGeometry")
@@ -1233,7 +1261,7 @@ class H5GIIntegrator():
         )
 
     @logger_info
-    def get_nx_entry_name(self):
+    def get_new_nx_entry_name(self):
         entry_name = f'entry_{str(self.get_nx_entries()).zfill(ENTRY_ZEROS)}'
         return entry_name
 
@@ -1667,6 +1695,9 @@ class H5GIIntegrator():
     def generator_samples(self, get_group_name=True, get_relative_address=False) -> str:
         with File(self._h5_filename, 'r+') as f:
             for entry in  f.keys():
+                if entry == ENTRY_PONIFILE_KEY:
+                    continue
+
                 if get_group_name:
                     yield entry
                 else:
@@ -1709,13 +1740,17 @@ class H5GIIntegrator():
     def get_dict_files(self):
         dict_files = defaultdict(set)
         for file in self.generator_all_files():
-            sample_name = Path(file).parent
-            if relative_address:
-                file = Path(file).relative_to(sample_name).as_posix()
-                sample_name = sample_name.relative_to(self._root_dir).as_posix()
-            else:
-                file = Path(file).as_posix()
-                sample_name = sample_name.as_posix()
+            sample_name = Path(file).parent.as_posix()
+            file = Path(file).as_posix()
+
+
+            # sample_name = Path(file).parent
+            # if relative_address:
+            #     file = Path(file).relative_to(sample_name).as_posix()
+            #     sample_name = sample_name.relative_to(self._root_dir).as_posix()
+            # else:
+            #     file = Path(file).as_posix()
+            #     sample_name = sample_name.as_posix()
 
             dict_files[sample_name].add(file)
         return dict_files
@@ -1743,7 +1778,7 @@ class H5GIIntegrator():
         self._pattern = pattern
 
     @logger_info
-    def search_new_datafiles(
+    def search_datafiles(
         self, 
         pattern="*.edf",
         ):
@@ -1751,6 +1786,18 @@ class H5GIIntegrator():
         searched_files = self._root_dir.rglob(pattern)
         dict_files = get_dict_files(
             list_files=searched_files,
+        )
+        return dict_files
+
+
+    @logger_info
+    def search_new_datafiles(
+        self, 
+        pattern="*.edf",
+        ):
+        # Search the files
+        dict_files = self.search_datafiles(
+            pattern=pattern,
         )
 
         # Filter only the new data
@@ -1761,28 +1808,43 @@ class H5GIIntegrator():
             small_dict=dict_files_in_h5,
         )
 
-        return dict_files
+        return dict_new_files
 
     @logger_info
     def update_datafiles(
         self, 
-        dict_new_files=dict(), 
-        pattern='*.edf', 
+        dict_files=dict(), 
         search=False,
+        pattern='*.edf',         
         ):
 
         # Search for new files
-        if dict_new_files:
-            dict_new_files = dict_new_files
+        if dict_files:
+            dict_files = dict_files
         elif search:
-            dict_new_files = self.search_new_datafiles(
+            dict_files = self.search_datafiles(
                 pattern=pattern,
             )
-        logger.info(f"{INFO_H5_NEW_DICTIONARY_FILES}: {str(dict_new_files)}")
+        
+        # Identify the new files
+        dict_files_in_h5 = self.get_dict_files()
+        dict_new_files = get_dict_difference(
+            large_dict=dict_files,
+            small_dict=dict_files_in_h5,
+        )
+        logger.info(f"{INFO_H5_NEW_DICTIONARY_FILES}: {str(dict_files)}")
 
-        for sample_address, data_files in dict_new_files.items():
+        for sample_address in dict_new_files.keys():
 
-            group_name = self.get_nx_entry_name()
+            # Rewrite group if it exists
+            existing_entry = self.get_entry_name(sample_address=sample_address)
+            if existing_entry:
+                group_name = existing_entry
+                data_files = dict_files.get(sample_address)
+                self.delete_nx_group(entry=group_name)
+            else:
+                group_name = self.get_new_nx_entry_name()
+                data_files = dict_new_files.get(sample_address)
 
             dict_metadata = self.get_full_dict_metadata(
                 list_filenames=data_files,
@@ -1805,7 +1867,7 @@ class H5GIIntegrator():
                 )
 
     @logger_info
-    def check_entry_exist(self, sample_address=''):
+    def get_entry_name(self, sample_address=''):
         sample_address = Path(sample_address)
 
         if sample_address.is_absolute():
@@ -1820,18 +1882,45 @@ class H5GIIntegrator():
 
             with File(self._h5_filename, 'r+') as f:
                 for entry in f.keys():
+                    if entry == ENTRY_PONIFILE_KEY:
+                        continue
+
                     if absolute_address == f[entry].attrs[ABS_ADDRESS_KEY]:
-                        return True
-                    
+                        return entry
+
         elif relative_address:
             relative_address = Path(relative_address).as_posix()
 
             with File(self._h5_filename, 'r+') as f:
                 for entry in f.keys():
+                    if entry == ENTRY_PONIFILE_KEY:
+                        continue
+
                     if relative_address == f[entry].attrs[REL_ADDRESS_KEY]:
-                        return True
-        
-        return False
+                        return entry
+
+        return None
+
+
+
+
+
+
+
+
+
+    @logger_info
+    def check_ponifile_entry(self):
+        with File(self._h5_filename, 'r+') as f:
+            if ENTRY_PONIFILE_KEY in f.keys():
+                return True
+            else:
+                return False
+            
+    @logger_info
+    def delete_nx_group(self, entry=''):
+        with File(self._h5_filename, 'r+') as f:
+            del f[entry]
 
     @logger_info
     def write_sample_address(self, group_name='', sample_address=''):
@@ -1893,6 +1982,7 @@ class H5GIIntegrator():
                         return sample
                 logger.info(f"There is no sample with abs. address {sample_name}.")
                 return
+
 
     @logger_info
     def generator_files_in_sample(
@@ -2038,7 +2128,6 @@ class H5GIIntegrator():
         list_keys = sorted(
             self.generator_metadata_keys_from_sample(
                 sample_name=sample_name,
-                sample_relative_address=sample_relative_address,
                 ))
         return list_keys
 
@@ -2046,86 +2135,110 @@ class H5GIIntegrator():
     def generator_metadata_keys_from_sample(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         ):
-        sample_name = self.get_sample_address(
-            sample_name=sample_name,
-            get_relative_address=sample_relative_address,
-        )
 
-        if not sample_name:
+        entry_name = self.get_entry_name(sample_address=sample_name)
+
+
+        if not entry_name:
             return
         
         with File(self._h5_filename, 'r+') as f:
-            list_keys = f[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY].keys()
-            for key in list_keys:
+            for key in f[entry_name].keys():
                 yield key
 
     @logger_info
     def get_filename_from_index(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         index_list=list(),
         ):
-        print(sample_name)
-        print(sample_relative_address)
-        print(index_list)
-        sample_name = self.get_sample_address(
-            sample_name=sample_name,
-            get_relative_address=sample_relative_address,
-        )
 
-        if not sample_name:
+        entry_name = self.get_entry_name(sample_address=sample_name)
+
+        if not entry_name:
             return
 
         with File(self._h5_filename, 'r+') as f:
+
             if isinstance(index_list, int):
                 index_list = [index_list]
-            if len(index_list) == 1:
-                filename = bytes.decode(f[SAMPLE_GROUP_KEY][sample_name][DATA_KEY][index_list[0]])
-            else:
-                filename = bytes.decode(f[SAMPLE_GROUP_KEY][sample_name][DATA_KEY][index_list[-1]])
+
+            filename = f[entry_name][DATAFILE_KEY][DATAFILE_KEY][index_list[0]]
+            filename = bytes.decode(filename)
+
+            if len(index_list) > 1:
                 filename = filename.replace(".edf", "_average.edf")
+
         return filename
 
+
     @logger_info
-    def get_sample_index_from_filename(self, filename=str()):
-        """
-        Searches the filename in the .h5 Groups and returns the name of the folder and the index of the file in the Group
+    def get_name_from_index(
+        self, 
+        sample_name=str(),
+        index_list=list(),
+        ):
 
-        Parameters:
-        filename(str) : string of the filename to be searched
+        entry_name = self.get_entry_name(sample_address=sample_name)
 
-        Returns:
-        str : string with the name of the folder in the .h5 file
-        int : index of the filename inside the folder
-        """
-        # sample_name = str(Path(filename).parent.relative_to(self._root_dir))
-        sample_name_abs = Path(filename).parent.as_posix()
-
-        sample_address = self.get_sample_address(
-            sample_name=sample_name_abs,
-            get_relative_address=False,
-        )
-
-        if not sample_address:
+        if not entry_name:
             return
 
-        # if not self.contains_group(sample_name=sample_name, group_address=SAMPLE_GROUP_KEY):
-        #     logger.info(f"There is no Group with the name {sample_name}. Returns.")
-        #     return
+        with File(self._h5_filename, 'r+') as f:
 
-        for index, file in enumerate(
-            self.generator_files_in_sample(
-                sample_name=sample_address,
-                is_group_name=True,
-            )):
-            if file == filename:
-                logger.info(f"Found match with the filename at index {index}")
-                return sample_name, index
-        logger.info(f"No matches were found with the filename {filename}")
-        return None, None
+            if isinstance(index_list, int):
+                index_list = [index_list]
+
+            filename = f[entry_name][DATANAME_KEY][DATANAME_KEY][index_list[0]]
+            filename = bytes.decode(filename)
+
+            if len(index_list) > 1:
+                filename = filename.replace(".edf", "_average.edf")
+
+        return filename
+
+
+
+
+
+    # @logger_info
+    # def get_sample_index_from_filename(self, filename=str()):
+    #     """
+    #     Searches the filename in the .h5 Groups and returns the name of the folder and the index of the file in the Group
+
+    #     Parameters:
+    #     filename(str) : string of the filename to be searched
+
+    #     Returns:
+    #     str : string with the name of the folder in the .h5 file
+    #     int : index of the filename inside the folder
+    #     """
+    #     sample_name = str(Path(filename).parent.relative_to(self._root_dir))
+    #     sample_name_abs = Path(filename).parent.as_posix()
+
+    #     sample_address = self.get_sample_address(
+    #         sample_name=sample_name_abs,
+    #         get_relative_address=False,
+    #     )
+
+    #     if not sample_address:
+    #         return
+
+    #     if not self.contains_group(sample_name=sample_name, group_address=SAMPLE_GROUP_KEY):
+    #         logger.info(f"There is no Group with the name {sample_name}. Returns.")
+    #         return
+
+    #     for index, file in enumerate(
+    #         self.generator_files_in_sample(
+    #             sample_name=sample_address,
+    #             is_group_name=True,
+    #         )):
+    #         if file == filename:
+    #             logger.info(f"Found match with the filename at index {index}")
+    #             return sample_name, index
+    #     logger.info(f"No matches were found with the filename {filename}")
+    #     return None, None
 
     #####################################
     ###### EDF METHODS ##########
@@ -2147,7 +2260,6 @@ class H5GIIntegrator():
             try:
                 filename = self.get_filename_from_index(
                     sample_name=sample_name,
-                    sample_relative_address=sample_relative_address,
                     index_list=index_file,
                 )
 
@@ -2228,19 +2340,28 @@ class H5GIIntegrator():
     def map_reshaping(
         self,
         data=None,
-    ):
-        # ponifile = self.get_active_ponifile()
-        try:
-            ai = load(self.active_ponifile)
-            data_reshape, q, chi = ai.integrate2d(
-                data=data,
-                npt_rad=1000,
-                unit="q_nm^-1",
-            )
-            logger.info(f"Reshaped map.")
-        except Exception as e:
-            logger.error(f"Impossible to reshape map with shapes: data {data.shape}.")
-            return
+        dict_poni=dict(),
+        ):
+        ai = AzimuthalIntegrator()
+
+        if dict_poni:
+            try:
+                new_poni = PoniFile(data=dict_poni)
+                ai._init_from_poni(new_poni)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                ai.load(self.active_ponifile)
+            except Exception as e:
+                print(e)
+                
+        data_reshape, q, chi = ai.integrate2d(
+            data=data,
+            npt_rad=1000,
+            unit="q_nm^-1",
+        )
+        logger.info(f"Reshaped map.")
 
         return data_reshape, q, chi
 
