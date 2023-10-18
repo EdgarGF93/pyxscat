@@ -1947,14 +1947,6 @@ class H5GIIntegrator():
 
         return None
 
-
-
-
-
-
-
-
-
     @logger_info
     def check_ponifile_entry(self):
         with File(self._h5_filename, 'r+') as f:
@@ -1981,16 +1973,6 @@ class H5GIIntegrator():
     def get_nx_entries(self):
         with File(self._h5_filename, 'r+') as f:
             return f.__len__()
-        # # Store in the .h5 file by folder and its own list of files
-        # for sample_name, file_list in dict_new_files.items():
-        #     self.update_sample(
-        #         sample_name=sample_name,
-        #         data_filenames=file_list,
-        #         get_2D_array=False,
-        #     )
-
-        #     logger.info(f"Finished with folder: {sample_name}.")
-        # logger.info(INFO_H5_FILES_UPDATED)
 
     @logger_info
     def get_all_files_from_sample(

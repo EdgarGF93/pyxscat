@@ -152,21 +152,6 @@ class TestH5GI:
             _h5_filename = f['.'].attrs[FILENAME_H5_KEY]
             assert Path(_h5_filename).as_posix() == h5_filename.as_posix()
 
-    # def test_creation_sample_group(self, h5):
-    #     print('testing the creation of sample group')
-    #     with File(h5._h5_filename, 'r+') as f:
-    #         assert f.__contains__(SAMPLE_GROUP_KEY)
-
-    # def test_creation_ponifile_group(self, h5):
-    #     print('testing the creation of ponifile group')
-    #     with File(h5._h5_filename, 'r+') as f:
-    #         assert f.__contains__(PONI_GROUP_KEY)
-
-    # def test_creation_ponifile_dataset(self, h5):
-    #     print('testing the creation of ponifile dataset')
-    #     with File(h5._h5_filename, 'r+') as f:
-    #         assert f[PONI_GROUP_KEY].__contains__(PONIFILE_DATASET_KEY)
-    
     def test_upload_ponifiles(self, h5):
         print('testing the uploading of .poni files')
         h5.update_ponifiles()
@@ -192,20 +177,20 @@ class TestH5GI:
     def test_activate_ponifiles_wrong(self, h5):
         print('testing the activation of a poni file')
         ponifile = 'not_stored_ponifile'
-        h5.activate_ponifile(poni_filename=ponifile)
-        assert h5.active_ponifile == None
+        h5.activate_poni_parameters(poni_filename=ponifile)
+        assert h5.active_ponifile == ''
 
     def test_activate_abs_ponifile_valid(self, h5):
         print('testing the activation of a poni file')
         ponifile = [f.as_posix() for f in h5._root_dir.rglob('*.poni')][0]
-        h5.activate_ponifile(poni_filename=ponifile)
+        h5.activate_poni_parameters(poni_filename=ponifile)
         assert h5.active_ponifile != None
 
     def test_activate_rel_ponifile_valid(self, h5):
         print('testing the activation of a poni file')
         ponifile = [f for f in h5._root_dir.rglob('*.poni')][0]
         ponifile_rel = ponifile.relative_to(h5._root_dir).as_posix()
-        h5.activate_ponifile(poni_filename=ponifile_rel)
+        h5.activate_poni_parameters(poni_filename=ponifile_rel)
         assert h5.active_ponifile != None
 
     def test_update_grazinggeometry(self, h5):
