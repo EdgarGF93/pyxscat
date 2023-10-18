@@ -1882,7 +1882,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.write_terminal_and_loggerinfo(f"New detected files: {str(dict_new_files)}.")
         
         self.h5.update_datafiles(          
-            dict_new_files=dict_new_files,
+            dict_files=dict_new_files,
             search=False,
         )
         self.h5.update_ponifiles()
@@ -1997,7 +1997,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             dict_files_1s = get_dict_files(list_files=list_files_1s)
             print(dict_files_1s)
             self.h5.update_datafiles(          
-                dict_new_files=dict_files_1s,
+                dict_files=dict_files_1s,
                 search=False,
             )
 
@@ -2267,7 +2267,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Update the metadata combobox if needed
         self.check_and_update_cb_metadata(
             sample_name=clicked_sample_name,
-            sample_relative_address=sample_relative_address,
         )
 
         # Get a Pandas.DataFrame to upload the table
@@ -2308,7 +2307,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     def check_and_update_cb_metadata(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         ):
         if not sample_name:
             sample_name = self.sample_cache
@@ -2316,7 +2314,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Fetch the list of metadata keys in that sample
         metadata_keys = self.h5.get_all_metadata_keys_from_sample(
             sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
         )
 
         # Update the comboboxes if it is different
@@ -3010,6 +3007,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         try:
             data_reshape, q, chi = self.h5.map_reshaping(
                 data=data,
+                dict_poni=self.get_poni_dict_from_widgets(),
             )
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Data could not be reshaped.")
