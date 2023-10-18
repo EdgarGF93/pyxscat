@@ -1,6 +1,6 @@
 from collections import defaultdict
 from pathlib import Path
-from pyFAI import AzimuthalIntegrator
+from pyFAI.azimuthalIntegrator import AzimuthalIntegrator
 from pyFAI.io.ponifile import PoniFile
 from pygix.transform import Transform
 from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
@@ -245,7 +245,9 @@ class H5GIIntegrator():
         else:
             raise Exception(INPUT_ROOT_DIR_NOT_VALID)
         
+        self._poni_instance = None
         self._transform = Transform()
+        self._ai = AzimuthalIntegrator()
         self.active_ponifile = ''
                     
 
@@ -930,6 +932,33 @@ class H5GIIntegrator():
                 except Exception as e:
                     logger.error(f"{str(list_to_append)} could not be appended to {group_address}/{dataset}")
 
+
+
+
+
+    @logger_info
+    def retrieve_poni_instance_from_file(self, poni_filename=''):
+        poni_filename = Path(poni_filename)
+
+        if not poni_filename.is_file():
+            return
+
+        poni = PoniFile(data=str(poni_filename))
+        return poni
+
+    # @logger_info
+    # def retrieve_poni_dict_from_file(self, poni_filename=''):
+    #     poni_instance = self.retrieve_poni_instance_from_file(
+    #         poni_filename=poni_filename,
+    #     )
+
+
+
+
+
+
+
+
     @logger_info
     def update_ponifile_parameters(self, dict_poni=dict()) -> None:
         """
@@ -970,41 +999,58 @@ class H5GIIntegrator():
         return ponifile_list
 
     @logger_info
-    def activate_ponifile(self, poni_filename='') -> None:    
-        if not poni_filename:
-            self.active_ponifile = ''
-            return
+    def activate_poni_parameters(
+        self, 
+        poni_filename='', 
+        dict_poni=dict(),
+        poni_instance=None,
+        ) -> None: 
+
+        if poni_filename:
+            poni_filename = Path(poni_filename)
+
+            try:
+                if poni_filename.is_absolute():
+                    poni_filename = poni_filename.as_posix()            
+                else:
+                    poni_filename = self._root_dir.joinpath(poni_filename).as_posix()
+            except Exception as e:
+                self.active_ponifile = ''
+            
+            # Proceed only if the requested ponifiles is already stored
+            stored_ponifiles = self.get_all_ponifiles(get_relative_address=False)            
+
+            if poni_filename in stored_ponifiles:
+                self.active_ponifile = poni_filename
+
+                new_poni = self.retrieve_poni_instance_from_file(
+                    poni_filename=self.active_ponifile,
+                )
+                self._poni_instance = new_poni
         
-        poni_filename = Path(poni_filename)
+        elif dict_poni:
+            try:
+                new_poni = PoniFile(data=dict_poni)
+                self._poni_instance = new_poni
+            except Exception as e:
+                logger.error(e)
+
+        elif poni_instance:
+            new_poni = poni_instance
+            self._poni_instance = new_poni
+        
+        try:
+            self._transform._init_from_poni(new_poni)
+        except Exception as e:
+            logger.error(e)
 
         try:
-            if poni_filename.is_absolute():
-                poni_filename = poni_filename.as_posix()            
-            else:
-                poni_filename = self._root_dir.joinpath(poni_filename).as_posix()
+            self._ai._init_from_poni(poni=new_poni)
         except Exception as e:
-            self.active_ponifile = ''
-            return    
-
-        # Proceed only if the requested ponifiles is already stored
-        stored_ponifiles = self.get_all_ponifiles(get_relative_address=False)
-
-        if poni_filename in stored_ponifiles:
-
-            self.active_ponifile = poni_filename
-
-            self.update_ponifile_parameters
-
-            self.update_ponifile_parameters()
-
-
+            logger.error(e)
+        
         else:
-            logger.info(f"Ponifile {poni_filename} is not stored in the .h5")
-            self.active_ponifile = None
-            return           
-
-        # Update the GrazingGeometry instance
-        # self.update_grazinggeometry()
+            return
 
     @logger_info
     def get_poni_dict(self):
@@ -2340,23 +2386,22 @@ class H5GIIntegrator():
     def map_reshaping(
         self,
         data=None,
-        dict_poni=dict(),
+        # dict_poni=dict(),
         ):
-        ai = AzimuthalIntegrator()
 
-        if dict_poni:
-            try:
-                new_poni = PoniFile(data=dict_poni)
-                ai._init_from_poni(new_poni)
-            except Exception as e:
-                print(e)
-        else:
-            try:
-                ai.load(self.active_ponifile)
-            except Exception as e:
-                print(e)
+        # if dict_poni:
+        #     try:
+        #         new_poni = PoniFile(data=dict_poni)
+        #         ai._init_from_poni(new_poni)
+        #     except Exception as e:
+        #         print(e)
+        # else:
+        #     try:
+        #         ai.load(self.active_ponifile)
+        #     except Exception as e:
+        #         print(e)
                 
-        data_reshape, q, chi = ai.integrate2d(
+        data_reshape, q, chi = self._ai.integrate2d(
             data=data,
             npt_rad=1000,
             unit="q_nm^-1",
