@@ -1344,9 +1344,12 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
 
         # Activate the .poni file in the h5 instance
-        self.h5.activate_ponifile(
+        self.activate_poni_parameters(
             poni_filename=poni_name,
         )
+        # self.h5.activate_poni_parameters(
+        #     poni_filename=poni_name,
+        # )
 
         # Update the inherited instance of Grazing Geometry
         # self.h5.update_grazinggeometry()
@@ -1381,9 +1384,21 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         if not self.h5:
             return
         
+        old_poni = self.h5.retrieve_poni_instance_from_file(self.h5.active_ponifile)
+
+        self.activate_poni_parameters(
+            poni_instance=old_poni,
+        )
+
         dict_poni = self.h5.get_poni_dict()
         self.update_ponifile_widgets(
             dict_poni=dict_poni,
+        )
+
+        self.update_graphs(
+            graph_1D=True,
+            graph_2D_reshape=True,
+            graph_2D_q=True,
         )
     
     @log_info
@@ -1393,7 +1408,11 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         
         dict_poni = self.get_poni_dict_from_widgets()
 
-        self.h5.update_ponifile_parameters(
+        # self.h5.update_ponifile_parameters(
+        #     dict_poni=dict_poni,
+        # )
+
+        self.activate_poni_parameters(
             dict_poni=dict_poni,
         )
 
@@ -1404,17 +1423,48 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
     @log_info
+    def activate_poni_parameters(self, poni_filename='', dict_poni={}, poni_instance=None):
+        if not self.h5:
+            return
+
+        self.h5.activate_poni_parameters(
+            poni_filename=poni_filename,
+            dict_poni=dict_poni,
+            poni_instance=poni_instance,
+        )
+
+        dict_poni = self.h5.get_poni_dict()
+        self.write_terminal_and_loggerinfo(f"Current poni parameters: {dict_poni}")
+
+    @log_info
     def save_poni_clicked(self,_):
         if not self.h5:
             return
         
-        # Get a full poni dictionary from the widgets and h5
+        # Update the .poni parameters from widgets
         dict_poni = self.get_poni_dict_from_widgets()
 
-        # Save a .poni file
-        self.save_poni_dict(
+        self.activate_poni_parameters(
             dict_poni=dict_poni,
         )
+
+        # Save a .poni file
+        self.save_poni_instance(poni_instance=self.h5._poni_instance)
+
+
+
+
+        self.update_graphs(
+            graph_1D=True,
+            graph_2D_reshape=True,
+            graph_2D_q=True,
+        )
+
+
+        # Get a full poni dictionary from the widgets and h5
+
+        # dict_poni = self.get_poni_dict_from_widgets()
+
 
         # Update the h5 and combobox
         self.h5.update_ponifiles()
@@ -1648,17 +1698,19 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
     @log_info
-    def save_poni_dict(self, dict_poni=dict()) -> None:
+    def save_poni_instance(self, poni_instance=None) -> None:
         """
         Saves a new .poni file with updated parameters
         """
         if not self.h5:
             return
-        ponifile = str(self.h5.active_ponifile)
-        ponifile = ponifile.replace(".poni", f"_{date_prefix()}.poni")
 
-        with open(ponifile, "w+") as fp:
-            json.dump(dict_poni, fp)
+        # ponifile = str(self.h5.active_ponifile)
+        ponifile_name = self.h5.active_ponifile.replace(".poni", f"_{date_prefix()}.poni")
+
+        with open(ponifile_name, "w+") as fp:
+            poni_instance.write(fp)
+            # json.dump(dict_poni, fp)
 
 
     @log_info
@@ -3007,14 +3059,19 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         try:
             data_reshape, q, chi = self.h5.map_reshaping(
                 data=data,
-                dict_poni=self.get_poni_dict_from_widgets(),
+                # dict_poni=self.get_poni_dict_from_widgets(),
             )
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Data could not be reshaped.")
             return
 
         canvas = self.canvas_reshape_widget
-        z_lims = gm.get_zlims(self.graph_raw_widget)
+
+        try:
+            z_lims = canvas.axes.get_images()[0].get_clim()
+            print(z_lims)
+        except:
+            z_lims = gm.get_zlims(self.graph_raw_widget)
 
         if clear:
             canvas.axes.cla()
