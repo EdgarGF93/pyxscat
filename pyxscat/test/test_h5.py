@@ -237,7 +237,7 @@ class TestH5GI:
 
     def test_generate_datafiles(self, h5):
         print('testing the datafile-generator method')
-        files_in_h5 = h5.get_all_files()
+        files_in_h5 = h5.get_all_filenames()
 
     def test_upload_datafiles_valid(self, h5):
         print('testing a valid storage of sample-datafiles')
