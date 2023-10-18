@@ -201,8 +201,6 @@ class H5GIIntegrator():
                 h5_filename=output_filename_h5,
             )     
 
-            # self.init_h5_groups()
-
         else:
             raise Exception(INPUT_ROOT_DIR_NOT_VALID) 
 
@@ -548,7 +546,6 @@ class H5GIIntegrator():
     def get_dataset_acquisition_time(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         ) -> np.array:
         """
         Returns the numpy array which is the dataset of acquistion times associated with the files of a folder (Group)
@@ -564,7 +561,6 @@ class H5GIIntegrator():
             dataset = self.get_metadata_dataset(
                 sample_name=sample_name,
                 key_metadata=key_acq,
-                sample_relative_address=sample_relative_address,
             )
         except:
             dataset = None
@@ -574,7 +570,6 @@ class H5GIIntegrator():
     def get_dataset_incident_angle(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         ) -> np.array:
         """
         Returns the numpy array which is the dataset of incident angles associated with the files of a folder (Group)
@@ -589,7 +584,6 @@ class H5GIIntegrator():
         try:
             dataset = self.get_metadata_dataset(
                 sample_name=sample_name,
-                sample_relative_address=sample_relative_address,
                 key_metadata=key_iangle,
             )
         except:
@@ -600,7 +594,6 @@ class H5GIIntegrator():
     def get_dataset_tilt_angle(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         ) -> np.array:
         """
         Returns the numpy array which is the dataset of tilt angles associated with the files of a folder (Group)
@@ -615,7 +608,6 @@ class H5GIIntegrator():
         try:
             dataset = self.get_metadata_dataset(
                 sample_name=sample_name,
-                sample_relative_address=sample_relative_address,
                 key_metadata=key_tangle,
             )
         except:
@@ -626,7 +618,6 @@ class H5GIIntegrator():
     def get_dataset_norm_factor(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         ) -> np.array:
         """
         Returns the numpy array which is the dataset of normalization factors associated with the files of a folder (Group)
@@ -641,7 +632,6 @@ class H5GIIntegrator():
         try:
             dataset = self.get_metadata_dataset(
                 sample_name=sample_name,
-                sample_relative_address=sample_relative_address,
                 key_metadata=key_norm,
             )
         except:
@@ -653,7 +643,6 @@ class H5GIIntegrator():
         self, 
         folder_name=str(), 
         index_list=int(),
-        sample_relative_address=True,
         ) -> float:
         """
         Returns the acquisition time of a file or the average from a list of files (index)
@@ -667,7 +656,6 @@ class H5GIIntegrator():
         """
         dataset = self.get_dataset_acquisition_time(
             sample_name=folder_name,
-            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -688,7 +676,6 @@ class H5GIIntegrator():
     def get_incident_angle(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         index_list=int(),
         ) -> float:
         """
@@ -703,7 +690,6 @@ class H5GIIntegrator():
         """
         dataset = self.get_dataset_incident_angle(
             sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -724,7 +710,6 @@ class H5GIIntegrator():
     def get_tilt_angle(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         index_list=int(),
         ) -> float:
         """
@@ -739,7 +724,6 @@ class H5GIIntegrator():
         """
         dataset = self.get_dataset_tilt_angle(
             sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -761,7 +745,6 @@ class H5GIIntegrator():
     def get_norm_factor(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         index_list=int()) -> float:
         """
         Returns the normalization factor of a file or the average from a list of files (index)
@@ -775,7 +758,6 @@ class H5GIIntegrator():
         """
         dataset = self.get_dataset_norm_factor(
             sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -1196,12 +1178,10 @@ class H5GIIntegrator():
     def update_angles(self, sample_name=str(), list_index=list()):
         iangle = self.get_incident_angle(
             sample_name=sample_name,
-            sample_relative_address=True,
             index_list=list_index,
         )
         tangle = self.get_tilt_angle(
             sample_name=sample_name,
-            sample_relative_address=True,
             index_list=list_index,
         )
         self.update_incident_tilt_angle(
@@ -1280,31 +1260,9 @@ class H5GIIntegrator():
                         name=str(group_name),
                     )
 
-                    # self.create_nx_spectrum(
-
-                    # )
-
-
-
-
                     logger.debug(f"{group_name} was created in {root_group_address}.")
                 except Exception as e:
                     logger.error(f"{e}: {group_name} could not be created in {root_group_address}.")
-
-    @logger_info
-    def create_nx_spectrum(self, data=None, sample_address='', dataset_name=''):
-
-        if data is None:
-            return
-        
-        save_NXdata(
-            filename=self._h5_filename,
-            signal_name=dataset_name,
-            signal=data,
-            interpretation='spectrum',
-            nxentry_name=sample_address,
-            nxdata_name=dataset_name,
-        )
 
     @logger_info
     def get_new_nx_entry_name(self):
@@ -1380,36 +1338,10 @@ class H5GIIntegrator():
         # Define the name, absolute and relative
         sample_name = Path(sample_name)
 
-        # if sample_name.is_absolute():
-        #     abs_address = sample_name.as_posix()
-        #     rel_address = sample_name.relative_to(self._root_dir).as_posix()
-        # else:
-        #     abs_address = self._root_dir.joinpath(sample_name).as_posix()
-        #     rel_address = sample_name.as_posix()
-
-        # # Write some attributes
-        # dict_init_sample = {
-        #     # CLASS_KEY : SAMPLE_KEY,
-        #     # DATETIME_KEY : date_prefix(),
-        #     ABS_ADDRESS_KEY : abs_address,
-        #     REL_ADDRESS_KEY : rel_address,
-        # }
-
-        # sample_name = sample_name.as_posix().replace('/', '\\')
         self.create_group(
             root_group_address=SAMPLE_GROUP_KEY,
             group_name=sample_name,
         )
-        # self.h5_write_attrs_in_group(
-        #     dict_attrs=dict_init_sample,
-        #     group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
-        # )
-
-        # self.create_data_dset(sample_name=sample_name)
-        # self.create_metadata_group(sample_name=sample_name)
-
-
-
 
     def get_full_dict_metadata(self, list_filenames=[]):
         header_dict = defaultdict(list)
@@ -1426,250 +1358,6 @@ class H5GIIntegrator():
             header_dict[DATAFILE_KEY].append(file.encode())
             header_dict[DATANAME_KEY].append(Path(file).name)
         return header_dict
-
-
-
-
-
-    @logger_info
-    def update_sample(self, sample_name=str(), data_filenames=list(), get_2D_array=False) -> None:
-        """
-        Creates or updates a folder (Group) with data and metadata from a list of files
-
-        Keyword Arguments:
-            folder_name -- name of the folder (Group) where the data/metadata will be stored (default: {str()})
-            filename_list -- list of path filenames where the data/metadata will be extracted (default: {list()})
-            get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
-        """
-
-        # save_NXdata(
-        #     filename=self._h5_filename,
-        #     signal_name=dataset_name,
-        #     signal=data,
-        #     interpretation='spectrum',
-        #     nxentry_name=sample_address,
-        #     nxdata_name=dataset_name,
-        # )
-
-
-        # Create the sample first
-        # self.create_sample(
-        #     sample_name=sample_name,
-        # )
-        return
-
-        sample_name = self.get_sample_address(
-            sample_name=sample_name,
-            get_relative_address=False,
-        )
-
-
-        # Append Data filenames
-        if get_2D_array:
-            return
-        else:
-            self.append_datafile_list(
-                sample_name=sample_name,
-                datafile_list=data_filenames,
-            )
-        
-        # Append MetaData values
-        dict_metadata = defaultdict(list)
-
-        for header in self.generator_file_header(filenames=data_filenames):
-            for k,v in header.items():
-                try:
-                    v = float(v)
-                except Exception as e:
-                    v = str(v)
-                finally:
-                    dict_metadata[k].append(v)
-
-        # print(dict_metadata)
-        for k,v in dict_metadata.items():
-
-            if isinstance(v[0], float):
-                self.create_metadata_dset_float(
-                        sample_name=sample_name,
-                        metadata_key=k,
-                    )
-            elif isinstance(v[0], str):
-                self.create_metadata_dset_str(
-                        sample_name=sample_name,
-                        metadata_key=k,
-                    )
-            else:
-                continue
-
-            self.append_metadata_values(
-                    sample_name=sample_name,
-                    metadata_key=k,
-                    value_list=v,
-                )                
-
-
-        # First, get the packed data and metadata for every filename
-        # merged_data, merged_metadata = self.get_merged_data_and_metadata(
-        #     filename_list=data_filenames, 
-        #     get_2D_array=get_2D_array,
-        #     # relative_to_root=relative_to_root,
-        # )
-
-        # # Get the names of samples and files to write in the .h5 file
-        # if relative_to_root:
-        #     sample_name = Path(sample_name)
-        #     data_filenames = [str(Path(file).relative_to(sample_name)) for file in data_filenames]            
-        #     sample_name = str(sample_name.relative_to(self._root_dir))
-
-
-
-        # Create the DataSet 'data'
-        # self.h5_create_data_dset(sample_name=sample_name)
-        # # if not self._file[SAMPLE_GROUP_KEY][sample_name].__contains__(DATA_KEY):
-        # #     self._file[SAMPLE_GROUP_KEY][sample_name].create_dataset(
-        # #         DATA_KEY, 
-        # #         data=merged_data, 
-        # #         chunks=True, 
-        # #         maxshape=(None, None, None,),
-        # #         # dtype=h5py.string_dtype(encoding='utf-8'),
-        # #     )
-        # #     logger.info(f"Data dataset in {sample_name} group created.")
-        # #     logger.info(f"Added in {sample_name}-Data shape: {merged_data.shape}")
-        # # else:
-        # #     logger.info(f"Data dataset in {sample_name} group already existed. Go to append.")
-        # #     self.append_to_dataset(
-        # #         group_address=SAMPLE_GROUP_KEY,
-        # #         sample_name=sample_name,
-        # #         new_data=merged_data,
-        # #         dataset_name=DATA_KEY,
-        # #     )
-
-        # # Create or update METADATA group with datasets
-        # self.h5_create_metadata_dset()
-
-        # if not self._file[SAMPLE_GROUP_KEY][sample_name].__contains__(METADATA_KEY):
-        #     self._file[SAMPLE_GROUP_KEY][sample_name].create_group(METADATA_KEY)
-        #     logger.info(f"Metadata group in {sample_name} group created.")
-        # else:
-        #     logger.info(f"Metadata group in {sample_name} group already existed. Continue.")
-
-        # for key,value in merged_metadata.items():
-        #     # Value is a list here! Convert to np.array
-        #     value = np.array(value)
-
-        #     # Creates dataset for the key
-        #     if not self._file[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY].__contains__(key):
-
-        #         # Try to create dataset with the standard format (floats)
-        #         try:
-        #             self._file[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY].create_dataset(key, data=np.array(value), chunks=True, maxshape=(None,))
-        #             logger.info(f"Dataset {key} in {sample_name}-Metadata was created.")
-        #             continue
-        #         except:
-        #             logger.info(f"Dataset could not be created with the standard format for the key {key}, value {value}.")
-
-        #         # If it did not work, try to create dataset encoding the dataset as bytes format
-        #         try:
-        #             logger.info("Trying to create dataset with encoded data.")
-        #             bytes_array = np.array([str(item).encode() for item in value])
-        #             self._file[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY].create_dataset(key, data=bytes_array, chunks=True, maxshape=(None,))
-        #             logger.info(f"Dataset {key} in {sample_name}-Metadata was created. Encoding worked.")
-        #             continue
-        #         except:
-        #             logger.info(f"Dataset could not be created with the encoded format for the key {key}, value {value}.")
-
-        #     # Appends dataset for the key if the dataset already existed
-        #     else:
-        #         subfolder = f"{sample_name}/{METADATA_KEY}"
-        #         # Try to append dataset with the standard format (floats)
-
-        #         try:
-        #             self.append_to_dataset(
-        #                 group_address=SAMPLE_GROUP_KEY,
-        #                 sample_name=subfolder,
-        #                 new_data=value, 
-        #                 dataset_name=key,
-        #             )
-        #             logger.info(f"Dataset {key} in {subfolder} was appended.")
-        #             continue
-        #         except:
-        #             logger.info(f"Dataset could not be appended with the standard format for the key {key}, value {value}.")
-
-        #         # If it did not work, try to append dataset encoding the dataset as bytes format
-        #         try:
-        #             logger.info("Trying to append dataset with encoded data.")
-        #             bytes_array = np.array([str(item).encode() for item in value])
-        #             self.append_to_dataset(
-        #                 group_address=SAMPLE_GROUP_KEY,
-        #                 sample_name=subfolder, 
-        #                 new_data=bytes_array, 
-        #                 dataset_name=key,
-        #             )
-        #             logger.info(f"Dataset {key} in {sample_name}-Metadata was appended. Encoding worked.")
-        #             continue
-        #         except:
-        #             logger.info(f"Dataset could not be appended with the encoded format for the key {key}, value {value}.")
-
-
-
-
-
-
-
-
-
-
-
-
-    # @debug_info
-    # def get_merged_data_and_metadata(
-    #     self, 
-    #     filename_list=list(), 
-    #     get_2D_array=True, 
-    #     absolute_address=True,
-    #     ):
-    #     """
-    #     Use FabIO module to get the data (arrays) and metadata from 2D detector patterns
-    #     If not get_2D_array, it yields the encoded name of the file, not the real 2D array
-
-    #     Keyword Arguments:
-    #         filenames -- list of strings with the full address of the data files (default: {list()})
-    #         get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
-
-    #     Returns:
-    #         _description_
-    #     """
-    #     # Init dataset and header
-    #     merged_dataset = np.array([])
-    #     merged_header = defaultdict(list)            
-        
-    #     for index_file, (data, header) in enumerate(
-    #         self.generator_fabio_data_header(
-    #             filename_list=filename_list,
-    #             get_2D_array=get_2D_array,
-    #             relative_to_root=absolute_address,
-    #         )):
-    #         # Pack data
-    #         try:
-    #             if index_file == 0:
-    #                 merged_dataset = np.array([data])
-    #             else:
-    #                 merged_dataset = np.concatenate((merged_dataset, [data]), axis=0)
-    #             logger.info(f"Merged Data dataset was extracted.")
-    #         except Exception as e:
-    #             logger.error(f"{e}: Error while packing data at {index_file}")
-            
-    #         # Pack metadata
-    #         for key,value in header.items():
-    #             try:
-    #                 value = float_str(value)
-    #                 merged_header[key].append(value)
-    #             except Exception as e:
-    #                 logger.error(f"{e}: Error while packing metadata at key: {key}, value {value}")
-    #         logger.info(f"Merged all Metadata datasets.")
-    #     return merged_dataset, merged_header
-
-
 
     @logger_info
     def generator_file_header(self, filenames=list()):
@@ -1692,50 +1380,6 @@ class H5GIIntegrator():
                 logger.error(f"{e}: Error while fabio handling at {file}")
                 header = None, None
             yield header
-
-
-    # @debug_info
-    # def generator_fabio_data_header(self, filename_list=[], get_2D_array=True, relative_to_root=True):
-    #     """
-    #     Use FabIO module to generate the data and metadata from a list of files
-    #     If not get_2D_array, it yields the encoded name of the file, not the real 2D array
-
-    #     Keyword Arguments:
-    #         filenames -- list of strings with the full address of the data files (default: {[]})
-    #         get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
-
-    #     Yields:
-    #         np.array : 2D map or encoded filename
-    #         dict : header dictionary from FabIO
-    #     """
-    #     for file in filename_list:
-    #         # Open a EdfClass instance
-    #         try:
-    #             edf = EdfClass(
-    #                 filename=file,
-    #             )
-    #             logger.info(f"EdfClass with filename {file} was created.")
-    #         except Exception as e:
-    #             logger.error(f"{e}: EdfClass instance with filename {file} could not be created.")
-    #             continue
-
-    #         # Yield data or data addresses and header
-    #         try:
-    #             if get_2D_array:
-    #                 data, header = edf.get_data(), edf.get_header()
-    #             else:
-    #                 if relative_to_root:
-    #                     filename = Path(file)
-    #                     sample_name = filename.parent
-    #                     filename = filename.relative_to(sample_name)
-    #                 else:
-    #                     filename = file
-    #                 data, header = np.array(([[str(filename).encode()]])), edf.get_header()
-    #             logger.info(f"Data and header extracted successfully.")
-    #         except Exception as e:
-    #             logger.error(f"{e}: Error while fabio handling at {filename}")
-    #             data, header = None, None
-    #         yield data, header
 
     @logger_info
     def generator_samples(self, get_group_name=True, get_relative_address=False) -> str:
@@ -1764,7 +1408,7 @@ class H5GIIntegrator():
         return list_entries
 
     @logger_info
-    def generator_all_files(self, get_relative_address=False) -> str:
+    def generator_all_filenames(self) -> str:
         """
         Yields the names of every file stored in the .h5 file
 
@@ -1775,34 +1419,22 @@ class H5GIIntegrator():
         str : fullpath of stored filenames
         """
         for sample in self.generator_samples(get_group_name=True):
-            for file in self.generator_files_in_sample(
-                sample_name=sample,
-                is_group_name=True,
-                get_relative_address=get_relative_address,
+            for file in self.generator_filenames_in_sample(
+                sample_address=sample,
                 ):
                 yield file
 
     @logger_info
     def get_dict_files(self):
         dict_files = defaultdict(set)
-        for file in self.generator_all_files():
-            sample_name = Path(file).parent.as_posix()
-            file = Path(file).as_posix()
-
-
-            # sample_name = Path(file).parent
-            # if relative_address:
-            #     file = Path(file).relative_to(sample_name).as_posix()
-            #     sample_name = sample_name.relative_to(self._root_dir).as_posix()
-            # else:
-            #     file = Path(file).as_posix()
-            #     sample_name = sample_name.as_posix()
-
-            dict_files[sample_name].add(file)
+        for filename in self.generator_all_filenames():
+            sample_name = Path(filename).parent.as_posix()
+            file = Path(filename).as_posix()
+            dict_files[sample_name].add(filename)
         return dict_files
 
     @logger_info
-    def get_all_files(self, get_relative_address=False) -> list:
+    def get_all_filenames(self) -> list:
         """
         Returns a list with all the stored files in the h5 File
 
@@ -1812,7 +1444,7 @@ class H5GIIntegrator():
         Returns:
             _description_
         """
-        list_files = list(self.generator_all_files(get_relative_address=get_relative_address))
+        list_files = list(self.generator_all_filenames())
         return list_files
 
     ##################################################
@@ -1914,6 +1546,14 @@ class H5GIIntegrator():
 
     @logger_info
     def get_entry_name(self, sample_address=''):
+
+        # Check if its an entry name
+        with File(self._h5_filename, 'r+') as f:
+            for entry in f.keys():
+                if sample_address == entry:
+                    return sample_address
+
+        # Check if its an absolute or relative path address
         sample_address = Path(sample_address)
 
         if sample_address.is_absolute():
@@ -1975,94 +1615,90 @@ class H5GIIntegrator():
             return f.__len__()
 
     @logger_info
-    def get_all_files_from_sample(
+    def get_all_filenames_from_sample(
         self, 
         sample_name=str(),
-        is_group_name=True,
-        sample_relative_address=True, 
-        get_relative_address=True,
         ):
-        list_files = sorted(
-            self.generator_files_in_sample(
-                sample_name=sample_name,
-                is_group_name=is_group_name,
-                sample_relative_address=sample_relative_address,
-                get_relative_address=get_relative_address,
+        list_files = list(
+            self.generator_filenames_in_sample(
+                sample_address=sample_name,
+            ))
+        return list_files
+
+    @logger_info
+    def get_all_names_from_sample(
+        self, 
+        sample_name=str(),
+        ):
+        list_files = list(
+            self.generator_names_in_sample(
+                sample_address=sample_name,
             ))
         return list_files
 
     @logger_info
     def get_sample_address(
         self, 
-        sample_name='', 
-        get_relative_address=True,
+        entry_name='',
+        get_relative_address=False,
         ):
         with File(self._h5_filename, 'r+') as f:
-            if get_relative_address:
-                for sample in f.keys():
-                    if f[sample].attrs[REL_ADDRESS_KEY] == sample_name:
-                        return sample
-                logger.info(f"There is no sample with rel. address {sample_name}.")
-                return
-            else:
-                for sample in f.keys():
-                    if f[sample].attrs[ABS_ADDRESS_KEY] == sample_name:
-                        return sample
-                logger.info(f"There is no sample with abs. address {sample_name}.")
-                return
-
+            for entry in f.keys():
+                if entry_name == entry:
+                    if get_relative_address:
+                        address = f[entry].attrs[REL_ADDRESS_KEY]
+                    else:
+                        address = f[entry].attrs[ABS_ADDRESS_KEY]
+                    return address
+            return ''
 
     @logger_info
-    def generator_files_in_sample(
+    def generator_filenames_in_sample(
         self, 
-        sample_name=str(),
-        is_group_name=True,
-        sample_relative_address=True, 
-        get_relative_address=True,
+        sample_address=str(),
         ):
 
-        if is_group_name:
-            sample_name=sample_name
-        else:
-            sample_name = self.get_sample_address(
-                sample_name=sample_name,
-                get_relative_address=sample_relative_address,
-            )
+        data_filenames = self.get_metadata_dataset(
+            sample_name=sample_address,
+            key_metadata=DATAFILE_KEY,
+        )
 
-        if not sample_name:
-            return
+        for filename in data_filenames:
+            filename = bytes.decode(filename)
+            yield filename
 
-        with File(self._h5_filename, 'r+') as f:
-            if get_relative_address:
-                dataset = f[sample_name][DATANAME_KEY][DATANAME_KEY]
-                for name in dataset:
-                    name = name.decode(ENCODING_FORMAT)
-                    yield name
-            else:
-                dataset = f[sample_name][DATAFILE_KEY][DATAFILE_KEY]
-                for filename in dataset:
-                    filename = filename.decode(ENCODING_FORMAT)
-                    yield filename
+    @logger_info
+    def generator_names_in_sample(
+        self, 
+        sample_address=str(),
+        ):
+
+        data_filenames = self.get_metadata_dataset(
+            sample_name=sample_address,
+            key_metadata=DATANAME_KEY,
+        )
+
+        for name in data_filenames:
+            name = bytes.decode(name)
+            yield name
 
     @logger_info
     def get_metadata_dataset(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         key_metadata=str(),
         ) -> np.array:
 
-        sample_name = self.get_sample_address(
-            sample_name=sample_name,
-            get_relative_address=sample_relative_address,
+        entry_name = self.get_entry_name(
+            sample_address=sample_name,
         )
 
-        if not sample_name:
+        if not entry_name:
             return
 
         with File(self._h5_filename, 'r+') as f:
             try:
-                dataset = f[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY][key_metadata][()]
+                dataset = f[entry_name][key_metadata][key_metadata][()]
             except Exception as e:
                 logger.error(f"{e}: dataset {key_metadata} could not be accessed.")
                 return
@@ -2072,7 +1708,6 @@ class H5GIIntegrator():
     def get_metadata_value(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         key_metadata=str(), 
         index_list=list(),
         ) -> float:
@@ -2089,7 +1724,6 @@ class H5GIIntegrator():
         """
         dataset = self.get_metadata_dataset(
             sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
             key_metadata=key_metadata,
         )
 
@@ -2113,14 +1747,11 @@ class H5GIIntegrator():
     def get_metadata_dataframe(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         list_keys=list(),
         ) -> pd.DataFrame:
 
-        list_files_in_sample = self.get_all_files_from_sample(
+        list_files_in_sample = self.get_all_filenames_from_sample(
             sample_name=sample_name,
-            is_group_name=False,
-            sample_relative_address=sample_relative_address,
         )
 
         if not list_files_in_sample:
@@ -2137,7 +1768,6 @@ class H5GIIntegrator():
                 try:
                     dataset_key = self.get_metadata_dataset(
                         sample_name=sample_name,
-                        sample_relative_address=sample_relative_address,
                         key_metadata=key,
                     )
                     short_metadata[key] = list(dataset_key)
@@ -2151,7 +1781,6 @@ class H5GIIntegrator():
     def get_all_metadata_keys_from_sample(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         ):
         list_keys = sorted(
             self.generator_metadata_keys_from_sample(
@@ -2225,48 +1854,6 @@ class H5GIIntegrator():
                 filename = filename.replace(".edf", "_average.edf")
 
         return filename
-
-
-
-
-
-    # @logger_info
-    # def get_sample_index_from_filename(self, filename=str()):
-    #     """
-    #     Searches the filename in the .h5 Groups and returns the name of the folder and the index of the file in the Group
-
-    #     Parameters:
-    #     filename(str) : string of the filename to be searched
-
-    #     Returns:
-    #     str : string with the name of the folder in the .h5 file
-    #     int : index of the filename inside the folder
-    #     """
-    #     sample_name = str(Path(filename).parent.relative_to(self._root_dir))
-    #     sample_name_abs = Path(filename).parent.as_posix()
-
-    #     sample_address = self.get_sample_address(
-    #         sample_name=sample_name_abs,
-    #         get_relative_address=False,
-    #     )
-
-    #     if not sample_address:
-    #         return
-
-    #     if not self.contains_group(sample_name=sample_name, group_address=SAMPLE_GROUP_KEY):
-    #         logger.info(f"There is no Group with the name {sample_name}. Returns.")
-    #         return
-
-    #     for index, file in enumerate(
-    #         self.generator_files_in_sample(
-    #             sample_name=sample_address,
-    #             is_group_name=True,
-    #         )):
-    #         if file == filename:
-    #             logger.info(f"Found match with the filename at index {index}")
-    #             return sample_name, index
-    #     logger.info(f"No matches were found with the filename {filename}")
-    #     return None, None
 
     #####################################
     ###### EDF METHODS ##########
@@ -2371,18 +1958,6 @@ class H5GIIntegrator():
         # dict_poni=dict(),
         ):
 
-        # if dict_poni:
-        #     try:
-        #         new_poni = PoniFile(data=dict_poni)
-        #         ai._init_from_poni(new_poni)
-        #     except Exception as e:
-        #         print(e)
-        # else:
-        #     try:
-        #         ai.load(self.active_ponifile)
-        #     except Exception as e:
-        #         print(e)
-                
         data_reshape, q, chi = self._ai.integrate2d(
             data=data,
             npt_rad=1000,
@@ -2422,20 +1997,6 @@ class H5GIIntegrator():
                 sample_relative_address=sample_relative_address,
                 index_list=index_list,
             )
-
-        # # Updates the incident and tilt angle
-        # incident_angle = self.get_incident_angle(
-        #     folder_name=folder_name,
-        #     index_list=index_list,
-        # )
-        # tilt_angle = self.get_tilt_angle(
-        #     folder_name=folder_name,
-        #     index_list=index_list,
-        # )
-        # self.update_incident_tilt_angle(
-        #     incident_angle=incident_angle,
-        #     tilt_angle=tilt_angle,
-        # )
 
         # Get the normalization factor
         if norm_factor == 1.0:
@@ -2819,15 +2380,6 @@ class H5GIIntegrator():
                 elif output_unit in QA_ALIAS:
                     return vector_nm/10
 
-
-
-
-
-
-
-
-
-
     @logger_info
     def get_detector_array(self, shape=()) -> np.array:
         """
@@ -2926,7 +2478,7 @@ class H5GIIntegrator():
         str : string with the full path of the file with the highest time of creation
         """
         if not list_files:
-            list_files = [getctime(file) for file in self.generator_all_files()]
+            list_files = [getctime(file) for file in self.generator_all_filenames()]
         try:
             last_file = list_files[np.argmax(list_files)]
             logger.info(f"Found last file: {last_file}")

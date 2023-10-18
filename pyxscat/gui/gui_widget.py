@@ -12,14 +12,14 @@ from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix
 from pyxscat.other.plots import *
 from pyxscat.other.integrator_methods import *
 from pyxscat.other.setup_methods import save_setup_dictionary, locate_setup_file, search_metadata_names, get_empty_setup_dict
-from pyxscat.gui import LOGGER_PATH, SRC_PATH, GUI_PATH
+from pyxscat.gui import SRC_PATH
 from pyxscat.gui import lineedit_methods as le
 from pyxscat.gui import combobox_methods as cb
 from pyxscat.gui import listwidget_methods as lt
 from pyxscat.gui import table_methods as tm
 from pyxscat.gui import graph_methods as gm
 from pyxscat.gui.gui_layout import GUIPyXMWidgetLayout
-from pyxscat.gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND, BUTTON_LIVE, BUTTON_LIVE_ON
+from pyxscat.gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND
 from pyxscat.gui.gui_layout import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
 from pyxscat.h5_integrator import H5GIIntegrator
 from pyxscat.h5_integrator import PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
@@ -1729,11 +1729,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         name_ref_folder = cb.value(self.combobox_reffolder)
 
         # Get the list of files
-        list_ref_files = sorted(self.h5.generator_files_in_sample(
+        list_ref_files = self.h5.get_all_names_from_sample(
             sample_name=name_ref_folder,
-            sample_relative_address=True,
-            get_relative_address=True,
-        ))
+        )
         cb.insert_list(
             combobox=self.combobox_reffile,
             list_items=list_ref_files,
@@ -2044,10 +2042,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             logger.info(f"Found new files LIVE: {list_files_1s}")
 
             # Upload the new files to h5
-            print(999)
-            print(list_files_1s)
             dict_files_1s = get_dict_files(list_files=list_files_1s)
-            print(dict_files_1s)
             self.h5.update_datafiles(          
                 dict_files=dict_files_1s,
                 search=False,
@@ -2307,7 +2302,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     #         )
 
     @log_info
-    def listsamples_clicked(self, clicked_sample_name, sample_relative_address=GET_RELATIVE_ADDRESS):
+    def listsamples_clicked(self, clicked_sample_name):
         if not self.h5:
             return
         
@@ -2323,10 +2318,13 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Get a Pandas.DataFrame to upload the table
         keys_to_display = self.combobox_metadata.currentData()
+        print(keys_to_display)
         dataframe = self.h5.get_metadata_dataframe(
             sample_name=clicked_sample_name,
             list_keys=keys_to_display,
         )
+
+        print(dataframe)
 
         # Reset and feed the table widget with default metadata keys if needed
         self.update_table(
@@ -2810,12 +2808,8 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         logger.info(f"New integration: {len(list_results)}")
 
-        graph_1D_widget.setLimits(
-            xmin=graph_1D_widget.getGraphXLimits()[0],
-            xmax=graph_1D_widget.getGraphXLimits()[1],
-            ymin=graph_1D_widget.getGraphYLimits()[0],
-            ymax=graph_1D_widget.getGraphYLimits()[1],
-        )
+        xlims = [graph_1D_widget.getGraphXLimits()[0], graph_1D_widget.getGraphXLimits()[1]]
+        ylims = [graph_1D_widget.getGraphYLimits()[0], graph_1D_widget.getGraphYLimits()[1]]
 
         for ind, result in enumerate(list_results):
             try:          
@@ -2836,6 +2830,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                     graph_1D_widget.setGraphXLabel(label=list_dict_integration[ind][BOX_KEY_OUTPUT_UNIT])
             except:
                 pass
+
+        graph_1D_widget.setLimits(
+            xmin=xlims[0],
+            xmax=xlims[1],
+            ymin=ylims[0],
+            ymax=ylims[1],
+        )
+
 
     @log_info
     def save_plot_clicked(self, _):
