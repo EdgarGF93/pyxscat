@@ -135,6 +135,8 @@ ROOT_DIR_NOT_ACCESIBLE = 'The access to root directory is not available.'
 INPUT_ROOT_DIR_NOT_VALID = 'There is no valid root directory nor input file.'
 H5_FILENAME_NOT_VALID = 'No valid path for the .h5 file'
 
+EXTENSION_H5 = '.h5'
+
 from pyxscat.logger_config import setup_logger
 logger = setup_logger()
 
@@ -291,7 +293,7 @@ class H5GIIntegrator():
         
         if root_directory:
             name = Path(root_directory).name
-            h5_output_file = Path(root_directory).joinpath(name).with_suffix(".h5")
+            h5_output_file = Path(root_directory).joinpath(name).with_suffix(EXTENSION_H5)
             if self.filename_valid(filename=h5_output_file):
                 return h5_output_file
             else:
@@ -1957,7 +1959,11 @@ class H5GIIntegrator():
         data=None,
         # dict_poni=dict(),
         ):
+        """_summary_
 
+        :param data: _description_, defaults to None
+        :return: _description_
+        """                               
         data_reshape, q, chi = self._ai.integrate2d(
             data=data,
             npt_rad=1000,
@@ -1977,20 +1983,19 @@ class H5GIIntegrator():
         norm_factor=1.0,
         list_dict_integration=list(),
     ) -> list:
-        """
-        Chooses which integration is going to be performed: azimuthal (pyFAI), radial (pyFAI) or box (self method)
+        """_summary_
 
-        Parameters:
-        folder_name(str) : name of the folder(Group) in the first level of hierarchy
-        index_list(list or int) : integer of list of integers for the files inside the folder
-        data(np.array) : data can be uploaded directly
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        list_dict_integration(list) : list of dictionaries with key-values that will be read by the pygix-pyFAI integration engine
-        
+        Keyword Arguments:
+            sample_name -- _description_ (default: {str()})
+            sample_relative_address -- _description_ (default: {True})
+            index_list -- _description_ (default: {list()})
+            data -- _description_ (default: {None})
+            norm_factor -- _description_ (default: {1.0})
+            list_dict_integration -- _description_ (default: {list()})
+
         Returns:
-        list : list of numpy arrays with the result of the integration
-        """
-        # Get the data
+            _description_
+        """        
         if data is None:
             data = self.get_Edf_data(
                 sample_name=sample_name,

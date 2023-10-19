@@ -38,7 +38,7 @@ from pyxscat.other.setup_methods import *
 
 import concurrent.futures
 
-ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_logo_thumb.png')
+ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_new_logo.png')
 
 MSG_SETUP_UPDATED = "New setup dictionary was updated."
 MSG_SETUP_ERROR = "The setup dictionary could not be updated."
