@@ -36,6 +36,8 @@ import pandas as pd
 
 from pyxscat.other.setup_methods import *
 
+import concurrent.futures
+
 ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_logo_thumb.png')
 
 MSG_SETUP_UPDATED = "New setup dictionary was updated."
@@ -2740,28 +2742,37 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         if data is None:
             return
 
-        # Update 1D integration graph
-        if graph_1D:
-            self.update_1D_graph(
-                data=data,
-                norm_factor=norm_factor,
-            )
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = []
 
-        # Update 2D Raw Map
-        if graph_2D_raw:
-            self.update_2D_raw(
-                data=data,
-            )
+            # Update 1D integration graph
+            if graph_1D:
+                futures.append(executor.submit(self.update_1D_graph, data=data, norm_factor=norm_factor))
+                # self.update_1D_graph(
+                #     data=data,
+                #     norm_factor=norm_factor,
+                # )
 
-        # Update 2D Reshape
-        if graph_2D_reshape:
-            self.update_2D_reshape_map(
-                data=data,
-            )
+            # Update 2D Raw Map
+            if graph_2D_raw:
+                futures.append(executor.submit(self.update_2D_raw, data=data))
+                # self.update_2D_raw(
+                #     data=data,
+                # )
 
-        # Update 2D q map
-        if graph_2D_q:
-            self.update_2D_q()
+            # Update 2D Reshape
+            if graph_2D_reshape:
+                futures.append(executor.submit(self.update_2D_reshape_map, data=data))
+                # self.update_2D_reshape_map(
+                #     data=data,
+                # )
+
+            # Update 2D q map
+            if graph_2D_q:
+                futures.append(executor.submit(self.update_2D_q))
+                # self.update_2D_q()
+
+            concurrent.futures.wait(futures)
 
     @log_info
     def update_1D_graph(self, data=None, norm_factor=1.0, clear=True):
