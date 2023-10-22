@@ -22,12 +22,11 @@ from pyxscat.gui.gui_layout import GUIPyXMWidgetLayout
 from pyxscat.gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND
 from pyxscat.gui.gui_layout import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
 from pyxscat.h5_integrator import H5GIIntegrator
-from pyxscat.h5_integrator import PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
-from pyxscat.h5_integrator import *
+from pyxscat.gi_integrator import PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
+# from pyxscat.h5_integrator import *
 from pyxscat.gui.gui_layout import QZ_BUTTON_LABEL, QR_BUTTON_LABEL, MIRROR_BUTTON_LABEL
 
 import json
-import logging
 import numpy as np
 import subprocess
 import sys
@@ -107,7 +106,20 @@ DEFAULT_MAP_FONTSIZE = 10
 DEFAULT_INCIDENT_ANGLE = 0.0
 DEFAULT_TILT_ANGLE = 0.0
 
+DICT_SAMPLE_ORIENTATIONS = {
+    (True,True) : 1,
+    (True,False) : 2,
+    (False,True) : 3,
+    (False,False) : 4,
+}
+
 RELATIVE_TO_ROOT = False
+
+FILENAME_H5_KEY = "h5_filename"
+NAME_H5_KEY = "name"
+FILENAME_KEY = "filename"
+
+
 
 from pyxscat.logger_config import setup_logger
 logger = setup_logger()
@@ -154,6 +166,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.list_results_cache = []
         self.list_dict_integration_cache = []
         self.dict_recent_h5 = {}
+        self._poni_cache = None
 
         self.scat_horz_cache = None
         self.scat_vert_cache = None
@@ -1346,7 +1359,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
 
         # Activate the .poni file in the h5 instance
-        self.activate_poni_parameters(
+        self.update_poni(
             poni_filename=poni_name,
         )
         # self.h5.activate_poni_parameters(
@@ -1357,21 +1370,26 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # self.h5.update_grazinggeometry()
         
         # Check if the .poni file does exist
-        if self.h5.active_ponifile:
-            self.write_terminal_and_loggerinfo(f"Activated {self.h5.active_ponifile}")
-            # self.write_terminal_and_loggerinfo(self.h5)
-        else:
-            self.write_terminal_and_loggerinfo(f"No active ponifile.")
-            return
 
-        if not Path(self.h5.active_ponifile).is_file():
-            self.write_terminal_and_loggerinfo(f"The .poni file {str(self.h5.active_ponifile)} does not exist.")
-            return
+
+
+        # if self.h5.active_ponifile:
+        #     self.write_terminal_and_loggerinfo(f"Activated {self.h5.active_ponifile}")
+        #     # self.write_terminal_and_loggerinfo(self.h5)
+        # else:
+        #     self.write_terminal_and_loggerinfo(f"No active ponifile.")
+        #     return
+
+        # if not Path(self.h5.active_ponifile).is_file():
+        #     self.write_terminal_and_loggerinfo(f"The .poni file {str(self.h5.active_ponifile)} does not exist.")
+        #     return
         
         # Update the .poni tab widgets
-        dict_poni = self.h5.get_poni_dict()
+        poni = self.h5.get_poni()
+        self._poni_cache = poni
+
         self.update_ponifile_widgets(
-            dict_poni=dict_poni,
+            poni=poni,
         )
 
         # Update_graphs
@@ -1386,16 +1404,16 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         if not self.h5:
             return
         
-        old_poni = self.h5.retrieve_poni_instance_from_file(self.h5.active_ponifile)
+        # old_poni = self.h5.retrieve_poni_instance_from_file(self.h5.active_ponifile)
 
-        self.activate_poni_parameters(
-            poni_instance=old_poni,
-        )
-
-        dict_poni = self.h5.get_poni_dict()
+        poni = self._poni_cache
         self.update_ponifile_widgets(
-            dict_poni=dict_poni,
+            poni=poni,
         )
+
+        self.update_poni(poni_instance=poni)
+
+        # poni = self.h5.get_poni()
 
         self.update_graphs(
             graph_1D=True,
@@ -1414,7 +1432,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         #     dict_poni=dict_poni,
         # )
 
-        self.activate_poni_parameters(
+        self.update_poni(
             dict_poni=dict_poni,
         )
 
@@ -1425,18 +1443,18 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
     @log_info
-    def activate_poni_parameters(self, poni_filename='', dict_poni={}, poni_instance=None):
+    def update_poni(self, poni_filename='', dict_poni={}, poni_instance=None):
         if not self.h5:
             return
 
-        self.h5.activate_poni_parameters(
+        self.h5.update_poni(
             poni_filename=poni_filename,
             dict_poni=dict_poni,
             poni_instance=poni_instance,
         )
 
-        dict_poni = self.h5.get_poni_dict()
-        self.write_terminal_and_loggerinfo(f"Current poni parameters: {dict_poni}")
+        # dict_poni = self.h5.get_poni_dict()
+        self.write_terminal_and_loggerinfo(f"Current poni parameters: {self.h5.get_poni()}")
 
     @log_info
     def save_poni_clicked(self,_):
@@ -1446,7 +1464,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Update the .poni parameters from widgets
         dict_poni = self.get_poni_dict_from_widgets()
 
-        self.activate_poni_parameters(
+        self.update_poni(
             dict_poni=dict_poni,
         )
 
@@ -1579,110 +1597,123 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self._dict_poni_cache[PONI_KEY_ROT3] = rot3
 
     @log_info
-    def update_ponifile_widgets(self, dict_poni=dict()) -> None:
+    def update_ponifile_widgets(self, poni=None) -> None:
         """
         Update the ponifile widgets from a poni dictionary
         """
         if not self.h5:
             return
         try:
-            detector_name = dict_poni[PONI_KEY_DETECTOR]
+            # detector_name = dict_poni[PONI_KEY_DETECTOR]
+            detector_name = poni.detector.name
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Detector name could not be retrieved from dictionary.")
             return
         try:
-            detector_bin = dict_poni[PONI_KEY_BINNING]
+            # detector_bin = dict_poni[PONI_KEY_BINNING]
+            detector_bin = poni.detector.binning
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Detector bin could not be retrieved from dictionary.")
             return
         try:
-            wave = dict_poni[PONI_KEY_WAVELENGTH]
+            # wave = dict_poni[PONI_KEY_WAVELENGTH]
+            wave = poni.wavelength
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Wavelength could not be retrieved from dictionary.")
             return
         try:
-            dist = dict_poni[PONI_KEY_DISTANCE]
+            # dist = dict_poni[PONI_KEY_DISTANCE]
+            dist = poni.dist
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Distance could not be retrieved from dictionary.")
             return
         try:
-            pixel1 = dict_poni[PONI_KEY_PIXEL1]
+            # pixel1 = dict_poni[PONI_KEY_PIXEL1]
+            pixel1 = poni.detector.pixel1
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Pixel 1 could not be retrieved from dictionary.")
             return
         try:
-            pixel2 = dict_poni[PONI_KEY_PIXEL2]
+            # pixel2 = dict_poni[PONI_KEY_PIXEL2]
+            pixel2 = poni.detector.pixel2
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Pixel 2 could not be retrieved from dictionary.")
             return
         try:
-            shape1 = dict_poni[PONI_KEY_SHAPE1]
+            # shape1 = dict_poni[PONI_KEY_SHAPE1]
+            shape1 = poni.detector.shape[0]
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Shape 1 could not be retrieved from dictionary.")
             return
         try:
-            shape2 = dict_poni[PONI_KEY_SHAPE2]
+            # shape2 = dict_poni[PONI_KEY_SHAPE2]
+            shape2 = poni.detector.shape[1]
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Shape 2 could not be retrieved from dictionary.")
             return
         try:
-            poni1 = dict_poni[PONI_KEY_PONI1]
+            # poni1 = dict_poni[PONI_KEY_PONI1]
+            poni1 = poni.poni1
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: PONI 1 could not be retrieved from dictionary.")
             return
         try:
-            poni2 = dict_poni[PONI_KEY_PONI2]
+            # poni2 = dict_poni[PONI_KEY_PONI2]
+            poni2 = poni.poni2
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: PONI 2 could not be retrieved from dictionary.")
             return
         try:
-            rot1 = dict_poni[PONI_KEY_ROT1]
+            # rot1 = dict_poni[PONI_KEY_ROT1]
+            rot1 = poni.rot1
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Rotation 1 could not be retrieved from dictionary.")
             return
         try:
-            rot2 = dict_poni[PONI_KEY_ROT2]
+            # rot2 = dict_poni[PONI_KEY_ROT2]
+            rot2 = poni.rot2
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Rotation 2 could not be retrieved from dictionary.")
             return
         try:
-            rot3 = dict_poni[PONI_KEY_ROT3]
+            # rot3 = dict_poni[PONI_KEY_ROT3]
+            rot3 = poni.rot3
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Rotation 3 could not be retrieved from dictionary.")
             return
 
         detector_info = f"{str(detector_name)} / {str(detector_bin)} / ({shape1},{shape2}) / ({pixel1},{pixel2})"
 
-        if self.h5.active_ponifile:
-            le.substitute(
+        # if self.h5.active_ponifile:
+        le.substitute(
                 lineedit=self.lineedit_detector,
                 new_text=detector_info,
             )
-            le.substitute(
+        le.substitute(
                 lineedit=self.lineedit_wavelength,
                 new_text=wave,
             )
-            le.substitute(
+        le.substitute(
                 lineedit=self.lineedit_distance,
                 new_text=dist,
             )
-            le.substitute(
+        le.substitute(
                 lineedit=self.lineedit_poni1,
                 new_text=poni1,
             )
-            le.substitute(
+        le.substitute(
                 lineedit=self.lineedit_poni2,
                 new_text=poni2,
             )
-            le.substitute(
+        le.substitute(
                 lineedit=self.lineedit_rot1,
                 new_text=rot1,
             )
-            le.substitute(
+        le.substitute(
                 lineedit=self.lineedit_rot2,
                 new_text=rot2,
             )
-            le.substitute(
+        le.substitute(
                 lineedit=self.lineedit_rot3,
                 new_text=rot3,
             )
@@ -1713,6 +1744,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         with open(ponifile_name, "w+") as fp:
             poni_instance.write(fp)
             # json.dump(dict_poni, fp)
+
 
 
     @log_info

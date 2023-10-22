@@ -177,46 +177,46 @@ class TestH5GI:
     def test_activate_ponifiles_wrong(self, h5):
         print('testing the activation of a poni file')
         ponifile = 'not_stored_ponifile'
-        h5.activate_poni_parameters(poni_filename=ponifile)
-        assert h5.active_ponifile == ''
+        h5.update_poni(poni_filename=ponifile)
+        assert h5.gi._poni == None
 
     def test_activate_abs_ponifile_valid(self, h5):
         print('testing the activation of a poni file')
         ponifile = [f.as_posix() for f in h5._root_dir.rglob('*.poni')][0]
-        h5.activate_poni_parameters(poni_filename=ponifile)
-        assert h5.active_ponifile != None
+        h5.update_poni(poni_filename=ponifile)
+        assert h5.gi._poni != None
 
     def test_activate_rel_ponifile_valid(self, h5):
         print('testing the activation of a poni file')
         ponifile = [f for f in h5._root_dir.rglob('*.poni')][0]
         ponifile_rel = ponifile.relative_to(h5._root_dir).as_posix()
-        h5.activate_poni_parameters(poni_filename=ponifile_rel)
-        assert h5.active_ponifile != None
+        h5.update_poni(poni_filename=ponifile_rel)
+        assert h5.gi._poni != None
 
-    def test_update_grazinggeometry(self, h5):
-        print('testing the updating og GrazingGeometry instance')
-        h5.update_grazinggeometry()
+    # def test_update_grazinggeometry(self, h5):
+    #     print('testing the updating og GrazingGeometry instance')
+    #     h5.update_grazinggeometry()
 
     def test_validate_poni_parameters(self, h5):
         print('testing the poni parameters')
-        h5.update_grazinggeometry()
-        poni_instance = PoniFile(data=h5.active_ponifile)
+        ponifile = [f.as_posix() for f in h5._root_dir.rglob('*.poni')][0]
 
-        transform_instance = h5._transform
+        h5.update_poni(poni_filename=ponifile)
+        poni_instance = PoniFile(data=ponifile)
 
-        assert poni_instance.dist == transform_instance._dist
-        assert poni_instance.wavelength == transform_instance._wavelength
-        assert poni_instance.poni1 == transform_instance._poni1
-        assert poni_instance.poni2 == transform_instance._poni2
-        assert poni_instance.rot1 == transform_instance._rot1
-        assert poni_instance.rot2 == transform_instance._rot2
-        assert poni_instance.rot3 == transform_instance._rot3
+        assert poni_instance.dist == h5.gi._poni._dist
+        assert poni_instance.wavelength == h5.gi._poni._wavelength
+        assert poni_instance.poni1 == h5.gi._poni._poni1
+        assert poni_instance.poni2 == h5.gi._poni._poni2
+        assert poni_instance.rot1 == h5.gi._poni._rot1
+        assert poni_instance.rot2 == h5.gi._poni._rot2
+        assert poni_instance.rot3 == h5.gi._poni._rot3
 
-        assert poni_instance.detector.name == transform_instance.detector.name
-        assert poni_instance.detector.binning == transform_instance.detector.binning
-        assert poni_instance.detector.shape == transform_instance.detector.shape
-        assert poni_instance.detector.pixel1 == transform_instance.detector.pixel1
-        assert poni_instance.detector.pixel2 == transform_instance.detector.pixel2
+        assert poni_instance.detector.name == h5.gi._poni.detector.name
+        assert poni_instance.detector.binning == h5.gi._poni.detector.binning
+        assert poni_instance.detector.shape == h5.gi._poni.detector.shape
+        assert poni_instance.detector.pixel1 == h5.gi._poni.detector.pixel1
+        assert poni_instance.detector.pixel2 == h5.gi._poni.detector.pixel2
     
     def test_upload_datafiles(self, h5):
         h5.update_datafiles(
@@ -242,7 +242,7 @@ class TestH5GI:
     def test_upload_datafiles_valid(self, h5):
         print('testing a valid storage of sample-datafiles')
         dict_files_in_h5 = h5.get_dict_files()
-        dict_files = h5.search_new_datafiles()
+        dict_files = h5.search_datafiles()
 
         samples = set(dict_files.keys())
 
@@ -299,7 +299,6 @@ class TestH5GI:
 
         data_from_rel = h5.get_Edf_data(
             sample_name=rel_samples_in_h5[0],
-            sample_relative_address=True,
             index_list=0,
         )
 
@@ -336,11 +335,16 @@ class TestH5GI:
 
         list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
 
-        list_results = h5.raw_integration(
+        data = h5.get_Edf_data(
+            sample_name=rel_samples_in_h5[0],
+            index_list=0,
+        )
+
+        list_results = h5.gi.raw_integration(
             sample_name=rel_samples_in_h5[0],
             sample_relative_address=True,
             index_list=0,
-            data=None,
+            data=data,
             norm_factor=1.0,
             list_dict_integration=list_dict_integration,
         )
@@ -354,11 +358,16 @@ class TestH5GI:
 
         list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
 
-        list_results = h5.raw_integration(
+        data = h5.get_Edf_data(
+            sample_name=rel_samples_in_h5[0],
+            index_list=0,
+        )
+
+        list_results = h5.gi.raw_integration(
             sample_name=rel_samples_in_h5[0],
             sample_relative_address=True,
             index_list=0,
-            data=None,
+            data=data,
             norm_factor=1.0,
             list_dict_integration=list_dict_integration,
         )
@@ -371,11 +380,16 @@ class TestH5GI:
 
         list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
 
-        list_results = h5.raw_integration(
+        data = h5.get_Edf_data(
+            sample_name=rel_samples_in_h5[0],
+            index_list=0,
+        )
+
+        list_results = h5.gi.raw_integration(
             sample_name=rel_samples_in_h5[0],
             sample_relative_address=True,
             index_list=0,
-            data=None,
+            data=data,
             norm_factor=1.0,
             list_dict_integration=list_dict_integration,
         )

@@ -1,19 +1,14 @@
 from collections import defaultdict
 from pathlib import Path
-from pyFAI.azimuthalIntegrator import AzimuthalIntegrator
-from pyFAI.io.ponifile import PoniFile
-from pygix.transform import Transform
-from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
+from gi_integrator import GIIntegrator
 from os.path import getctime
 
-
+from pyFAI.io.ponifile import PoniFile
 from pyxscat.edf import EdfClass
 from pyxscat.other.other_functions import date_prefix, get_dict_files, get_dict_difference
-from pyxscat.gui import LOGGER_PATH
 from pyxscat.other.units import *
 
 import h5py
-import logging
 import numpy as np
 import pandas as pd
 from silx.io.h5py_utils import File
@@ -30,12 +25,7 @@ DEFAULT_SHAPE_1D = (0,)
 MAXSHAPE_1D_RESIZE = (None,)
 DEFAULT_H5_PATH = '.'
 
-UNIT_GI = {
-    'q_nm^-1' : Q_NM,
-    'q_A^-1' : Q_A,
-    '2th_deg' : TTH_DEG,
-    '2th_rad' : TTH_RAD,
-}
+
 
 DESCRIPTION_HDF5 = "HDF5 file with Scattering methods."
 BEAMLINE = "BM28-XMaS"
@@ -72,6 +62,7 @@ MODE_WRITE = "r+"
 
 PONIFILE_DATASET_KEY = "ponifiles"
 PONIFILE_ACTIVE_KEY = "active_ponifile"
+WILDCARDS_PONI = '*.poni'
 
 DEFAULT_INCIDENT_ANGLE = 0.0
 DEFAULT_TILT_ANGLE = 0.0
@@ -80,44 +71,6 @@ DIGITS_SAMPLE = 4
 DIGITS_FILE = 4
 
 ENTRY_ZEROS = 4
-
-POLARIZATION_FACTOR = 0.99
-NPT_RADIAL = int(100)
-
-DICT_SAMPLE_ORIENTATIONS = {
-    (True,True) : 1,
-    (True,False) : 2,
-    (False,True) : 3,
-    (False,False) : 4,
-}
-
-PONI_KEY_VERSION = "poni_version"
-PONI_KEY_BINNING = "binning"
-PONI_KEY_DISTANCE = "dist"
-PONI_KEY_WAVELENGTH = "wavelength"
-PONI_KEY_SHAPE1 = "shape1"
-PONI_KEY_SHAPE2 = "shape2"
-PONI_KEY_DETECTOR = "detector"
-PONI_KEY_DETECTOR_CONFIG = "detector_config"
-PONI_KEY_PIXEL1 = "pixelsize1"
-PONI_KEY_PIXEL2 = "pixelsize2"
-PONI_KEY_PONI1 = "poni1"
-PONI_KEY_PONI2 = "poni2"
-PONI_KEY_ROT1 = "rot1"
-PONI_KEY_ROT2 = "rot2"
-PONI_KEY_ROT3 = "rot3"
-
-DICT_BOX_ORIENTATION = {
-    'horizontal' : 'ipbox',
-    'vertical' : 'opbox',
-}
-
-AZIMUTH_NAME = 'azimuthal'
-RADIAL_NAME = 'radial'
-HORIZONTAL_NAME = 'horizontal'
-VERTICAL_NAME = 'vertical'
-
-ERROR_RAW_INTEGRATION = "Failed at detect integration type."
 MSG_LOGGER_INIT = "Logger was initialized."
 
 
@@ -137,7 +90,6 @@ H5_FILENAME_NOT_VALID = 'No valid path for the .h5 file'
 
 from pyxscat.logger_config import setup_logger
 logger = setup_logger()
-
 
 def logger_info(func):
     def wrapper(*args, **kwargs):
@@ -200,7 +152,6 @@ class H5GIIntegrator():
                 root_directory=root_directory,
                 h5_filename=output_filename_h5,
             )     
-
         else:
             raise Exception(INPUT_ROOT_DIR_NOT_VALID) 
 
@@ -243,11 +194,7 @@ class H5GIIntegrator():
         else:
             raise Exception(INPUT_ROOT_DIR_NOT_VALID)
         
-        self._poni_instance = None
-        self._transform = Transform()
-        self._ai = AzimuthalIntegrator()
-        self.active_ponifile = ''
-                    
+        self.gi = GIIntegrator()                    
 
     def set_root_directory(self, root_directory=''):
         self._root_dir = Path(root_directory)
@@ -315,10 +262,10 @@ class H5GIIntegrator():
             self._file = None
             logger.error(f"{e}: The file {h5_filename} could not be created.")
 
-    @logger_info
-    def init_h5_groups(self, h5_filename=''):
-        self.create_group_samples(h5_filename=h5_filename)
-        self.create_group_ponifiles(h5_filename=h5_filename)
+    # @logger_info
+    # def init_h5_groups(self, h5_filename=''):
+    #     self.create_group_samples(h5_filename=h5_filename)
+    #     self.create_group_ponifiles(h5_filename=h5_filename)
 
     @logger_info
     def write_root_attributes(
@@ -526,15 +473,6 @@ class H5GIIntegrator():
 
     @logger_info
     def get_metadata_dict(self) -> dict:
-        """
-        Returns a dictionary with the key-value metadata information
-
-        Keyword Arguments:
-            group_address -- address of the Group inside the H5 File (default: {'.'})
-
-        Returns:
-            dictionary with the metadata key-values
-        """
         dict_metadata = dict()
         dict_metadata[INCIDENT_ANGLE_KEY] = self._iangle_key
         dict_metadata[TILT_ANGLE_KEY] = self._tangle_key
@@ -788,394 +726,136 @@ class H5GIIntegrator():
 
     @logger_info
     def search_ponifiles(self) -> list:
-        """
-        Searches for .poni files in the root directory
+        """Searches for .poni files in the root directory
 
         Returns:
-            list of .poni files recursively in the root directory
-        """                
+            list with sorted strings of poni filename
+        """                    
         if not self._root_dir:
+            logger.error('No root directory to search .poni files.')
             return
+        
         try:
-            searched_ponifiles = sorted(file.as_posix() for file in self._root_dir.rglob("*.poni"))
-
-            # if new_files:
-            #     stored_ponifiles = self.get_all_ponifiles(get_relative_address=False)
-            #     searched_ponifiles = [file for file in searched_ponifiles if file not in stored_ponifiles]
-
+            searched_ponifiles = sorted(file.as_posix() for file in self._root_dir.rglob(WILDCARDS_PONI))
             logger.info(f"Found {len(searched_ponifiles)} .poni files in {self._root_dir}")
             return searched_ponifiles
+        
         except Exception as e:
             logger.error(f"{e}: there was an error during searching ponifiles in {self._root_dir}.")
             return
 
-
-    def create_data_dset(self, sample_name=str()):
-        self.create_dataset_path(
-            group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
-            dset_name=DATA_KEY,
-        )
-
-    def create_metadata_group(self, sample_name=str()):
-        self.create_group(
-            root_group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
-            group_name=METADATA_KEY,
-        )
-
-    def create_metadata_dset_str(self, sample_name=str(), metadata_key=str()):
-        self.create_dataset_path(
-            group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}/{METADATA_KEY}",
-            dset_name=metadata_key,
-        )
-
-    def create_metadata_dset_float(self, sample_name=str(), metadata_key=str()):
-        self.create_dataset_float(
-            group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}/{METADATA_KEY}",
-            dset_name=metadata_key,
-        )
-
     @logger_info
     def update_ponifiles(self):
-
-        # Creates the dataset for ponifiles if needed
-        # self.create_ponifile_dset()
-
-        # Search new files if requested
+        """
+        Searches .poni files in the root directory and updates
+        the entry_ponifiles
+        """        
         searched_ponifiles = self.search_ponifiles()
 
         if not searched_ponifiles:
-            logger.info("No ponifiles to be updated. Return.")
+            logger.info('No ponifiles to be updated.')
             return
+        
         else:
             if self.check_ponifile_entry():
                 self.delete_nx_group(entry=ENTRY_PONIFILE_KEY)
-            
-            save_NXdata(
-                filename=self._h5_filename,
-                signal_name=PONI_GROUP_KEY,
-                signal=searched_ponifiles,
-                interpretation='spectrum',
-                nxentry_name=ENTRY_PONIFILE_KEY,
-                nxdata_name=PONI_GROUP_KEY,
-            )
-            
-                    
 
-        # # Return if no new ponifiles
-        # if not ponifile_list:
-        #     logger.info(f"No ponifiles to update.")
-        #     return
-
-        # self.append_ponifile_list(
-        #     ponifile_list=ponifile_list,
-        # )
-
-    @logger_info
-    def append_metadata_values(self, sample_name=str(), metadata_key=str(), value_list=list()):
-        self.append_stringlist_to_dataset(
-            group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}/{METADATA_KEY}",
-            dataset_name=metadata_key,
-            list_to_append=value_list,
-        )
-
-
-    @logger_info
-    def append_datafile_list(self, sample_name=str(), datafile_list=list()):
-
-        self.append_stringlist_to_dataset(
-            group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
-            dataset_name=DATA_KEY,
-            list_to_append=datafile_list,
-        )
-
-
-    @logger_info
-    def append_ponifile_list(self, ponifile_list=list()):
-        self.append_stringlist_to_dataset(
-            group_address=PONI_GROUP_KEY,
-            dataset_name=PONIFILE_DATASET_KEY,
-            list_to_append=ponifile_list,
-        )
-
-    @logger_info
-    def append_stringlist_to_dataset(self, group_address='.', dataset_name=str(), list_to_append=list()):
-        if isinstance(list_to_append, str):
-            list_to_append = [list_to_append]
-
-        with File(self._h5_filename, 'r+') as f:
-            if not f[group_address].__contains__(dataset_name):
-                logger.info(f"{dataset_name} does not exist in {group_address}. Create it before appending.")
-            else:
-                try:
-                    dataset = f[group_address][dataset_name]
-                    dataset.resize((dataset.shape[0] + len(list_to_append),))
-                    dataset[-len(list_to_append):] = list_to_append
-                    logger.debug(f"{str(list_to_append)} was appended to {group_address}/{dataset}")
-                except Exception as e:
-                    logger.error(f"{str(list_to_append)} could not be appended to {group_address}/{dataset}")
-
-
-
-
-
-    @logger_info
-    def retrieve_poni_instance_from_file(self, poni_filename=''):
-        poni_filename = Path(poni_filename)
-
-        if not poni_filename.is_file():
-            return
-
-        poni = PoniFile(data=str(poni_filename))
-        return poni
-
-    # @logger_info
-    # def retrieve_poni_dict_from_file(self, poni_filename=''):
-    #     poni_instance = self.retrieve_poni_instance_from_file(
-    #         poni_filename=poni_filename,
-    #     )
-
-
-
-
-
-
-
-
-    @logger_info
-    def update_ponifile_parameters(self, dict_poni=dict()) -> None:
-        """
-        Changes manually the functional poni parameters of pygix
-        """
-        if not self._transform:
-            return
-
-        if dict_poni:
             try:
-                new_poni = PoniFile(data=dict_poni)
-                self._transform._init_from_poni(new_poni)
+                save_NXdata(
+                    filename=self._h5_filename,
+                    signal_name=PONI_GROUP_KEY,
+                    signal=searched_ponifiles,
+                    interpretation='spectrum',
+                    nxentry_name=ENTRY_PONIFILE_KEY,
+                    nxdata_name=PONI_GROUP_KEY,
+                )
+                logger.info(f'Saved NXdata: {ENTRY_PONIFILE_KEY}')
             except Exception as e:
-                logger.error(e)
-        else:
-            if self.active_ponifile:
-                self._transform.load(self.active_ponifile)
-
+                logger.error(f'{e}: Error during saving NXdata {ENTRY_PONIFILE_KEY}')
 
     @logger_info
     def generate_ponifiles(self, get_relative_address=True) -> str:
-        with File(self._h5_filename, 'r+') as f:
-            if not self.check_ponifile_entry():
-                logger.info('There is no ponifiles yet.')
-                return
+        """Yields a string with the relative or absolute address of .poni files
 
+        Keyword Arguments:
+            get_relative_address -- if True, yields the basename of .poni file
+
+        Yields:
+            string of .poni file
+        """
+        if not self.check_ponifile_entry():
+            logger.info('There is no entry_ponifiles.')
+            return
+        
+        with File(self._h5_filename, 'r+') as f:
             dataset = f[ENTRY_PONIFILE_KEY][PONI_GROUP_KEY][PONI_GROUP_KEY]
+
             for ponifile in dataset:
                 ponifile = ponifile.decode(ENCODING_FORMAT)
                 ponifile = Path(ponifile).as_posix()
+
                 if get_relative_address:
                     ponifile = Path(ponifile).relative_to(self._root_dir).as_posix()
+
                 yield ponifile
         
     @logger_info
     def get_all_ponifiles(self, get_relative_address=True) -> list:
+        """Gets a sorted list with the stored .poni files
+
+        Keyword Arguments:
+            get_relative_address -- if True, returns a list of .poni file basenames
+
+        Returns:
+            list with strings of .poni files
+        """        
         ponifile_list = sorted(self.generate_ponifiles(get_relative_address=get_relative_address))
         return ponifile_list
 
     @logger_info
-    def activate_poni_parameters(
-        self, 
+    def get_ponifile(self, poni_name='') -> str:
+        poni_name = Path(poni_name)
+
+        if poni_name.is_absolute():
+            poni_name = poni_name.as_posix()
+        else:
+            poni_name = self._root_dir.joinpath(poni_name).as_posix()
+        
+        return poni_name
+
+    @logger_info
+    def update_poni(
+        self,
+        poni_instance=None,        
         poni_filename='', 
         dict_poni=dict(),
-        poni_instance=None,
-        ) -> None: 
+        ) -> None:
 
         if poni_filename:
-            poni_filename = Path(poni_filename)
+            poni_filename = self.get_ponifile(poni_name=poni_filename)
 
-            try:
-                if poni_filename.is_absolute():
-                    poni_filename = poni_filename.as_posix()            
-                else:
-                    poni_filename = self._root_dir.joinpath(poni_filename).as_posix()
-            except Exception as e:
-                self.active_ponifile = ''
-            
-            # Proceed only if the requested ponifiles is already stored
-            stored_ponifiles = self.get_all_ponifiles(get_relative_address=False)            
+        self.gi.update_poni(
+            poni=poni_instance,
+            ponifile=poni_filename,
+            dict_poni=dict_poni
+        )
+    
+    @logger_info
+    def get_poni(self):
+        poni = self.gi._poni
+        return poni
 
-            if poni_filename in stored_ponifiles:
-                self.active_ponifile = poni_filename
-
-                new_poni = self.retrieve_poni_instance_from_file(
-                    poni_filename=self.active_ponifile,
-                )
-                self._poni_instance = new_poni
-        
-        elif dict_poni:
-            try:
-                new_poni = PoniFile(data=dict_poni)
-                self._poni_instance = new_poni
-            except Exception as e:
-                logger.error(e)
-
-        elif poni_instance:
-            new_poni = poni_instance
-            self._poni_instance = new_poni
-        
-        try:
-            self._transform._init_from_poni(new_poni)
-        except Exception as e:
-            logger.error(e)
-
-        try:
-            self._ai._init_from_poni(poni=new_poni)
-        except Exception as e:
-            logger.error(e)
-        
-        else:
-            return
 
     @logger_info
-    def get_poni_dict(self):
-        try:
-            detector = self._transform.detector
-        except Exception as e:
-            logger.error(f"{e}: Detector could not be retrieved.")
-            return
-        try:
-            detector_config = self._transform.detector.get_config()
-        except Exception as e:
-            logger.error(f"{e}: Detector could not be retrieved.")
-            return
-        try:
-            wave = self._transform._wavelength
-        except Exception as e:
-            logger.error(f"{e}: Wavelength could not be retrieved.")
-            return
-        try:
-            dist = self._transform._dist
-        except Exception as e:
-            logger.error(f"{e}: Distance could not be retrieved.")
-            return
-        
-        # Pixel 1
-        try:
-            pixel1 = self._transform.pixel1
-        except Exception as e:
-            pixel1 = None
-            logger.error(f"{e}: Pixel 1 could not be retrieved.")
-            return
-        if not pixel1:
-            try:
-                pixel1 = detector_config.pixel1
-            except Exception as e:
-                logger.error(f"{e}: Pixel 1 could not be retrieved.")
-                return
-        # Pixel 2
-        try:
-            pixel2 = self._transform.pixel2
-        except Exception as e:
-            pixel2 = None
-            logger.error(f"{e}: Pixel 2 could not be retrieved.")
-            return
-        if not pixel2:
-            try:
-                pixel2 = detector_config.pixel2
-            except Exception as e:
-                logger.error(f"{e}: Pixel 2 could not be retrieved.")
-                return
+    def update_orientation(self, qz_parallel=True, qr_parallel=True):
+        self.gi.update_orientation(
+            qz_parallel=qz_parallel,
+            qr_parallel=qr_parallel,
+        )
 
-        # Shape
-        try:
-            shape = self._transform.detector.max_shape
-        except Exception as e:
-            shape = None
-            logger.error(f"{e}: Shape could not be retrieved from detector.")
-        if not shape:
-            try:
-                shape = detector_config.max_shape
-            except Exception as e:
-                logger.error(f"{e}: Shape could not be retrieved from detector-config.")
-                return
-
-        try:
-            poni1 = self._transform._poni1
-        except Exception as e:
-            logger.error(f"{e}: PONI 1 could not be retrieved from h5.")
-            return
-        try:
-            poni2 = self._transform._poni2
-        except Exception as e:
-            logger.error(f"{e}: PONI 2 could not be retrieved from h5.")
-            return
-        try:
-            rot1 = self._transform._rot1
-        except Exception as e:
-            logger.error(f"{e}: Rotation 1 could not be retrieved from h5.")
-            return
-        try:
-            rot2 = self._transform._rot2
-        except Exception as e:
-            logger.error(f"{e}: Rotation 2 could not be retrieved from h5.")
-            return
-        try:
-            rot3 = self._transform._rot3
-        except Exception as e:
-            logger.error(f"{e}: Rotation 3 could not be retrieved from h5.")
-            return
-        
-        poni_dict = {
-            PONI_KEY_VERSION : 2,
-            PONI_KEY_DETECTOR : detector.name,
-            PONI_KEY_BINNING : detector._binning,
-            PONI_KEY_DETECTOR_CONFIG : detector_config,
-            PONI_KEY_WAVELENGTH : wave,
-            PONI_KEY_DISTANCE : dist,
-            PONI_KEY_PIXEL1 : pixel1,
-            PONI_KEY_PIXEL2 : pixel2,
-            PONI_KEY_SHAPE1 : shape[0],
-            PONI_KEY_SHAPE2 : shape[1],
-            PONI_KEY_PONI1 : poni1,
-            PONI_KEY_PONI2 : poni2,
-            PONI_KEY_ROT1 : rot1,
-            PONI_KEY_ROT2 : rot2,
-            PONI_KEY_ROT3 : rot3,
-        }
-        return poni_dict
-
-    #########################################################
-    ######### PYGIX CONNECTIONS ######################
-    #########################################################
 
     @logger_info
-    def update_grazinggeometry(self, poni_filename='') -> None:
-        """
-        If there is an active ponifile, inherits the methods from Transform class (pygix module)
-        """        
-        if not poni_filename:
-            poni_filename = self.active_ponifile
-
-        if not poni_filename:
-            logger.info(f"No active ponifile. GrazingGeometry was not updated")            
-            return
-        if not Path(poni_filename).is_file():
-            logger.info(f"The .poni file {poni_filename} does not exist.")
-            return
-
-        # Load the ponifile
-        try:
-            self._transform.load(poni_filename)
-            logger.info(f"Loaded poni file: {poni_filename}")
-        except Exception as e:
-            logger.error(f"{e}: Ponifile could not be loaded to GrazingGeometry")
-        
-        # Update default incident and tilt angles
-        try:
-            self.update_incident_tilt_angle()
-        except Exception as e:
-            logger.error(f"{e}: angles could not be updated.")
-
-    @logger_info
-    def update_angles(self, sample_name=str(), list_index=list()):
+    def update_angles(self, sample_name='', list_index=0):
         iangle = self.get_incident_angle(
             sample_name=sample_name,
             index_list=list_index,
@@ -1184,164 +864,138 @@ class H5GIIntegrator():
             sample_name=sample_name,
             index_list=list_index,
         )
-        self.update_incident_tilt_angle(
+
+        self.gi.update_incident_tilt_angle(
             incident_angle=iangle,
             tilt_angle=tangle,
         )
 
-    @logger_info
-    def update_incident_tilt_angle(self, incident_angle=0.0, tilt_angle=0.0):
-        """
-        Update the incident and tilt angles inherited from GrazingGeometry
+    # @logger_info
+    # def append_stringlist_to_dataset(self, group_address='.', dataset_name=str(), list_to_append=list()):
+    #     if isinstance(list_to_append, str):
+    #         list_to_append = [list_to_append]
 
-        Keyword Arguments:
-            incident_angle -- (default: {0.0})
-            tilt_angle --  (default: {0.0})
-        """        
-        # Incident angle
-        try:
-            self._transform.set_incident_angle(
-                incident_angle=incident_angle,
-            )
-            logger.info(f"Incident angle set at {incident_angle}")
-        except Exception as e:
-            logger.error(f"{e}: Incident angle could not be updated.")
+    #     with File(self._h5_filename, 'r+') as f:
+    #         if not f[group_address].__contains__(dataset_name):
+    #             logger.info(f"{dataset_name} does not exist in {group_address}. Create it before appending.")
+    #         else:
+    #             try:
+    #                 dataset = f[group_address][dataset_name]
+    #                 dataset.resize((dataset.shape[0] + len(list_to_append),))
+    #                 dataset[-len(list_to_append):] = list_to_append
+    #                 logger.debug(f"{str(list_to_append)} was appended to {group_address}/{dataset}")
+    #             except Exception as e:
+    #                 logger.error(f"{str(list_to_append)} could not be appended to {group_address}/{dataset}")
 
-        # Tilt angle
-        try:
-            self._transform.set_tilt_angle(
-                tilt_angle=tilt_angle,
-            )
-            logger.info(f"Tilt angle set at {tilt_angle}")
-        except Exception as e:
-            logger.error(f"{e}: Tilt angle could not be updated.")
 
-    @logger_info
-    def update_orientation(self, qz_parallel=True, qr_parallel=True) -> None:
-        """
-        Updates two parameters to define the rotation of the detector and the orientation of the sample axis
-        Pygix defined a sample orientation upon 1-4 values
-
-        Keyword Arguments:
-            qz_parallel -- inversion of the qz axis (default: {True})
-            qr_parallel -- inversion of the qr axis (default: {True})
-        """
-        try:
-            sample_orientation = DICT_SAMPLE_ORIENTATIONS[(qz_parallel, qr_parallel)]
-            self._transform.set_sample_orientation(
-                sample_orientation=sample_orientation,
-            )
-            logger.info(f"The sample orientation (pygix) is set at {sample_orientation}.")
-        except Exception as e:
-            logger.error(f"The sample orientation (pygix) could not be updated.")
 
     #####################################
     ###### HDF5 METHODS #################
     #####################################
 
-    @logger_info
-    def create_group(
-        self,
-        h5_filename='',
-        root_group_address='.', 
-        group_name=str(),
-        ):
-        if not h5_filename:
-            h5_filename = self._h5_filename
+    # @logger_info
+    # def create_group(
+    #     self,
+    #     h5_filename='',
+    #     root_group_address='.', 
+    #     group_name=str(),
+    #     ):
+    #     if not h5_filename:
+    #         h5_filename = self._h5_filename
         
-        with File(self._h5_filename, 'r+') as f:
-            # Returns if it contains the dataset already
-            if f[root_group_address].__contains__(group_name):
-                logger.debug(f"{group_name} exists already in {root_group_address}.")
-                return
-            else:
-                try:
-                    f[root_group_address].create_group(
-                        name=str(group_name),
-                    )
+    #     with File(self._h5_filename, 'r+') as f:
+    #         # Returns if it contains the dataset already
+    #         if f[root_group_address].__contains__(group_name):
+    #             logger.debug(f"{group_name} exists already in {root_group_address}.")
+    #             return
+    #         else:
+    #             try:
+    #                 f[root_group_address].create_group(
+    #                     name=str(group_name),
+    #                 )
 
-                    logger.debug(f"{group_name} was created in {root_group_address}.")
-                except Exception as e:
-                    logger.error(f"{e}: {group_name} could not be created in {root_group_address}.")
+    #                 logger.debug(f"{group_name} was created in {root_group_address}.")
+    #             except Exception as e:
+    #                 logger.error(f"{e}: {group_name} could not be created in {root_group_address}.")
 
     @logger_info
     def get_new_nx_entry_name(self):
         entry_name = f'entry_{str(self.get_nx_entries()).zfill(ENTRY_ZEROS)}'
         return entry_name
 
-    @logger_info
-    def create_dataset_path(self, group_address='.', dset_name=str(), dtype=FORMAT_STRING, shape=DEFAULT_SHAPE_1D, maxshape=MAXSHAPE_1D_RESIZE,):
-        with File(self._h5_filename, 'r+') as f:
-            # Returns if it contains the dataset already
-            if f[group_address].__contains__(dset_name):
-                logger.debug(f"{dset_name} exists already in {group_address}.")
-                return
-            else:
-                try:
-                    f[group_address].create_dataset(
-                        name=dset_name,
-                        shape=shape,
-                        maxshape=maxshape,
-                        dtype=dtype,
-                    )
-                    logger.debug(f"{dset_name} was created in {group_address}")
-                except Exception as e:
-                    logger.error(f"{e}: {dset_name} could not be created in {group_address}")
+    # @logger_info
+    # def create_dataset_path(self, group_address='.', dset_name=str(), dtype=FORMAT_STRING, shape=DEFAULT_SHAPE_1D, maxshape=MAXSHAPE_1D_RESIZE,):
+    #     with File(self._h5_filename, 'r+') as f:
+    #         # Returns if it contains the dataset already
+    #         if f[group_address].__contains__(dset_name):
+    #             logger.debug(f"{dset_name} exists already in {group_address}.")
+    #             return
+    #         else:
+    #             try:
+    #                 f[group_address].create_dataset(
+    #                     name=dset_name,
+    #                     shape=shape,
+    #                     maxshape=maxshape,
+    #                     dtype=dtype,
+    #                 )
+    #                 logger.debug(f"{dset_name} was created in {group_address}")
+    #             except Exception as e:
+    #                 logger.error(f"{e}: {dset_name} could not be created in {group_address}")
 
 
-    @logger_info
-    def create_dataset_float(self, group_address='.', dset_name=str(), dtype=FORMAT_FLOAT, shape=DEFAULT_SHAPE_1D, maxshape=MAXSHAPE_1D_RESIZE,):
-        with File(self._h5_filename, 'r+') as f:
-            # Returns if it contains the dataset already
-            if f[group_address].__contains__(dset_name):
-                logger.debug(f"{dset_name} exists already in {group_address}.")
-                return
-            else:
-                try:
-                    f[group_address].create_dataset(
-                        name=dset_name,
-                        shape=shape,
-                        maxshape=maxshape,
-                        dtype=dtype,
-                    )
-                    logger.debug(f"{dset_name} was created in {group_address}")
-                except Exception as e:
-                    logger.error(f"{e}: {dset_name} could not be created in {group_address}")
+    # @logger_info
+    # def create_dataset_float(self, group_address='.', dset_name=str(), dtype=FORMAT_FLOAT, shape=DEFAULT_SHAPE_1D, maxshape=MAXSHAPE_1D_RESIZE,):
+    #     with File(self._h5_filename, 'r+') as f:
+    #         # Returns if it contains the dataset already
+    #         if f[group_address].__contains__(dset_name):
+    #             logger.debug(f"{dset_name} exists already in {group_address}.")
+    #             return
+    #         else:
+    #             try:
+    #                 f[group_address].create_dataset(
+    #                     name=dset_name,
+    #                     shape=shape,
+    #                     maxshape=maxshape,
+    #                     dtype=dtype,
+    #                 )
+    #                 logger.debug(f"{dset_name} was created in {group_address}")
+    #             except Exception as e:
+    #                 logger.error(f"{e}: {dset_name} could not be created in {group_address}")
 
-    @logger_info
-    def create_group_samples(self, h5_filename=''):
-        self.create_group(
-            h5_filename=h5_filename,
-            group_name=SAMPLE_GROUP_KEY,
-        )
+    # @logger_info
+    # def create_group_samples(self, h5_filename=''):
+    #     self.create_group(
+    #         h5_filename=h5_filename,
+    #         group_name=SAMPLE_GROUP_KEY,
+    #     )
 
-    @logger_info
-    def create_group_ponifiles(self, h5_filename):
-        self.create_group(
-            h5_filename=h5_filename,
-            group_name=PONI_GROUP_KEY,
-        )
-        self.create_ponifile_dset()
-
-
-    @logger_info
-    def create_ponifile_dset(self):
-        self.create_dataset_path(
-            group_address=PONI_GROUP_KEY,
-            dset_name=PONIFILE_DATASET_KEY,
-        )
+    # @logger_info
+    # def create_group_ponifiles(self, h5_filename):
+    #     self.create_group(
+    #         h5_filename=h5_filename,
+    #         group_name=PONI_GROUP_KEY,
+    #     )
+    #     self.create_ponifile_dset()
 
 
-    @logger_info
-    def create_sample(self, sample_name=str()):
+    # @logger_info
+    # def create_ponifile_dset(self):
+    #     self.create_dataset_path(
+    #         group_address=PONI_GROUP_KEY,
+    #         dset_name=PONIFILE_DATASET_KEY,
+    #     )
 
-        # Define the name, absolute and relative
-        sample_name = Path(sample_name)
 
-        self.create_group(
-            root_group_address=SAMPLE_GROUP_KEY,
-            group_name=sample_name,
-        )
+    # @logger_info
+    # def create_sample(self, sample_name=str()):
+
+    #     # Define the name, absolute and relative
+    #     sample_name = Path(sample_name)
+
+    #     self.create_group(
+    #         root_group_address=SAMPLE_GROUP_KEY,
+    #         group_name=sample_name,
+    #     )
 
     def get_full_dict_metadata(self, list_filenames=[]):
         header_dict = defaultdict(list)
@@ -1448,45 +1102,26 @@ class H5GIIntegrator():
         return list_files
 
     ##################################################
-    ############# SAMPLES/FILES METHODS ##############
+    ############# DATAFILE METHODS ##############
     ##################################################
 
     @logger_info
-    def set_pattern(self, pattern=".edf"):
-        self._pattern = pattern
+    def search_datafiles(self, pattern='*.edf') -> dict:
+        """Searches the data files in the root directory that match with a pattern
 
-    @logger_info
-    def search_datafiles(
-        self, 
-        pattern="*.edf",
-        ):
+        Keyword Arguments:
+            pattern -- filename string pattern (default: {'*.edf'})
 
+        Returns:
+            dictionary with folder addresses as keys and list of data addresses as values
+        """        
         searched_files = self._root_dir.rglob(pattern)
+
         dict_files = get_dict_files(
             list_files=searched_files,
         )
+
         return dict_files
-
-
-    @logger_info
-    def search_new_datafiles(
-        self, 
-        pattern="*.edf",
-        ):
-        # Search the files
-        dict_files = self.search_datafiles(
-            pattern=pattern,
-        )
-
-        # Filter only the new data
-        dict_files_in_h5 = self.get_dict_files()
-
-        dict_new_files = get_dict_difference(
-            large_dict=dict_files,
-            small_dict=dict_files_in_h5,
-        )
-
-        return dict_new_files
 
     @logger_info
     def update_datafiles(
@@ -1495,6 +1130,13 @@ class H5GIIntegrator():
         search=False,
         pattern='*.edf',         
         ):
+        """Updates the data filenames as NXentries
+
+        Keyword Arguments:
+            dict_files -- input dictionary of folder-filenames (default: {dict()})
+            search -- if True, searches in the root dictionary (default: {False})
+            pattern -- filename string pattern (default: {'*.edf'})
+        """        
 
         # Search for new files
         if dict_files:
@@ -1543,6 +1185,10 @@ class H5GIIntegrator():
                     group_name=group_name,
                     sample_address=sample_address,
                 )
+
+
+
+
 
     @logger_info
     def get_entry_name(self, sample_address=''):
@@ -1599,6 +1245,7 @@ class H5GIIntegrator():
     def delete_nx_group(self, entry=''):
         with File(self._h5_filename, 'r+') as f:
             del f[entry]
+            logger.info(f'Deleted {entry}.')
 
     @logger_info
     def write_sample_address(self, group_name='', sample_address=''):
@@ -1829,7 +1476,6 @@ class H5GIIntegrator():
 
         return filename
 
-
     @logger_info
     def get_name_from_index(
         self, 
@@ -1855,16 +1501,32 @@ class H5GIIntegrator():
 
         return filename
 
-    #####################################
-    ###### EDF METHODS ##########
-    #####################################
+    @logger_info
+    def get_last_file(self, list_files=list()) -> str:
+        """
+        Returns the file with the highest epoch, time of creation
+
+        Parameters:
+        list_files(list) : list of files among the the last created will be found, if not, all the files in the .h5 file
+
+        Returns:
+        str : string with the full path of the file with the highest time of creation
+        """
+        if not list_files:
+            list_files = [getctime(file) for file in self.generator_all_filenames()]
+        try:
+            last_file = list_files[np.argmax(list_files)]
+            logger.info(f"Found last file: {last_file}")
+        except:
+            logger.info("The last file could not be found.")
+        return last_file
+            
 
     @logger_info
     def get_Edf_instance(
         self, 
         full_filename=str(),
         sample_name=str(),
-        sample_relative_address=True,
         index_file=int(),
         ):
 
@@ -1927,7 +1589,6 @@ class H5GIIntegrator():
                     self.get_Edf_instance(
                         full_filename=full_filename,
                         sample_name=sample_name,
-                        sample_relative_address=sample_relative_address,
                         index_file=index,
                     ).get_data() for index in index_list
                 ]
@@ -1946,543 +1607,12 @@ class H5GIIntegrator():
             data_sample = data_sample.astype('float32') / norm_factor
 
         return data_sample
-
-    #####################################
-    ###### INTEGRATION METHODS ##########
-    #####################################
-
+    
     @logger_info
-    def map_reshaping(
-        self,
-        data=None,
-        # dict_poni=dict(),
-        ):
-
-        data_reshape, q, chi = self._ai.integrate2d(
+    def raw_integration(self, data=None, norm_factor=1.0, list_dict_integration=[]):
+        array_compiled = self.gi.raw_integration(
             data=data,
-            npt_rad=1000,
-            unit="q_nm^-1",
+            norm_factor=norm_factor,
+            list_dict_integration=list_dict_integration,
         )
-        logger.info(f"Reshaped map.")
-
-        return data_reshape, q, chi
-
-    @logger_info
-    def raw_integration(
-        self,
-        sample_name=str(),
-        sample_relative_address=True,
-        index_list=list(),
-        data=None,
-        norm_factor=1.0,
-        list_dict_integration=list(),
-    ) -> list:
-        """
-        Chooses which integration is going to be performed: azimuthal (pyFAI), radial (pyFAI) or box (self method)
-
-        Parameters:
-        folder_name(str) : name of the folder(Group) in the first level of hierarchy
-        index_list(list or int) : integer of list of integers for the files inside the folder
-        data(np.array) : data can be uploaded directly
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        list_dict_integration(list) : list of dictionaries with key-values that will be read by the pygix-pyFAI integration engine
-        
-        Returns:
-        list : list of numpy arrays with the result of the integration
-        """
-        # Get the data
-        if data is None:
-            data = self.get_Edf_data(
-                sample_name=sample_name,
-                sample_relative_address=sample_relative_address,
-                index_list=index_list,
-            )
-
-        # Get the normalization factor
-        if norm_factor == 1.0:
-            norm_factor = self.get_norm_factor(
-                sample_name=sample_name,
-                index_list=index_list,
-            )
-
-        array_compiled = []
-
-        for dict_integration in list_dict_integration:
-            if dict_integration[KEY_INTEGRATION] == CAKE_LABEL:
-                if dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_AZIM:
-                    res = self.raw_integration_azimuthal(
-                        data=data,
-                        norm_factor=norm_factor,
-                        dict_integration=dict_integration,
-                    )
-
-                elif dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_RADIAL:
-                    res = self.raw_integration_radial(
-                        data=data,
-                        norm_factor=norm_factor,
-                        dict_integration=dict_integration,
-                    )
-            elif dict_integration[KEY_INTEGRATION] == BOX_LABEL:
-                res = self.raw_integration_box(
-                    data=data,
-                    norm_factor=norm_factor,
-                    dict_integration=dict_integration,
-                )
-            else:
-                print(ERROR_RAW_INTEGRATION)
-                res = None
-
-            array_compiled.append(res)
         return array_compiled
-
-    @logger_info
-    def raw_integration_azimuthal(
-        self, 
-        data=None,
-        norm_factor=1.0,
-        dict_integration=dict(),
-    ) -> np.array:
-        """
-        Performs an azimuthal integration using the pygix-pyFAI engine
-
-        Parameters:
-        data(np.array) : data to be integrated
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        dict_integration(dict) : dictionary with key-values that will be read by the pygix-pyFAI integration engine
-        
-        Returns:
-        np.array : result of the integration
-        """
-        # Take the array of intensity
-        if (data is None) or (not dict_integration):
-            return
-        
-        p0_range=dict_integration[CAKE_KEY_RRANGE]
-        p1_range=dict_integration[CAKE_KEY_ARANGE]
-        unit=dict_integration[CAKE_KEY_UNIT]
-        npt = dict_integration[CAKE_KEY_ABINS]
-
-        if npt == 0:
-            npt=self.calculate_bins(
-                radial_range=p0_range,
-                unit=unit,
-            )
-
-        # Do the integration with pygix/pyFAI
-        try:
-            logger.info(f"Trying azimuthal integration with: data-shape={data.shape} bins={npt}, p0_range={p0_range}, p1_range={p1_range}, unit={unit}")
-            y_vector, x_vector = self._transform.integrate_1d(
-                process='sector',
-                data=data,
-                npt=npt,
-                p0_range=p0_range,
-                p1_range=p1_range,
-                unit=UNIT_GI[unit],
-                normalization_factor=float(norm_factor),
-                polarization_factor=POLARIZATION_FACTOR,
-            )
-            logger.info("Integration performed.")
-        except Exception as e:
-            logger.error(f"{e}: Error during azimuthal integration.")
-            return
-
-        return np.array([x_vector, y_vector])
-
-    @logger_info
-    def raw_integration_radial(
-        self, 
-        data=None,
-        norm_factor=1.0,
-        dict_integration=dict(),
-    ) -> np.array:
-        """
-        Performs a radial integration using the pygix-pyFAI engine
-
-        Parameters:
-        data(np.array) : data to be integrated
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        dict_integration(dict) : dictionary with key-values that will be read by the pygix-pyFAI integration engine
-        
-        Returns:
-        np.array : result of the integration
-        """
-        # Take the array of intensity
-        if (data is None) or (not dict_integration):
-            return
-
-        # Do the integration with pygix/pyFAI
-        npt  = int(dict_integration[CAKE_KEY_ABINS])
-        p0_range = dict_integration[CAKE_KEY_RRANGE]
-        p1_range = dict_integration[CAKE_KEY_ARANGE]
-
-        
-        unit = UNIT_GI[dict_integration[CAKE_KEY_UNIT]]
-        
-        try:
-            logger.info(f"Trying radial integration with: npt={npt}, p0_range={p0_range}, p1_range={p1_range}, unit={unit}")
-            y_vector, x_vector = self._transform.integrate_1d(
-                process='chi',
-                data=data,
-                npt=npt,
-                p0_range=p1_range,
-                p1_range=p0_range,
-                unit=unit,
-                normalization_factor=float(norm_factor),
-                polarization_factor=POLARIZATION_FACTOR,
-            )
-            logger.info("Integration performed.")
-        except:
-            logger.info("Error during radial integration.")
-            return
-        return np.array([x_vector, y_vector])
-
-    @logger_info
-    def raw_integration_box(
-        self, 
-        data=None,
-        norm_factor=1.0,
-        dict_integration=dict(),
-    ) -> pd.DataFrame:
-        """
-        Performs a box integration using the pygix-pyFAI engine
-
-        Parameters:
-        data(np.array) : data to be integrated
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        dict_integration(dict) : dictionary with key-values that will be read by the pygix-pyFAI integration engine
-        
-        Returns:
-        np.array : result of the integration
-        """
-        # Take the array of intensity
-        if (data is None) or (not dict_integration):
-            return
-
-        # Get the direction of the box
-        process = DICT_BOX_ORIENTATION[dict_integration[BOX_KEY_DIRECTION]]
-        unit=dict_integration[BOX_KEY_INPUT_UNIT]
-        try:
-            if process == 'opbox':
-                p0_range, p1_range = dict_integration[BOX_KEY_OOPRANGE], dict_integration[BOX_KEY_IPRANGE]
-                npt = self.calculate_bins(
-                    radial_range=dict_integration[BOX_KEY_OOPRANGE],
-                    unit=unit,
-                )
-            elif process == 'ipbox':
-                p0_range, p1_range = dict_integration[BOX_KEY_IPRANGE], dict_integration[BOX_KEY_OOPRANGE]
-                npt = self.calculate_bins(
-                    radial_range=dict_integration[BOX_KEY_IPRANGE],
-                    unit=unit,
-                )
-            else:
-                return
-        except:
-            p0_range, p1_range, npt = None, None, NPT_RADIAL
-
-        # Transform input units if necessary
-        p0_range = [self.get_q_nm(
-            value=position,
-            input_unit=unit,
-            direction=dict_integration[BOX_KEY_DIRECTION],
-        ) for position in p0_range]
-
-        p1_range = [self.get_q_nm(
-            value=position,
-            input_unit=unit,
-            direction=dict_integration[BOX_KEY_DIRECTION],
-        ) for position in p1_range]
-
-        # Do the integration with pygix/pyFAI
-        try:
-            logger.info(f"Trying box integration with: process={process}, npt={npt}, p0_range={p0_range}, p1_range={p1_range}, unit={unit}")
-            y_vector, x_vector = self._transform.integrate_1d(
-                process=process,
-                data=data,
-                npt=npt,
-                p0_range=p0_range,
-                p1_range=p1_range,
-                unit=UNIT_GI[unit],
-                normalization_factor=float(norm_factor),
-                polarization_factor=POLARIZATION_FACTOR,
-                # method='bbox',
-            )
-            x_vector = self.transform_q_units(
-                x_vector=x_vector,
-                input_unit=dict_integration[BOX_KEY_INPUT_UNIT],
-                output_unit=dict_integration[BOX_KEY_OUTPUT_UNIT],
-                direction=dict_integration[BOX_KEY_DIRECTION],
-            )
-
-            logger.info("Integration performed.")
-        except:
-            logger.info("Error during box integration.")
-            return
-
-        return np.array([x_vector, y_vector])
-
-    @logger_info
-    def calculate_bins(self, radial_range=[], unit='q_nm^-1') -> int:
-        """
-        Calculates the bins between two q values
-
-        Parameters:
-        radial_range(list, tuple) : two components with the minimum and maximum radial position to be integrated
-        unit(str) : 'q_nm^-1', 'q_A^-1', '2th_deg' or '2th_rad'
-
-        Returns:
-        int : number of counts to be generated
-        """
-        if unit in ('q_nm^-1', 'q_A^-1'):
-            twotheta1 = self.q_to_twotheta(
-                q=radial_range[0],
-                unit=unit,
-            )
-
-            twotheta2 = self.q_to_twotheta(
-                q=radial_range[1],
-                unit=unit,
-            )
-        elif unit == '2th_deg':
-            twotheta1, twotheta2 = np.radians(radial_range[0]), np.radians(radial_range[1])
-        elif unit == '2th_rad':
-            twotheta1, twotheta2 = radial_range[0], radial_range[1]
-        else:
-            return
-        return int(round(self._transform._dist / self._transform.get_pixel1() * (np.tan(twotheta2) - np.tan(twotheta1))))
-
-    @logger_info
-    def q_to_twotheta(self, q=0.0, unit='q_nm^-1', degree=False) -> float:
-        """
-        Transforms from q to 2theta (rad)
-
-        Parameters:
-        q(float) : modulus of q, scattering vector
-        unit(str) : 'q_nm^-1' or 'q_A^-1'
-        degree(bool) : the result will be in degrees (True) or radians (False)
-
-        Returns:
-        float : twotheta value
-        """
-        if unit == 'q_nm^-1':
-            twotheta = 2 * np.arcsin((q*self._transform._wavelength * 1e9)/(4*np.pi))
-        elif unit == 'q_A^-1':
-            twotheta = 2 * np.arcsin((q*self._transform._wavelength * 1e10)/(4*np.pi))
-        else:
-            return
-        return np.rad2deg(twotheta) if degree else twotheta
-
-    @logger_info
-    def get_q_nm(self, value=0.0, direction='Vertical', input_unit='q_nm^-1') -> float:
-        """
-            Return a q(nm-1) value from another unit
-        """
-        if input_unit == 'q_nm^-1':
-            return value
-        elif input_unit == 'q_A^-1':
-            return value
-        elif input_unit == '2th_deg':
-            return self.twotheta_to_q(twotheta=value, direction=direction, deg=True)
-        elif input_unit == '2th_rad':
-            return self.twotheta_to_q(twotheta=value, deg=False)
-        else:
-            return None
-
-    @logger_info
-    def twotheta_to_q(self, twotheta=0.0, direction='vertical', deg=True) -> float:
-        """
-            Returns the q(nm-1) from the 2theta value
-        """
-        if deg:
-            twotheta = np.radians(twotheta)
-        try:
-            wavelength_nm = self._transform._wavelength * 1e9
-        except:
-            return
-        
-        try:
-            alpha_inc = np.radians(self._transform._incident_angle)
-        except:
-            alpha_inc = 0.0
-        
-        q_horz = 2 * np.pi / wavelength_nm * (np.cos(alpha_inc) * np.sin(twotheta))
-        q_vert = 2 * np.pi / wavelength_nm * (np.sin(twotheta) + np.sin(alpha_inc))
-
-        if direction == BOX_KEY_TYPE_VERT:
-            return q_horz
-        elif direction == BOX_KEY_TYPE_HORZ:
-            return q_vert
-        else:
-            return
-
-
-    @logger_info
-    def transform_q_units(
-        self, 
-        x_vector=None, 
-        input_unit=None, 
-        output_unit=None, 
-        direction='vertical',
-        ):
-
-        if x_vector is None:
-            return
-
-        if input_unit == output_unit:
-            return x_vector
-        
-        # From Q
-        if input_unit in UNITS_Q:
-            if output_unit in UNITS_Q:
-                if output_unit in QNM_ALIAS:
-                    x_vector *= 10
-                elif output_unit in QA_ALIAS:
-                    x_vector /= 10
-                return x_vector
-
-            elif output_unit in UNITS_THETA:
-                if output_unit in DEG_ALIAS:
-                    x_vector = self.q_to_twotheta(
-                        q=x_vector,
-                        unit=input_unit,
-                        degree=True,
-                    )
-                    return x_vector
-                elif output_unit in RAD_ALIAS:
-                    x_vector = self.q_to_twotheta(
-                        q=x_vector,
-                        unit=input_unit,
-                        degree=False,
-                    )
-                    return x_vector
-        # From TTH
-        elif input_unit in UNITS_THETA:
-            if output_unit in UNITS_THETA:
-                if output_unit in DEG_ALIAS:
-                    return x_vector*180/np.pi
-                elif output_unit in RAD_ALIAS:
-                    return x_vector*np.pi/180
-            elif output_unit in UNITS_Q:
-                if input_unit in DEG_ALIAS:
-                    vector_nm = self.twotheta_to_q(
-                        twotheta=x_vector,
-                        direction=direction,
-                        deg=True,
-                    )
-                elif input_unit in RAD_ALIAS:
-                    vector_nm = self.twotheta_to_q(
-                        twotheta=x_vector,
-                        direction=direction,
-                        deg=False,
-                    )
-
-                if output_unit in QNM_ALIAS:
-                    return vector_nm
-                elif output_unit in QA_ALIAS:
-                    return vector_nm/10
-
-    @logger_info
-    def get_detector_array(self, shape=()) -> np.array:
-        """
-        Returns an array with detector shape and rotated, according to sample orientation (pygix-pyFAI)
-
-        Parameters:
-        None
-
-        Returns:
-        np.array : 2D array with the shape of the detector registered in the active ponifile
-        """
-        try:
-            # This method does not work with ALBA_NCD_Nov2022
-            if not shape:
-                shape = self._transform.get_shape()
-
-            logger.info(f"Shape of the detector: {shape}")
-            d2,d1 = np.meshgrid(
-                np.linspace(1,shape[1],shape[1]),
-                np.linspace(1,shape[0],shape[0]),
-            )
-            out = np.array([d1,d2])
-            return out
-        except:
-            return None
-
-    @logger_info
-    def get_mesh_matrix(self, unit='q_nm^-1', shape=()):
-        """
-        Returns both horizontal and vertical mesh matrix for Grazing-Incidence geometry, returns also the corrected data without the missing wedge
-        
-        Parameters:
-        unit(str) : 'q_nm^-1', 'q_A^-1', '2th_deg' or '2th_rad'
-        data(np.array) : 2D map data
-
-        Returns:
-        np.array(QX)
-        np.array(QZ)
-        np.array(data)
-        """
-        if not shape:
-            logger.info(f"Shape is None. Returns.")
-            return
-
-        # Get the detector array, it is always the same shape (RAW MATRIX SHAPE!), no rotations yet
-        # shape = data.shape
-        det_array = self.get_detector_array(shape=shape)
-
-        # Get the mesh matrix
-        if unit in UNITS_Q:
-            try:
-                # calc_q will take into account the sample_orientation in GrazingGeometry instance
-                scat_z, scat_xy = self._transform.calc_q(
-                    d1=det_array[0,:,:],
-                    d2=det_array[1,:,:],
-                )
-                logger.info(f"Shape of the scat_z matrix: {scat_z.shape}")
-                logger.info(f"Shape of the scat_x matrix: {scat_xy.shape}")
-            except:
-                scat_z, scat_xy = None, None
-                logger.info(f"Scat_z matrix could not be generated.")
-                logger.info(f"Scat_x matrix could not be generated.")
-        elif unit in UNITS_THETA:
-            try:
-                scat_z, scat_xy = self._transform.calc_angles(
-                    d1=det_array[0,:,:],
-                    d2=det_array[1,:,:],
-                )
-                logger.info(f"Shape of the scat_z matrix: {scat_z.shape}")
-                logger.info(f"Shape of the scat_x matrix: {scat_xy.shape}")
-            except:
-                scat_z, scat_xy = None, None
-                logger.info(f"Scat_z matrix could not be generated.")
-                logger.info(f"Scat_x matrix could not be generated.")
-
-        # Transform units
-        if (scat_z is not None) and (scat_xy is not None):
-            DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
-            scat_z *= DICT_PLOT['SCALE']
-            scat_xy *= DICT_PLOT['SCALE']
-            logger.info(f"Changing the scale of the matriz q units. Scale: {DICT_PLOT['SCALE']}")
-        else:
-            return
-        return scat_xy, scat_z
-
-
-    @logger_info
-    def get_last_file(self, list_files=list()) -> str:
-        """
-        Returns the file with the highest epoch, time of creation
-
-        Parameters:
-        list_files(list) : list of files among the the last created will be found, if not, all the files in the .h5 file
-
-        Returns:
-        str : string with the full path of the file with the highest time of creation
-        """
-        if not list_files:
-            list_files = [getctime(file) for file in self.generator_all_filenames()]
-        try:
-            last_file = list_files[np.argmax(list_files)]
-            logger.info(f"Found last file: {last_file}")
-        except:
-            logger.info("The last file could not be found.")
-        return last_file
-            
