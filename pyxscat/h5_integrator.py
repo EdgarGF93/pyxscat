@@ -102,12 +102,7 @@ class H5GIIntegrator():
     """
     Creates an HDF5 file and provides methods to read/write the file following the hierarchy of XMaS-BM28
     """
-    def __init__(
-        self,
-        input_h5_filename='',        
-        root_directory='',
-        output_filename_h5='',
-        ) -> None:
+    def __init__(self, input_h5_filename='', root_directory='', output_filename_h5=''):
 
         logger.info("H5GIIntegrator instance was created.")
 
@@ -155,12 +150,7 @@ class H5GIIntegrator():
         else:
             raise Exception(INPUT_ROOT_DIR_NOT_VALID) 
 
-    def init_root_h5_attributes(
-        self,
-        input_h5_filename='',
-        root_directory='',
-        output_filename_h5='',
-    ):
+    def init_root_h5_attributes(self, input_h5_filename='', root_directory='', output_filename_h5=''):
         if input_h5_filename:
 
             self.set_h5_filename(
@@ -262,17 +252,8 @@ class H5GIIntegrator():
             self._file = None
             logger.error(f"{e}: The file {h5_filename} could not be created.")
 
-    # @logger_info
-    # def init_h5_groups(self, h5_filename=''):
-    #     self.create_group_samples(h5_filename=h5_filename)
-    #     self.create_group_ponifiles(h5_filename=h5_filename)
-
     @logger_info
-    def write_root_attributes(
-        self,
-        root_directory='',
-        h5_filename='',
-        ):
+    def write_root_attributes(self, root_directory='', h5_filename=''):
         # Write the attributes into the .h5 file
         dict_attrs = {
             NAME_H5_KEY : Path(h5_filename).name,
@@ -284,61 +265,6 @@ class H5GIIntegrator():
         with File(h5_filename, 'r+') as f:
             for k, v in dict_attrs.items():
                 f.attrs[k] = v
-
-    @property
-    def _open_r(self):
-        """
-        Opens the h5 file with reading permises
-        """   
-        # self._file = File(str(self._h5_filename), MODE_READ)
-        self._open_w
-
-    @property
-    def _open(self):
-        self._open_w
-        
-    @property
-    def _open_w(self):
-        """
-        Opens the h5 file with reading/writing permises
-        """        
-        self._file = File(str(self._h5_filename), MODE_WRITE)
-        logger.info("H5 OPEN TO READ/WRITE")
-
-    @property
-    def _close(self):
-        """
-        Closes the h5 file
-        """
-        self._file.close()
-        logger.info("H5 CLOSED")
-
-    @property
-    def is_open(self):
-        return bool(self._file)
-
-    @property
-    def get_mode(self):
-        if self.is_open:
-            return self._file.mode
-        else:
-            return False
-
-    @logger_info
-    def h5_write_attrs_in_group(self, dict_attrs=dict(), group_address='.'):
-        """
-        Write the key-values from a dictionary as attributes at the root level of h5 file
-
-        Keyword Arguments:
-            dict_attrs -- dictionary with root attribute information (default: {dict()})
-            address -- path of the Group inside the h5 File (default: {'.'})
-        """
-        for k, v in dict_attrs.items():
-            self.h5_write_attr_in_group(
-                key=k,
-                value=v,
-                group_address=group_address,
-            )
 
     @logger_info
     def init_metadata_attrs(self) -> None:
@@ -824,21 +750,12 @@ class H5GIIntegrator():
         return poni_name
 
     @logger_info
-    def update_poni(
-        self,
-        poni_instance=None,        
-        poni_filename='', 
-        dict_poni=dict(),
-        ) -> None:
+    def update_poni(self, poni=None) -> None:
 
-        if poni_filename:
-            poni_filename = self.get_ponifile(poni_name=poni_filename)
+        if isinstance(poni, str) or isinstance(poni, Path):
+            poni = self.get_ponifile(poni_name=poni)
 
-        self.gi.update_poni(
-            poni=poni_instance,
-            ponifile=poni_filename,
-            dict_poni=dict_poni
-        )
+        self.gi.update_poni(poni=poni)
     
     @logger_info
     def get_poni(self):
@@ -865,10 +782,13 @@ class H5GIIntegrator():
             index_list=list_index,
         )
 
-        self.gi.update_incident_tilt_angle(
+        self.gi.update_incident_angle(
             incident_angle=iangle,
+        )
+        self.gi.update_tilt_angle(
             tilt_angle=tangle,
         )
+
 
     # @logger_info
     # def append_stringlist_to_dataset(self, group_address='.', dataset_name=str(), list_to_append=list()):

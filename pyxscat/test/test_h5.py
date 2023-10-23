@@ -177,31 +177,27 @@ class TestH5GI:
     def test_activate_ponifiles_wrong(self, h5):
         print('testing the activation of a poni file')
         ponifile = 'not_stored_ponifile'
-        h5.update_poni(poni_filename=ponifile)
+        h5.update_poni(poni=ponifile)
         assert h5.gi._poni == None
 
     def test_activate_abs_ponifile_valid(self, h5):
         print('testing the activation of a poni file')
         ponifile = [f.as_posix() for f in h5._root_dir.rglob('*.poni')][0]
-        h5.update_poni(poni_filename=ponifile)
+        h5.update_poni(poni=ponifile)
         assert h5.gi._poni != None
 
     def test_activate_rel_ponifile_valid(self, h5):
         print('testing the activation of a poni file')
         ponifile = [f for f in h5._root_dir.rglob('*.poni')][0]
         ponifile_rel = ponifile.relative_to(h5._root_dir).as_posix()
-        h5.update_poni(poni_filename=ponifile_rel)
+        h5.update_poni(poni=ponifile_rel)
         assert h5.gi._poni != None
-
-    # def test_update_grazinggeometry(self, h5):
-    #     print('testing the updating og GrazingGeometry instance')
-    #     h5.update_grazinggeometry()
 
     def test_validate_poni_parameters(self, h5):
         print('testing the poni parameters')
         ponifile = [f.as_posix() for f in h5._root_dir.rglob('*.poni')][0]
 
-        h5.update_poni(poni_filename=ponifile)
+        h5.update_poni(poni=ponifile)
         poni_instance = PoniFile(data=ponifile)
 
         assert poni_instance.dist == h5.gi._poni._dist
@@ -341,9 +337,6 @@ class TestH5GI:
         )
 
         list_results = h5.gi.raw_integration(
-            sample_name=rel_samples_in_h5[0],
-            sample_relative_address=True,
-            index_list=0,
             data=data,
             norm_factor=1.0,
             list_dict_integration=list_dict_integration,
@@ -364,9 +357,6 @@ class TestH5GI:
         )
 
         list_results = h5.gi.raw_integration(
-            sample_name=rel_samples_in_h5[0],
-            sample_relative_address=True,
-            index_list=0,
             data=data,
             norm_factor=1.0,
             list_dict_integration=list_dict_integration,
@@ -386,9 +376,6 @@ class TestH5GI:
         )
 
         list_results = h5.gi.raw_integration(
-            sample_name=rel_samples_in_h5[0],
-            sample_relative_address=True,
-            index_list=0,
             data=data,
             norm_factor=1.0,
             list_dict_integration=list_dict_integration,

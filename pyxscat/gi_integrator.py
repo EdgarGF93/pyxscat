@@ -7,7 +7,7 @@ from pyxscat.other.integrator_methods import *
 from pyxscat.other.setup_methods import *
 from pathlib import Path
 from pyxscat.other.units import *
-
+from pyxscat.poni_methods import open_poni
 
 import numpy as np
 import pandas as pd
@@ -60,6 +60,9 @@ NPT_RADIAL = int(100)
 
 ERROR_RAW_INTEGRATION = "Failed at detect integration type."
 
+from pyxscat.logger_config import setup_logger
+logger = setup_logger()
+
 def logger_info(func):
     def wrapper(*args, **kwargs):
         logger.info(f'We entered into function: {func.__name__}')
@@ -67,261 +70,67 @@ def logger_info(func):
     return wrapper
 
 class GIIntegrator(Transform):
+    """
+    Class to handle .poni parameters, pyFAI reshapings and pygix (GI) transformations
+
+    Arguments:
+        Transform -- inherits the methods from Transform class (pygix)
+    """    
 
     def __init__(self) -> None:
         super().__init__()
         self.init_transform()
         self.init_ai()
         self.active_ponifile=''
-        self._poni_instance = None
+        self._poni = None
 
-    
-    def init_transform(self, incident_angle=0.0, tilt_angle=0.0):
+    @logger_info
+    def init_transform(self):
+        """
+        Initiate as 0.0 both incident and tilt angles of the sample
+        """
+        self.update_incident_angle(incident_angle=0.0)
+        self.update_tilt_angle(tilt_angle=0.0)
+
+    @logger_info
+    def update_incident_angle(self, incident_angle=0.0):
+        """
+        Updates the parameter incident_angle in GrazingGeometry instance
+
+        Keyword Arguments:
+            incident_angle -- pitch angle, projection of the beam into the surface-sample (default: {0.0})
+        """
+        if not isinstance(incident_angle, float):
+            try:
+                incident_angle = float(incident_angle)
+            except Exception as e:
+                logger.error(f'{e}: {incident_angle} is not a valid incident angle. Set up as 0.0')
+                incident_angle = 0.0
+        
         self.set_incident_angle(
             incident_angle=incident_angle,
         )
+        logger.info(f'Incident angle set up as {incident_angle}.')
+
+    @logger_info
+    def update_tilt_angle(self, tilt_angle=0.0):
+        """
+        Updates the parameter tilt_angle in GrazingGeometry instance
+
+        Keyword Arguments:
+            tilt_angle -- roll angle of the sample surface (default: {0.0})
+        """
+        if not isinstance(tilt_angle, float):
+            try:
+                tilt_angle = float(tilt_angle)
+            except Exception as e:
+                logger.error(f'{e}: {tilt_angle} is not a valid tilt angle. Set up as 0.0')
+                tilt_angle = 0.0
+        
         self.set_tilt_angle(
             tilt_angle=tilt_angle,
         )
-    
-    def init_ai(self):
-        self._ai = AzimuthalIntegrator()
-
-    def update_poni(self, poni=None, ponifile='', dict_poni={}):        
-        if poni:
-            poni = poni
-
-        elif ponifile:
-            try:
-                poni = PoniFile(data=ponifile)
-            except Exception as e:
-                logger.error(f'{e}: {ponifile} is not a valid .poni filename.')
-                self._poni = None
-                return
-
-        elif dict_poni:
-            try:
-                poni = PoniFile(data=dict_poni)
-            except Exception as e:
-                logger.error(f'{e}: {dict_poni} is not a valid poni dictionary')
-                self._poni = None
-                return
-
-        try:
-            self._init_from_poni(poni=poni)
-            self._ai._init_from_poni(poni=poni)
-            self._poni = poni
-            logger.info(f'Poni updated: {self._poni}.')
-        except Exception as e:
-            logger.error(f'{e}: Poni could not be updated: {self._poni}.')
-            self._poni = None
-
-    # @logger_info
-    # def get_poni_dict(self):
-    #     try:
-    #         detector = self._transform.detector
-    #     except Exception as e:
-    #         logger.error(f"{e}: Detector could not be retrieved.")
-    #         return
-    #     try:
-    #         detector_config = self._transform.detector.get_config()
-    #     except Exception as e:
-    #         logger.error(f"{e}: Detector could not be retrieved.")
-    #         return
-    #     try:
-    #         wave = self._transform._wavelength
-    #     except Exception as e:
-    #         logger.error(f"{e}: Wavelength could not be retrieved.")
-    #         return
-    #     try:
-    #         dist = self._transform._dist
-    #     except Exception as e:
-    #         logger.error(f"{e}: Distance could not be retrieved.")
-    #         return
-        
-    #     # Pixel 1
-    #     try:
-    #         pixel1 = self._transform.pixel1
-    #     except Exception as e:
-    #         pixel1 = None
-    #         logger.error(f"{e}: Pixel 1 could not be retrieved.")
-    #         return
-    #     if not pixel1:
-    #         try:
-    #             pixel1 = detector_config.pixel1
-    #         except Exception as e:
-    #             logger.error(f"{e}: Pixel 1 could not be retrieved.")
-    #             return
-    #     # Pixel 2
-    #     try:
-    #         pixel2 = self._transform.pixel2
-    #     except Exception as e:
-    #         pixel2 = None
-    #         logger.error(f"{e}: Pixel 2 could not be retrieved.")
-    #         return
-    #     if not pixel2:
-    #         try:
-    #             pixel2 = detector_config.pixel2
-    #         except Exception as e:
-    #             logger.error(f"{e}: Pixel 2 could not be retrieved.")
-    #             return
-
-    #     # Shape
-    #     try:
-    #         shape = self._transform.detector.max_shape
-    #     except Exception as e:
-    #         shape = None
-    #         logger.error(f"{e}: Shape could not be retrieved from detector.")
-    #     if not shape:
-    #         try:
-    #             shape = detector_config.max_shape
-    #         except Exception as e:
-    #             logger.error(f"{e}: Shape could not be retrieved from detector-config.")
-    #             return
-
-    #     try:
-    #         poni1 = self._transform._poni1
-    #     except Exception as e:
-    #         logger.error(f"{e}: PONI 1 could not be retrieved from h5.")
-    #         return
-    #     try:
-    #         poni2 = self._transform._poni2
-    #     except Exception as e:
-    #         logger.error(f"{e}: PONI 2 could not be retrieved from h5.")
-    #         return
-    #     try:
-    #         rot1 = self._transform._rot1
-    #     except Exception as e:
-    #         logger.error(f"{e}: Rotation 1 could not be retrieved from h5.")
-    #         return
-    #     try:
-    #         rot2 = self._transform._rot2
-    #     except Exception as e:
-    #         logger.error(f"{e}: Rotation 2 could not be retrieved from h5.")
-    #         return
-    #     try:
-    #         rot3 = self._transform._rot3
-    #     except Exception as e:
-    #         logger.error(f"{e}: Rotation 3 could not be retrieved from h5.")
-    #         return
-        
-    #     poni_dict = {
-    #         PONI_KEY_VERSION : 2,
-    #         PONI_KEY_DETECTOR : detector.name,
-    #         PONI_KEY_BINNING : detector._binning,
-    #         PONI_KEY_DETECTOR_CONFIG : detector_config,
-    #         PONI_KEY_WAVELENGTH : wave,
-    #         PONI_KEY_DISTANCE : dist,
-    #         PONI_KEY_PIXEL1 : pixel1,
-    #         PONI_KEY_PIXEL2 : pixel2,
-    #         PONI_KEY_SHAPE1 : shape[0],
-    #         PONI_KEY_SHAPE2 : shape[1],
-    #         PONI_KEY_PONI1 : poni1,
-    #         PONI_KEY_PONI2 : poni2,
-    #         PONI_KEY_ROT1 : rot1,
-    #         PONI_KEY_ROT2 : rot2,
-    #         PONI_KEY_ROT3 : rot3,
-    #     }
-    #     return poni_dict
-
-    # @logger_info
-    # def retrieve_poni_instance_from_file(self, poni_filename=''):
-    #     poni_filename = Path(poni_filename)
-
-    #     if not poni_filename.is_file():
-    #         return
-
-    #     poni = PoniFile(data=str(poni_filename))
-    #     return poni
-
-
-    # @logger_info
-    # def update_ponifile_parameters(self, dict_poni=dict()) -> None:
-    #     """
-    #     Changes manually the functional poni parameters of pygix
-    #     """
-    #     if not self._transform:
-    #         return
-
-    #     if dict_poni:
-    #         try:
-    #             new_poni = PoniFile(data=dict_poni)
-    #             self._transform._init_from_poni(new_poni)
-    #         except Exception as e:
-    #             logger.error(e)
-    #     else:
-    #         if self.active_ponifile:
-    #             self._transform.load(self.active_ponifile)
-
-    # @logger_info
-    # def update_grazinggeometry(self, poni_filename='') -> None:
-    #     """
-    #     If there is an active ponifile, inherits the methods from Transform class (pygix module)
-    #     """        
-    #     if not poni_filename:
-    #         poni_filename = self.active_ponifile
-
-    #     if not poni_filename:
-    #         logger.info(f"No active ponifile. GrazingGeometry was not updated")            
-    #         return
-    #     if not Path(poni_filename).is_file():
-    #         logger.info(f"The .poni file {poni_filename} does not exist.")
-    #         return
-
-    #     # Load the ponifile
-    #     try:
-    #         self._transform.load(poni_filename)
-    #         logger.info(f"Loaded poni file: {poni_filename}")
-    #     except Exception as e:
-    #         logger.error(f"{e}: Ponifile could not be loaded to GrazingGeometry")
-        
-    #     # Update default incident and tilt angles
-    #     try:
-    #         self.update_incident_tilt_angle()
-    #     except Exception as e:
-    #         logger.error(f"{e}: angles could not be updated.")
-
-    # @logger_info
-    # def update_angles(self, sample_name=str(), list_index=list()):
-    #     iangle = self.get_incident_angle(
-    #         sample_name=sample_name,
-    #         index_list=list_index,
-    #     )
-    #     tangle = self.get_tilt_angle(
-    #         sample_name=sample_name,
-    #         index_list=list_index,
-    #     )
-    #     self.update_incident_tilt_angle(
-    #         incident_angle=iangle,
-    #         tilt_angle=tangle,
-    #     )
-
-    @logger_info
-    def update_incident_tilt_angle(self, incident_angle=0.0, tilt_angle=0.0):
-        """
-        Update the incident and tilt angles inherited from GrazingGeometry
-
-        Keyword Arguments:
-            incident_angle -- (default: {0.0})
-            tilt_angle --  (default: {0.0})
-        """        
-        # Incident angle
-        try:
-            self._transform.set_incident_angle(
-                incident_angle=incident_angle,
-            )
-            logger.info(f"Incident angle set at {incident_angle}")
-        except Exception as e:
-            logger.error(f"{e}: Incident angle could not be updated.")
-
-        # Tilt angle
-        try:
-            self._transform.set_tilt_angle(
-                tilt_angle=tilt_angle,
-            )
-            logger.info(f"Tilt angle set at {tilt_angle}")
-        except Exception as e:
-            logger.error(f"{e}: Tilt angle could not be updated.")
+        logger.info(f'Tilt angle set up as {tilt_angle}.')
 
     @logger_info
     def update_orientation(self, qz_parallel=True, qr_parallel=True) -> None:
@@ -335,80 +144,127 @@ class GIIntegrator(Transform):
         """
         try:
             sample_orientation = DICT_SAMPLE_ORIENTATIONS[(qz_parallel, qr_parallel)]
-            self._transform.set_sample_orientation(
+            self.set_sample_orientation(
                 sample_orientation=sample_orientation,
             )
             logger.info(f"The sample orientation (pygix) is set at {sample_orientation}.")
         except Exception as e:
             logger.error(f"The sample orientation (pygix) could not be updated.")
 
+    @logger_info
+    def init_ai(self):
+        self._ai = AzimuthalIntegrator()
 
+    @logger_info
+    def update_poni(self, poni=None):
+        """
+        Updates the .poni parameters in AzimuthalIntegrator and GrazingGeometry instances
+
+        Keyword Arguments:
+            poni -- PoniFile instance, taken from pyFAI.io.ponifile or ponifile string path (default: {None})
+        """
+        poni = open_poni(poni=poni)
+
+        if poni is None:
+            logger.error(f'poni instance could not be updated.')
+            return
+
+        self._update_gi(poni=poni)
+        self._update_ai(poni=poni)
+        self._set_poni(poni=poni)
+
+    @logger_info
+    def _update_gi(self, poni=None):
+        """
+        Update the .poni parameters of GrazingGeometry instance
+
+        Keyword Arguments:
+            poni -- pyFAI.io.PoniFile instance (default: {None})
+        """        
+        if poni is None:
+            return
+        
+        try:
+            self._init_from_poni(poni=poni)
+            logger.info(f'GrazingGeometry instance was updated.')
+        except Exception as e:
+            logger.error(f'{e}: GrazingGeometry could not be updated.')
+
+    @logger_info
+    def _update_ai(self, poni=None):
+        """
+        Update the .poni parameters of pyFAI.AzimuthalIntegrator instance
+
+        Keyword Arguments:
+            poni -- pyFAI.io.PoniFile instance (default: {None})
+        """    
+        if poni is None:
+            return
+
+        try:
+            self._ai._init_from_poni(poni=poni)
+            logger.info(f'GrazingGeometry instance was updated.')
+        except Exception as e:
+            logger.error(f'{e}: GrazingGeometry could not be updated.')
+
+    @logger_info
+    def _set_poni(self, poni=None):
+        """
+        Set the poni instance
+
+        Keyword Arguments:
+            poni -- pyFAI.io.PoniFile instance (default: {None})
+        """        
+        self._poni = poni
+        
     #####################################
     ###### EDF METHODS ##########
     #####################################
 
     @logger_info
-    def map_reshaping(
-        self,
-        data=None,
-        # dict_poni=dict(),
-        ):
+    def map_reshaping(self, data=None):
+        """
+        Generates the reshaped map according to .poni parameters
 
-        data_reshape, q, chi = self._ai.integrate2d(
-            data=data,
-            npt_rad=1000,
-            unit="q_nm^-1",
-        )
-        logger.info(f"Reshaped map.")
+        Keyword Arguments:
+            data -- 2D matrix to be reshaped (default: {None})
+
+        Returns:
+            data_reshape -- 2D matrix with transformed coordinates (polar-q)
+            q -- Azimuthal grid
+            chi -- Polar grid
+        """        
+        try:
+            data_reshape, q, chi = self._ai.integrate2d(
+                data=data,
+                npt_rad=1000,
+                unit="q_nm^-1",
+            )
+        except Exception as e:
+            logger.error(f'{e}: Reshaped_map could not retrieved.')
+            data_reshape, q, chi = None, None, None
 
         return data_reshape, q, chi
     
-
-
-
     @logger_info
-    def raw_integration(
-        self,
-        sample_name=str(),
-        sample_relative_address=True,
-        index_list=list(),
-        data=None,
-        norm_factor=1.0,
-        list_dict_integration=list(),
-    ) -> list:
+    def raw_integration(self, data=None, norm_factor=1.0, list_dict_integration=list()) -> list:
         """
-        Chooses which integration is going to be performed: azimuthal (pyFAI), radial (pyFAI) or box (self method)
+        Chooses which integration is going to be performed: azimuthal (pyFAI), radial (pyFAI) or box (pygix)
 
-        Parameters:
-        folder_name(str) : name of the folder(Group) in the first level of hierarchy
-        index_list(list or int) : integer of list of integers for the files inside the folder
-        data(np.array) : data can be uploaded directly
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        list_dict_integration(list) : list of dictionaries with key-values that will be read by the pygix-pyFAI integration engine
-        
+        Keyword Arguments:
+            data -- 2D array to be integrated (default: {None})
+            norm_factor -- normalization factor to be used during integration (default: {1.0})
+            list_dict_integration -- list of dictionaries with integration instructions (default: {list()})
+
         Returns:
-        list : list of numpy arrays with the result of the integration
+            list of numpy arrays with the results of the integration
         """
-        # Get the data
-        # if data is None:
-        #     data = self.get_Edf_data(
-        #         sample_name=sample_name,
-        #         sample_relative_address=sample_relative_address,
-        #         index_list=index_list,
-        #     )
-
-        # Get the normalization factor
-        # if norm_factor == 1.0:
-        #     norm_factor = self.get_norm_factor(
-        #         sample_name=sample_name,
-        #         index_list=index_list,
-        #     )
-
         array_compiled = []
 
         for dict_integration in list_dict_integration:
             if dict_integration[KEY_INTEGRATION] == CAKE_LABEL:
                 if dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_AZIM:
+
                     res = self.raw_integration_azimuthal(
                         data=data,
                         norm_factor=norm_factor,
@@ -416,44 +272,52 @@ class GIIntegrator(Transform):
                     )
 
                 elif dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_RADIAL:
+
                     res = self.raw_integration_radial(
                         data=data,
                         norm_factor=norm_factor,
                         dict_integration=dict_integration,
                     )
             elif dict_integration[KEY_INTEGRATION] == BOX_LABEL:
+
                 res = self.raw_integration_box(
                     data=data,
                     norm_factor=norm_factor,
                     dict_integration=dict_integration,
                 )
             else:
-                print(ERROR_RAW_INTEGRATION)
+                logger.info(ERROR_RAW_INTEGRATION)
                 res = None
 
             array_compiled.append(res)
+
         return array_compiled
 
-    @logger_info
-    def raw_integration_azimuthal(
-        self, 
-        data=None,
-        norm_factor=1.0,
-        dict_integration=dict(),
-    ) -> np.array:
-        """
-        Performs an azimuthal integration using the pygix-pyFAI engine
 
-        Parameters:
-        data(np.array) : data to be integrated
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        dict_integration(dict) : dictionary with key-values that will be read by the pygix-pyFAI integration engine
-        
-        Returns:
-        np.array : result of the integration
+    @logger_info
+    def raw_integration_azimuthal(self, data=None, norm_factor=1.0, dict_integration=dict()) -> np.array:
         """
-        # Take the array of intensity
-        if (data is None) or (not dict_integration):
+        Performs an azimuthal integration using the pyFAI engine
+
+        Keyword Arguments:
+            data -- 2D array to be integrated (default: {None})
+            norm_factor -- normalization factor to be used during integration (default: {1.0})
+            dict_integration -- dictionary with integration instructions (default: {dict()})
+
+        Returns:
+            result of the integration
+        """
+
+        if data is None:
+            logger.error(f'Data is None. No integration to be done.')
+            return
+
+        if not dict_integration:
+            logger.error(f'No dict integration.')
+            return
+
+        if not is_cake_dictionary(dict_integration=dict_integration):
+            logger.error(f'{dict_integration} is not a valid dict for cake integration.')
             return
         
         p0_range=dict_integration[CAKE_KEY_RRANGE]
@@ -462,12 +326,16 @@ class GIIntegrator(Transform):
         npt = dict_integration[CAKE_KEY_ABINS]
 
         if npt == 0:
-            npt=self.calculate_bins(
-                radial_range=p0_range,
-                unit=unit,
-            )
+            try:
+                npt=self.calculate_bins(
+                    radial_range=p0_range,
+                    unit=unit,
+                )
+            except Exception as e:
+                logger.error(f'{e} Error during calculating bins. p0_range:{p0_range}, unit: {unit}')
+                npt = 1000
+                logger.info(f'npt set to 1000')
 
-        # Do the integration with pygix/pyFAI
         try:
             logger.info(f"Trying azimuthal integration with: data-shape={data.shape} bins={npt}, p0_range={p0_range}, p1_range={p1_range}, unit={unit}")
             y_vector, x_vector = self.integrate_1d(
@@ -480,7 +348,7 @@ class GIIntegrator(Transform):
                 normalization_factor=float(norm_factor),
                 polarization_factor=POLARIZATION_FACTOR,
             )
-            logger.info("Integration performed.")
+            logger.info("Azimuthal integration performed.")
         except Exception as e:
             logger.error(f"{e}: Error during azimuthal integration.")
             return
@@ -488,33 +356,35 @@ class GIIntegrator(Transform):
         return np.array([x_vector, y_vector])
 
     @logger_info
-    def raw_integration_radial(
-        self, 
-        data=None,
-        norm_factor=1.0,
-        dict_integration=dict(),
-    ) -> np.array:
+    def raw_integration_radial(self, data=None, norm_factor=1.0, dict_integration=dict()) -> np.array:
         """
-        Performs a radial integration using the pygix-pyFAI engine
+        Performs a radial integration using the pyFAI engine
 
-        Parameters:
-        data(np.array) : data to be integrated
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        dict_integration(dict) : dictionary with key-values that will be read by the pygix-pyFAI integration engine
-        
+        Keyword Arguments:
+            data -- 2D array to be integrated (default: {None})
+            norm_factor -- normalization factor to be used during integration (default: {1.0})
+            dict_integration -- dictionary with integration instructions (default: {dict()})
+
         Returns:
-        np.array : result of the integration
+            result of the integration
         """
-        # Take the array of intensity
-        if (data is None) or (not dict_integration):
+
+        if data is None:
+            logger.error(f'Data is None. No integration to be done.')
+            return
+
+        if not dict_integration:
+            logger.error(f'No dict integration.')
+            return
+
+        if not is_cake_dictionary(dict_integration=dict_integration):
+            logger.error(f'{dict_integration} is not a valid dict for cake integration.')
             return
 
         # Do the integration with pygix/pyFAI
         npt  = int(dict_integration[CAKE_KEY_ABINS])
         p0_range = dict_integration[CAKE_KEY_RRANGE]
         p1_range = dict_integration[CAKE_KEY_ARANGE]
-
-        
         unit = UNIT_GI[dict_integration[CAKE_KEY_UNIT]]
         
         try:
@@ -529,54 +399,67 @@ class GIIntegrator(Transform):
                 normalization_factor=float(norm_factor),
                 polarization_factor=POLARIZATION_FACTOR,
             )
-            logger.info("Integration performed.")
+            logger.info("Radial integration performed.")
         except:
             logger.info("Error during radial integration.")
             return
+
         return np.array([x_vector, y_vector])
 
     @logger_info
-    def raw_integration_box(
-        self, 
-        data=None,
-        norm_factor=1.0,
-        dict_integration=dict(),
-    ) -> pd.DataFrame:
+    def raw_integration_box(self, data=None, norm_factor=1.0, dict_integration=dict()) -> np.array:
         """
-        Performs a box integration using the pygix-pyFAI engine
+        Performs a box integration using the pygix engine
 
-        Parameters:
-        data(np.array) : data to be integrated
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        dict_integration(dict) : dictionary with key-values that will be read by the pygix-pyFAI integration engine
-        
+        Keyword Arguments:
+            data -- 2D array to be integrated (default: {None})
+            norm_factor -- normalization factor to be used during integration (default: {1.0})
+            dict_integration -- dictionary with integration instructions (default: {dict()})
+
         Returns:
-        np.array : result of the integration
+            result of the integration
         """
-        # Take the array of intensity
-        if (data is None) or (not dict_integration):
+        
+        if data is None:
+            logger.error(f'Data is None. No integration to be done.')
+            return
+
+        if not dict_integration:
+            logger.error(f'No dict integration.')
+            return
+
+        if not is_box_dictionary(dict_integration=dict_integration):
+            logger.error(f'{dict_integration} is not a valid dict for box integration.')
             return
 
         # Get the direction of the box
         process = DICT_BOX_ORIENTATION[dict_integration[BOX_KEY_DIRECTION]]
         unit=dict_integration[BOX_KEY_INPUT_UNIT]
-        try:
-            if process == 'opbox':
-                p0_range, p1_range = dict_integration[BOX_KEY_OOPRANGE], dict_integration[BOX_KEY_IPRANGE]
+
+        if process == 'opbox':
+            p0_range, p1_range = dict_integration[BOX_KEY_OOPRANGE], dict_integration[BOX_KEY_IPRANGE]
+            try:
                 npt = self.calculate_bins(
                     radial_range=dict_integration[BOX_KEY_OOPRANGE],
                     unit=unit,
                 )
-            elif process == 'ipbox':
-                p0_range, p1_range = dict_integration[BOX_KEY_IPRANGE], dict_integration[BOX_KEY_OOPRANGE]
+            except Exception as e:
+                logger.error(f'{e}: error during calculating bins. Rad.range: {dict_integration[BOX_KEY_OOPRANGE]}, unit:{unit}')
+                npt = 1000
+                logger.info(f'npt set to 1000')
+        elif process == 'ipbox':
+            p0_range, p1_range = dict_integration[BOX_KEY_IPRANGE], dict_integration[BOX_KEY_OOPRANGE]
+            try:
                 npt = self.calculate_bins(
                     radial_range=dict_integration[BOX_KEY_IPRANGE],
                     unit=unit,
-                )
-            else:
-                return
-        except:
-            p0_range, p1_range, npt = None, None, NPT_RADIAL
+                )                
+            except Exception as e:
+                logger.error(f'{e}: error during calculating bins. Rad.range: {dict_integration[BOX_KEY_IPRANGE]}, unit:{unit}')
+                npt = 1000
+                logger.info(f'npt set to 1000')
+        else:
+            return
 
         # Transform input units if necessary
         p0_range = [self.get_q_nm(

@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QMessageBox
 from PyQt5.QtGui import QPixmap
 from scipy import ndimage
 
+from pyFAI.io.ponifile import PoniFile
 from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries, get_dict_files, get_dict_difference
 from pyxscat.other.plots import *
 from pyxscat.other.integrator_methods import *
@@ -25,7 +26,10 @@ from pyxscat.h5_integrator import H5GIIntegrator
 from pyxscat.gi_integrator import PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
 # from pyxscat.h5_integrator import *
 from pyxscat.gui.gui_layout import QZ_BUTTON_LABEL, QR_BUTTON_LABEL, MIRROR_BUTTON_LABEL
+from pyxscat.poni_methods import open_poni
 
+
+import copy
 import json
 import numpy as np
 import subprocess
@@ -119,21 +123,10 @@ FILENAME_H5_KEY = "h5_filename"
 NAME_H5_KEY = "name"
 FILENAME_KEY = "filename"
 
-
-
 from pyxscat.logger_config import setup_logger
 logger = setup_logger()
 
 def log_info(func):
-    """
-    To be used as decorator, everytime the function is accesed, a new log info message is written
-
-    Parameters:
-    None
-
-    Returns:
-    None
-    """
     def wrapper(*args, **kwargs):
         logger.debug(f'We entered into function: {func.__name__}')
         return func(*args, **kwargs)
@@ -143,9 +136,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     """
     Class to create a GUI widget, with methods and callbacks
     """
-
-    signal = pyqtSignal(int)
-
     def __init__(self):
         super(GUIPyXMWidget, self).__init__()
 
@@ -161,7 +151,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.h5 = None
         self._data_cache = None
         self.main_directory = Path()
-        self._dict_poni_cache = dict()
+        # self._dict_poni_cache = dict()
         self.clicked_folder = str()
         self.list_results_cache = []
         self.list_dict_integration_cache = []
@@ -371,21 +361,12 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         ### PONIFILE PARAMETERS
         #########################
         self.checkbox_poni_mod.stateChanged.connect(self.disable_ponifile_mod)
-        self.button_update_old_poni_parameters.clicked.connect(self.retrieve_old_poni_clicked)
+        self.button_update_old_poni_parameters.clicked.connect(self.restore_cache_poni_clicked)
         self.button_update_poni_parameters.clicked.connect(self.update_poni_clicked)
         self.button_save_poni_parameters.clicked.connect(self.save_poni_clicked)
 
     @log_info
     def reset_attributes_and_widgets(self) -> None:
-        """
-        Resets data attributes after changing main directory
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
         self.sample_cache = str()
         self.cache_index = []
         self._h5_file = str()
@@ -402,16 +383,16 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         cb.clear(self.combobox_normfactor)
         lt.clear(self.listwidget_samples)
         tm.reset(self.table_files)
-        # le.clear(self.lineedit_headeritems)
-        # le.clear(self.lineedit_headeritems_title)
         self.graph_1D_widget.clear()
         self.graph_raw_widget.clear()
 
         self.write_terminal_and_loggerinfo(MSG_RESET_DATA)
 
-    # #########################
-    # # Update self attributes
-    # #########################
+
+    ##########################
+    ## RECENT .H5 FILES METHODS
+    ##########################
+
     @log_info
     def update_combobox_h5(self, change_to_last=True) -> None:
         combobox = self.combobox_h5_files
@@ -441,6 +422,11 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             h5_file = Path(dict_h5.get("h5_filename"))
             h5_files.append(h5_file)
         return h5_files
+
+
+    ##########################
+    ## METADATA TAB METHODS
+    ##########################
 
     @log_info
     def update_combobox_metadata(self) -> None:
@@ -502,44 +488,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Update the widgets
         self.update_metadata_widgets(dict_setup=dict_cake_integration)
     
-
-    # @log_info
-    # def update_setup_info(self, name_setup=str(), new_dict=defaultdict) -> None:
-    #     """
-    #     Declare the setup dictionary of the GUI searching by name (string) or declaring a new one
-
-    #     Parameters:
-    #     new_name_setup(str) : key 'Name' of the (already saved) setup dictionary in a .json file
-    #     new_dict(defaultdict) : contains the new values for the setup dictionary
-
-    #     Returns:
-    #     None
-    #     """
-    #     if not name_setup:
-    #         name_setup = cb.value(self.combobox_setup)
-
-    #     # Search for a .json file with the name_setup string
-    #     if name_setup:
-    #         new_dict_setup = get_dict_setup_from_name(
-    #             name=name_setup,
-    #             directory_setups=SETUP_PATH,
-    #         )
-    #     # Directly update with a defaultdict  
-    #     elif new_dict:
-    #         new_dict_setup = new_dict
-    #     else:
-    #         new_dict_setup = get_empty_setup_dict()
-
-    #     new_dict_setup = filter_dict_setup(
-    #         dictionary=new_dict_setup,
-    #     )
-
-    #     # Updates the instance variable
-    #     self._dict_setup = new_dict_setup
-
-    #     self.write_terminal_and_logger(MSG_SETUP_UPDATED)
-    #     self.write_terminal_and_logger(self._dict_setup)
-
     @log_info
     def update_metadata_widgets(self, dict_setup=dict()):
 
@@ -647,8 +595,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         self.write_terminal_and_loggerinfo(f"New metadata keys: {str(dict_metadata)}")
 
-
-
     @log_info
     def metadata_save_clicked(self, _):
         # Fetch a dictionary with metadata keys from widgets
@@ -669,19 +615,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             text=dict_metadata["Name"],
         )
 
-
-
-    # @log_info
-    # def save_metadata(self, dict_setup=dict()) -> None:
-    #     """
-    #         Collect the dictionary and save a .json file
-    #     """
-    #     file_json = join(SETUP_PATH, f"{new_dict_info['Name']}.json")
-    #     with open(file_json, 'w+') as fp:
-    #         json.dump(new_dict_info, fp)
-    #     self.update_combobox_setups()
-
-
+    ##########################
+    ## CAKE TAB METHODS ######
+    ##########################
 
     @log_info
     def listcakes_clicked(self, list_item):
@@ -722,42 +658,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         logger.info(f"Updated widgets with cake integration values.")
 
     @log_info
-    def listbox_clicked(self, list_item):
-        name_box_integration = list_item.text()
-
-        # Check if a file with this name does exist
-        filename_integration = locate_integration_file(name_integration=name_box_integration)
-        if not filename_integration:
-            return
-        
-        # Fetch the dictionary
-        dict_box_integration = fetch_dictionary_from_json(filename_json=filename_integration)
-
-        # Check if the dictionary contains all the parameters and correct types
-        if not is_box_dictionary(dict_integration=dict_box_integration):
-            return
-
-        # Update cake widgets
-        self.update_box_parameters(dict_integration=dict_box_integration)
-
-    @log_info
-    def update_box_parameters(self, dict_integration=dict()):
-        """
-        Updates the widgets of integration after clicking on the list_boxes
-        """
-        le.substitute(self.lineedit_name_box, dict_integration[BOX_KEY_NAME])
-        le.substitute(self.lineedit_suffix_box, dict_integration[BOX_KEY_SUFFIX])
-        cb.set_text(self.combobox_direction_box, dict_integration[BOX_KEY_DIRECTION])
-        cb.set_text(self.combobox_units_box, dict_integration[BOX_KEY_INPUT_UNIT])
-        self.spinbox_ipmin_box.setValue(dict_integration[BOX_KEY_IPRANGE][0])
-        self.spinbox_ipmax_box.setValue(dict_integration[BOX_KEY_IPRANGE][1])
-        self.spinbox_oopmin_box.setValue(dict_integration[BOX_KEY_OOPRANGE][0])
-        self.spinbox_oopmax_box.setValue(dict_integration[BOX_KEY_OOPRANGE][1])
-        cb.set_text(self.combobox_outputunits_box, dict_integration[BOX_KEY_OUTPUT_UNIT])
-        logger.info(f"Updated widgets with box integration values.")
-
-
-    @log_info
     def cake_parameter_changed(self,_):
         # Fetch the integration parameters from the widgets
         dict_integration = self.fetch_cake_integration_parameters()
@@ -781,7 +681,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             graph_2D_raw=True,
         )
         
-
     @log_info
     def fetch_cake_integration_parameters(self):
         dict_cake = dict()
@@ -826,6 +725,45 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         dict_cake[KEY_INTEGRATION] = CAKE_LABEL
 
         return dict_cake
+
+    ##########################
+    ## BOX TAB METHODS #######
+    ##########################
+
+    @log_info
+    def listbox_clicked(self, list_item):
+        name_box_integration = list_item.text()
+
+        # Check if a file with this name does exist
+        filename_integration = locate_integration_file(name_integration=name_box_integration)
+        if not filename_integration:
+            return
+        
+        # Fetch the dictionary
+        dict_box_integration = fetch_dictionary_from_json(filename_json=filename_integration)
+
+        # Check if the dictionary contains all the parameters and correct types
+        if not is_box_dictionary(dict_integration=dict_box_integration):
+            return
+
+        # Update cake widgets
+        self.update_box_parameters(dict_integration=dict_box_integration)
+
+    @log_info
+    def update_box_parameters(self, dict_integration=dict()):
+        """
+        Updates the widgets of integration after clicking on the list_boxes
+        """
+        le.substitute(self.lineedit_name_box, dict_integration[BOX_KEY_NAME])
+        le.substitute(self.lineedit_suffix_box, dict_integration[BOX_KEY_SUFFIX])
+        cb.set_text(self.combobox_direction_box, dict_integration[BOX_KEY_DIRECTION])
+        cb.set_text(self.combobox_units_box, dict_integration[BOX_KEY_INPUT_UNIT])
+        self.spinbox_ipmin_box.setValue(dict_integration[BOX_KEY_IPRANGE][0])
+        self.spinbox_ipmax_box.setValue(dict_integration[BOX_KEY_IPRANGE][1])
+        self.spinbox_oopmin_box.setValue(dict_integration[BOX_KEY_OOPRANGE][0])
+        self.spinbox_oopmax_box.setValue(dict_integration[BOX_KEY_OOPRANGE][1])
+        cb.set_text(self.combobox_outputunits_box, dict_integration[BOX_KEY_OUTPUT_UNIT])
+        logger.info(f"Updated widgets with box integration values.")
 
     @log_info
     def box_parameter_changed(self,_):
@@ -890,6 +828,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         return dict_box
 
+    #####################################
+    ## SAMPLE-ORIENTATION METHODS #######
+    #####################################
+
     @log_info
     def button_mirror_clicked(self, state_mirror):
         # Update the label and style of button
@@ -952,6 +894,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 graph_2D_q=True,
             )
 
+    #################################
+    ## ROOT-DIRECTORY METHODS #######
+    #################################
+    
     @log_info
     def pick_rootdir_clicked(self,_):
         # Get the address of a root directory
@@ -1001,7 +947,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Update the combobox of h5 files
         self.update_combobox_h5()
-
 
     @log_info
     def init_h5_instance(
@@ -1082,7 +1027,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         return h5_filename
 
-
     @log_info
     def pick_root_directory(self, timeout=1e9) -> Path:
         """
@@ -1111,20 +1055,17 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 self.write_terminal_and_loggerinfo(ERROR_PICK_FOLDER)
         return main_directory
 
+    # @log_info
+    # def get_full_folderpath(self, folder_relative_name=str()) -> Path:
+    #     """
+    #     Join the folder_name (relative to) with the main_directory
+    #     """
+    #     if not self.main_directory:
+    #         return
 
-
-
-    @log_info
-    def get_full_folderpath(self, folder_relative_name=str()) -> Path:
-        """
-        Join the folder_name (relative to) with the main_directory
-        """
-        if not self.main_directory:
-            return
-
-        folder_relative_name = Path(folder_relative_name)
-        full_folder_name = self.main_directory.joinpath(folder_relative_name)
-        return full_folder_name
+    #     folder_relative_name = Path(folder_relative_name)
+    #     full_folder_name = self.main_directory.joinpath(folder_relative_name)
+    #     return full_folder_name
 
     @log_info
     def pick_hdf5_folder(self) -> Path:
@@ -1155,7 +1096,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 self.write_terminal_and_loggerinfo(ERROR_H5DIR)
 
         return h5_dir
-
 
     @log_info
     def pick_h5file_clicked(self, _):
@@ -1196,7 +1136,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Update the combobox of h5 files
         self.update_combobox_h5()
-
 
     @log_info
     def pick_h5_file(self):
@@ -1301,7 +1240,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             qr_parallel=self.state_qr,
         )
 
-
     @log_info
     def update_h5_plaintext(self):
         self.h5_plaintext.clear()
@@ -1310,9 +1248,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             for k,v in d.items():
                 self.h5_plaintext.appendPlainText(f"{str(k)} : {str(v)}\n")
 
-    ##################################################
-    ############# PONIFILE METHODS ###################
-    ##################################################
+    #####################
+    ### PONI METHODS ####
+    #####################
 
     @log_info
     def update_cb_ponifiles(
@@ -1330,7 +1268,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Add ponifiles from h5 instance
         if from_h5:
-            # Fetch ponifiles from h5 instance
             ponifiles_in_h5 = self.h5.get_all_ponifiles(get_relative_address=relative_address)
             ponifile_list = ponifiles_in_h5
 
@@ -1355,42 +1292,24 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     @log_info
     def cb_ponifile_changed(self, poni_name):
+        """
+        Updates the .poni parameters from a changed value of .poni filename
+
+        Arguments:
+            poni_name -- string of .poni filename
+        """        
+
         if not self.h5:
             return
 
         # Activate the .poni file in the h5 instance
-        self.update_poni(
-            poni_filename=poni_name,
-        )
-        # self.h5.activate_poni_parameters(
-        #     poni_filename=poni_name,
-        # )
-
-        # Update the inherited instance of Grazing Geometry
-        # self.h5.update_grazinggeometry()
-        
-        # Check if the .poni file does exist
-
-
-
-        # if self.h5.active_ponifile:
-        #     self.write_terminal_and_loggerinfo(f"Activated {self.h5.active_ponifile}")
-        #     # self.write_terminal_and_loggerinfo(self.h5)
-        # else:
-        #     self.write_terminal_and_loggerinfo(f"No active ponifile.")
-        #     return
-
-        # if not Path(self.h5.active_ponifile).is_file():
-        #     self.write_terminal_and_loggerinfo(f"The .poni file {str(self.h5.active_ponifile)} does not exist.")
-        #     return
+        self.update_poni(poni=poni_name)
         
         # Update the .poni tab widgets
         poni = self.h5.get_poni()
         self._poni_cache = poni
 
-        self.update_ponifile_widgets(
-            poni=poni,
-        )
+        self.update_poni_widgets(poni=poni)
 
         # Update_graphs
         self.update_graphs(
@@ -1400,42 +1319,24 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
     @log_info
-    def retrieve_old_poni_clicked(self,_):
+    def restore_cache_poni_clicked(self,_):
+        """
+        Restores the poni widgets with the values from the previous poni stored in cache
+        """        
+
         if not self.h5:
             return
         
-        # old_poni = self.h5.retrieve_poni_instance_from_file(self.h5.active_ponifile)
-
+        # Retrieves the previous poni values
         poni = self._poni_cache
-        self.update_ponifile_widgets(
-            poni=poni,
-        )
 
-        self.update_poni(poni_instance=poni)
+        # Updates the widgets
+        self.update_poni_widgets(poni=poni)
 
-        # poni = self.h5.get_poni()
+        # Updates the GrazingGeometry and AzimuthalIntegrator instance
+        self.update_poni(poni=poni)
 
-        self.update_graphs(
-            graph_1D=True,
-            graph_2D_reshape=True,
-            graph_2D_q=True,
-        )
-    
-    @log_info
-    def update_poni_clicked(self,_):
-        if not self.h5:
-            return
-        
-        dict_poni = self.get_poni_dict_from_widgets()
-
-        # self.h5.update_ponifile_parameters(
-        #     dict_poni=dict_poni,
-        # )
-
-        self.update_poni(
-            dict_poni=dict_poni,
-        )
-
+        # Updates graphs
         self.update_graphs(
             graph_1D=True,
             graph_2D_reshape=True,
@@ -1443,36 +1344,156 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
     @log_info
-    def update_poni(self, poni_filename='', dict_poni={}, poni_instance=None):
+    def get_wavelength_from_widget(self) -> float:
+        """
+        Gets the float value for PONI_1 from the widget
+
+        Returns:
+            float of poni_2 parameter (check pyFAI geometry)
+        """    
+        widget = self.lineedit_wavelength
+        try:
+            wave = le.text(widget)
+            wave = float(wave)
+        except Exception as e:
+            self.write_terminal_and_loggererror(f'{e} wavelength: {wave} is not a good value.')
+            wave = self.h5.gi._poni.wavelength
+        return wave
+
+    @log_info
+    def get_distance_from_widget(self) -> float:
+        """
+        Gets the float value for sample-detector distance from the widget
+
+        Returns:
+            float of distance parameter (check pyFAI geometry)
+        """    
+        widget = self.lineedit_distance
+        try:
+            dist = le.text(widget)
+            dist = float(dist)
+        except Exception as e:
+            self.write_terminal_and_loggererror(f'{e} distance: {dist} is not a good value.')
+            dist = self.h5.gi._poni.dist
+        return dist
+
+    @log_info
+    def get_poni1_from_widget(self) -> float:
+        """
+        Gets the float value for PONI_1 from the widget
+
+        Returns:
+            float of poni_1 parameter (check pyFAI geometry)
+        """    
+        widget = self.lineedit_poni1
+        try:
+            poni1 = le.text(widget)
+            poni1 = float(poni1)
+        except Exception as e:
+            self.write_terminal_and_loggererror(f'{e} PONI1: {poni1} is not a good value.')
+            poni1 = self.h5.gi._poni.poni1
+        return poni1
+
+    @log_info
+    def get_poni2_from_widget(self) -> float:
+        """
+        Gets the float value for PONI_2 from the widget
+
+        Returns:
+            float of poni_2 parameter (check pyFAI geometry)
+        """    
+        widget = self.lineedit_poni2
+        try:
+            poni2 = le.text(widget)
+            poni2 = float(poni2)
+        except Exception as e:
+            self.write_terminal_and_loggererror(f'{e} PONI2: {poni2} is not a good value.')
+            poni2 = self.h5.gi._poni.poni2
+        return poni2
+
+    @log_info
+    def get_rot1_from_widget(self) -> float:
+        """
+        Gets the float value for rotation_1 from the widget
+
+        Returns:
+            float of rotation_1 parameter (check pyFAI geometry)
+        """    
+        widget = self.lineedit_rot1
+        try:
+            rot1 = le.text(widget)
+            rot1 = float(rot1)
+        except Exception as e:
+            self.write_terminal_and_loggererror(f'{e} ROT1: {rot1} is not a good value.')
+            rot1 = self.h5.gi._poni.rot1
+        return rot1
+
+    @log_info
+    def get_rot2_from_widget(self) -> float:
+        """
+        Gets the float value for rotation_2 from the widget
+
+        Returns:
+            float of rotation_2 parameter (check pyFAI geometry)
+        """              
+        widget = self.lineedit_rot2
+        try:
+            rot2 = le.text(widget)
+            rot2 = float(rot2)
+        except Exception as e:
+            self.write_terminal_and_loggererror(f'{e} ROT2: {rot2} is not a good value.')
+            rot2 = self.h5.gi._poni.rot2
+        return rot2
+
+    @log_info
+    def get_rot3_from_widget(self) -> float:
+        """
+        Gets the float value for rotation_3 from the widget
+
+        Returns:
+            float of rotation_3 parameter (check pyFAI geometry)
+        """              
+        widget = self.lineedit_rot3
+        try:
+            rot3 = le.text(widget)
+            rot3 = float(rot3)
+        except Exception as e:
+            self.write_terminal_and_loggererror(f'{e} ROT3: {rot3} is not a good value.')
+            rot3 = self.h5.gi._poni.rot3
+
+        return rot3
+
+    @log_info
+    def update_poni(self, poni=None):
+        """
+        Update the .poni parameters from GrazingGeometry and AzimuthalIntegrator instances
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """        
+
         if not self.h5:
             return
 
-        self.h5.update_poni(
-            poni_filename=poni_filename,
-            dict_poni=dict_poni,
-            poni_instance=poni_instance,
-        )
+        self.h5.update_poni(poni=poni)
 
         # dict_poni = self.h5.get_poni_dict()
         self.write_terminal_and_loggerinfo(f"Current poni parameters: {self.h5.get_poni()}")
 
     @log_info
-    def save_poni_clicked(self,_):
+    def update_poni_clicked(self,_):
+        """
+        Update .poni parameters and graphs
+        """
+
         if not self.h5:
             return
-        
-        # Update the .poni parameters from widgets
-        dict_poni = self.get_poni_dict_from_widgets()
 
-        self.update_poni(
-            dict_poni=dict_poni,
-        )
+        new_poni = self.get_poni_from_widgets()
 
-        # Save a .poni file
-        self.save_poni_instance(poni_instance=self.h5._poni_instance)
+        self.update_poni(poni=new_poni)
 
-
-
+        self.update_poni_widgets(poni=new_poni)
 
         self.update_graphs(
             graph_1D=True,
@@ -1480,272 +1501,302 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             graph_2D_q=True,
         )
 
+    @log_info
+    def save_poni_clicked(self,_):
+        """
+        Gets a modified version of current PoniFile instance and saves it as a new .poni file
+        """        
 
-        # Get a full poni dictionary from the widgets and h5
+        if not self.h5:
+            return
+        
+        # Get a new PoniFile instance from widgets
+        poni = self.get_poni_from_widgets()
 
-        # dict_poni = self.get_poni_dict_from_widgets()
+        # Update the poni parameters in GrazingGeometry and AzimuthalIntegrator instances
+        self.update_poni(poni=poni)
 
+        # Save a new .poni file
+        self.save_poni_instance(poni=poni)
+
+        # Update graphs
+        self.update_graphs(
+            graph_1D=True,
+            graph_2D_reshape=True,
+            graph_2D_q=True,
+        )
 
         # Update the h5 and combobox
         self.h5.update_ponifiles()
         self.update_cb_ponifiles(from_h5=True)
 
     @log_info
-    def get_poni_dict_from_widgets(self) -> dict:
+    def get_poni_from_widgets(self) -> PoniFile:
         """
-        Returns a dictionary with poni parameters from the widgets
-        """
+        Returns a copy from the current PoniFile instance with changes upon the widgets
+
+        Returns:
+            modified PoniFile instance
+        """        
+
         if not self.h5:
-            return
-        try:
-            wave = float(le.text(self.lineedit_wavelength))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Wavelength could not be retrieved from widget.")
-            return
-        try:
-            dist = float(le.text(self.lineedit_distance))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Distance could not be retrieved from widget.")
-            return
-        try:
-            poni1 = float(le.text(self.lineedit_poni1))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 1 could not be retrieved from widget.")
-            return
-        try:
-            poni2 = float(le.text(self.lineedit_poni2))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 2 could not be retrieved from widget.")
-            return
-        try:
-            rot1 = float(le.text(self.lineedit_rot1))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 1 could not be retrieved from widget.")
-            return
-        try:
-            rot2 = float(le.text(self.lineedit_rot2))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 2 could not be retrieved from widget.")
-            return
-        try:
-            rot3 = float(le.text(self.lineedit_rot3))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 3 could not be retrieved from widget.")
             return
         
-        dict_poni = self.h5.get_poni_dict()
-        dict_poni[PONI_KEY_WAVELENGTH] = wave
-        dict_poni[PONI_KEY_DISTANCE] = dist
-        dict_poni[PONI_KEY_PONI1] = poni1
-        dict_poni[PONI_KEY_PONI2] = poni2
-        dict_poni[PONI_KEY_ROT1] = rot1
-        dict_poni[PONI_KEY_ROT2] = rot2
-        dict_poni[PONI_KEY_ROT3] = rot3
+        current_poni = self.h5.gi._poni
 
-        return dict_poni
+        if current_poni is None:
+            logger.error(f'There is poni instance in GrazingGeometry instance.')
+
+        new_wave = self.get_wavelength_from_widget()
+        new_dist = self.get_distance_from_widget()
+        new_poni1 = self.get_poni1_from_widget()
+        new_poni2 = self.get_poni2_from_widget()
+        new_rot1 = self.get_rot1_from_widget()
+        new_rot2 = self.get_rot2_from_widget()
+        new_rot3 = self.get_rot3_from_widget()
+
+        new_poni = copy.deepcopy(current_poni)
+
+        new_poni._wavelength = new_wave
+        new_poni._dist = new_dist
+        new_poni._poni1 = new_poni1
+        new_poni._poni2 = new_poni2
+        new_poni._rot1 = new_rot1
+        new_poni._rot2 = new_rot2
+        new_poni._rot3 = new_rot3
+
+        return new_poni
+
+    @log_info
+    def update_poni_widgets(self, poni=None):
+        """
+        Update the ponifile widgets from a valid PoniFile instance
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """        
+
+        if not self.h5:
+            return
         
-    @log_info
-    def update_dict_poni_cache(self) -> dict:
-        """
-        Returns a dictionary with poni parameters from the widgets
-        """
-        if not self.h5:
-            return
-
-        try:
-            wave = float(le.text(self.lineedit_wavelength))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Wavelength could not be retrieved from widget.")
-            return
-        try:
-            dist = float(le.text(self.lineedit_distance))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Distance could not be retrieved from widget.")
-            return
-        try:
-            poni1 = float(le.text(self.lineedit_poni1))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 1 could not be retrieved from widget.")
-            return
-        try:
-            poni2 = float(le.text(self.lineedit_poni2))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 2 could not be retrieved from widget.")
-            return
-        try:
-            rot1 = float(le.text(self.lineedit_rot1))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 1 could not be retrieved from widget.")
-            return
-        try:
-            rot2 = float(le.text(self.lineedit_rot2))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 2 could not be retrieved from widget.")
-            return
-        try:
-            rot3 = float(le.text(self.lineedit_rot3))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 3 could not be retrieved from widget.")
-            return
-
-        self._dict_poni_cache[PONI_KEY_WAVELENGTH] = wave
-        self._dict_poni_cache[PONI_KEY_DISTANCE] = dist
-        self._dict_poni_cache[PONI_KEY_PONI1] = poni1
-        self._dict_poni_cache[PONI_KEY_PONI2] = poni2
-        self._dict_poni_cache[PONI_KEY_ROT1] = rot1
-        self._dict_poni_cache[PONI_KEY_ROT2] = rot2
-        self._dict_poni_cache[PONI_KEY_ROT3] = rot3
+        self.update_detector_widget(poni=poni)
+        self.update_wavelength_widget(poni=poni)
+        self.update_dist_widget(poni=poni)
+        self.update_poni1_widget(poni=poni)
+        self.update_poni2_widget(poni=poni)
+        self.update_rot1_widget(poni=poni)
+        self.update_rot2_widget(poni=poni)
+        self.update_rot3_widget(poni=poni)
 
     @log_info
-    def update_ponifile_widgets(self, poni=None) -> None:
+    def update_detector_widget(self, poni=None):
         """
-        Update the ponifile widgets from a poni dictionary
-        """
-        if not self.h5:
-            return
+        Update the widget with detector information
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """        
+        widget = self.lineedit_detector
+
         try:
-            # detector_name = dict_poni[PONI_KEY_DETECTOR]
             detector_name = poni.detector.name
         except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Detector name could not be retrieved from dictionary.")
-            return
+            self.write_terminal_and_loggererror(f"{e}: Detector name could not be retrieved from {poni}.")
+            detector_name = ''
+
         try:
-            # detector_bin = dict_poni[PONI_KEY_BINNING]
             detector_bin = poni.detector.binning
         except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Detector bin could not be retrieved from dictionary.")
-            return
-        try:
-            # wave = dict_poni[PONI_KEY_WAVELENGTH]
-            wave = poni.wavelength
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Wavelength could not be retrieved from dictionary.")
-            return
-        try:
-            # dist = dict_poni[PONI_KEY_DISTANCE]
-            dist = poni.dist
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Distance could not be retrieved from dictionary.")
-            return
-        try:
-            # pixel1 = dict_poni[PONI_KEY_PIXEL1]
-            pixel1 = poni.detector.pixel1
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Pixel 1 could not be retrieved from dictionary.")
-            return
-        try:
-            # pixel2 = dict_poni[PONI_KEY_PIXEL2]
-            pixel2 = poni.detector.pixel2
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Pixel 2 could not be retrieved from dictionary.")
-            return
-        try:
-            # shape1 = dict_poni[PONI_KEY_SHAPE1]
-            shape1 = poni.detector.shape[0]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Shape 1 could not be retrieved from dictionary.")
-            return
-        try:
-            # shape2 = dict_poni[PONI_KEY_SHAPE2]
-            shape2 = poni.detector.shape[1]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Shape 2 could not be retrieved from dictionary.")
-            return
-        try:
-            # poni1 = dict_poni[PONI_KEY_PONI1]
-            poni1 = poni.poni1
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 1 could not be retrieved from dictionary.")
-            return
-        try:
-            # poni2 = dict_poni[PONI_KEY_PONI2]
-            poni2 = poni.poni2
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 2 could not be retrieved from dictionary.")
-            return
-        try:
-            # rot1 = dict_poni[PONI_KEY_ROT1]
-            rot1 = poni.rot1
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 1 could not be retrieved from dictionary.")
-            return
-        try:
-            # rot2 = dict_poni[PONI_KEY_ROT2]
-            rot2 = poni.rot2
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 2 could not be retrieved from dictionary.")
-            return
-        try:
-            # rot3 = dict_poni[PONI_KEY_ROT3]
-            rot3 = poni.rot3
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 3 could not be retrieved from dictionary.")
-            return
+            self.write_terminal_and_loggererror(f"{e}: Detector binning could not be retrieved from {poni}.")
+            detector_bin = ('x','x')
 
-        detector_info = f"{str(detector_name)} / {str(detector_bin)} / ({shape1},{shape2}) / ({pixel1},{pixel2})"
+        try:
+            shape = poni.detector.shape
+            shape = (shape[0], shape[1])
+        except Exception as e:
+            self.write_terminal_and_loggererror(f"{e}: Shape could not be retrieved from {poni}.")
+            shape = (0,0)         
 
-        # if self.h5.active_ponifile:
+        detector_info = f'{str(detector_name)} / {str(detector_bin)} / {str(shape)}'
+
         le.substitute(
-                lineedit=self.lineedit_detector,
+                lineedit=widget,
                 new_text=detector_info,
             )
+
+    @log_info
+    def update_wavelength_widget(self, poni=None):
+        """
+        Update the widget with wavelength parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_wavelength
+
+        try:
+            wave = poni.wavelength
+        except Exception as e:
+            self.write_terminal_and_loggererror(f"{e}: Wavelength could not be retrieved from {poni}.")
+            wave = 0.0
+
         le.substitute(
-                lineedit=self.lineedit_wavelength,
+                lineedit=widget,
                 new_text=wave,
             )
+
+    @log_info
+    def update_dist_widget(self, poni=None):
+        """
+        Update the widget with sample-detector distance parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_distance
+
+        try:
+            dist = poni.dist
+        except Exception as e:
+            self.write_terminal_and_loggererror(f"{e}: Distance could not be retrieved from {poni}.")
+            dist = 0.0
+
         le.substitute(
-                lineedit=self.lineedit_distance,
+                lineedit=widget,
                 new_text=dist,
             )
+
+    @log_info
+    def update_poni1_widget(self, poni=None):
+        """
+        Update the widget with PONI 1 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_poni1
+
+        try:
+            poni1 = poni.poni1
+        except Exception as e:
+            self.write_terminal_and_loggererror(f"{e}: PONI1 could not be retrieved from {poni}.")
+            poni1 = 0.0
+
         le.substitute(
-                lineedit=self.lineedit_poni1,
+                lineedit=widget,
                 new_text=poni1,
             )
+
+    @log_info
+    def update_poni2_widget(self, poni=None):
+        """
+        Update the widget with PONI 2 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_poni2
+
+        try:
+            poni2 = poni.poni2
+        except Exception as e:
+            self.write_terminal_and_loggererror(f"{e}: PONI2 could not be retrieved from {poni}.")
+            poni2 = 0.0
+
         le.substitute(
-                lineedit=self.lineedit_poni2,
+                lineedit=widget,
                 new_text=poni2,
             )
+
+    @log_info
+    def update_rot1_widget(self, poni=None):
+        """
+        Update the widget with rotation_1 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_rot1
+
+        try:
+            rot1 = poni.rot1
+        except Exception as e:
+            self.write_terminal_and_loggererror(f"{e}: ROT1 could not be retrieved from {poni}.")
+            rot1 = 0.0
+
         le.substitute(
-                lineedit=self.lineedit_rot1,
+                lineedit=widget,
                 new_text=rot1,
             )
+
+    @log_info
+    def update_rot2_widget(self, poni=None):
+        """
+        Update the widget with rotation_2 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_rot2
+
+        try:
+            rot2 = poni.rot2
+        except Exception as e:
+            self.write_terminal_and_loggererror(f"{e}: ROT2 could not be retrieved from {poni}.")
+            rot2 = 0.0
+
         le.substitute(
-                lineedit=self.lineedit_rot2,
+                lineedit=widget,
                 new_text=rot2,
             )
+
+    @log_info
+    def update_rot3_widget(self, poni=None):
+        """
+        Update the widget with rotation_3 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_rot3
+
+        try:
+            rot3 = poni.rot3
+        except Exception as e:
+            self.write_terminal_and_loggererror(f"{e}: ROT3 could not be retrieved from {poni}.")
+            rot3 = 0.0
+
         le.substitute(
-                lineedit=self.lineedit_rot3,
+                lineedit=widget,
                 new_text=rot3,
             )
 
     @log_info
-    def update_ponifile_parameters(self, dict_poni=dict()) -> None:
-        """
-        Changes the functinal poni parameters stored in h5 instance
-        """
-        if not self.h5:
-            return
-
-        self.h5.update_ponifile_parameters(
-            dict_poni=dict_poni,
-        )
-
-    @log_info
-    def save_poni_instance(self, poni_instance=None) -> None:
+    def save_poni_instance(self, poni=None):
         """
         Saves a new .poni file with updated parameters
-        """
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """        
+
         if not self.h5:
             return
 
-        # ponifile = str(self.h5.active_ponifile)
-        ponifile_name = self.h5.active_ponifile.replace(".poni", f"_{date_prefix()}.poni")
+        ponifile_folder = self.h5._root_dir.joinpath('poni_files')
+        ponifile_folder.mkdir(exist_ok=True)
+        ponifile_name = ponifile_folder.joinpath(f'poni_{date_prefix()}.poni')
 
-        with open(ponifile_name, "w+") as fp:
-            poni_instance.write(fp)
-            # json.dump(dict_poni, fp)
+        try:
+            with open(ponifile_name, "w+") as fp:
+                poni.write(fp)
+                self.write_terminal_and_loggerinfo(f'Saved {ponifile_name}')
+        except Exception as e:
+            self.write_terminal_and_loggererror(f'{e} {ponifile_name} coudl not be saved.')
 
-
+    ##########################
+    ### REFERENCE METHODS ####
+    ##########################
 
     @log_info
     def update_reference_widgets(self) -> None:
@@ -1796,6 +1847,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             graph_2D_q=True,
         )
 
+    ##########################
+    ### PATHERN METHODS ######
+    ##########################
+
     @log_info
     def get_pattern(self):
         wildcards = le.text(self.lineedit_wildcards).strip()
@@ -1804,6 +1859,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         pattern = pattern.replace('**', '*')
         return pattern
 
+    ##########################
+    ### LISTWIDGET METHODS ###
+    ##########################
+
     @log_info
     def update_listwidget_with_samples(
         self, 
@@ -1811,7 +1870,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         from_h5=False, 
         list_samples=list(),
         reset=True,
-        relative_address=True,
         ):
         if not self.h5:
             return        
@@ -1851,7 +1909,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         from_h5=False, 
         list_samples=list(),
         reset=True,
-        # relative_to=True,
         ):
 
         # Add samples from h5 instance
@@ -1863,11 +1920,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 get_relative_address=True,
             )
             list_samples = samples_in_h5
-
-        # Make it relative
-        # if relative_to:
-        #     root_dir = Path(self.h5._root_dir)
-        #     list_samples = [str(Path(file).relative_to(root_dir)) for file in list_samples]
 
         if reset:
             cb.insert_list(
@@ -1886,6 +1938,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 list_items=new_samples,
                 reset=False,
             )
+
+    ##########################
+    ### PYFAI-CALIB METHODS ##
+    ##########################
 
     @log_info
     def open_pyFAI_calib2(self,_) -> None:
@@ -1950,13 +2006,13 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 reset=True,
             )
            
-    # #########################
-    # # Search engines
-    # #########################
-
+    ##########################
+    ### DATAFILES METHODS ####
+    ##########################
 
     @log_info
     def update_all_files(self,_):
+
         if not self.h5:
             return
         # Get a dictionary with the new files (not stored in h5)
@@ -1997,8 +2053,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             reset=True,
         )
 
-
-
+    ##########################
+    ### LIVE METHODS #########
+    ##########################
 
     @log_info
     def live_clicked(self,state_live):
@@ -2123,33 +2180,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         else:
             return
 
-
-
-
-
-    @log_info
-    def update_h5_poni_and_files(self) -> None:
-        """
-        Searches new files and updates the data/metadata files in the h5 file
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
-        if self.h5:
-            # Search ponifiles and updates them in the .h5 file
-            self.search_and_update_ponifiles_widgets()
-
-            # Searches files and update the Data/Metadat in Groups and Datasets in the .h5 file
-            self.h5.search_and_update_datafiles(
-                pattern=self.get_pattern(),
-            )
-            self.write_terminal_and_loggerinfo(INFO_H5_UPDATED)
-        else:
-            self.write_terminal_and_loggerinfo(ERROR_H5_UPDATED)
-
     @log_info
     def save_h5_dict(self):
         if not self.h5:
@@ -2216,60 +2246,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             item=short_name,
         )
 
-    # @log_info
-    # def update_widgets(self) -> None:
-    #     """
-    #     To be used after updating the .h5 file
-    #     This method may update the list_widget of folders and the table_widget with files and metadata
-    #     """
-    #     if self.h5:
-    #         # Main lineedit
-    #         le.substitute(
-    #             lineedit=self.lineedit_h5file,
-    #             new_text=self.h5.filename_h5,
-    #         )
-
-    #         # Check if new folders to update the list_widget and reference folder combobox
-    #         folders_in_list = set(lt.all_items(self.listwidget_samples))
-    #         folders_in_h5 = set(self.h5.generator_samples())
-    #         new_folders = [item for item in folders_in_h5.difference(folders_in_list)]
-    #         new_folders.sort()
-
-    #         if new_folders:
-    #             # List widget
-    #             lt.insert_list(
-    #                 listwidget=self.listwidget_samples,
-    #                 item_list=new_folders,
-    #                 reset=False,
-    #             )
-    #             logger.info(INFO_LIST_FOLDERS_UPDATED)
-
-    #             # Reference combobox
-    #             cb.insert_list(
-    #                 combobox=self.combobox_reffolder,
-    #                 list_items=new_folders,
-    #                 reset=False,
-    #             )
-    #         else:
-    #             logger.info(INFO_LIST_NO_FOLDERS_TO_UPDATE)
-
-    #         # Check if the table (click_folder) should be updated
-    #         if not self.clicked_folder:
-    #             return
-
-    #         num_files_in_table = tm.get_row_count(self.table_files)
-    #         num_files_in_h5 = self.h5.number_files_in_sample(self.clicked_folder)
-    #         logger.info(f"There are {num_files_in_table} files in the table and {num_files_in_h5} files in the .h5")
-    #         if num_files_in_h5 != num_files_in_table:
-    #             self.update_comboboxes_metadata_items()
-    #             self.update_table(
-    #                 reset=True,
-    #             )
-    #         else:
-    #             logger.info("The table was not updated.")
-    #     else:
-    #         self.write_terminal_and_loggerinfo(ERROR_H5_NOTEXISTS)
-
     def update_widgets_to_last_file(self, last_file=str()):
         """
         Updates atributes and graphs to the last detected file
@@ -2298,43 +2274,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             else:
                 logger.info("Last file was not updated.")
             
-    # @log_info
-    # def update_widgets_from_h5(self):
-
-    #     if self.h5:
-    #         # Update the main directory, files and folder attributes
-    #         self.main_directory = self.h5.get_root_directory()
-    #         # self.lineedit_maindir.setText(str(self.main_directory))
-    #         self.write_terminal_and_loggerinfo(MSG_MAIN_DIRECTORY)
-    #         self.write_terminal_and_loggerinfo(f"New main directory: {str(self.main_directory)}")
-
-    #         # Update file and folder attributes
-    #         self.list_folders = list(self.h5.generator_samples())
-    #         self.write_terminal_and_loggerinfo(f"Added {len(self.list_folders)} folders.")
-
-    #         # Feed the ponifile combobox
-    #         ponifile_list = self.h5.get_ponifile_list()
-    #         ponifile_list = [str(Path(item).relative_to(self.main_directory)) for item in ponifile_list]
-
-    #         cb.insert_list(
-    #             combobox=self.combobox_ponifile,
-    #             list_items=ponifile_list,
-    #             reset=True,
-    #         )
-
-    #         # Reset and fill the list widget with folders
-    #         lt.insert_list(
-    #             listwidget=self.listwidget_samples,
-    #             item_list=list(self.h5.generator_samples()),
-    #             reset=True,
-    #         )
-
-    #         # Feed the combobox of reference folder and masks
-    #         cb.insert_list(
-    #             combobox=self.combobox_reffolder,
-    #             list_items=list(self.h5.generator_samples()),
-    #         )
-
     @log_info
     def listsamples_clicked(self, clicked_sample_name):
         if not self.h5:
