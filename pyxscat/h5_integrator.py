@@ -919,6 +919,7 @@ class H5GIIntegrator():
 
     def get_full_dict_metadata(self, list_filenames=[]):
         header_dict = defaultdict(list)
+        list_filenames.sort()
         for file in list_filenames:
             header = self.get_Edf_instance(
                 full_filename=file,
@@ -1105,10 +1106,6 @@ class H5GIIntegrator():
                     group_name=group_name,
                     sample_address=sample_address,
                 )
-
-
-
-
 
     @logger_info
     def get_entry_name(self, sample_address=''):

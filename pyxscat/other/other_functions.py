@@ -37,7 +37,7 @@ def get_dict_files(list_files=list()) -> defaultdict:
     return dict_files
 
 
-def get_dict_difference(large_dict=dict(), small_dict=dict()):
+def get_dict_difference(large_dict=dict(), small_dict=dict(), sort=True):
     large_dict_set = {k:set(v) for k,v in large_dict.items()}
     small_dict_set = {k:set(v) for k,v in small_dict.items()}
 
@@ -53,6 +53,11 @@ def get_dict_difference(large_dict=dict(), small_dict=dict()):
                 dict_diff[key].update(new_datafiles)
             else:
                 pass
+
+    if sort:
+        for k in dict_diff.keys():
+            dict_diff[k] = sorted(dict_diff[k])
+
     return dict_diff
 
 

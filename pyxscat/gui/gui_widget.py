@@ -147,7 +147,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Initialize attributes and callbacks
         self.h5 = None
         self._data_cache = None
-        self.main_directory = Path()
+        self._root_dir = Path()
         # self._dict_poni_cache = dict()
         self.clicked_folder = str()
         self.list_results_cache = []
@@ -385,7 +385,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         self.write_terminal_and_loggerinfo(MSG_RESET_DATA)
 
-
     ##########################
     ## RECENT .H5 FILES METHODS
     ##########################
@@ -427,7 +426,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             h5_files.append(h5_file)
 
         return h5_files
-
 
     ##########################
     ## METADATA TAB METHODS
@@ -937,6 +935,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     
     @log_info
     def pick_rootdir_clicked(self,_):
+        """
+        Chain of events after pressing the folder button
+        """        
+
         # Get the address of a root directory
         root_directory = self.pick_root_directory()
         if not root_directory:
@@ -1016,16 +1018,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return False
 
     @log_info
-    def pick_h5_filename(self, root_directory=str()):
+    def pick_h5_filename(self, root_directory=''):
         """
         Creates a new filename for the incoming new .h5 file
 
-        Parameters:
-        main_directory(srt, Path) : path of the root directory where all the data/metadata will be located recursively
+        Keyword Arguments:
+            root_directory -- path of the root directory where all the data/metadata will be located recursively (default: {''})
+        """        
 
-        Return:
-        None
-        """
         # It has to be a Path where to search the data files
         if not root_directory:
             self.write_terminal_and_loggerinfo(ERROR_MAINDIR_DONTEXIST)
@@ -1075,74 +1075,60 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         return h5_filename
 
     @log_info
-    def pick_root_directory(self, timeout=1e9) -> Path:
+    def pick_root_directory(self) -> Path:
         """
-        Picks a folder as main directory, the root where the data files are searched recursively
+        Picks a folder as root directory, where the data files are searched recursively
+
+        Returns:
+            Path instance with the root directory
+        """        
+
+        # Pick the folder after pop-up browser window
+        self.dialog_maindir = QFileDialog()
+        get_directory = self.dialog_maindir.getExistingDirectory(self, 'Choose main directory', str(GLOBAL_PATH))
+
+        # Returns if is not valid, or the dialog was cancelled
+        if not get_directory:
+            root_directory = ""
+            self.write_terminal_and_loggerinfo(ERROR_PICK_FOLDER)
+        else:
+            try:
+                root_directory = Path(get_directory)
+            except NotImplementedError:
+                root_directory = ""
+                self.write_terminal_and_loggerinfo(ERROR_PICK_FOLDER)
+
+        return root_directory
+
+    @log_info
+    def pick_hdf5_folder(self) -> Path:
+        """
+        Picks a folder to save the .h5 file
 
         Parameters:
         None
 
         Returns:
-        Path: path instance of the root directory to search data files
+        Path: path for the new .h5
         """
-        # Pick the folder after pop-up browser window
-        self.dialog_maindir = QFileDialog()
-        get_directory = self.dialog_maindir.getExistingDirectory(self, 'Choose main directory', str(GLOBAL_PATH))
+        # It has to be a Path where to search the data files
+        if not self._root_dir:
+            self.write_terminal_and_loggerinfo(ERROR_MAINDIR_DONTEXIST)
+            return
+        
+        dialog_h5_dir = QFileDialog.getExistingDirectory(self, 'Choose main directory', ".")
 
-
-        # Returns if is not valid, or the dialog was cancelled
-        if not get_directory:
-            main_directory = ""
-            self.write_terminal_and_loggerinfo(ERROR_PICK_FOLDER)
+        if not dialog_h5_dir:
+            self.write_terminal_and_loggerinfo(ERROR_H5DIR)
+            h5_dir = ""
         else:
             try:
-                main_directory = Path(get_directory)
+                h5_dir = Path(dialog_h5_dir)
             except NotImplementedError:
-                main_directory = ""
-                self.write_terminal_and_loggerinfo(ERROR_PICK_FOLDER)
-        return main_directory
+                h5_dir = ""
+                self.write_terminal_and_loggerinfo(ERROR_H5DIR)
 
-    # @log_info
-    # def get_full_folderpath(self, folder_relative_name=str()) -> Path:
-    #     """
-    #     Join the folder_name (relative to) with the main_directory
-    #     """
-    #     if not self.main_directory:
-    #         return
-
-    #     folder_relative_name = Path(folder_relative_name)
-    #     full_folder_name = self.main_directory.joinpath(folder_relative_name)
-    #     return full_folder_name
-
-    # @log_info
-    # def pick_hdf5_folder(self) -> Path:
-    #     """
-    #     Picks a folder to save the .h5 file
-
-    #     Parameters:
-    #     None
-
-    #     Returns:
-    #     Path: path for the new .h5
-    #     """
-    #     # It has to be a Path where to search the data files
-    #     if not self.main_directory:
-    #         self.write_terminal_and_loggerinfo(ERROR_MAINDIR_DONTEXIST)
-    #         return
-        
-    #     dialog_h5_dir = QFileDialog.getExistingDirectory(self, 'Choose main directory', ".")
-
-    #     if not dialog_h5_dir:
-    #         self.write_terminal_and_loggerinfo(ERROR_H5DIR)
-    #         h5_dir = ""
-    #     else:
-    #         try:
-    #             h5_dir = Path(dialog_h5_dir)
-    #         except NotImplementedError:
-    #             h5_dir = ""
-    #             self.write_terminal_and_loggerinfo(ERROR_H5DIR)
-
-    #     return h5_dir
+        return h5_dir
 
     @log_info
     def pick_h5file_clicked(self, _):
@@ -1212,8 +1198,8 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Returns:
         None
         """
-        if self.main_directory:
-            h5_file = QFileDialog.getOpenFileNames(self, 'Pick .hdf5 file', str(self.main_directory), "*.h5")
+        if self._root_dir:
+            h5_file = QFileDialog.getOpenFileNames(self, 'Pick .hdf5 file', str(self._root_dir), "*.h5")
         else:
             h5_file = QFileDialog.getOpenFileNames(self, 'Pick .hdf5 file', '.', "*.h5")
 
@@ -2451,8 +2437,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             else:
                 logger.info("Last file was not updated.")
             
-
-
     @log_info
     def cb_metadata_changed(self, _):
         # Get a Pandas.DataFrame to upload the table
@@ -2527,9 +2511,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             tilt_angle=tilt_angle,
         )
 
-
-
-
     @log_info
     def tab_graph_changed(self,_):
         self.update_graphs(
@@ -2538,7 +2519,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             graph_2D_reshape=True,
             graph_2D_q=True,
         )
-
 
     @log_info
     def update_cache_data(self, sample_name=str(), list_index=list()):  
@@ -2569,7 +2549,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             sample_name=self.active_entry,
             list_index=self.cache_index,
         )
-
 
     @log_info
     def update_2D_q(self, new_data=True):
@@ -2694,7 +2673,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         else:
             return full_reference_filename
 
-
     @log_info
     def filter_data(self, data=None):
         if data is None:
@@ -2770,7 +2748,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             resetzoom=reset_zoom,
         )
         logger.info(f"Displayed data.")
-
 
     @log_info
     def update_label_displayed(self):
@@ -2967,7 +2944,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             ymax=ylims[1],
         )
 
-
     @log_info
     def save_plot_clicked(self, _):
         if not self.h5:
@@ -3034,36 +3010,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             f.write(f'{str_header}\n')
         dataframe.to_csv(filename_out, sep=',', mode='a', index=False, header=True)
 
-
     @log_info
     def mark_metadata_keys(self, metadata_keys=list()):
         # Click the items
         self.combobox_metadata.markItems(metadata_keys)
-
-
-
-
-
-
-    # @log_info
-    # def update_clicked_filenames(self) -> None:
-    #     """
-    #     Updates the value of the clicked files in the table (list of files) and stores them in cache
-
-    #     Parameters:
-    #     None
-
-    #     Returns:
-    #     None
-    #     """
-    #     self.cache_index = tm.selected_rows(self.table_files)
-    #     self.cache_filenames = [
-    #         self.filename_fromrow(index) for index in self.cache_index
-    #     ]
-
-    #     logger.info(f"New cache index: {self.cache_index}")
-    #     self.write_terminal_and_loggerinfo(f"New cache filenames: {str(self.cache_filenames)}")
-
 
     @log_info
     def get_data(
@@ -3085,24 +3035,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             data = None
 
         return data
-
-    # @log_info
-    # def filename_fromrow(self, row_index) -> str:
-    #     """
-    #     Returns the filename according to clicked index
-
-    #     Parameters:
-    #     None
-
-    #     Returns:
-    #     None
-    #     """
-    #     clicked_filename = tm.item(
-    #         table=self.table_files,
-    #         row=row_index,
-    #         column=0
-    #     )
-    #     return clicked_filename
 
     @log_info
     def update_2D_reshape_map(self, data=None, clear=True):
@@ -3296,7 +3228,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             'tilt_angle' : tangle_current,
         }
         logger.info(f"Updated cache dictionary: {str(self._dict_qmap_cache)}")
-
 
     @log_info
     def plot_qcache_matrix(self):
@@ -3551,15 +3482,11 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             graph_2D_q=True,
         )
 
-
-
-
     @log_info
     def checkbox_mask_clicked(self,_):
         self.update_graphs(
             graph_2D_raw=True,
         )
-
 
     @log_info
     def cb_integration_changed(self,_):
