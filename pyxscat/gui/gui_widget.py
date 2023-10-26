@@ -8,10 +8,10 @@ from PyQt5.QtGui import QPixmap
 from scipy import ndimage
 
 from pyFAI.io.ponifile import PoniFile
-from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries, get_dict_files, get_dict_difference
+from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries, get_dict_files
 from pyxscat.other.plots import *
 from pyxscat.other.integrator_methods import *
-from pyxscat.other.setup_methods import save_setup_dictionary, locate_setup_file, search_metadata_names, get_empty_setup_dict
+from pyxscat.other.setup_methods import save_setup_dictionary, locate_setup_file, search_metadata_names
 from pyxscat.gui import SRC_PATH
 from pyxscat.gui import lineedit_methods as le
 from pyxscat.gui import combobox_methods as cb
@@ -23,8 +23,7 @@ from pyxscat.gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND
 from pyxscat.gui.gui_layout import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
 from pyxscat.h5_integrator import H5GIIntegrator
 from pyxscat.gui.gui_layout import QZ_BUTTON_LABEL, QR_BUTTON_LABEL, MIRROR_BUTTON_LABEL
-from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QListWidget, QTableWidget, QLabel, QComboBox
-
+from PyQt5.QtWidgets import QComboBox
 
 import copy
 import json
@@ -35,7 +34,6 @@ import os
 import pandas as pd
 
 from pyxscat.other.setup_methods import *
-
 import concurrent.futures
 
 ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_logo_thumb.png')
@@ -146,15 +144,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Initialize attributes and callbacks
         self.h5 = None
-        self._data_cache = None
         self._root_dir = Path()
-        # self._dict_poni_cache = dict()
         self.clicked_folder = str()
         self.list_results_cache = []
         self.list_dict_integration_cache = []
         self.dict_recent_h5 = {}
         self._poni_cache = None
 
+        self._data_cache = None
         self.scat_horz_cache = None
         self.scat_vert_cache = None
         self.data_bin_cache = None
@@ -177,8 +174,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         self.reset_attributes_and_widgets()
         self.init_callbacks()
-        
-        # self.update_setup_info()
         self.update_lims_ticks()
 
     def write_terminal_and_loggerinfo(self, msg=str()):
@@ -368,7 +363,20 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.cache_index = []
         self._h5_file = str()
         self._data_cache = None
+        self.scat_horz_cache = None
+        self.scat_vert_cache = None
+        self.data_bin_cache = None
 
+        self._dict_qmap_cache = {
+            'acq_time' : None,
+            'qz_parallel' : self.state_qz,
+            'qr_parallel' : self.state_qr,
+            'mirror' : self.state_mirror,
+            'binning' : DEFAULT_BINNING,
+            'incident_angle': DEFAULT_INCIDENT_ANGLE,
+            'tilt_angle' : DEFAULT_TILT_ANGLE,
+        }
+        
         # Clear GUI widgets
         cb.clear(self.combobox_ponifile)
         cb.clear(self.combobox_reffolder)
@@ -1887,18 +1895,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
     ##########################
-    ### PATHERN METHODS ######
-    ##########################
-
-    @log_info
-    def get_pattern(self):
-        wildcards = le.text(self.lineedit_wildcards).strip()
-        extension = cb.value(self.combobox_extension)
-        pattern = wildcards + extension
-        pattern = pattern.replace('**', '*')
-        return pattern
-
-    ##########################
     ### LISTWIDGET METHODS ###
     ##########################
 
@@ -2874,18 +2870,16 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         """
         Updates the 1D chart with intensity profiles, after pygix-pyFAI integration protocols
 
-        Parameters:
-        data (np.array) : numpy array with the 2D detector map
-        norm_factor(float) : value that will divide the whole array
 
-        Returns:
-        None
-        """
+        Keyword Arguments:
+            data -- numpy array with the 2D detector map (default: {None})
+            norm_factor -- value that will divide the whole array (default: {1.0})
+            clear -- if True, clear the graph widget (default: {True})
+        """        
         graph_1D_widget = self.graph_1D_widget
 
         if clear:
             graph_1D_widget.clear()
-
 
         if data is None:
             data = self._data_cache
@@ -2902,46 +2896,59 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
         logger.info(f"Dictionaries of integration: {list_dict_integration}")
 
-        list_results = self.h5.raw_integration(
+        # Save in cache in case of saving
+        self.list_dict_integration_cache = list_dict_integration
+        self.list_results_cache = []
+
+        for ind, result in enumerate(self.h5.generate_integration(
             data=data,
             norm_factor=norm_factor,
             list_dict_integration=list_dict_integration,
-        )
+            )):
 
-        # Save in cache in case of saving
-        self.list_dict_integration_cache = list_dict_integration        
-        self.list_results_cache = list_results
+            dict_int = list_dict_integration[ind]
 
-        logger.info(f"New integration: {len(list_results)}")
-
-        xlims = [graph_1D_widget.getGraphXLimits()[0], graph_1D_widget.getGraphXLimits()[1]]
-        ylims = [graph_1D_widget.getGraphYLimits()[0], graph_1D_widget.getGraphYLimits()[1]]
-
-        for ind, result in enumerate(list_results):
-            try:          
+            try:
+                # Plot the result
                 graph_1D_widget.addCurve(
                     x=result[0],
                     y=result[1],
                     legend=f"{ind}",
                     resetzoom=True,
                 )
-                graph_1D_widget.setGraphYLabel(label='Intensity (arb. units)')
-                if list_dict_integration[ind].get(KEY_INTEGRATION) == CAKE_LABEL:
-                    if list_dict_integration[ind].get(CAKE_KEY_TYPE) == CAKE_KEY_TYPE_AZIM:
-                        xlabel = list_dict_integration[ind][CAKE_KEY_UNIT]
-                    elif list_dict_integration[ind].get(CAKE_KEY_TYPE) == CAKE_KEY_TYPE_RADIAL:
-                        xlabel = f'\u03c7 (deg)'
-                    graph_1D_widget.setGraphXLabel(label=xlabel)
-                elif list_dict_integration[ind].get(KEY_INTEGRATION) == BOX_LABEL:
-                    graph_1D_widget.setGraphXLabel(label=list_dict_integration[ind][BOX_KEY_OUTPUT_UNIT])
-            except:
-                pass
+            except Exception as e:
+                self.write_terminal_and_loggererror(f'{e}: {dict_int} Could not be plotted.')
+        
+        # LABELS
+        self.plot_1d_set_labels(dict_int=dict_int)
 
+        # KEEP LIMITS
+        self.plot_1d_keep_limits()
+
+    @log_info
+    def plot_1d_set_labels(self, dict_int={}):
+        graph_1D_widget = self.graph_1D_widget
+        # Define the labels of the plot
+        try:
+            if dict_int.get(KEY_INTEGRATION) == CAKE_LABEL:
+                if dict_int.get(CAKE_KEY_TYPE) == CAKE_KEY_TYPE_AZIM:
+                    xlabel = dict_int[CAKE_KEY_UNIT]
+                elif dict_int.get(CAKE_KEY_TYPE) == CAKE_KEY_TYPE_RADIAL:
+                    xlabel = f'\u03c7 (deg)'
+                graph_1D_widget.setGraphXLabel(label=xlabel)
+            elif dict_int.get(KEY_INTEGRATION) == BOX_LABEL:
+                graph_1D_widget.setGraphXLabel(label=dict_int[BOX_KEY_OUTPUT_UNIT])
+            graph_1D_widget.setGraphYLabel(label='Intensity (arb. units)')
+        except Exception as e:
+            logger.error(f'{e} Error with the labels in {dict_int}')
+
+    @log_info
+    def plot_1d_keep_limits(self):
+        graph_1D_widget = self.graph_1D_widget
+        xlims = [graph_1D_widget.getGraphXLimits()[0], graph_1D_widget.getGraphXLimits()[1]]
+        ylims = [graph_1D_widget.getGraphYLimits()[0], graph_1D_widget.getGraphYLimits()[1]]
         graph_1D_widget.setLimits(
-            xmin=xlims[0],
-            xmax=xlims[1],
-            ymin=ylims[0],
-            ymax=ylims[1],
+            xmin=xlims[0], xmax=xlims[1], ymin=ylims[0], ymax=ylims[1],
         )
 
     @log_info
@@ -3051,10 +3058,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
 
         try:
-            data_reshape, q, chi = self.h5.map_reshaping(
-                data=data,
-                # dict_poni=self.get_poni_dict_from_widgets(),
-            )
+            data_reshape, q, chi = self.h5.map_reshaping(data=data,)
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: Data could not be reshaped.")
             return
@@ -3063,7 +3067,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         try:
             z_lims = canvas.axes.get_images()[0].get_clim()
-            print(z_lims)
         except:
             z_lims = gm.get_zlims(self.graph_raw_widget)
 
@@ -3113,6 +3116,35 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         except Exception as e:
             self.write_terminal_and_loggerinfo(f"{e}: There was an error during data binning.")
         return mat
+
+    @log_info
+    def missing_wedge(self, data, scat_horz, distance_threshold=0.1):
+        sample_orientation = DICT_SAMPLE_ORIENTATIONS[(self.state_qz, self.state_qr)]
+
+        if sample_orientation in (1,3):
+
+            delta_x_1 = np.diff(scat_horz, axis=1)
+            delta_x_1_padded = np.pad(delta_x_1, ((0, 0), (0, 1)), mode='edge')
+
+            delta_x_2 = np.fliplr(np.diff(np.fliplr(scat_horz), axis=1))
+            delta_x_2_padded = np.pad(delta_x_2, ((0, 0), (1, 0)), mode='edge')
+
+        elif sample_orientation in (2,4):
+
+            delta_x_1 = np.diff(scat_horz, axis=0)
+            delta_x_1_padded = np.pad(delta_x_1, ((1, 0), (0, 0)), mode='edge')
+
+            delta_x_2 = np.fliplr(np.diff(np.fliplr(scat_horz), axis=0))
+            delta_x_2_padded = np.pad(delta_x_2, ((0, 1), (0, 0)), mode='edge')
+
+        else:
+            return
+
+        condition = (np.abs(delta_x_1_padded) > distance_threshold) | (np.abs(delta_x_2_padded) > distance_threshold)
+        data[condition] = np.nan
+        return data
+
+
 
     @log_info
     def update_q_matrix_cache(self, new_data=True):
@@ -3179,11 +3211,13 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 binning=binning_current,
             )
 
+        unit = cb.value(self.combobox_units)
+        unit = get_pyfai_unit(unit)
+
         # If scat matrix are None, generate them again and zoom
         if (scat_horz is None) or (scat_vert is None):
             # Get the unit of the generated map
-            unit = cb.value(self.combobox_units)
-            unit = get_pyfai_unit(unit)
+
 
             scat_horz, scat_vert = self.h5.get_mesh_matrix(
                 unit=unit,
@@ -3212,7 +3246,15 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Update all cache vars
         self.scat_horz_cache = scat_horz
         self.scat_vert_cache = scat_vert
-        self.data_bin_cache = data_bin
+
+        if unit in UNITS_Q:
+            self.data_bin_cache = self.missing_wedge(
+                data=data_bin,
+                scat_horz=scat_horz,
+                distance_threshold=0.1,
+            )
+        else:
+            self.data_bin_cache = data_bin
 
         self.write_terminal_and_loggerinfo(f"Updated cache matrix.")
         logger.info(f"Updated scat_horz_cache with shape {scat_horz.shape}")
@@ -3263,16 +3305,25 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Plot the scatter
         try:
             canvas.axes.cla()
-            canvas.axes.scatter(
-                scat_horz,
-                scat_vert,
-                c=data_bin,
-                s=size_comma,
+            canvas.axes.contourf
+
+            canvas.axes.pcolormesh(
+                scat_horz, 
+                scat_vert, 
+                data_bin,
                 norm=norm,
-                edgecolors="None",
-                marker=',',
-                cmap="viridis",
-            )
+                cmap='viridis',
+                )
+            # canvas.axes.scatter(
+            #     scat_horz,
+            #     scat_vert,
+            #     c=data_bin,
+            #     s=size_comma,
+            #     norm=norm,
+            #     edgecolors="None",
+            #     marker=',',
+            #     cmap="viridis",
+            # )
             canvas.axes.set_aspect('equal', 'box')
 
             if xlim != (0.0, 1.0):
@@ -3285,6 +3336,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             self.write_terminal_and_loggererror(f"{e}: Impossible to scatter scat_horz with shape {scat_horz.shape} \
                 , scat_vert with shape {scat_vert.shape} and data with shape {data_bin.shape}.")
             
+
+
+
     @log_info
     def update_qmap_style(self):
         canvas = self.canvas_2d_q
@@ -3355,85 +3409,86 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         canvas.axes.set_title(title, fontsize=font_size)
         canvas.draw()
 
-    @log_info
-    def plot_q_map(
-        self,
-        mesh_horz=None,
-        mesh_vert=None, 
-        data=None, 
-        unit='q_nm^-1', 
-        auto_lims=True, 
-        title='',
-        norm=None,
-        clear_axes=True,
-        **kwargs):
+    # @log_info
+    # def plot_q_map(
+    #     self,
+    #     mesh_horz=None,
+    #     mesh_vert=None, 
+    #     data=None, 
+    #     unit='q_nm^-1', 
+    #     auto_lims=True, 
+    #     title='',
+    #     norm=None,
+    #     clear_axes=True,
+    #     **kwargs):
 
-        if not self.h5:
-            return
+    #     if not self.h5:
+    #         return
 
-        if (mesh_horz is None) or (mesh_vert is None) or (data is None):
-            self.write_terminal_and_loggerinfo("There is a None in the input matrix")
-            return
+    #     if (mesh_horz is None) or (mesh_vert is None) or (data is None):
+    #         self.write_terminal_and_loggerinfo("There is a None in the input matrix")
+    #         return
 
-        canvas = self.canvas_reshape_widget
-        if clear_axes:
-            canvas.axes.cla()
+    #     canvas = self.canvas_reshape_widget
+    #     if clear_axes:
+    #         canvas.axes.cla()
 
-        if not (mesh_horz.shape == mesh_vert.shape == data.shape):
-            self.write_terminal_and_loggerinfo("The shape of the mesh matrix do not match.")
-            self.write_terminal_and_loggerinfo(f"Mesh_horz.shape={mesh_horz.shape}.")
-            self.write_terminal_and_loggerinfo(f"Mesh_vert.shape={mesh_vert.shape}.")
-            self.write_terminal_and_loggerinfo(f"Data.shape={data.shape}.")
-            return
+    #     if not (mesh_horz.shape == mesh_vert.shape == data.shape):
+    #         self.write_terminal_and_loggerinfo("The shape of the mesh matrix do not match.")
+    #         self.write_terminal_and_loggerinfo(f"Mesh_horz.shape={mesh_horz.shape}.")
+    #         self.write_terminal_and_loggerinfo(f"Mesh_vert.shape={mesh_vert.shape}.")
+    #         self.write_terminal_and_loggerinfo(f"Data.shape={data.shape}.")
+    #         return
         
-        # Get the units and style parameters
-        DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
-        x_label = kwargs.get('xlabel', DICT_PLOT['X_LABEL'])
-        y_label = kwargs.get('ylabel', DICT_PLOT['Y_LABEL'])
+    #     # Get the units and style parameters
+    #     DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
+    #     x_label = kwargs.get('xlabel', DICT_PLOT['X_LABEL'])
+    #     y_label = kwargs.get('ylabel', DICT_PLOT['Y_LABEL'])
 
-        if not auto_lims:
-            x_lims = kwargs.get('xlim', DICT_PLOT['X_LIMS'])
-            if x_lims == '':
-                x_lims = DICT_PLOT['X_LIMS']
+    #     if not auto_lims:
+    #         x_lims = kwargs.get('xlim', DICT_PLOT['X_LIMS'])
+    #         if x_lims == '':
+    #             x_lims = DICT_PLOT['X_LIMS']
 
-            y_lims = kwargs.get('ylim', DICT_PLOT['Y_LIMS'])
-            if y_lims == '':
-                y_lims = DICT_PLOT['Y_LIMS']
+    #         y_lims = kwargs.get('ylim', DICT_PLOT['Y_LIMS'])
+    #         if y_lims == '':
+    #             y_lims = DICT_PLOT['Y_LIMS']
 
-            x_ticks = kwargs.get('xticks', DICT_PLOT['X_TICKS'])
-            if x_ticks == '':
-                x_ticks = DICT_PLOT['X_TICKS']
+    #         x_ticks = kwargs.get('xticks', DICT_PLOT['X_TICKS'])
+    #         if x_ticks == '':
+    #             x_ticks = DICT_PLOT['X_TICKS']
 
-            y_ticks = kwargs.get('yticks', DICT_PLOT['Y_TICKS'])
-            if y_ticks == '':
-                y_ticks = DICT_PLOT['Y_TICKS']
+    #         y_ticks = kwargs.get('yticks', DICT_PLOT['Y_TICKS'])
+    #         if y_ticks == '':
+    #             y_ticks = DICT_PLOT['Y_TICKS']
 
-            canvas.axes.set_xlim(x_lims)
-            canvas.axes.set_ylim(y_lims)
-        else:
-            x_ticks = canvas.axes.get_xticks()
-            y_ticks = canvas.axes.get_yticks()
+    #         canvas.axes.set_xlim(x_lims)
+    #         canvas.axes.set_ylim(y_lims)
+    #     else:
+    #         x_ticks = canvas.axes.get_xticks()
+    #         y_ticks = canvas.axes.get_yticks()
 
-        # Plot the scatter
-        try:
-            canvas.axes.scatter(
-                mesh_horz,
-                mesh_vert,
-                c=data,
-                s=self._scattersize_cache,
-                norm=norm,
-                edgecolors="None",
-                marker=',',
-                cmap="viridis",
-            )
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}")
-        canvas.axes.set_xlabel(xlabel=x_label)
-        canvas.axes.set_ylabel(ylabel=y_label)
-        canvas.axes.set_xticks(x_ticks)
-        canvas.axes.set_yticks(y_ticks)
-        canvas.axes.set_title(title)
-        canvas.draw()
+    #     # Plot the scatter
+    #     try:
+    #         canvas.axes.pcolormesh(mesh_horz, mesh_vert, data)
+    #         # canvas.axes.scatter(
+    #         #     mesh_horz,
+    #         #     mesh_vert,
+    #         #     c=data,
+    #         #     s=self._scattersize_cache,
+    #         #     norm=norm,
+    #         #     edgecolors="None",
+    #         #     marker=',',
+    #         #     cmap="viridis",
+    #         # )
+    #     except Exception as e:
+    #         self.write_terminal_and_loggerinfo(f"{e}")
+    #     canvas.axes.set_xlabel(xlabel=x_label)
+    #     canvas.axes.set_ylabel(ylabel=y_label)
+    #     canvas.axes.set_xticks(x_ticks)
+    #     canvas.axes.set_yticks(y_ticks)
+    #     canvas.axes.set_title(title)
+    #     canvas.draw()
 
     @log_info
     def increase_font_clicked(self,_):
@@ -3657,7 +3712,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     @log_info
     def get_yticks(self):
         y_ticks = le.get_clean_lineedit(
-            lineedit_widget=self.lineedit_xticks,
+            lineedit_widget=self.lineedit_yticks,
         )
         y_ticks = [float(tick) for tick in y_ticks]
         return y_ticks

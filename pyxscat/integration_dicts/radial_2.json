@@ -1,0 +1,1 @@
+{"name": "radial_2", "suffix": "radial_2", "type": "radial", "unit": "q_nm^-1", "radial_range": [10.0, 15.5], "azimuth_range": [-90.0, 90.0], "azim_bins": 180, "integration": "cake"}

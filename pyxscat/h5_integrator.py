@@ -1526,10 +1526,25 @@ class H5GIIntegrator():
         return data_sample
     
     @logger_info
-    def raw_integration(self, data=None, norm_factor=1.0, list_dict_integration=[]):
-        array_compiled = self.gi.raw_integration(
+    def generate_integration(self, data=None, norm_factor=1.0, list_dict_integration=[]):
+        for res in self.gi.generate_integration(
             data=data,
             norm_factor=norm_factor,
             list_dict_integration=list_dict_integration,
+            ):
+            yield res
+
+    @logger_info
+    def map_reshaping(self, data=None):
+        if data is None:
+            return
+        data_reshape, q, chi = self.gi.map_reshaping(data=data)
+        return data_reshape, q, chi
+
+    @logger_info
+    def get_mesh_matrix(self, unit='q_nm^-1', shape=()):
+        scat_horz, scat_vert = self.gi.get_mesh_matrix(
+                unit=unit,
+                shape=shape,
         )
-        return array_compiled
+        return scat_horz, scat_vert

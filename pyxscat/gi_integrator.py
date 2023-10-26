@@ -1,35 +1,15 @@
 
 from pyFAI.azimuthalIntegrator import AzimuthalIntegrator
-from pyFAI.io.ponifile import PoniFile
 from pygix.transform import Transform
 from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
 from pyxscat.other.integrator_methods import *
 from pyxscat.other.setup_methods import *
-from pathlib import Path
 from pyxscat.other.units import *
 from pyxscat.poni_methods import open_poni
-
 import numpy as np
-import pandas as pd
 
 from pyxscat.logger_config import setup_logger
 logger = setup_logger()
-
-PONI_KEY_VERSION = "poni_version"
-PONI_KEY_BINNING = "binning"
-PONI_KEY_DISTANCE = "dist"
-PONI_KEY_WAVELENGTH = "wavelength"
-PONI_KEY_SHAPE1 = "shape1"
-PONI_KEY_SHAPE2 = "shape2"
-PONI_KEY_DETECTOR = "detector"
-PONI_KEY_DETECTOR_CONFIG = "detector_config"
-PONI_KEY_PIXEL1 = "pixelsize1"
-PONI_KEY_PIXEL2 = "pixelsize2"
-PONI_KEY_PONI1 = "poni1"
-PONI_KEY_PONI2 = "poni2"
-PONI_KEY_ROT1 = "rot1"
-PONI_KEY_ROT2 = "rot2"
-PONI_KEY_ROT3 = "rot3"
 
 DICT_BOX_ORIENTATION = {
     'horizontal' : 'ipbox',
@@ -218,54 +198,28 @@ class GIIntegrator(Transform):
         self._poni = poni
         
     #####################################
-    ###### EDF METHODS ##########
+    ###### INTEGRATION METHODS ##########
     #####################################
 
     @logger_info
-    def map_reshaping(self, data=None):
+    def generate_integration(self, data=None, norm_factor=1.0, list_dict_integration=list()) -> list:
         """
-        Generates the reshaped map according to .poni parameters
-
-        Keyword Arguments:
-            data -- 2D matrix to be reshaped (default: {None})
-
-        Returns:
-            data_reshape -- 2D matrix with transformed coordinates (polar-q)
-            q -- Azimuthal grid
-            chi -- Polar grid
-        """        
-        try:
-            data_reshape, q, chi = self._ai.integrate2d(
-                data=data,
-                npt_rad=1000,
-                unit="q_nm^-1",
-            )
-        except Exception as e:
-            logger.error(f'{e}: Reshaped_map could not retrieved.')
-            data_reshape, q, chi = None, None, None
-
-        return data_reshape, q, chi
-    
-    @logger_info
-    def raw_integration(self, data=None, norm_factor=1.0, list_dict_integration=list()) -> list:
-        """
-        Chooses which integration is going to be performed: azimuthal (pyFAI), radial (pyFAI) or box (pygix)
+        Yields an integration: azimuthal (pyFAI), radial (pyFAI) or box (pygix)
 
         Keyword Arguments:
             data -- 2D array to be integrated (default: {None})
             norm_factor -- normalization factor to be used during integration (default: {1.0})
             list_dict_integration -- list of dictionaries with integration instructions (default: {list()})
 
-        Returns:
-            list of numpy arrays with the results of the integration
-        """
-        array_compiled = []
+        Yields:
+            numpy array with the results of the integration
+        """        
 
         for dict_integration in list_dict_integration:
             if dict_integration[KEY_INTEGRATION] == CAKE_LABEL:
                 if dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_AZIM:
 
-                    res = self.raw_integration_azimuthal(
+                    res = self.integration_azimuthal(
                         data=data,
                         norm_factor=norm_factor,
                         dict_integration=dict_integration,
@@ -273,29 +227,28 @@ class GIIntegrator(Transform):
 
                 elif dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_RADIAL:
 
-                    res = self.raw_integration_radial(
+                    res = self.integration_radial(
                         data=data,
                         norm_factor=norm_factor,
                         dict_integration=dict_integration,
                     )
+
             elif dict_integration[KEY_INTEGRATION] == BOX_LABEL:
 
-                res = self.raw_integration_box(
+                res = self.integration_box(
                     data=data,
                     norm_factor=norm_factor,
                     dict_integration=dict_integration,
                 )
+
             else:
                 logger.info(ERROR_RAW_INTEGRATION)
                 res = None
 
-            array_compiled.append(res)
-
-        return array_compiled
-
+            yield res
 
     @logger_info
-    def raw_integration_azimuthal(self, data=None, norm_factor=1.0, dict_integration=dict()) -> np.array:
+    def integration_azimuthal(self, data=None, norm_factor=1.0, dict_integration=dict()) -> np.array:
         """
         Performs an azimuthal integration using the pyFAI engine
 
@@ -356,7 +309,7 @@ class GIIntegrator(Transform):
         return np.array([x_vector, y_vector])
 
     @logger_info
-    def raw_integration_radial(self, data=None, norm_factor=1.0, dict_integration=dict()) -> np.array:
+    def integration_radial(self, data=None, norm_factor=1.0, dict_integration=dict()) -> np.array:
         """
         Performs a radial integration using the pyFAI engine
 
@@ -407,7 +360,7 @@ class GIIntegrator(Transform):
         return np.array([x_vector, y_vector])
 
     @logger_info
-    def raw_integration_box(self, data=None, norm_factor=1.0, dict_integration=dict()) -> np.array:
+    def integration_box(self, data=None, norm_factor=1.0, dict_integration=dict()) -> np.array:
         """
         Performs a box integration using the pygix engine
 
@@ -502,6 +455,10 @@ class GIIntegrator(Transform):
 
         return np.array([x_vector, y_vector])
 
+    #####################################
+    ###### UNIT-TRANSFORMATION METHODS ##
+    #####################################
+
     @logger_info
     def calculate_bins(self, radial_range=[], unit='q_nm^-1') -> int:
         """
@@ -514,7 +471,8 @@ class GIIntegrator(Transform):
         Returns:
         int : number of counts to be generated
         """
-        if unit in ('q_nm^-1', 'q_A^-1'):
+        if unit in Q_ALIAS:
+            
             twotheta1 = self.q_to_twotheta(
                 q=radial_range[0],
                 unit=unit,
@@ -524,62 +482,73 @@ class GIIntegrator(Transform):
                 q=radial_range[1],
                 unit=unit,
             )
-        elif unit == '2th_deg':
+        elif unit == DEG_ALIAS:
+
             twotheta1, twotheta2 = np.radians(radial_range[0]), np.radians(radial_range[1])
-        elif unit == '2th_rad':
+
+        elif unit == RAD_ALIAS:
+
             twotheta1, twotheta2 = radial_range[0], radial_range[1]
+
         else:
             return
+
         return int(round(self._dist / self.get_pixel1() * (np.tan(twotheta2) - np.tan(twotheta1))))
 
     @logger_info
     def q_to_twotheta(self, q=0.0, unit='q_nm^-1', degree=False) -> float:
         """
-        Transforms from q to 2theta (rad)
+        Transforms q into 2theta
 
-        Parameters:
-        q(float) : modulus of q, scattering vector
-        unit(str) : 'q_nm^-1' or 'q_A^-1'
-        degree(bool) : the result will be in degrees (True) or radians (False)
+        Keyword Arguments:
+            q -- modulus of q, scattering vector (default: {0.0})
+            unit -- 'q_nm^-1' or 'q_A^-1' (default: {'q_nm^-1'})
+            degree -- the result will be in degrees (True) or radians (False) (default: {False})
 
         Returns:
-        float : twotheta value
+            twotheta value
         """
-        if unit == 'q_nm^-1':
-            twotheta = 2 * np.arcsin((q*self._wavelength * 1e9)/(4*np.pi))
-        elif unit == 'q_A^-1':
-            twotheta = 2 * np.arcsin((q*self._wavelength * 1e10)/(4*np.pi))
-        else:
-            return
-        return np.rad2deg(twotheta) if degree else twotheta
-
-    @logger_info
-    def get_q_nm(self, value=0.0, direction='Vertical', input_unit='q_nm^-1') -> float:
-        """
-            Return a q(nm-1) value from another unit
-        """
-        if input_unit == 'q_nm^-1':
-            return value
-        elif input_unit == 'q_A^-1':
-            return value
-        elif input_unit == '2th_deg':
-            return self.twotheta_to_q(twotheta=value, direction=direction, deg=True)
-        elif input_unit == '2th_rad':
-            return self.twotheta_to_q(twotheta=value, deg=False)
-        else:
-            return None
-
-    @logger_info
-    def twotheta_to_q(self, twotheta=0.0, direction='vertical', deg=True) -> float:
-        """
-            Returns the q(nm-1) from the 2theta value
-        """
-        if deg:
-            twotheta = np.radians(twotheta)
         try:
-            wavelength_nm = self._wavelength * 1e9
-        except:
+            wavelength = self._wavelength
+        except Exception as e:
+            logger.error(f'{e} There is no wavelength to transform q into 2theta')
             return
+
+        if unit in QNM_ALIAS:
+            twotheta = 2 * np.arcsin((q * wavelength * 1e9) / (4 * np.pi))
+        elif unit in QA_ALIAS:
+            twotheta = 2 * np.arcsin((q * wavelength * 1e10) / (4 * np.pi))
+        else:
+            return
+
+        if degree:
+            twotheta = np.rad2deg(twotheta)
+
+        return twotheta
+
+    @logger_info
+    def twotheta_to_q(self, twotheta=0.0, degree_input=True, direction='vertical', output_unit='q_nm^-1',) -> float:
+        """
+        Transforms 2theta into q
+
+        Keyword Arguments:
+            twotheta -- exit angle (default: {0.0})
+            degree_input -- if True, the input twotheta is degrees, if not, radians (default: {True})
+            direction -- if vertical, q is taken as qz, if horizontal, is taken as qxy (default: {'vertical'})
+            output_unit -- 'q_nm^-1' or 'q_A^-1' (default: {'q_nm^-1'})
+
+        Returns:
+            modulus of q, scattering vector
+        """        
+        try:
+            wavelength = self._wavelength
+            wavelength_nm = wavelength * 1e9
+        except Exception as e:
+            logger.error(f'{e} There is no wavelength to transform 2theta into q.')
+            return
+
+        if degree_input:
+            twotheta = np.radians(twotheta)
         
         try:
             alpha_inc = np.radians(self._incident_angle)
@@ -589,6 +558,12 @@ class GIIntegrator(Transform):
         q_horz = 2 * np.pi / wavelength_nm * (np.cos(alpha_inc) * np.sin(twotheta))
         q_vert = 2 * np.pi / wavelength_nm * (np.sin(twotheta) + np.sin(alpha_inc))
 
+        if output_unit in QNM_ALIAS:
+            pass
+        elif output_unit in QA_ALIAS:
+            q_horz /= 10
+            q_vert /= 10
+
         if direction == BOX_KEY_TYPE_VERT:
             return q_horz
         elif direction == BOX_KEY_TYPE_HORZ:
@@ -596,6 +571,21 @@ class GIIntegrator(Transform):
         else:
             return
 
+    @logger_info
+    def get_q_nm(self, value=0.0, direction='vertical', input_unit='q_nm^-1') -> float:
+        """
+            Return a q(nm-1) value from another unit
+        """
+        if input_unit in QNM_ALIAS:
+            return value
+        elif input_unit in Q_ALIAS:
+            return value
+        elif input_unit in DEG_ALIAS:
+            return self.twotheta_to_q(twotheta=value, direction=direction, degree_input=True)
+        elif input_unit in RAD_ALIAS:
+            return self.twotheta_to_q(twotheta=value, degree_input=False)
+        else:
+            return None
 
     @logger_info
     def transform_q_units(
@@ -648,19 +638,23 @@ class GIIntegrator(Transform):
                     vector_nm = self.twotheta_to_q(
                         twotheta=x_vector,
                         direction=direction,
-                        deg=True,
+                        degree_input=True,
                     )
                 elif input_unit in RAD_ALIAS:
                     vector_nm = self.twotheta_to_q(
                         twotheta=x_vector,
                         direction=direction,
-                        deg=False,
+                        degree_input=False,
                     )
 
                 if output_unit in QNM_ALIAS:
                     return vector_nm
                 elif output_unit in QA_ALIAS:
                     return vector_nm/10
+
+    #####################################
+    ###### DETECTOR-ARRAY TRANSFORMATION METHODS ##
+    #####################################
 
     @logger_info
     def get_detector_array(self, shape=()) -> np.array:
@@ -746,3 +740,31 @@ class GIIntegrator(Transform):
         else:
             return
         return scat_xy, scat_z
+
+    @logger_info
+    def map_reshaping(self, data=None):
+
+        """
+        Generates the reshaped map according to .poni parameters
+
+        Keyword Arguments:
+            data -- 2D matrix to be reshaped (default: {None})
+
+        Returns:
+            data_reshape -- 2D matrix with transformed coordinates (polar-q)
+            q -- Azimuthal grid
+            chi -- Polar grid
+        """        
+        try:
+            data_reshape, q, chi = self._ai.integrate2d(
+                data=data,
+                npt_rad=1000,
+                unit="q_nm^-1",
+            )
+        except Exception as e:
+            logger.error(f'{e}: Reshaped_map could not retrieved.')
+            data_reshape, q, chi = None, None, None
+
+        return data_reshape, q, chi
+
+

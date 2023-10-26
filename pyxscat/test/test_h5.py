@@ -325,6 +325,43 @@ class TestH5GI:
 
         assert data_from_fabio.all() == data_from_h5.all()
 
+
+    def test_radial_integration(self, h5):
+        rel_samples_in_h5 = h5.get_all_entries(get_relative_address=True)
+        list_integration_names = ['radial', 'radial_2']
+
+        list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
+
+        data = h5.get_Edf_data(
+            sample_name=rel_samples_in_h5[0],
+            index_list=0,
+        )
+
+        for ind, res in enumerate(h5.raw_integration(
+            data=data,
+            norm_factor=1.0,
+            list_dict_integration=list_dict_integration,
+            )):
+            assert res is not None
+
+    def test_box_integration(self, h5):
+        rel_samples_in_h5 = h5.get_all_entries(get_relative_address=True)
+        list_integration_names = ['vertical_rod', 'horizontal_cut']
+
+        list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
+
+        data = h5.get_Edf_data(
+            sample_name=rel_samples_in_h5[0],
+            index_list=0,
+        )
+
+        for res in h5.raw_integration(
+            data=data,
+            norm_factor=1.0,
+            list_dict_integration=list_dict_integration,
+            ):
+            assert res is not None
+
     def test_azim_integration(self, h5):
         rel_samples_in_h5 = h5.get_all_entries(get_relative_address=True)
         list_integration_names = ['azim_complete', 'azim_oop']
@@ -336,49 +373,9 @@ class TestH5GI:
             index_list=0,
         )
 
-        list_results = h5.gi.raw_integration(
+        for res in h5.raw_integration(
             data=data,
             norm_factor=1.0,
             list_dict_integration=list_dict_integration,
-        )
-
-        assert list_results[0] is not None
-        assert list_results[1] is not None
-
-    def test_radial_integration(self, h5):
-        rel_samples_in_h5 = h5.get_all_entries(get_relative_address=True)
-        list_integration_names = ['radial']
-
-        list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
-
-        data = h5.get_Edf_data(
-            sample_name=rel_samples_in_h5[0],
-            index_list=0,
-        )
-
-        list_results = h5.gi.raw_integration(
-            data=data,
-            norm_factor=1.0,
-            list_dict_integration=list_dict_integration,
-        )
-
-        assert list_results[0] is not None
-
-    def test_box_integration(self, h5):
-        rel_samples_in_h5 = h5.get_all_entries(get_relative_address=True)
-        list_integration_names = ['vertical_rod']
-
-        list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
-
-        data = h5.get_Edf_data(
-            sample_name=rel_samples_in_h5[0],
-            index_list=0,
-        )
-
-        list_results = h5.gi.raw_integration(
-            data=data,
-            norm_factor=1.0,
-            list_dict_integration=list_dict_integration,
-        )
-
-        assert list_results[0] is not None
+            ):
+            assert res is not None

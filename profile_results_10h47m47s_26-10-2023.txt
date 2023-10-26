@@ -1,0 +1,11 @@
+Thu Oct 26 10:47:47 2023    profile_stats
+
+         2 function calls in 1.003 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    1.003    1.003    1.003    1.003 {built-in method time.sleep}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
