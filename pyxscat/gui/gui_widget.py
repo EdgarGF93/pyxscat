@@ -1,5 +1,6 @@
 from . import *
 from collections import defaultdict
+from cachetools import cached, LRUCache
 from os.path import join
 from pathlib import Path
 from pyFAI import __file__ as pyfai_file
@@ -1884,7 +1885,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.update_reference_widgets()
 
         # Update the data if needed
-        self.update_cache_data()
+        self.get_final_data()
 
         # Update graphs
         self.update_graphs(
@@ -2101,7 +2102,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
 
         # Update data cache
-        self.update_cache_data(
+        self._data_cache = self.get_final_data(
+            sample_name=self.active_entry,
+            index=self.cache_index,
+            scaled_factor=self.spinbox_sub.value(),
+        )
+
+        # Update GI angles
+        self.h5.update_angles(
             sample_name=self.active_entry,
             list_index=self.cache_index,
         )
@@ -2193,27 +2201,37 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         if not self.h5:
             return
+
+        #########################
+        #### UPDATE DATAFILES ###
+        #########################
+        
         # Get a dictionary with the new files (not stored in h5)
-        dict_new_files = self.h5.search_new_datafiles(
+        dict_new_files = self.h5.search_datafiles(
             pattern=self.get_pattern(),
+            new_files=True,
         )
         self.log_explorer_info(f"New detected files: {str(dict_new_files)}.")
         
+        # Update the H5
         self.h5.update_datafiles(          
             dict_files=dict_new_files,
             search=False,
         )
-        self.h5.update_ponifiles()
 
-        # Update combobox of ponifiles
-        self.update_cb_ponifiles(
+        # Update list of samples
+        self.update_sample_listwidget(
             from_h5=True,
             reset=True,
         )
 
-        # Update list of samples
-        self.update_sample_listwidget(
-            listwidget=self.listwidget_samples,
+        #########################
+        #### UPDATE PONIFILES ###
+        #########################
+
+        self.h5.update_ponifiles()
+
+        self.update_cb_ponifiles(
             from_h5=True,
             reset=True,
         )
@@ -2342,9 +2360,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             sample, index = self.h5.get_sample_index_from_filename(filename=last_file)
             self.active_entry = sample
             self.cache_index = index
-            self.update_cache_data(
+            self.get_final_data(
                 sample_name=sample,
-                list_index=index,
+                index=index,
             )
             self.update_label_displayed()
             self.update_graphs(
@@ -2425,7 +2443,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 # self.clicked_folder = last_file_folder
                 self.cache_index = last_file_index
                 # self.log_explorer_info(f"Updated clicked folder: {self.clicked_folder} and cache index: {self.cache_index}")
-                self.update_cache_data(),
+                self.get_final_data(),
                 self.update_1D_graph(),
                 self.update_2D_raw(),
                 self.update_2D_reshape_map(),
@@ -2516,18 +2534,21 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             graph_2D_q=True,
         )
 
-    @log_info
-    def update_cache_data(self, sample_name=str(), list_index=list()):  
+    @cached(cache=LRUCache(maxsize=10))
+    @log_info    
+    def get_final_data(self, sample_name='', index=(), scaled_factor=0.0,): 
+
         # Take the new data from new folder/index
         data = self.get_data(
             sample_name=sample_name,
-            list_index=list_index,
+            index=index,
         )
+
         if data is None:
             return
 
         # Subtract the reference
-        if self.spinbox_sub.value() != 0.0:
+        if scaled_factor != 0.0:
             data = self.get_subtracted_data(
                 data=data,
             )
@@ -2535,16 +2556,18 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Filter the data
         data = self.filter_data(
             data=data,
-        )        
+        )
+
+        return data
 
         # Update the data cache
-        self._data_cache = data
+        # self._data_cache = data
 
         # Update GI angles
-        self.h5.update_angles(
-            sample_name=self.active_entry,
-            list_index=self.cache_index,
-        )
+        # self.h5.update_angles(
+        #     sample_name=self.active_entry,
+        #     list_index=self.cache_index,
+        # )
 
     @log_info
     def update_2D_q(self, new_data=True):
@@ -2563,9 +2586,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     @log_info
     def sub_factor_changed(self, scale_factor):
-        self.update_cache_data(
+        self.get_final_data(
             sample_name=self.active_entry,
-            list_index=self.cache_index,
+            index=self.cache_index,
         )
 
         self.update_graphs(
@@ -2607,7 +2630,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         data_ref = self.h5.get_Edf_data(
             full_filename=full_reference_filename,
             sample_name=reference_folder_name,
-            index_list=index_ref,
+            index=index_ref,
             normalized=True,
         )
         reference_factor = self.spinbox_sub.value()
@@ -2729,8 +2752,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         if self.checkbox_mask_integration.isChecked():
             data = self.get_masked_integration_array(data=data)
-
-        print(data.shape)
 
         graph_2D_widget.addImage(
             data=data,
@@ -3025,20 +3046,20 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     @log_info
     def get_data(
         self, 
-        sample_name=str(), 
-        list_index=list(), 
+        sample_name='', 
+        index=(), 
         normalized=True,
         ) -> np.array:
 
         try:
             data = self.h5.get_Edf_data(
                 sample_name=sample_name,
-                index_list=list_index,
+                index=index,
                 normalized=normalized,
             )
-            self.log_explorer_info(f"Retrieved data. Sample_name:{sample_name}, index {str(list_index)}.")
+            self.log_explorer_info(f"Retrieved data. Sample_name:{sample_name}, index {str(index)}.")
         except Exception as e:
-            logger.error(f"{e}: Data could not be retrieved with sample {sample_name} and index {str(list_index)}.")
+            logger.error(f"{e}: Data could not be retrieved with sample {sample_name} and index {str(index)}.")
             data = None
 
         return data
@@ -3817,6 +3838,18 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         new_integrations = [item for item in new_integrations if item]
 
         self.combobox_integration.addItems(texts=new_integrations)
+
+    @log_info
+    def update_active_data(self):
+        active_sample = lt.click_values(self.listwidget_samples)
+        active_index = tm.selected_rows(self.table_files)
+        qz = self.state_qz
+        qr = self.state_qr
+        mirror = self.state_mirror
+
+        
+
+
 
     @log_info
     def open_fitting_form(self):

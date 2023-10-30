@@ -67,7 +67,6 @@ def get_dict_difference(large_dict=dict(), small_dict=dict(), sort=True):
 
 
 
-
 def print_percent_done(index, total, bar_len=50, title='Processing'):
     '''
     index is expected to be 0 based index. 

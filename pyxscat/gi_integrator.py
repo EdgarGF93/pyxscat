@@ -1,4 +1,7 @@
 
+from cachetools import cached, LRUCache
+from cachetools.keys import hashkey
+
 from pyFAI.azimuthalIntegrator import AzimuthalIntegrator
 from pygix.transform import Transform
 from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
@@ -48,6 +51,8 @@ def logger_info(func):
         logger.info(f'We entered into function: {func.__name__}')
         return func(*args, **kwargs)
     return wrapper
+
+
 
 class GIIntegrator(Transform):
     """
@@ -216,36 +221,53 @@ class GIIntegrator(Transform):
         """        
 
         for dict_integration in list_dict_integration:
-            if dict_integration[KEY_INTEGRATION] == CAKE_LABEL:
-                if dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_AZIM:
+            res = self.raw_integration(
+                data=data,
+                norm_factor=norm_factor,
+                dict_integration=dict_integration,
+            )
+            yield res
 
-                    res = self.integration_azimuthal(
-                        data=data,
-                        norm_factor=norm_factor,
-                        dict_integration=dict_integration,
-                    )
 
-                elif dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_RADIAL:
+    def custom_key(self, arr, s, f):
+        arr_hash = hashkey(arr.tobytes()) if isinstance(arr, np.ndarray) else arr
+        return hashkey(arr_hash, s, f)
 
-                    res = self.integration_radial(
-                        data=data,
-                        norm_factor=norm_factor,
-                        dict_integration=dict_integration,
-                    )
+    @logger_info
+    # @cached(cache=LRUCache(maxsize=10), key=self.custom_key)
+    def raw_integration(self, data=None, norm_factor=1.0, dict_integration=dict()) -> np.array:
 
-            elif dict_integration[KEY_INTEGRATION] == BOX_LABEL:
+        if dict_integration[KEY_INTEGRATION] == CAKE_LABEL:
 
-                res = self.integration_box(
+            if dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_AZIM:
+
+                res = self.integration_azimuthal(
                     data=data,
                     norm_factor=norm_factor,
                     dict_integration=dict_integration,
                 )
 
-            else:
-                logger.info(ERROR_RAW_INTEGRATION)
-                res = None
+            elif dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_RADIAL:
 
-            yield res
+                res = self.integration_radial(
+                    data=data,
+                    norm_factor=norm_factor,
+                    dict_integration=dict_integration,
+                )
+
+        elif dict_integration[KEY_INTEGRATION] == BOX_LABEL:
+
+            res = self.integration_box(
+                data=data,
+                norm_factor=norm_factor,
+                dict_integration=dict_integration,
+            )
+
+        else:
+            logger.info(ERROR_RAW_INTEGRATION)
+            res = None
+
+        return res
 
     @logger_info
     def integration_azimuthal(self, data=None, norm_factor=1.0, dict_integration=dict()) -> np.array:

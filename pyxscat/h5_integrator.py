@@ -1027,7 +1027,7 @@ class H5GIIntegrator():
     ##################################################
 
     @logger_info
-    def search_datafiles(self, pattern='*.edf') -> dict:
+    def search_datafiles(self, pattern='*.edf', new_files=True) -> dict:
         """Searches the data files in the root directory that match with a pattern
 
         Keyword Arguments:
@@ -1042,21 +1042,27 @@ class H5GIIntegrator():
             list_files=searched_files,
         )
 
+        if new_files:
+            # Identify the new files
+            dict_files_in_h5 = self.get_dict_files()
+            dict_files = get_dict_difference(
+                large_dict=dict_files,
+                small_dict=dict_files_in_h5,
+            )
+            logger.info(f"{INFO_H5_NEW_DICTIONARY_FILES}: {str(dict_files)}")
+
         return dict_files
 
     @logger_info
-    def update_datafiles(
-        self, 
-        dict_files=dict(), 
-        search=False,
-        pattern='*.edf',         
-        ):
+    def update_datafiles(self, dict_files=dict(), search=False, pattern='*.edf', new_files=True,):
+
         """Updates the data filenames as NXentries
 
         Keyword Arguments:
             dict_files -- input dictionary of folder-filenames (default: {dict()})
             search -- if True, searches in the root dictionary (default: {False})
             pattern -- filename string pattern (default: {'*.edf'})
+            new_files -- if True, update only the new files (default: {True})
         """        
 
         # Search for new files
@@ -1065,17 +1071,11 @@ class H5GIIntegrator():
         elif search:
             dict_files = self.search_datafiles(
                 pattern=pattern,
+                new_files=new_files,
             )
-        
-        # Identify the new files
-        dict_files_in_h5 = self.get_dict_files()
-        dict_new_files = get_dict_difference(
-            large_dict=dict_files,
-            small_dict=dict_files_in_h5,
-        )
-        logger.info(f"{INFO_H5_NEW_DICTIONARY_FILES}: {str(dict_files)}")
 
-        for sample_address in dict_new_files.keys():
+        # Write the new files
+        for sample_address in dict_files.keys():
 
             # Rewrite group if it exists
             existing_entry = self.get_entry_name(sample_address=sample_address)
@@ -1085,7 +1085,7 @@ class H5GIIntegrator():
                 self.delete_nx_group(entry=group_name)
             else:
                 group_name = self.get_new_nx_entry_name()
-                data_files = dict_new_files.get(sample_address)
+                data_files = dict_files.get(sample_address)
 
             dict_metadata = self.get_full_dict_metadata(
                 list_filenames=data_files,
@@ -1475,12 +1475,8 @@ class H5GIIntegrator():
     def get_Edf_data(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
-        index_list=list(), 
+        index=(), 
         full_filename=str(),
-        folder_reference_name=str(),
-        file_reference_name=str(),
-        reference_factor=0.0,
         normalized=False,
         ) -> np.array:
         """
@@ -1496,8 +1492,8 @@ class H5GIIntegrator():
         Returns:
         np.array : data of the file (subtracted or not)
         """
-        if isinstance(index_list, int):
-            index_list = [index_list]
+        if isinstance(index, int):
+            index = (index)
 
         # Get the sample data
         try:
@@ -1507,9 +1503,9 @@ class H5GIIntegrator():
                         full_filename=full_filename,
                         sample_name=sample_name,
                         index_file=index,
-                    ).get_data() for index in index_list
+                    ).get_data() for index in index
                 ]
-            ) / len(index_list)
+            ) / len(index)
             logger.info(f"New data sample with shape: {data_sample.shape}")
         except Exception as e:
             data_sample = None
@@ -1519,7 +1515,7 @@ class H5GIIntegrator():
         if normalized:
             norm_factor = self.get_norm_factor(
                 sample_name=sample_name,
-                index_list=index_list,
+                index_list=index,
             )
             data_sample = data_sample.astype('float32') / norm_factor
 
