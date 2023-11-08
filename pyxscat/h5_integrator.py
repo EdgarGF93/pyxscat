@@ -1,6 +1,6 @@
 from collections import defaultdict
 from pathlib import Path
-from gi_integrator import GIIntegrator
+from pyxscat.gi_integrator import GIIntegrator
 from os.path import getctime
 
 from pyFAI.io.ponifile import PoniFile
