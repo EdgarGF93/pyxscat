@@ -1557,8 +1557,6 @@ class H5GIIntegrator():
             filename = full_filename
         else:
             try:
-                print(444)
-                print(f'Sample is {sample_name}, index is {index_file}')
                 filename = self.get_filename_from_index(
                     sample_name=sample_name,
                     index_list=index_file,
@@ -1604,9 +1602,6 @@ class H5GIIntegrator():
 
         # Get the sample data
         try:
-            # index = list(index)
-            print(333)
-            print(f'Sample is {sample_name}, index is {index}')
             data_sample = sum(
                 [
                     self.get_Edf_instance(

@@ -6,10 +6,8 @@ from pathlib import Path
 from pyFAI import __file__ as pyfai_file
 from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QMessageBox
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import pyqtSignal, QTimer
+from PyQt5.QtCore import QTimer
 from scipy import ndimage
-import time
-from pyxscat.gui.live import PyXScatObserver, PyXScatHandler
 
 from pyFAI.io.ponifile import PoniFile
 from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries, get_dict_files
@@ -26,6 +24,7 @@ from pyxscat.gui.gui_layout import GUIPyXMWidgetLayout
 from pyxscat.gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND
 from pyxscat.gui.gui_layout import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
 from pyxscat.h5_integrator import H5GIIntegrator
+from pyxscat.gi_integrator import UNIT_GI
 from pyxscat.gui.gui_layout import QZ_BUTTON_LABEL, QR_BUTTON_LABEL, MIRROR_BUTTON_LABEL
 from PyQt5.QtWidgets import QComboBox
 
@@ -38,7 +37,6 @@ import os
 import pandas as pd
 
 from pyxscat.other.setup_methods import *
-# import concurrent.futures
 
 ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_new_logo.png')
 
@@ -2459,7 +2457,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
 
         # Update data cache
-        print(f'Sample is {self.active_entry}, index is {self.cache_index}')
         self._data_cache = self.get_final_data(
             sample_name=self.active_entry,
             index=self.cache_index,
@@ -2703,9 +2700,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     @log_info
     def sub_factor_changed(self, scale_factor):
-        self.get_final_data(
+        self._data_cache = self.get_final_data(
             sample_name=self.active_entry,
             index=self.cache_index,
+            scaled_factor=scale_factor,
         )
 
         self.update_graphs(
@@ -3066,6 +3064,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             )):
 
             dict_int = list_dict_integration[ind]
+            self.list_results_cache.append(result)
 
             try:
                 # Plot the result
@@ -3134,7 +3133,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             confirm_save = QMessageBox.question(self, 'MessageBox', "You are going to save in the same data folder. \
                 Do you want to continue? You can change it in the blank square above.", QMessageBox.Yes | QMessageBox.No)
             if confirm_save == QMessageBox.Yes:
-                folder_output = self.h5._root_dir.joinpath(self.clicked_folder)
+                folder_output = self.h5._root_dir.joinpath(self.active_entry)
             else:
                 return
 
@@ -3190,8 +3189,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         ) -> np.array:
 
         try:
-            print(2222)
-            print(f'Sample is {sample_name}, index is {index}')
             data = self.h5.get_Edf_data(
                 sample_name=sample_name,
                 index=index,
@@ -3773,7 +3770,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
                 self.log_explorer_info(f"Parameters to mask the array. Shape: {shape}, unit: {unit}, \
                     oop_range: {oop_range}, ip_range: {ip_range}, q_scale: {q_scale}.")
-                horz_q, vert_q = self.h5._transform.giarray_from_unit(shape, "opbox", "center", unit_gi)
+                horz_q, vert_q = self.h5.gi.giarray_from_unit(shape, "opbox", "center", unit_gi)
             except Exception as e:
                 logger.error(f"{e} horz_q and vert_q matrix could not be generated with {dict_integration} and shape {shape}")
                 return
@@ -3933,7 +3930,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.log_explorer_info(f"Output filename for the image: {filename_out}")
  
         try:
-            print(filename_out)
             self.canvas_2d_q.savefig(filename_out)
 
             # self.update_q_map(show=False)

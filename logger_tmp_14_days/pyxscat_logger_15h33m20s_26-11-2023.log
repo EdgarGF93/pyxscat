@@ -1,0 +1,783 @@
+2023-11-26 15:33:21,511 - INFO - The data parameters were reinitialized.
+2023-11-26 15:33:21,513 - INFO - Title for the generated map: 
+2023-11-26 15:33:21,581 - INFO - Title for the generated map: 
+2023-11-26 15:33:21,590 - INFO - [Errno 2] No such file or directory: '/home/edgar/work/pyxscat/pyxscat/h5_files_dicts/ ': The .json does not contain a valid filename: /home/edgar/work/pyxscat/pyxscat/h5_files_dicts/ 
+2023-11-26 15:33:30,159 - INFO - H5GIIntegrator instance was created.
+2023-11-26 15:33:30,160 - INFO - We entered into function: init_transform
+2023-11-26 15:33:30,160 - INFO - We entered into function: update_incident_angle
+2023-11-26 15:33:30,160 - INFO - Incident angle set up as 0.0.
+2023-11-26 15:33:30,160 - INFO - We entered into function: update_tilt_angle
+2023-11-26 15:33:30,160 - INFO - Tilt angle set up as 0.0.
+2023-11-26 15:33:30,160 - INFO - We entered into function: init_ai
+2023-11-26 15:33:30,160 - INFO - We entered into function: init_metadata_attrs
+2023-11-26 15:33:30,160 - INFO - We entered into function: create_h5_file
+2023-11-26 15:33:30,161 - INFO - We entered into function: write_root_attributes
+2023-11-26 15:33:30,163 - INFO - H5 instance was initialized.
+2023-11-26 15:33:30,163 - INFO - We entered into function: update_datafiles
+2023-11-26 15:33:30,163 - INFO - We entered into function: search_datafiles
+2023-11-26 15:33:30,163 - INFO - We entered into function: get_dict_files
+2023-11-26 15:33:30,164 - INFO - We entered into function: generator_all_filenames
+2023-11-26 15:33:30,164 - INFO - We entered into function: generator_samples
+2023-11-26 15:33:30,164 - INFO - Got dictionary of folders and files: defaultdict(<class 'set'>, {'/home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1': ['/home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf', '/home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.15_000_0000.edf', '/home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.1_000_0000.edf', '/home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.2_000_0000.edf'], '/home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference': ['/home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf', '/home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_1s_000_0000.edf', '/home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_5s_spitch_0.12_000_0000.edf']})
+2023-11-26 15:33:30,164 - INFO - We entered into function: get_entry_name
+2023-11-26 15:33:30,165 - INFO - We entered into function: get_new_nx_entry_name
+2023-11-26 15:33:30,165 - INFO - We entered into function: get_nx_entries
+2023-11-26 15:33:30,165 - INFO - We entered into function: create_entry
+2023-11-26 15:33:30,166 - INFO - We entered into function: get_Edf_instance
+2023-11-26 15:33:30,167 - INFO - We entered into function: get_Edf_instance
+2023-11-26 15:33:30,168 - INFO - We entered into function: get_Edf_instance
+2023-11-26 15:33:30,168 - INFO - We entered into function: get_Edf_instance
+2023-11-26 15:33:30,169 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,169 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,169 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,170 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,170 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,170 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,170 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,171 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,171 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,171 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,172 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,172 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,173 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,173 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,174 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,174 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,174 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,175 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,175 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,175 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,176 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,176 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,176 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,176 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,177 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,177 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,177 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,178 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,178 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,178 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,178 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,179 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,179 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,179 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,179 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,180 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,180 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,180 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,181 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,181 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,181 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,181 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,182 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,182 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,182 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,183 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,183 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,183 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,184 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,184 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,184 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,185 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,185 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,185 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,185 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,186 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,186 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,186 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,186 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,187 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,187 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,187 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,188 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,188 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,188 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,189 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,189 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,189 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,190 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,190 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,190 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,190 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,191 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,191 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,191 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,191 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,192 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,192 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,192 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,192 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,193 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,193 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,193 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,193 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,194 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,194 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,194 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,194 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,195 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,195 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,195 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,195 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,196 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,196 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,196 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,197 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,197 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,197 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,197 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,198 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,198 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,198 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,199 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,199 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,199 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,199 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,200 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,200 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,201 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,201 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,201 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,201 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,202 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,202 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,202 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,202 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,203 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,203 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,203 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,203 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,204 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,204 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,204 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,204 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,205 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,205 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,205 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,205 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,205 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,206 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,206 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,206 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,206 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,206 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,207 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,207 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,207 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,207 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,208 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,208 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,208 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,208 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,209 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,209 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,209 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,209 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,210 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,210 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,210 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,210 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,211 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,211 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,211 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,212 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,212 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,212 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,213 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,213 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,213 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,213 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,214 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,214 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,214 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,214 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,215 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,215 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,215 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,215 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,216 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,216 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,216 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,216 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,217 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,217 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,217 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,217 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,217 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,218 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,218 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,218 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,219 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,219 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,219 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,219 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,220 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,220 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,220 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,220 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,221 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,221 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,221 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,221 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,222 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,222 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,222 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,222 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,223 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,223 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,223 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,223 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,224 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,224 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,224 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,224 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,225 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,225 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,225 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,225 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,226 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,226 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,226 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,226 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,227 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,227 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,227 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,227 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,227 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,228 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,228 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,228 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,229 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,229 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,229 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,229 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,230 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,230 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,230 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,231 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,231 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,231 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,231 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,232 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,232 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,232 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,232 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,233 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,234 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,234 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,234 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,234 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,235 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,235 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,235 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,235 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,235 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,236 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,236 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,236 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,236 - INFO - We entered into function: get_entry_name
+2023-11-26 15:33:30,237 - INFO - We entered into function: get_new_nx_entry_name
+2023-11-26 15:33:30,237 - INFO - We entered into function: get_nx_entries
+2023-11-26 15:33:30,237 - INFO - We entered into function: create_entry
+2023-11-26 15:33:30,237 - INFO - We entered into function: get_Edf_instance
+2023-11-26 15:33:30,238 - INFO - We entered into function: get_Edf_instance
+2023-11-26 15:33:30,238 - INFO - We entered into function: get_Edf_instance
+2023-11-26 15:33:30,238 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,239 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,239 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,239 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,239 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,240 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,240 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,240 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,240 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,241 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,241 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,241 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,241 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,242 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,242 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,242 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,242 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,242 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,243 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,243 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,243 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,243 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,244 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,244 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,244 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,244 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,245 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,245 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,246 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,246 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,246 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,246 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,247 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,247 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,247 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,247 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,248 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,248 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,248 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,248 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,249 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,249 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,249 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,250 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,250 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,250 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,250 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,251 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,251 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,251 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,251 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,252 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,252 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,252 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,252 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,253 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,253 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,253 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,253 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,254 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,254 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,254 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,254 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,255 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,255 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,255 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,255 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,256 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,256 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,256 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,256 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,257 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,257 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,257 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,257 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,258 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,258 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,258 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,258 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,258 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,259 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,259 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,259 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,259 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,260 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,260 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,260 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,260 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,261 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,261 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,261 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,262 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,262 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,262 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,262 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,263 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,263 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,263 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,263 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,264 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,264 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,264 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,265 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,265 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,265 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,265 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,265 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,266 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,266 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,266 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,266 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,267 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,267 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,268 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,268 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,268 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,269 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,269 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,269 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,269 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,269 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,270 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,270 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,270 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,270 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,270 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,271 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,271 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,271 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,271 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,272 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,272 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,272 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,272 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,273 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,273 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,273 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,273 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,274 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,274 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,274 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,274 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,274 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,275 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,275 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,275 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,275 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,276 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,276 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,276 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,276 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,277 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,277 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,277 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,277 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,278 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,278 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,278 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,279 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,279 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,279 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,279 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,280 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,280 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,280 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,281 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,281 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,281 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,282 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,282 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,282 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,283 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,283 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,283 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,283 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,283 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,284 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,284 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,284 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,284 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,285 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,285 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,285 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,285 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,286 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,286 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,286 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,286 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,287 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,287 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,287 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,287 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,288 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,288 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,288 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,288 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,289 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,289 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,289 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,289 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,290 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,290 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,290 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,290 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,291 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,291 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,291 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,291 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,292 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,292 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,292 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,292 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,292 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,293 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,293 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,293 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,293 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,293 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,294 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,294 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,294 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,294 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,295 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,295 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,296 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,296 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,296 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,296 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,297 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,297 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,297 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,298 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,298 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,298 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,298 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,299 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,299 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,299 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,299 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,300 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,300 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,301 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,301 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,301 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,301 - INFO - We entered into function: check_metadata_group
+2023-11-26 15:33:30,301 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,302 - INFO - We entered into function: create_group_metadata
+2023-11-26 15:33:30,302 - INFO - We entered into function: write_sample_address
+2023-11-26 15:33:30,302 - INFO - We entered into function: update_ponifiles
+2023-11-26 15:33:30,302 - INFO - We entered into function: search_ponifiles
+2023-11-26 15:33:30,303 - INFO - We entered into function: get_all_ponifiles
+2023-11-26 15:33:30,303 - INFO - We entered into function: generate_ponifiles
+2023-11-26 15:33:30,303 - INFO - We entered into function: check_ponifile_entry
+2023-11-26 15:33:30,303 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,303 - INFO - There is no entry_ponifiles.
+2023-11-26 15:33:30,303 - INFO - Found 1 .poni files in /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD
+2023-11-26 15:33:30,303 - INFO - We entered into function: check_ponifile_entry
+2023-11-26 15:33:30,303 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,303 - INFO - We entered into function: create_entry_ponifile
+2023-11-26 15:33:30,304 - INFO - We entered into function: get_all_ponifiles
+2023-11-26 15:33:30,304 - INFO - We entered into function: generate_ponifiles
+2023-11-26 15:33:30,304 - INFO - We entered into function: check_ponifile_entry
+2023-11-26 15:33:30,304 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,305 - INFO - We entered into function: update_poni
+2023-11-26 15:33:30,305 - INFO - We entered into function: get_ponifile
+2023-11-26 15:33:30,305 - INFO - We entered into function: update_poni
+2023-11-26 15:33:30,305 - INFO - We entered into function: open_poni
+2023-11-26 15:33:30,305 - INFO - We entered into function: _update_gi
+2023-11-26 15:33:30,305 - INFO - GrazingGeometry instance was updated.
+2023-11-26 15:33:30,305 - INFO - We entered into function: _update_ai
+2023-11-26 15:33:30,360 - INFO - GrazingGeometry instance was updated.
+2023-11-26 15:33:30,361 - INFO - We entered into function: _set_poni
+2023-11-26 15:33:30,361 - INFO - We entered into function: get_poni
+2023-11-26 15:33:30,361 - INFO - Current poni parameters: {
+    "poni_version": 2,
+    "detector": "Detector",
+    "detector_config": {
+        "pixel1": 8.854e-05,
+        "pixel2": 8.854e-05,
+        "max_shape": [
+            2880,
+            960
+        ]
+    },
+    "dist": 0.21956146503177287,
+    "poni1": 0.2134776312917016,
+    "poni2": 0.0066574815765295895,
+    "rot1": -0.006724546816823459,
+    "rot2": -0.0024356625603106676,
+    "rot3": 4.738730503032621e-06,
+    "wavelength": 9.998725680096795e-11
+}
+2023-11-26 15:33:30,361 - INFO - We entered into function: get_poni
+2023-11-26 15:33:30,362 - INFO - We entered into function: get_all_entries
+2023-11-26 15:33:30,362 - INFO - We entered into function: generator_samples
+2023-11-26 15:33:30,363 - INFO - We entered into function: h5_get_dict_attrs
+2023-11-26 15:33:30,363 - INFO - We entered into function: update_poni
+2023-11-26 15:33:30,363 - INFO - We entered into function: get_ponifile
+2023-11-26 15:33:30,363 - INFO - We entered into function: update_poni
+2023-11-26 15:33:30,363 - INFO - We entered into function: open_poni
+2023-11-26 15:33:30,363 - ERROR - /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD does not exist.
+2023-11-26 15:33:30,363 - ERROR - poni instance could not be updated.
+2023-11-26 15:33:30,363 - INFO - We entered into function: get_poni
+2023-11-26 15:33:30,364 - INFO - Current poni parameters: {
+    "poni_version": 2,
+    "detector": "Detector",
+    "detector_config": {
+        "pixel1": 8.854e-05,
+        "pixel2": 8.854e-05,
+        "max_shape": [
+            2880,
+            960
+        ]
+    },
+    "dist": 0.21956146503177287,
+    "poni1": 0.2134776312917016,
+    "poni2": 0.0066574815765295895,
+    "rot1": -0.006724546816823459,
+    "rot2": -0.0024356625603106676,
+    "rot3": 4.738730503032621e-06,
+    "wavelength": 9.998725680096795e-11
+}
+2023-11-26 15:33:30,364 - INFO - We entered into function: get_poni
+2023-11-26 15:33:30,364 - INFO - The data parameters were reinitialized.
+2023-11-26 15:33:30,364 - INFO - [Errno 2] No such file or directory: '/home/edgar/work/pyxscat/pyxscat/h5_files_dicts/ ': The .json does not contain a valid filename: /home/edgar/work/pyxscat/pyxscat/h5_files_dicts/ 
+2023-11-26 15:33:30,364 - INFO - H5GIIntegrator instance was created.
+2023-11-26 15:33:30,364 - INFO - We entered into function: h5_get_attr
+2023-11-26 15:33:30,365 - INFO - We entered into function: init_transform
+2023-11-26 15:33:30,365 - INFO - We entered into function: update_incident_angle
+2023-11-26 15:33:30,365 - INFO - Incident angle set up as 0.0.
+2023-11-26 15:33:30,365 - INFO - We entered into function: update_tilt_angle
+2023-11-26 15:33:30,365 - INFO - Tilt angle set up as 0.0.
+2023-11-26 15:33:30,365 - INFO - We entered into function: init_ai
+2023-11-26 15:33:30,365 - INFO - We entered into function: init_metadata_attrs
+2023-11-26 15:33:30,365 - INFO - H5 instance was initialized.
+2023-11-26 15:33:30,365 - INFO - We entered into function: h5_get_dict_attrs
+2023-11-26 15:33:30,366 - INFO - We entered into function: get_all_ponifiles
+2023-11-26 15:33:30,366 - INFO - We entered into function: generate_ponifiles
+2023-11-26 15:33:30,366 - INFO - We entered into function: check_ponifile_entry
+2023-11-26 15:33:30,366 - INFO - We entered into function: check_entry
+2023-11-26 15:33:30,366 - INFO - We entered into function: update_poni
+2023-11-26 15:33:30,366 - INFO - We entered into function: get_ponifile
+2023-11-26 15:33:30,366 - INFO - We entered into function: update_poni
+2023-11-26 15:33:30,366 - INFO - We entered into function: open_poni
+2023-11-26 15:33:30,367 - INFO - We entered into function: _update_gi
+2023-11-26 15:33:30,367 - INFO - GrazingGeometry instance was updated.
+2023-11-26 15:33:30,367 - INFO - We entered into function: _update_ai
+2023-11-26 15:33:30,425 - INFO - GrazingGeometry instance was updated.
+2023-11-26 15:33:30,425 - INFO - We entered into function: _set_poni
+2023-11-26 15:33:30,425 - INFO - We entered into function: get_poni
+2023-11-26 15:33:30,425 - INFO - Current poni parameters: {
+    "poni_version": 2,
+    "detector": "Detector",
+    "detector_config": {
+        "pixel1": 8.854e-05,
+        "pixel2": 8.854e-05,
+        "max_shape": [
+            2880,
+            960
+        ]
+    },
+    "dist": 0.21956146503177287,
+    "poni1": 0.2134776312917016,
+    "poni2": 0.0066574815765295895,
+    "rot1": -0.006724546816823459,
+    "rot2": -0.0024356625603106676,
+    "rot3": 4.738730503032621e-06,
+    "wavelength": 9.998725680096795e-11
+}
+2023-11-26 15:33:30,425 - INFO - We entered into function: get_poni
+2023-11-26 15:33:30,425 - INFO - We entered into function: get_all_entries
+2023-11-26 15:33:30,426 - INFO - We entered into function: generator_samples
+2023-11-26 15:33:30,426 - INFO - We entered into function: get_all_entries
+2023-11-26 15:33:30,426 - INFO - We entered into function: generator_samples
+2023-11-26 15:33:30,427 - INFO - We entered into function: update_orientation
+2023-11-26 15:33:30,427 - INFO - We entered into function: update_orientation
+2023-11-26 15:33:30,427 - INFO - The sample orientation (pygix) is set at 1.
+2023-11-26 15:33:31,190 - INFO - We entered into function: get_all_metadata_keys_from_sample
+2023-11-26 15:33:31,190 - INFO - We entered into function: generator_metadata_keys_from_sample
+2023-11-26 15:33:31,190 - INFO - We entered into function: get_entry_name
+2023-11-26 15:33:31,192 - INFO - We entered into function: get_metadata_dataframe
+2023-11-26 15:33:31,192 - INFO - We entered into function: get_all_filenames_from_sample
+2023-11-26 15:33:31,192 - INFO - We entered into function: generator_filenames_in_sample
+2023-11-26 15:33:31,192 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 15:33:31,192 - INFO - We entered into function: get_entry_name
+2023-11-26 15:33:31,195 - INFO - The dataframe has size 3.
+2023-11-26 15:33:31,195 - INFO - Table was reseted.
+2023-11-26 15:33:31,195 - INFO - Inserted columns: 1.
+2023-11-26 15:33:31,195 - INFO - Inserted rows: 3.
+2023-11-26 15:33:31,196 - INFO - Updated cell [0,0].
+2023-11-26 15:33:31,196 - INFO - Updated cell [1,0].
+2023-11-26 15:33:31,196 - INFO - Updated cell [2,0].
+2023-11-26 15:33:31,198 - INFO - Title for the generated map: 
+2023-11-26 15:33:31,209 - INFO - We entered into function: get_metadata_dataframe
+2023-11-26 15:33:31,209 - INFO - We entered into function: get_all_filenames_from_sample
+2023-11-26 15:33:31,209 - INFO - We entered into function: generator_filenames_in_sample
+2023-11-26 15:33:31,209 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 15:33:31,210 - INFO - We entered into function: get_entry_name
+2023-11-26 15:33:31,211 - INFO - The dataframe has size 3.
+2023-11-26 15:33:31,211 - INFO - Table was reseted.
+2023-11-26 15:33:31,211 - INFO - Inserted columns: 1.
+2023-11-26 15:33:31,211 - INFO - Inserted rows: 3.
+2023-11-26 15:33:31,212 - INFO - Updated cell [0,0].
+2023-11-26 15:33:31,212 - INFO - Updated cell [1,0].
+2023-11-26 15:33:31,212 - INFO - Updated cell [2,0].
+2023-11-26 15:33:31,838 - INFO - We entered into function: get_Edf_data
+2023-11-26 15:33:31,838 - INFO - We entered into function: get_Edf_instance
+2023-11-26 15:33:31,838 - INFO - We entered into function: get_filename_from_index
+2023-11-26 15:33:31,838 - INFO - We entered into function: get_entry_name
+2023-11-26 15:33:31,841 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 15:33:31,851 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 15:33:31,851 - INFO - We entered into function: get_norm_factor
+2023-11-26 15:33:31,852 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 15:33:31,852 - INFO - We entered into function: get_norm_key
+2023-11-26 15:33:31,852 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 15:33:31,852 - INFO - We entered into function: get_entry_name
+2023-11-26 15:33:31,853 - ERROR - 'Unable to synchronously open object (name parameter cannot be an empty string)': dataset  could not be accessed.
+2023-11-26 15:33:31,853 - ERROR - Failed while getting norm factor. Norm. factor set to 1.0.
+2023-11-26 15:33:31,853 - INFO - Norm factor: 1.0
+2023-11-26 15:33:31,856 - INFO - Retrieved data. Sample_name:Reference, index (0,).
+2023-11-26 15:33:31,874 - INFO - Filtered negative, nan and zero values.
+2023-11-26 15:33:31,874 - INFO - We entered into function: update_angles
+2023-11-26 15:33:31,874 - INFO - We entered into function: get_incident_angle
+2023-11-26 15:33:31,874 - INFO - We entered into function: get_dataset_incident_angle
+2023-11-26 15:33:31,874 - INFO - We entered into function: get_iangle_key
+2023-11-26 15:33:31,874 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 15:33:31,874 - INFO - We entered into function: get_entry_name
+2023-11-26 15:33:31,875 - ERROR - 'Unable to synchronously open object (name parameter cannot be an empty string)': dataset  could not be accessed.
+2023-11-26 15:33:31,875 - INFO - Failed while getting incident angle.
+2023-11-26 15:33:31,875 - INFO - Got incident angle: 0.0
+2023-11-26 15:33:31,875 - INFO - We entered into function: get_tilt_angle
+2023-11-26 15:33:31,875 - INFO - We entered into function: get_dataset_tilt_angle
+2023-11-26 15:33:31,875 - INFO - We entered into function: get_tiltangle_key
+2023-11-26 15:33:31,875 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 15:33:31,875 - INFO - We entered into function: get_entry_name
+2023-11-26 15:33:31,876 - ERROR - 'Unable to synchronously open object (name parameter cannot be an empty string)': dataset  could not be accessed.
+2023-11-26 15:33:31,876 - INFO - Failed while getting tilt angle.
+2023-11-26 15:33:31,876 - INFO - Got tilt angle: 0.0
+2023-11-26 15:33:31,876 - INFO - We entered into function: update_incident_angle
+2023-11-26 15:33:31,876 - INFO - Incident angle set up as 0.0.
+2023-11-26 15:33:31,876 - INFO - We entered into function: update_tilt_angle
+2023-11-26 15:33:31,876 - INFO - Tilt angle set up as 0.0.
+2023-11-26 15:33:31,876 - INFO - We entered into function: get_filename_from_index
+2023-11-26 15:33:31,876 - INFO - We entered into function: get_entry_name
+2023-11-26 15:33:31,877 - INFO - New label: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 15:33:31,877 - INFO - Dictionaries of integration: []
+2023-11-26 15:33:31,878 - INFO - Dictionaries of integration: []
+2023-11-26 15:33:31,878 - INFO - We entered into function: generate_integration
+2023-11-26 15:33:31,878 - INFO - We entered into function: generate_integration
+2023-11-26 15:33:31,878 - INFO - True
+2023-11-26 15:33:31,879 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 15:33:31,888 - INFO - (299.0037841796875, 1764.0038146972656)
+2023-11-26 15:33:31,893 - INFO - Displayed data.
+2023-11-26 15:33:34,190 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 15:33:34,191 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 15:33:34,191 - INFO - We entered into function: generate_integration
+2023-11-26 15:33:34,191 - INFO - We entered into function: generate_integration
+2023-11-26 15:33:34,191 - INFO - We entered into function: raw_integration
+2023-11-26 15:33:34,191 - INFO - We entered into function: integration_azimuthal
+2023-11-26 15:33:34,191 - INFO - We entered into function: calculate_bins
+2023-11-26 15:33:34,191 - INFO - We entered into function: q_to_twotheta
+2023-11-26 15:33:34,191 - INFO - We entered into function: q_to_twotheta
+2023-11-26 15:33:34,192 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 15:33:34,753 - INFO - Azimuthal integration performed.
+2023-11-26 15:33:34,755 - INFO - False
+2023-11-26 15:33:34,761 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 15:33:34,773 - INFO - (299.0037841796875, 1764.0038146972656)
+2023-11-26 15:33:34,778 - INFO - Displayed data.
+2023-11-26 15:33:38,830 - INFO - We entered into function: update_orientation
+2023-11-26 15:33:38,830 - INFO - We entered into function: update_orientation
+2023-11-26 15:33:38,832 - INFO - The sample orientation (pygix) is set at 3.
+2023-11-26 15:33:38,832 - INFO - New sample orientation: 3
+2023-11-26 15:33:38,833 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 15:33:38,834 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 15:33:38,834 - INFO - We entered into function: generate_integration
+2023-11-26 15:33:38,834 - INFO - We entered into function: generate_integration
+2023-11-26 15:33:38,834 - INFO - We entered into function: raw_integration
+2023-11-26 15:33:38,834 - INFO - We entered into function: integration_azimuthal
+2023-11-26 15:33:38,834 - INFO - We entered into function: calculate_bins
+2023-11-26 15:33:38,834 - INFO - We entered into function: q_to_twotheta
+2023-11-26 15:33:38,834 - INFO - We entered into function: q_to_twotheta
+2023-11-26 15:33:38,835 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 15:33:39,464 - INFO - Azimuthal integration performed.
+2023-11-26 15:33:39,465 - INFO - False
+2023-11-26 15:33:39,466 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 15:33:39,474 - INFO - (299.0037841796875, 1764.0038146972656)
+2023-11-26 15:33:39,480 - INFO - Displayed data.
+2023-11-26 15:33:40,200 - INFO - We entered into function: get_metadata_dataframe
+2023-11-26 15:33:40,201 - INFO - We entered into function: get_all_filenames_from_sample
+2023-11-26 15:33:40,201 - INFO - We entered into function: generator_filenames_in_sample
+2023-11-26 15:33:40,201 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 15:33:40,201 - INFO - We entered into function: get_entry_name
+2023-11-26 15:33:40,203 - INFO - The dataframe has size 3.
+2023-11-26 15:33:40,204 - INFO - Table was reseted.
+2023-11-26 15:33:40,204 - INFO - Inserted columns: 1.
+2023-11-26 15:33:40,204 - INFO - Inserted rows: 3.
+2023-11-26 15:33:40,205 - INFO - Updated cell [0,0].
+2023-11-26 15:33:40,205 - INFO - Updated cell [1,0].
+2023-11-26 15:33:40,205 - INFO - Updated cell [2,0].
