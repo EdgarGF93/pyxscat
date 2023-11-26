@@ -100,7 +100,10 @@ def selected_rows(table):
     """
         Return a list of tuples with the coordinates of selected files in the table
     """
-    return [table.row(item) for item in table.selectedItems()]
+    list_rows = [table.row(item) for item in table.selectedItems()]
+    list_rows.sort()
+    tuple_rows = tuple(list_rows)
+    return tuple_rows
 
 def reset(table):
     """

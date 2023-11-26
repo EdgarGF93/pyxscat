@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import QCheckBox, QLineEdit, QDoubleSpinBox, QPlainTextEdit
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import Qt
 from silx.gui.plot.PlotWindow import Plot1D, Plot2D
+from pyxscat.gui import lineedit_methods as le
+from pyxscat.gui import combobox_methods as cb
 
 from pyxscat.edf import DICT_SAMPLE_ORIENTATIONS
 from pyxscat.other.units import DICT_UNIT_ALIAS, CAKE_INTEGRATIONS, BOX_INTEGRATIONS
@@ -197,9 +199,9 @@ LABEL_YLIMS = "y-lims:"
 LABEL_XTICKS = "x-ticks:"
 LABEL_YTICKS = "y-ticks:"
 
-DEFAULT_BINNING = int(4)
+DEFAULT_BINNING = int(2)
 BINNING_STEP = int(1)
-BINNING_RANGE_MIN = int(0)
+BINNING_RANGE_MIN = int(1)
 BINNING_RANGE_MAX = int(100)
 
 BUTTON_LABEL_MINUS = "a"
@@ -1595,4 +1597,11 @@ class GUIPyXMWidgetLayout(QWidget):
         if new_state:
             self.button_live.setText(BUTTON_LIVE_ON)
         else:
-            self.button_live.setText(BUTTON_LIVE)   
+            self.button_live.setText(BUTTON_LIVE)
+
+    def get_pattern(self):
+        wildcards = le.text(self.lineedit_wildcards).strip()
+        extension = cb.value(self.combobox_extension)
+        pattern = wildcards + extension
+        pattern = pattern.replace('**', '*')
+        return pattern

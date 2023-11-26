@@ -1,17 +1,21 @@
 from . import *
 from collections import defaultdict
+# from cachetools import cached, LRUCache
 from os.path import join
 from pathlib import Path
 from pyFAI import __file__ as pyfai_file
-from PyQt5.QtCore import QTimer, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QMessageBox
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import pyqtSignal, QTimer
 from scipy import ndimage
+import time
+from pyxscat.gui.live import PyXScatObserver, PyXScatHandler
 
-from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries, get_dict_files, get_dict_difference
+from pyFAI.io.ponifile import PoniFile
+from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries, get_dict_files
 from pyxscat.other.plots import *
 from pyxscat.other.integrator_methods import *
-from pyxscat.other.setup_methods import save_setup_dictionary, locate_setup_file, search_metadata_names, get_empty_setup_dict
+from pyxscat.other.setup_methods import save_setup_dictionary, locate_setup_file, search_metadata_names
 from pyxscat.gui import SRC_PATH
 from pyxscat.gui import lineedit_methods as le
 from pyxscat.gui import combobox_methods as cb
@@ -22,12 +26,11 @@ from pyxscat.gui.gui_layout import GUIPyXMWidgetLayout
 from pyxscat.gui.gui_layout import LABEL_CAKE_BINS_OPT, LABEL_CAKE_BINS_MAND
 from pyxscat.gui.gui_layout import INDEX_TAB_1D_INTEGRATION, INDEX_TAB_RAW_MAP, INDEX_TAB_Q_MAP, INDEX_TAB_RESHAPE_MAP, DEFAULT_BINNING
 from pyxscat.h5_integrator import H5GIIntegrator
-from pyxscat.h5_integrator import PONI_KEY_BINNING, PONI_KEY_DISTANCE, PONI_KEY_SHAPE1, PONI_KEY_SHAPE2, PONI_KEY_DETECTOR, PONI_KEY_DETECTOR_CONFIG, PONI_KEY_PIXEL1, PONI_KEY_PIXEL2, PONI_KEY_WAVELENGTH, PONI_KEY_PONI1, PONI_KEY_PONI2, PONI_KEY_ROT1, PONI_KEY_ROT2, PONI_KEY_ROT3
-from pyxscat.h5_integrator import *
 from pyxscat.gui.gui_layout import QZ_BUTTON_LABEL, QR_BUTTON_LABEL, MIRROR_BUTTON_LABEL
+from PyQt5.QtWidgets import QComboBox
 
+import copy
 import json
-import logging
 import numpy as np
 import subprocess
 import sys
@@ -35,8 +38,7 @@ import os
 import pandas as pd
 
 from pyxscat.other.setup_methods import *
-
-import concurrent.futures
+# import concurrent.futures
 
 ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_new_logo.png')
 
@@ -107,23 +109,25 @@ DEFAULT_MAP_FONTSIZE = 10
 DEFAULT_INCIDENT_ANGLE = 0.0
 DEFAULT_TILT_ANGLE = 0.0
 
+DICT_SAMPLE_ORIENTATIONS = {
+    (True,True) : 1,
+    (True,False) : 2,
+    (False,True) : 3,
+    (False,False) : 4,
+}
+
 RELATIVE_TO_ROOT = False
+
+FILENAME_H5_KEY = "h5_filename"
+NAME_H5_KEY = "name"
+FILENAME_KEY = "filename"
 
 from pyxscat.logger_config import setup_logger
 logger = setup_logger()
 
 def log_info(func):
-    """
-    To be used as decorator, everytime the function is accesed, a new log info message is written
-
-    Parameters:
-    None
-
-    Returns:
-    None
-    """
     def wrapper(*args, **kwargs):
-        logger.debug(f'We entered into function: {func.__name__}')
+        logger.debug(f'_________OPEN FUNCTION: {func.__name__}_________')
         return func(*args, **kwargs)
     return wrapper
 
@@ -131,9 +135,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     """
     Class to create a GUI widget, with methods and callbacks
     """
-
-    signal = pyqtSignal(int)
-
     def __init__(self):
         super(GUIPyXMWidget, self).__init__()
 
@@ -147,14 +148,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Initialize attributes and callbacks
         self.h5 = None
-        self._data_cache = None
-        self.main_directory = Path()
-        self._dict_poni_cache = dict()
+        self._root_dir = Path()
         self.clicked_folder = str()
         self.list_results_cache = []
         self.list_dict_integration_cache = []
         self.dict_recent_h5 = {}
+        self._poni_cache = None
 
+        self._data_cache = None
         self.scat_horz_cache = None
         self.scat_vert_cache = None
         self.data_bin_cache = None
@@ -177,11 +178,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         self.reset_attributes_and_widgets()
         self.init_callbacks()
-        
-        # self.update_setup_info()
         self.update_lims_ticks()
 
-    def write_terminal_and_loggerinfo(self, msg=str()):
+    def log_explorer_info(self, msg=str()):
         """
         Types a message in the terminal of the GUI and register the message in the logger file as INFO
 
@@ -191,7 +190,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self._write_output(msg)
         logger.info(msg)
 
-    def write_terminal_and_loggererror(self, msg=str()):
+    def log_explorer_error(self, msg=str()):
         """
         Types a message in the terminal of the GUI and register the message in the logger file as INFO
 
@@ -358,26 +357,30 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         ### PONIFILE PARAMETERS
         #########################
         self.checkbox_poni_mod.stateChanged.connect(self.disable_ponifile_mod)
-        self.button_update_old_poni_parameters.clicked.connect(self.retrieve_old_poni_clicked)
+        self.button_update_old_poni_parameters.clicked.connect(self.restore_cache_poni_clicked)
         self.button_update_poni_parameters.clicked.connect(self.update_poni_clicked)
         self.button_save_poni_parameters.clicked.connect(self.save_poni_clicked)
 
     @log_info
     def reset_attributes_and_widgets(self) -> None:
-        """
-        Resets data attributes after changing main directory
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
-        self.sample_cache = str()
+        self.active_entry = str()
         self.cache_index = []
         self._h5_file = str()
         self._data_cache = None
+        self.scat_horz_cache = None
+        self.scat_vert_cache = None
+        self.data_bin_cache = None
 
+        self._dict_qmap_cache = {
+            'acq_time' : None,
+            'qz_parallel' : self.state_qz,
+            'qr_parallel' : self.state_qr,
+            'mirror' : self.state_mirror,
+            'binning' : DEFAULT_BINNING,
+            'incident_angle': DEFAULT_INCIDENT_ANGLE,
+            'tilt_angle' : DEFAULT_TILT_ANGLE,
+        }
+        
         # Clear GUI widgets
         cb.clear(self.combobox_ponifile)
         cb.clear(self.combobox_reffolder)
@@ -389,16 +392,15 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         cb.clear(self.combobox_normfactor)
         lt.clear(self.listwidget_samples)
         tm.reset(self.table_files)
-        # le.clear(self.lineedit_headeritems)
-        # le.clear(self.lineedit_headeritems_title)
         self.graph_1D_widget.clear()
         self.graph_raw_widget.clear()
 
-        self.write_terminal_and_loggerinfo(MSG_RESET_DATA)
+        self.log_explorer_info(MSG_RESET_DATA)
 
-    # #########################
-    # # Update self attributes
-    # #########################
+    ##########################
+    ## RECENT .H5 FILES METHODS
+    ##########################
+
     @log_info
     def update_combobox_h5(self, change_to_last=True) -> None:
         combobox = self.combobox_h5_files
@@ -420,14 +422,26 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             )
 
     @log_info
-    def get_recent_h5_files(self):
+    def get_recent_h5_files(self) -> list:
+        """
+        Searches every recently opened .h5 file
+
+        Returns:
+            list with the addresses of .h5 files previously opened
+        """        
         h5_files = []
         json_files = H5_FILES_PATH.rglob("*.json")
+
         for file in json_files:
             dict_h5 = open_json(file)
             h5_file = Path(dict_h5.get("h5_filename"))
             h5_files.append(h5_file)
+
         return h5_files
+
+    ##########################
+    ## METADATA TAB METHODS
+    ##########################
 
     @log_info
     def update_combobox_metadata(self) -> None:
@@ -489,44 +503,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Update the widgets
         self.update_metadata_widgets(dict_setup=dict_cake_integration)
     
-
-    # @log_info
-    # def update_setup_info(self, name_setup=str(), new_dict=defaultdict) -> None:
-    #     """
-    #     Declare the setup dictionary of the GUI searching by name (string) or declaring a new one
-
-    #     Parameters:
-    #     new_name_setup(str) : key 'Name' of the (already saved) setup dictionary in a .json file
-    #     new_dict(defaultdict) : contains the new values for the setup dictionary
-
-    #     Returns:
-    #     None
-    #     """
-    #     if not name_setup:
-    #         name_setup = cb.value(self.combobox_setup)
-
-    #     # Search for a .json file with the name_setup string
-    #     if name_setup:
-    #         new_dict_setup = get_dict_setup_from_name(
-    #             name=name_setup,
-    #             directory_setups=SETUP_PATH,
-    #         )
-    #     # Directly update with a defaultdict  
-    #     elif new_dict:
-    #         new_dict_setup = new_dict
-    #     else:
-    #         new_dict_setup = get_empty_setup_dict()
-
-    #     new_dict_setup = filter_dict_setup(
-    #         dictionary=new_dict_setup,
-    #     )
-
-    #     # Updates the instance variable
-    #     self._dict_setup = new_dict_setup
-
-    #     self.write_terminal_and_logger(MSG_SETUP_UPDATED)
-    #     self.write_terminal_and_logger(self._dict_setup)
-
     @log_info
     def update_metadata_widgets(self, dict_setup=dict()):
 
@@ -632,9 +608,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             dict_metadata_keys=dict_metadata,
         )
 
-        self.write_terminal_and_loggerinfo(f"New metadata keys: {str(dict_metadata)}")
-
-
+        self.log_explorer_info(f"New metadata keys: {str(dict_metadata)}")
 
     @log_info
     def metadata_save_clicked(self, _):
@@ -656,19 +630,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             text=dict_metadata["Name"],
         )
 
-
-
-    # @log_info
-    # def save_metadata(self, dict_setup=dict()) -> None:
-    #     """
-    #         Collect the dictionary and save a .json file
-    #     """
-    #     file_json = join(SETUP_PATH, f"{new_dict_info['Name']}.json")
-    #     with open(file_json, 'w+') as fp:
-    #         json.dump(new_dict_info, fp)
-    #     self.update_combobox_setups()
-
-
+    ##########################
+    ## CAKE TAB METHODS ######
+    ##########################
 
     @log_info
     def listcakes_clicked(self, list_item):
@@ -678,7 +642,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Check if a file with this name does exist
         filename_integration = locate_integration_file(name_integration=name_cake_integration)
         if not filename_integration:
-            self.write_terminal_and_loggerinfo(f"There is no .json file with the name {name_cake_integration}")
+            self.log_explorer_info(f"There is no .json file with the name {name_cake_integration}")
             return
         
         # Fetch the dictionary
@@ -686,7 +650,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Check if the dictionary contains all the parameters and correct types
         if not is_cake_dictionary(dict_integration=dict_cake_integration):
-            self.write_terminal_and_loggerinfo(f"The integration dictionary is not correct : {dict_cake_integration}")
+            self.log_explorer_info(f"The integration dictionary is not correct : {dict_cake_integration}")
             return
 
         # Update cake widgets
@@ -706,43 +670,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.spinbox_azimmax_cake.setValue(dict_integration[CAKE_KEY_ARANGE][1])
         cb.set_text(self.combobox_units_cake, dict_integration[CAKE_KEY_UNIT])
         self.spinbox_azimbins_cake.setValue(dict_integration[CAKE_KEY_ABINS])
-        logger.info(f"Updated widgets with cake integration values.")
-
-    @log_info
-    def listbox_clicked(self, list_item):
-        name_box_integration = list_item.text()
-
-        # Check if a file with this name does exist
-        filename_integration = locate_integration_file(name_integration=name_box_integration)
-        if not filename_integration:
-            return
-        
-        # Fetch the dictionary
-        dict_box_integration = fetch_dictionary_from_json(filename_json=filename_integration)
-
-        # Check if the dictionary contains all the parameters and correct types
-        if not is_box_dictionary(dict_integration=dict_box_integration):
-            return
-
-        # Update cake widgets
-        self.update_box_parameters(dict_integration=dict_box_integration)
-
-    @log_info
-    def update_box_parameters(self, dict_integration=dict()):
-        """
-        Updates the widgets of integration after clicking on the list_boxes
-        """
-        le.substitute(self.lineedit_name_box, dict_integration[BOX_KEY_NAME])
-        le.substitute(self.lineedit_suffix_box, dict_integration[BOX_KEY_SUFFIX])
-        cb.set_text(self.combobox_direction_box, dict_integration[BOX_KEY_DIRECTION])
-        cb.set_text(self.combobox_units_box, dict_integration[BOX_KEY_INPUT_UNIT])
-        self.spinbox_ipmin_box.setValue(dict_integration[BOX_KEY_IPRANGE][0])
-        self.spinbox_ipmax_box.setValue(dict_integration[BOX_KEY_IPRANGE][1])
-        self.spinbox_oopmin_box.setValue(dict_integration[BOX_KEY_OOPRANGE][0])
-        self.spinbox_oopmax_box.setValue(dict_integration[BOX_KEY_OOPRANGE][1])
-        cb.set_text(self.combobox_outputunits_box, dict_integration[BOX_KEY_OUTPUT_UNIT])
-        logger.info(f"Updated widgets with box integration values.")
-
+        self.log_explorer_info(f"Updated widgets with cake integration values.")
 
     @log_info
     def cake_parameter_changed(self,_):
@@ -768,7 +696,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             graph_2D_raw=True,
         )
         
-
     @log_info
     def fetch_cake_integration_parameters(self):
         dict_cake = dict()
@@ -813,6 +740,45 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         dict_cake[KEY_INTEGRATION] = CAKE_LABEL
 
         return dict_cake
+
+    ##########################
+    ## BOX TAB METHODS #######
+    ##########################
+
+    @log_info
+    def listbox_clicked(self, list_item):
+        name_box_integration = list_item.text()
+
+        # Check if a file with this name does exist
+        filename_integration = locate_integration_file(name_integration=name_box_integration)
+        if not filename_integration:
+            return
+        
+        # Fetch the dictionary
+        dict_box_integration = fetch_dictionary_from_json(filename_json=filename_integration)
+
+        # Check if the dictionary contains all the parameters and correct types
+        if not is_box_dictionary(dict_integration=dict_box_integration):
+            return
+
+        # Update cake widgets
+        self.update_box_parameters(dict_integration=dict_box_integration)
+
+    @log_info
+    def update_box_parameters(self, dict_integration=dict()):
+        """
+        Updates the widgets of integration after clicking on the list_boxes
+        """
+        le.substitute(self.lineedit_name_box, dict_integration[BOX_KEY_NAME])
+        le.substitute(self.lineedit_suffix_box, dict_integration[BOX_KEY_SUFFIX])
+        cb.set_text(self.combobox_direction_box, dict_integration[BOX_KEY_DIRECTION])
+        cb.set_text(self.combobox_units_box, dict_integration[BOX_KEY_INPUT_UNIT])
+        self.spinbox_ipmin_box.setValue(dict_integration[BOX_KEY_IPRANGE][0])
+        self.spinbox_ipmax_box.setValue(dict_integration[BOX_KEY_IPRANGE][1])
+        self.spinbox_oopmin_box.setValue(dict_integration[BOX_KEY_OOPRANGE][0])
+        self.spinbox_oopmax_box.setValue(dict_integration[BOX_KEY_OOPRANGE][1])
+        cb.set_text(self.combobox_outputunits_box, dict_integration[BOX_KEY_OUTPUT_UNIT])
+        self.log_explorer_info(f"Updated widgets with box integration values.")
 
     @log_info
     def box_parameter_changed(self,_):
@@ -877,21 +843,39 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         return dict_box
 
+    #####################################
+    ## SAMPLE-ORIENTATION METHODS #######
+    #####################################
+
     @log_info
     def button_mirror_clicked(self, state_mirror):
+        """
+        Performs a mirror transformation on the 2D matrix
+
+        Arguments:
+            state_mirror -- state of the clicked button On/Off
+        """        
+
         # Update the label and style of button
         self.update_button_orientation(
             button_label=MIRROR_BUTTON_LABEL,
             new_state=state_mirror,
         )
 
-        if self.h5:
-            self.update_graphs(
-                graph_2D_q=True,
-            )
+        # Update only q map
+        self.update_graphs(
+            graph_2D_q=True,
+        )
 
     @log_info
     def button_qz_clicked(self, state_qz):
+        """
+        Updates the sample orientation by changing the orientation of qz axis
+
+        Arguments:
+            state_qz -- state of the qz button (On/Off)
+        """        
+
         # Update the label and style of button
         self.update_button_orientation(
             button_label=QZ_BUTTON_LABEL,
@@ -899,23 +883,26 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
         # Update the h5 integrator instance
-        if self.h5:
-            qz_parallel = self.state_qz
-            qr_parallel = self.state_qr
-            sample_or = DICT_SAMPLE_ORIENTATIONS[(qz_parallel, qr_parallel)]
+        self.update_orientation(
+            qz_parallel=self.state_qz, 
+            qr_parallel=self.state_qr,
+        )
 
-            self.h5.update_orientation(
-                qz_parallel=qz_parallel,
-                qr_parallel=qr_parallel,
-            )
-            self.write_terminal_and_loggerinfo(f"New sample orientation: {sample_or}")
-            self.update_graphs(
-                graph_1D=True,
-                graph_2D_q=True,
-            )
+        # Update 1D and q map
+        self.update_graphs(
+            graph_2D_raw=True,
+            graph_1D=True,
+            graph_2D_q=True,
+        )
 
     @log_info
     def button_qr_clicked(self, state_qr):
+        """
+        Updates the sample orientation by changing the orientation of qr axis
+
+        Arguments:
+            state_qr -- state of the qr button (On/Off)
+        """        
 
         # Update the label and style of button
         self.update_button_orientation(
@@ -924,23 +911,48 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
         # Update the h5 integrator instance
-        if self.h5:
-            qz_parallel = self.state_qz
-            qr_parallel = self.state_qr
-            sample_or = DICT_SAMPLE_ORIENTATIONS[(qz_parallel, qr_parallel)]
+        self.update_orientation(
+            qz_parallel=self.state_qz, 
+            qr_parallel=self.state_qr,
+        )
 
-            self.h5.update_orientation(
-                qz_parallel=qz_parallel,
-                qr_parallel=qr_parallel,
-            )
-            self.write_terminal_and_loggerinfo(f"New sample orientation: {sample_or}")
-            self.update_graphs(
-                graph_1D=True,
-                graph_2D_q=True,
-            )
+        # Update 1D and q map
+        self.update_graphs(
+            graph_2D_raw=True,
+            graph_1D=True,
+            graph_2D_q=True,
+        )
 
     @log_info
+    def update_orientation(self, qz_parallel=True, qr_parallel=True):
+        """
+        Updates the sample orientation upon the orientation of qz and qr axis
+
+        Keyword Arguments:
+            qz_parallel -- state of the qz button (On/Off) (default: {True})
+            qr_parallel -- state of the qr button (On/Off) (default: {True})
+        """        
+        if not self.h5:
+            self.log_explorer_info(f'There is no h5 instance to update the sample orientation.')
+
+        self.h5.update_orientation(
+            qz_parallel=qz_parallel,
+            qr_parallel=qr_parallel,
+        )
+
+        new_sample_or = self.h5.gi.sample_orientation
+        self.log_explorer_info(f"New sample orientation: {new_sample_or}")
+
+    #################################
+    ## ROOT-DIRECTORY METHODS #######
+    #################################
+    
+    @log_info
     def pick_rootdir_clicked(self,_):
+        """
+        Chain of events after pressing the folder button
+        """        
+
         # Get the address of a root directory
         root_directory = self.pick_root_directory()
         if not root_directory:
@@ -976,11 +988,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
         # Update list of samples
-        self.update_listwidget_with_samples(
-            listwidget=self.listwidget_samples,
-            from_h5=True,
+        self.update_sample_listwidget(
+            # from_h5=True,
             reset=True,
-            relative_address=GET_RELATIVE_ADDRESS,
         )
 
         # Save a .json file with the attributes of the new h5 instance
@@ -989,45 +999,54 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Update the combobox of h5 files
         self.update_combobox_h5()
 
-
     @log_info
     def init_h5_instance(
         self,
-        root_directory=str(),
-        output_filename_h5=str(),
-        input_filename_h5=str(),
+        root_directory='',
+        output_filename_h5='',
+        input_filename_h5='',
         ):
+        """
+        Generates an instance of H5Integrator
+
+        Keyword Arguments:
+            root_directory -- directory to search recursively data files (default: {''})
+            output_filename_h5 -- output name of .h5 file, optional (default: {''})
+            input_filename_h5 -- name of an existing .h5 file, to be read and handle (default: {''})
+
+        Returns:
+            validation of the H5Integration instance
+        """        
         try:
             self.h5 = H5GIIntegrator(
                 root_directory=root_directory,
                 output_filename_h5=output_filename_h5,
                 input_h5_filename=input_filename_h5,
             )
-            self.write_terminal_and_loggerinfo("H5 instance was initialized.")
+            self.log_explorer_info("H5 instance was initialized.")
             return True
+
         except Exception as e:
             self.h5 = None
-            self.write_terminal_and_loggerinfo(f"{e}: H5 instance could not be initiliazed.")
+            self.log_explorer_info(f"{e}: H5 instance could not be initiliazed.")
             return False
 
     @log_info
-    def pick_h5_filename(self, root_directory=str()):
+    def pick_h5_filename(self, root_directory=''):
         """
         Creates a new filename for the incoming new .h5 file
 
-        Parameters:
-        main_directory(srt, Path) : path of the root directory where all the data/metadata will be located recursively
+        Keyword Arguments:
+            root_directory -- path of the root directory where all the data/metadata will be located recursively (default: {''})
+        """        
 
-        Return:
-        None
-        """
         # It has to be a Path where to search the data files
         if not root_directory:
-            self.write_terminal_and_loggerinfo(ERROR_MAINDIR_DONTEXIST)
+            self.log_explorer_info(ERROR_MAINDIR_DONTEXIST)
             return
 
         if not Path(root_directory).exists():
-            self.write_terminal_and_loggerinfo(ERROR_MAINDIR_DONTEXIST)
+            self.log_explorer_info(ERROR_MAINDIR_DONTEXIST)
             return
         
         # Save the .h5 file in the same main_directory root or not
@@ -1037,12 +1056,12 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         elif choice_hdf5 == QMessageBox.No:
             h5_filename = self.pick_hdf5_folder()
         else:
-            self.write_terminal_and_loggerinfo(ERROR_H5_FILECREATION)
+            self.log_explorer_info(ERROR_H5_FILECREATION)
             return
 
         # If there is no defined path for the future .h5 file, returns without creating the h5 file
         if not h5_filename:
-            self.write_terminal_and_loggerinfo(ERROR_H5_FILECREATION)
+            self.log_explorer_info(ERROR_H5_FILECREATION)
             return
         
         # Full filename for the .h5 file
@@ -1058,7 +1077,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             elif choice_hdf5_overwrite == QMessageBox.No:
                 overwrite = False
             else:
-                self.write_terminal_and_loggerinfo(ERROR_H5_FILECREATION)
+                self.log_explorer_info(ERROR_H5_FILECREATION)
                 return
         else:
             overwrite = True
@@ -1069,49 +1088,31 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         return h5_filename
 
-
     @log_info
-    def pick_root_directory(self, timeout=1e9) -> Path:
+    def pick_root_directory(self) -> Path:
         """
-        Picks a folder as main directory, the root where the data files are searched recursively
-
-        Parameters:
-        None
+        Picks a folder as root directory, where the data files are searched recursively
 
         Returns:
-        Path: path instance of the root directory to search data files
-        """
+            Path instance with the root directory
+        """        
+
         # Pick the folder after pop-up browser window
         self.dialog_maindir = QFileDialog()
         get_directory = self.dialog_maindir.getExistingDirectory(self, 'Choose main directory', str(GLOBAL_PATH))
 
-
         # Returns if is not valid, or the dialog was cancelled
         if not get_directory:
-            main_directory = ""
-            self.write_terminal_and_loggerinfo(ERROR_PICK_FOLDER)
+            root_directory = ""
+            self.log_explorer_info(ERROR_PICK_FOLDER)
         else:
             try:
-                main_directory = Path(get_directory)
+                root_directory = Path(get_directory)
             except NotImplementedError:
-                main_directory = ""
-                self.write_terminal_and_loggerinfo(ERROR_PICK_FOLDER)
-        return main_directory
+                root_directory = ""
+                self.log_explorer_info(ERROR_PICK_FOLDER)
 
-
-
-
-    @log_info
-    def get_full_folderpath(self, folder_relative_name=str()) -> Path:
-        """
-        Join the folder_name (relative to) with the main_directory
-        """
-        if not self.main_directory:
-            return
-
-        folder_relative_name = Path(folder_relative_name)
-        full_folder_name = self.main_directory.joinpath(folder_relative_name)
-        return full_folder_name
+        return root_directory
 
     @log_info
     def pick_hdf5_folder(self) -> Path:
@@ -1125,42 +1126,40 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Path: path for the new .h5
         """
         # It has to be a Path where to search the data files
-        if not self.main_directory:
-            self.write_terminal_and_loggerinfo(ERROR_MAINDIR_DONTEXIST)
+        if not self._root_dir:
+            self.log_explorer_info(ERROR_MAINDIR_DONTEXIST)
             return
         
         dialog_h5_dir = QFileDialog.getExistingDirectory(self, 'Choose main directory', ".")
 
         if not dialog_h5_dir:
-            self.write_terminal_and_loggerinfo(ERROR_H5DIR)
+            self.log_explorer_info(ERROR_H5DIR)
             h5_dir = ""
         else:
             try:
                 h5_dir = Path(dialog_h5_dir)
             except NotImplementedError:
                 h5_dir = ""
-                self.write_terminal_and_loggerinfo(ERROR_H5DIR)
+                self.log_explorer_info(ERROR_H5DIR)
 
         return h5_dir
 
-
     @log_info
     def pick_h5file_clicked(self, _):
-        # Get the address of the .h5 file
+
+        # Get the address of the .h5 file. Return is empty
         h5_filename = self.pick_h5_file()
         if not h5_filename:
             return
 
+        # Check if the file has been already imported
         h5_recent_files = self.get_recent_h5_files()
-
         if h5_filename in h5_recent_files:
-            self.write_terminal_and_loggerinfo(f"{h5_filename} is already imported.")
+            self.log_explorer_info(f"{h5_filename} is already imported.")
             return
 
         # Initiate H5 instance from a .h5 file
-        if not self.init_h5_instance(
-            input_filename_h5=h5_filename,
-            ):
+        if not self.init_h5_instance(input_filename_h5=h5_filename):
             return
 
         # Update combobox of ponifiles
@@ -1171,11 +1170,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
         # Update list of samples
-        self.update_listwidget_with_samples(
-            listwidget=self.listwidget_samples,
-            from_h5=True,
+        self.update_sample_listwidget(
+            # from_h5=True,
             reset=True,
-            relative_address=GET_RELATIVE_ADDRESS,
         )
 
         # Save a .json file with the attributes of the new h5 instance
@@ -1184,16 +1181,25 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Update the combobox of h5 files
         self.update_combobox_h5()
 
-
     @log_info
-    def pick_h5_file(self):
+    def pick_h5_file(self) -> str:
+        """
+        Picks a .h5 file through the QFileDialog
+
+        Returns:
+            string of h5 absolute path
+        """        
+      
         h5_file = QFileDialog.getOpenFileNames(self, 'Pick .hdf5 file', '.', "*.h5")
+
         try:
             h5_file = h5_file[0][0]
             h5_file = Path(h5_file)
+            self.log_explorer_info(f'Picked h5 file: {h5_file}')
             return h5_file
         except Exception as e:
-            return
+            self.log_explorer_error(f'{e}: No valid picked file: {h5_file}.')
+            return ''
 
     @log_info
     def pick_and_activate_hdf5_file(self) -> None:
@@ -1206,8 +1212,8 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Returns:
         None
         """
-        if self.main_directory:
-            h5_file = QFileDialog.getOpenFileNames(self, 'Pick .hdf5 file', str(self.main_directory), "*.h5")
+        if self._root_dir:
+            h5_file = QFileDialog.getOpenFileNames(self, 'Pick .hdf5 file', str(self._root_dir), "*.h5")
         else:
             h5_file = QFileDialog.getOpenFileNames(self, 'Pick .hdf5 file', '.', "*.h5")
 
@@ -1224,7 +1230,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                     text=h5_file,
                 )
             except:
-                logger.info("No .h5 file was picked.")
+                self.log_explorer_info("No .h5 file was picked.")
         else:
             return
 
@@ -1240,13 +1246,13 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         try:
             dict_h5 = open_json(json_filename)
         except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: The .json does not contain a valid filename: {json_filename}")
+            self.log_explorer_info(f"{e}: The .json does not contain a valid filename: {json_filename}")
             return
 
         # Check if this file still exists
         filename_h5 = dict_h5[FILENAME_H5_KEY]
         if not Path(filename_h5).is_file():
-            self.write_terminal_and_loggerinfo(f"The file {filename_h5} does not exists.")
+            self.log_explorer_info(f"The file {filename_h5} does not exists.")
             return
         
         # Create the h5 instance from an existing .h5 file
@@ -1272,9 +1278,8 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
         # Update list of samples and reference combobox
-        self.update_listwidget_with_samples(
-            listwidget=self.listwidget_samples,
-            from_h5=True,
+        self.update_sample_listwidget(
+            # from_h5=True,
             reset=True,
         )
         self.update_combobox_with_samples(
@@ -1288,7 +1293,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             qr_parallel=self.state_qr,
         )
 
-
     @log_info
     def update_h5_plaintext(self):
         self.h5_plaintext.clear()
@@ -1297,9 +1301,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             for k,v in d.items():
                 self.h5_plaintext.appendPlainText(f"{str(k)} : {str(v)}\n")
 
-    ##################################################
-    ############# PONIFILE METHODS ###################
-    ##################################################
+    #####################
+    ### PONI METHODS ####
+    #####################
 
     @log_info
     def update_cb_ponifiles(
@@ -1317,7 +1321,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Add ponifiles from h5 instance
         if from_h5:
-            # Fetch ponifiles from h5 instance
             ponifiles_in_h5 = self.h5.get_all_ponifiles(get_relative_address=relative_address)
             ponifile_list = ponifiles_in_h5
 
@@ -1342,37 +1345,24 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     @log_info
     def cb_ponifile_changed(self, poni_name):
+        """
+        Updates the .poni parameters from a changed value of .poni filename
+
+        Arguments:
+            poni_name -- string of .poni filename
+        """        
+
         if not self.h5:
             return
 
         # Activate the .poni file in the h5 instance
-        self.activate_poni_parameters(
-            poni_filename=poni_name,
-        )
-        # self.h5.activate_poni_parameters(
-        #     poni_filename=poni_name,
-        # )
-
-        # Update the inherited instance of Grazing Geometry
-        # self.h5.update_grazinggeometry()
-        
-        # Check if the .poni file does exist
-        if self.h5.active_ponifile:
-            self.write_terminal_and_loggerinfo(f"Activated {self.h5.active_ponifile}")
-            # self.write_terminal_and_loggerinfo(self.h5)
-        else:
-            self.write_terminal_and_loggerinfo(f"No active ponifile.")
-            return
-
-        if not Path(self.h5.active_ponifile).is_file():
-            self.write_terminal_and_loggerinfo(f"The .poni file {str(self.h5.active_ponifile)} does not exist.")
-            return
+        self.update_poni(poni=poni_name)
         
         # Update the .poni tab widgets
-        dict_poni = self.h5.get_poni_dict()
-        self.update_ponifile_widgets(
-            dict_poni=dict_poni,
-        )
+        poni = self.h5.get_poni()
+        self._poni_cache = poni
+
+        self.update_poni_widgets(poni=poni)
 
         # Update_graphs
         self.update_graphs(
@@ -1382,338 +1372,484 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
     @log_info
-    def retrieve_old_poni_clicked(self,_):
+    def restore_cache_poni_clicked(self,_):
+        """
+        Restores the poni widgets with the values from the previous poni stored in cache
+        """        
+
         if not self.h5:
             return
         
-        old_poni = self.h5.retrieve_poni_instance_from_file(self.h5.active_ponifile)
+        # Retrieves the previous poni values
+        poni = self._poni_cache
 
-        self.activate_poni_parameters(
-            poni_instance=old_poni,
-        )
+        # Updates the widgets
+        self.update_poni_widgets(poni=poni)
 
-        dict_poni = self.h5.get_poni_dict()
-        self.update_ponifile_widgets(
-            dict_poni=dict_poni,
-        )
+        # Updates the GrazingGeometry and AzimuthalIntegrator instance
+        self.update_poni(poni=poni)
 
+        # Updates graphs
         self.update_graphs(
             graph_1D=True,
             graph_2D_reshape=True,
             graph_2D_q=True,
         )
-    
+
+    @log_info
+    def get_wavelength_from_widget(self) -> float:
+        """
+        Gets the float value for PONI_1 from the widget
+
+        Returns:
+            float of poni_2 parameter (check pyFAI geometry)
+        """    
+        widget = self.lineedit_wavelength
+        try:
+            wave = le.text(widget)
+            wave = float(wave)
+        except Exception as e:
+            self.log_explorer_error(f'{e} wavelength: {wave} is not a good value.')
+            wave = self.h5.gi._poni.wavelength
+        return wave
+
+    @log_info
+    def get_distance_from_widget(self) -> float:
+        """
+        Gets the float value for sample-detector distance from the widget
+
+        Returns:
+            float of distance parameter (check pyFAI geometry)
+        """    
+        widget = self.lineedit_distance
+        try:
+            dist = le.text(widget)
+            dist = float(dist)
+        except Exception as e:
+            self.log_explorer_error(f'{e} distance: {dist} is not a good value.')
+            dist = self.h5.gi._poni.dist
+        return dist
+
+    @log_info
+    def get_poni1_from_widget(self) -> float:
+        """
+        Gets the float value for PONI_1 from the widget
+
+        Returns:
+            float of poni_1 parameter (check pyFAI geometry)
+        """    
+        widget = self.lineedit_poni1
+        try:
+            poni1 = le.text(widget)
+            poni1 = float(poni1)
+        except Exception as e:
+            self.log_explorer_error(f'{e} PONI1: {poni1} is not a good value.')
+            poni1 = self.h5.gi._poni.poni1
+        return poni1
+
+    @log_info
+    def get_poni2_from_widget(self) -> float:
+        """
+        Gets the float value for PONI_2 from the widget
+
+        Returns:
+            float of poni_2 parameter (check pyFAI geometry)
+        """    
+        widget = self.lineedit_poni2
+        try:
+            poni2 = le.text(widget)
+            poni2 = float(poni2)
+        except Exception as e:
+            self.log_explorer_error(f'{e} PONI2: {poni2} is not a good value.')
+            poni2 = self.h5.gi._poni.poni2
+        return poni2
+
+    @log_info
+    def get_rot1_from_widget(self) -> float:
+        """
+        Gets the float value for rotation_1 from the widget
+
+        Returns:
+            float of rotation_1 parameter (check pyFAI geometry)
+        """    
+        widget = self.lineedit_rot1
+        try:
+            rot1 = le.text(widget)
+            rot1 = float(rot1)
+        except Exception as e:
+            self.log_explorer_error(f'{e} ROT1: {rot1} is not a good value.')
+            rot1 = self.h5.gi._poni.rot1
+        return rot1
+
+    @log_info
+    def get_rot2_from_widget(self) -> float:
+        """
+        Gets the float value for rotation_2 from the widget
+
+        Returns:
+            float of rotation_2 parameter (check pyFAI geometry)
+        """              
+        widget = self.lineedit_rot2
+        try:
+            rot2 = le.text(widget)
+            rot2 = float(rot2)
+        except Exception as e:
+            self.log_explorer_error(f'{e} ROT2: {rot2} is not a good value.')
+            rot2 = self.h5.gi._poni.rot2
+        return rot2
+
+    @log_info
+    def get_rot3_from_widget(self) -> float:
+        """
+        Gets the float value for rotation_3 from the widget
+
+        Returns:
+            float of rotation_3 parameter (check pyFAI geometry)
+        """              
+        widget = self.lineedit_rot3
+        try:
+            rot3 = le.text(widget)
+            rot3 = float(rot3)
+        except Exception as e:
+            self.log_explorer_error(f'{e} ROT3: {rot3} is not a good value.')
+            rot3 = self.h5.gi._poni.rot3
+
+        return rot3
+
+    @log_info
+    def update_poni(self, poni=None):
+        """
+        Update the .poni parameters from GrazingGeometry and AzimuthalIntegrator instances
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """        
+
+        if not self.h5:
+            return
+
+        self.h5.update_poni(poni=poni)
+
+        # dict_poni = self.h5.get_poni_dict()
+        self.log_explorer_info(f"Current poni parameters: {self.h5.get_poni()}")
+
     @log_info
     def update_poni_clicked(self,_):
+        """
+        Update .poni parameters and graphs
+        """
+
         if not self.h5:
             return
-        
-        dict_poni = self.get_poni_dict_from_widgets()
 
-        # self.h5.update_ponifile_parameters(
-        #     dict_poni=dict_poni,
-        # )
+        new_poni = self.get_poni_from_widgets()
 
-        self.activate_poni_parameters(
-            dict_poni=dict_poni,
-        )
+        self.update_poni(poni=new_poni)
+
+        self.update_poni_widgets(poni=new_poni)
 
         self.update_graphs(
             graph_1D=True,
             graph_2D_reshape=True,
             graph_2D_q=True,
         )
-
-    @log_info
-    def activate_poni_parameters(self, poni_filename='', dict_poni={}, poni_instance=None):
-        if not self.h5:
-            return
-
-        self.h5.activate_poni_parameters(
-            poni_filename=poni_filename,
-            dict_poni=dict_poni,
-            poni_instance=poni_instance,
-        )
-
-        dict_poni = self.h5.get_poni_dict()
-        self.write_terminal_and_loggerinfo(f"Current poni parameters: {dict_poni}")
 
     @log_info
     def save_poni_clicked(self,_):
+        """
+        Gets a modified version of current PoniFile instance and saves it as a new .poni file
+        """        
+
         if not self.h5:
             return
         
-        # Update the .poni parameters from widgets
-        dict_poni = self.get_poni_dict_from_widgets()
+        # Get a new PoniFile instance from widgets
+        poni = self.get_poni_from_widgets()
 
-        self.activate_poni_parameters(
-            dict_poni=dict_poni,
-        )
+        # Update the poni parameters in GrazingGeometry and AzimuthalIntegrator instances
+        self.update_poni(poni=poni)
 
-        # Save a .poni file
-        self.save_poni_instance(poni_instance=self.h5._poni_instance)
+        # Save a new .poni file
+        self.save_poni_instance(poni=poni)
 
-
-
-
+        # Update graphs
         self.update_graphs(
             graph_1D=True,
             graph_2D_reshape=True,
             graph_2D_q=True,
         )
-
-
-        # Get a full poni dictionary from the widgets and h5
-
-        # dict_poni = self.get_poni_dict_from_widgets()
-
 
         # Update the h5 and combobox
         self.h5.update_ponifiles()
         self.update_cb_ponifiles(from_h5=True)
 
     @log_info
-    def get_poni_dict_from_widgets(self) -> dict:
+    def get_poni_from_widgets(self) -> PoniFile:
         """
-        Returns a dictionary with poni parameters from the widgets
-        """
+        Returns a copy from the current PoniFile instance with changes upon the widgets
+
+        Returns:
+            modified PoniFile instance
+        """        
+
         if not self.h5:
-            return
-        try:
-            wave = float(le.text(self.lineedit_wavelength))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Wavelength could not be retrieved from widget.")
-            return
-        try:
-            dist = float(le.text(self.lineedit_distance))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Distance could not be retrieved from widget.")
-            return
-        try:
-            poni1 = float(le.text(self.lineedit_poni1))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 1 could not be retrieved from widget.")
-            return
-        try:
-            poni2 = float(le.text(self.lineedit_poni2))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 2 could not be retrieved from widget.")
-            return
-        try:
-            rot1 = float(le.text(self.lineedit_rot1))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 1 could not be retrieved from widget.")
-            return
-        try:
-            rot2 = float(le.text(self.lineedit_rot2))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 2 could not be retrieved from widget.")
-            return
-        try:
-            rot3 = float(le.text(self.lineedit_rot3))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 3 could not be retrieved from widget.")
             return
         
-        dict_poni = self.h5.get_poni_dict()
-        dict_poni[PONI_KEY_WAVELENGTH] = wave
-        dict_poni[PONI_KEY_DISTANCE] = dist
-        dict_poni[PONI_KEY_PONI1] = poni1
-        dict_poni[PONI_KEY_PONI2] = poni2
-        dict_poni[PONI_KEY_ROT1] = rot1
-        dict_poni[PONI_KEY_ROT2] = rot2
-        dict_poni[PONI_KEY_ROT3] = rot3
+        current_poni = self.h5.gi._poni
 
-        return dict_poni
+        if current_poni is None:
+            logger.error(f'There is poni instance in GrazingGeometry instance.')
+
+        new_wave = self.get_wavelength_from_widget()
+        new_dist = self.get_distance_from_widget()
+        new_poni1 = self.get_poni1_from_widget()
+        new_poni2 = self.get_poni2_from_widget()
+        new_rot1 = self.get_rot1_from_widget()
+        new_rot2 = self.get_rot2_from_widget()
+        new_rot3 = self.get_rot3_from_widget()
+
+        new_poni = copy.deepcopy(current_poni)
+
+        new_poni._wavelength = new_wave
+        new_poni._dist = new_dist
+        new_poni._poni1 = new_poni1
+        new_poni._poni2 = new_poni2
+        new_poni._rot1 = new_rot1
+        new_poni._rot2 = new_rot2
+        new_poni._rot3 = new_rot3
+
+        return new_poni
+
+    @log_info
+    def update_poni_widgets(self, poni=None):
+        """
+        Update the ponifile widgets from a valid PoniFile instance
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """        
+
+        if not self.h5:
+            return
         
-    @log_info
-    def update_dict_poni_cache(self) -> dict:
-        """
-        Returns a dictionary with poni parameters from the widgets
-        """
-        if not self.h5:
-            return
-
-        try:
-            wave = float(le.text(self.lineedit_wavelength))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Wavelength could not be retrieved from widget.")
-            return
-        try:
-            dist = float(le.text(self.lineedit_distance))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Distance could not be retrieved from widget.")
-            return
-        try:
-            poni1 = float(le.text(self.lineedit_poni1))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 1 could not be retrieved from widget.")
-            return
-        try:
-            poni2 = float(le.text(self.lineedit_poni2))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 2 could not be retrieved from widget.")
-            return
-        try:
-            rot1 = float(le.text(self.lineedit_rot1))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 1 could not be retrieved from widget.")
-            return
-        try:
-            rot2 = float(le.text(self.lineedit_rot2))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 2 could not be retrieved from widget.")
-            return
-        try:
-            rot3 = float(le.text(self.lineedit_rot3))
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 3 could not be retrieved from widget.")
-            return
-
-        self._dict_poni_cache[PONI_KEY_WAVELENGTH] = wave
-        self._dict_poni_cache[PONI_KEY_DISTANCE] = dist
-        self._dict_poni_cache[PONI_KEY_PONI1] = poni1
-        self._dict_poni_cache[PONI_KEY_PONI2] = poni2
-        self._dict_poni_cache[PONI_KEY_ROT1] = rot1
-        self._dict_poni_cache[PONI_KEY_ROT2] = rot2
-        self._dict_poni_cache[PONI_KEY_ROT3] = rot3
+        self.update_detector_widget(poni=poni)
+        self.update_wavelength_widget(poni=poni)
+        self.update_dist_widget(poni=poni)
+        self.update_poni1_widget(poni=poni)
+        self.update_poni2_widget(poni=poni)
+        self.update_rot1_widget(poni=poni)
+        self.update_rot2_widget(poni=poni)
+        self.update_rot3_widget(poni=poni)
 
     @log_info
-    def update_ponifile_widgets(self, dict_poni=dict()) -> None:
+    def update_detector_widget(self, poni=None):
         """
-        Update the ponifile widgets from a poni dictionary
-        """
-        if not self.h5:
-            return
-        try:
-            detector_name = dict_poni[PONI_KEY_DETECTOR]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Detector name could not be retrieved from dictionary.")
-            return
-        try:
-            detector_bin = dict_poni[PONI_KEY_BINNING]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Detector bin could not be retrieved from dictionary.")
-            return
-        try:
-            wave = dict_poni[PONI_KEY_WAVELENGTH]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Wavelength could not be retrieved from dictionary.")
-            return
-        try:
-            dist = dict_poni[PONI_KEY_DISTANCE]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Distance could not be retrieved from dictionary.")
-            return
-        try:
-            pixel1 = dict_poni[PONI_KEY_PIXEL1]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Pixel 1 could not be retrieved from dictionary.")
-            return
-        try:
-            pixel2 = dict_poni[PONI_KEY_PIXEL2]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Pixel 2 could not be retrieved from dictionary.")
-            return
-        try:
-            shape1 = dict_poni[PONI_KEY_SHAPE1]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Shape 1 could not be retrieved from dictionary.")
-            return
-        try:
-            shape2 = dict_poni[PONI_KEY_SHAPE2]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Shape 2 could not be retrieved from dictionary.")
-            return
-        try:
-            poni1 = dict_poni[PONI_KEY_PONI1]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 1 could not be retrieved from dictionary.")
-            return
-        try:
-            poni2 = dict_poni[PONI_KEY_PONI2]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: PONI 2 could not be retrieved from dictionary.")
-            return
-        try:
-            rot1 = dict_poni[PONI_KEY_ROT1]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 1 could not be retrieved from dictionary.")
-            return
-        try:
-            rot2 = dict_poni[PONI_KEY_ROT2]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 2 could not be retrieved from dictionary.")
-            return
-        try:
-            rot3 = dict_poni[PONI_KEY_ROT3]
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Rotation 3 could not be retrieved from dictionary.")
-            return
+        Update the widget with detector information
 
-        detector_info = f"{str(detector_name)} / {str(detector_bin)} / ({shape1},{shape2}) / ({pixel1},{pixel2})"
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """        
+        widget = self.lineedit_detector
 
-        if self.h5.active_ponifile:
-            le.substitute(
-                lineedit=self.lineedit_detector,
+        try:
+            detector_name = poni.detector.name
+        except Exception as e:
+            self.log_explorer_error(f"{e}: Detector name could not be retrieved from {poni}.")
+            detector_name = ''
+
+        try:
+            detector_bin = poni.detector.binning
+        except Exception as e:
+            self.log_explorer_error(f"{e}: Detector binning could not be retrieved from {poni}.")
+            detector_bin = ('x','x')
+
+        try:
+            shape = poni.detector.shape
+            shape = (shape[0], shape[1])
+        except Exception as e:
+            self.log_explorer_error(f"{e}: Shape could not be retrieved from {poni}.")
+            shape = (0,0)         
+
+        detector_info = f'{str(detector_name)} / {str(detector_bin)} / {str(shape)}'
+
+        le.substitute(
+                lineedit=widget,
                 new_text=detector_info,
             )
-            le.substitute(
-                lineedit=self.lineedit_wavelength,
+
+    @log_info
+    def update_wavelength_widget(self, poni=None):
+        """
+        Update the widget with wavelength parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_wavelength
+
+        try:
+            wave = poni.wavelength
+        except Exception as e:
+            self.log_explorer_error(f"{e}: Wavelength could not be retrieved from {poni}.")
+            wave = 0.0
+
+        le.substitute(
+                lineedit=widget,
                 new_text=wave,
             )
-            le.substitute(
-                lineedit=self.lineedit_distance,
+
+    @log_info
+    def update_dist_widget(self, poni=None):
+        """
+        Update the widget with sample-detector distance parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_distance
+
+        try:
+            dist = poni.dist
+        except Exception as e:
+            self.log_explorer_error(f"{e}: Distance could not be retrieved from {poni}.")
+            dist = 0.0
+
+        le.substitute(
+                lineedit=widget,
                 new_text=dist,
             )
-            le.substitute(
-                lineedit=self.lineedit_poni1,
+
+    @log_info
+    def update_poni1_widget(self, poni=None):
+        """
+        Update the widget with PONI 1 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_poni1
+
+        try:
+            poni1 = poni.poni1
+        except Exception as e:
+            self.log_explorer_error(f"{e}: PONI1 could not be retrieved from {poni}.")
+            poni1 = 0.0
+
+        le.substitute(
+                lineedit=widget,
                 new_text=poni1,
             )
-            le.substitute(
-                lineedit=self.lineedit_poni2,
+
+    @log_info
+    def update_poni2_widget(self, poni=None):
+        """
+        Update the widget with PONI 2 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_poni2
+
+        try:
+            poni2 = poni.poni2
+        except Exception as e:
+            self.log_explorer_error(f"{e}: PONI2 could not be retrieved from {poni}.")
+            poni2 = 0.0
+
+        le.substitute(
+                lineedit=widget,
                 new_text=poni2,
             )
-            le.substitute(
-                lineedit=self.lineedit_rot1,
+
+    @log_info
+    def update_rot1_widget(self, poni=None):
+        """
+        Update the widget with rotation_1 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_rot1
+
+        try:
+            rot1 = poni.rot1
+        except Exception as e:
+            self.log_explorer_error(f"{e}: ROT1 could not be retrieved from {poni}.")
+            rot1 = 0.0
+
+        le.substitute(
+                lineedit=widget,
                 new_text=rot1,
             )
-            le.substitute(
-                lineedit=self.lineedit_rot2,
+
+    @log_info
+    def update_rot2_widget(self, poni=None):
+        """
+        Update the widget with rotation_2 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_rot2
+
+        try:
+            rot2 = poni.rot2
+        except Exception as e:
+            self.log_explorer_error(f"{e}: ROT2 could not be retrieved from {poni}.")
+            rot2 = 0.0
+
+        le.substitute(
+                lineedit=widget,
                 new_text=rot2,
             )
-            le.substitute(
-                lineedit=self.lineedit_rot3,
+
+    @log_info
+    def update_rot3_widget(self, poni=None):
+        """
+        Update the widget with rotation_3 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_rot3
+
+        try:
+            rot3 = poni.rot3
+        except Exception as e:
+            self.log_explorer_error(f"{e}: ROT3 could not be retrieved from {poni}.")
+            rot3 = 0.0
+
+        le.substitute(
+                lineedit=widget,
                 new_text=rot3,
             )
 
     @log_info
-    def update_ponifile_parameters(self, dict_poni=dict()) -> None:
-        """
-        Changes the functinal poni parameters stored in h5 instance
-        """
-        if not self.h5:
-            return
-
-        self.h5.update_ponifile_parameters(
-            dict_poni=dict_poni,
-        )
-
-    @log_info
-    def save_poni_instance(self, poni_instance=None) -> None:
+    def save_poni_instance(self, poni=None):
         """
         Saves a new .poni file with updated parameters
-        """
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """        
+
         if not self.h5:
             return
 
-        # ponifile = str(self.h5.active_ponifile)
-        ponifile_name = self.h5.active_ponifile.replace(".poni", f"_{date_prefix()}.poni")
+        ponifile_folder = self.h5._root_dir.joinpath('poni_files')
+        ponifile_folder.mkdir(exist_ok=True)
+        ponifile_name = ponifile_folder.joinpath(f'poni_{date_prefix()}.poni')
 
-        with open(ponifile_name, "w+") as fp:
-            poni_instance.write(fp)
-            # json.dump(dict_poni, fp)
+        try:
+            with open(ponifile_name, "w+") as fp:
+                poni.write(fp)
+                self.log_explorer_info(f'Saved {ponifile_name}')
+        except Exception as e:
+            self.log_explorer_error(f'{e} {ponifile_name} coudl not be saved.')
 
+    ##########################
+    ### REFERENCE METHODS ####
+    ##########################
 
     @log_info
     def update_reference_widgets(self) -> None:
@@ -1754,7 +1890,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.update_reference_widgets()
 
         # Update the data if needed
-        self.update_cache_data()
+        self.get_final_data()
 
         # Update graphs
         self.update_graphs(
@@ -1764,50 +1900,53 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             graph_2D_q=True,
         )
 
-    @log_info
-    def get_pattern(self):
-        wildcards = le.text(self.lineedit_wildcards).strip()
-        extension = cb.value(self.combobox_extension)
-        pattern = wildcards + extension
-        pattern = pattern.replace('**', '*')
-        return pattern
+    ##########################
+    ### LISTWIDGET METHODS ###
+    ##########################
 
     @log_info
-    def update_listwidget_with_samples(
-        self, 
-        listwidget,
-        from_h5=False, 
-        list_samples=list(),
+    def update_sample_listwidget(
+        self,
+        # list_samples=list(),        
+        # from_h5=False, 
         reset=True,
-        relative_address=True,
         ):
-        if not self.h5:
-            return        
+        """
+        Feeds the listwidget with the entries from the .h5 file (or another list)
 
-        # Add samples from h5 instance
-        if from_h5:
-            samples_in_h5 = self.h5.get_all_entries(
-                get_relative_address=True,
-            )
-            list_samples = samples_in_h5
-        
-        if not list_samples:
+        Keyword Arguments:
+            list_samples -- external list of samples (default: {list()})
+            from_h5 -- if True, takes the list of entries from .h5 file (default: {False})
+            reset -- if True, clean the list before feeding (default: {True})
+        """        
+
+        if not self.h5:
             return
 
+        widget = self.listwidget_samples  
+
+        # Take the list of samples to be updated
+        # if list_samples:
+        #     list_samples = list_samples
+        # elif from_h5:
+        list_samples = self.h5.get_all_entries(
+            get_relative_address=True,
+        )
+        
+        # Clean the widget if needed
         if reset:
             lt.insert_list(
-                listwidget=listwidget,
+                listwidget=widget,
                 item_list=list_samples,
                 reset=True,
             )
         else:
             # Filter the new files
-            samples_in_widget = lt.all_items(listwidget=listwidget)
-            new_samples = [s for s in list_samples if s not in samples_in_widget]
-            new_samples = [s for s in new_samples if s]
+            samples_in_widget = lt.all_items(listwidget=widget)
+            new_samples = [s for s in list_samples if s not in samples_in_widget and s]
             new_samples.sort()
             lt.insert_list(
-                listwidget=listwidget,
+                listwidget=widget,
                 item_list=new_samples,
                 reset=False,
             )
@@ -1816,26 +1955,33 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     def update_combobox_with_samples(
         self, 
         combobox=None,
+        list_samples=list(),        
         from_h5=False, 
-        list_samples=list(),
         reset=True,
-        # relative_to=True,
         ):
+        """
+        Feeds a combobox widget with the entries from the .h5 file (or another list)
 
-        # Add samples from h5 instance
-        if from_h5:
-            if not self.h5:
-                return
-            # Fetch samples from h5 instance
-            samples_in_h5 = self.h5.get_all_entries(
+        Keyword Arguments:
+            combobox -- widget to be feed (default: {None})
+            list_samples -- external list of samples (default: {list()})
+            from_h5 -- if True, takes the list of entries from .h5 file (default: {False})
+            reset -- if True, clean the combobox before feeding (default: {True})
+        """
+
+        if not isinstance(combobox, QComboBox):
+            logger.error(f'{combobox} is not a valid PyQt5.QtWidgets.QComboBox')
+            return
+
+        if not self.h5:
+            return
+
+        if list_samples:
+            list_samples = list_samples
+        elif from_h5:
+            list_samples = self.h5.get_all_entries(
                 get_relative_address=True,
             )
-            list_samples = samples_in_h5
-
-        # Make it relative
-        # if relative_to:
-        #     root_dir = Path(self.h5._root_dir)
-        #     list_samples = [str(Path(file).relative_to(root_dir)) for file in list_samples]
 
         if reset:
             cb.insert_list(
@@ -1854,6 +2000,139 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 list_items=new_samples,
                 reset=False,
             )
+
+    @log_info
+    def listsamples_clicked(self, clicked_sample_name):
+        """
+        Chain of events after cliking on one of the item from the listwidget
+
+        Arguments:
+            clicked_sample_name -- current clicked item on the listwidget
+        """        
+
+        if not self.h5:
+            return
+        
+        # Fetch the name of the integration
+        clicked_sample_name = clicked_sample_name.text()
+        if clicked_sample_name:
+            self.active_entry = clicked_sample_name
+
+        # Update the metadata combobox if needed
+        self.check_and_update_cb_metadata(
+            sample_name=clicked_sample_name,
+        )
+
+        # Get a Pandas.DataFrame to upload the table
+        keys_to_display = self.combobox_metadata.currentData()
+        dataframe = self.h5.get_metadata_dataframe(
+            sample_name=clicked_sample_name,
+            list_keys=keys_to_display,
+        )
+
+        # Reset and feed the table widget with default metadata keys if needed
+        self.update_table(
+            dataframe=dataframe,
+            reset=True,
+        )
+
+    ##########################
+    ### TABLE METHODS ###
+    ##########################
+
+    @log_info
+    def update_table(self, dataframe=None, reset=True):
+        """
+        Feeds the table widget with the values and labels from dataframe
+
+        Keyword Arguments:
+            dataframe -- pandas.DataFrame to be displayed in table widget (default: {None})
+            reset -- if True, clean the table before feeding (default: {True})
+        """        
+
+        table = self.table_files
+
+        # Clean table if required
+        if reset:
+            tm.reset(table=self.table_files)
+            self.log_explorer_info('Table was reseted.')
+        if dataframe is None:
+            self.log_explorer_info('No dataframe to be displayed.')
+            return
+
+        # Add columns for the displayed metadata keys
+        n_columns = len(dataframe.columns)
+        labels_columns = list(dataframe.columns)
+        tm.insert_columns(
+            table=table,
+            num=n_columns,
+            labels=labels_columns,
+        )
+        self.log_explorer_info(f'Inserted columns: {len(dataframe.columns)}.')
+
+        # Add the rows for all the displayed files
+        n_rows = len(dataframe)
+        tm.insert_rows(
+            table=table,
+            num=n_rows,
+        )
+        self.log_explorer_info(f'Inserted rows: {len(dataframe)}.')
+
+        # Add the new key values for every file
+        for ind_row, _ in enumerate(dataframe[FILENAME_KEY]):
+            for ind_column, key in enumerate(dataframe):
+                try:
+                    tm.update_cell(
+                        table=table,
+                        row_ind=ind_row,
+                        column_ind=ind_column,
+                        st=dataframe[key][ind_row],
+                    )
+                    self.log_explorer_info(f"Updated cell [{ind_row},{ind_column}].")
+                except Exception as e:
+                    logger.error(f'{e}. The key {key} could not be displayed in table.')
+
+    @log_info
+    def table_clicked(self):
+        """
+        Chain of events after clicking on one of the elements from the Table Widget
+        """        
+
+        if not self.h5:
+            return
+
+        # Save the clicked index of clicked data
+        self.cache_index = tm.selected_rows(self.table_files)
+        if not self.cache_index:
+            return
+
+        # Update data cache
+        self._data_cache = self.get_final_data(
+            sample_name=self.active_entry,
+            index=self.cache_index,
+            scaled_factor=self.spinbox_sub.value(),
+        )
+
+        # Update GI angles
+        self.h5.update_angles(
+            sample_name=self.active_entry,
+            list_index=self.cache_index,
+        )
+
+        # Update label dislayed
+        self.update_label_displayed()
+
+        # Update graphs
+        self.update_graphs(
+            graph_1D=True,
+            graph_2D_raw=True,
+            graph_2D_reshape=True,
+            graph_2D_q=True,
+        )
+
+    ##########################
+    ### PYFAI-CALIB METHODS ##
+    ##########################
 
     @log_info
     def open_pyFAI_calib2(self,_) -> None:
@@ -1875,14 +2154,16 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         """
             If the OS is linux, open pyFAI-calib2 GUI
         """
-        if not self.h5:
-            open_directory = self.h5.get_main_directory()
+        if self.h5:
+            open_directory = self.h5._root_dir
         else:
             open_directory = ""
         try:
-            subprocess.run([join(GLOBAL_PATH, 'bash_files', 'open_calib2.sh'), open_directory])
+            os.system(f'cd {open_directory}')
+            os.system(f'pyFAI-calib2')
+            # subprocess.run([join(GLOBAL_PATH, 'bash_files', 'open_calib2.sh'), open_directory])
         except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: pyFAI GUI could not be opened.")
+            self.log_explorer_info(f"{e}: pyFAI GUI could not be opened.")
         finally:
             self.h5.update_ponifiles()
 
@@ -1908,7 +2189,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             cmd = f"{sys.executable} {calib_path}"
             os.system(cmd)
         except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: pyFAI GUI could not be opened.")
+            self.log_explorer_info(f"{e}: pyFAI GUI could not be opened.")
         finally:
             self.h5.update_ponifiles()
 
@@ -1918,36 +2199,46 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 reset=True,
             )
            
-    # #########################
-    # # Search engines
-    # #########################
-
+    ##########################
+    ### DATAFILES METHODS ####
+    ##########################
 
     @log_info
     def update_all_files(self,_):
+
         if not self.h5:
             return
-        # Get a dictionary with the new files (not stored in h5)
-        dict_new_files = self.h5.search_new_datafiles(
-            pattern=self.get_pattern(),
-        )
-        self.write_terminal_and_loggerinfo(f"New detected files: {str(dict_new_files)}.")
+
+        #########################
+        #### UPDATE DATAFILES ###
+        #########################
         
+        # Get a dictionary with the new files (not stored in h5)
+        dict_new_files = self.h5.search_datafiles(
+            pattern=self.get_pattern(),
+            new_files=True,
+        )
+        self.log_explorer_info(f"New detected files: {str(dict_new_files)}.")
+        
+        # Update the H5
         self.h5.update_datafiles(          
             dict_files=dict_new_files,
             search=False,
         )
-        self.h5.update_ponifiles()
 
-        # Update combobox of ponifiles
-        self.update_cb_ponifiles(
-            from_h5=True,
+        # Update list of samples
+        self.update_sample_listwidget(
+            # from_h5=True,
             reset=True,
         )
 
-        # Update list of samples
-        self.update_listwidget_with_samples(
-            listwidget=self.listwidget_samples,
+        #########################
+        #### UPDATE PONIFILES ###
+        #########################
+
+        self.h5.update_ponifiles()
+
+        self.update_cb_ponifiles(
             from_h5=True,
             reset=True,
         )
@@ -1955,7 +2246,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Get a Pandas.DataFrame to upload the table
         keys_to_display = self.combobox_metadata.currentData()
         dataframe = self.h5.get_metadata_dataframe(
-            sample_name=self.sample_cache,
+            sample_name=self.active_entry,
             list_keys=keys_to_display,
         )
 
@@ -1965,40 +2256,76 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             reset=True,
         )
 
-
-
+    ##########################
+    ### LIVE METHODS #########
+    ##########################
 
     @log_info
     def live_clicked(self,state_live):
         platform = sys.platform
         if 'linux' not in platform:
-            self.write_terminal_and_loggerinfo(f"The operating system {platform} is not compatible with live searching.")
+            self.log_explorer_info(f"The operating system {platform} is not compatible with live searching.")
+            return
+
+        if not self.h5:
+            self.log_explorer_info(f"Nothing to monitor...")
             return
 
         # Update style of the button
         self.update_button_live(state_live)
 
-        if not self.h5:
-            return
-
-        if not state_live:
-
-            self.h5.stop_live_mode()
-            self.write_terminal_and_loggerinfo(f"LIVE Mode OFF")
+        if state_live:
+            self.start_live_mode(
+                pattern=self.get_pattern(),
+            )
+            self.log_explorer_info(f"LIVE Mode ON")
+            return       
+        else:            
+            self.stop_live_mode()
+            self.log_explorer_info(f"LIVE Mode OFF")
             return
 
         # First search off the line
-        self.update_all_files(None)
+        # self.update_all_files(None)
 
-        # Start live mode
-        self.start_live_mode(
-            pattern=self.get_pattern(),
-        )
+        # # Start live mode
+        # self.start_live_mode(
+        #     pattern=self.get_pattern(),
+        # )
 
     @log_info
     def start_live_mode(self, pattern=None):
+        # First update
+        self.h5.update_datafiles(search=True)
+        # self.observer = PyXScatObserver()
+        # self.handler = PyXScatHandler()
+        # # new_file_signal = pyqtSignal(str)
+        self.timer_data = QTimer()
+        self.timer_data.timeout.connect(
+            lambda: (
+                self.search_datafiles_live(pattern=pattern),
+            )
+        )
+        self.timer_data.start(INTERVAL_SEARCH_DATA)
+        
+        # self.observer.schedule(self.handler, self.h5._root_dir, recursive=True)
+        # self.observer.start()
+        
+        # try:
+        #     while True:
+        #         time.sleep(5)
+        # except:
+        #     self.observer.stop()
+        #     print("Observer Stopped")
+
+        # self.observer.join()
+        
+        
+        
+        
+        return
         if pattern is None:
-            logger.info(f"No pattern to search in live mode.")
+            self.log_explorer_info(f"No pattern to search in live mode.")
             return
 
         # # If live is on, start the live searching engine, only for Linux
@@ -2009,7 +2336,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             # Start the loop each second
             self.timer_data.timeout.connect(
                 lambda: (
-                    self.search_live_files(pattern=pattern),
+                    self.search_datafiles_live(pattern=pattern),
                 )
             )
 
@@ -2017,20 +2344,21 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             # self.update_widgets_to_last_file()
 
             self.timer_data.start(INTERVAL_SEARCH_DATA)
-            logger.info("LIVE ON: Now, the script is looking for new files...")
+            self.log_explorer_info("LIVE ON: Now, the script is looking for new files...")
         else:
-            logger.info(f"The operating system {platform} is not compatible with live searching.")
+            self.log_explorer_info(f"The operating system {platform} is not compatible with live searching.")
 
     @log_info
     def stop_live_mode(self):
+        return
         # # If live is on, start the live searching engine, only for Linux
         if self.timer_data:
             self.timer_data.stop()
-            logger.info("LIVE: OFF. The script stopped looking for new files.")
+            self.log_explorer_info("LIVE: OFF. The script stopped looking for new files.")
         else:
-            logger.info(f"LIVE: OFF. The script stopped looking for new files.")
+            self.log_explorer_info(f"LIVE: OFF. The script stopped looking for new files.")
 
-    def search_live_files(self, pattern=None) -> None:
+    def search_datafiles_live(self, pattern=None) -> None:
         list_files_1s = []
         cmd = f"find {str(self.h5._root_dir)} -name {pattern} -newermt '-1 seconds'"
         try:
@@ -2038,10 +2366,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             # Clean empty items
             list_files_1s = [item for item in list_files_1s if item]
         except:
-            logger.info(f"Error while running the bash script.")
+            self.log_explorer_info(f"Error while running the bash script.")
 
         if list_files_1s:
-            logger.info(f"Found new files LIVE: {list_files_1s}")
+            self.log_explorer_info(f"Found new files LIVE: {list_files_1s}")
+            self.update_datafiles_live(
+                datafile_list=list_files_1s,
+            )
+            return
 
             # Upload the new files to h5
             dict_files_1s = get_dict_files(list_files=list_files_1s)
@@ -2051,18 +2383,16 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             )
 
             # Update list of samples
-            self.update_listwidget_with_samples(
-                listwidget=self.listwidget_samples,
+            self.update_sample_listwidget(
                 from_h5=True,
                 reset=True,
-                # relative_to_root=RELATIVE_TO_ROOT,
             )
 
             # Update table if needed
             # Get a Pandas.DataFrame to upload the table
             keys_to_display = self.combobox_metadata.currentData()
             dataframe = self.h5.get_metadata_dataframe(
-                sample_name=self.sample_cache,
+                sample_name=self.active_entry,
                 list_keys=keys_to_display,
             )
 
@@ -2075,11 +2405,11 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             # Go to the last file
             last_file = self.h5.get_last_file(list_files=list_files_1s)
             sample, index = self.h5.get_sample_index_from_filename(filename=last_file)
-            self.sample_cache = sample
+            self.active_entry = sample
             self.cache_index = index
-            self.update_cache_data(
+            self.get_final_data(
                 sample_name=sample,
-                list_index=index,
+                index=index,
             )
             self.update_label_displayed()
             self.update_graphs(
@@ -2091,35 +2421,81 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         else:
             return
 
-
-
-
-
     @log_info
-    def update_h5_poni_and_files(self) -> None:
-        """
-        Searches new files and updates the data/metadata files in the h5 file
+    def update_datafiles_live(self, datafile_list=[]):
+        dict_files = get_dict_files(list_files=datafile_list)
+        self.h5.update_datafiles(dict_files=dict_files)
+        
+        # Update listwidget
+        self.update_sample_listwidget()
+        
+        # Activate the last entry
+        new_sample = sorted(dict_files.keys())[0]
+        new_sample = Path(new_sample).relative_to(self.h5._root_dir).as_posix()
+        if new_sample != self.active_entry:
+            self.active_entry = new_sample
+        
+        # Update the metadata combobox if needed
+        self.check_and_update_cb_metadata(
+            sample_name=self.active_entry,
+        )
 
-        Parameters:
-        None
+        # Get a Pandas.DataFrame to upload the table
+        keys_to_display = self.combobox_metadata.currentData()
+        dataframe = self.h5.get_metadata_dataframe(
+            sample_name=self.active_entry,
+            list_keys=keys_to_display,
+        )
 
-        Returns:
-        None
-        """
-        if self.h5:
-            # Search ponifiles and updates them in the .h5 file
-            self.search_and_update_ponifiles_widgets()
+        # Reset and feed the table widget with default metadata keys if needed
+        self.update_table(
+            dataframe=dataframe,
+            reset=True,
+        )
+        
+        # Activate last file
+        self.cache_index = tm.get_row_count(self.table_files) - 1
+        if not self.cache_index:
+            return
 
-            # Searches files and update the Data/Metadat in Groups and Datasets in the .h5 file
-            self.h5.search_and_update_datafiles(
-                pattern=self.get_pattern(),
-            )
-            self.write_terminal_and_loggerinfo(INFO_H5_UPDATED)
-        else:
-            self.write_terminal_and_loggerinfo(ERROR_H5_UPDATED)
+        # Update data cache
+        print(f'Sample is {self.active_entry}, index is {self.cache_index}')
+        self._data_cache = self.get_final_data(
+            sample_name=self.active_entry,
+            index=self.cache_index,
+            scaled_factor=self.spinbox_sub.value(),
+        )
+
+        # Update GI angles
+        self.h5.update_angles(
+            sample_name=self.active_entry,
+            list_index=self.cache_index,
+        )
+
+        # Update label dislayed
+        self.update_label_displayed()
+
+        # Update graphs
+        self.update_graphs(
+            graph_1D=True,
+            graph_2D_raw=True,
+            graph_2D_reshape=True,
+            graph_2D_q=True,
+        )
+
+
+
+
+
+
+
+
 
     @log_info
     def save_h5_dict(self):
+        """
+        Saves information of .h5 file in a .json to be located afterwards
+        """        
         if not self.h5:
             return
 
@@ -2138,26 +2514,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     @log_info
     def append_h5file(self, h5_path=str()) -> None:
-        """
-        Register the filename of the .h5 file into the .json file
-
-        Parameters:
-        h5_path(str, Path) : path of an existing .h5 file, that will be appended to the combobox
-
-        Returns:
-        None
-        """
-        # If no input, take the filename associated to the active H5Integrator instance
-        # if not h5_path:
-        #     try:
-        #         h5_path = str(self.h5.filename_h5)
-        #     except AttributeError:
-        #         self.write_terminal_and_logger(ERROR_H5_NOTEXISTS)
-        #         return
-        # else:
-        #     self.write_terminal_and_logger(ERROR_APPEND_H5)
-        #     return
-        # logger.info(f"New .h5 file to append {h5_path}")
 
         # Append to .txt file        
         if Path(JSON_FILE_H5).is_file():
@@ -2167,7 +2523,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             with open(JSON_FILE_H5, "w+") as fp:
                 fp.write(f"\n")
                 fp.write(f"{str(h5_path)}\n")
-        logger.info(f"Current list of .h5 files.")
+        self.log_explorer_info(f"Current list of .h5 files.")
 
         # Append to combobox if it's new
         filenames_from_cb = cb.all_items(self.combobox_h5_files)
@@ -2183,60 +2539,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             combobox=self.combobox_h5_files,
             item=short_name,
         )
-
-    # @log_info
-    # def update_widgets(self) -> None:
-    #     """
-    #     To be used after updating the .h5 file
-    #     This method may update the list_widget of folders and the table_widget with files and metadata
-    #     """
-    #     if self.h5:
-    #         # Main lineedit
-    #         le.substitute(
-    #             lineedit=self.lineedit_h5file,
-    #             new_text=self.h5.filename_h5,
-    #         )
-
-    #         # Check if new folders to update the list_widget and reference folder combobox
-    #         folders_in_list = set(lt.all_items(self.listwidget_samples))
-    #         folders_in_h5 = set(self.h5.generator_samples())
-    #         new_folders = [item for item in folders_in_h5.difference(folders_in_list)]
-    #         new_folders.sort()
-
-    #         if new_folders:
-    #             # List widget
-    #             lt.insert_list(
-    #                 listwidget=self.listwidget_samples,
-    #                 item_list=new_folders,
-    #                 reset=False,
-    #             )
-    #             logger.info(INFO_LIST_FOLDERS_UPDATED)
-
-    #             # Reference combobox
-    #             cb.insert_list(
-    #                 combobox=self.combobox_reffolder,
-    #                 list_items=new_folders,
-    #                 reset=False,
-    #             )
-    #         else:
-    #             logger.info(INFO_LIST_NO_FOLDERS_TO_UPDATE)
-
-    #         # Check if the table (click_folder) should be updated
-    #         if not self.clicked_folder:
-    #             return
-
-    #         num_files_in_table = tm.get_row_count(self.table_files)
-    #         num_files_in_h5 = self.h5.number_files_in_sample(self.clicked_folder)
-    #         logger.info(f"There are {num_files_in_table} files in the table and {num_files_in_h5} files in the .h5")
-    #         if num_files_in_h5 != num_files_in_table:
-    #             self.update_comboboxes_metadata_items()
-    #             self.update_table(
-    #                 reset=True,
-    #             )
-    #         else:
-    #             logger.info("The table was not updated.")
-    #     else:
-    #         self.write_terminal_and_loggerinfo(ERROR_H5_NOTEXISTS)
 
     def update_widgets_to_last_file(self, last_file=str()):
         """
@@ -2257,89 +2559,21 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             if last_file_folder and last_file_index:
                 # self.clicked_folder = last_file_folder
                 self.cache_index = last_file_index
-                # logger.info(f"Updated clicked folder: {self.clicked_folder} and cache index: {self.cache_index}")
-                self.update_cache_data(),
+                # self.log_explorer_info(f"Updated clicked folder: {self.clicked_folder} and cache index: {self.cache_index}")
+                self.get_final_data(),
                 self.update_1D_graph(),
                 self.update_2D_raw(),
                 self.update_2D_reshape_map(),
                 self.update_2D_q(),
             else:
-                logger.info("Last file was not updated.")
+                self.log_explorer_info("Last file was not updated.")
             
-    # @log_info
-    # def update_widgets_from_h5(self):
-
-    #     if self.h5:
-    #         # Update the main directory, files and folder attributes
-    #         self.main_directory = self.h5.get_root_directory()
-    #         # self.lineedit_maindir.setText(str(self.main_directory))
-    #         self.write_terminal_and_loggerinfo(MSG_MAIN_DIRECTORY)
-    #         self.write_terminal_and_loggerinfo(f"New main directory: {str(self.main_directory)}")
-
-    #         # Update file and folder attributes
-    #         self.list_folders = list(self.h5.generator_samples())
-    #         self.write_terminal_and_loggerinfo(f"Added {len(self.list_folders)} folders.")
-
-    #         # Feed the ponifile combobox
-    #         ponifile_list = self.h5.get_ponifile_list()
-    #         ponifile_list = [str(Path(item).relative_to(self.main_directory)) for item in ponifile_list]
-
-    #         cb.insert_list(
-    #             combobox=self.combobox_ponifile,
-    #             list_items=ponifile_list,
-    #             reset=True,
-    #         )
-
-    #         # Reset and fill the list widget with folders
-    #         lt.insert_list(
-    #             listwidget=self.listwidget_samples,
-    #             item_list=list(self.h5.generator_samples()),
-    #             reset=True,
-    #         )
-
-    #         # Feed the combobox of reference folder and masks
-    #         cb.insert_list(
-    #             combobox=self.combobox_reffolder,
-    #             list_items=list(self.h5.generator_samples()),
-    #         )
-
-    @log_info
-    def listsamples_clicked(self, clicked_sample_name):
-        if not self.h5:
-            return
-        
-        # Fetch the name of the integration
-        clicked_sample_name = clicked_sample_name.text()
-        if clicked_sample_name:
-            self.sample_cache = clicked_sample_name
-
-        # Update the metadata combobox if needed
-        self.check_and_update_cb_metadata(
-            sample_name=clicked_sample_name,
-        )
-
-        # Get a Pandas.DataFrame to upload the table
-        keys_to_display = self.combobox_metadata.currentData()
-        print(keys_to_display)
-        dataframe = self.h5.get_metadata_dataframe(
-            sample_name=clicked_sample_name,
-            list_keys=keys_to_display,
-        )
-
-        print(dataframe)
-
-        # Reset and feed the table widget with default metadata keys if needed
-        self.update_table(
-            dataframe=dataframe,
-            reset=True,
-        )
-
     @log_info
     def cb_metadata_changed(self, _):
         # Get a Pandas.DataFrame to upload the table
         keys_to_display = self.combobox_metadata.currentData()
         dataframe = self.h5.get_metadata_dataframe(
-            sample_name=self.sample_cache,
+            sample_name=self.active_entry,
             list_keys=keys_to_display,
         )
 
@@ -2361,7 +2595,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         sample_name=str(),
         ):
         if not sample_name:
-            sample_name = self.sample_cache
+            sample_name = self.active_entry
 
         # Fetch the list of metadata keys in that sample
         metadata_keys = self.h5.get_all_metadata_keys_from_sample(
@@ -2390,7 +2624,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     @log_info
     def update_sample_orientation(self):
-        active_sample = self.sample_cache
+        active_sample = self.active_entry
 
         if not active_sample or not self.cache_index:
             return
@@ -2408,9 +2642,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             tilt_angle=tilt_angle,
         )
 
-
-
-
     @log_info
     def tab_graph_changed(self,_):
         self.update_graphs(
@@ -2420,19 +2651,21 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             graph_2D_q=True,
         )
 
+    # @cached(cache=LRUCache(maxsize=10))
+    @log_info    
+    def get_final_data(self, sample_name='', index=(), scaled_factor=0.0,): 
 
-    @log_info
-    def update_cache_data(self, sample_name=str(), list_index=list()):  
         # Take the new data from new folder/index
         data = self.get_data(
             sample_name=sample_name,
-            list_index=list_index,
+            index=index,
         )
+
         if data is None:
             return
 
         # Subtract the reference
-        if self.spinbox_sub.value() != 0.0:
+        if scaled_factor != 0.0:
             data = self.get_subtracted_data(
                 data=data,
             )
@@ -2440,10 +2673,18 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Filter the data
         data = self.filter_data(
             data=data,
-        )        
+        )
+
+        return data
 
         # Update the data cache
-        self._data_cache = data
+        # self._data_cache = data
+
+        # Update GI angles
+        # self.h5.update_angles(
+        #     sample_name=self.active_entry,
+        #     list_index=self.cache_index,
+        # )
 
     @log_info
     def update_2D_q(self, new_data=True):
@@ -2458,13 +2699,13 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             self.plot_qcache_matrix()
             self.update_qmap_style()
         except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Error during updating q-map map.")
+            self.log_explorer_info(f"{e}: Error during updating q-map map.")
 
     @log_info
     def sub_factor_changed(self, scale_factor):
-        self.update_cache_data(
-            sample_name=self.sample_cache,
-            list_index=self.cache_index,
+        self.get_final_data(
+            sample_name=self.active_entry,
+            index=self.cache_index,
         )
 
         self.update_graphs(
@@ -2483,7 +2724,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
 
         reference_folder_name = cb.value(self.combobox_reffolder)
-        logger.info(f"Reference folder: {reference_folder_name}")
+        self.log_explorer_info(f"Reference folder: {reference_folder_name}")
 
         full_reference_filename, index_ref = self.get_reference_file(
             sample_reference=reference_folder_name,
@@ -2493,7 +2734,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         if not full_reference_filename:
             return
 
-        self.write_terminal_and_loggerinfo(f"Reference file: {full_reference_filename}.")
+        self.log_explorer_info(f"Reference file: {full_reference_filename}.")
 
         reference_name = Path(full_reference_filename).name
         if self.checkbox_auto_reffile.isChecked():
@@ -2506,11 +2747,11 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         data_ref = self.h5.get_Edf_data(
             full_filename=full_reference_filename,
             sample_name=reference_folder_name,
-            index_list=index_ref,
+            index=index_ref,
             normalized=True,
         )
         reference_factor = self.spinbox_sub.value()
-        logger.info(f"New reference factor: {reference_factor}")
+        self.log_explorer_info(f"New reference factor: {reference_factor}")
 
         if data_ref is not None:
             data = data - reference_factor * data_ref
@@ -2529,19 +2770,19 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         if self.checkbox_auto_reffile.isChecked():
             index = 0
             if not self.h5.get_acquisition_key():
-                self.write_terminal_and_loggerinfo("There is no key for acquisition time. Reference subtraction is not possible.")
+                self.log_explorer_info("There is no key for acquisition time. Reference subtraction is not possible.")
                 return None, None
 
             acq_time_file = self.h5.get_acquisition_time(
-                folder_name=self.sample_cache,
+                folder_name=self.active_entry,
                 index_list=self.cache_index,
             )
-            logger.info(f"Acquisition time of the sample is {acq_time_file}.")
+            self.log_explorer_info(f"Acquisition time of the sample is {acq_time_file}.")
 
             acq_ref_dataset = self.h5.get_dataset_acquisition_time(
                 sample_name=sample_reference,
             )
-            logger.info(f"Acquisition dataset of the reference folder is {acq_ref_dataset}.")
+            self.log_explorer_info(f"Acquisition dataset of the reference folder is {acq_ref_dataset}.")
             full_reference_filename = ""
             
             if (acq_time_file is not None) and (acq_ref_dataset is not None):
@@ -2551,23 +2792,22 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                             sample_name=sample_reference,
                             index_list=index,
                         )
-                        logger.info(f"Auto reference file: {full_reference_filename}")
+                        self.log_explorer_info(f"Auto reference file: {full_reference_filename}")
                         break
                 if not full_reference_filename:
-                    logger.info(f"There is no match in acquisition times.")
+                    self.log_explorer_info(f"There is no match in acquisition times.")
                 
         # Specific reference file
         else:
             index = 0
             file_reference_name = cb.value(self.combobox_reffile)
             full_reference_filename = str(self.h5._root_dir.joinpath(Path(sample_reference), Path(file_reference_name)))
-            logger.info(f"Chosen reference file: {full_reference_filename}.")
+            self.log_explorer_info(f"Chosen reference file: {full_reference_filename}.")
 
         if return_index:
             return full_reference_filename, index
         else:
             return full_reference_filename
-
 
     @log_info
     def filter_data(self, data=None):
@@ -2577,7 +2817,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         data[data==0] = 1e-9
         data[data<0] = 1e-9
         data = np.nan_to_num(data, nan=1e-9)
-        logger.info(f"Filtered negative, nan and zero values.")   
+        self.log_explorer_info(f"Filtered negative, nan and zero values.")   
         return data
 
     @log_info
@@ -2608,17 +2848,17 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             reset_zoom = True
         else:
             reset_zoom = False
-        logger.info(reset_zoom)
+        self.log_explorer_info(reset_zoom)
 
         graph_2D_widget.setKeepDataAspectRatio(True)
         graph_2D_widget.setYAxisInverted(True)
 
-        logger.info(f"Data extracted from cache. Data: {type(data)}")
+        self.log_explorer_info(f"Data extracted from cache. Data: {type(data)}")
 
         z_lims = np_weak_lims(
             data=data,
         )
-        logger.info(z_lims)
+        self.log_explorer_info(z_lims)
 
         graph_2D_widget.setLimits(
                 xmin=graph_2D_widget.getGraphXLimits()[0],
@@ -2629,8 +2869,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         if self.checkbox_mask_integration.isChecked():
             data = self.get_masked_integration_array(data=data)
-
-        print(data.shape)
 
         graph_2D_widget.addImage(
             data=data,
@@ -2643,8 +2881,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             },
             resetzoom=reset_zoom,
         )
-        logger.info(f"Displayed data.")
-
+        self.log_explorer_info(f"Displayed data.")
 
     @log_info
     def update_label_displayed(self):
@@ -2661,11 +2898,11 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         #     return
 
         new_label = self.h5.get_filename_from_index(
-            sample_name=self.sample_cache,
+            sample_name=self.active_entry,
             index_list=self.cache_index,
         )
 
-        logger.info(f"New label: {new_label}")
+        self.log_explorer_info(f"New label: {new_label}")
         self.lineedit_filename.setText(f"{new_label}")
 
     @log_info
@@ -2685,14 +2922,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             )
         except:
             x_ticks = None
-        logger.info(f"X ticks for the generated map: {x_ticks}")
+        self.log_explorer_info(f"X ticks for the generated map: {x_ticks}")
         try:
             y_ticks = le.get_clean_lineedit(
                 lineedit_widget=self.lineedit_yticks
             )
         except:
             y_ticks = None
-        logger.info(f"Y ticks for the generated map: {y_ticks}")
+        self.log_explorer_info(f"Y ticks for the generated map: {y_ticks}")
         try:
             return [float(tick) for tick in x_ticks], [float(tick) for tick in y_ticks]
         except:
@@ -2704,7 +2941,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             color_lims = gm.get_zlims(self.graph_raw_widget)
             return color_lims
         except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Error at taking color limits.")
+            self.log_explorer_info(f"{e}: Error at taking color limits.")
 
     @log_info
     def get_norm_colors(self, color_lims=[], log=False):
@@ -2736,61 +2973,72 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         graph_2D_reshape=False,
         graph_2D_q=False,
         ):
+        if not self.h5:
+            return
+
         if data is None:
             data = self._data_cache
         
         if data is None:
             return
+        
+        if graph_1D:
+            self.update_1D_graph(
+                data=data,
+                norm_factor=norm_factor,
+            )
+            
+        if graph_2D_raw:
+            self.update_2D_raw(
+                data=data,
+            )
+            
+        if graph_2D_reshape:
+            self.update_2D_reshape_map(
+                data=data,
+            )
+        
+        if graph_2D_q:
+            self.update_2D_q()
+        
+        
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = []
+        # with concurrent.futures.ThreadPoolExecutor() as executor:
+        #     futures = []
 
-            # Update 1D integration graph
-            if graph_1D:
-                futures.append(executor.submit(self.update_1D_graph, data=data, norm_factor=norm_factor))
-                # self.update_1D_graph(
-                #     data=data,
-                #     norm_factor=norm_factor,
-                # )
+        #     # Update 1D integration graph
+        #     if graph_1D:
+        #         futures.append(executor.submit(self.update_1D_graph, data=data, norm_factor=norm_factor))
 
-            # Update 2D Raw Map
-            if graph_2D_raw:
-                futures.append(executor.submit(self.update_2D_raw, data=data))
-                # self.update_2D_raw(
-                #     data=data,
-                # )
+        #     # Update 2D Raw Map
+        #     if graph_2D_raw:
+        #         futures.append(executor.submit(self.update_2D_raw, data=data))
 
-            # Update 2D Reshape
-            if graph_2D_reshape:
-                futures.append(executor.submit(self.update_2D_reshape_map, data=data))
-                # self.update_2D_reshape_map(
-                #     data=data,
-                # )
+        #     # Update 2D Reshape
+        #     if graph_2D_reshape:
+        #         futures.append(executor.submit(self.update_2D_reshape_map, data=data))
 
-            # Update 2D q map
-            if graph_2D_q:
-                futures.append(executor.submit(self.update_2D_q))
-                # self.update_2D_q()
+        #     # Update 2D q map
+        #     if graph_2D_q:
+        #         futures.append(executor.submit(self.update_2D_q))
 
-            concurrent.futures.wait(futures)
+        #     concurrent.futures.wait(futures)
 
     @log_info
     def update_1D_graph(self, data=None, norm_factor=1.0, clear=True):
         """
         Updates the 1D chart with intensity profiles, after pygix-pyFAI integration protocols
 
-        Parameters:
-        data (np.array) : numpy array with the 2D detector map
-        norm_factor(float) : value that will divide the whole array
 
-        Returns:
-        None
-        """
+        Keyword Arguments:
+            data -- numpy array with the 2D detector map (default: {None})
+            norm_factor -- value that will divide the whole array (default: {1.0})
+            clear -- if True, clear the graph widget (default: {True})
+        """        
         graph_1D_widget = self.graph_1D_widget
 
         if clear:
             graph_1D_widget.clear()
-
 
         if data is None:
             data = self._data_cache
@@ -2802,53 +3050,65 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
             
         list_integration_names = self.combobox_integration.currentData()
-        logger.info(f"Dictionaries of integration: {list_integration_names}")
+        self.log_explorer_info(f"Dictionaries of integration: {list_integration_names}")
 
         list_dict_integration = [get_dict_from_name(name=name, path_integration=INTEGRATION_PATH) for name in list_integration_names]
-        logger.info(f"Dictionaries of integration: {list_dict_integration}")
+        self.log_explorer_info(f"Dictionaries of integration: {list_dict_integration}")
 
-        list_results = self.h5.raw_integration(
+        # Save in cache in case of saving
+        self.list_dict_integration_cache = list_dict_integration
+        self.list_results_cache = []
+
+        for ind, result in enumerate(self.h5.generate_integration(
             data=data,
             norm_factor=norm_factor,
             list_dict_integration=list_dict_integration,
-        )
+            )):
 
-        # Save in cache in case of saving
-        self.list_dict_integration_cache = list_dict_integration        
-        self.list_results_cache = list_results
+            dict_int = list_dict_integration[ind]
 
-        logger.info(f"New integration: {len(list_results)}")
-
-        xlims = [graph_1D_widget.getGraphXLimits()[0], graph_1D_widget.getGraphXLimits()[1]]
-        ylims = [graph_1D_widget.getGraphYLimits()[0], graph_1D_widget.getGraphYLimits()[1]]
-
-        for ind, result in enumerate(list_results):
-            try:          
+            try:
+                # Plot the result
                 graph_1D_widget.addCurve(
                     x=result[0],
                     y=result[1],
                     legend=f"{ind}",
                     resetzoom=True,
                 )
-                graph_1D_widget.setGraphYLabel(label='Intensity (arb. units)')
-                if list_dict_integration[ind].get(KEY_INTEGRATION) == CAKE_LABEL:
-                    if list_dict_integration[ind].get(CAKE_KEY_TYPE) == CAKE_KEY_TYPE_AZIM:
-                        xlabel = list_dict_integration[ind][CAKE_KEY_UNIT]
-                    elif list_dict_integration[ind].get(CAKE_KEY_TYPE) == CAKE_KEY_TYPE_RADIAL:
-                        xlabel = f'\u03c7 (deg)'
-                    graph_1D_widget.setGraphXLabel(label=xlabel)
-                elif list_dict_integration[ind].get(KEY_INTEGRATION) == BOX_LABEL:
-                    graph_1D_widget.setGraphXLabel(label=list_dict_integration[ind][BOX_KEY_OUTPUT_UNIT])
-            except:
-                pass
+            except Exception as e:
+                self.log_explorer_error(f'{e}: {dict_int} Could not be plotted.')
+        
+            # LABELS
+            self.plot_1d_set_labels(dict_int=dict_int)
 
+            # KEEP LIMITS
+            self.plot_1d_keep_limits()
+
+    @log_info
+    def plot_1d_set_labels(self, dict_int={}):
+        graph_1D_widget = self.graph_1D_widget
+        # Define the labels of the plot
+        try:
+            if dict_int.get(KEY_INTEGRATION) == CAKE_LABEL:
+                if dict_int.get(CAKE_KEY_TYPE) == CAKE_KEY_TYPE_AZIM:
+                    xlabel = dict_int[CAKE_KEY_UNIT]
+                elif dict_int.get(CAKE_KEY_TYPE) == CAKE_KEY_TYPE_RADIAL:
+                    xlabel = f'\u03c7 (deg)'
+                graph_1D_widget.setGraphXLabel(label=xlabel)
+            elif dict_int.get(KEY_INTEGRATION) == BOX_LABEL:
+                graph_1D_widget.setGraphXLabel(label=dict_int[BOX_KEY_OUTPUT_UNIT])
+            graph_1D_widget.setGraphYLabel(label='Intensity (arb. units)')
+        except Exception as e:
+            logger.error(f'{e} Error with the labels in {dict_int}')
+
+    @log_info
+    def plot_1d_keep_limits(self):
+        graph_1D_widget = self.graph_1D_widget
+        xlims = [graph_1D_widget.getGraphXLimits()[0], graph_1D_widget.getGraphXLimits()[1]]
+        ylims = [graph_1D_widget.getGraphYLimits()[0], graph_1D_widget.getGraphYLimits()[1]]
         graph_1D_widget.setLimits(
-            xmin=xlims[0],
-            xmax=xlims[1],
-            ymin=ylims[0],
-            ymax=ylims[1],
+            xmin=xlims[0], xmax=xlims[1], ymin=ylims[0], ymax=ylims[1],
         )
-
 
     @log_info
     def save_plot_clicked(self, _):
@@ -2856,7 +3116,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
 
         if not self.list_results_cache:
-            self.write_terminal_and_loggerinfo("Nothing to save. Return.")
+            self.log_explorer_info("Nothing to save. Return.")
             return
 
         # Save the file
@@ -2868,7 +3128,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 if confirm_mkdir == QMessageBox.Yes:
                     folder_output.mkdir()
                 else:
-                    self.write_terminal_and_loggerinfo(f"The .csv file could not be saved.")
+                    self.log_explorer_info(f"The .csv file could not be saved.")
                     return                  
         else:
             confirm_save = QMessageBox.question(self, 'MessageBox', "You are going to save in the same data folder. \
@@ -2879,7 +3139,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 return
 
         if not Path(folder_output).exists:
-            self.write_terminal_and_loggerinfo(f"The .csv file could not be saved.")
+            self.log_explorer_info(f"The .csv file could not be saved.")
             return
 
         name_out = Path(le.text(self.lineedit_filename)).stem
@@ -2891,9 +3151,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         merge_dict = merge_dictionaries(
             list_dicts=self.list_dict_integration_cache,
         )
-        logger.info("Merged dictionary")
+        self.log_explorer_info("Merged dictionary")
         str_header = dict_to_str(dictionary= merge_dict)
-        logger.info("String header")
+        self.log_explorer_info("String header")
 
         # Merged pandas dataframe
         dict_results = {}
@@ -2906,154 +3166,43 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             dict_results[f"Intensity_{dict_int[CAKE_KEY_SUFFIX]}"] = res[1]
             filename_out += f"_{dict_int[CAKE_KEY_SUFFIX]}"
         filename_out += '.csv'
-        self.write_terminal_and_loggerinfo(f"Output filename for the image: {filename_out}")
+        self.log_explorer_info(f"Output filename for the image: {filename_out}")
         dataframe = pd.DataFrame.from_dict(dict_results, orient='index')
         dataframe = dataframe.transpose()
-        logger.info("Dataframe to be exported as .csv")
+        self.log_explorer_info("Dataframe to be exported as .csv")
 
         mode = 'w' if Path(filename_out).is_file() else 'a'
         with open(filename_out, mode) as f:
             f.write(f'{str_header}\n')
         dataframe.to_csv(filename_out, sep=',', mode='a', index=False, header=True)
 
-
     @log_info
     def mark_metadata_keys(self, metadata_keys=list()):
         # Click the items
         self.combobox_metadata.markItems(metadata_keys)
 
-
-    @log_info
-    def table_clicked(self):
-        if not self.h5:
-            return
-
-        # Save the clicked index of clicked data
-        self.cache_index = tm.selected_rows(self.table_files)
-
-        if not self.cache_index:
-            return
-
-        # Update data cache
-        self.update_cache_data(
-            sample_name=self.sample_cache,
-            list_index=self.cache_index,
-        )
-        # Update grazing-incidence geometry
-        self.h5.update_angles(
-            sample_name=self.sample_cache,
-            list_index=self.cache_index,
-        )
-
-        # Update label dislayed
-        self.update_label_displayed()
-
-        # Update graphs
-        self.update_graphs(
-            graph_1D=True,
-            graph_2D_raw=True,
-            graph_2D_reshape=True,
-            graph_2D_q=True,
-        )
-
-    @log_info
-    def update_table(self, dataframe=None, reset=True):
-
-        if reset:
-            tm.reset(
-                table=self.table_files,
-            )
-            logger.info("Table was reseted.")
-        if dataframe is None:
-            return
-
-        # Add columns for the displayed metadata keys
-        tm.insert_columns(
-            table=self.table_files,
-            num=len(dataframe.columns),
-            labels=list(dataframe.columns),
-        )
-        logger.info(f"Inserted columns: {len(dataframe.columns)}")
-
-        # Add the rows for all the displayed files
-        tm.insert_rows(
-            table=self.table_files,
-            num=len(dataframe),
-        )
-        logger.info(f"Inserted rows: {len(dataframe)}")
-
-        # Add the new key values for every file
-        for ind_row, _ in enumerate(dataframe[FILENAME_KEY]):
-            for ind_column, key in enumerate(dataframe):
-                try:
-                    tm.update_cell(
-                        table=self.table_files,
-                        row_ind=ind_row,
-                        column_ind=ind_column,
-                        st=dataframe[key][ind_row],
-                    )
-                    logger.info(f"Updated cell [{ind_row},{ind_column}].")
-                except:
-                    pass
-
-    @log_info
-    def update_clicked_filenames(self) -> None:
-        """
-        Updates the value of the clicked files in the table (list of files) and stores them in cache
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
-        self.cache_index = tm.selected_rows(self.table_files)
-        self.cache_filenames = [
-            self.filename_fromrow(index) for index in self.cache_index
-        ]
-
-        logger.info(f"New cache index: {self.cache_index}")
-        self.write_terminal_and_loggerinfo(f"New cache filenames: {str(self.cache_filenames)}")
-
-
     @log_info
     def get_data(
         self, 
-        sample_name=str(), 
-        list_index=list(), 
+        sample_name='', 
+        index=(), 
         normalized=True,
         ) -> np.array:
 
         try:
+            print(2222)
+            print(f'Sample is {sample_name}, index is {index}')
             data = self.h5.get_Edf_data(
                 sample_name=sample_name,
-                index_list=list_index,
+                index=index,
                 normalized=normalized,
             )
-            self.write_terminal_and_loggerinfo(f"Retrieved data. Sample_name:{sample_name}, index {str(list_index)}.")
+            self.log_explorer_info(f"Retrieved data. Sample_name:{sample_name}, index {str(index)}.")
         except Exception as e:
-            logger.error(f"{e}: Data could not be retrieved with sample {sample_name} and index {str(list_index)}.")
+            logger.error(f"{e}: Data could not be retrieved with sample {sample_name} and index {str(index)}.")
             data = None
 
         return data
-
-    @log_info
-    def filename_fromrow(self, row_index) -> str:
-        """
-        Returns the filename according to clicked index
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
-        clicked_filename = tm.item(
-            table=self.table_files,
-            row=row_index,
-            column=0
-        )
-        return clicked_filename
 
     @log_info
     def update_2D_reshape_map(self, data=None, clear=True):
@@ -3070,19 +3219,15 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
 
         try:
-            data_reshape, q, chi = self.h5.map_reshaping(
-                data=data,
-                # dict_poni=self.get_poni_dict_from_widgets(),
-            )
+            data_reshape, q, chi = self.h5.map_reshaping(data=data,)
         except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: Data could not be reshaped.")
+            self.log_explorer_info(f"{e}: Data could not be reshaped.")
             return
 
         canvas = self.canvas_reshape_widget
 
         try:
             z_lims = canvas.axes.get_images()[0].get_clim()
-            print(z_lims)
         except:
             z_lims = gm.get_zlims(self.graph_raw_widget)
 
@@ -3105,7 +3250,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         canvas.axes.set_ylabel("Chi (deg)")     
         canvas.draw()   
 
-        logger.info(f"Displayed reshape data.")
+        self.log_explorer_info(f"Displayed reshape data.")
 
     @log_info
     def mirror_scat_matrix(self, data=None, scat_horz=None):
@@ -3130,8 +3275,37 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         try:
             mat = ndimage.zoom(mat, 1/binning)
         except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}: There was an error during data binning.")
+            self.log_explorer_info(f"{e}: There was an error during data binning.")
         return mat
+
+    @log_info
+    def missing_wedge(self, data, scat_horz, distance_threshold=0.1):
+        sample_orientation = DICT_SAMPLE_ORIENTATIONS[(self.state_qz, self.state_qr)]
+
+        if sample_orientation in (1,3):
+
+            delta_x_1 = np.diff(scat_horz, axis=1)
+            delta_x_1_padded = np.pad(delta_x_1, ((0, 0), (0, 1)), mode='edge')
+
+            delta_x_2 = np.fliplr(np.diff(np.fliplr(scat_horz), axis=1))
+            delta_x_2_padded = np.pad(delta_x_2, ((0, 0), (1, 0)), mode='edge')
+
+        elif sample_orientation in (2,4):
+
+            delta_x_1 = np.diff(scat_horz, axis=0)
+            delta_x_1_padded = np.pad(delta_x_1, ((1, 0), (0, 0)), mode='edge')
+
+            delta_x_2 = np.fliplr(np.diff(np.fliplr(scat_horz), axis=0))
+            delta_x_2_padded = np.pad(delta_x_2, ((0, 1), (0, 0)), mode='edge')
+
+        else:
+            return
+
+        condition = (np.abs(delta_x_1_padded) > distance_threshold) | (np.abs(delta_x_2_padded) > distance_threshold)
+        data[condition] = np.nan
+        return data
+
+
 
     @log_info
     def update_q_matrix_cache(self, new_data=True):
@@ -3198,11 +3372,13 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 binning=binning_current,
             )
 
+        unit = cb.value(self.combobox_units)
+        unit = get_pyfai_unit(unit)
+
         # If scat matrix are None, generate them again and zoom
         if (scat_horz is None) or (scat_vert is None):
             # Get the unit of the generated map
-            unit = cb.value(self.combobox_units)
-            unit = get_pyfai_unit(unit)
+
 
             scat_horz, scat_vert = self.h5.get_mesh_matrix(
                 unit=unit,
@@ -3218,7 +3394,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             )
             
         if (scat_horz is None) or (scat_vert is None) or (data_bin is None):
-            self.write_terminal_and_loggerinfo("Scattering matrix are None.")
+            self.log_explorer_info("Scattering matrix are None.")
             return
         
         # Mirror if needed
@@ -3231,12 +3407,20 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Update all cache vars
         self.scat_horz_cache = scat_horz
         self.scat_vert_cache = scat_vert
-        self.data_bin_cache = data_bin
 
-        self.write_terminal_and_loggerinfo(f"Updated cache matrix.")
-        logger.info(f"Updated scat_horz_cache with shape {scat_horz.shape}")
-        logger.info(f"Updated scat_vert_cache with shape {scat_vert.shape}")
-        logger.info(f"Updated data_bin_cache with shape {data_bin.shape}")
+        if unit in UNITS_Q:
+            self.data_bin_cache = self.missing_wedge(
+                data=data_bin,
+                scat_horz=scat_horz,
+                distance_threshold=0.1,
+            )
+        else:
+            self.data_bin_cache = data_bin
+
+        self.log_explorer_info(f"Updated cache matrix.")
+        self.log_explorer_info(f"Updated scat_horz_cache with shape {scat_horz.shape}")
+        self.log_explorer_info(f"Updated scat_vert_cache with shape {scat_vert.shape}")
+        self.log_explorer_info(f"Updated data_bin_cache with shape {data_bin.shape}")
 
         self._dict_qmap_cache = {
             'qz_parallel' : qz_current,
@@ -3246,8 +3430,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             'incident_angle': iangle_current,
             'tilt_angle' : tangle_current,
         }
-        logger.info(f"Updated cache dictionary: {str(self._dict_qmap_cache)}")
-
+        self.log_explorer_info(f"Updated cache dictionary: {str(self._dict_qmap_cache)}")
 
     @log_info
     def plot_qcache_matrix(self):
@@ -3259,10 +3442,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Return if there are no matrix or the shapes do not match
         if (scat_horz is None) or (scat_vert is None) or (data_bin is None):
-            self.write_terminal_and_loggerinfo("Impossible to plot.")
+            self.log_explorer_info("Impossible to plot.")
         
         if not (scat_horz.shape == scat_vert.shape == data_bin.shape):
-            self.write_terminal_and_loggerinfo("The shape of scat matrix do not match.")
+            self.log_explorer_info("The shape of scat matrix do not match.")
             return
         
         # Get the size of the comma
@@ -3283,16 +3466,25 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # Plot the scatter
         try:
             canvas.axes.cla()
-            canvas.axes.scatter(
-                scat_horz,
-                scat_vert,
-                c=data_bin,
-                s=size_comma,
+            canvas.axes.contourf
+
+            canvas.axes.pcolormesh(
+                scat_horz, 
+                scat_vert, 
+                data_bin,
                 norm=norm,
-                edgecolors="None",
-                marker=',',
-                cmap="viridis",
-            )
+                cmap='viridis',
+                )
+            # canvas.axes.scatter(
+            #     scat_horz,
+            #     scat_vert,
+            #     c=data_bin,
+            #     s=size_comma,
+            #     norm=norm,
+            #     edgecolors="None",
+            #     marker=',',
+            #     cmap="viridis",
+            # )
             canvas.axes.set_aspect('equal', 'box')
 
             if xlim != (0.0, 1.0):
@@ -3302,9 +3494,12 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
             canvas.draw()
         except Exception as e:
-            self.write_terminal_and_loggererror(f"{e}: Impossible to scatter scat_horz with shape {scat_horz.shape} \
+            self.log_explorer_error(f"{e}: Impossible to scatter scat_horz with shape {scat_horz.shape} \
                 , scat_vert with shape {scat_vert.shape} and data with shape {data_bin.shape}.")
             
+
+
+
     @log_info
     def update_qmap_style(self):
         canvas = self.canvas_2d_q
@@ -3375,85 +3570,86 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         canvas.axes.set_title(title, fontsize=font_size)
         canvas.draw()
 
-    @log_info
-    def plot_q_map(
-        self,
-        mesh_horz=None,
-        mesh_vert=None, 
-        data=None, 
-        unit='q_nm^-1', 
-        auto_lims=True, 
-        title='',
-        norm=None,
-        clear_axes=True,
-        **kwargs):
+    # @log_info
+    # def plot_q_map(
+    #     self,
+    #     mesh_horz=None,
+    #     mesh_vert=None, 
+    #     data=None, 
+    #     unit='q_nm^-1', 
+    #     auto_lims=True, 
+    #     title='',
+    #     norm=None,
+    #     clear_axes=True,
+    #     **kwargs):
 
-        if not self.h5:
-            return
+    #     if not self.h5:
+    #         return
 
-        if (mesh_horz is None) or (mesh_vert is None) or (data is None):
-            self.write_terminal_and_loggerinfo("There is a None in the input matrix")
-            return
+    #     if (mesh_horz is None) or (mesh_vert is None) or (data is None):
+    #         self.write_terminal_and_loggerinfo("There is a None in the input matrix")
+    #         return
 
-        canvas = self.canvas_reshape_widget
-        if clear_axes:
-            canvas.axes.cla()
+    #     canvas = self.canvas_reshape_widget
+    #     if clear_axes:
+    #         canvas.axes.cla()
 
-        if not (mesh_horz.shape == mesh_vert.shape == data.shape):
-            self.write_terminal_and_loggerinfo("The shape of the mesh matrix do not match.")
-            self.write_terminal_and_loggerinfo(f"Mesh_horz.shape={mesh_horz.shape}.")
-            self.write_terminal_and_loggerinfo(f"Mesh_vert.shape={mesh_vert.shape}.")
-            self.write_terminal_and_loggerinfo(f"Data.shape={data.shape}.")
-            return
+    #     if not (mesh_horz.shape == mesh_vert.shape == data.shape):
+    #         self.write_terminal_and_loggerinfo("The shape of the mesh matrix do not match.")
+    #         self.write_terminal_and_loggerinfo(f"Mesh_horz.shape={mesh_horz.shape}.")
+    #         self.write_terminal_and_loggerinfo(f"Mesh_vert.shape={mesh_vert.shape}.")
+    #         self.write_terminal_and_loggerinfo(f"Data.shape={data.shape}.")
+    #         return
         
-        # Get the units and style parameters
-        DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
-        x_label = kwargs.get('xlabel', DICT_PLOT['X_LABEL'])
-        y_label = kwargs.get('ylabel', DICT_PLOT['Y_LABEL'])
+    #     # Get the units and style parameters
+    #     DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
+    #     x_label = kwargs.get('xlabel', DICT_PLOT['X_LABEL'])
+    #     y_label = kwargs.get('ylabel', DICT_PLOT['Y_LABEL'])
 
-        if not auto_lims:
-            x_lims = kwargs.get('xlim', DICT_PLOT['X_LIMS'])
-            if x_lims == '':
-                x_lims = DICT_PLOT['X_LIMS']
+    #     if not auto_lims:
+    #         x_lims = kwargs.get('xlim', DICT_PLOT['X_LIMS'])
+    #         if x_lims == '':
+    #             x_lims = DICT_PLOT['X_LIMS']
 
-            y_lims = kwargs.get('ylim', DICT_PLOT['Y_LIMS'])
-            if y_lims == '':
-                y_lims = DICT_PLOT['Y_LIMS']
+    #         y_lims = kwargs.get('ylim', DICT_PLOT['Y_LIMS'])
+    #         if y_lims == '':
+    #             y_lims = DICT_PLOT['Y_LIMS']
 
-            x_ticks = kwargs.get('xticks', DICT_PLOT['X_TICKS'])
-            if x_ticks == '':
-                x_ticks = DICT_PLOT['X_TICKS']
+    #         x_ticks = kwargs.get('xticks', DICT_PLOT['X_TICKS'])
+    #         if x_ticks == '':
+    #             x_ticks = DICT_PLOT['X_TICKS']
 
-            y_ticks = kwargs.get('yticks', DICT_PLOT['Y_TICKS'])
-            if y_ticks == '':
-                y_ticks = DICT_PLOT['Y_TICKS']
+    #         y_ticks = kwargs.get('yticks', DICT_PLOT['Y_TICKS'])
+    #         if y_ticks == '':
+    #             y_ticks = DICT_PLOT['Y_TICKS']
 
-            canvas.axes.set_xlim(x_lims)
-            canvas.axes.set_ylim(y_lims)
-        else:
-            x_ticks = canvas.axes.get_xticks()
-            y_ticks = canvas.axes.get_yticks()
+    #         canvas.axes.set_xlim(x_lims)
+    #         canvas.axes.set_ylim(y_lims)
+    #     else:
+    #         x_ticks = canvas.axes.get_xticks()
+    #         y_ticks = canvas.axes.get_yticks()
 
-        # Plot the scatter
-        try:
-            canvas.axes.scatter(
-                mesh_horz,
-                mesh_vert,
-                c=data,
-                s=self._scattersize_cache,
-                norm=norm,
-                edgecolors="None",
-                marker=',',
-                cmap="viridis",
-            )
-        except Exception as e:
-            self.write_terminal_and_loggerinfo(f"{e}")
-        canvas.axes.set_xlabel(xlabel=x_label)
-        canvas.axes.set_ylabel(ylabel=y_label)
-        canvas.axes.set_xticks(x_ticks)
-        canvas.axes.set_yticks(y_ticks)
-        canvas.axes.set_title(title)
-        canvas.draw()
+    #     # Plot the scatter
+    #     try:
+    #         canvas.axes.pcolormesh(mesh_horz, mesh_vert, data)
+    #         # canvas.axes.scatter(
+    #         #     mesh_horz,
+    #         #     mesh_vert,
+    #         #     c=data,
+    #         #     s=self._scattersize_cache,
+    #         #     norm=norm,
+    #         #     edgecolors="None",
+    #         #     marker=',',
+    #         #     cmap="viridis",
+    #         # )
+    #     except Exception as e:
+    #         self.write_terminal_and_loggerinfo(f"{e}")
+    #     canvas.axes.set_xlabel(xlabel=x_label)
+    #     canvas.axes.set_ylabel(ylabel=y_label)
+    #     canvas.axes.set_xticks(x_ticks)
+    #     canvas.axes.set_yticks(y_ticks)
+    #     canvas.axes.set_title(title)
+    #     canvas.draw()
 
     @log_info
     def increase_font_clicked(self,_):
@@ -3502,15 +3698,11 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             graph_2D_q=True,
         )
 
-
-
-
     @log_info
     def checkbox_mask_clicked(self,_):
         self.update_graphs(
             graph_2D_raw=True,
         )
-
 
     @log_info
     def cb_integration_changed(self,_):
@@ -3534,7 +3726,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return data
 
         dict_integration = list_dict_integration[0]
-        logger.info(f"Dictionary of integration to be masked: {dict_integration}")
+        self.log_explorer_info(f"Dictionary of integration to be masked: {dict_integration}")
         shape = data.shape
 
         # Mask for Azimuthal or Radial integration
@@ -3548,9 +3740,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 p0_range = tuple([i / pos0_scale for i in p0_range])
                 p1_range = tuple([np.deg2rad(i) + np.pi for i in p1_range]) 
 
-                logger.info(f"Parameters to mask the array. Shape: {shape}, unit: {unit}, \
+                self.log_explorer_info(f"Parameters to mask the array. Shape: {shape}, unit: {unit}, \
                     p0_range: {p0_range}, p1_range: {p1_range}, pos0_scale: {pos0_scale}.")
-                chi, pos0 = self.h5._transform.giarray_from_unit(shape, "sector", "center", unit)
+                chi, pos0 = self.h5.gi.giarray_from_unit(shape, "sector", "center", unit)
             except:
                 logger.error(f"Chi and pos0 matrix could not be generated. The parameters were: \
                     Shape: {shape}, unit: {unit}, p0_range: {p0_range}, p1_range: {p1_range}, pos0_scale: {pos0_scale}.")
@@ -3565,7 +3757,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             chi = np.where(chi != 0, chi, np.nan)
 
             mask = chi * pos0
-            logger.info("The mask was generated.")   
+            self.log_explorer_info("The mask was generated.")   
 
         # Mask for Box integration
         elif dict_integration[KEY_INTEGRATION] == BOX_LABEL:
@@ -3579,7 +3771,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 oop_range = tuple([ii / q_scale for ii in oop_range])
                 ip_range = tuple([ii / q_scale for ii in ip_range])
 
-                logger.info(f"Parameters to mask the array. Shape: {shape}, unit: {unit}, \
+                self.log_explorer_info(f"Parameters to mask the array. Shape: {shape}, unit: {unit}, \
                     oop_range: {oop_range}, ip_range: {ip_range}, q_scale: {q_scale}.")
                 horz_q, vert_q = self.h5._transform.giarray_from_unit(shape, "opbox", "center", unit_gi)
             except Exception as e:
@@ -3600,7 +3792,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
         plt.plot(mask)
         data_mask = data * mask
-        logger.info("The mask was completed.")        
+        self.log_explorer_info("The mask was completed.")        
 
         return data_mask
 
@@ -3620,7 +3812,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             title_str = ''
             for key in keys_title:
                 metadata_value = self.h5.get_metadata_value(
-                    sample_name=self.sample_cache,
+                    sample_name=self.active_entry,
                     sample_relative_address=True,
                     key_metadata=key,
                     index_list=self.cache_index,
@@ -3628,7 +3820,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 title_str += f"{key}={metadata_value}; "
         except:
             title_str = ''
-        logger.info(f"Title for the generated map: {title_str}")  
+        self.log_explorer_info(f"Title for the generated map: {title_str}")  
         return title_str
 
     @log_info
@@ -3681,7 +3873,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     @log_info
     def get_yticks(self):
         y_ticks = le.get_clean_lineedit(
-            lineedit_widget=self.lineedit_xticks,
+            lineedit_widget=self.lineedit_yticks,
         )
         y_ticks = [float(tick) for tick in y_ticks]
         return y_ticks
@@ -3722,7 +3914,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 if confirm_mkdir == QMessageBox.Yes:
                     folder_output.mkdir()
                 else:
-                    self.write_terminal_and_loggerinfo(f"The image could not be saved.")
+                    self.log_explorer_info(f"The image could not be saved.")
                     return                  
         else:
             confirm_save = QMessageBox.question(self, 'MessageBox', "You are going to save in the same data folder. \
@@ -3733,12 +3925,12 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 return
 
         if not Path(folder_output).exists:
-            self.write_terminal_and_loggerinfo(f"The image could not be saved.")
+            self.log_explorer_info(f"The image could not be saved.")
             return
 
         filename = Path(le.text(self.lineedit_filename)).stem
         filename_out = folder_output.joinpath(f"{filename}.png")
-        self.write_terminal_and_loggerinfo(f"Output filename for the image: {filename_out}")
+        self.log_explorer_info(f"Output filename for the image: {filename_out}")
  
         try:
             print(filename_out)
@@ -3747,9 +3939,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             # self.update_q_map(show=False)
             # plt.savefig(filename_out)
             # plt.close()
-            self.write_terminal_and_loggerinfo(f"Imaged was saved.")
+            self.log_explorer_info(f"Imaged was saved.")
         except:
-            self.write_terminal_and_loggerinfo(f"The image could not be saved.")
+            self.log_explorer_info(f"The image could not be saved.")
             pass
 
     @log_info
@@ -3786,6 +3978,18 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         new_integrations = [item for item in new_integrations if item]
 
         self.combobox_integration.addItems(texts=new_integrations)
+
+    @log_info
+    def update_active_data(self):
+        active_sample = lt.click_values(self.listwidget_samples)
+        active_index = tm.selected_rows(self.table_files)
+        qz = self.state_qz
+        qr = self.state_qr
+        mirror = self.state_mirror
+
+        
+
+
 
     @log_info
     def open_fitting_form(self):

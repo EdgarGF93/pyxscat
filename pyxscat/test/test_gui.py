@@ -9,7 +9,7 @@ import pytest
 from pyFAI.io.ponifile import PoniFile
 
 import pyautogui
-from pyxscat.gui.run import run
+from pyxscat.gui.run import main
 from unittest.mock import patch
 
 import time
