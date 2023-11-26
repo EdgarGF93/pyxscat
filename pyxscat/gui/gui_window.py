@@ -7,7 +7,7 @@ from pyxscat.gui.gui_widget_about import AboutForm
 from PyQt5.QtWidgets import QMainWindow, QMenu, QMenuBar, QAction
 from PyQt5 import QtGui, QtCore
 
-PYXSCAT_LOGO = "pyxscat_icon.png"
+PYXSCAT_LOGO = "pyxscat_new_icon.png"
 WIDTH = 1280
 HEIGHT = 720
 

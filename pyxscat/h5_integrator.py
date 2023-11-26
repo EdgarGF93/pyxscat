@@ -12,7 +12,7 @@ import h5py
 import numpy as np
 import pandas as pd
 from silx.io.h5py_utils import File
-from silx.io.nxdata import save_NXdata
+# from silx.io.nxdata import save_NXdata
 from pyxscat.other.integrator_methods import *
 from pyxscat.other.setup_methods import *
 import os
@@ -651,7 +651,7 @@ class H5GIIntegrator():
     #########################################################
 
     @logger_info
-    def search_ponifiles(self) -> list:
+    def search_ponifiles(self, new_files=True) -> list:
         """Searches for .poni files in the root directory
 
         Returns:
@@ -662,7 +662,13 @@ class H5GIIntegrator():
             return
         
         try:
+            # Absolute paths of .poni files in the root folder
             searched_ponifiles = sorted(file.as_posix() for file in self._root_dir.rglob(WILDCARDS_PONI))
+            if new_files:
+                # Filter only the new files
+                ponifiles_in_h5 = self.get_all_ponifiles(get_relative_address=False)
+                searched_ponifiles = [file for file in searched_ponifiles if file not in ponifiles_in_h5]  
+            
             logger.info(f"Found {len(searched_ponifiles)} .poni files in {self._root_dir}")
             return searched_ponifiles
         
@@ -683,21 +689,30 @@ class H5GIIntegrator():
             return
         
         else:
-            if self.check_ponifile_entry():
-                self.delete_nx_group(entry=ENTRY_PONIFILE_KEY)
+            if not self.check_ponifile_entry():
+                # Create ponifile entry and dataset
+                self.create_entry_ponifile(
+                    ponifile_list=searched_ponifiles,
+                )                   
+                # self.delete_nx_group(entry=ENTRY_PONIFILE_KEY)
+            else:
+                try:
+                    # Resize and append
+                    self.append_ponifiles(
+                        ponifile_list=searched_ponifiles,
+                    )
 
-            try:
-                save_NXdata(
-                    filename=self._h5_filename,
-                    signal_name=PONI_GROUP_KEY,
-                    signal=searched_ponifiles,
-                    interpretation='spectrum',
-                    nxentry_name=ENTRY_PONIFILE_KEY,
-                    nxdata_name=PONI_GROUP_KEY,
-                )
-                logger.info(f'Saved NXdata: {ENTRY_PONIFILE_KEY}')
-            except Exception as e:
-                logger.error(f'{e}: Error during saving NXdata {ENTRY_PONIFILE_KEY}')
+                    # save_NXdata(
+                    #     filename=self._h5_filename,
+                    #     signal_name=PONI_GROUP_KEY,
+                    #     signal=searched_ponifiles,
+                    #     interpretation='spectrum',
+                    #     nxentry_name=ENTRY_PONIFILE_KEY,
+                    #     nxdata_name=PONI_GROUP_KEY,
+                    # )
+                    logger.info(f'Saved NXdata: {ENTRY_PONIFILE_KEY}')
+                except Exception as e:
+                    logger.error(f'{e}: Error during saving NXdata {ENTRY_PONIFILE_KEY}')
 
     @logger_info
     def generate_ponifiles(self, get_relative_address=True) -> str:
@@ -711,7 +726,7 @@ class H5GIIntegrator():
         """
         if not self.check_ponifile_entry():
             logger.info('There is no entry_ponifiles.')
-            return
+            return []
         
         with File(self._h5_filename, 'r+') as f:
             dataset = f[ENTRY_PONIFILE_KEY][PONI_GROUP_KEY][PONI_GROUP_KEY]
@@ -813,6 +828,55 @@ class H5GIIntegrator():
     ###### HDF5 METHODS #################
     #####################################
 
+    @logger_info
+    def create_entry_ponifile(self, ponifile_list=[]):
+        with File(self._h5_filename, 'r+') as f:
+            f.create_group(name='entry_ponifiles')
+            f['entry_ponifiles'].attrs['NX_class'] ='NXentry'
+            f['entry_ponifiles'].create_group(name='ponifiles')     
+            f['entry_ponifiles']['ponifiles'].attrs['NX_class'] ='NXdata'
+            	
+            f['entry_ponifiles']['ponifiles'].create_dataset(
+                name='ponifiles',
+                data=ponifile_list,
+                maxshape=(None,),
+                dtype=FORMAT_STRING,
+            )
+        
+    @logger_info
+    def append_ponifiles(self, ponifile_list=[]):
+        with File(self._h5_filename, 'r+') as f:
+            # Resize dataset
+            initial_size = f['entry_ponifiles']['ponifiles']['ponifiles'].shape[0]
+            future_size = (initial_size + len(ponifile_list),)
+            f['entry_ponifiles']['ponifiles']['ponifiles'].resize(future_size)
+            # Add new data
+            f['entry_ponifiles']['ponifiles']['ponifiles'][initial_size:] = ponifile_list
+
+
+    @logger_info
+    def create_group_metadata(self, entry_name='', metadata_key='', data_values=[]):
+        with File(self._h5_filename, 'r+') as f:
+            f[entry_name].create_group(name=metadata_key)
+            f[entry_name][metadata_key].attrs['NX_class'] ='NXdata'
+            f[entry_name][metadata_key].create_dataset(
+                name=metadata_key,
+                data=data_values,
+                maxshape=(None,),
+                # dtype=FORMAT_STRING,
+            )
+            
+    @logger_info
+    def append_metadata_value(self, entry_name='', metadata_key='', data_values=[]):
+        with File(self._h5_filename, 'r+') as f:
+            # Resize dataset
+            initial_size = f[entry_name][metadata_key][metadata_key].shape[0]
+            future_size = (initial_size + len(data_values),)
+            f[entry_name][metadata_key][metadata_key].resize(future_size)
+            # Add new data
+            f[entry_name][metadata_key][metadata_key][initial_size:] = data_values
+            
+        
     # @logger_info
     # def create_group(
     #     self,
@@ -919,6 +983,7 @@ class H5GIIntegrator():
 
     def get_full_dict_metadata(self, list_filenames=[]):
         header_dict = defaultdict(list)
+        list_filenames = list(list_filenames)
         list_filenames.sort()
         for file in list_filenames:
             header = self.get_Edf_instance(
@@ -1079,28 +1144,50 @@ class H5GIIntegrator():
 
             # Rewrite group if it exists
             existing_entry = self.get_entry_name(sample_address=sample_address)
-            if existing_entry:
-                group_name = existing_entry
-                data_files = dict_files.get(sample_address)
-                self.delete_nx_group(entry=group_name)
-            else:
+            if not existing_entry:
                 group_name = self.get_new_nx_entry_name()
-                data_files = dict_files.get(sample_address)
-
+                self.create_entry(entry_name=group_name)
+            else:
+                group_name = existing_entry
+            # if existing_entry:
+            #     group_name = existing_entry
+            #     data_files = dict_files.get(sample_address)
+            #     self.delete_nx_group(entry=group_name)
+            # else:
+            #     group_name = self.get_new_nx_entry_name()
+            #     self.create_entry(entry_name=group_name)
+            #     data_files = dict_files.get(sample_address)
+            
+            data_files = dict_files.get(sample_address)
             dict_metadata = self.get_full_dict_metadata(
                 list_filenames=data_files,
             )
 
             for key, value in dict_metadata.items():
+                if not self.check_metadata_group(entry_name=group_name, metadata_key=key):
+                    # Create group/dataset
+                    self.create_group_metadata(
+                        entry_name=group_name,
+                        metadata_key=key,
+                        data_values=value,
+                    )              
+                else:
+                    self.append_metadata_value(
+                        entry_name=group_name,
+                        metadata_key=key,
+                        data_values=value,
+                    )
+                    # Resize and append
+                
 
-                save_NXdata(
-                    filename=self._h5_filename,
-                    signal_name=key,
-                    signal=value,
-                    interpretation='spectrum',
-                    nxentry_name=group_name,
-                    nxdata_name=key,
-                )
+                # save_NXdata(
+                #     filename=self._h5_filename,
+                #     signal_name=key,
+                #     signal=value,
+                #     interpretation='spectrum',
+                #     nxentry_name=group_name,
+                #     nxdata_name=key,
+                # )
 
                 self.write_sample_address(
                     group_name=group_name,
@@ -1150,14 +1237,30 @@ class H5GIIntegrator():
 
         return None
 
+
     @logger_info
-    def check_ponifile_entry(self):
+    def create_entry(self, entry_name=''):
         with File(self._h5_filename, 'r+') as f:
-            if ENTRY_PONIFILE_KEY in f.keys():
+            f.create_group(name=entry_name)
+            f[entry_name].attrs['NX_class'] ='NXentry'
+            
+    @logger_info
+    def check_entry(self, entry_name=''):
+        with File(self._h5_filename, 'r+') as f:
+            if entry_name in f.keys():
                 return True
             else:
-                return False
+                return False        
             
+    @logger_info
+    def check_ponifile_entry(self):
+        return self.check_entry(entry_name=ENTRY_PONIFILE_KEY)
+            
+    @logger_info
+    def check_metadata_group(self, entry_name, metadata_key):
+        h5_path = f'{entry_name}/{metadata_key}'
+        return self.check_entry(entry_name=h5_path)
+        
     @logger_info
     def delete_nx_group(self, entry=''):
         with File(self._h5_filename, 'r+') as f:
@@ -1452,6 +1555,8 @@ class H5GIIntegrator():
             filename = full_filename
         else:
             try:
+                print(444)
+                print(f'Sample is {sample_name}, index is {index_file}')
                 filename = self.get_filename_from_index(
                     sample_name=sample_name,
                     index_list=index_file,
@@ -1493,10 +1598,13 @@ class H5GIIntegrator():
         np.array : data of the file (subtracted or not)
         """
         if isinstance(index, int):
-            index = (index)
+            index = (index,)
 
         # Get the sample data
         try:
+            # index = list(index)
+            print(333)
+            print(f'Sample is {sample_name}, index is {index}')
             data_sample = sum(
                 [
                     self.get_Edf_instance(

@@ -1,12 +1,15 @@
 from . import *
 from collections import defaultdict
-from cachetools import cached, LRUCache
+# from cachetools import cached, LRUCache
 from os.path import join
 from pathlib import Path
 from pyFAI import __file__ as pyfai_file
 from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QMessageBox
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import pyqtSignal, QTimer
 from scipy import ndimage
+import time
+from pyxscat.gui.live import PyXScatObserver, PyXScatHandler
 
 from pyFAI.io.ponifile import PoniFile
 from pyxscat.other.other_functions import np_weak_lims, dict_to_str, date_prefix, merge_dictionaries, get_dict_files
@@ -35,9 +38,9 @@ import os
 import pandas as pd
 
 from pyxscat.other.setup_methods import *
-import concurrent.futures
+# import concurrent.futures
 
-ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_logo_thumb.png')
+ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_new_logo.png')
 
 MSG_SETUP_UPDATED = "New setup dictionary was updated."
 MSG_SETUP_ERROR = "The setup dictionary could not be updated."
@@ -887,6 +890,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Update 1D and q map
         self.update_graphs(
+            graph_2D_raw=True,
             graph_1D=True,
             graph_2D_q=True,
         )
@@ -914,6 +918,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Update 1D and q map
         self.update_graphs(
+            graph_2D_raw=True,
             graph_1D=True,
             graph_2D_q=True,
         )
@@ -984,7 +989,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Update list of samples
         self.update_sample_listwidget(
-            from_h5=True,
+            # from_h5=True,
             reset=True,
         )
 
@@ -1166,7 +1171,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Update list of samples
         self.update_sample_listwidget(
-            from_h5=True,
+            # from_h5=True,
             reset=True,
         )
 
@@ -1274,7 +1279,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Update list of samples and reference combobox
         self.update_sample_listwidget(
-            from_h5=True,
+            # from_h5=True,
             reset=True,
         )
         self.update_combobox_with_samples(
@@ -1902,8 +1907,8 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     @log_info
     def update_sample_listwidget(
         self,
-        list_samples=list(),        
-        from_h5=False, 
+        # list_samples=list(),        
+        # from_h5=False, 
         reset=True,
         ):
         """
@@ -1921,12 +1926,12 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         widget = self.listwidget_samples  
 
         # Take the list of samples to be updated
-        if list_samples:
-            list_samples = list_samples
-        elif from_h5:
-            list_samples = self.h5.get_all_entries(
-                get_relative_address=True,
-            )
+        # if list_samples:
+        #     list_samples = list_samples
+        # elif from_h5:
+        list_samples = self.h5.get_all_entries(
+            get_relative_address=True,
+        )
         
         # Clean the widget if needed
         if reset:
@@ -2149,12 +2154,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         """
             If the OS is linux, open pyFAI-calib2 GUI
         """
-        if not self.h5:
-            open_directory = self.h5.get_main_directory()
+        if self.h5:
+            open_directory = self.h5._root_dir
         else:
             open_directory = ""
         try:
-            subprocess.run([join(GLOBAL_PATH, 'bash_files', 'open_calib2.sh'), open_directory])
+            os.system(f'cd {open_directory}')
+            os.system(f'pyFAI-calib2')
+            # subprocess.run([join(GLOBAL_PATH, 'bash_files', 'open_calib2.sh'), open_directory])
         except Exception as e:
             self.log_explorer_info(f"{e}: pyFAI GUI could not be opened.")
         finally:
@@ -2221,7 +2228,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Update list of samples
         self.update_sample_listwidget(
-            from_h5=True,
+            # from_h5=True,
             reset=True,
         )
 
@@ -2260,28 +2267,63 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             self.log_explorer_info(f"The operating system {platform} is not compatible with live searching.")
             return
 
+        if not self.h5:
+            self.log_explorer_info(f"Nothing to monitor...")
+            return
+
         # Update style of the button
         self.update_button_live(state_live)
 
-        if not self.h5:
-            return
-
-        if not state_live:
-
-            self.h5.stop_live_mode()
+        if state_live:
+            self.start_live_mode(
+                pattern=self.get_pattern(),
+            )
+            self.log_explorer_info(f"LIVE Mode ON")
+            return       
+        else:            
+            self.stop_live_mode()
             self.log_explorer_info(f"LIVE Mode OFF")
             return
 
         # First search off the line
-        self.update_all_files(None)
+        # self.update_all_files(None)
 
-        # Start live mode
-        self.start_live_mode(
-            pattern=self.get_pattern(),
-        )
+        # # Start live mode
+        # self.start_live_mode(
+        #     pattern=self.get_pattern(),
+        # )
 
     @log_info
     def start_live_mode(self, pattern=None):
+        # First update
+        self.h5.update_datafiles(search=True)
+        # self.observer = PyXScatObserver()
+        # self.handler = PyXScatHandler()
+        # # new_file_signal = pyqtSignal(str)
+        self.timer_data = QTimer()
+        self.timer_data.timeout.connect(
+            lambda: (
+                self.search_datafiles_live(pattern=pattern),
+            )
+        )
+        self.timer_data.start(INTERVAL_SEARCH_DATA)
+        
+        # self.observer.schedule(self.handler, self.h5._root_dir, recursive=True)
+        # self.observer.start()
+        
+        # try:
+        #     while True:
+        #         time.sleep(5)
+        # except:
+        #     self.observer.stop()
+        #     print("Observer Stopped")
+
+        # self.observer.join()
+        
+        
+        
+        
+        return
         if pattern is None:
             self.log_explorer_info(f"No pattern to search in live mode.")
             return
@@ -2294,7 +2336,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             # Start the loop each second
             self.timer_data.timeout.connect(
                 lambda: (
-                    self.search_live_files(pattern=pattern),
+                    self.search_datafiles_live(pattern=pattern),
                 )
             )
 
@@ -2308,6 +2350,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     @log_info
     def stop_live_mode(self):
+        return
         # # If live is on, start the live searching engine, only for Linux
         if self.timer_data:
             self.timer_data.stop()
@@ -2315,7 +2358,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         else:
             self.log_explorer_info(f"LIVE: OFF. The script stopped looking for new files.")
 
-    def search_live_files(self, pattern=None) -> None:
+    def search_datafiles_live(self, pattern=None) -> None:
         list_files_1s = []
         cmd = f"find {str(self.h5._root_dir)} -name {pattern} -newermt '-1 seconds'"
         try:
@@ -2327,6 +2370,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         if list_files_1s:
             self.log_explorer_info(f"Found new files LIVE: {list_files_1s}")
+            self.update_datafiles_live(
+                datafile_list=list_files_1s,
+            )
+            return
 
             # Upload the new files to h5
             dict_files_1s = get_dict_files(list_files=list_files_1s)
@@ -2373,6 +2420,76 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             )
         else:
             return
+
+    @log_info
+    def update_datafiles_live(self, datafile_list=[]):
+        dict_files = get_dict_files(list_files=datafile_list)
+        self.h5.update_datafiles(dict_files=dict_files)
+        
+        # Update listwidget
+        self.update_sample_listwidget()
+        
+        # Activate the last entry
+        new_sample = sorted(dict_files.keys())[0]
+        new_sample = Path(new_sample).relative_to(self.h5._root_dir).as_posix()
+        if new_sample != self.active_entry:
+            self.active_entry = new_sample
+        
+        # Update the metadata combobox if needed
+        self.check_and_update_cb_metadata(
+            sample_name=self.active_entry,
+        )
+
+        # Get a Pandas.DataFrame to upload the table
+        keys_to_display = self.combobox_metadata.currentData()
+        dataframe = self.h5.get_metadata_dataframe(
+            sample_name=self.active_entry,
+            list_keys=keys_to_display,
+        )
+
+        # Reset and feed the table widget with default metadata keys if needed
+        self.update_table(
+            dataframe=dataframe,
+            reset=True,
+        )
+        
+        # Activate last file
+        self.cache_index = tm.get_row_count(self.table_files) - 1
+        if not self.cache_index:
+            return
+
+        # Update data cache
+        print(f'Sample is {self.active_entry}, index is {self.cache_index}')
+        self._data_cache = self.get_final_data(
+            sample_name=self.active_entry,
+            index=self.cache_index,
+            scaled_factor=self.spinbox_sub.value(),
+        )
+
+        # Update GI angles
+        self.h5.update_angles(
+            sample_name=self.active_entry,
+            list_index=self.cache_index,
+        )
+
+        # Update label dislayed
+        self.update_label_displayed()
+
+        # Update graphs
+        self.update_graphs(
+            graph_1D=True,
+            graph_2D_raw=True,
+            graph_2D_reshape=True,
+            graph_2D_q=True,
+        )
+
+
+
+
+
+
+
+
 
     @log_info
     def save_h5_dict(self):
@@ -2534,7 +2651,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             graph_2D_q=True,
         )
 
-    @cached(cache=LRUCache(maxsize=10))
+    # @cached(cache=LRUCache(maxsize=10))
     @log_info    
     def get_final_data(self, sample_name='', index=(), scaled_factor=0.0,): 
 
@@ -2864,27 +2981,48 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         
         if data is None:
             return
+        
+        if graph_1D:
+            self.update_1D_graph(
+                data=data,
+                norm_factor=norm_factor,
+            )
+            
+        if graph_2D_raw:
+            self.update_2D_raw(
+                data=data,
+            )
+            
+        if graph_2D_reshape:
+            self.update_2D_reshape_map(
+                data=data,
+            )
+        
+        if graph_2D_q:
+            self.update_2D_q()
+        
+        
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = []
+        # with concurrent.futures.ThreadPoolExecutor() as executor:
+        #     futures = []
 
-            # Update 1D integration graph
-            if graph_1D:
-                futures.append(executor.submit(self.update_1D_graph, data=data, norm_factor=norm_factor))
+        #     # Update 1D integration graph
+        #     if graph_1D:
+        #         futures.append(executor.submit(self.update_1D_graph, data=data, norm_factor=norm_factor))
 
-            # Update 2D Raw Map
-            if graph_2D_raw:
-                futures.append(executor.submit(self.update_2D_raw, data=data))
+        #     # Update 2D Raw Map
+        #     if graph_2D_raw:
+        #         futures.append(executor.submit(self.update_2D_raw, data=data))
 
-            # Update 2D Reshape
-            if graph_2D_reshape:
-                futures.append(executor.submit(self.update_2D_reshape_map, data=data))
+        #     # Update 2D Reshape
+        #     if graph_2D_reshape:
+        #         futures.append(executor.submit(self.update_2D_reshape_map, data=data))
 
-            # Update 2D q map
-            if graph_2D_q:
-                futures.append(executor.submit(self.update_2D_q))
+        #     # Update 2D q map
+        #     if graph_2D_q:
+        #         futures.append(executor.submit(self.update_2D_q))
 
-            concurrent.futures.wait(futures)
+        #     concurrent.futures.wait(futures)
 
     @log_info
     def update_1D_graph(self, data=None, norm_factor=1.0, clear=True):
@@ -2940,11 +3078,11 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             except Exception as e:
                 self.log_explorer_error(f'{e}: {dict_int} Could not be plotted.')
         
-        # LABELS
-        self.plot_1d_set_labels(dict_int=dict_int)
+            # LABELS
+            self.plot_1d_set_labels(dict_int=dict_int)
 
-        # KEEP LIMITS
-        self.plot_1d_keep_limits()
+            # KEEP LIMITS
+            self.plot_1d_keep_limits()
 
     @log_info
     def plot_1d_set_labels(self, dict_int={}):
@@ -3052,6 +3190,8 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         ) -> np.array:
 
         try:
+            print(2222)
+            print(f'Sample is {sample_name}, index is {index}')
             data = self.h5.get_Edf_data(
                 sample_name=sample_name,
                 index=index,
@@ -3602,7 +3742,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
                 self.log_explorer_info(f"Parameters to mask the array. Shape: {shape}, unit: {unit}, \
                     p0_range: {p0_range}, p1_range: {p1_range}, pos0_scale: {pos0_scale}.")
-                chi, pos0 = self.h5._transform.giarray_from_unit(shape, "sector", "center", unit)
+                chi, pos0 = self.h5.gi.giarray_from_unit(shape, "sector", "center", unit)
             except:
                 logger.error(f"Chi and pos0 matrix could not be generated. The parameters were: \
                     Shape: {shape}, unit: {unit}, p0_range: {p0_range}, p1_range: {p1_range}, pos0_scale: {pos0_scale}.")
