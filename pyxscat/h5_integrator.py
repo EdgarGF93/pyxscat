@@ -88,6 +88,8 @@ ROOT_DIR_NOT_ACCESIBLE = 'The access to root directory is not available.'
 INPUT_ROOT_DIR_NOT_VALID = 'There is no valid root directory nor input file.'
 H5_FILENAME_NOT_VALID = 'No valid path for the .h5 file'
 
+EXTENSION_H5 = '.h5'
+
 from pyxscat.logger_config import setup_logger
 logger = setup_logger()
 
@@ -228,7 +230,7 @@ class H5GIIntegrator():
         
         if root_directory:
             name = Path(root_directory).name
-            h5_output_file = Path(root_directory).joinpath(name).with_suffix(".h5")
+            h5_output_file = Path(root_directory).joinpath(name).with_suffix(EXTENSION_H5)
             if self.filename_valid(filename=h5_output_file):
                 return h5_output_file
             else:
