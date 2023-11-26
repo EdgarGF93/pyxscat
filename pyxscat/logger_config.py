@@ -6,6 +6,7 @@ from pyxscat.other.other_functions import date_prefix
 import datetime
 
 def setup_logger():
+    LEVEL = logging.WARNING
 
     if not LOGGER_PATH.exists():
         LOGGER_PATH.mkdir()
@@ -13,7 +14,7 @@ def setup_logger():
     cleanup_old_logs()
 
     logger = logging.getLogger('PyXScatLogger')
-    logger.setLevel(logging.INFO)
+    logger.setLevel(LEVEL)
     log_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     log_filename = LOGGER_PATH.joinpath(f'pyxscat_logger_{date_prefix()}.log')
 
@@ -22,7 +23,7 @@ def setup_logger():
         # Console Handler
         stream_handler = logging.StreamHandler()
         stream_handler.setFormatter(log_formatter)        
-        stream_handler.setLevel(logging.INFO)
+        stream_handler.setLevel(LEVEL)
 
         # File Handler
 
@@ -32,7 +33,7 @@ def setup_logger():
            backupCount=10,
         )
         file_handler.setFormatter(log_formatter)        
-        file_handler.setLevel(logging.INFO)
+        file_handler.setLevel(LEVEL)
 
         logger.addHandler(stream_handler)        
         logger.addHandler(file_handler)

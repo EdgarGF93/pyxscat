@@ -1,0 +1,2323 @@
+2023-11-26 16:56:11,248 - INFO - The data parameters were reinitialized.
+2023-11-26 16:56:11,249 - INFO - Title for the generated map: 
+2023-11-26 16:56:11,314 - INFO - Title for the generated map: 
+2023-11-26 16:56:11,323 - INFO - [Errno 2] No such file or directory: '/home/edgar/work/pyxscat/pyxscat/h5_files_dicts/ ': The .json does not contain a valid filename: /home/edgar/work/pyxscat/pyxscat/h5_files_dicts/ 
+2023-11-26 16:56:13,083 - INFO - H5GIIntegrator instance was created.
+2023-11-26 16:56:13,083 - INFO - We entered into function: h5_get_attr
+2023-11-26 16:56:13,084 - INFO - We entered into function: init_transform
+2023-11-26 16:56:13,084 - INFO - We entered into function: update_incident_angle
+2023-11-26 16:56:13,084 - INFO - Incident angle set up as 0.0.
+2023-11-26 16:56:13,084 - INFO - We entered into function: update_tilt_angle
+2023-11-26 16:56:13,084 - INFO - Tilt angle set up as 0.0.
+2023-11-26 16:56:13,084 - INFO - We entered into function: init_ai
+2023-11-26 16:56:13,084 - INFO - We entered into function: init_metadata_attrs
+2023-11-26 16:56:13,085 - INFO - H5 instance was initialized.
+2023-11-26 16:56:13,085 - INFO - We entered into function: h5_get_dict_attrs
+2023-11-26 16:56:13,086 - INFO - We entered into function: get_all_ponifiles
+2023-11-26 16:56:13,086 - INFO - We entered into function: generate_ponifiles
+2023-11-26 16:56:13,086 - INFO - We entered into function: check_ponifile_entry
+2023-11-26 16:56:13,086 - INFO - We entered into function: check_entry
+2023-11-26 16:56:13,087 - INFO - We entered into function: update_poni
+2023-11-26 16:56:13,087 - INFO - We entered into function: get_ponifile
+2023-11-26 16:56:13,087 - INFO - We entered into function: update_poni
+2023-11-26 16:56:13,087 - INFO - We entered into function: open_poni
+2023-11-26 16:56:13,087 - INFO - We entered into function: _update_gi
+2023-11-26 16:56:13,087 - INFO - GrazingGeometry instance was updated.
+2023-11-26 16:56:13,087 - INFO - We entered into function: _update_ai
+2023-11-26 16:56:13,142 - INFO - GrazingGeometry instance was updated.
+2023-11-26 16:56:13,142 - INFO - We entered into function: _set_poni
+2023-11-26 16:56:13,142 - INFO - We entered into function: get_poni
+2023-11-26 16:56:13,142 - INFO - Current poni parameters: {
+    "poni_version": 2,
+    "detector": "Detector",
+    "detector_config": {
+        "pixel1": 8.854e-05,
+        "pixel2": 8.854e-05,
+        "max_shape": [
+            2880,
+            960
+        ]
+    },
+    "dist": 0.21956146503177287,
+    "poni1": 0.2134776312917016,
+    "poni2": 0.0066574815765295895,
+    "rot1": -0.006724546816823459,
+    "rot2": -0.0024356625603106676,
+    "rot3": 4.738730503032621e-06,
+    "wavelength": 9.998725680096795e-11
+}
+2023-11-26 16:56:13,143 - INFO - We entered into function: get_poni
+2023-11-26 16:56:13,143 - INFO - We entered into function: get_all_entries
+2023-11-26 16:56:13,143 - INFO - We entered into function: generator_samples
+2023-11-26 16:56:13,143 - INFO - We entered into function: get_all_entries
+2023-11-26 16:56:13,143 - INFO - We entered into function: generator_samples
+2023-11-26 16:56:13,144 - INFO - We entered into function: update_orientation
+2023-11-26 16:56:13,144 - INFO - We entered into function: update_orientation
+2023-11-26 16:56:13,144 - INFO - The sample orientation (pygix) is set at 1.
+2023-11-26 16:56:14,058 - INFO - We entered into function: get_all_metadata_keys_from_sample
+2023-11-26 16:56:14,059 - INFO - We entered into function: generator_metadata_keys_from_sample
+2023-11-26 16:56:14,059 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:14,061 - INFO - We entered into function: get_metadata_dataframe
+2023-11-26 16:56:14,061 - INFO - We entered into function: get_all_filenames_from_sample
+2023-11-26 16:56:14,061 - INFO - We entered into function: generator_filenames_in_sample
+2023-11-26 16:56:14,061 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:14,061 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:14,063 - INFO - The dataframe has size 4.
+2023-11-26 16:56:14,064 - INFO - Table was reseted.
+2023-11-26 16:56:14,064 - INFO - Inserted columns: 1.
+2023-11-26 16:56:14,064 - INFO - Inserted rows: 4.
+2023-11-26 16:56:14,065 - INFO - Updated cell [0,0].
+2023-11-26 16:56:14,065 - INFO - Updated cell [1,0].
+2023-11-26 16:56:14,065 - INFO - Updated cell [2,0].
+2023-11-26 16:56:14,065 - INFO - Updated cell [3,0].
+2023-11-26 16:56:14,067 - INFO - Title for the generated map: 
+2023-11-26 16:56:14,078 - INFO - We entered into function: get_metadata_dataframe
+2023-11-26 16:56:14,078 - INFO - We entered into function: get_all_filenames_from_sample
+2023-11-26 16:56:14,078 - INFO - We entered into function: generator_filenames_in_sample
+2023-11-26 16:56:14,078 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:14,078 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:14,080 - INFO - The dataframe has size 4.
+2023-11-26 16:56:14,080 - INFO - Table was reseted.
+2023-11-26 16:56:14,080 - INFO - Inserted columns: 1.
+2023-11-26 16:56:14,080 - INFO - Inserted rows: 4.
+2023-11-26 16:56:14,080 - INFO - Updated cell [0,0].
+2023-11-26 16:56:14,080 - INFO - Updated cell [1,0].
+2023-11-26 16:56:14,080 - INFO - Updated cell [2,0].
+2023-11-26 16:56:14,081 - INFO - Updated cell [3,0].
+2023-11-26 16:56:14,571 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:14,571 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:14,571 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:14,571 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:14,573 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:14,585 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:14,585 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:14,585 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:14,585 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:14,585 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:14,585 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:14,587 - ERROR - 'Unable to synchronously open object (name parameter cannot be an empty string)': dataset  could not be accessed.
+2023-11-26 16:56:14,587 - ERROR - Failed while getting norm factor. Norm. factor set to 1.0.
+2023-11-26 16:56:14,587 - INFO - Norm factor: 1.0
+2023-11-26 16:56:14,589 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:14,605 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:14,606 - INFO - We entered into function: update_angles
+2023-11-26 16:56:14,606 - INFO - We entered into function: get_incident_angle
+2023-11-26 16:56:14,606 - INFO - We entered into function: get_dataset_incident_angle
+2023-11-26 16:56:14,606 - INFO - We entered into function: get_iangle_key
+2023-11-26 16:56:14,606 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:14,606 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:14,607 - ERROR - 'Unable to synchronously open object (name parameter cannot be an empty string)': dataset  could not be accessed.
+2023-11-26 16:56:14,607 - INFO - Failed while getting incident angle.
+2023-11-26 16:56:14,607 - INFO - Got incident angle: 0.0
+2023-11-26 16:56:14,607 - INFO - We entered into function: get_tilt_angle
+2023-11-26 16:56:14,607 - INFO - We entered into function: get_dataset_tilt_angle
+2023-11-26 16:56:14,607 - INFO - We entered into function: get_tiltangle_key
+2023-11-26 16:56:14,607 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:14,607 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:14,607 - ERROR - 'Unable to synchronously open object (name parameter cannot be an empty string)': dataset  could not be accessed.
+2023-11-26 16:56:14,607 - INFO - Failed while getting tilt angle.
+2023-11-26 16:56:14,607 - INFO - Got tilt angle: 0.0
+2023-11-26 16:56:14,608 - INFO - We entered into function: update_incident_angle
+2023-11-26 16:56:14,608 - INFO - Incident angle set up as 0.0.
+2023-11-26 16:56:14,608 - INFO - We entered into function: update_tilt_angle
+2023-11-26 16:56:14,608 - INFO - Tilt angle set up as 0.0.
+2023-11-26 16:56:14,608 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:14,608 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:14,609 - INFO - New label: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:14,609 - INFO - Dictionaries of integration: []
+2023-11-26 16:56:14,609 - INFO - Dictionaries of integration: []
+2023-11-26 16:56:14,609 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:14,609 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:14,609 - INFO - True
+2023-11-26 16:56:14,611 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:14,619 - INFO - (327.09600830078125, 2118.492431640625)
+2023-11-26 16:56:14,624 - INFO - Displayed data.
+2023-11-26 16:56:16,715 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:16,715 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:16,715 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:16,716 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:16,716 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:16,716 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:16,716 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:16,716 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:16,716 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:16,716 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:17,284 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:17,286 - INFO - False
+2023-11-26 16:56:17,286 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:17,295 - INFO - (327.09600830078125, 2118.492431640625)
+2023-11-26 16:56:17,300 - INFO - Displayed data.
+2023-11-26 16:56:19,867 - INFO - We entered into function: update_orientation
+2023-11-26 16:56:19,867 - INFO - We entered into function: update_orientation
+2023-11-26 16:56:19,868 - INFO - The sample orientation (pygix) is set at 3.
+2023-11-26 16:56:19,869 - INFO - New sample orientation: 3
+2023-11-26 16:56:19,869 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:19,870 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:19,870 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:19,870 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:19,870 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:19,870 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:19,870 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:19,870 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:19,870 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:19,870 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:20,497 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:20,499 - INFO - False
+2023-11-26 16:56:20,499 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:20,507 - INFO - (327.09600830078125, 2118.492431640625)
+2023-11-26 16:56:20,512 - INFO - Displayed data.
+2023-11-26 16:56:21,403 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:21,403 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:21,403 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:21,403 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:21,405 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:21,412 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:21,413 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:21,413 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:21,413 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:21,413 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:21,413 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:21,414 - ERROR - 'Unable to synchronously open object (name parameter cannot be an empty string)': dataset  could not be accessed.
+2023-11-26 16:56:21,415 - ERROR - Failed while getting norm factor. Norm. factor set to 1.0.
+2023-11-26 16:56:21,415 - INFO - Norm factor: 1.0
+2023-11-26 16:56:21,417 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:21,418 - INFO - Reference folder: A1
+2023-11-26 16:56:21,418 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:21,418 - INFO - There is no key for acquisition time. Reference subtraction is not possible.
+2023-11-26 16:56:21,770 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:21,771 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:21,779 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:21,779 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:21,781 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:21,788 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:21,788 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:21,788 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:21,788 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:21,788 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:21,788 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:21,789 - ERROR - 'Unable to synchronously open object (name parameter cannot be an empty string)': dataset  could not be accessed.
+2023-11-26 16:56:21,789 - ERROR - Failed while getting norm factor. Norm. factor set to 1.0.
+2023-11-26 16:56:21,790 - INFO - Norm factor: 1.0
+2023-11-26 16:56:21,792 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:21,792 - INFO - Reference folder: A1
+2023-11-26 16:56:21,792 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:21,793 - INFO - There is no key for acquisition time. Reference subtraction is not possible.
+2023-11-26 16:56:21,954 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:21,955 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:21,955 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:21,955 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:21,957 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:21,964 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:21,965 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:21,965 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:21,965 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:21,965 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:21,965 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:21,966 - ERROR - 'Unable to synchronously open object (name parameter cannot be an empty string)': dataset  could not be accessed.
+2023-11-26 16:56:21,966 - ERROR - Failed while getting norm factor. Norm. factor set to 1.0.
+2023-11-26 16:56:21,966 - INFO - Norm factor: 1.0
+2023-11-26 16:56:21,969 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:21,969 - INFO - Reference folder: A1
+2023-11-26 16:56:21,969 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:21,970 - INFO - There is no key for acquisition time. Reference subtraction is not possible.
+2023-11-26 16:56:22,610 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:22,611 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:22,611 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:22,611 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:22,613 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:22,619 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:22,619 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:22,619 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:22,619 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:22,619 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:22,619 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:22,621 - ERROR - 'Unable to synchronously open object (name parameter cannot be an empty string)': dataset  could not be accessed.
+2023-11-26 16:56:22,621 - ERROR - Failed while getting norm factor. Norm. factor set to 1.0.
+2023-11-26 16:56:22,621 - INFO - Norm factor: 1.0
+2023-11-26 16:56:22,624 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:22,624 - INFO - Reference folder: A1
+2023-11-26 16:56:22,624 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:22,625 - INFO - There is no key for acquisition time. Reference subtraction is not possible.
+2023-11-26 16:56:27,235 - INFO - We entered into function: update_metadata_keys
+2023-11-26 16:56:27,235 - INFO - New metadata keys: defaultdict(<class 'str'>, {'name': 'ALBA_NCD', 'iangle_key': 'spitch', 'tilt_key': 'sroll', 'norm_key': 'Monitor', 'acq_key': 'exposure'})
+2023-11-26 16:56:29,203 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:29,203 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:29,203 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:29,203 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,205 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:29,211 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:29,211 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:29,211 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:29,212 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:29,212 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:29,212 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,213 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:29,215 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:29,216 - INFO - Reference folder: A1
+2023-11-26 16:56:29,216 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:29,216 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:29,216 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:29,216 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:29,216 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:29,216 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,217 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:29,217 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:29,217 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:29,217 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:29,217 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:29,217 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,218 - INFO - Acquisition dataset of the reference folder is [10. 10. 10. 10.].
+2023-11-26 16:56:29,218 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:29,218 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,219 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:29,219 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:29,219 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:29,219 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:29,224 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:29,225 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:29,225 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:29,225 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:29,225 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:29,225 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,226 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:29,230 - INFO - New reference factor: 0.05
+2023-11-26 16:56:29,241 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:29,241 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:29,241 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:29,242 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:29,242 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:29,242 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:29,242 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:29,242 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:29,242 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:29,242 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:29,242 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:29,309 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:29,310 - INFO - False
+2023-11-26 16:56:29,311 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:29,319 - INFO - (0.15390409529209137, 0.996786043047905)
+2023-11-26 16:56:29,324 - INFO - Displayed data.
+2023-11-26 16:56:29,834 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:29,834 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:29,835 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:29,835 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,836 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:29,843 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:29,843 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:29,843 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:29,843 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:29,843 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:29,843 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,845 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:29,847 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:29,848 - INFO - Reference folder: A1
+2023-11-26 16:56:29,848 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:29,848 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:29,848 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:29,848 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:29,848 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:29,848 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,849 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:29,849 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:29,849 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:29,849 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:29,850 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:29,850 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,850 - INFO - Acquisition dataset of the reference folder is [10. 10. 10. 10.].
+2023-11-26 16:56:29,850 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:29,851 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,851 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:29,852 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:29,852 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:29,852 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:29,859 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:29,859 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:29,859 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:29,859 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:29,859 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:29,859 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:29,860 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:29,863 - INFO - New reference factor: 0.060000000000000005
+2023-11-26 16:56:29,874 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:29,874 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:29,875 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:29,875 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:29,875 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:29,875 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:29,875 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:29,875 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:29,875 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:29,875 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:29,875 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:29,944 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:29,946 - INFO - False
+2023-11-26 16:56:29,946 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:29,956 - INFO - (0.15228410065174103, 0.9862934798002243)
+2023-11-26 16:56:29,961 - INFO - Displayed data.
+2023-11-26 16:56:30,330 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:30,330 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:30,331 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:30,331 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,332 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:30,338 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:30,338 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:30,338 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:30,338 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:30,338 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,338 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,339 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:30,342 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:30,342 - INFO - Reference folder: A1
+2023-11-26 16:56:30,342 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:30,342 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:30,342 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:30,342 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:30,342 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,343 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,343 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:30,344 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:30,344 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:30,344 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:30,344 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,344 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,345 - INFO - Acquisition dataset of the reference folder is [10. 10. 10. 10.].
+2023-11-26 16:56:30,345 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:30,345 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,346 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:30,346 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:30,346 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:30,346 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:30,351 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:30,351 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:30,351 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:30,351 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:30,351 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,351 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,352 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:30,354 - INFO - New reference factor: 0.07
+2023-11-26 16:56:30,366 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:30,367 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:30,367 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:30,367 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:30,367 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:30,367 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:30,367 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:30,367 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:30,367 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:30,367 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:30,367 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:30,432 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:30,434 - INFO - False
+2023-11-26 16:56:30,434 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:30,443 - INFO - (0.15066400170326233, 0.9758010804653168)
+2023-11-26 16:56:30,448 - INFO - Displayed data.
+2023-11-26 16:56:30,626 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:30,627 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:30,627 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:30,627 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,629 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:30,635 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:30,635 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:30,635 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:30,635 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:30,635 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,635 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,637 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:30,640 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:30,640 - INFO - Reference folder: A1
+2023-11-26 16:56:30,640 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:30,640 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:30,640 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:30,640 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:30,640 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,641 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,642 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:30,642 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:30,642 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:30,642 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:30,642 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,642 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,643 - INFO - Acquisition dataset of the reference folder is [10. 10. 10. 10.].
+2023-11-26 16:56:30,643 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:30,643 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,644 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:30,645 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:30,645 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:30,645 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:30,649 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:30,650 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:30,650 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:30,650 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:30,650 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,650 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,651 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:30,653 - INFO - New reference factor: 0.08
+2023-11-26 16:56:30,666 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:30,666 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:30,666 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:30,666 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:30,667 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:30,667 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:30,667 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:30,667 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:30,667 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:30,667 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:30,667 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:30,741 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:30,743 - INFO - False
+2023-11-26 16:56:30,743 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:30,751 - INFO - (0.1490439623594284, 0.9653086513280869)
+2023-11-26 16:56:30,756 - INFO - Displayed data.
+2023-11-26 16:56:30,826 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:30,826 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:30,826 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:30,826 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,827 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:30,833 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:30,834 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:30,834 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:30,834 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:30,834 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,834 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,836 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:30,838 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:30,838 - INFO - Reference folder: A1
+2023-11-26 16:56:30,838 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:30,838 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:30,839 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:30,839 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:30,839 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,839 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,840 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:30,840 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:30,840 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:30,841 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:30,841 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,841 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,842 - INFO - Acquisition dataset of the reference folder is [10. 10. 10. 10.].
+2023-11-26 16:56:30,842 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:30,842 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,844 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:30,844 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:30,844 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:30,844 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:30,851 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:30,852 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:30,852 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:30,852 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:30,852 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:30,852 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:30,853 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:30,855 - INFO - New reference factor: 0.09
+2023-11-26 16:56:30,867 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:30,868 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:30,868 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:30,868 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:30,868 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:30,868 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:30,868 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:30,868 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:30,868 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:30,869 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:30,869 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:30,934 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:30,936 - INFO - False
+2023-11-26 16:56:30,936 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:30,944 - INFO - (0.1474238932132721, 0.9548160135746002)
+2023-11-26 16:56:30,949 - INFO - Displayed data.
+2023-11-26 16:56:32,027 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:32,027 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:32,027 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:32,027 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:32,028 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:32,034 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:32,034 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:32,034 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:32,034 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:32,034 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:32,034 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:32,035 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:32,037 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:32,047 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:32,048 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:32,048 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:32,048 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:32,048 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:32,048 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:32,048 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:32,048 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:32,048 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:32,048 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:32,048 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:32,116 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:32,118 - INFO - False
+2023-11-26 16:56:32,118 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:32,126 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:56:32,132 - INFO - Displayed data.
+2023-11-26 16:56:32,587 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:32,587 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:32,587 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:32,587 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:32,589 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:32,596 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:32,597 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:32,597 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:32,597 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:32,597 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:32,597 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:32,599 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:32,602 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:32,603 - INFO - Reference folder: A1
+2023-11-26 16:56:32,603 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:32,603 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:32,603 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:32,603 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:32,603 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:32,603 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:32,604 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:32,604 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:32,604 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:32,604 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:32,604 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:32,604 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:32,605 - INFO - Acquisition dataset of the reference folder is [10. 10. 10. 10.].
+2023-11-26 16:56:32,605 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:32,605 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:32,606 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:32,606 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:32,606 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:32,606 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:32,613 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:32,613 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:32,613 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:32,613 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:32,613 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:32,613 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:32,614 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:32,617 - INFO - New reference factor: 0.7
+2023-11-26 16:56:32,628 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:32,629 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:32,629 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:32,629 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:32,629 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:32,629 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:32,629 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:32,629 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:32,629 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:32,629 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:32,629 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:32,695 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:32,697 - INFO - False
+2023-11-26 16:56:32,697 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:32,706 - INFO - (0.04860127717256546, 0.3147745132446289)
+2023-11-26 16:56:32,711 - INFO - Displayed data.
+2023-11-26 16:56:34,402 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:34,402 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:34,403 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:34,403 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,405 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:34,411 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:34,411 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:34,411 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:34,411 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:34,411 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:34,411 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,413 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:34,415 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:34,415 - INFO - Reference folder: A1
+2023-11-26 16:56:34,416 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:34,416 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:34,416 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:34,416 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:34,416 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:34,416 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,417 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:34,417 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:34,417 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:34,417 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:34,417 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:34,417 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,418 - INFO - Acquisition dataset of the reference folder is [10. 10. 10. 10.].
+2023-11-26 16:56:34,418 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:34,418 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,419 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:34,419 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:34,419 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:34,419 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:34,424 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:34,424 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:34,424 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:34,425 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:34,425 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:34,425 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,426 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:34,428 - INFO - New reference factor: 0.71
+2023-11-26 16:56:34,440 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:34,440 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:34,441 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:34,441 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:34,441 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:34,441 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:34,441 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:34,441 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:34,441 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:34,441 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:34,441 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:34,506 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:34,508 - INFO - False
+2023-11-26 16:56:34,508 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:34,517 - INFO - (0.046981245279312134, 0.304282046854496)
+2023-11-26 16:56:34,521 - INFO - Displayed data.
+2023-11-26 16:56:34,970 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:34,971 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:34,971 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:34,971 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,973 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:34,979 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:34,980 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:34,980 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:34,980 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:34,980 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:34,980 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,981 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:34,984 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:34,984 - INFO - Reference folder: A1
+2023-11-26 16:56:34,984 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:34,984 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:34,984 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:34,985 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:34,985 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:34,985 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,985 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:34,986 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:34,986 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:34,986 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:34,986 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:34,986 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,987 - INFO - Acquisition dataset of the reference folder is [10. 10. 10. 10.].
+2023-11-26 16:56:34,987 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:34,987 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,988 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:34,988 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:34,988 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:34,988 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:34,996 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:34,996 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:34,996 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:34,996 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:34,996 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:34,996 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:34,997 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:35,000 - INFO - New reference factor: 0.72
+2023-11-26 16:56:35,011 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:35,012 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:35,012 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:35,012 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:35,012 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:35,012 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:35,012 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:35,012 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:35,012 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:35,013 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:35,013 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:35,084 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:35,086 - INFO - False
+2023-11-26 16:56:35,086 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:35,095 - INFO - (0.04536119103431702, 0.2937895134091377)
+2023-11-26 16:56:35,101 - INFO - Displayed data.
+2023-11-26 16:56:37,434 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:37,435 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:37,435 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:37,435 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:37,437 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:37,443 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:37,444 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:37,444 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:37,444 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:37,444 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:37,444 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:37,445 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:37,448 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:37,448 - INFO - Reference folder: Reference
+2023-11-26 16:56:37,448 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:37,448 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:37,448 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:37,448 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:37,448 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:37,448 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:37,449 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:37,449 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:37,449 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:37,449 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:37,449 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:37,450 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:37,450 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:37,451 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:37,451 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:37,451 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:37,452 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:37,452 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:37,452 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:37,456 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:37,457 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:37,457 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:37,457 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:37,457 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:37,457 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:37,458 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:37,460 - INFO - New reference factor: 0.73
+2023-11-26 16:56:37,473 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:37,474 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:37,474 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:37,474 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:37,474 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:37,474 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:37,474 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:37,474 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:37,474 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:37,474 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:37,474 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:37,542 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:37,544 - INFO - False
+2023-11-26 16:56:37,545 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:37,555 - INFO - (0.05492723733186722, 0.6832413598895073)
+2023-11-26 16:56:37,560 - INFO - Displayed data.
+2023-11-26 16:56:38,202 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:38,202 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:38,202 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:38,203 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,204 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:38,210 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:38,210 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:38,210 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:38,210 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:38,211 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:38,211 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,212 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:38,215 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:38,215 - INFO - Reference folder: Reference
+2023-11-26 16:56:38,215 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:38,215 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:38,215 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:38,215 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:38,215 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:38,215 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,217 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:38,217 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:38,217 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:38,217 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:38,217 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:38,218 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,219 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:38,219 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:38,220 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,221 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:38,221 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:38,221 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:38,221 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:38,227 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:38,227 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:38,227 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:38,227 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:38,227 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:38,227 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,229 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:38,232 - INFO - New reference factor: 0.74
+2023-11-26 16:56:38,244 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:38,244 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:38,245 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:38,245 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:38,245 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:38,245 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:38,245 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:38,245 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:38,245 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:38,245 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:38,245 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:38,317 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:38,319 - INFO - False
+2023-11-26 16:56:38,319 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:38,328 - INFO - (0.053618039935827255, 0.6805686168372631)
+2023-11-26 16:56:38,333 - INFO - Displayed data.
+2023-11-26 16:56:38,666 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:38,666 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:38,666 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:38,667 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,668 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:38,675 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:38,676 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:38,676 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:38,676 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:38,676 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:38,676 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,677 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:38,680 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:38,680 - INFO - Reference folder: Reference
+2023-11-26 16:56:38,681 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:38,681 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:38,681 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:38,681 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:38,681 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:38,681 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,682 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:38,682 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:38,682 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:38,682 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:38,682 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:38,682 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,683 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:38,683 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:38,683 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,684 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:38,684 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:38,684 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:38,684 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:38,689 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:38,689 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:38,689 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:38,689 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:38,690 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:38,690 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:38,691 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:38,693 - INFO - New reference factor: 0.75
+2023-11-26 16:56:38,706 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:38,707 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:38,707 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:38,707 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:38,707 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:38,707 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:38,707 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:38,707 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:38,707 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:38,707 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:38,707 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:38,775 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:38,777 - INFO - False
+2023-11-26 16:56:38,777 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:38,785 - INFO - (0.052378688007593155, 0.6779791302978992)
+2023-11-26 16:56:38,790 - INFO - Displayed data.
+2023-11-26 16:56:39,018 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:39,018 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:39,018 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:39,019 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,020 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:39,027 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:39,027 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:39,027 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:39,027 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:39,027 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:39,027 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,029 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:39,032 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:39,032 - INFO - Reference folder: Reference
+2023-11-26 16:56:39,032 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:39,032 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:39,032 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:39,032 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:39,033 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:39,033 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,033 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:39,034 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:39,034 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:39,034 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:39,034 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:39,034 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,035 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:39,035 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:39,035 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,036 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:39,036 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:39,036 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:39,036 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:39,042 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:39,043 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:39,043 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:39,043 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:39,043 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:39,043 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,044 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:39,047 - INFO - New reference factor: 0.76
+2023-11-26 16:56:39,061 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:39,062 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:39,062 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:39,062 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:39,062 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:39,062 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:39,062 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:39,062 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:39,062 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:39,063 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:39,063 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:39,128 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:39,130 - INFO - False
+2023-11-26 16:56:39,130 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:39,139 - INFO - (0.051204878836870193, 0.6754685528576374)
+2023-11-26 16:56:39,144 - INFO - Displayed data.
+2023-11-26 16:56:39,250 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:39,250 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:39,250 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:39,251 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,252 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:39,259 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:39,259 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:39,259 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:39,259 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:39,259 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:39,259 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,261 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:39,264 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:39,265 - INFO - Reference folder: Reference
+2023-11-26 16:56:39,265 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:39,265 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:39,265 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:39,265 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:39,265 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:39,265 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,266 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:39,266 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:39,266 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:39,266 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:39,266 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:39,266 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,267 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:39,267 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:39,267 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,268 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:39,268 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:39,269 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:39,269 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:39,273 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:39,274 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:39,274 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:39,274 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:39,274 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:39,274 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:39,275 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:39,277 - INFO - New reference factor: 0.77
+2023-11-26 16:56:39,288 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:39,289 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:39,289 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:39,289 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:39,289 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:39,289 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:39,289 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:39,289 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:39,289 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:39,289 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:39,289 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:39,361 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:39,363 - INFO - False
+2023-11-26 16:56:39,363 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:39,371 - INFO - (0.05008215457201004, 0.6730302944779396)
+2023-11-26 16:56:39,376 - INFO - Displayed data.
+2023-11-26 16:56:41,962 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:41,963 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:41,963 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:41,963 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:41,965 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:41,971 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:41,971 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:41,971 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:41,971 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:41,971 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:41,971 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:41,973 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:41,976 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:41,976 - INFO - Reference folder: Reference
+2023-11-26 16:56:41,976 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:41,976 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:41,976 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:41,976 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:41,976 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:41,976 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:41,977 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:41,978 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:41,978 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:41,978 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:41,978 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:41,978 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:41,979 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:41,979 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:41,979 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:41,980 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:41,980 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:41,980 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:41,980 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:41,985 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:41,985 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:41,985 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:41,985 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:41,985 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:41,985 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:41,987 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:41,989 - INFO - New reference factor: 0.78
+2023-11-26 16:56:42,002 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:42,002 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:42,002 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:42,003 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,003 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,003 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:42,003 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:42,003 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:42,003 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,003 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,003 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:42,069 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:42,071 - INFO - False
+2023-11-26 16:56:42,071 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:42,080 - INFO - (0.048994068056344986, 0.6706581450998783)
+2023-11-26 16:56:42,085 - INFO - Displayed data.
+2023-11-26 16:56:42,164 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:42,165 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:42,165 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:42,165 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,166 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:42,171 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:42,171 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:42,172 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:42,172 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:42,172 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,172 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,173 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:42,176 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:42,176 - INFO - Reference folder: Reference
+2023-11-26 16:56:42,176 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,176 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:42,176 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:42,176 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,176 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,176 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,177 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:42,177 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:42,177 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:42,177 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,177 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,177 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,179 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:42,179 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:42,179 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,180 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:42,180 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:42,180 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:42,180 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:42,185 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:42,186 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:42,186 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:42,186 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:42,186 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,186 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,187 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:42,189 - INFO - New reference factor: 0.79
+2023-11-26 16:56:42,203 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:42,204 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:42,204 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:42,204 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,204 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,204 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:42,204 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:42,204 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:42,204 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,204 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,204 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:42,275 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:42,277 - INFO - False
+2023-11-26 16:56:42,277 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:42,285 - INFO - (0.047928716987371445, 0.6683481596410275)
+2023-11-26 16:56:42,290 - INFO - Displayed data.
+2023-11-26 16:56:42,370 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:42,370 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:42,370 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:42,370 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,371 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:42,377 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:42,377 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:42,377 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:42,377 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:42,377 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,377 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,379 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:42,381 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:42,382 - INFO - Reference folder: Reference
+2023-11-26 16:56:42,382 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,382 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:42,382 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:42,382 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,382 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,382 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,383 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:42,383 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:42,383 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:42,383 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,383 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,383 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,384 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:42,384 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:42,385 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,385 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:42,386 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:42,386 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:42,386 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:42,391 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:42,392 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:42,392 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:42,392 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:42,392 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,392 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,393 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:42,396 - INFO - New reference factor: 0.8
+2023-11-26 16:56:42,409 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:42,409 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:42,410 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:42,410 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,410 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,410 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:42,410 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:42,410 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:42,410 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,410 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,410 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:42,481 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:42,483 - INFO - False
+2023-11-26 16:56:42,483 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:42,492 - INFO - (0.0468781515955925, 0.6660977080464363)
+2023-11-26 16:56:42,497 - INFO - Displayed data.
+2023-11-26 16:56:42,575 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:42,575 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:42,575 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:42,575 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,576 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:42,583 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:42,583 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:42,583 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:42,583 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:42,583 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,583 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,584 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:42,587 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:42,587 - INFO - Reference folder: Reference
+2023-11-26 16:56:42,587 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,587 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:42,587 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:42,587 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,587 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,587 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,588 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:42,588 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:42,588 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:42,588 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,588 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,588 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,589 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:42,589 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:42,590 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,590 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:42,591 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:42,591 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:42,591 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:42,598 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:42,598 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:42,598 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:42,598 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:42,599 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,599 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,600 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:42,602 - INFO - New reference factor: 0.81
+2023-11-26 16:56:42,614 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:42,615 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:42,615 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:42,615 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,615 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,615 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:42,615 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:42,616 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:42,616 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,616 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,616 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:42,683 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:42,685 - INFO - False
+2023-11-26 16:56:42,685 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:42,693 - INFO - (0.04583750292658806, 0.6639054082334042)
+2023-11-26 16:56:42,699 - INFO - Displayed data.
+2023-11-26 16:56:42,699 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:42,699 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:42,699 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:42,700 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,701 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:42,705 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:42,705 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:42,705 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:42,705 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:42,706 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,706 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,707 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:42,709 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:42,709 - INFO - Reference folder: Reference
+2023-11-26 16:56:42,709 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,709 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:42,709 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:42,709 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,709 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,709 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,710 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:42,711 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:42,711 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:42,711 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,711 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,711 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,712 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:42,712 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:42,712 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,713 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:42,713 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:42,713 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:42,713 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:42,718 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:42,718 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:42,718 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:42,718 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:42,719 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,719 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,720 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:42,721 - INFO - New reference factor: 0.8200000000000001
+2023-11-26 16:56:42,734 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:42,734 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:42,735 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:42,735 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,735 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,735 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:42,735 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:42,735 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:42,735 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,735 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,735 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:42,806 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:42,808 - INFO - False
+2023-11-26 16:56:42,808 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:42,817 - INFO - (0.044803958386182785, 0.6617705039680004)
+2023-11-26 16:56:42,821 - INFO - Displayed data.
+2023-11-26 16:56:42,900 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:42,900 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:42,900 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:42,900 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,901 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:42,906 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:42,906 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:42,906 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:42,906 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:42,906 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,906 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,908 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:42,910 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:42,910 - INFO - Reference folder: Reference
+2023-11-26 16:56:42,910 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,910 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:42,910 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:42,910 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,910 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,910 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,911 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:42,912 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:42,912 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:42,912 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:42,912 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,912 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,913 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:42,913 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:42,913 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,914 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:42,915 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:42,915 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:42,915 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:42,921 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:42,921 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:42,921 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:42,921 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:42,921 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:42,921 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:42,922 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:42,924 - INFO - New reference factor: 0.8300000000000001
+2023-11-26 16:56:42,939 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:42,939 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:42,939 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:42,940 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,940 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:42,940 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:42,940 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:42,940 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:42,940 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,940 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:42,940 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:43,011 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:43,013 - INFO - False
+2023-11-26 16:56:43,013 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:43,022 - INFO - (0.04377609118819237, 0.6596925519406796)
+2023-11-26 16:56:43,026 - INFO - Displayed data.
+2023-11-26 16:56:43,027 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:43,027 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:43,027 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:43,027 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,028 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:43,033 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:43,034 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:43,034 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:43,034 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:43,034 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:43,034 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,035 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:43,037 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:43,037 - INFO - Reference folder: Reference
+2023-11-26 16:56:43,037 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:43,037 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:43,037 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:43,037 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:43,037 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:43,037 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,038 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:43,038 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:43,038 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:43,039 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:43,039 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:43,039 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,040 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:43,040 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:43,040 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,040 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:43,041 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:43,041 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:43,041 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:43,047 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:43,047 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:43,047 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:43,047 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:43,047 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:43,047 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,049 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:43,051 - INFO - New reference factor: 0.8400000000000001
+2023-11-26 16:56:43,062 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:43,062 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:43,063 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:43,063 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:43,063 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:43,063 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:43,063 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:43,063 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:43,063 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:43,063 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:43,063 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:43,134 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:43,135 - INFO - False
+2023-11-26 16:56:43,136 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:43,145 - INFO - (0.04275350645184517, 0.6576716490089893)
+2023-11-26 16:56:43,149 - INFO - Displayed data.
+2023-11-26 16:56:43,234 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:43,234 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:43,234 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:43,234 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,235 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:43,240 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:43,240 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:43,240 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:43,240 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:43,240 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:43,240 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,241 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:43,243 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:43,243 - INFO - Reference folder: Reference
+2023-11-26 16:56:43,243 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:43,243 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:43,243 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:43,243 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:43,243 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:43,243 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,244 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:43,245 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:43,245 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:43,245 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:43,245 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:43,245 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,246 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:43,246 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:43,246 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,247 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:43,247 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:43,247 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:43,248 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:43,253 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:43,253 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:43,253 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:43,253 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:43,253 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:43,253 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:43,254 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:43,257 - INFO - New reference factor: 0.8500000000000001
+2023-11-26 16:56:43,272 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:43,272 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:43,273 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:43,273 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:43,273 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:43,273 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:43,273 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:43,273 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:43,273 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:43,273 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:43,273 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:43,342 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:43,345 - INFO - False
+2023-11-26 16:56:43,345 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:43,354 - INFO - (0.04173688963055611, 0.6557078994810581)
+2023-11-26 16:56:43,359 - INFO - Displayed data.
+2023-11-26 16:56:45,466 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:45,467 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:45,467 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:45,467 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:45,469 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.15_000_0000.edf
+2023-11-26 16:56:45,475 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:45,475 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:45,475 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:45,475 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:45,475 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:45,475 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:45,477 - INFO - Norm factor: 2018.734167944
+2023-11-26 16:56:45,480 - INFO - Retrieved data. Sample_name:A1, index (1,).
+2023-11-26 16:56:45,481 - INFO - Reference folder: Reference
+2023-11-26 16:56:45,481 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:45,481 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:45,481 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:45,481 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:45,481 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:45,481 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:45,483 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:45,483 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:45,483 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:45,483 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:45,483 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:45,483 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:45,485 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:45,485 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:45,485 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:45,487 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:45,487 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:45,488 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:45,488 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:45,494 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:45,494 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:45,494 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:45,494 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:45,495 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:45,495 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:45,496 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:45,500 - INFO - New reference factor: 0.8500000000000001
+2023-11-26 16:56:45,513 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:45,513 - INFO - We entered into function: update_angles
+2023-11-26 16:56:45,513 - INFO - We entered into function: get_incident_angle
+2023-11-26 16:56:45,514 - INFO - We entered into function: get_dataset_incident_angle
+2023-11-26 16:56:45,514 - INFO - We entered into function: get_iangle_key
+2023-11-26 16:56:45,514 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:45,514 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:45,515 - INFO - Got incident angle: 0.15
+2023-11-26 16:56:45,515 - INFO - We entered into function: get_tilt_angle
+2023-11-26 16:56:45,515 - INFO - We entered into function: get_dataset_tilt_angle
+2023-11-26 16:56:45,515 - INFO - We entered into function: get_tiltangle_key
+2023-11-26 16:56:45,515 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:45,515 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:45,516 - INFO - Got tilt angle: 0.0
+2023-11-26 16:56:45,516 - INFO - We entered into function: update_incident_angle
+2023-11-26 16:56:45,516 - INFO - Incident angle set up as 0.15.
+2023-11-26 16:56:45,516 - INFO - We entered into function: update_tilt_angle
+2023-11-26 16:56:45,516 - INFO - Tilt angle set up as 0.0.
+2023-11-26 16:56:45,516 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:45,516 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:45,517 - INFO - New label: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.15_000_0000.edf
+2023-11-26 16:56:45,518 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:45,518 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:45,518 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:45,518 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:45,518 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:45,518 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:45,518 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:45,518 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:45,518 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:45,518 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:46,151 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:46,153 - INFO - False
+2023-11-26 16:56:46,153 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:46,161 - INFO - (0.006631221156567335, 0.39631618140265346)
+2023-11-26 16:56:46,166 - INFO - Displayed data.
+2023-11-26 16:56:48,322 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:48,322 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:48,322 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:48,322 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:48,325 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.2_000_0000.edf
+2023-11-26 16:56:48,333 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:48,333 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:48,333 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:48,333 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:48,333 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:48,333 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:48,335 - INFO - Norm factor: 2018.4425126088
+2023-11-26 16:56:48,338 - INFO - Retrieved data. Sample_name:A1, index (3,).
+2023-11-26 16:56:48,338 - INFO - Reference folder: Reference
+2023-11-26 16:56:48,338 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:48,338 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:48,338 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:48,338 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:48,339 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:48,339 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:48,340 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:48,340 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:48,340 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:48,340 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:48,340 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:48,340 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:48,341 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:48,341 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:48,341 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:48,342 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:48,342 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:48,343 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:48,343 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:48,349 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:48,350 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:48,350 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:48,350 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:48,350 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:48,350 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:48,351 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:48,353 - INFO - New reference factor: 0.8500000000000001
+2023-11-26 16:56:48,367 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:48,367 - INFO - We entered into function: update_angles
+2023-11-26 16:56:48,367 - INFO - We entered into function: get_incident_angle
+2023-11-26 16:56:48,367 - INFO - We entered into function: get_dataset_incident_angle
+2023-11-26 16:56:48,367 - INFO - We entered into function: get_iangle_key
+2023-11-26 16:56:48,367 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:48,367 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:48,368 - INFO - Got incident angle: 0.2
+2023-11-26 16:56:48,368 - INFO - We entered into function: get_tilt_angle
+2023-11-26 16:56:48,368 - INFO - We entered into function: get_dataset_tilt_angle
+2023-11-26 16:56:48,368 - INFO - We entered into function: get_tiltangle_key
+2023-11-26 16:56:48,368 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:48,368 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:48,369 - INFO - Got tilt angle: 0.0
+2023-11-26 16:56:48,369 - INFO - We entered into function: update_incident_angle
+2023-11-26 16:56:48,370 - INFO - Incident angle set up as 0.2.
+2023-11-26 16:56:48,370 - INFO - We entered into function: update_tilt_angle
+2023-11-26 16:56:48,370 - INFO - Tilt angle set up as 0.0.
+2023-11-26 16:56:48,370 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:48,370 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:48,371 - INFO - New label: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.2_000_0000.edf
+2023-11-26 16:56:48,371 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:48,371 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:48,371 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:48,372 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:48,372 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:48,372 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:48,372 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:48,372 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:48,372 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:48,372 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:48,999 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:49,001 - INFO - False
+2023-11-26 16:56:49,001 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:49,009 - INFO - (0.004376235418021679, 0.25429246854037046)
+2023-11-26 16:56:49,014 - INFO - Displayed data.
+2023-11-26 16:56:49,498 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:49,498 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:49,498 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:49,498 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:49,500 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.1_000_0000.edf
+2023-11-26 16:56:49,506 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:49,506 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:49,507 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:49,507 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:49,507 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:49,507 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:49,509 - INFO - Norm factor: 2019.4551553847
+2023-11-26 16:56:49,511 - INFO - Retrieved data. Sample_name:A1, index (2,).
+2023-11-26 16:56:49,511 - INFO - Reference folder: Reference
+2023-11-26 16:56:49,511 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:49,511 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:49,511 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:49,511 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:49,511 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:49,511 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:49,512 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:49,512 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:49,512 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:49,512 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:49,513 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:49,513 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:49,514 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:49,514 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:49,514 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:49,515 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:49,515 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:49,515 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:49,515 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:49,520 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:49,521 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:49,521 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:49,521 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:49,521 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:49,521 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:49,522 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:49,524 - INFO - New reference factor: 0.8500000000000001
+2023-11-26 16:56:49,538 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:49,538 - INFO - We entered into function: update_angles
+2023-11-26 16:56:49,538 - INFO - We entered into function: get_incident_angle
+2023-11-26 16:56:49,538 - INFO - We entered into function: get_dataset_incident_angle
+2023-11-26 16:56:49,538 - INFO - We entered into function: get_iangle_key
+2023-11-26 16:56:49,538 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:49,538 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:49,539 - INFO - Got incident angle: 0.1
+2023-11-26 16:56:49,539 - INFO - We entered into function: get_tilt_angle
+2023-11-26 16:56:49,539 - INFO - We entered into function: get_dataset_tilt_angle
+2023-11-26 16:56:49,539 - INFO - We entered into function: get_tiltangle_key
+2023-11-26 16:56:49,539 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:49,539 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:49,540 - INFO - Got tilt angle: 0.0
+2023-11-26 16:56:49,540 - INFO - We entered into function: update_incident_angle
+2023-11-26 16:56:49,541 - INFO - Incident angle set up as 0.1.
+2023-11-26 16:56:49,541 - INFO - We entered into function: update_tilt_angle
+2023-11-26 16:56:49,541 - INFO - Tilt angle set up as 0.0.
+2023-11-26 16:56:49,541 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:49,541 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:49,542 - INFO - New label: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.1_000_0000.edf
+2023-11-26 16:56:49,542 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:49,543 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:49,543 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:49,543 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:49,543 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:49,543 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:49,543 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:49,543 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:49,543 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:49,543 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:50,165 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:50,167 - INFO - False
+2023-11-26 16:56:50,167 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:50,176 - INFO - (0.07227769494056702, 0.8167864084243774)
+2023-11-26 16:56:50,181 - INFO - Displayed data.
+2023-11-26 16:56:50,970 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:50,970 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:50,970 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:50,970 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:50,972 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:50,977 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:50,977 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:50,977 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:50,977 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:50,977 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:50,977 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:50,979 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:56:50,981 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:56:50,982 - INFO - Reference folder: Reference
+2023-11-26 16:56:50,982 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:50,982 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:56:50,982 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:50,982 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:50,982 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:50,982 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:50,983 - INFO - Got acquistion time: 10.0
+2023-11-26 16:56:50,983 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:56:50,983 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:56:50,983 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:56:50,983 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:50,983 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:50,984 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:56:50,984 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:50,984 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:50,985 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:56:50,985 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:56:50,985 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:56:50,985 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:56:50,989 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:56:50,989 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:56:50,989 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:56:50,989 - INFO - We entered into function: get_norm_key
+2023-11-26 16:56:50,990 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:50,990 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:50,991 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:56:50,993 - INFO - New reference factor: 0.8500000000000001
+2023-11-26 16:56:51,007 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:56:51,007 - INFO - We entered into function: update_angles
+2023-11-26 16:56:51,007 - INFO - We entered into function: get_incident_angle
+2023-11-26 16:56:51,007 - INFO - We entered into function: get_dataset_incident_angle
+2023-11-26 16:56:51,007 - INFO - We entered into function: get_iangle_key
+2023-11-26 16:56:51,007 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:51,007 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:51,008 - INFO - Got incident angle: 0.12
+2023-11-26 16:56:51,009 - INFO - We entered into function: get_tilt_angle
+2023-11-26 16:56:51,009 - INFO - We entered into function: get_dataset_tilt_angle
+2023-11-26 16:56:51,009 - INFO - We entered into function: get_tiltangle_key
+2023-11-26 16:56:51,009 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:56:51,009 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:51,009 - INFO - Got tilt angle: 0.0
+2023-11-26 16:56:51,009 - INFO - We entered into function: update_incident_angle
+2023-11-26 16:56:51,010 - INFO - Incident angle set up as 0.12.
+2023-11-26 16:56:51,010 - INFO - We entered into function: update_tilt_angle
+2023-11-26 16:56:51,010 - INFO - Tilt angle set up as 0.0.
+2023-11-26 16:56:51,010 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:56:51,010 - INFO - We entered into function: get_entry_name
+2023-11-26 16:56:51,011 - INFO - New label: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:56:51,012 - INFO - Dictionaries of integration: ['azim_complete']
+2023-11-26 16:56:51,012 - INFO - Dictionaries of integration: [{'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}]
+2023-11-26 16:56:51,012 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:51,012 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:51,012 - INFO - We entered into function: raw_integration
+2023-11-26 16:56:51,012 - INFO - We entered into function: integration_azimuthal
+2023-11-26 16:56:51,012 - INFO - We entered into function: calculate_bins
+2023-11-26 16:56:51,012 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:51,012 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:56:51,012 - INFO - Trying azimuthal integration with: data-shape=(2880, 960) bins=1298, p0_range=[0.0, 30.0], p1_range=[0.0, 90.0], unit=q_nm^-1
+2023-11-26 16:56:51,634 - INFO - Azimuthal integration performed.
+2023-11-26 16:56:51,635 - INFO - False
+2023-11-26 16:56:51,636 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:51,644 - INFO - (0.04173688963055611, 0.6557078994810581)
+2023-11-26 16:56:51,650 - INFO - Displayed data.
+2023-11-26 16:56:54,362 - INFO - False
+2023-11-26 16:56:54,362 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:54,376 - INFO - (0.04173688963055611, 0.6557078994810581)
+2023-11-26 16:56:54,378 - INFO - Dictionary of integration to be masked: {'name': 'azim_complete', 'suffix': 'azim_complete', 'type': 'azimuthal', 'unit': 'q_nm^-1', 'radial_range': [0.0, 30.0], 'azimuth_range': [0.0, 90.0], 'azim_bins': 0, 'integration': 'cake'}
+2023-11-26 16:56:54,378 - INFO - Parameters to mask the array. Shape: (2880, 960), unit: q_nm^-1,                     p0_range: (0.0, 0.3), p1_range: (3.141592653589793, 4.71238898038469), pos0_scale: 100.
+2023-11-26 16:56:54,454 - INFO - The mask was generated.
+2023-11-26 16:56:54,805 - INFO - The mask was completed.
+2023-11-26 16:56:54,810 - INFO - Displayed data.
+2023-11-26 16:56:55,498 - INFO - False
+2023-11-26 16:56:55,498 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:55,511 - INFO - (0.04173688963055611, 0.6557078994810581)
+2023-11-26 16:56:55,515 - INFO - Displayed data.
+2023-11-26 16:56:56,922 - INFO - Dictionaries of integration: []
+2023-11-26 16:56:56,923 - INFO - Dictionaries of integration: []
+2023-11-26 16:56:56,923 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:56,923 - INFO - We entered into function: generate_integration
+2023-11-26 16:56:56,923 - INFO - False
+2023-11-26 16:56:56,924 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:56:56,935 - INFO - (0.04173688963055611, 0.6557078994810581)
+2023-11-26 16:56:56,939 - INFO - Displayed data.
+2023-11-26 16:57:00,138 - INFO - Dictionaries of integration: ['vertical_rod']
+2023-11-26 16:57:00,139 - INFO - Dictionaries of integration: [{'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}]
+2023-11-26 16:57:00,139 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:00,139 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:00,139 - INFO - We entered into function: raw_integration
+2023-11-26 16:57:00,139 - INFO - We entered into function: integration_box
+2023-11-26 16:57:00,139 - INFO - We entered into function: calculate_bins
+2023-11-26 16:57:00,139 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:00,140 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:00,140 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:00,140 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:00,140 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:00,140 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:00,140 - INFO - Trying box integration with: process=opbox, npt=1298, p0_range=[0.0, 30.0], p1_range=[3.0, 4.0], unit=q_nm^-1
+2023-11-26 16:57:00,489 - INFO - We entered into function: transform_q_units
+2023-11-26 16:57:00,489 - INFO - Integration performed.
+2023-11-26 16:57:00,490 - INFO - False
+2023-11-26 16:57:00,491 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:00,500 - INFO - (0.04173688963055611, 0.6557078994810581)
+2023-11-26 16:57:00,504 - INFO - Displayed data.
+2023-11-26 16:57:02,066 - INFO - False
+2023-11-26 16:57:02,066 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:02,079 - INFO - (0.04173688963055611, 0.6557078994810581)
+2023-11-26 16:57:02,080 - INFO - Dictionary of integration to be masked: {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}
+2023-11-26 16:57:02,080 - ERROR - name 'UNIT_GI' is not defined horz_q and vert_q matrix could not be generated with {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'} and shape (2880, 960)
+2023-11-26 16:57:09,994 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:57:09,994 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:09,994 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:09,994 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:09,996 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.15_000_0000.edf
+2023-11-26 16:57:10,003 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:57:10,003 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:57:10,003 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:57:10,003 - INFO - We entered into function: get_norm_key
+2023-11-26 16:57:10,003 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:10,004 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:10,005 - INFO - Norm factor: 2018.734167944
+2023-11-26 16:57:10,008 - INFO - Retrieved data. Sample_name:A1, index (1,).
+2023-11-26 16:57:10,008 - INFO - Reference folder: Reference
+2023-11-26 16:57:10,016 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:10,016 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:57:10,016 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:57:10,017 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:10,017 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:10,017 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:10,018 - INFO - Got acquistion time: 10.0
+2023-11-26 16:57:10,018 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:57:10,019 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:57:10,019 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:10,019 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:10,019 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:10,020 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:57:10,020 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:10,021 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:10,022 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:57:10,023 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:57:10,023 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:57:10,023 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:10,029 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:57:10,030 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:57:10,030 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:57:10,030 - INFO - We entered into function: get_norm_key
+2023-11-26 16:57:10,030 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:10,030 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:10,031 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:57:10,033 - INFO - New reference factor: 0.8500000000000001
+2023-11-26 16:57:10,044 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:57:10,044 - INFO - We entered into function: update_angles
+2023-11-26 16:57:10,044 - INFO - We entered into function: get_incident_angle
+2023-11-26 16:57:10,044 - INFO - We entered into function: get_dataset_incident_angle
+2023-11-26 16:57:10,045 - INFO - We entered into function: get_iangle_key
+2023-11-26 16:57:10,045 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:10,045 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:10,046 - INFO - Got incident angle: 0.15
+2023-11-26 16:57:10,046 - INFO - We entered into function: get_tilt_angle
+2023-11-26 16:57:10,046 - INFO - We entered into function: get_dataset_tilt_angle
+2023-11-26 16:57:10,046 - INFO - We entered into function: get_tiltangle_key
+2023-11-26 16:57:10,046 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:10,046 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:10,046 - INFO - Got tilt angle: 0.0
+2023-11-26 16:57:10,047 - INFO - We entered into function: update_incident_angle
+2023-11-26 16:57:10,047 - INFO - Incident angle set up as 0.15.
+2023-11-26 16:57:10,047 - INFO - We entered into function: update_tilt_angle
+2023-11-26 16:57:10,047 - INFO - Tilt angle set up as 0.0.
+2023-11-26 16:57:10,047 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:10,047 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:10,048 - INFO - New label: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.15_000_0000.edf
+2023-11-26 16:57:10,048 - INFO - Dictionaries of integration: ['vertical_rod']
+2023-11-26 16:57:10,048 - INFO - Dictionaries of integration: [{'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}]
+2023-11-26 16:57:10,048 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:10,048 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:10,048 - INFO - We entered into function: raw_integration
+2023-11-26 16:57:10,049 - INFO - We entered into function: integration_box
+2023-11-26 16:57:10,049 - INFO - We entered into function: calculate_bins
+2023-11-26 16:57:10,049 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:10,049 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:10,049 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:10,049 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:10,049 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:10,049 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:10,049 - INFO - Trying box integration with: process=opbox, npt=1298, p0_range=[0.0, 30.0], p1_range=[3.0, 4.0], unit=q_nm^-1
+2023-11-26 16:57:10,566 - INFO - We entered into function: transform_q_units
+2023-11-26 16:57:10,566 - INFO - Integration performed.
+2023-11-26 16:57:10,568 - INFO - False
+2023-11-26 16:57:10,568 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:10,577 - INFO - (0.006631221156567335, 0.39631618140265346)
+2023-11-26 16:57:10,579 - INFO - Dictionary of integration to be masked: {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}
+2023-11-26 16:57:10,579 - ERROR - name 'UNIT_GI' is not defined horz_q and vert_q matrix could not be generated with {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'} and shape (2880, 960)
+2023-11-26 16:57:11,306 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:57:11,306 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:11,306 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:11,306 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,308 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:57:11,311 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:11,311 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:11,311 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,313 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.15_000_0000.edf
+2023-11-26 16:57:11,316 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:11,316 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:11,316 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,317 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.1_000_0000.edf
+2023-11-26 16:57:11,320 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:11,320 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:11,320 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,321 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.2_000_0000.edf
+2023-11-26 16:57:11,329 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:57:11,329 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:57:11,329 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:57:11,330 - INFO - We entered into function: get_norm_key
+2023-11-26 16:57:11,330 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:11,330 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,331 - INFO - Norm factor: 2018.9221794031748
+2023-11-26 16:57:11,334 - INFO - Retrieved data. Sample_name:A1, index (0, 1, 2, 3).
+2023-11-26 16:57:11,334 - INFO - Reference folder: Reference
+2023-11-26 16:57:11,334 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:11,334 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:57:11,334 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:57:11,334 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:11,334 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:11,334 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,335 - INFO - Got acquistion time: 10.0
+2023-11-26 16:57:11,335 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:57:11,335 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:57:11,335 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:11,336 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:11,336 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,337 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:57:11,337 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:11,337 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,337 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:57:11,338 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:57:11,338 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:57:11,338 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:11,344 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:57:11,344 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:57:11,344 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:57:11,344 - INFO - We entered into function: get_norm_key
+2023-11-26 16:57:11,344 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:11,344 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,346 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:57:11,349 - INFO - New reference factor: 0.8500000000000001
+2023-11-26 16:57:11,362 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:57:11,362 - INFO - We entered into function: update_angles
+2023-11-26 16:57:11,362 - INFO - We entered into function: get_incident_angle
+2023-11-26 16:57:11,363 - INFO - We entered into function: get_dataset_incident_angle
+2023-11-26 16:57:11,363 - INFO - We entered into function: get_iangle_key
+2023-11-26 16:57:11,363 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:11,363 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,364 - INFO - Got incident angle: 0.14250000000000002
+2023-11-26 16:57:11,364 - INFO - We entered into function: get_tilt_angle
+2023-11-26 16:57:11,364 - INFO - We entered into function: get_dataset_tilt_angle
+2023-11-26 16:57:11,364 - INFO - We entered into function: get_tiltangle_key
+2023-11-26 16:57:11,364 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:11,364 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,365 - INFO - Got tilt angle: 0.0
+2023-11-26 16:57:11,365 - INFO - We entered into function: update_incident_angle
+2023-11-26 16:57:11,365 - INFO - Incident angle set up as 0.14250000000000002.
+2023-11-26 16:57:11,365 - INFO - We entered into function: update_tilt_angle
+2023-11-26 16:57:11,365 - INFO - Tilt angle set up as 0.0.
+2023-11-26 16:57:11,365 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:11,365 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,366 - INFO - New label: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000_average.edf
+2023-11-26 16:57:11,367 - INFO - Dictionaries of integration: ['vertical_rod']
+2023-11-26 16:57:11,367 - INFO - Dictionaries of integration: [{'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}]
+2023-11-26 16:57:11,367 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:11,367 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:11,367 - INFO - We entered into function: raw_integration
+2023-11-26 16:57:11,367 - INFO - We entered into function: integration_box
+2023-11-26 16:57:11,367 - INFO - We entered into function: calculate_bins
+2023-11-26 16:57:11,367 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:11,367 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:11,367 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:11,367 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:11,367 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:11,367 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:11,367 - INFO - Trying box integration with: process=opbox, npt=1298, p0_range=[0.0, 30.0], p1_range=[3.0, 4.0], unit=q_nm^-1
+2023-11-26 16:57:11,896 - INFO - We entered into function: transform_q_units
+2023-11-26 16:57:11,896 - INFO - Integration performed.
+2023-11-26 16:57:11,898 - INFO - False
+2023-11-26 16:57:11,898 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:11,906 - INFO - (0.021840495988726616, 0.49710812978446484)
+2023-11-26 16:57:11,908 - INFO - Dictionary of integration to be masked: {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}
+2023-11-26 16:57:11,908 - ERROR - name 'UNIT_GI' is not defined horz_q and vert_q matrix could not be generated with {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'} and shape (2880, 960)
+2023-11-26 16:57:11,967 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:57:11,967 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:11,967 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:11,967 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,968 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:57:11,973 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:57:11,973 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:57:11,973 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:57:11,973 - INFO - We entered into function: get_norm_key
+2023-11-26 16:57:11,973 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:11,973 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,974 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:57:11,976 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:57:11,977 - INFO - Reference folder: Reference
+2023-11-26 16:57:11,977 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:11,977 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:57:11,977 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:57:11,977 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:11,977 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:11,977 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,978 - INFO - Got acquistion time: 10.0
+2023-11-26 16:57:11,978 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:57:11,978 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:57:11,978 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:11,978 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:11,978 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,980 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:57:11,980 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:11,980 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,981 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:57:11,981 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:57:11,981 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:57:11,981 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:11,986 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:57:11,986 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:57:11,986 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:57:11,986 - INFO - We entered into function: get_norm_key
+2023-11-26 16:57:11,986 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:11,986 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:11,988 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:57:11,990 - INFO - New reference factor: 0.8500000000000001
+2023-11-26 16:57:12,002 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:57:12,002 - INFO - We entered into function: update_angles
+2023-11-26 16:57:12,002 - INFO - We entered into function: get_incident_angle
+2023-11-26 16:57:12,002 - INFO - We entered into function: get_dataset_incident_angle
+2023-11-26 16:57:12,002 - INFO - We entered into function: get_iangle_key
+2023-11-26 16:57:12,002 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:12,002 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:12,003 - INFO - Got incident angle: 0.12
+2023-11-26 16:57:12,004 - INFO - We entered into function: get_tilt_angle
+2023-11-26 16:57:12,004 - INFO - We entered into function: get_dataset_tilt_angle
+2023-11-26 16:57:12,004 - INFO - We entered into function: get_tiltangle_key
+2023-11-26 16:57:12,004 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:12,004 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:12,004 - INFO - Got tilt angle: 0.0
+2023-11-26 16:57:12,004 - INFO - We entered into function: update_incident_angle
+2023-11-26 16:57:12,005 - INFO - Incident angle set up as 0.12.
+2023-11-26 16:57:12,005 - INFO - We entered into function: update_tilt_angle
+2023-11-26 16:57:12,005 - INFO - Tilt angle set up as 0.0.
+2023-11-26 16:57:12,005 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:12,005 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:12,006 - INFO - New label: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:57:12,006 - INFO - Dictionaries of integration: ['vertical_rod']
+2023-11-26 16:57:12,007 - INFO - Dictionaries of integration: [{'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}]
+2023-11-26 16:57:12,007 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:12,007 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:12,007 - INFO - We entered into function: raw_integration
+2023-11-26 16:57:12,007 - INFO - We entered into function: integration_box
+2023-11-26 16:57:12,007 - INFO - We entered into function: calculate_bins
+2023-11-26 16:57:12,007 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:12,007 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:12,007 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:12,007 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:12,007 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:12,007 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:12,007 - INFO - Trying box integration with: process=opbox, npt=1298, p0_range=[0.0, 30.0], p1_range=[3.0, 4.0], unit=q_nm^-1
+2023-11-26 16:57:12,534 - INFO - We entered into function: transform_q_units
+2023-11-26 16:57:12,534 - INFO - Integration performed.
+2023-11-26 16:57:12,536 - INFO - False
+2023-11-26 16:57:12,536 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:12,545 - INFO - (0.04173688963055611, 0.6557078994810581)
+2023-11-26 16:57:12,546 - INFO - Dictionary of integration to be masked: {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}
+2023-11-26 16:57:12,546 - ERROR - name 'UNIT_GI' is not defined horz_q and vert_q matrix could not be generated with {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'} and shape (2880, 960)
+2023-11-26 16:57:14,602 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:57:14,603 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:14,603 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:14,603 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:14,605 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:57:14,611 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:57:14,611 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:57:14,611 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:57:14,611 - INFO - We entered into function: get_norm_key
+2023-11-26 16:57:14,611 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:14,611 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:14,613 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:57:14,615 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:57:14,615 - INFO - Reference folder: Reference
+2023-11-26 16:57:14,616 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:14,616 - INFO - We entered into function: get_acquisition_time
+2023-11-26 16:57:14,616 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:57:14,616 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:14,616 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:14,616 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:14,617 - INFO - Got acquistion time: 10.0
+2023-11-26 16:57:14,617 - INFO - Acquisition time of the sample is 10.0.
+2023-11-26 16:57:14,617 - INFO - We entered into function: get_dataset_acquisition_time
+2023-11-26 16:57:14,617 - INFO - We entered into function: get_acquisition_key
+2023-11-26 16:57:14,617 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:14,617 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:14,618 - INFO - Acquisition dataset of the reference folder is [10.  1.  5.].
+2023-11-26 16:57:14,618 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:14,618 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:14,619 - INFO - Auto reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf
+2023-11-26 16:57:14,619 - INFO - Reference file: /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/Reference/rayonix_10s_spitch_0.12_000_0000.edf.
+2023-11-26 16:57:14,619 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:57:14,619 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:14,624 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:57:14,625 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:57:14,625 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:57:14,625 - INFO - We entered into function: get_norm_key
+2023-11-26 16:57:14,625 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:14,625 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:14,626 - INFO - Norm factor: 2032.7465264043
+2023-11-26 16:57:14,628 - INFO - New reference factor: 0.8
+2023-11-26 16:57:14,639 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:57:14,639 - INFO - Dictionaries of integration: ['vertical_rod']
+2023-11-26 16:57:14,639 - INFO - Dictionaries of integration: [{'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}]
+2023-11-26 16:57:14,640 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:14,640 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:14,640 - INFO - We entered into function: raw_integration
+2023-11-26 16:57:14,640 - INFO - We entered into function: integration_box
+2023-11-26 16:57:14,640 - INFO - We entered into function: calculate_bins
+2023-11-26 16:57:14,640 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:14,640 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:14,640 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:14,640 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:14,640 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:14,640 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:14,640 - INFO - Trying box integration with: process=opbox, npt=1298, p0_range=[0.0, 30.0], p1_range=[3.0, 4.0], unit=q_nm^-1
+2023-11-26 16:57:14,649 - INFO - We entered into function: transform_q_units
+2023-11-26 16:57:14,649 - INFO - Integration performed.
+2023-11-26 16:57:14,651 - INFO - False
+2023-11-26 16:57:14,651 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:14,659 - INFO - (0.0468781515955925, 0.6660977080464363)
+2023-11-26 16:57:14,661 - INFO - Dictionary of integration to be masked: {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}
+2023-11-26 16:57:14,661 - ERROR - name 'UNIT_GI' is not defined horz_q and vert_q matrix could not be generated with {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'} and shape (2880, 960)
+2023-11-26 16:57:14,722 - INFO - We entered into function: get_Edf_data
+2023-11-26 16:57:14,722 - INFO - We entered into function: get_Edf_instance
+2023-11-26 16:57:14,722 - INFO - We entered into function: get_filename_from_index
+2023-11-26 16:57:14,722 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:14,724 - INFO - Trying to open sample name /home/edgar/work/pyxscat/pyxscat/test/test_edf/test_NCD/A1/rayonix_A1_spitch_0.12_000_0000.edf
+2023-11-26 16:57:14,730 - INFO - New data sample with shape: (2880, 960)
+2023-11-26 16:57:14,730 - INFO - We entered into function: get_norm_factor
+2023-11-26 16:57:14,730 - INFO - We entered into function: get_dataset_norm_factor
+2023-11-26 16:57:14,730 - INFO - We entered into function: get_norm_key
+2023-11-26 16:57:14,730 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:57:14,730 - INFO - We entered into function: get_entry_name
+2023-11-26 16:57:14,732 - INFO - Norm factor: 2019.0568816752
+2023-11-26 16:57:14,735 - INFO - Retrieved data. Sample_name:A1, index (0,).
+2023-11-26 16:57:14,743 - INFO - Filtered negative, nan and zero values.
+2023-11-26 16:57:14,744 - INFO - Dictionaries of integration: ['vertical_rod']
+2023-11-26 16:57:14,744 - INFO - Dictionaries of integration: [{'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}]
+2023-11-26 16:57:14,744 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:14,744 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:14,744 - INFO - We entered into function: raw_integration
+2023-11-26 16:57:14,744 - INFO - We entered into function: integration_box
+2023-11-26 16:57:14,744 - INFO - We entered into function: calculate_bins
+2023-11-26 16:57:14,744 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:14,744 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:14,744 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:14,744 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:14,744 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:14,744 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:14,744 - INFO - Trying box integration with: process=opbox, npt=1298, p0_range=[0.0, 30.0], p1_range=[3.0, 4.0], unit=q_nm^-1
+2023-11-26 16:57:14,753 - INFO - We entered into function: transform_q_units
+2023-11-26 16:57:14,753 - INFO - Integration performed.
+2023-11-26 16:57:14,755 - INFO - False
+2023-11-26 16:57:14,755 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:14,764 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:14,766 - INFO - Dictionary of integration to be masked: {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}
+2023-11-26 16:57:14,766 - ERROR - name 'UNIT_GI' is not defined horz_q and vert_q matrix could not be generated with {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'} and shape (2880, 960)
+2023-11-26 16:57:19,506 - INFO - False
+2023-11-26 16:57:19,507 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:19,521 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:19,526 - INFO - Displayed data.
+2023-11-26 16:57:20,154 - INFO - False
+2023-11-26 16:57:20,154 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:20,175 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:20,176 - INFO - Dictionary of integration to be masked: {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}
+2023-11-26 16:57:20,176 - ERROR - name 'UNIT_GI' is not defined horz_q and vert_q matrix could not be generated with {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'} and shape (2880, 960)
+2023-11-26 16:57:25,956 - INFO - Dictionaries of integration: ['vertical_rod']
+2023-11-26 16:57:25,956 - INFO - Dictionaries of integration: [{'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}]
+2023-11-26 16:57:25,957 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:25,957 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:25,957 - INFO - We entered into function: raw_integration
+2023-11-26 16:57:25,957 - INFO - We entered into function: integration_box
+2023-11-26 16:57:25,957 - INFO - We entered into function: calculate_bins
+2023-11-26 16:57:25,957 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:25,957 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:25,957 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:25,957 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:25,957 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:25,957 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:25,957 - INFO - Trying box integration with: process=opbox, npt=1298, p0_range=[0.0, 30.0], p1_range=[3.0, 4.0], unit=q_nm^-1
+2023-11-26 16:57:25,969 - INFO - We entered into function: transform_q_units
+2023-11-26 16:57:25,969 - INFO - Integration performed.
+2023-11-26 16:57:25,971 - INFO - False
+2023-11-26 16:57:25,971 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:25,980 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:25,982 - INFO - Dictionary of integration to be masked: {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}
+2023-11-26 16:57:25,982 - ERROR - name 'UNIT_GI' is not defined horz_q and vert_q matrix could not be generated with {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'} and shape (2880, 960)
+2023-11-26 16:57:25,982 - INFO - Updated widgets with box integration values.
+2023-11-26 16:57:31,562 - INFO - Updated widgets with box integration values.
+2023-11-26 16:57:41,762 - INFO - False
+2023-11-26 16:57:41,763 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:41,776 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:41,781 - INFO - Displayed data.
+2023-11-26 16:57:44,148 - INFO - Dictionaries of integration: ['vertical_rod']
+2023-11-26 16:57:44,149 - INFO - Dictionaries of integration: [{'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [4.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}]
+2023-11-26 16:57:44,149 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:44,149 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:44,149 - INFO - We entered into function: raw_integration
+2023-11-26 16:57:44,149 - INFO - We entered into function: integration_box
+2023-11-26 16:57:44,149 - INFO - We entered into function: calculate_bins
+2023-11-26 16:57:44,149 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:44,149 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:44,149 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:44,149 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:44,149 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:44,149 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:44,149 - INFO - Trying box integration with: process=opbox, npt=1139, p0_range=[4.0, 30.0], p1_range=[3.0, 4.0], unit=q_nm^-1
+2023-11-26 16:57:44,159 - INFO - We entered into function: transform_q_units
+2023-11-26 16:57:44,159 - INFO - Integration performed.
+2023-11-26 16:57:44,161 - INFO - False
+2023-11-26 16:57:44,161 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:44,169 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:44,174 - INFO - Displayed data.
+2023-11-26 16:57:45,045 - INFO - Dictionaries of integration: ['vertical_rod']
+2023-11-26 16:57:45,045 - INFO - Dictionaries of integration: [{'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [0.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}]
+2023-11-26 16:57:45,045 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:45,045 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:45,045 - INFO - We entered into function: raw_integration
+2023-11-26 16:57:45,046 - INFO - We entered into function: integration_box
+2023-11-26 16:57:45,046 - INFO - We entered into function: calculate_bins
+2023-11-26 16:57:45,046 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:45,046 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:45,046 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:45,046 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:45,046 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:45,046 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:45,046 - INFO - Trying box integration with: process=opbox, npt=1298, p0_range=[0.0, 30.0], p1_range=[3.0, 4.0], unit=q_nm^-1
+2023-11-26 16:57:45,055 - INFO - We entered into function: transform_q_units
+2023-11-26 16:57:45,055 - INFO - Integration performed.
+2023-11-26 16:57:45,057 - INFO - False
+2023-11-26 16:57:45,057 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:45,065 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:45,070 - INFO - Displayed data.
+2023-11-26 16:57:45,150 - INFO - Dictionaries of integration: ['vertical_rod']
+2023-11-26 16:57:45,150 - INFO - Dictionaries of integration: [{'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [5.0, 30.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}]
+2023-11-26 16:57:45,150 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:45,150 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:45,150 - INFO - We entered into function: raw_integration
+2023-11-26 16:57:45,150 - INFO - We entered into function: integration_box
+2023-11-26 16:57:45,150 - INFO - We entered into function: calculate_bins
+2023-11-26 16:57:45,151 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:45,151 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:45,151 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:45,151 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:45,151 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:45,151 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:45,151 - INFO - Trying box integration with: process=opbox, npt=1100, p0_range=[5.0, 30.0], p1_range=[3.0, 4.0], unit=q_nm^-1
+2023-11-26 16:57:45,159 - INFO - We entered into function: transform_q_units
+2023-11-26 16:57:45,159 - INFO - Integration performed.
+2023-11-26 16:57:45,161 - INFO - False
+2023-11-26 16:57:45,161 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:45,170 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:45,174 - INFO - Displayed data.
+2023-11-26 16:57:48,613 - INFO - Dictionaries of integration: ['vertical_rod']
+2023-11-26 16:57:48,613 - INFO - Dictionaries of integration: [{'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [5.0, 7.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}]
+2023-11-26 16:57:48,613 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:48,613 - INFO - We entered into function: generate_integration
+2023-11-26 16:57:48,614 - INFO - We entered into function: raw_integration
+2023-11-26 16:57:48,614 - INFO - We entered into function: integration_box
+2023-11-26 16:57:48,614 - INFO - We entered into function: calculate_bins
+2023-11-26 16:57:48,614 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:48,614 - INFO - We entered into function: q_to_twotheta
+2023-11-26 16:57:48,614 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:48,614 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:48,614 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:48,614 - INFO - We entered into function: get_q_nm
+2023-11-26 16:57:48,614 - INFO - Trying box integration with: process=opbox, npt=80, p0_range=[5.0, 7.0], p1_range=[3.0, 4.0], unit=q_nm^-1
+2023-11-26 16:57:48,624 - INFO - We entered into function: transform_q_units
+2023-11-26 16:57:48,624 - INFO - Integration performed.
+2023-11-26 16:57:48,627 - INFO - False
+2023-11-26 16:57:48,627 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:48,636 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:48,640 - INFO - Displayed data.
+2023-11-26 16:57:52,274 - INFO - False
+2023-11-26 16:57:52,275 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:52,286 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:52,288 - INFO - Dictionary of integration to be masked: {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [5.0, 7.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}
+2023-11-26 16:57:52,288 - ERROR - name 'UNIT_GI' is not defined horz_q and vert_q matrix could not be generated with {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [5.0, 7.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'} and shape (2880, 960)
+2023-11-26 16:57:54,394 - INFO - False
+2023-11-26 16:57:54,395 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:54,408 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:54,413 - INFO - Displayed data.
+2023-11-26 16:57:54,834 - INFO - False
+2023-11-26 16:57:54,835 - INFO - Data extracted from cache. Data: <class 'numpy.ndarray'>
+2023-11-26 16:57:54,849 - INFO - (0.16200432181358337, 1.0492483973503113)
+2023-11-26 16:57:54,850 - INFO - Dictionary of integration to be masked: {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [5.0, 7.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'}
+2023-11-26 16:57:54,850 - ERROR - name 'UNIT_GI' is not defined horz_q and vert_q matrix could not be generated with {'name': 'vertical_rod', 'suffix': 'vertical_rod', 'direction': 'vertical', 'ip_range': [3.0, 4.0], 'oop_range': [5.0, 7.0], 'output_unit': 'q_nm^-1', 'input_unit': 'q_nm^-1', 'integration': 'box'} and shape (2880, 960)
+2023-11-26 16:58:04,669 - INFO - We entered into function: get_metadata_dataframe
+2023-11-26 16:58:04,669 - INFO - We entered into function: get_all_filenames_from_sample
+2023-11-26 16:58:04,669 - INFO - We entered into function: generator_filenames_in_sample
+2023-11-26 16:58:04,669 - INFO - We entered into function: get_metadata_dataset
+2023-11-26 16:58:04,669 - INFO - We entered into function: get_entry_name
+2023-11-26 16:58:04,672 - INFO - The dataframe has size 4.
+2023-11-26 16:58:04,672 - INFO - Table was reseted.
+2023-11-26 16:58:04,672 - INFO - Inserted columns: 1.
+2023-11-26 16:58:04,673 - INFO - Inserted rows: 4.
+2023-11-26 16:58:04,673 - INFO - Updated cell [0,0].
+2023-11-26 16:58:04,673 - INFO - Updated cell [1,0].
+2023-11-26 16:58:04,673 - INFO - Updated cell [2,0].
+2023-11-26 16:58:04,674 - INFO - Updated cell [3,0].
