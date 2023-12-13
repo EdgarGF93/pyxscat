@@ -1,6 +1,5 @@
 from . import *
 from collections import defaultdict
-# from cachetools import cached, LRUCache
 from os.path import join
 from pathlib import Path
 from pyFAI import __file__ as pyfai_file
@@ -2999,29 +2998,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         if graph_2D_q:
             self.update_2D_q()
         
-        
-
-        # with concurrent.futures.ThreadPoolExecutor() as executor:
-        #     futures = []
-
-        #     # Update 1D integration graph
-        #     if graph_1D:
-        #         futures.append(executor.submit(self.update_1D_graph, data=data, norm_factor=norm_factor))
-
-        #     # Update 2D Raw Map
-        #     if graph_2D_raw:
-        #         futures.append(executor.submit(self.update_2D_raw, data=data))
-
-        #     # Update 2D Reshape
-        #     if graph_2D_reshape:
-        #         futures.append(executor.submit(self.update_2D_reshape_map, data=data))
-
-        #     # Update 2D q map
-        #     if graph_2D_q:
-        #         futures.append(executor.submit(self.update_2D_q))
-
-        #     concurrent.futures.wait(futures)
-
     @log_info
     def update_1D_graph(self, data=None, norm_factor=1.0, clear=True):
         """

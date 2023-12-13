@@ -1,7 +1,4 @@
 
-from cachetools import cached, LRUCache
-from cachetools.keys import hashkey
-
 from pyFAI.azimuthalIntegrator import AzimuthalIntegrator
 from pygix.transform import Transform
 from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
