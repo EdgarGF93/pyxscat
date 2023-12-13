@@ -9,7 +9,6 @@ from pyxscat.other.other_functions import date_prefix
 
 import argparse
 import os
-import pytest
 import sys
 # Open the GUI
 CATO = '''
@@ -48,7 +47,8 @@ TEST_GUI_FILE = Path(pyxscat.__file__).parent.joinpath('test', 'test_gui.py')
 TEST_TIME_FILE = Path(pyxscat.__file__).parent.joinpath('test', 'test_time.py')
 
 
-def main(argv=None):
+def _main(argv=None):
+    import pytest
 
 
     if argv is None:
@@ -95,6 +95,9 @@ def main(argv=None):
         run()
         # print(f"Unrecognized command: {args.command}")
         # parser.print_help()
+
+def main():
+    run()
 
 def run():
     app = QApplication(sys.argv)
