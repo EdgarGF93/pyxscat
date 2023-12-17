@@ -5,7 +5,7 @@ from pathlib import Path
 from pyFAI import __file__ as pyfai_file
 from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QMessageBox
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, pyqtSignal
 from scipy import ndimage
 
 from pyFAI.io.ponifile import PoniFile
@@ -79,11 +79,6 @@ ERROR_H5_FILECREATION = "The .h5 file could not be created."
 ERROR_H5_INSTANCE = "The h5 instance could not be created."
 ERROR_H5_UPDATED = "The H5 could not be updated."
 
-ERROR_MAINDIR = "Main directory could not be set."
-ERROR_MAINDIR_DONTEXIST = "Main directory does not exists."
-ERROR_PICK_FOLDER = "No folder detected."
-ERROR_H5DIR = "There is no new address for the .h5 file. Cancel everything."
-ERROR_APPEND_H5 = "The .h5 file could not be appended to the combobox."
 
 INFO_NEW_MAINDIR = "New main directory set."
 INFO_H5_CREATION = "New .h5 file was created successfully."
@@ -144,8 +139,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         splash.finish(self)
 
         # Initialize attributes and callbacks
-        self.h5 = None
-        self._root_dir = Path()
         self.clicked_folder = str()
         self.list_results_cache = []
         self.list_dict_integration_cache = []
@@ -172,11 +165,101 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self._scattersize_cache = DEFAULT_SCATTER_SIZE
         self._terminal_visible = True
         self._live = False
+        
+        self._active_h5 = pyqtSignal()
+        self.active_h5 = None
+        self._active_entry = pyqtSignal()
+        self.active_entry = ''
+        self._active_index = pyqtSignal()
+        self.active_index = []
 
-        self.reset_attributes_and_widgets()
+        # self.reset_gui()
         self.init_callbacks()
         self.update_lims_ticks()
+    
+    #####################
+    ## CALLBACK TO UPDATE THE BROWSER WIDGETS
+    #####################
+    
+    @property
+    def active_h5(self):
+        return self._active_h5
+    
+    @active_h5.setter
+    def active_h5(self, new_active_h5):
+        self._active_h5 = new_active_h5
+        
+        if self._active_h5:
+            self.log_explorer_info(f"{'*'*30}\n New H5 file: {self._active_h5._h5_filename}\n{'*'*30}")
+            
+            # Reset everything
+            self.reset_gui()
+                        
+            # Retrieve poni file paths
+            self.update_cb_ponifiles(
+                from_h5=True,
+            )
+            
+            # Retrieve entries
+            self.update_sample_listwidget(
+                reset=True,
+            )
+    
+    ##### 
+    ## CALLBACK TO UPDATE LIST WIDGET AND TABLE (BROWSER)
+    #####
+    
+    @property
+    def active_entry(self):
+        return self._active_entry
+    
+    @active_entry.setter
+    def active_entry(self, new_active_entry):
+        self._active_entry = new_active_entry
+        
+        if self._active_entry:
+            self.log_explorer_info(f"{'*'*30}\n New active entry: {new_active_entry}\n{'*'*30}")
+            
+            self.update_browser(
+                entry_name=new_active_entry,
+                is_relative_path=True,
+            )
+        
+    def update_browser(
+        self,
+        h5_file=None,
+        entry_name='',
+        is_relative_path=True,
+        ):
+        pass
+        
+        
+        
+        
+    #     browser = self.listsamples_clicked
+        
+    # def update_
+        
+        
+        
+    @property
+    def active_index(self):
+        return self._active_index        
+        
+    @active_index.setter
+    def active_index(self, new_active_index):
+        if new_active_index:
+            self._active_index = new_active_index
+            self.log_explorer_info(f"{'*'*30}\n New active index: {new_active_index}\n{'*'*30}")
+        #     self.update_plots(new_index=True)        
+            
+        
+        
+        
+    # def update_plots(new_index=False):
+    #     pass
 
+        
     def log_explorer_info(self, msg=str()):
         """
         Types a message in the terminal of the GUI and register the message in the logger file as INFO
@@ -213,8 +296,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         #####################################################################
 
         #########################
-        # H5 combobox callback
+        # Open/Creating H5 files
         #########################
+        self.button_pick_rootdir.clicked.connect(self.pick_rootdir_clicked)
+        self.button_pick_hdf5.clicked.connect(self.pick_h5file_clicked)        
         self.combobox_h5_files.currentTextChanged.connect(self.cb_h5_changed)
 
         #########################
@@ -264,11 +349,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.button_qz.clicked.connect(self.button_qz_clicked)
         self.button_qr.clicked.connect(self.button_qr_clicked)
 
-        #########################
-        # Pick main directory
-        #########################
-        self.button_pick_rootdir.clicked.connect(self.pick_rootdir_clicked)
-        self.button_pick_hdf5.clicked.connect(self.pick_h5file_clicked)
+
 
         #########################
         # Ponifile callbacks
@@ -359,10 +440,28 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.button_save_poni_parameters.clicked.connect(self.save_poni_clicked)
 
     @log_info
-    def reset_attributes_and_widgets(self) -> None:
-        self.active_entry = str()
-        self.cache_index = []
-        self._h5_file = str()
+    def reset_gui(self) -> None:
+        
+        # Reset active entry and index
+        self.active_entry = ''
+        self.active_index = []
+        
+        # Clean main GUI
+        lt.clear(self.listwidget_samples)
+        tm.reset(self.table_files)        
+        cb.clear(self.combobox_ponifile)
+        cb.clear(self.combobox_reffolder)        
+        cb.clear(self.combobox_metadata)
+        cb.clear(self.combobox_headeritems_title)
+        cb.clear(self.combobox_angle)
+        cb.clear(self.combobox_tilt_angle)
+        cb.clear(self.combobox_acquisition)
+        cb.clear(self.combobox_normfactor)
+        self.graph_1D_widget.clear()
+        self.graph_raw_widget.clear()
+        self.canvas_reshape_widget.axes.cla()   
+        self.canvas_2d_q.axes.cla()
+            
         self._data_cache = None
         self.scat_horz_cache = None
         self.scat_vert_cache = None
@@ -379,18 +478,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         }
         
         # Clear GUI widgets
-        cb.clear(self.combobox_ponifile)
-        cb.clear(self.combobox_reffolder)
-        cb.clear(self.combobox_metadata)
-        cb.clear(self.combobox_headeritems_title)
-        cb.clear(self.combobox_angle)
-        cb.clear(self.combobox_tilt_angle)
-        cb.clear(self.combobox_acquisition)
-        cb.clear(self.combobox_normfactor)
-        lt.clear(self.listwidget_samples)
-        tm.reset(self.table_files)
-        self.graph_1D_widget.clear()
-        self.graph_raw_widget.clear()
+
+
+
+
 
         self.log_explorer_info(MSG_RESET_DATA)
 
@@ -404,7 +495,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         json_files = H5_FILES_PATH.rglob("*.json")
         json_list_names = [file.name for file in json_files]
-        json_list_names.insert(0, " ")
+        json_list_names.insert(0, "")
 
         cb.insert_list(
             combobox=combobox,
@@ -415,7 +506,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         if change_to_last:
             cb.set_text(
                 combobox=combobox,
-                text=self.h5._name.replace(".h5", ".json"),
+                text=self._active_h5._name.replace(".h5", ".json"),
             )
 
     @log_info
@@ -594,14 +685,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     @log_info
     def metadata_update_clicked(self, _):
-        if not self.h5:
+        if not self._active_h5:
             return
 
         # Fetch a dictionary with metadata keys from widgets
         dict_metadata = self.fetch_dict_metadata()
 
         # Update the attributes in the .h5 file
-        self.h5.update_metadata_keys(
+        self._active_h5.update_metadata_keys(
             dict_metadata_keys=dict_metadata,
         )
 
@@ -929,15 +1020,15 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             qz_parallel -- state of the qz button (On/Off) (default: {True})
             qr_parallel -- state of the qr button (On/Off) (default: {True})
         """        
-        if not self.h5:
+        if not self._active_h5:
             self.log_explorer_info(f'There is no h5 instance to update the sample orientation.')
 
-        self.h5.update_orientation(
+        self._active_h5.update_orientation(
             qz_parallel=qz_parallel,
             qr_parallel=qr_parallel,
         )
 
-        new_sample_or = self.h5.gi.sample_orientation
+        new_sample_or = self._active_h5.gi.sample_orientation
         self.log_explorer_info(f"New sample orientation: {new_sample_or}")
 
     #################################
@@ -948,53 +1039,56 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     def pick_rootdir_clicked(self,_):
         """
         Chain of events after pressing the folder button
-        """        
-
+        """
         # Get the address of a root directory
         root_directory = self.pick_root_directory()
         if not root_directory:
             return
 
         # Generate a filename for the .h5 file
-        h5_filename = self.pick_h5_filename(
+        h5_filename = self.get_h5_filename(
             root_directory=root_directory,
         )
         if not h5_filename:
             return
 
         # Create the H5 instance from a root directory
-        if not self.init_h5_instance(
+        h5 = self.init_h5_instance(
             root_directory=root_directory,
             output_filename_h5=h5_filename,
             input_filename_h5=None,
-            ):
+            init_data=True,
+        )
+        if not h5:
             return
+        
+        self.active_h5 = h5
 
-        # Feed data files and ponifiles within the h5 instance
-        self.h5.update_datafiles(
-            search=True,
-            pattern=self.get_pattern(),
-        )
-        self.h5.update_ponifiles()
+        # # Feed data files and ponifiles within the h5 instance
+        # self._active_h5.update_datafiles(
+        #     search=True,
+        #     pattern=self.get_pattern(),
+        # )
+        # self._active_h5.update_ponifiles()
 
-        # Update combobox of ponifiles
-        self.update_cb_ponifiles(
-            from_h5=True,
-            reset=True,
-            relative_address=GET_RELATIVE_ADDRESS,
-        )
+        # # Update combobox of ponifiles
+        # self.update_cb_ponifiles(
+        #     from_h5=True,
+        #     reset=True,
+        #     relative_address=GET_RELATIVE_ADDRESS,
+        # )
 
-        # Update list of samples
-        self.update_sample_listwidget(
-            # from_h5=True,
-            reset=True,
-        )
+        # # Update list of samples
+        # self.update_sample_listwidget(
+        #     # from_h5=True,
+        #     reset=True,
+        # )
 
-        # Save a .json file with the attributes of the new h5 instance
-        self.save_h5_dict()
+        # # Save a .json file with the attributes of the new h5 instance
+        # self.save_h5_dict()
 
-        # Update the combobox of h5 files
-        self.update_combobox_h5()
+        # # Update the combobox of h5 files
+        # self.update_combobox_h5()
 
     @log_info
     def init_h5_instance(
@@ -1002,6 +1096,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         root_directory='',
         output_filename_h5='',
         input_filename_h5='',
+        init_data=False,
         ):
         """
         Generates an instance of H5Integrator
@@ -1015,73 +1110,71 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             validation of the H5Integration instance
         """        
         try:
-            self.h5 = H5GIIntegrator(
+            h5 = H5GIIntegrator(
                 root_directory=root_directory,
                 output_filename_h5=output_filename_h5,
                 input_h5_filename=input_filename_h5,
+                init_data=init_data,
             )
             self.log_explorer_info("H5 instance was initialized.")
-            return True
+            return h5
 
         except Exception as e:
-            self.h5 = None
-            self.log_explorer_info(f"{e}: H5 instance could not be initiliazed.")
-            return False
+            self.log_explorer_error(f"H5 instance could not be initiliazed with attributes : \
+                root dir: {root_directory}, \
+                filename_h5: {output_filename_h5},\
+                input filename: {input_filename_h5}")
+            self.log_explorer_error(f'{e}')
+            return
 
     @log_info
-    def pick_h5_filename(self, root_directory=''):
+    def get_h5_filename(self, root_directory=''):
         """
         Creates a new filename for the incoming new .h5 file
 
         Keyword Arguments:
             root_directory -- path of the root directory where all the data/metadata will be located recursively (default: {''})
         """        
-
-        # It has to be a Path where to search the data files
         if not root_directory:
-            self.log_explorer_info(ERROR_MAINDIR_DONTEXIST)
+            self.log_explorer_info('There is no root directory!')
             return
 
         if not Path(root_directory).exists():
-            self.log_explorer_info(ERROR_MAINDIR_DONTEXIST)
+            self.log_explorer_info(f'The directory ({root_directory}) does not exist!')
             return
         
         # Save the .h5 file in the same main_directory root or not
         choice_hdf5 = QMessageBox.question(self, 'MessageBox', MSG_H5FILE_CHOICE, QMessageBox.Yes | QMessageBox.No)
         if choice_hdf5 == QMessageBox.Yes:
-            h5_filename = root_directory
+            h5_directory = root_directory
         elif choice_hdf5 == QMessageBox.No:
-            h5_filename = self.pick_hdf5_folder()
+            h5_directory = self.pick_h5_directory()
         else:
-            self.log_explorer_info(ERROR_H5_FILECREATION)
+            self.log_explorer_info("No directory for h5 file was selected.")
             return
 
-        # If there is no defined path for the future .h5 file, returns without creating the h5 file
-        if not h5_filename:
-            self.log_explorer_info(ERROR_H5_FILECREATION)
+        if not h5_directory:
             return
         
         # Full filename for the .h5 file
-        h5_filename = Path(h5_filename)
-        root_directory = Path(root_directory)
-        h5_filename = h5_filename.joinpath(f"{root_directory.name}.h5")
+        h5_filename = str(h5_directory.joinpath(f"{root_directory.name}_pyxscat.h5"))
 
         # Check if it is going to be overwritten
-        if h5_filename.is_file():
+        if Path(h5_filename).is_file():
             choice_hdf5_overwrite = QMessageBox.question(self, 'MessageBox', MSG_H5FILE_OVERWRITE, QMessageBox.Yes | QMessageBox.No)
             if choice_hdf5_overwrite == QMessageBox.Yes:
                 overwrite = True
             elif choice_hdf5_overwrite == QMessageBox.No:
                 overwrite = False
             else:
-                self.log_explorer_info(ERROR_H5_FILECREATION)
+                self.log_explorer_info(f"H5 file ({h5_filename}) was not created.")
                 return
         else:
             overwrite = True
 
         # Join date_prefix if no overwriting
         if not overwrite:
-            h5_filename = h5_filename.joinpath(f"{root_directory.name}_{date_prefix()}.h5")
+            h5_filename =str(h5_directory.joinpath(f"{root_directory.name}_pyxscat_{date_prefix()}.h5"))
 
         return h5_filename
 
@@ -1093,26 +1186,27 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Returns:
             Path instance with the root directory
         """        
-
         # Pick the folder after pop-up browser window
         self.dialog_maindir = QFileDialog()
-        get_directory = self.dialog_maindir.getExistingDirectory(self, 'Choose main directory', str(GLOBAL_PATH))
+        get_directory = self.dialog_maindir.getExistingDirectory(self, 'Choose main directory', os.getcwd())
 
         # Returns if is not valid, or the dialog was cancelled
         if not get_directory:
             root_directory = ""
-            self.log_explorer_info(ERROR_PICK_FOLDER)
+            self.log_explorer_info("No root directory was picked.")
         else:
             try:
                 root_directory = Path(get_directory)
-            except NotImplementedError:
+                self.log_explorer_info(f'New root directory: {root_directory}')
+            except NotImplementedError as e:
+                self.log_explorer_error(f'The root directory ({root_directory}) is not valid for Path instance.')
                 root_directory = ""
-                self.log_explorer_info(ERROR_PICK_FOLDER)
+                logger.error(f'{e.message}')
 
         return root_directory
 
     @log_info
-    def pick_hdf5_folder(self) -> Path:
+    def pick_h5_directory(self) -> Path:
         """
         Picks a folder to save the .h5 file
 
@@ -1122,24 +1216,19 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Returns:
         Path: path for the new .h5
         """
-        # It has to be a Path where to search the data files
-        if not self._root_dir:
-            self.log_explorer_info(ERROR_MAINDIR_DONTEXIST)
-            return
-        
-        dialog_h5_dir = QFileDialog.getExistingDirectory(self, 'Choose main directory', ".")
+        dialog_h5_dir = QFileDialog.getExistingDirectory(self, 'Choose main directory', os.getcwd())
 
         if not dialog_h5_dir:
-            self.log_explorer_info(ERROR_H5DIR)
-            h5_dir = ""
+            self.log_explorer_info("No directory for h5 file was selected.")
+            return
         else:
             try:
-                h5_dir = Path(dialog_h5_dir)
+                h5_directory = Path(dialog_h5_dir)
             except NotImplementedError:
-                h5_dir = ""
-                self.log_explorer_info(ERROR_H5DIR)
+                h5_directory = ""
+                self.log_explorer_info(f'The directory ({h5_directory}) is not valid for Path instance.')
 
-        return h5_dir
+        return h5_directory
 
     @log_info
     def pick_h5file_clicked(self, _):
@@ -1232,12 +1321,15 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
 
     @log_info
-    def cb_h5_changed(self, json_name):
+    def cb_h5_changed(self, json_name=''):
+        print(f'hola el json es {json_name}')
+        print(type(json_name))
+        
         # Return if empty
-        if not json_name:
-            self.reset_attributes_and_widgets()
+        if json_name is None:
+            print(88)
             return
-
+        print(77)
         # Fetch the full filename
         json_filename = H5_FILES_PATH.joinpath(json_name)
         try:
@@ -1256,7 +1348,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.init_h5_instance(
             input_filename_h5=filename_h5,
         )
-        if not self.h5:
+        if not self._active_h5:
             return
         
         # Update label
@@ -1285,18 +1377,18 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             reset=True,
         )
 
-        self.h5.update_orientation(
+        self._active_h5.update_orientation(
             qz_parallel=self.state_qz,
             qr_parallel=self.state_qr,
         )
 
     @log_info
     def update_h5_plaintext(self):
-        self.h5_plaintext.clear()
-        if self.h5:
-            d = self.h5.h5_get_dict_attrs()
+        self._active_h5_plaintext.clear()
+        if self._active_h5:
+            d = self._active_h5.h5_get_dict_attrs()
             for k,v in d.items():
-                self.h5_plaintext.appendPlainText(f"{str(k)} : {str(v)}\n")
+                self._active_h5_plaintext.appendPlainText(f"{str(k)} : {str(v)}\n")
 
     #####################
     ### PONI METHODS ####
@@ -1310,7 +1402,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         reset=True,
         relative_address=True,
         ):
-        if not self.h5:
+        if not self._active_h5:
             return
 
         # Combobox
@@ -1318,7 +1410,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Add ponifiles from h5 instance
         if from_h5:
-            ponifiles_in_h5 = self.h5.get_all_ponifiles(get_relative_address=relative_address)
+            ponifiles_in_h5 = self._active_h5.get_all_ponifiles(get_relative_address=relative_address)
             ponifile_list = ponifiles_in_h5
 
         if reset:
@@ -1349,14 +1441,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             poni_name -- string of .poni filename
         """        
 
-        if not self.h5:
+        if not self._active_h5:
             return
 
         # Activate the .poni file in the h5 instance
         self.update_poni(poni=poni_name)
         
         # Update the .poni tab widgets
-        poni = self.h5.get_poni()
+        poni = self._active_h5.get_poni()
         self._poni_cache = poni
 
         self.update_poni_widgets(poni=poni)
@@ -1374,7 +1466,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Restores the poni widgets with the values from the previous poni stored in cache
         """        
 
-        if not self.h5:
+        if not self._active_h5:
             return
         
         # Retrieves the previous poni values
@@ -1407,7 +1499,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             wave = float(wave)
         except Exception as e:
             self.log_explorer_error(f'{e} wavelength: {wave} is not a good value.')
-            wave = self.h5.gi._poni.wavelength
+            wave = self._active_h5.gi._poni.wavelength
         return wave
 
     @log_info
@@ -1424,7 +1516,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             dist = float(dist)
         except Exception as e:
             self.log_explorer_error(f'{e} distance: {dist} is not a good value.')
-            dist = self.h5.gi._poni.dist
+            dist = self._active_h5.gi._poni.dist
         return dist
 
     @log_info
@@ -1441,7 +1533,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             poni1 = float(poni1)
         except Exception as e:
             self.log_explorer_error(f'{e} PONI1: {poni1} is not a good value.')
-            poni1 = self.h5.gi._poni.poni1
+            poni1 = self._active_h5.gi._poni.poni1
         return poni1
 
     @log_info
@@ -1458,7 +1550,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             poni2 = float(poni2)
         except Exception as e:
             self.log_explorer_error(f'{e} PONI2: {poni2} is not a good value.')
-            poni2 = self.h5.gi._poni.poni2
+            poni2 = self._active_h5.gi._poni.poni2
         return poni2
 
     @log_info
@@ -1475,7 +1567,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             rot1 = float(rot1)
         except Exception as e:
             self.log_explorer_error(f'{e} ROT1: {rot1} is not a good value.')
-            rot1 = self.h5.gi._poni.rot1
+            rot1 = self._active_h5.gi._poni.rot1
         return rot1
 
     @log_info
@@ -1492,7 +1584,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             rot2 = float(rot2)
         except Exception as e:
             self.log_explorer_error(f'{e} ROT2: {rot2} is not a good value.')
-            rot2 = self.h5.gi._poni.rot2
+            rot2 = self._active_h5.gi._poni.rot2
         return rot2
 
     @log_info
@@ -1509,7 +1601,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             rot3 = float(rot3)
         except Exception as e:
             self.log_explorer_error(f'{e} ROT3: {rot3} is not a good value.')
-            rot3 = self.h5.gi._poni.rot3
+            rot3 = self._active_h5.gi._poni.rot3
 
         return rot3
 
@@ -1522,13 +1614,13 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             poni -- instance of PoniFile (default: {None})
         """        
 
-        if not self.h5:
+        if not self._active_h5:
             return
 
-        self.h5.update_poni(poni=poni)
+        self._active_h5.update_poni(poni=poni)
 
-        # dict_poni = self.h5.get_poni_dict()
-        self.log_explorer_info(f"Current poni parameters: {self.h5.get_poni()}")
+        # dict_poni = self._active_h5.get_poni_dict()
+        self.log_explorer_info(f"Current poni parameters: {self._active_h5.get_poni()}")
 
     @log_info
     def update_poni_clicked(self,_):
@@ -1536,7 +1628,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Update .poni parameters and graphs
         """
 
-        if not self.h5:
+        if not self._active_h5:
             return
 
         new_poni = self.get_poni_from_widgets()
@@ -1557,7 +1649,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Gets a modified version of current PoniFile instance and saves it as a new .poni file
         """        
 
-        if not self.h5:
+        if not self._active_h5:
             return
         
         # Get a new PoniFile instance from widgets
@@ -1577,7 +1669,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
         # Update the h5 and combobox
-        self.h5.update_ponifiles()
+        self._active_h5.update_ponifiles()
         self.update_cb_ponifiles(from_h5=True)
 
     @log_info
@@ -1589,10 +1681,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             modified PoniFile instance
         """        
 
-        if not self.h5:
+        if not self._active_h5:
             return
         
-        current_poni = self.h5.gi._poni
+        current_poni = self._active_h5.gi._poni
 
         if current_poni is None:
             logger.error(f'There is poni instance in GrazingGeometry instance.')
@@ -1626,7 +1718,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             poni -- instance of PoniFile (default: {None})
         """        
 
-        if not self.h5:
+        if not self._active_h5:
             return
         
         self.update_detector_widget(poni=poni)
@@ -1830,10 +1922,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             poni -- instance of PoniFile (default: {None})
         """        
 
-        if not self.h5:
+        if not self._active_h5:
             return
 
-        ponifile_folder = self.h5._root_dir.joinpath('poni_files')
+        ponifile_folder = self._active_h5._root_dir.joinpath('poni_files')
         ponifile_folder.mkdir(exist_ok=True)
         ponifile_name = ponifile_folder.joinpath(f'poni_{date_prefix()}.poni')
 
@@ -1853,7 +1945,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         """
         Update the reference file widget
         """
-        if not self.h5:
+        if not self._active_h5:
             return
 
         if self.checkbox_auto_reffile.isChecked():
@@ -1864,7 +1956,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         name_ref_folder = cb.value(self.combobox_reffolder)
 
         # Get the list of files
-        list_ref_files = self.h5.get_all_names_from_sample(
+        list_ref_files = self._active_h5.get_all_names_from_sample(
             sample_name=name_ref_folder,
         )
         cb.insert_list(
@@ -1917,7 +2009,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             reset -- if True, clean the list before feeding (default: {True})
         """        
 
-        if not self.h5:
+        if not self._active_h5:
             return
 
         widget = self.listwidget_samples  
@@ -1926,7 +2018,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # if list_samples:
         #     list_samples = list_samples
         # elif from_h5:
-        list_samples = self.h5.get_all_entries(
+        list_samples = self._active_h5.get_all_entries(
             get_relative_address=True,
         )
         
@@ -1970,13 +2062,13 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             logger.error(f'{combobox} is not a valid PyQt5.QtWidgets.QComboBox')
             return
 
-        if not self.h5:
+        if not self._active_h5:
             return
 
         if list_samples:
             list_samples = list_samples
         elif from_h5:
-            list_samples = self.h5.get_all_entries(
+            list_samples = self._active_h5.get_all_entries(
                 get_relative_address=True,
             )
 
@@ -2007,7 +2099,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             clicked_sample_name -- current clicked item on the listwidget
         """        
 
-        if not self.h5:
+        if not self._active_h5:
             return
         
         # Fetch the name of the integration
@@ -2022,7 +2114,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Get a Pandas.DataFrame to upload the table
         keys_to_display = self.combobox_metadata.currentData()
-        dataframe = self.h5.get_metadata_dataframe(
+        dataframe = self._active_h5.get_metadata_dataframe(
             sample_name=clicked_sample_name,
             list_keys=keys_to_display,
         )
@@ -2095,25 +2187,26 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Chain of events after clicking on one of the elements from the Table Widget
         """        
 
-        if not self.h5:
+        if not self._active_h5:
             return
 
         # Save the clicked index of clicked data
-        self.cache_index = tm.selected_rows(self.table_files)
-        if not self.cache_index:
+        self.active_index = tm.selected_rows(self.table_files)
+        self.active_index = self.active_index
+        if not self.active_index:
             return
 
         # Update data cache
         self._data_cache = self.get_final_data(
             sample_name=self.active_entry,
-            index=self.cache_index,
+            index=self.active_index,
             scaled_factor=self.spinbox_sub.value(),
         )
 
         # Update GI angles
-        self.h5.update_angles(
+        self._active_h5.update_angles(
             sample_name=self.active_entry,
-            list_index=self.cache_index,
+            list_index=self.active_index,
         )
 
         # Update label dislayed
@@ -2151,8 +2244,8 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         """
             If the OS is linux, open pyFAI-calib2 GUI
         """
-        if self.h5:
-            open_directory = self.h5._root_dir
+        if self._active_h5:
+            open_directory = self._active_h5._root_dir
         else:
             open_directory = ""
         try:
@@ -2162,7 +2255,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         except Exception as e:
             self.log_explorer_info(f"{e}: pyFAI GUI could not be opened.")
         finally:
-            self.h5.update_ponifiles()
+            self._active_h5.update_ponifiles()
 
             # Update combobox of ponifiles
             self.update_cb_ponifiles(
@@ -2175,8 +2268,8 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         """
             If the OS is Windows, open pyFAI-calib2 GUI
         """
-        if self.h5:
-            open_directory = self.h5._root_dir
+        if self._active_h5:
+            open_directory = self._active_h5._root_dir
         else:
             open_directory = ""
 
@@ -2188,7 +2281,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         except Exception as e:
             self.log_explorer_info(f"{e}: pyFAI GUI could not be opened.")
         finally:
-            self.h5.update_ponifiles()
+            self._active_h5.update_ponifiles()
 
             # Update combobox of ponifiles
             self.update_cb_ponifiles(
@@ -2203,7 +2296,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     @log_info
     def update_all_files(self,_):
 
-        if not self.h5:
+        if not self._active_h5:
             return
 
         #########################
@@ -2211,14 +2304,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         #########################
         
         # Get a dictionary with the new files (not stored in h5)
-        dict_new_files = self.h5.search_datafiles(
+        dict_new_files = self._active_h5.search_datafiles(
             pattern=self.get_pattern(),
             new_files=True,
         )
         self.log_explorer_info(f"New detected files: {str(dict_new_files)}.")
         
         # Update the H5
-        self.h5.update_datafiles(          
+        self._active_h5.update_datafiles(          
             dict_files=dict_new_files,
             search=False,
         )
@@ -2233,7 +2326,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         #### UPDATE PONIFILES ###
         #########################
 
-        self.h5.update_ponifiles()
+        self._active_h5.update_ponifiles()
 
         self.update_cb_ponifiles(
             from_h5=True,
@@ -2242,7 +2335,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Get a Pandas.DataFrame to upload the table
         keys_to_display = self.combobox_metadata.currentData()
-        dataframe = self.h5.get_metadata_dataframe(
+        dataframe = self._active_h5.get_metadata_dataframe(
             sample_name=self.active_entry,
             list_keys=keys_to_display,
         )
@@ -2264,7 +2357,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             self.log_explorer_info(f"The operating system {platform} is not compatible with live searching.")
             return
 
-        if not self.h5:
+        if not self._active_h5:
             self.log_explorer_info(f"Nothing to monitor...")
             return
 
@@ -2293,7 +2386,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     @log_info
     def start_live_mode(self, pattern=None):
         # First update
-        self.h5.update_datafiles(search=True)
+        self._active_h5.update_datafiles(search=True)
         # self.observer = PyXScatObserver()
         # self.handler = PyXScatHandler()
         # # new_file_signal = pyqtSignal(str)
@@ -2305,7 +2398,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
         self.timer_data.start(INTERVAL_SEARCH_DATA)
         
-        # self.observer.schedule(self.handler, self.h5._root_dir, recursive=True)
+        # self.observer.schedule(self.handler, self._active_h5._root_dir, recursive=True)
         # self.observer.start()
         
         # try:
@@ -2357,7 +2450,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     def search_datafiles_live(self, pattern=None) -> None:
         list_files_1s = []
-        cmd = f"find {str(self.h5._root_dir)} -name {pattern} -newermt '-1 seconds'"
+        cmd = f"find {str(self._active_h5._root_dir)} -name {pattern} -newermt '-1 seconds'"
         try:
             list_files_1s = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True).stdout.decode().strip().split('\n')
             # Clean empty items
@@ -2374,7 +2467,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
             # Upload the new files to h5
             dict_files_1s = get_dict_files(list_files=list_files_1s)
-            self.h5.update_datafiles(          
+            self._active_h5.update_datafiles(          
                 dict_files=dict_files_1s,
                 search=False,
             )
@@ -2388,7 +2481,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             # Update table if needed
             # Get a Pandas.DataFrame to upload the table
             keys_to_display = self.combobox_metadata.currentData()
-            dataframe = self.h5.get_metadata_dataframe(
+            dataframe = self._active_h5.get_metadata_dataframe(
                 sample_name=self.active_entry,
                 list_keys=keys_to_display,
             )
@@ -2400,10 +2493,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             )
 
             # Go to the last file
-            last_file = self.h5.get_last_file(list_files=list_files_1s)
-            sample, index = self.h5.get_sample_index_from_filename(filename=last_file)
+            last_file = self._active_h5.get_last_file(list_files=list_files_1s)
+            sample, index = self._active_h5.get_sample_index_from_filename(filename=last_file)
             self.active_entry = sample
-            self.cache_index = index
+            self.active_index = index
             self.get_final_data(
                 sample_name=sample,
                 index=index,
@@ -2421,14 +2514,14 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     @log_info
     def update_datafiles_live(self, datafile_list=[]):
         dict_files = get_dict_files(list_files=datafile_list)
-        self.h5.update_datafiles(dict_files=dict_files)
+        self._active_h5.update_datafiles(dict_files=dict_files)
         
         # Update listwidget
         self.update_sample_listwidget()
         
         # Activate the last entry
         new_sample = sorted(dict_files.keys())[0]
-        new_sample = Path(new_sample).relative_to(self.h5._root_dir).as_posix()
+        new_sample = Path(new_sample).relative_to(self._active_h5._root_dir).as_posix()
         if new_sample != self.active_entry:
             self.active_entry = new_sample
         
@@ -2439,7 +2532,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         # Get a Pandas.DataFrame to upload the table
         keys_to_display = self.combobox_metadata.currentData()
-        dataframe = self.h5.get_metadata_dataframe(
+        dataframe = self._active_h5.get_metadata_dataframe(
             sample_name=self.active_entry,
             list_keys=keys_to_display,
         )
@@ -2451,21 +2544,21 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
         
         # Activate last file
-        self.cache_index = tm.get_row_count(self.table_files) - 1
-        if not self.cache_index:
+        self.active_index = tm.get_row_count(self.table_files) - 1
+        if not self.active_index:
             return
 
         # Update data cache
         self._data_cache = self.get_final_data(
             sample_name=self.active_entry,
-            index=self.cache_index,
+            index=self.active_index,
             scaled_factor=self.spinbox_sub.value(),
         )
 
         # Update GI angles
-        self.h5.update_angles(
+        self._active_h5.update_angles(
             sample_name=self.active_entry,
-            list_index=self.cache_index,
+            list_index=self.active_index,
         )
 
         # Update label dislayed
@@ -2492,17 +2585,17 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         """
         Saves information of .h5 file in a .json to be located afterwards
         """        
-        if not self.h5:
+        if not self._active_h5:
             return
 
         # Get the output name for the .json
-        name_json = self.h5._name.replace(".h5", ".json")
+        name_json = self._active_h5._name.replace(".h5", ".json")
         H5_FILES_PATH.mkdir(parents=True, exist_ok=True)
 
         filename_out = H5_FILES_PATH.joinpath(f"{name_json}")
 
         # Fetch the dictionary of attributes from the h5 instance
-        dict_h5 = self.h5.h5_get_dict_attrs()
+        dict_h5 = self._active_h5.h5_get_dict_attrs()
 
         # Save the dictionary as a .json file
         with open(filename_out, 'w+') as fp:
@@ -2546,15 +2639,15 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Returns:
         None
         """
-        if self.h5:
+        if self._active_h5:
             if not last_file:
-                last_file = self.h5.get_last_file()
-            last_file_folder, last_file_index = self.h5.get_sample_index_from_filename(
+                last_file = self._active_h5.get_last_file()
+            last_file_folder, last_file_index = self._active_h5.get_sample_index_from_filename(
                 filename=last_file,
             )
             if last_file_folder and last_file_index:
                 # self.clicked_folder = last_file_folder
-                self.cache_index = last_file_index
+                self.active_index = last_file_index
                 # self.log_explorer_info(f"Updated clicked folder: {self.clicked_folder} and cache index: {self.cache_index}")
                 self.get_final_data(),
                 self.update_1D_graph(),
@@ -2568,7 +2661,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     def cb_metadata_changed(self, _):
         # Get a Pandas.DataFrame to upload the table
         keys_to_display = self.combobox_metadata.currentData()
-        dataframe = self.h5.get_metadata_dataframe(
+        dataframe = self._active_h5.get_metadata_dataframe(
             sample_name=self.active_entry,
             list_keys=keys_to_display,
         )
@@ -2594,7 +2687,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             sample_name = self.active_entry
 
         # Fetch the list of metadata keys in that sample
-        metadata_keys = self.h5.get_all_metadata_keys_from_sample(
+        metadata_keys = self._active_h5.get_all_metadata_keys_from_sample(
             sample_name=sample_name,
         )
 
@@ -2622,18 +2715,18 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     def update_sample_orientation(self):
         active_sample = self.active_entry
 
-        if not active_sample or not self.cache_index:
+        if not active_sample or not self.active_index:
             return
 
-        incident_angle = self.h5.get_incident_angle(
+        incident_angle = self._active_h5.get_incident_angle(
             sample_name=active_sample,
-            index_list=self.cache_index,
+            index_list=self.active_index,
         )
-        tilt_angle = self.h5.get_tilt_angle(
+        tilt_angle = self._active_h5.get_tilt_angle(
             sample_name=active_sample,
-            index_list=self.cache_index,
+            index_list=self.active_index,
         )
-        self.h5.update_incident_tilt_angle(
+        self._active_h5.update_incident_tilt_angle(
             incident_angle=incident_angle,
             tilt_angle=tilt_angle,
         )
@@ -2677,7 +2770,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # self._data_cache = data
 
         # Update GI angles
-        # self.h5.update_angles(
+        # self._active_h5.update_angles(
         #     sample_name=self.active_entry,
         #     list_index=self.cache_index,
         # )
@@ -2701,7 +2794,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     def sub_factor_changed(self, scale_factor):
         self._data_cache = self.get_final_data(
             sample_name=self.active_entry,
-            index=self.cache_index,
+            index=self.active_index,
             scaled_factor=scale_factor,
         )
 
@@ -2717,7 +2810,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         if data is None:
             return
-        if not self.h5:
+        if not self._active_h5:
             return
 
         reference_folder_name = cb.value(self.combobox_reffolder)
@@ -2741,7 +2834,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 item=f"(Auto): {reference_name}",
             )
 
-        data_ref = self.h5.get_Edf_data(
+        data_ref = self._active_h5.get_Edf_data(
             full_filename=full_reference_filename,
             sample_name=reference_folder_name,
             index=index_ref,
@@ -2760,23 +2853,23 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         """
         Returns the full filename to be subtracted from the sample data
         """
-        if not self.h5:
+        if not self._active_h5:
             return
 
         # Automatic searching of file through the acquisition time
         if self.checkbox_auto_reffile.isChecked():
             index = 0
-            if not self.h5.get_acquisition_key():
+            if not self._active_h5.get_acquisition_key():
                 self.log_explorer_info("There is no key for acquisition time. Reference subtraction is not possible.")
                 return None, None
 
-            acq_time_file = self.h5.get_acquisition_time(
+            acq_time_file = self._active_h5.get_acquisition_time(
                 folder_name=self.active_entry,
-                index_list=self.cache_index,
+                index_list=self.active_index,
             )
             self.log_explorer_info(f"Acquisition time of the sample is {acq_time_file}.")
 
-            acq_ref_dataset = self.h5.get_dataset_acquisition_time(
+            acq_ref_dataset = self._active_h5.get_dataset_acquisition_time(
                 sample_name=sample_reference,
             )
             self.log_explorer_info(f"Acquisition dataset of the reference folder is {acq_ref_dataset}.")
@@ -2785,7 +2878,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             if (acq_time_file is not None) and (acq_ref_dataset is not None):
                 for index, exp_ref in enumerate(acq_ref_dataset):
                     if exp_ref == acq_time_file:
-                        full_reference_filename = self.h5.get_filename_from_index(
+                        full_reference_filename = self._active_h5.get_filename_from_index(
                             sample_name=sample_reference,
                             index_list=index,
                         )
@@ -2798,7 +2891,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         else:
             index = 0
             file_reference_name = cb.value(self.combobox_reffile)
-            full_reference_filename = str(self.h5._root_dir.joinpath(Path(sample_reference), Path(file_reference_name)))
+            full_reference_filename = str(self._active_h5._root_dir.joinpath(Path(sample_reference), Path(file_reference_name)))
             self.log_explorer_info(f"Chosen reference file: {full_reference_filename}.")
 
         if return_index:
@@ -2894,9 +2987,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         # if not self.clicked_folder or not self.cache_index:
         #     return
 
-        new_label = self.h5.get_filename_from_index(
+        new_label = self._active_h5.get_filename_from_index(
             sample_name=self.active_entry,
-            index_list=self.cache_index,
+            index_list=self.active_index,
         )
 
         self.log_explorer_info(f"New label: {new_label}")
@@ -2970,7 +3063,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         graph_2D_reshape=False,
         graph_2D_q=False,
         ):
-        if not self.h5:
+        if not self._active_h5:
             return
 
         if data is None:
@@ -3033,7 +3126,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.list_dict_integration_cache = list_dict_integration
         self.list_results_cache = []
 
-        for ind, result in enumerate(self.h5.generate_integration(
+        for ind, result in enumerate(self._active_h5.generate_integration(
             data=data,
             norm_factor=norm_factor,
             list_dict_integration=list_dict_integration,
@@ -3087,7 +3180,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     @log_info
     def save_plot_clicked(self, _):
-        if not self.h5:
+        if not self._active_h5:
             return
 
         if not self.list_results_cache:
@@ -3109,7 +3202,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             confirm_save = QMessageBox.question(self, 'MessageBox', "You are going to save in the same data folder. \
                 Do you want to continue? You can change it in the blank square above.", QMessageBox.Yes | QMessageBox.No)
             if confirm_save == QMessageBox.Yes:
-                folder_output = self.h5._root_dir.joinpath(self.active_entry)
+                folder_output = self._active_h5._root_dir.joinpath(self.active_entry)
             else:
                 return
 
@@ -3165,7 +3258,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         ) -> np.array:
 
         try:
-            data = self.h5.get_Edf_data(
+            data = self._active_h5.get_Edf_data(
                 sample_name=sample_name,
                 index=index,
                 normalized=normalized,
@@ -3179,7 +3272,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     @log_info
     def update_2D_reshape_map(self, data=None, clear=True):
-        if not self.h5:
+        if not self._active_h5:
             return
 
         if data is None:
@@ -3192,7 +3285,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
 
         try:
-            data_reshape, q, chi = self.h5.map_reshaping(data=data,)
+            data_reshape, q, chi = self._active_h5.map_reshaping(data=data,)
         except Exception as e:
             self.log_explorer_info(f"{e}: Data could not be reshaped.")
             return
@@ -3292,7 +3385,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Returns:
         None
         """
-        if not self.h5:
+        if not self._active_h5:
             return
 
         # Get cache versions of the scattering matrix
@@ -3312,13 +3405,13 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         qr_current = self.state_qr
         mirror_current = self.state_mirror
         binning_current = int(self.spinbox_binnning_data.value())
-        iangle_current = self.h5.get_incident_angle(
+        iangle_current = self._active_h5.get_incident_angle(
             sample_name=self.clicked_folder,
-            index_list=self.cache_index,
+            index_list=self.active_index,
         )
-        tangle_current = self.h5.get_tilt_angle(
+        tangle_current = self._active_h5.get_tilt_angle(
             sample_name=self.clicked_folder,
-            index_list=self.cache_index,
+            index_list=self.active_index,
         )
 
         # Redone the data if new_data
@@ -3353,7 +3446,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             # Get the unit of the generated map
 
 
-            scat_horz, scat_vert = self.h5.get_mesh_matrix(
+            scat_horz, scat_vert = self._active_h5.get_mesh_matrix(
                 unit=unit,
                 shape=self._data_cache.shape,
             )
@@ -3556,7 +3649,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     #     clear_axes=True,
     #     **kwargs):
 
-    #     if not self.h5:
+    #     if not self._active_h5:
     #         return
 
     #     if (mesh_horz is None) or (mesh_vert is None) or (data is None):
@@ -3715,7 +3808,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
                 self.log_explorer_info(f"Parameters to mask the array. Shape: {shape}, unit: {unit}, \
                     p0_range: {p0_range}, p1_range: {p1_range}, pos0_scale: {pos0_scale}.")
-                chi, pos0 = self.h5.gi.giarray_from_unit(shape, "sector", "center", unit)
+                chi, pos0 = self._active_h5.gi.giarray_from_unit(shape, "sector", "center", unit)
             except:
                 logger.error(f"Chi and pos0 matrix could not be generated. The parameters were: \
                     Shape: {shape}, unit: {unit}, p0_range: {p0_range}, p1_range: {p1_range}, pos0_scale: {pos0_scale}.")
@@ -3746,7 +3839,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
                 self.log_explorer_info(f"Parameters to mask the array. Shape: {shape}, unit: {unit}, \
                     oop_range: {oop_range}, ip_range: {ip_range}, q_scale: {q_scale}.")
-                horz_q, vert_q = self.h5.gi.giarray_from_unit(shape, "opbox", "center", unit_gi)
+                horz_q, vert_q = self._active_h5.gi.giarray_from_unit(shape, "opbox", "center", unit_gi)
             except Exception as e:
                 logger.error(f"{e} horz_q and vert_q matrix could not be generated with {dict_integration} and shape {shape}")
                 return
@@ -3784,16 +3877,17 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             keys_title = self.combobox_headeritems_title.currentData()
             title_str = ''
             for key in keys_title:
-                metadata_value = self.h5.get_metadata_value(
+                metadata_value = self._active_h5.get_metadata_value(
                     sample_name=self.active_entry,
                     sample_relative_address=True,
                     key_metadata=key,
-                    index_list=self.cache_index,
+                    index_list=self.active_index,
                 )
                 title_str += f"{key}={metadata_value}; "
         except:
             title_str = ''
-        self.log_explorer_info(f"Title for the generated map: {title_str}")  
+        
+        # self.log_explorer_info(f"Title for the generated map: {title_str}")  
         return title_str
 
     @log_info

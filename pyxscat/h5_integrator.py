@@ -104,7 +104,7 @@ class H5GIIntegrator():
     """
     Creates an HDF5 file and provides methods to read/write the file following the hierarchy of XMaS-BM28
     """
-    def __init__(self, input_h5_filename='', root_directory='', output_filename_h5=''):
+    def __init__(self, input_h5_filename='', root_directory='', output_filename_h5='', init_data=False):
 
         logger.info("H5GIIntegrator instance was created.")
 
@@ -150,7 +150,11 @@ class H5GIIntegrator():
                 h5_filename=output_filename_h5,
             )     
         else:
-            raise Exception(INPUT_ROOT_DIR_NOT_VALID) 
+            raise Exception(INPUT_ROOT_DIR_NOT_VALID)
+        
+        if init_data:
+            self.update_ponifiles()
+            self.update_datafiles(search=True)
 
     def init_root_h5_attributes(self, input_h5_filename='', root_directory='', output_filename_h5=''):
         if input_h5_filename:
