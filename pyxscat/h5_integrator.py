@@ -17,6 +17,7 @@ from pyxscat.other.integrator_methods import *
 from pyxscat.other.setup_methods import *
 import os
 from typing import List, Any
+from multiprocessing import Pool
 
 ENCODING_FORMAT = "UTF-8"
 FORMAT_STRING = h5py.string_dtype(ENCODING_FORMAT)
@@ -99,6 +100,28 @@ def logger_info(func):
         logger.info(f'We entered into function: {func.__name__}')
         return func(*args, **kwargs)
     return wrapper
+
+
+def get_dict_entry(pattern, entry):
+    d_entry = defaultdict(list)
+
+    for file in entry.glob(pattern):
+        d_entry['filenames'].append(str(file))
+        d_entry['names'].append(str(file.name))
+
+        header = EdfClass(filename=str(file)).get_header()
+        for metadata_key,metadata_value in header.items():
+            try:
+                metadata_value = float(metadata_value)
+            except:
+                metadata_value = str(metadata_value)
+            d_entry[metadata_key].append(metadata_value)
+    
+    return d_entry
+
+
+
+
 
 class H5GIIntegrator():
 # class H5GIIntegrator(Transform):
@@ -1099,11 +1122,37 @@ class H5GIIntegrator():
     ############# DATAFILE METHODS ##############
     ##################################################
 
+
+
+    def update_new_data_fast(
+        self,
+        pattern: str = '*.edf',
+        ) -> dict:
+
+        attrs = [
+            (
+                pattern, 
+                subdir,
+            ) 
+            for subdir in self._root_dir.rglob('**/')
+        ]
+
+        with Pool(processes=4) as pool:  # creating a pool with 4 worker processes
+            results = pool.starmap(get_dict_entry, attrs)
+
+        for result, entry in zip(results, self._root_dir.rglob('**/')):
+            self.dict_data[str(entry)] = result
+
+        #works extremely fast but needs a filter 
+
+
+
+
     @logger_info
     def update_new_data(
         self,
         pattern: str = '*.edf',
-    ) -> dict:
+        ) -> dict:
         """Updates the database with data files in the root directory that match with a pattern
 
         Keyword arguments:
