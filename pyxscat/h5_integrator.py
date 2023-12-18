@@ -16,6 +16,7 @@ from silx.io.h5py_utils import File
 from pyxscat.other.integrator_methods import *
 from pyxscat.other.setup_methods import *
 import os
+from typing import List, Any
 
 ENCODING_FORMAT = "UTF-8"
 FORMAT_STRING = h5py.string_dtype(ENCODING_FORMAT)
@@ -107,6 +108,7 @@ class H5GIIntegrator():
     def __init__(self, input_h5_filename='', root_directory='', output_filename_h5='', init_data=False):
 
         logger.info("H5GIIntegrator instance was created.")
+        self.dict_data = defaultdict(lambda : defaultdict(list))  
 
         if input_h5_filename:
 
@@ -1098,34 +1100,156 @@ class H5GIIntegrator():
     ##################################################
 
     @logger_info
-    def search_datafiles(self, pattern='*.edf', new_files=True) -> dict:
-        """Searches the data files in the root directory that match with a pattern
+    def update_new_data(
+        self,
+        pattern: str = '*.edf',
+    ) -> dict:
+        """Updates the database with data files in the root directory that match with a pattern
 
-        Keyword Arguments:
-            pattern -- filename string pattern (default: {'*.edf'})
+        Keyword arguments:
+        pattern -- filename string pattern (default: {'*.edf'})
 
         Returns:
-            dictionary with folder addresses as keys and list of data addresses as values
-        """        
-        searched_files = self._root_dir.rglob(pattern)
+        dict: all metadata collected from files
+        """   
+        dict_new_data = defaultdict(lambda : defaultdict(list))
 
-        dict_files = get_dict_files(
-            list_files=searched_files,
-        )
+        # If there is no stored data so far, append directly without checking
+        if not self.dict_data:
 
-        if new_files:
-            # Identify the new files
-            dict_files_in_h5 = self.get_dict_files()
-            dict_files = get_dict_difference(
-                large_dict=dict_files,
-                small_dict=dict_files_in_h5,
-            )
-            logger.info(f"{INFO_H5_NEW_DICTIONARY_FILES}: {str(dict_files)}")
+            for file in self._root_dir.rglob(pattern):
+                dict_new_data[str(file.parent)]['filenames'].append(str(file))
+                dict_new_data[str(file.parent)]['names'].append(str(file.name))
+                header = EdfClass(filename=str(file)).get_header()
+                for metadata_key,metadata_value in header.items():
+                    try:
+                        metadata_value = float(metadata_value)
+                    except:
+                        metadata_value = str(metadata_value)
+                    dict_new_data[str(file.parent)][metadata_key].append(metadata_value)
 
-        return dict_files
+            # Search also for .poni files
+            for file in self._root_dir.rglob('*.poni'):
+                dict_new_data['ponifiles']['files'].append(str(file))
+
+            self.dict_data = dict_new_data
+
+        # If there are stored data, check if it is redundant
+        else:
+            for file in self._root_dir.rglob(pattern):
+                if str(file) not in self.dict_data[str(file.parent)]['filenames']:
+
+                    dict_new_data[str(file.parent)]['filenames'].append(str(file))
+                    dict_new_data[str(file.parent)]['names'].append(str(file.name))
+                    self.dict_data[str(file.parent)]['filenames'].append(str(file))
+                    self.dict_data[str(file.parent)]['names'].append(str(file.name))
+
+                    header = EdfClass(filename=str(file)).get_header()
+                    for metadata_key,metadata_value in header.items():
+                        try:
+                            metadata_value = float(metadata_value)
+                        except:
+                            metadata_value = str(metadata_value)
+
+                        dict_new_data[str(file.parent)][metadata_key].append(metadata_value)
+                        self.dict_data[str(file.parent)][metadata_key].append(metadata_value)
+
+            # Search also for .poni files
+            for file in self._root_dir.rglob('*.poni'):
+                if str(file) not in self.dict_data['ponifiles']['files']:
+                    dict_new_data['ponifiles']['files'].append(str(file))
+                    self.dict_data['ponifiles']['files'].append(str(file))
+
+        return dict_new_data
 
     @logger_info
-    def update_datafiles(self, dict_files=dict(), search=False, pattern='*.edf', new_files=True,):
+    def get_metadata(
+        self, 
+        entry_name: str = '', 
+        metadata_key: str = '',
+        index: List[int] = [],
+        ) -> list:
+        """Retrieves metadata from database (self.dict_data)
+
+        Keyword arguments:
+        entry_name -- name of the subdirectory (default '')
+        metadata_key -- name of the metadata key (default '')
+        index - list of integers, associated with the files inside the directory (default [])
+
+        Returns:
+        list: metadata stored in database
+        """   
+        if isinstance(index, int):
+            index = [index, index + 1]
+        elif isinstance(index, list) and len(index) == 1:
+            index = [index[0], index[0] + 1]
+        elif index == []:
+            index = [0, 999999]
+        
+        metadata = self.dict_data[entry_name][metadata_key][index[0]:index[1]]
+        if metadata == []:
+            logger.error(f'No metadata could be retrieved with name ({metadata_key}) in entry ({entry_name}) through index ({index})')
+        return metadata
+
+    @logger_info
+    def get_ponifiles(
+        self, 
+        ) -> list:
+        """Retrieves .poni filenames from database (self.dict_data)
+
+        Returns:
+        list: metadata stored in database
+        """   
+        metadata = self.get_metadata(
+            entry_name='ponifiles',
+            metadata_key='files'
+        )
+        if metadata == []:
+            logger.error(f'No .poni files to retrieve.')
+        return metadata
+
+    @logger_info
+    def save_database(self):
+        json_out = f'kk.json'
+        with open(json_out, '+w') as fp:
+            json.dump(self.dict_data, fp)
+
+    @logger_info
+    def save_h5_file(self):
+        with h5py.File('kk.h5', 'w') as f:
+            for ind_entry, entry in enumerate(self.dict_data.keys()):
+                name_entry = f'entry_{ind_entry:04}'
+                f.create_group(name=name_entry)
+                for metadata_key, metadata_list in self.dict_data[entry].items():
+                    try:
+                        f[name_entry].create_dataset(
+                            name=metadata_key,
+                            data=np.array(metadata_list),
+                        )
+                    except:
+                        f[name_entry].create_dataset(
+                            name=metadata_key,
+                            data=np.array(metadata_list),
+                            dtype=FORMAT_STRING,
+                        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @logger_info
+    def update_datafiles(self, pattern='*.edf'):
 
         """Updates the data filenames as NXentries
 
@@ -1134,16 +1258,7 @@ class H5GIIntegrator():
             search -- if True, searches in the root dictionary (default: {False})
             pattern -- filename string pattern (default: {'*.edf'})
             new_files -- if True, update only the new files (default: {True})
-        """        
-
-        # Search for new files
-        if dict_files:
-            dict_files = dict_files
-        elif search:
-            dict_files = self.search_datafiles(
-                pattern=pattern,
-                new_files=new_files,
-            )
+        """     
 
         # Write the new files
         for sample_address in dict_files.keys():
@@ -1155,15 +1270,7 @@ class H5GIIntegrator():
                 self.create_entry(entry_name=group_name)
             else:
                 group_name = existing_entry
-            # if existing_entry:
-            #     group_name = existing_entry
-            #     data_files = dict_files.get(sample_address)
-            #     self.delete_nx_group(entry=group_name)
-            # else:
-            #     group_name = self.get_new_nx_entry_name()
-            #     self.create_entry(entry_name=group_name)
-            #     data_files = dict_files.get(sample_address)
-            
+
             data_files = dict_files.get(sample_address)
             dict_metadata = self.get_full_dict_metadata(
                 list_filenames=data_files,
@@ -1183,22 +1290,77 @@ class H5GIIntegrator():
                         metadata_key=key,
                         data_values=value,
                     )
-                    # Resize and append
-                
-
-                # save_NXdata(
-                #     filename=self._h5_filename,
-                #     signal_name=key,
-                #     signal=value,
-                #     interpretation='spectrum',
-                #     nxentry_name=group_name,
-                #     nxdata_name=key,
-                # )
 
                 self.write_sample_address(
                     group_name=group_name,
                     sample_address=sample_address,
                 )
+
+
+    @logger_info
+    def update_datafiles_todict(self, pattern='*.edf'):
+
+        """Updates the data filenames as NXentries
+
+        Keyword Arguments:
+            dict_files -- input dictionary of folder-filenames (default: {dict()})
+            search -- if True, searches in the root dictionary (default: {False})
+            pattern -- filename string pattern (default: {'*.edf'})
+            new_files -- if True, update only the new files (default: {True})
+        """        
+
+        # Search for new files
+        dict_datafiles = self.get_dict_data(
+            pattern=pattern,
+        )
+        
+
+
+
+
+        return dict_datafiles
+
+        # # Write the new files
+        # for sample_address in dict_files.keys():
+
+        #     # Rewrite group if it exists
+        #     existing_entry = self.get_entry_name(sample_address=sample_address)
+        #     if not existing_entry:
+        #         group_name = self.get_new_nx_entry_name()
+        #         self.create_entry(entry_name=group_name)
+        #     else:
+        #         group_name = existing_entry
+
+        #     data_files = dict_files.get(sample_address)
+        #     dict_metadata = self.get_full_dict_metadata(
+        #         list_filenames=data_files,
+        #     )
+
+        #     for key, value in dict_metadata.items():
+        #         if not self.check_metadata_group(entry_name=group_name, metadata_key=key):
+        #             # Create group/dataset
+        #             self.create_group_metadata(
+        #                 entry_name=group_name,
+        #                 metadata_key=key,
+        #                 data_values=value,
+        #             )              
+        #         else:
+        #             self.append_metadata_value(
+        #                 entry_name=group_name,
+        #                 metadata_key=key,
+        #                 data_values=value,
+        #             )
+
+        #         self.write_sample_address(
+        #             group_name=group_name,
+        #             sample_address=sample_address,
+        #         )
+
+
+
+
+
+
 
     @logger_info
     def get_entry_name(self, sample_address=''):

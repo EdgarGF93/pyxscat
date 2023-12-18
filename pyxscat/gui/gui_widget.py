@@ -35,6 +35,8 @@ import sys
 import os
 import pandas as pd
 
+from typing import Sequence, List,
+
 from pyxscat.other.setup_methods import *
 
 ICON_SPLASH = join(ICON_DIRECTORY, 'pyxscat_new_logo.png')
@@ -1093,11 +1095,11 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     @log_info
     def init_h5_instance(
         self,
-        root_directory='',
-        output_filename_h5='',
-        input_filename_h5='',
-        init_data=False,
-        ):
+        root_directory: str = '',
+        output_filename_h5: str = '',
+        input_filename_h5: str = '',
+        init_data: bool = False,
+        ) -> H5GIIntegrator:
         """
         Generates an instance of H5Integrator
 
@@ -1128,7 +1130,10 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             return
 
     @log_info
-    def get_h5_filename(self, root_directory=''):
+    def get_h5_filename(
+        self,
+        root_directory: str = '',
+        ):
         """
         Creates a new filename for the incoming new .h5 file
 
