@@ -1144,6 +1144,9 @@ class H5GIIntegrator():
             self.dict_data[str(entry)] = result
 
         #works extremely fast but needs a filter 
+            
+
+            
 
 
 
