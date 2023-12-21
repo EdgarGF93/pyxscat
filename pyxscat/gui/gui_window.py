@@ -1,6 +1,6 @@
 
 from . import ICON_DIRECTORY
-from pyxscat.gui.gui_widget import GUIPyXMWidget
+from pyxscat.gui.gui_widget_2 import GUIPyXMWidget
 from pyxscat.gui.gui_widget_about import AboutForm
 
 

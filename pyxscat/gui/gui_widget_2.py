@@ -27,6 +27,8 @@ from pyxscat.gi_integrator import UNIT_GI
 from pyxscat.gui.gui_layout import QZ_BUTTON_LABEL, QR_BUTTON_LABEL, MIRROR_BUTTON_LABEL
 from PyQt5.QtWidgets import QComboBox
 
+from pyxscat.metadata import MetadataBase, PoniMetadata
+
 import copy
 import json
 import numpy as np
@@ -167,6 +169,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self._scattersize_cache = DEFAULT_SCATTER_SIZE
         self._terminal_visible = True
         self._live = False
+
+        self._meta = pyqtSignal()
+        self.meta = None
         
         self._active_h5 = pyqtSignal()
         self.active_h5 = None
@@ -300,7 +305,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         #########################
         # Open/Creating H5 files
         #########################
-        self.button_pick_rootdir.clicked.connect(self.pick_rootdir_clicked)
+        self.button_pick_rootdir.clicked.connect(self.slot_rootdir_clicked)
         self.button_pick_hdf5.clicked.connect(self.pick_h5file_clicked)        
         self.combobox_h5_files.currentTextChanged.connect(self.cb_h5_changed)
 
@@ -356,7 +361,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         #########################
         # Ponifile callbacks
         #########################
-        self.combobox_ponifile.currentTextChanged.connect(self.cb_ponifile_changed)
+        self.combobox_ponifile.currentTextChanged.connect(self.slot_ponifile_changed)
 
         #########################
         # Reference callbacks
@@ -781,7 +786,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.feed_integration_widgets()
 
         # Update the graphs
-        self.update_graphs(
+        self._update_graphs(
             graph_1D=True,
             graph_2D_raw=True,
         )
@@ -889,7 +894,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.feed_integration_widgets()
 
         # Update the graphs
-        self.update_graphs(
+        self._update_graphs(
             graph_1D=True,
             graph_2D_raw=True,
         )
@@ -953,7 +958,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
         # Update only q map
-        self.update_graphs(
+        self._update_graphs(
             graph_2D_q=True,
         )
 
@@ -979,7 +984,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
         # Update 1D and q map
-        self.update_graphs(
+        self._update_graphs(
             graph_2D_raw=True,
             graph_1D=True,
             graph_2D_q=True,
@@ -1007,7 +1012,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         )
 
         # Update 1D and q map
-        self.update_graphs(
+        self._update_graphs(
             graph_2D_raw=True,
             graph_1D=True,
             graph_2D_q=True,
@@ -1033,64 +1038,458 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         new_sample_or = self._active_h5.gi.sample_orientation
         self.log_explorer_info(f"New sample orientation: {new_sample_or}")
 
-    #################################
-    ## ROOT-DIRECTORY METHODS #######
-    #################################
-    
+
+
+
+
+
+
+
+    ######################
+    ##### SLOTS
+    ######################
+        
     @log_info
-    def pick_rootdir_clicked(self,_):
+    def slot_rootdir_clicked(self,_):
         """
         Chain of events after pressing the folder button
         """
+        self.init_browser()
+    
+    @log_info
+    def slot_ponifile_changed(self, poni_name):
+        """
+        Updates the .poni parameters from a changed value of .poni filename
+
+        Arguments:
+            poni_name -- string of .poni filename
+        """
+        self.update_poni(poni_data=poni_name)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #################################
+    ## BROWSER METHODS #######
+    #################################
+
+    @log_info
+    def init_browser(self):
         # Get the address of a root directory
         root_directory = self.pick_root_directory()
         if not root_directory:
             return
-
-        # Generate a filename for the .h5 file
-        h5_filename = self.get_h5_filename(
-            root_directory=root_directory,
-        )
-        if not h5_filename:
-            return
-
-        # Create the H5 instance from a root directory
-        h5 = self.init_h5_instance(
-            root_directory=root_directory,
-            output_filename_h5=h5_filename,
-            input_filename_h5=None,
-            init_data=True,
-        )
-        if not h5:
-            return
         
-        self.active_h5 = h5
+        # Parse root_directory and pattern
+        root_directory = Path(root_directory)
+        pattern = self.get_pattern()
 
-        # # Feed data files and ponifiles within the h5 instance
-        # self._active_h5.update_datafiles(
-        #     search=True,
-        #     pattern=self.get_pattern(),
-        # )
-        # self._active_h5.update_ponifiles()
+        self._init_browser(
+            root_directory=root_directory,
+            pattern=pattern,
+        )
 
-        # # Update combobox of ponifiles
-        # self.update_cb_ponifiles(
-        #     from_h5=True,
-        #     reset=True,
-        #     relative_address=GET_RELATIVE_ADDRESS,
-        # )
+    @log_info
+    def _init_browser(self, root_directory: str = '', pattern: str = ''):
 
-        # # Update list of samples
-        # self.update_sample_listwidget(
-        #     # from_h5=True,
-        #     reset=True,
-        # )
+        # MetadataBase
+        if not self._init_meta(
+            root_directory=root_directory,
+            pattern=pattern,
+            ):
+            return
+        self.update_listwidget(init=True)
+        self.update_referencecb(init=True)
 
-        # # Save a .json file with the attributes of the new h5 instance
-        # self.save_h5_dict()
+        # PoniMetadataBase
+        if not self._init_meta_poni(
+            root_directory=root_directory,
+            ):
+            return
 
-        # # Update the combobox of h5 files
-        # self.update_combobox_h5()
+        self.update_ponicb(init=True)
+
+    @log_info
+    def _init_meta(self, root_directory, pattern) -> bool:
+        try:
+            self.meta = MetadataBase(
+                directory=root_directory,
+                pattern=pattern,
+            )
+            return True
+        except Exception as e:
+            self.log_explorer_error(f'Metadata base instance could not be initialized: {e}')
+            return False
+        
+    @log_info
+    def _init_meta_poni(self, root_directory: str = ''):
+        try:
+            self.meta_poni = PoniMetadata(
+                directory=root_directory,
+            )
+            return True
+        except Exception as e:
+            self.log_explorer_error(f'PoniMetadata base instance could not be initialized: {e}')
+            return False
+
+    @log_info
+    def update_listwidget(self, init=False):
+        if init:
+            self._init_listwidget()
+        else:
+            self._update_listwidget()
+
+    @log_info
+    def _init_listwidget(self):
+        listwidget = self.listwidget_samples
+
+        # Reset listwidget
+        lt.clear(listwidget=listwidget)
+
+        # Feed listwidget
+        for entry in self.meta.gen_entries(relative_path=True):
+            lt.insert(
+                listwidget=listwidget,
+                item=entry,
+                repeat_file=False,
+            )
+
+    @log_info
+    def _update_listwidget(self):
+        listwidget = self.listwidget_samples
+        for entry in self.meta.gen_new_entries(relative_path=True):
+            lt.insert(
+                listwidget=listwidget,
+                item=entry,
+                repeat_file=False,
+            )
+
+    @log_info
+    def update_referencecb(self, init=False):
+        if init:
+            self._init_referencecb()
+        else:
+            self._update_referencecb()
+
+    @log_info
+    def _init_referencecb(self):
+        combobox = self.combobox_reffolder
+        cb.clear(combobox=combobox)
+        for entry in self.meta.gen_entries(relative_path=True):
+            cb.insert(
+                combobox=combobox,
+                item=entry,
+            )
+
+    @log_info
+    def _update_referencecb(self):
+        combobox = self.combobox_reffolder
+        for entry in self.meta.gen_new_entries(relative_path=True):
+            cb.insert(
+                combobox=combobox,
+                item=entry,
+            )
+
+    @log_info
+    def update_ponicb(self, init=True):
+        if init:
+            self._init_ponicb()
+        else:
+            self._update_ponicb()
+
+    @log_info
+    def _init_ponicb(self):
+        combobox = self.combobox_ponifile
+        cb.clear(combobox=combobox)
+        for ponifile in self.meta_poni.gen_files(relative_path=True):
+            cb.insert(
+                combobox=combobox,
+                item=ponifile,
+            )
+
+    @log_info
+    def _update_ponicb(self):
+        combobox = self.combobox_ponifile
+        for ponifile in self.meta_poni.gen_new_files(relative_path=True):
+            cb.insert(
+                combobox=combobox,
+                item=ponifile,
+            )
+
+    @log_info
+    def update_poni(self, poni_data):
+
+        if isinstance(poni_data, (str, Path)):
+            poni_data = Path(poni_data)
+            if not poni_data.absolute() == poni_data:
+                poni_data = self.meta.get_absolute_path(relative_path=poni_data)
+            if not Path(poni_data).is_file():
+                self.log_explorer_error(f'Ponifile {poni_data} does not exists??')
+                return
+        elif isinstance(poni_data, PoniFile):
+            pass
+        else:
+            self.log_explorer_error(f'Poni_data {poni_data} (type: {type(poni_data)}) is not a valid type')
+            return
+                
+        try:
+            poni = PoniFile(data=poni_data)
+        except Exception as e:
+            self.log_explorer_error(f'Poni instance could not be created using {poni_data}: {e}')
+            return
+
+        self._update_poni(poni=poni)
+        self._update_poni_widgets()
+        self._update_graphs(graph_1D=True, graph_2D_q=True, graph_2D_reshape=True)
+
+    @log_info
+    def _update_poni(self, poni):
+        self._active_poni = poni
+
+    @log_info
+    def _update_poni_widgets(self):
+        """
+        Update the ponifile widgets from a valid PoniFile instance
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """        
+        self._update_detector_widget()
+        self._update_wavelength_widget()
+        self._update_dist_widget()
+        self._update_poni1_widget()
+        self._update_poni2_widget()
+        self._update_rot1_widget()
+        self._update_rot2_widget()
+        self._update_rot3_widget()
+
+    @log_info
+    def _update_detector_widget(self):
+        """
+        Update the widget with detector information
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """        
+        widget = self.lineedit_detector
+
+        try:
+            detector_name = self._active_poni.detector.name
+        except Exception as e:
+            self.log_explorer_error(f"{e}: Detector name could not be retrieved from {self._active_poni}.")
+            detector_name = ''
+
+        try:
+            detector_bin = self._active_poni.detector.binning
+        except Exception as e:
+            self.log_explorer_error(f"{e}: Detector binning could not be retrieved from {self._active_poni}.")
+            detector_bin = ('x','x')
+
+        try:
+            shape = self._active_poni.detector.shape
+            shape = (shape[0], shape[1])
+        except Exception as e:
+            self.log_explorer_error(f"{e}: Shape could not be retrieved from {self._active_poni}.")
+            shape = (0,0)         
+
+        detector_info = f'{str(detector_name)} / {str(detector_bin)} / {str(shape)}'
+
+        le.substitute(
+                lineedit=widget,
+                new_text=detector_info,
+            )
+  
+    @log_info
+    def _update_wavelength_widget(self):
+        """
+        Update the widget with wavelength parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_wavelength
+
+        try:
+            wave = self._active_poni.wavelength
+        except Exception as e:
+            self.log_explorer_error(f"{e}: Wavelength could not be retrieved from {self._active_poni}.")
+            wave = 0.0
+
+        le.substitute(
+                lineedit=widget,
+                new_text=wave,
+            )
+
+    @log_info
+    def _update_dist_widget(self):
+        """
+        Update the widget with sample-detector distance parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_distance
+
+        try:
+            dist = self._active_poni.dist
+        except Exception as e:
+            self.log_explorer_error(f"{e}: Distance could not be retrieved from {self._active_poni}.")
+            dist = 0.0
+
+        le.substitute(
+                lineedit=widget,
+                new_text=dist,
+            )
+
+    @log_info
+    def _update_poni1_widget(self):
+        """
+        Update the widget with PONI 1 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_poni1
+
+        try:
+            poni1 = self._active_poni.poni1
+        except Exception as e:
+            self.log_explorer_error(f"{e}: PONI1 could not be retrieved from {self._active_poni}.")
+            poni1 = 0.0
+
+        le.substitute(
+                lineedit=widget,
+                new_text=poni1,
+            )
+
+    @log_info
+    def _update_poni2_widget(self):
+        """
+        Update the widget with PONI 2 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_poni2
+
+        try:
+            poni2 = self._active_poni.poni2
+        except Exception as e:
+            self.log_explorer_error(f"{e}: PONI2 could not be retrieved from {self._active_poni}.")
+            poni2 = 0.0
+
+        le.substitute(
+                lineedit=widget,
+                new_text=poni2,
+            )
+
+    @log_info
+    def _update_rot1_widget(self):
+        """
+        Update the widget with rotation_1 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_rot1
+
+        try:
+            rot1 = self._active_poni.rot1
+        except Exception as e:
+            self.log_explorer_error(f"{e}: ROT1 could not be retrieved from {self._active_poni}.")
+            rot1 = 0.0
+
+        le.substitute(
+                lineedit=widget,
+                new_text=rot1,
+            )
+
+    @log_info
+    def _update_rot2_widget(self):
+        """
+        Update the widget with rotation_2 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_rot2
+
+        try:
+            rot2 = self._active_poni.rot2
+        except Exception as e:
+            self.log_explorer_error(f"{e}: ROT2 could not be retrieved from {self._active_poni}.")
+            rot2 = 0.0
+
+        le.substitute(
+                lineedit=widget,
+                new_text=rot2,
+            )
+
+    @log_info
+    def _update_rot3_widget(self):
+        """
+        Update the widget with rotation_3 parameter
+
+        Keyword Arguments:
+            poni -- instance of PoniFile (default: {None})
+        """ 
+        widget = self.lineedit_rot3
+
+        try:
+            rot3 = self._active_poni.rot3
+        except Exception as e:
+            self.log_explorer_error(f"{e}: ROT3 could not be retrieved from {self._active_poni}.")
+            rot3 = 0.0
+
+        le.substitute(
+                lineedit=widget,
+                new_text=rot3,
+            )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @log_info
     def init_h5_instance(
@@ -1437,33 +1836,6 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 reset=False,
             )
 
-    @log_info
-    def cb_ponifile_changed(self, poni_name):
-        """
-        Updates the .poni parameters from a changed value of .poni filename
-
-        Arguments:
-            poni_name -- string of .poni filename
-        """        
-
-        if not self._active_h5:
-            return
-
-        # Activate the .poni file in the h5 instance
-        self.update_poni(poni=poni_name)
-        
-        # Update the .poni tab widgets
-        poni = self._active_h5.get_poni()
-        self._poni_cache = poni
-
-        self.update_poni_widgets(poni=poni)
-
-        # Update_graphs
-        self.update_graphs(
-            graph_1D=True,
-            graph_2D_q=True,
-            graph_2D_reshape=True,
-        )
 
     @log_info
     def restore_cache_poni_clicked(self,_):
@@ -1478,13 +1850,13 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         poni = self._poni_cache
 
         # Updates the widgets
-        self.update_poni_widgets(poni=poni)
+        self._update_poni_widgets(poni=poni)
 
         # Updates the GrazingGeometry and AzimuthalIntegrator instance
         self.update_poni(poni=poni)
 
         # Updates graphs
-        self.update_graphs(
+        self._update_graphs(
             graph_1D=True,
             graph_2D_reshape=True,
             graph_2D_q=True,
@@ -1640,9 +2012,9 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         self.update_poni(poni=new_poni)
 
-        self.update_poni_widgets(poni=new_poni)
+        self._update_poni_widgets(poni=new_poni)
 
-        self.update_graphs(
+        self._update_graphs(
             graph_1D=True,
             graph_2D_reshape=True,
             graph_2D_q=True,
@@ -1667,7 +2039,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.save_poni_instance(poni=poni)
 
         # Update graphs
-        self.update_graphs(
+        self._update_graphs(
             graph_1D=True,
             graph_2D_reshape=True,
             graph_2D_q=True,
@@ -1714,209 +2086,13 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         return new_poni
 
-    @log_info
-    def update_poni_widgets(self, poni=None):
-        """
-        Update the ponifile widgets from a valid PoniFile instance
 
-        Keyword Arguments:
-            poni -- instance of PoniFile (default: {None})
-        """        
 
-        if not self._active_h5:
-            return
-        
-        self.update_detector_widget(poni=poni)
-        self.update_wavelength_widget(poni=poni)
-        self.update_dist_widget(poni=poni)
-        self.update_poni1_widget(poni=poni)
-        self.update_poni2_widget(poni=poni)
-        self.update_rot1_widget(poni=poni)
-        self.update_rot2_widget(poni=poni)
-        self.update_rot3_widget(poni=poni)
 
-    @log_info
-    def update_detector_widget(self, poni=None):
-        """
-        Update the widget with detector information
 
-        Keyword Arguments:
-            poni -- instance of PoniFile (default: {None})
-        """        
-        widget = self.lineedit_detector
 
-        try:
-            detector_name = poni.detector.name
-        except Exception as e:
-            self.log_explorer_error(f"{e}: Detector name could not be retrieved from {poni}.")
-            detector_name = ''
 
-        try:
-            detector_bin = poni.detector.binning
-        except Exception as e:
-            self.log_explorer_error(f"{e}: Detector binning could not be retrieved from {poni}.")
-            detector_bin = ('x','x')
 
-        try:
-            shape = poni.detector.shape
-            shape = (shape[0], shape[1])
-        except Exception as e:
-            self.log_explorer_error(f"{e}: Shape could not be retrieved from {poni}.")
-            shape = (0,0)         
-
-        detector_info = f'{str(detector_name)} / {str(detector_bin)} / {str(shape)}'
-
-        le.substitute(
-                lineedit=widget,
-                new_text=detector_info,
-            )
-
-    @log_info
-    def update_wavelength_widget(self, poni=None):
-        """
-        Update the widget with wavelength parameter
-
-        Keyword Arguments:
-            poni -- instance of PoniFile (default: {None})
-        """ 
-        widget = self.lineedit_wavelength
-
-        try:
-            wave = poni.wavelength
-        except Exception as e:
-            self.log_explorer_error(f"{e}: Wavelength could not be retrieved from {poni}.")
-            wave = 0.0
-
-        le.substitute(
-                lineedit=widget,
-                new_text=wave,
-            )
-
-    @log_info
-    def update_dist_widget(self, poni=None):
-        """
-        Update the widget with sample-detector distance parameter
-
-        Keyword Arguments:
-            poni -- instance of PoniFile (default: {None})
-        """ 
-        widget = self.lineedit_distance
-
-        try:
-            dist = poni.dist
-        except Exception as e:
-            self.log_explorer_error(f"{e}: Distance could not be retrieved from {poni}.")
-            dist = 0.0
-
-        le.substitute(
-                lineedit=widget,
-                new_text=dist,
-            )
-
-    @log_info
-    def update_poni1_widget(self, poni=None):
-        """
-        Update the widget with PONI 1 parameter
-
-        Keyword Arguments:
-            poni -- instance of PoniFile (default: {None})
-        """ 
-        widget = self.lineedit_poni1
-
-        try:
-            poni1 = poni.poni1
-        except Exception as e:
-            self.log_explorer_error(f"{e}: PONI1 could not be retrieved from {poni}.")
-            poni1 = 0.0
-
-        le.substitute(
-                lineedit=widget,
-                new_text=poni1,
-            )
-
-    @log_info
-    def update_poni2_widget(self, poni=None):
-        """
-        Update the widget with PONI 2 parameter
-
-        Keyword Arguments:
-            poni -- instance of PoniFile (default: {None})
-        """ 
-        widget = self.lineedit_poni2
-
-        try:
-            poni2 = poni.poni2
-        except Exception as e:
-            self.log_explorer_error(f"{e}: PONI2 could not be retrieved from {poni}.")
-            poni2 = 0.0
-
-        le.substitute(
-                lineedit=widget,
-                new_text=poni2,
-            )
-
-    @log_info
-    def update_rot1_widget(self, poni=None):
-        """
-        Update the widget with rotation_1 parameter
-
-        Keyword Arguments:
-            poni -- instance of PoniFile (default: {None})
-        """ 
-        widget = self.lineedit_rot1
-
-        try:
-            rot1 = poni.rot1
-        except Exception as e:
-            self.log_explorer_error(f"{e}: ROT1 could not be retrieved from {poni}.")
-            rot1 = 0.0
-
-        le.substitute(
-                lineedit=widget,
-                new_text=rot1,
-            )
-
-    @log_info
-    def update_rot2_widget(self, poni=None):
-        """
-        Update the widget with rotation_2 parameter
-
-        Keyword Arguments:
-            poni -- instance of PoniFile (default: {None})
-        """ 
-        widget = self.lineedit_rot2
-
-        try:
-            rot2 = poni.rot2
-        except Exception as e:
-            self.log_explorer_error(f"{e}: ROT2 could not be retrieved from {poni}.")
-            rot2 = 0.0
-
-        le.substitute(
-                lineedit=widget,
-                new_text=rot2,
-            )
-
-    @log_info
-    def update_rot3_widget(self, poni=None):
-        """
-        Update the widget with rotation_3 parameter
-
-        Keyword Arguments:
-            poni -- instance of PoniFile (default: {None})
-        """ 
-        widget = self.lineedit_rot3
-
-        try:
-            rot3 = poni.rot3
-        except Exception as e:
-            self.log_explorer_error(f"{e}: ROT3 could not be retrieved from {poni}.")
-            rot3 = 0.0
-
-        le.substitute(
-                lineedit=widget,
-                new_text=rot3,
-            )
 
     @log_info
     def save_poni_instance(self, poni=None):
@@ -1987,7 +2163,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.get_final_data()
 
         # Update graphs
-        self.update_graphs(
+        self._update_graphs(
             graph_1D=True,
             graph_2D_raw=True,
             graph_2D_reshape=True,
@@ -2218,7 +2394,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.update_label_displayed()
 
         # Update graphs
-        self.update_graphs(
+        self._update_graphs(
             graph_1D=True,
             graph_2D_raw=True,
             graph_2D_reshape=True,
@@ -2507,7 +2683,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
                 index=index,
             )
             self.update_label_displayed()
-            self.update_graphs(
+            self._update_graphs(
                 graph_1D=True,
                 graph_2D_q=True,
                 graph_2D_raw=True,
@@ -2570,7 +2746,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.update_label_displayed()
 
         # Update graphs
-        self.update_graphs(
+        self._update_graphs(
             graph_1D=True,
             graph_2D_raw=True,
             graph_2D_reshape=True,
@@ -2738,7 +2914,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
     @log_info
     def tab_graph_changed(self,_):
-        self.update_graphs(
+        self._update_graphs(
             graph_1D=True,
             graph_2D_raw=True,
             graph_2D_reshape=True,
@@ -2803,7 +2979,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             scaled_factor=scale_factor,
         )
 
-        self.update_graphs(
+        self._update_graphs(
             graph_1D=True,
             graph_2D_raw=True,
             graph_2D_reshape=True,
@@ -3059,7 +3235,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         return norm
 
     @log_info
-    def update_graphs(
+    def _update_graphs(
         self,
         data=None,
         norm_factor=1.0,
@@ -3759,25 +3935,25 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self.scat_horz_cache = None
         self.scat_vert_cache = None
         self.update_lims_ticks()
-        self.update_graphs(
+        self._update_graphs(
             graph_2D_q=True,
         )
 
     @log_info
     def binning_changed(self,_):
-        self.update_graphs(
+        self._update_graphs(
             graph_2D_q=True,
         )
 
     @log_info
     def checkbox_mask_clicked(self,_):
-        self.update_graphs(
+        self._update_graphs(
             graph_2D_raw=True,
         )
 
     @log_info
     def cb_integration_changed(self,_):
-        self.update_graphs(
+        self._update_graphs(
             graph_2D_raw=True,
             graph_1D=True,
         )
