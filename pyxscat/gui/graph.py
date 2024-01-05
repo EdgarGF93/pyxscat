@@ -1,12 +1,11 @@
 
-
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
-from pyxscat.gui.terminallayout import TerminalLayout
+from pyxscat.gui.graphlayout import GraphLayout
 import sys
 
 
 
-class Terminal(TerminalLayout):
+class Graph(GraphLayout):
     pass
 
 
@@ -16,8 +15,8 @@ class Terminal(TerminalLayout):
 def main():
     app = QApplication(sys.argv)
     mw = QMainWindow()
-    terminal = Terminal()
-    mw.setCentralWidget(terminal)
+    graph = Graph()
+    mw.setCentralWidget(graph)
     mw.show()
     app.exec_()
 

@@ -6,7 +6,7 @@ from pyxscat.other.other_functions import date_prefix
 import datetime
 
 def setup_logger():
-    LEVEL = logging.WARNING
+    LEVEL = logging.INFO
 
     if not LOGGER_PATH.exists():
         LOGGER_PATH.mkdir()

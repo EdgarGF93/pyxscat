@@ -37,6 +37,8 @@ import sys
 import os
 import pandas as pd
 
+from pydantic import BaseModel
+
 from typing import Sequence, List
 
 from pyxscat.other.setup_methods import *
@@ -1064,7 +1066,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         Arguments:
             poni_name -- string of .poni filename
         """
-        self.update_poni(poni_data=poni_name)
+        self.update_active_poni(poni_data=poni_name)
 
 
 
@@ -1239,7 +1241,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
             )
 
     @log_info
-    def update_poni(self, poni_data):
+    def update_active_poni(self, poni_data):
 
         if isinstance(poni_data, (str, Path)):
             poni_data = Path(poni_data)
@@ -1853,7 +1855,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         self._update_poni_widgets(poni=poni)
 
         # Updates the GrazingGeometry and AzimuthalIntegrator instance
-        self.update_poni(poni=poni)
+        self.update_active_poni(poni=poni)
 
         # Updates graphs
         self._update_graphs(
@@ -1982,22 +1984,22 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         return rot3
 
-    @log_info
-    def update_poni(self, poni=None):
-        """
-        Update the .poni parameters from GrazingGeometry and AzimuthalIntegrator instances
+    # @log_info
+    # def update_poni(self, poni=None):
+    #     """
+    #     Update the .poni parameters from GrazingGeometry and AzimuthalIntegrator instances
 
-        Keyword Arguments:
-            poni -- instance of PoniFile (default: {None})
-        """        
+    #     Keyword Arguments:
+    #         poni -- instance of PoniFile (default: {None})
+    #     """        
 
-        if not self._active_h5:
-            return
+    #     if not self._active_h5:
+    #         return
 
-        self._active_h5.update_poni(poni=poni)
+    #     self._active_h5.update_poni(poni=poni)
 
-        # dict_poni = self._active_h5.get_poni_dict()
-        self.log_explorer_info(f"Current poni parameters: {self._active_h5.get_poni()}")
+    #     # dict_poni = self._active_h5.get_poni_dict()
+    #     self.log_explorer_info(f"Current poni parameters: {self._active_h5.get_poni()}")
 
     @log_info
     def update_poni_clicked(self,_):
@@ -2010,7 +2012,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
 
         new_poni = self.get_poni_from_widgets()
 
-        self.update_poni(poni=new_poni)
+        self.update_active_poni(poni=new_poni)
 
         self._update_poni_widgets(poni=new_poni)
 
@@ -2033,7 +2035,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         poni = self.get_poni_from_widgets()
 
         # Update the poni parameters in GrazingGeometry and AzimuthalIntegrator instances
-        self.update_poni(poni=poni)
+        self.update_active_poni(poni=poni)
 
         # Save a new .poni file
         self.save_poni_instance(poni=poni)

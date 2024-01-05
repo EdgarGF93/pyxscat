@@ -81,10 +81,25 @@ class MetadataBase:
                 else:
                     yield filename
 
-    def _get_files(self) -> dict:
+    def get_files_from_entry(self, entry: str):
+        return self.get_metadata_values_from_entry(entry=entry, metadata_key=FILENAMES)
+
+    def get_metadata_values_from_entry(self, entry: str, metadata_key: str):
+        entry = self.validate_entry(entry_name=entry)
+        return self.container[entry][metadata_key]
+
+
+    def validate_entry(self, entry_name:str):
+        if not Path(entry_name).is_absolute():
+            entry_name = self.get_absolute_path(relative_path=entry_name)
+        return entry_name
+
+
+
+    def get_files(self) -> dict:
         return {str(subdir) : subdir.glob(self.pattern) for subdir in self._directory.rglob(DIR_PATTERN)}
 
-    def _get_new_files(self) -> dict:
+    def get_new_files(self) -> dict:
         new_metadata = defaultdict(list)
         for subdir in self._directory.rglob(DIR_PATTERN):
             if str(subdir) not in self._container.keys():
@@ -95,9 +110,9 @@ class MetadataBase:
 
     def get_new_files(self) -> dict:
         if self._container == defaultdict(lambda : defaultdict(list)):
-            dict_new_files = self._get_files()
+            dict_new_files = self.get_files()
         else:
-            dict_new_files = self._get_new_files()
+            dict_new_files = self.get_new_files()
 
         return dict_new_files
     
