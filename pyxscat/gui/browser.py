@@ -1,6 +1,7 @@
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 
+from . import SRC_PATH
 from pyxscat.gui.browserlayout import BrowserLayout
 from pyxscat.logger_config import setup_logger
 from pyxscat.metadata import MetadataBase, PoniMetadata
@@ -13,6 +14,9 @@ from pathlib import Path
 from pyFAI.io.ponifile import PoniFile
 import os
 import sys
+
+JSON_DIR = Path(SRC_PATH).joinpath('METADATA_FILES')
+JSON_DIR.mkdir(exist_ok=True)
 
 logger = setup_logger()
 def log_info(func):
@@ -116,8 +120,11 @@ class Browser(BrowserLayout):
         if not self._init_meta(
             root_directory=root_directory,
             pattern=pattern,
+            output_directory=JSON_DIR,
             ):
             return
+        
+        self.update_rootdir_lineedit(new_text=root_directory)
         self.update_listwidget(init=True)
         self.update_referencecb(init=True)
 
@@ -130,16 +137,27 @@ class Browser(BrowserLayout):
         self.update_ponicb(init=True)
 
     @log_info
-    def _init_meta(self, root_directory, pattern) -> bool:
+    def _init_meta(self, root_directory, pattern, output_directory: str = '') -> bool:
         try:
             self.meta = MetadataBase(
                 directory=root_directory,
                 pattern=pattern,
+                update_metadata=True,
             )
+            
+            self._save_meta_file(
+                output_directory=output_directory,
+            )
+            
             return True
         except Exception as e:
             logger.error(f'Metadata base instance could not be initialized: {e}')
             return False
+    
+    @log_info
+    def _save_meta_file(self, output_directory: str = ''):
+        self.meta.save(output_directory=output_directory)
+        
         
     @log_info
     def _init_meta_poni(self, root_directory: str = ''):
@@ -151,6 +169,19 @@ class Browser(BrowserLayout):
         except Exception as e:
             logger.error(f'PoniMetadata base instance could not be initialized: {e}')
             return False
+
+    @log_info
+    def update_rootdir_lineedit(self, new_text: str):
+        lineedit = self.lineedit_root_dir
+        le.substitute(
+            lineedit=lineedit,
+            new_text=new_text,
+        )
+        
+
+
+
+
 
     @log_info
     def update_listwidget(self, init=False):

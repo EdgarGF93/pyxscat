@@ -71,8 +71,8 @@ LABEL_TAB_H5 = "HDF5 File"
 
 # INPUT FILE PARAMETERS
 LABEL_INPUT_PARAMETERS = "====== Input File Parameters ======"
-LABEL_RECENT_H5 = "Recent files:"
-LABEL_H5_FILE = "Root directory:"
+LABEL_JSON_FILES = "Recently opened:"
+LABEL_ROOT_DIR = "Root directory:"
 LABEL_EXTENSION = "File extension:"
 LABEL_WILDCARDS = "Wildcards(*):"
 LABEL_PONIFILE = "Ponifile:"
@@ -307,12 +307,12 @@ class BrowserLayout(QWidget):
         widget_tabs.addTab(widget_cake, LABEL_TAB_CAKE)
         widget_tabs.addTab(widget_box, LABEL_TAB_BOX)
         widget_tabs.addTab(widget_vbox_poni, LABEL_TAB_PONIFILE)
-        widget_tabs.addTab(widget_vbox_h5, LABEL_TAB_H5)
+        # widget_tabs.addTab(widget_vbox_h5, LABEL_TAB_H5)
 
         ### INPUT TAB ###
 
-        hbox_recent_h5 = QHBoxLayout()
-        hbox_recent_h5.setContentsMargins(1, 0, 1, 0)
+        hbox_json_files = QHBoxLayout()
+        hbox_json_files.setContentsMargins(1, 0, 1, 0)
         hbox_maindir = QHBoxLayout()
         hbox_maindir.setContentsMargins(1, 0, 1, 0)
         hbox_pattern = QHBoxLayout()
@@ -339,7 +339,7 @@ class BrowserLayout(QWidget):
         widget_sample_orientation = QWidget()
         widget_pyfai = QWidget()
 
-        widget_recent_h5.setLayout(hbox_recent_h5)
+        widget_recent_h5.setLayout(hbox_json_files)
         widget_maindir.setLayout(hbox_maindir)
         widget_pattern.setLayout(hbox_pattern)
         widget_poni.setLayout(hbox_poni)
@@ -358,31 +358,32 @@ class BrowserLayout(QWidget):
         vbox_input.addWidget(widget_sample_orientation)
         vbox_input.addWidget(widget_pyfai)
 
-        label_recent_h5 = QLabel(LABEL_RECENT_H5)
+        label_json_files = QLabel(LABEL_JSON_FILES)
         self.combobox_h5_files = QComboBox()
+        self.button_pick_json = QPushButton()
+        self.button_pick_json.setIcon(QIcon(ICON_FILE_PATH))
+        self.button_pick_json.setToolTip(LABEL_PICK_H5)
+        self.button_pick_json.setStyleSheet(BUTTON_STYLE_ENABLE)
+        
+        hbox_json_files.addWidget(label_json_files, Qt.AlignLeft)
+        hbox_json_files.addWidget(self.combobox_h5_files, Qt.AlignLeft)
+        hbox_json_files.addWidget(self.button_pick_json, Qt.AlignLeft)
 
-        hbox_recent_h5.addWidget(label_recent_h5, Qt.AlignLeft)
-        hbox_recent_h5.addWidget(self.combobox_h5_files, Qt.AlignLeft)
+        hbox_json_files.setStretch(0,1)
+        hbox_json_files.setStretch(1,10)
 
-        hbox_recent_h5.setStretch(0,1)
-        hbox_recent_h5.setStretch(1,10)
-
-        self.label_h5file = QLabel(LABEL_H5_FILE)
-        self.lineedit_h5file_1 = QLineEdit()
-        self.lineedit_h5file_1.setReadOnly(True)
+        self.label_root_dir = QLabel(LABEL_ROOT_DIR)
+        self.lineedit_root_dir = QLineEdit()
+        self.lineedit_root_dir.setReadOnly(True)
         self.button_pick_rootdir = QPushButton()
         self.button_pick_rootdir.setIcon(QIcon(ICON_FOLDER_PATH))
         self.button_pick_rootdir.setToolTip(LABEL_PICK_MAINDIR)    
         self.button_pick_rootdir.setStyleSheet(BUTTON_STYLE_ENABLE)    
-        self.button_pick_hdf5 = QPushButton()
-        self.button_pick_hdf5.setIcon(QIcon(H5_ICON_PATH))
-        self.button_pick_hdf5.setToolTip(LABEL_PICK_H5)
-        self.button_pick_hdf5.setStyleSheet(BUTTON_STYLE_ENABLE)
 
-        hbox_maindir.addWidget(self.label_h5file)
-        hbox_maindir.addWidget(self.lineedit_h5file_1)
+
+        hbox_maindir.addWidget(self.label_root_dir)
+        hbox_maindir.addWidget(self.lineedit_root_dir)
         hbox_maindir.addWidget(self.button_pick_rootdir)
-        hbox_maindir.addWidget(self.button_pick_hdf5)
 
         label_extension = QLabel(LABEL_EXTENSION)
         self.combobox_extension = QComboBox()
@@ -945,6 +946,25 @@ class BrowserLayout(QWidget):
         vbox_poni.addWidget(widget_poni_rot_2)
         vbox_poni.addWidget(widget_poni_rot_3)
         vbox_poni.addWidget(widget_poni_buttons)
+      
+      
+        hbox_poni_wave.setStretchFactor(label_wavelength,1)
+        hbox_poni_wave.setStretchFactor(self.lineedit_wavelength,5)  
+        hbox_poni_dist.setStretchFactor(label_distance,1)
+        hbox_poni_dist.setStretchFactor(self.lineedit_distance,5)
+        hbox_poni_detector.setStretchFactor(label_detector,1)
+        hbox_poni_detector.setStretchFactor(self.lineedit_detector,5)
+        hbox_poni_poni_1.setStretchFactor(label_poni_1,1)
+        hbox_poni_poni_1.setStretchFactor(self.lineedit_poni1,5)
+        hbox_poni_poni_2.setStretchFactor(label_poni_2,1)
+        hbox_poni_poni_2.setStretchFactor(self.lineedit_poni2,5)
+        hbox_poni_rot_1.setStretchFactor(label_rot_1,1)
+        hbox_poni_rot_1.setStretchFactor(self.lineedit_rot1,5)
+        hbox_poni_rot_2.setStretchFactor(label_rot_2,1)
+        hbox_poni_rot_2.setStretchFactor(self.lineedit_rot2,5)
+        hbox_poni_rot_3.setStretchFactor(label_rot_3,1)
+        hbox_poni_rot_3.setStretchFactor(self.lineedit_rot3,5)
+
 
         # H5 PARAMETERS TAB
         hbox_h5_h5file = QHBoxLayout()

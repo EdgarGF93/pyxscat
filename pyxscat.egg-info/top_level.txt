@@ -1,6 +1,5 @@
 Tutorial
 UserManual
-build
 logger_tmp_14_days
 prof_svg
 pyxscat

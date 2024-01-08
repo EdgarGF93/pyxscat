@@ -17,7 +17,7 @@ DEFAULT_PATTERN = '*.edf'
 DIR_PATTERN = '**/'
 
 class MetadataBase:
-    def __init__(self, directory, pattern, json_file=None, update_metadata=True):
+    def __init__(self, directory, pattern, update_metadata=True):
         self._directory = Path(directory)
         self.pattern = pattern
         self._container = defaultdict(lambda : defaultdict(list))
@@ -179,11 +179,12 @@ class MetadataBase:
         if return_dict:
             return dict_new_files_clear
         
-    def save(self, output_filename: str = ''):
-        if not output_filename:
+    def save(self, output_directory: str = ''):
+        if not output_directory:
             output_filename = self._directory.joinpath(f'{self._directory.name}_pyxscat_mdb.json')
         else:
-            output_filename = Path(output_filename).with_suffix('.json')
+            output_directory = Path(output_directory)
+            output_filename = output_directory.joinpath(f'{self._directory.name}_pyxscat_mdb.json')
 
         with open(output_filename, 'w') as fp:
             json.dump(self._container, fp)
