@@ -9,6 +9,9 @@
 # kk files
 **kk**
 
+# cache files
+*.pyc
+
 # Logger files
 .logger
 */.logger/*
