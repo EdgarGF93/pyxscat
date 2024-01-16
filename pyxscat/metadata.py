@@ -8,7 +8,7 @@ import fabio
 import json
 from pyxscat.edf import FullHeader
 
-
+######
 FILENAMES = 'filenames'
 NAMES = 'names'
 
