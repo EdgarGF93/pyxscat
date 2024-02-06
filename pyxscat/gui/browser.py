@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from . import SRC_PATH
 from pyxscat.gui.browserlayout import BrowserLayout
 from pyxscat.logger_config import setup_logger
-from pyxscat.metadata import MetadataBase, PoniMetadata
+from pyxscat.metadata import MetadataBase
 from pyxscat.gui import lineedit_methods as le
 from pyxscat.gui import listwidget_methods as lt
 from pyxscat.gui import combobox_methods as cb
@@ -90,10 +90,6 @@ class Browser(BrowserLayout):
     def _slot_active_entry_changed(self, new_entry):
         self.update_active_entry(new_entry=new_entry.text())
         
-
-
-
-
     #################################
     ## BROWSER METHODS #######
     #################################
@@ -116,59 +112,41 @@ class Browser(BrowserLayout):
 
     @log_info
     def _init_browser(self, root_directory: str = '', pattern: str = ''):
-        # MetadataBase
-        if not self._init_meta(
+        """Instanciate the MetadataBase class and updates the widgets of the browser
+
+        Params:
+            root_directory (str) : path of the directory where to search files recursively
+            pattern (str) : pattern to find data files
+        """
+        if not self._init_metadatabase(
             root_directory=root_directory,
             pattern=pattern,
             output_directory=JSON_DIR,
             ):
             return
-        
         self.update_rootdir_lineedit(new_text=root_directory)
         self.update_listwidget(init=True)
         self.update_referencecb(init=True)
-
-        # PoniMetadataBase
-        if not self._init_meta_poni(
-            root_directory=root_directory,
-            ):
-            return
-
         self.update_ponicb(init=True)
 
     @log_info
-    def _init_meta(self, root_directory, pattern, output_directory: str = '') -> bool:
+    def _init_metadatabase(self, root_directory, pattern, output_directory: str = '') -> bool:
         try:
             self.meta = MetadataBase(
                 directory=root_directory,
                 pattern=pattern,
-                update_metadata=True,
+                init_metadata=True,
             )
-            
-            self._save_meta_file(
-                output_directory=output_directory,
-            )
+            self._save_meta_file(output_directory=output_directory)
             
             return True
         except Exception as e:
             logger.error(f'Metadata base instance could not be initialized: {e}')
             return False
     
-    @log_info
     def _save_meta_file(self, output_directory: str = ''):
         self.meta.save(output_directory=output_directory)
-        
-        
-    @log_info
-    def _init_meta_poni(self, root_directory: str = ''):
-        try:
-            self.meta_poni = PoniMetadata(
-                directory=root_directory,
-            )
-            return True
-        except Exception as e:
-            logger.error(f'PoniMetadata base instance could not be initialized: {e}')
-            return False
+        self._update_recentfiles_cb()
 
     @log_info
     def update_rootdir_lineedit(self, new_text: str):
@@ -178,11 +156,6 @@ class Browser(BrowserLayout):
             new_text=new_text,
         )
         
-
-
-
-
-
     @log_info
     def update_listwidget(self, init=False):
         if init:
@@ -198,7 +171,7 @@ class Browser(BrowserLayout):
         lt.clear(listwidget=listwidget)
 
         # Feed listwidget
-        for entry in self.meta.gen_entries(relative_path=True):
+        for entry in self.meta._generate_entries(relative_path=True):
             lt.insert(
                 listwidget=listwidget,
                 item=entry,
@@ -208,7 +181,7 @@ class Browser(BrowserLayout):
     @log_info
     def _update_listwidget(self):
         listwidget = self.listwidget_samples
-        for entry in self.meta.gen_new_entries(relative_path=True):
+        for entry in self.meta._generate_new_entries(relative_path=True):
             lt.insert(
                 listwidget=listwidget,
                 item=entry,
@@ -226,7 +199,7 @@ class Browser(BrowserLayout):
     def _init_referencecb(self):
         combobox = self.combobox_reffolder
         cb.clear(combobox=combobox)
-        for entry in self.meta.gen_entries(relative_path=True):
+        for entry in self.meta._generate_entries(relative_path=True):
             cb.insert(
                 combobox=combobox,
                 item=entry,
@@ -235,7 +208,7 @@ class Browser(BrowserLayout):
     @log_info
     def _update_referencecb(self):
         combobox = self.combobox_reffolder
-        for entry in self.meta.gen_new_entries(relative_path=True):
+        for entry in self.meta._generate_new_entries(relative_path=True):
             cb.insert(
                 combobox=combobox,
                 item=entry,
@@ -252,16 +225,17 @@ class Browser(BrowserLayout):
     def _init_ponicb(self):
         combobox = self.combobox_ponifile
         cb.clear(combobox=combobox)
-        for ponifile in self.meta_poni.gen_files(relative_path=True):
-            cb.insert(
-                combobox=combobox,
-                item=ponifile,
-            )
+        cb.insert_list(
+            combobox=combobox,
+            list_items=self.meta.get_ponifiles(
+                relative_path=True,
+            ),
+        )
 
     @log_info
     def _update_ponicb(self):
         combobox = self.combobox_ponifile
-        for ponifile in self.meta_poni.gen_new_files(relative_path=True):
+        for ponifile in self.meta.get_new_ponifiles(relative_path=True):
             cb.insert(
                 combobox=combobox,
                 item=ponifile,
@@ -269,11 +243,10 @@ class Browser(BrowserLayout):
 
     @log_info
     def update_active_poni(self, poni_data):
-
         if isinstance(poni_data, (str, Path)):
             poni_data = Path(poni_data)
             if not poni_data.absolute() == poni_data:
-                poni_data = self.meta.get_absolute_path(relative_path=poni_data)
+                poni_data = self.meta._get_absolute_path(relative_path=poni_data)
             if not Path(poni_data).is_file():
                 logger.error(f'Ponifile {poni_data} does not exists??')
                 return

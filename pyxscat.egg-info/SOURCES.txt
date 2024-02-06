@@ -3,6 +3,7 @@ pyproject.toml
 pyxscat/__init__.py
 pyxscat/edf.py
 pyxscat/gi_integrator.py
+pyxscat/grazing.py
 pyxscat/h5_integrator.py
 pyxscat/logger_config.py
 pyxscat/metadata.py

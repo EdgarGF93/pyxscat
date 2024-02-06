@@ -3,11 +3,12 @@ from collections import defaultdict
 from threading import Thread
 from pathlib import Path
 from typing import List, Any
-
+import logging
 import fabio
 import json
 from pyxscat.edf import FullHeader
 
+logger = logging.getLogger(__name__)
 
 FILENAMES = 'filenames'
 NAMES = 'names'
@@ -17,109 +18,94 @@ DEFAULT_PATTERN = '*.edf'
 DIR_PATTERN = '**/'
 
 class MetadataBase:
-    def __init__(self, directory, pattern, update_metadata=True):
+    def __init__(self, directory, pattern, init_metadata=True):
         self._directory = Path(directory)
-        self.pattern = pattern
-        self._container = defaultdict(lambda : defaultdict(list))
-        self._container_newfiles = defaultdict(lambda : defaultdict(list))
+        self._pattern = pattern
+        self._container_metadata = defaultdict(lambda : defaultdict(list))
+        self._container_metadata_newfiles = defaultdict(lambda : defaultdict(list))
+        self._container_ponifiles = list()
+        self._container_ponifiles_new = list()
 
-        if update_metadata:
-            self.update_new_metadata(return_dict=False)
+        if init_metadata:
+            self._init_metadata()
+    
+    def __repr__(self):
+        repr = f"""
+        MetadataBase associated to {self._directory}
+        Pattern to search files: {self._pattern}
+        Number of entries: {self.nbentries}
+        Total number of files: {self.nfiles}
+        """
+        return repr
     
     @property
+    def nbentries(self):
+        return len(list(self._container_metadata.keys()))
+    
+    @property
+    def nfiles(self):
+        files = 0
+        for entry in self._generate_entries():
+            files += len(list(self._container_metadata[entry][FILENAMES]))
+        return files
+
+    @property
     def container(self):
-        return self._container
+        return self._container_metadata
     
     @property
     def container_newfiles(self):
-        return self._container_newfiles 
+        return self._container_metadata_newfiles 
 
     @property
     def directory(self):
         return str(self._directory)
     
     def _reset_container(self):
-        self._container = defaultdict(lambda : defaultdict(list))
+        self._container_metadata = defaultdict(lambda : defaultdict(list))
 
     def __iter__(self):
-        for subdirectory in self._container.keys():
-            for filename in self._container[subdirectory][FILENAMES]:
+        for subdirectory in self._container_metadata.keys():
+            for filename in self._container_metadata[subdirectory][FILENAMES]:
                 yield filename
 
-    def get_relative_path(self, absolute_path: str = ''):
+    def _get_relative_path(self, absolute_path: str = '', entry_name: str = ''):
+        if entry_name:
+            entry_name = self._validate_entry(entry_name=entry_name)
+            return str(Path(absolute_path).relative_to(entry_name)) 
         return str(Path(absolute_path).relative_to(self._directory))
     
-    def get_absolute_path(self, relative_path : str = ''):
+    def _get_absolute_path(self, relative_path : str = ''):
         return str(self._directory.joinpath(relative_path))
 
-    def gen_entries(self, relative_path=True):
-        for entry in self._container.keys():
-            if relative_path:
-                yield self.get_relative_path(absolute_path=entry)
-            else:
-                yield entry
-
-    def gen_new_entries(self, relative_path=True):
-        for entry in self._container_newfiles.keys():
-            if relative_path:
-                yield str(Path(entry).relative_to(self._directory))
-            else:
-                yield entry
-
-    def gen_files(self, relative_path=True):
-        for filename in self.__iter__():
-            if relative_path:
-                yield self.get_relative_path(absolute_path=filename)
-            else:
-                yield filename
-
-    def gen_new_files(self, relative_path=True):
-        for entry in self._container_newfiles.keys():
-            for filename in self._container_newfiles[entry][FILENAMES]:
-                if relative_path:
-                    yield self.get_relative_path(absolute_path=filename)
-                else:
-                    yield filename
-
-    def get_files_from_entry(self, entry: str):
-        return self.get_metadata_values_from_entry(entry=entry, metadata_key=FILENAMES)
-
-    def get_metadata_values_from_entry(self, entry: str, metadata_key: str):
-        entry = self.validate_entry(entry_name=entry)
-        return self.container[entry][metadata_key]
-
-
-    def validate_entry(self, entry_name:str):
-        if not Path(entry_name).is_absolute():
-            entry_name = self.get_absolute_path(relative_path=entry_name)
+    def _validate_entry(self, entry_name:str):
+        if Path(self.directory) in Path(entry_name).parents:
+            entry_name = str(entry_name)
+        else:
+            entry_name = str(Path(self.directory).joinpath(entry_name))
+        if entry_name not in self.get_entries():
+            return
         return entry_name
 
+    def _get_metadata_values_from_entry(self, entry: str, metadata_key: str):
+        entry = self._validate_entry(entry_name=entry)
+        if not entry:
+            return
+        return self.container[entry][metadata_key]
 
-
-    def get_files(self) -> dict:
-        return {str(subdir) : subdir.glob(self.pattern) for subdir in self._directory.rglob(DIR_PATTERN)}
-
-    def get_new_files(self) -> dict:
-        new_metadata = defaultdict(list)
+    def _get_new_files(self) -> dict:
+        dict_new_files = defaultdict(list)
         for subdir in self._directory.rglob(DIR_PATTERN):
-            if str(subdir) not in self._container.keys():
-                new_metadata[str(subdir)] = subdir.glob(self.pattern)
+            if str(subdir) not in self._container_metadata.keys():
+                dict_new_files[str(subdir)] = subdir.glob(self._pattern)
             else:
-                new_metadata[str(subdir)].extend([str(file) for file in subdir.glob(self.pattern) if str(file) not in self._container[str(subdir)][FILENAMES]])
-        return new_metadata
-
-    def get_new_files(self) -> dict:
-        if self._container == defaultdict(lambda : defaultdict(list)):
-            dict_new_files = self.get_files()
-        else:
-            dict_new_files = self.get_new_files()
-
+                dict_new_files[str(subdir)].extend([str(file) for file in subdir.glob(self._pattern) if str(file) not in self._container_metadata[str(subdir)][FILENAMES]])
         return dict_new_files
-    
-    def append(self, entry_name: str, metadata_key: str, metadata_value: Any):
-        self._container[entry_name][metadata_key].append(metadata_value)
 
-    def get_header(self, filename: str):
+    def _append(self, entry_name: str, metadata_key: str, metadata_value: Any):
+        self._container_metadata[entry_name][metadata_key].append(metadata_value)
+
+    def _get_header(self, filename: str):
         try:
             header = FullHeader(filename=str(filename)).get_header()
             return header
@@ -134,60 +120,201 @@ class MetadataBase:
             return
 
     def _update_entry_single(self, entry_name: Path, filename: Path):
-        filename = Path(filename)
+        if self._is_file_in_entry(
+            entry_name=str(entry_name),
+            filename=str(filename),
+            ):
+            logger.warning(f"The file {filename} is already in the MetadataBase.")
+            return
 
-        # ADDITIONAL METADATA
-        self.append(entry_name=str(entry_name), metadata_key=FILENAMES, metadata_value=str(filename))
-        self.append(entry_name=str(entry_name), metadata_key=NAMES, metadata_value=str(filename.name))
-
+        # Filename/Name metadata
+        self._append(entry_name=str(entry_name), metadata_key=FILENAMES, metadata_value=str(filename))
+        self._append(entry_name=str(entry_name), metadata_key=NAMES, metadata_value=str(Path(filename).name))
+        logger.info(f"Updated filename: {str(filename)}")
+    
         # Get Fabio header
-        header = self.get_header(filename=filename)
+        header = self._get_header(filename=filename)
         for metadata_key,metadata_value in header.items():
             try:
                 metadata_value = float(metadata_value)
             except:
                 metadata_value = str(metadata_value)
-            self.append(entry_name=str(entry_name), metadata_key=metadata_key, metadata_value=metadata_value)
+            self._append(entry_name=str(entry_name), metadata_key=metadata_key, metadata_value=metadata_value)
 
-    def update_entry_single(self, entry_name, filename):
+    def _update_entry_single_thread(self, entry_name, filename):
         Thread(target=self._update_entry_single, args=(entry_name, filename)).start()
 
-    def update_entry(self, entry_name, file_iter, threading=False):
+    def _update_entry(self, entry_name, file_iterator, threading=False):
         iter_empty = True
-
-        for filename in file_iter:
+        for filename in file_iterator:
             iter_empty = False
             if threading:
-                self.update_entry_single(entry_name=entry_name, filename=filename)
+                self._update_entry_single_thread(entry_name=entry_name, filename=filename)
             else:
                 self._update_entry_single(entry_name=entry_name, filename=filename)
         return iter_empty
+    
+    def _search_files(self) -> dict:
+        return {str(subdir) : subdir.glob(self._pattern) for subdir in self._directory.rglob(DIR_PATTERN)}
 
-    def update_new_metadata(self, threading=False, return_dict=True) -> dict:
-        dict_new_files = self.get_new_files()
+    def _search_ponifiles(self) -> list:
+        return [str(ponifile) for ponifile in self._directory.rglob("*.poni")]
 
+    def _init_metadata(self):
+        if not self._container_metadata == defaultdict(lambda : defaultdict(list)):
+            raise Exception("The container is not empty! It cannot be initialized again.")
+        else:
+            self._update_metadatabase(dict_new_files=self._search_files())
+            self.update_ponidatabase()
+
+    def _is_file_in_entry(self, entry_name: Path, filename: Path):
+        if filename in self._generate_files_in_entry(entry_name=entry_name):
+            return True
+        return False
+    
+    def _remove_metadata(self):
+        dict_removed_files = defaultdict(list)
+        for entry in self._generate_entries():
+            for index, filename in enumerate(self._generate_files_in_entry(entry_name=entry)):
+                if not Path(filename).is_file():
+                    dict_removed_files[entry].append(index)
+
+        for entry, index_list in dict_removed_files.items():
+            index_list.reverse()
+            for index in index_list:
+                self._remove_metadata_in_entry(
+                    entry_name=entry,
+                    index=index,
+                )
+
+    def _remove_metadata_in_entry(self, entry_name:str, index:int):
+        for metadata_key in self._container_metadata[entry_name]:
+            del self._container_metadata[entry_name][metadata_key][index]
+
+
+    def _generate_files(self, relative_path=False):
+        for filename in self.__iter__():
+            if relative_path:
+                yield self._get_relative_path(absolute_path=filename)
+            else:
+                yield filename
+
+    def _generate_new_files(self, relative_path=False):
+        for entry in self._container_metadata_newfiles.keys():
+            for filename in self._container_metadata_newfiles[entry][FILENAMES]:
+                if relative_path:
+                    yield self._get_relative_path(absolute_path=filename)
+                else:
+                    yield filename
+
+    def _generate_entries(self, relative_path=False):
+        for entry in self._container_metadata.keys():
+            if relative_path:
+                yield self._get_relative_path(absolute_path=entry)
+            else:
+                yield entry
+
+    def _generate_new_entries(self, relative_path=False):
+        for entry in self._container_metadata_newfiles.keys():
+            if relative_path:
+                yield self._get_relative_path(absolute_path=entry)
+            else:
+                yield entry
+
+    def _generate_files_in_entry(self, entry_name:str, relative_path=False):
+        entry_name = self._validate_entry(entry_name=entry_name)
+        if not entry_name:
+            return
+
+        for filename in self._container_metadata[entry_name][FILENAMES]:
+            if relative_path:
+                yield self._get_relative_path(absolute_path=filename, entry_name=entry_name)
+            else:
+                yield filename
+
+    def _update_metadatabase(self, dict_new_files:dict):
         dict_new_files_clear = dict_new_files.copy()
-        for subdirectory, file_iterator in dict_new_files.items():
-            if self.update_entry(
-                entry_name=subdirectory,
-                file_iter=file_iterator,
-                threading=threading,
-                ):
-                del dict_new_files_clear[subdirectory]
+        for entry_name, file_iterator in dict_new_files.items():
+            if self._update_entry(
+                entry_name=entry_name,
+                file_iterator=file_iterator,
+            ):
+                del dict_new_files_clear[entry_name]
+        self._container_metadata_newfiles = dict_new_files_clear
+        return dict_new_files_clear
 
-        self._container_newfiles = dict_new_files_clear
+    def _update_ponidatabase(self, list_new_ponifiles:list):
+        new_ponifiles = []
+        for ponifile in list_new_ponifiles:
+            if ponifile not in self._container_ponifiles:
+                self._container_ponifiles.append(ponifile)
+                new_ponifiles.append(ponifile)
+        self._container_ponifiles_new = new_ponifiles
+
+    ####################
+    #### PUBLIC API ####
+    ####################
+
+    def update(self, update_ponifiles: bool=True, return_dict: bool=False, removed_files: bool=False) -> dict:
+        dict_new_files = self.get_new_files()
+        dict_new_files_clear = self._update_metadatabase(
+            dict_new_files=dict_new_files,
+        )
+        if update_ponifiles:
+            self.update_ponidatabase()
+
+        if removed_files:
+            self._remove_metadata()
+
         if return_dict:
             return dict_new_files_clear
-        
+    
+    def update_ponidatabase(self):
+        self._update_ponidatabase(list_new_ponifiles=self._search_ponifiles())
+
+    def get_new_files(self) -> dict:
+        if self._container_metadata == defaultdict(lambda : defaultdict(list)):
+            dict_new_files = self._search_files()
+        else:
+            dict_new_files = self._get_new_files()
+        return dict_new_files
+
+    def get_entries(self, relative_path=False) -> list:
+        return [entry for entry in self._generate_entries(relative_path=relative_path)]
+
+    def get_files_in_entry(self, entry_name:str, relative_path=False):
+        return [filename for filename in self._generate_files_in_entry(entry_name=entry_name, relative_path=relative_path)]        
+
+    def get_metadata_in_entry(self, entry_name:str, metadata_key: str):
+        return self._get_metadata_values_from_entry(entry=entry_name, metadata_key=metadata_key)
+    
+    def get_ponifiles(self, relative_path=False):
+        if relative_path:
+            return [str(Path(ponifile).relative_to(self._directory)) for ponifile in self._container_ponifiles]
+        else:
+            return self._container_ponifiles
+
+    def get_new_ponifiles(self, relative_path=False):
+        if relative_path:
+            return [str(Path(ponifile).relative_to(self._directory)) for ponifile in self._container_ponifiles_new]
+        else:
+            return self._container_ponifiles_new
+
+    def search_files(self) -> dict:
+        return self._search_files()
+
     def save(self, output_directory: str = ''):
         if not output_directory:
-            output_filename = self._directory.joinpath(f'{self._directory.name}_pyxscat_mdb.json')
+            out_folder = Path(__file__).parent.joinpath("metadatabases")
+            out_folder.mkdir(exist_ok=True)            
+            output_filename = out_folder.joinpath(f'{self._directory.name}_pyxscat_mdb.json')
+            print(output_filename)
         else:
             output_directory = Path(output_directory)
             output_filename = output_directory.joinpath(f'{self._directory.name}_pyxscat_mdb.json')
 
         with open(output_filename, 'w') as fp:
-            json.dump(self._container, fp)
+            json.dump(self._container_metadata, fp)
 
 
 class EdfMetadata(MetadataBase):
@@ -205,8 +332,8 @@ class PoniMetadata(MetadataBase):
         filename = Path(filename)
 
         # ADDITIONAL METADATA
-        self.append(entry_name=str(entry_name), metadata_key=FILENAMES, metadata_value=str(filename))
-        self.append(entry_name=str(entry_name), metadata_key=NAMES, metadata_value=str(filename.name))
+        self._append(entry_name=str(entry_name), metadata_key=FILENAMES, metadata_value=str(filename))
+        self._append(entry_name=str(entry_name), metadata_key=NAMES, metadata_value=str(filename.name))
 
     def save(self, output_filename: str = ''):
         if not output_filename:
@@ -215,4 +342,4 @@ class PoniMetadata(MetadataBase):
             output_filename = Path(output_filename).with_suffix('.json')
 
         with open(output_filename, 'w') as fp:
-            json.dump(self._container, fp)
+            json.dump(self._container_metadata, fp)

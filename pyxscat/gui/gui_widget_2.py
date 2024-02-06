@@ -1171,7 +1171,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         lt.clear(listwidget=listwidget)
 
         # Feed listwidget
-        for entry in self.meta.gen_entries(relative_path=True):
+        for entry in self.meta._generate_entries(relative_path=True):
             lt.insert(
                 listwidget=listwidget,
                 item=entry,
@@ -1181,7 +1181,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     @log_info
     def _update_listwidget(self):
         listwidget = self.listwidget_samples
-        for entry in self.meta.gen_new_entries(relative_path=True):
+        for entry in self.meta._generate_new_entries(relative_path=True):
             lt.insert(
                 listwidget=listwidget,
                 item=entry,
@@ -1199,7 +1199,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     def _init_referencecb(self):
         combobox = self.combobox_reffolder
         cb.clear(combobox=combobox)
-        for entry in self.meta.gen_entries(relative_path=True):
+        for entry in self.meta._generate_entries(relative_path=True):
             cb.insert(
                 combobox=combobox,
                 item=entry,
@@ -1208,7 +1208,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     @log_info
     def _update_referencecb(self):
         combobox = self.combobox_reffolder
-        for entry in self.meta.gen_new_entries(relative_path=True):
+        for entry in self.meta._generate_new_entries(relative_path=True):
             cb.insert(
                 combobox=combobox,
                 item=entry,
@@ -1225,7 +1225,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     def _init_ponicb(self):
         combobox = self.combobox_ponifile
         cb.clear(combobox=combobox)
-        for ponifile in self.meta_poni.gen_files(relative_path=True):
+        for ponifile in self.meta_poni._generate_files(relative_path=True):
             cb.insert(
                 combobox=combobox,
                 item=ponifile,
@@ -1234,7 +1234,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
     @log_info
     def _update_ponicb(self):
         combobox = self.combobox_ponifile
-        for ponifile in self.meta_poni.gen_new_files(relative_path=True):
+        for ponifile in self.meta_poni._generate_new_files(relative_path=True):
             cb.insert(
                 combobox=combobox,
                 item=ponifile,
@@ -1246,7 +1246,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         if isinstance(poni_data, (str, Path)):
             poni_data = Path(poni_data)
             if not poni_data.absolute() == poni_data:
-                poni_data = self.meta.get_absolute_path(relative_path=poni_data)
+                poni_data = self.meta._get_absolute_path(relative_path=poni_data)
             if not Path(poni_data).is_file():
                 self.log_explorer_error(f'Ponifile {poni_data} does not exists??')
                 return

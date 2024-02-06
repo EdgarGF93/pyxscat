@@ -22,11 +22,11 @@ __author__ = "E. Gutierrez-Fernandez"
 __contact__ = "edgar.gutierrez-fernandez@esrf.fr"
 __license__ = ""
 __copyright__ = "European Synchrotron Radiation Facility, Grenoble, France"
+__version__ = "1.0.0"
+# def version():
+#     with open(PATH_TOML, 'r') as f:
+#         for line in f.readlines():
+#             if 'version' in line:
+#                 return line.split()[-1]
 
-def version():
-    with open(PATH_TOML, 'r') as f:
-        for line in f.readlines():
-            if 'version' in line:
-                return line.split()[-1]
-
-__version__ = version()
+# __version__ = version()

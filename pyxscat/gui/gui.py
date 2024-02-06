@@ -36,9 +36,6 @@ class GUI(GUILayout):
         self._splash()
         self._init_attributes()
 
-        
-
-
     def _splash(self):
         pixmap = QPixmap(ICON_SPLASH)
         splash = QSplashScreen(pixmap)
