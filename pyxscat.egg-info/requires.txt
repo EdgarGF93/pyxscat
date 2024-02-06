@@ -1,7 +1,0 @@
-numpy
-matplotlib
-pygix
-pyFAI
-PyQt5
-pandas
-h5py

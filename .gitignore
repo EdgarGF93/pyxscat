@@ -5,7 +5,7 @@
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
 # website: http://jupyter.org/
-
+*egg-info**
 */metadatabases/*
 *.js
 # kk files

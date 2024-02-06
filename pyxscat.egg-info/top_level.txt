@@ -1,5 +1,0 @@
-Tutorial
-UserManual
-logger_tmp_14_days
-prof_svg
-pyxscat
