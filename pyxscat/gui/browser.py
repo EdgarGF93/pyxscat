@@ -1,6 +1,6 @@
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QTimer
 
 from . import SRC_PATH
 from pyxscat.gui.browserlayout import BrowserLayout
@@ -10,7 +10,11 @@ from pyxscat.gui import lineedit_methods as le
 from pyxscat.gui import listwidget_methods as lt
 from pyxscat.gui import combobox_methods as cb
 from pyxscat.gui import table_methods as tm
+from pyxscat.observer import RootDirObserver
 
+from watchdog.observers import Observer
+from watchdog.events import LoggingEventHandler, FileSystemEventHandler
+import gevent
 from pathlib import Path
 from pyFAI.io.ponifile import PoniFile
 from pyFAI import load
@@ -31,11 +35,13 @@ def log_info(func):
 class Browser(BrowserLayout):
     browser_index = pyqtSignal()
     poni_changed = pyqtSignal()
+    new_files_detected = pyqtSignal()
 
     def __init__(self):
         super(Browser, self).__init__()
         self._init_attributes()
         self._init_callbacks()
+        
 
     def _init_attributes(self):
         self.active_entry = ''
@@ -62,6 +68,35 @@ class Browser(BrowserLayout):
         # self.button_pick_json.clicked.connect(self.pick_json_clicked)
         # self.button_metadata_update.clicked.connect(self.metadata_update_clicked)
         # self.button_metadata_save.clicked.connect(self.metadata_save_clicked)
+
+    def _init_watchdog(self):
+        class NewFileHandler(FileSystemEventHandler):
+            def __init__(self, parent, pattern="*.edf"):
+                self._pattern = pattern
+                self.parent = parent
+                self.new_files = []
+                
+            def on_any_event(self, event):
+                if event.event_type == "created" and event.is_directory == False:
+                    filename = event.src_path
+                    if Path(filename).match(self._pattern):
+                        self.parent.new_files_detected.emit()
+                        self.new_files.append(filename)
+                        # Change GUI#####
+                        
+        self._observer = Observer()
+        self._event_handler = NewFileHandler(
+            parent=self,
+            pattern=self.get_pattern(),
+        )
+        self._observer.schedule(
+            event_handler=self._event_handler, 
+            path=self.meta.directory, 
+            recursive=True,
+        )
+        self._observer.start()
+
+
 
     ######################
     ##### SETTERS ########
@@ -188,6 +223,7 @@ class Browser(BrowserLayout):
             json_file=json_file,
             ):
             return
+        self._init_watchdog()
         self.update_jsonfile_lineedit()
         self.update_rootdir_lineedit()
         self.update_listwidget(init=True)
@@ -347,30 +383,6 @@ class Browser(BrowserLayout):
                 combobox=combobox,
                 item=ponifile,
             )
-
-    # @log_info
-    # def update_active_poni(self, poni_data):
-    #     if isinstance(poni_data, (str, Path)):
-    #         poni_data = Path(poni_data)
-    #         if not poni_data.absolute() == poni_data:
-    #             poni_data = self.meta._get_absolute_path(relative_path=poni_data)
-    #         if not Path(poni_data).is_file():
-    #             logger.error(f'Ponifile {poni_data} does not exists??')
-    #             return
-    #     elif isinstance(poni_data, PoniFile):
-    #         pass
-    #     else:
-    #         logger.error(f'Poni_data {poni_data} (type: {type(poni_data)}) is not a valid type')
-    #         return
-                
-    #     try:
-    #         poni = PoniFile(data=poni_data)
-    #     except Exception as e:
-    #         logger.error(f'Poni instance could not be created using {poni_data}: {e}')
-    #         return
-
-    #     self._update_poni(poni=poni)
-    #     self._update_poni_widgets()
 
     @log_info
     def _update_poni(self, poni):
@@ -575,6 +587,9 @@ class Browser(BrowserLayout):
                 lineedit=widget,
                 new_text=rot3,
             )
+        
+        
+        
 
     @log_info
     def update_active_entry(self, new_entry):
@@ -695,14 +710,6 @@ class Browser(BrowserLayout):
                     )
                 except Exception as e:
                     logger.error(f'{e}. The key {key} could not be displayed in table.')
-
-
-
-
-
-
-
-
 
 
     # DIALOG METHODS

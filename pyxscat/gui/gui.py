@@ -13,10 +13,6 @@ import numpy as np
 
 ICON_SPLASH = str(Path(ICON_DIRECTORY).joinpath('pyxscat_new_logo.png'))
 
-
-
-
-
 logger = setup_logger()
 def log_info(func):
     def wrapper(*args, **kwargs):
@@ -45,6 +41,7 @@ class GUI(GUILayout):
     def _init_connections(self):
         self.browser.browser_index.connect(self._update_graphs)
         self.browser.poni_changed.connect(self._update_graphs)
+        self.browser.new_files_detected.connect(self._update_new_files)
     
     def _update_graphs(self, raw=True, reshape=True, q=True, integration=True):
         list_filenames = self.browser.get_active_filenames()
@@ -59,6 +56,9 @@ class GUI(GUILayout):
         if integration:
             res = self.browser.ai.integrate1d(data=data, npt=1000)
             self.graphs._update_integration_graph(result=res)
+            
+    def _update_new_files(self):
+        print(f"new file: {self.browser._event_handler.new_files}")
 
     def _open_data(self, list_filenames:list):
         if len(list_filenames) > 1:

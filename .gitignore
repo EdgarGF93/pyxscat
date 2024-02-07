@@ -10,6 +10,7 @@
 *.js
 # kk files
 **kk**
+*.edf
 
 # cache files
 *.pyc
