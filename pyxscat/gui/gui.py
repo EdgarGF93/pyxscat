@@ -1,5 +1,3 @@
-
-
 from PyQt5.QtWidgets import QApplication, QMainWindow, QSplashScreen
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QTimer, pyqtSignal
@@ -51,46 +49,6 @@ class GUI(GUILayout):
         self.active_index = []        
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def main():
     app = QApplication(sys.argv)
     mw = QMainWindow()
@@ -98,6 +56,10 @@ def main():
     mw.setCentralWidget(gui)
     mw.show()
     app.exec_()
+
+
+
+
 
 if __name__ == "__main__":
     main()

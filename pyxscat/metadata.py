@@ -7,6 +7,7 @@ import logging
 import fabio
 import json
 from pyxscat.edf import FullHeader
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -18,16 +19,32 @@ DEFAULT_PATTERN = '*.edf'
 DIR_PATTERN = '**/'
 
 class MetadataBase:
-    def __init__(self, directory, pattern, init_metadata=True):
-        self._directory = Path(directory)
-        self._pattern = pattern
-        self._container_metadata = defaultdict(lambda : defaultdict(list))
-        self._container_metadata_newfiles = defaultdict(lambda : defaultdict(list))
-        self._container_ponifiles = list()
-        self._container_ponifiles_new = list()
+    def __init__(
+            self, 
+            directory="", 
+            pattern=DEFAULT_PATTERN, 
+            update_metadata=True,
+            json_file="",
+        ):
+        self._init_containers()
 
-        if init_metadata:
-            self._init_metadata()
+        # Init database using a json_file or a directory path (+ pattern)
+        if json_file:
+            self._open_metadatabase(json_file=json_file)
+            self._init_attributes(
+                directory=os.path.commonprefix(self.get_entries()),
+                pattern=pattern,
+            )
+        elif directory:
+            self._init_attributes(
+                directory=directory,
+                pattern=pattern,
+            )
+        else:
+            return
+        
+        if update_metadata:
+            self._update_metadata()
     
     def __repr__(self):
         repr = f"""
@@ -38,6 +55,24 @@ class MetadataBase:
         """
         return repr
     
+    def _init_containers(self):
+        self._container_metadata = defaultdict(lambda : defaultdict(list))
+        self._container_metadata_newfiles = defaultdict(lambda : defaultdict(list))
+        self._container_ponifiles = list()
+        self._container_ponifiles_new = list()
+
+    def _open_metadatabase(self, json_file=""):
+        if not Path(json_file).is_file():
+            return
+        
+        with open(json_file) as f:
+            metadatabase = json.load(f)
+        self._container_metadata = defaultdict(lambda : defaultdict(list), metadatabase)     
+    
+    def _init_attributes(self, directory="", pattern=""):
+        self._directory = Path(directory)
+        self._pattern = pattern
+
     @property
     def nbentries(self):
         return len(list(self._container_metadata.keys()))
@@ -92,15 +127,6 @@ class MetadataBase:
         if not entry:
             return
         return self.container[entry][metadata_key]
-
-    def _get_new_files(self) -> dict:
-        dict_new_files = defaultdict(list)
-        for subdir in self._directory.rglob(DIR_PATTERN):
-            if str(subdir) not in self._container_metadata.keys():
-                dict_new_files[str(subdir)] = subdir.glob(self._pattern)
-            else:
-                dict_new_files[str(subdir)].extend([str(file) for file in subdir.glob(self._pattern) if str(file) not in self._container_metadata[str(subdir)][FILENAMES]])
-        return dict_new_files
 
     def _append(self, entry_name: str, metadata_key: str, metadata_value: Any):
         self._container_metadata[entry_name][metadata_key].append(metadata_value)
@@ -157,15 +183,24 @@ class MetadataBase:
     def _search_files(self) -> dict:
         return {str(subdir) : subdir.glob(self._pattern) for subdir in self._directory.rglob(DIR_PATTERN)}
 
+    def _search_new_files(self) -> dict:
+        dict_new_files = defaultdict(list)
+        for subdir in self._directory.rglob(DIR_PATTERN):
+            if str(subdir) not in self._container_metadata.keys():
+                dict_new_files[str(subdir)] = subdir.glob(self._pattern)
+            else:
+                dict_new_files[str(subdir)].extend([str(file) for file in subdir.glob(self._pattern) if str(file) not in self._container_metadata[str(subdir)][FILENAMES]])
+        return dict_new_files
+
     def _search_ponifiles(self) -> list:
         return [str(ponifile) for ponifile in self._directory.rglob("*.poni")]
 
-    def _init_metadata(self):
-        if not self._container_metadata == defaultdict(lambda : defaultdict(list)):
-            raise Exception("The container is not empty! It cannot be initialized again.")
-        else:
+    def _update_metadata(self):
+        if self._container_metadata == defaultdict(lambda : defaultdict(list)):
             self._update_metadatabase(dict_new_files=self._search_files())
-            self.update_ponidatabase()
+        else:
+            self._update_metadatabase(dict_new_files=self._search_new_files())
+        self.update_ponidatabase()
 
     def _is_file_in_entry(self, entry_name: Path, filename: Path):
         if filename in self._generate_files_in_entry(entry_name=entry_name):
@@ -276,7 +311,7 @@ class MetadataBase:
         if self._container_metadata == defaultdict(lambda : defaultdict(list)):
             dict_new_files = self._search_files()
         else:
-            dict_new_files = self._get_new_files()
+            dict_new_files = self._search_new_files()
         return dict_new_files
 
     def get_entries(self, relative_path=False) -> list:

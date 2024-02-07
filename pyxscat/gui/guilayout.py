@@ -23,7 +23,7 @@ class GUILayout(QWidget):
         frame_browser.setFrameShape(QFrame.StyledPanel)
         frame_browser.setLayout(vbox_browser)
         self.browser = Browser()
-        vbox_browser.addWidget(self.browser )
+        vbox_browser.addWidget(self.browser)
 
         vbox_right = QVBoxLayout()
         frame_right = QFrame(self)       

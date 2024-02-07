@@ -27,18 +27,27 @@ def log_info(func):
 
 
 class Browser(BrowserLayout):
-    def __init__(self):
+    def __init__(self, directory="", pattern="", json_file=""):
         super(Browser, self).__init__()
-        self._init_attributes()
+        self._init_attributes(
+            directory=directory,
+            pattern=pattern,
+            json_file=json_file,
+        )
         self._init_callbacks()
 
-    def _init_attributes(self):
-        self._meta = None
+    def _init_attributes(self, directory="", pattern="", json_file=""):
         self._active_entry = ''
-        self._active_index = []        
+        self._active_index = []
+        self._init_metadatabase(
+            root_directory=directory,
+            pattern=pattern,
+            json_file=json_file,
+        )
     
     def _init_callbacks(self):
-        self.button_pick_rootdir.clicked.connect(self._slot_rootdir_clicked)
+        self.button_pick_jsonfile.clicked.connect(self._slot_jsonfile_clicked)
+        self.button_pick_rootdir.clicked.connect(self._slot_rootdirectory_clicked)
         # self.button_pick_hdf5.clicked.connect(self.pick_h5file_clicked)        
         #self.combobox_h5_files.currentTextChanged.connect(self.cb_h5_changed)
         self.combobox_ponifile.currentTextChanged.connect(self._slot_poni_changed)
@@ -61,20 +70,23 @@ class Browser(BrowserLayout):
 
 
 
-
-
-
-
     ######################
     ##### SLOTS
     ######################
         
     @log_info
-    def _slot_rootdir_clicked(self,_):
+    def _slot_jsonfile_clicked(self, _):
+        """
+        Chain of events after pressing the json file button
+        """
+        self._init_browser_from_pick_file()
+
+    @log_info
+    def _slot_rootdirectory_clicked(self,_):
         """
         Chain of events after pressing the folder button
         """
-        self.init_browser()
+        self._init_browser_from_pick_dir()
     
     @log_info
     def _slot_poni_changed(self, poni_name):
@@ -91,13 +103,13 @@ class Browser(BrowserLayout):
         self.update_active_entry(new_entry=new_entry.text())
         
     #################################
-    ## BROWSER METHODS #######
+    #### INIT BROWSER METHODS #######
     #################################
 
     @log_info
-    def init_browser(self):
+    def _init_browser_from_pick_dir(self):
         # Get the address of a root directory
-        root_directory = self.pick_root_directory()
+        root_directory = self._pick_root_directory()
         if not root_directory:
             return
         
@@ -108,10 +120,32 @@ class Browser(BrowserLayout):
         self._init_browser(
             root_directory=root_directory,
             pattern=pattern,
+            json_file="",
         )
 
     @log_info
-    def _init_browser(self, root_directory: str = '', pattern: str = ''):
+    def _init_browser_from_pick_file(self):
+        json_file = self._pick_json_file()
+
+        if not json_file:
+            return
+        
+        if not Path(json_file).is_file():
+            return
+        
+        self._init_browser(
+            root_directory="",
+            pattern=self.get_pattern(),
+            json_file=json_file,
+        )
+
+    @log_info
+    def _init_browser(
+        self, 
+        root_directory: str = '', 
+        pattern: str = '',
+        json_file="",
+        ):
         """Instanciate the MetadataBase class and updates the widgets of the browser
 
         Params:
@@ -121,32 +155,52 @@ class Browser(BrowserLayout):
         if not self._init_metadatabase(
             root_directory=root_directory,
             pattern=pattern,
-            output_directory=JSON_DIR,
+            json_file=json_file,
             ):
             return
+        
         self.update_rootdir_lineedit(new_text=root_directory)
         self.update_listwidget(init=True)
         self.update_referencecb(init=True)
         self.update_ponicb(init=True)
 
     @log_info
-    def _init_metadatabase(self, root_directory, pattern, output_directory: str = '') -> bool:
-        try:
-            self.meta = MetadataBase(
-                directory=root_directory,
-                pattern=pattern,
-                init_metadata=True,
-            )
-            self._save_meta_file(output_directory=output_directory)
-            
-            return True
-        except Exception as e:
-            logger.error(f'Metadata base instance could not be initialized: {e}')
-            return False
-    
+    def _init_metadatabase(
+        self,
+        root_directory="", 
+        pattern="", 
+        output_directory: str = '',
+        json_file="",
+        ) -> bool:
+        if root_directory:
+            try:
+                self.meta = MetadataBase(
+                    directory=root_directory,
+                    pattern=pattern,
+                    update_metadata=True,
+                    json_file="",
+                )
+                self._save_meta_file(output_directory=output_directory)
+                
+                return True
+            except Exception as e:
+                logger.error(f'{e}: MetadataBase could not be initialized with directory: {root_directory}')
+                return False
+        elif json_file:
+            try:
+                self.meta = MetadataBase(
+                    directory="",
+                    pattern=pattern,
+                    update_metadata=True,
+                    json_file=json_file,
+                )
+                return True
+            except Exception as e:
+                logger.error(f"{e}: MetadataBase could not be initialized with json file: {json_file}")
+
     def _save_meta_file(self, output_directory: str = ''):
         self.meta.save(output_directory=output_directory)
-        self._update_recentfiles_cb()
+        # self._update_recentfiles_cb()
 
     @log_info
     def update_rootdir_lineedit(self, new_text: str):
@@ -471,7 +525,7 @@ class Browser(BrowserLayout):
             )
 
     @log_info
-    def pick_root_directory(self) -> Path:
+    def _pick_root_directory(self) -> Path:
         """
         Picks a folder as root directory, where the data files are searched recursively
 
@@ -479,8 +533,8 @@ class Browser(BrowserLayout):
             Path instance with the root directory
         """        
         # Pick the folder after pop-up browser window
-        self.dialog_maindir = QFileDialog()
-        get_directory = self.dialog_maindir.getExistingDirectory(self, 'Choose main directory', os.getcwd())
+        self.dialog_json = QFileDialog()
+        get_directory = self.dialog_json.getExistingDirectory(self, 'Choose main directory', os.getcwd())
 
         # Returns if is not valid, or the dialog was cancelled
         if not get_directory:
@@ -494,6 +548,32 @@ class Browser(BrowserLayout):
                 logger.error(f'The root directory ({root_directory}) is not valid for Path instance: {e}')
                 root_directory = ""
         return root_directory
+
+    @log_info
+    def _pick_json_file(self) -> Path:
+        self.dialog_json = QFileDialog()
+        get_json = self.dialog_json.getOpenFileNames(self, 'Pick .json file', '.', "*.json")
+
+        # Returns if is not valid, or the dialog was cancelled
+        if not get_json:
+            json_file = ""
+            logger.info("No file was picked.")
+        else:
+            try:
+                json_file = Path(get_json[0][0])
+                logger.info(f'New root directory: {json_file}')
+            except NotImplementedError as e:
+                logger.error(f'The root directory ({json_file}) is not valid for Path instance: {e}')
+                json_file = ""
+        return json_file
+
+
+
+
+
+
+
+
 
     @log_info
     def update_active_entry(self, new_entry):
@@ -542,15 +622,54 @@ class Browser(BrowserLayout):
         )
 
 
-
-
-
 def main():
+    from argparse import ArgumentParser
+    description = """PyXScat tool to open the GUI of the Browser"""
+    usage = "pyxscat [options]"
+    parser = ArgumentParser(
+        usage=usage,
+        description=description,
+    )
+
+    parser.add_argument(
+        "-f" "--file-json",
+        dest="file",
+        help="Import a .json file with already stored Metadata",
+        default=None,
+    )
+
+    parser.add_argument(
+        "-d", "--directory",
+        dest="directory",
+        help="Import a root directory to search files recursively",
+        default=None,
+    )
+
+    parser.add_argument(
+        "-p", "--pattern",
+        default="*.edf",
+        dest="pattern",
+        help="Use a file-matching pattern to search for data files",
+    )
+    options = parser.parse_args()
+
+    _main(
+        directory=options.directory,
+        pattern=options.pattern,
+        file_json=options.file,
+    )
+
+def _main(directory="", pattern="*.edf", file_json=""):
     app = QApplication(sys.argv)
     mw = QMainWindow()
     browser = Browser()
     mw.setCentralWidget(browser)
     mw.show()
+    browser._init_browser(
+        root_directory=directory,
+        pattern=pattern,
+        json_file=file_json,
+    )    
     app.exec_()
 
 if __name__ == "__main__":
