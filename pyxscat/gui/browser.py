@@ -1,5 +1,6 @@
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
+from PyQt5.QtCore import pyqtSignal
 
 from . import SRC_PATH
 from pyxscat.gui.browserlayout import BrowserLayout
@@ -8,10 +9,11 @@ from pyxscat.metadata import MetadataBase
 from pyxscat.gui import lineedit_methods as le
 from pyxscat.gui import listwidget_methods as lt
 from pyxscat.gui import combobox_methods as cb
-
+from pyxscat.gui import table_methods as tm
 
 from pathlib import Path
 from pyFAI.io.ponifile import PoniFile
+from pyFAI import load
 import os
 import sys
 
@@ -27,34 +29,27 @@ def log_info(func):
 
 
 class Browser(BrowserLayout):
-    def __init__(self, directory="", pattern="", json_file=""):
+    browser_index = pyqtSignal()
+    poni_changed = pyqtSignal()
+
+    def __init__(self):
         super(Browser, self).__init__()
-        self._init_attributes(
-            directory=directory,
-            pattern=pattern,
-            json_file=json_file,
-        )
+        self._init_attributes()
         self._init_callbacks()
 
-    def _init_attributes(self, directory="", pattern="", json_file=""):
-        self._active_entry = ''
-        self._active_index = []
-        self._init_metadatabase(
-            root_directory=directory,
-            pattern=pattern,
-            json_file=json_file,
-        )
+    def _init_attributes(self):
+        self.active_entry = ''
+        self.active_index = []
+        self.poni = None
+        self.ai = None
+        self.meta = None
     
     def _init_callbacks(self):
         self.button_pick_jsonfile.clicked.connect(self._slot_jsonfile_clicked)
         self.button_pick_rootdir.clicked.connect(self._slot_rootdirectory_clicked)
-        # self.button_pick_hdf5.clicked.connect(self.pick_h5file_clicked)        
-        #self.combobox_h5_files.currentTextChanged.connect(self.cb_h5_changed)
         self.combobox_ponifile.currentTextChanged.connect(self._slot_poni_changed)
         self.listwidget_samples.itemClicked.connect(self._slot_active_entry_changed)
-
-
-
+        self.table_files.itemSelectionChanged.connect(self._slot_active_index_changed)
 
         #########################
         # Setup dictionary callback
@@ -68,10 +63,39 @@ class Browser(BrowserLayout):
         # self.button_metadata_update.clicked.connect(self.metadata_update_clicked)
         # self.button_metadata_save.clicked.connect(self.metadata_save_clicked)
 
+    ######################
+    ##### SETTERS ########
+    ######################
+    
+    @property
+    def active_entry(self):
+        return self._active_entry
+    
+    @active_entry.setter
+    def active_entry(self, value):
+        self._active_entry = value
+        self._active_entry_changed()
 
+    @property
+    def active_index(self):
+        return self._active_index
+    
+    @active_index.setter
+    def active_index(self, value):
+        self._active_index = value
+        self._active_index_changed()
+
+    @property
+    def poni(self):
+        return self._poni
+    
+    @poni.setter
+    def poni(self, value):
+        self._poni = value
+        self._poni_instance_changed()
 
     ######################
-    ##### SLOTS
+    ####### SLOTS ########
     ######################
         
     @log_info
@@ -96,12 +120,18 @@ class Browser(BrowserLayout):
         Arguments:
             poni_name -- string of .poni filename
         """
-        self.update_active_poni(poni_data=poni_name)
+        poni_filename = self.meta._get_absolute_path(relative_path=poni_name)
+        self.poni = PoniFile(data=poni_filename)
+        self.ai = load(self.poni)
 
     @log_info
     def _slot_active_entry_changed(self, new_entry):
-        self.update_active_entry(new_entry=new_entry.text())
+        self.active_entry = new_entry.text()
         
+    @log_info
+    def _slot_active_index_changed(self):
+        self.active_index = tm.selected_rows(self.table_files)
+
     #################################
     #### INIT BROWSER METHODS #######
     #################################
@@ -158,8 +188,8 @@ class Browser(BrowserLayout):
             json_file=json_file,
             ):
             return
-        
-        self.update_rootdir_lineedit(new_text=root_directory)
+        self.update_jsonfile_lineedit()
+        self.update_rootdir_lineedit()
         self.update_listwidget(init=True)
         self.update_referencecb(init=True)
         self.update_ponicb(init=True)
@@ -172,6 +202,7 @@ class Browser(BrowserLayout):
         output_directory: str = '',
         json_file="",
         ) -> bool:
+        
         if root_directory:
             try:
                 self.meta = MetadataBase(
@@ -200,11 +231,35 @@ class Browser(BrowserLayout):
 
     def _save_meta_file(self, output_directory: str = ''):
         self.meta.save(output_directory=output_directory)
-        # self._update_recentfiles_cb()
+
 
     @log_info
-    def update_rootdir_lineedit(self, new_text: str):
+    def update_jsonfile_lineedit(self):
+        lineedit = self.lineedit_jsonfile
+        new_text = Path(self.meta._json_file).name
+        self._update_jsonfile_lineedit(
+            lineedit=lineedit,
+            new_text=new_text,
+        )
+
+    @log_info
+    def _update_jsonfile_lineedit(self, lineedit, new_text: str):
+        le.substitute(
+            lineedit=lineedit,
+            new_text=new_text,
+        )
+
+    @log_info
+    def update_rootdir_lineedit(self):
         lineedit = self.lineedit_root_dir
+        new_text = self.meta.directory
+        self._update_rootdir_lineedit(
+            lineedit=lineedit,
+            new_text=new_text,
+        )
+
+    @log_info
+    def _update_rootdir_lineedit(self, lineedit, new_text: str):
         le.substitute(
             lineedit=lineedit,
             new_text=new_text,
@@ -281,9 +336,7 @@ class Browser(BrowserLayout):
         cb.clear(combobox=combobox)
         cb.insert_list(
             combobox=combobox,
-            list_items=self.meta.get_ponifiles(
-                relative_path=True,
-            ),
+            list_items=self.meta.get_ponifiles(relative_path=True),
         )
 
     @log_info
@@ -295,34 +348,33 @@ class Browser(BrowserLayout):
                 item=ponifile,
             )
 
-    @log_info
-    def update_active_poni(self, poni_data):
-        if isinstance(poni_data, (str, Path)):
-            poni_data = Path(poni_data)
-            if not poni_data.absolute() == poni_data:
-                poni_data = self.meta._get_absolute_path(relative_path=poni_data)
-            if not Path(poni_data).is_file():
-                logger.error(f'Ponifile {poni_data} does not exists??')
-                return
-        elif isinstance(poni_data, PoniFile):
-            pass
-        else:
-            logger.error(f'Poni_data {poni_data} (type: {type(poni_data)}) is not a valid type')
-            return
+    # @log_info
+    # def update_active_poni(self, poni_data):
+    #     if isinstance(poni_data, (str, Path)):
+    #         poni_data = Path(poni_data)
+    #         if not poni_data.absolute() == poni_data:
+    #             poni_data = self.meta._get_absolute_path(relative_path=poni_data)
+    #         if not Path(poni_data).is_file():
+    #             logger.error(f'Ponifile {poni_data} does not exists??')
+    #             return
+    #     elif isinstance(poni_data, PoniFile):
+    #         pass
+    #     else:
+    #         logger.error(f'Poni_data {poni_data} (type: {type(poni_data)}) is not a valid type')
+    #         return
                 
-        try:
-            poni = PoniFile(data=poni_data)
-        except Exception as e:
-            logger.error(f'Poni instance could not be created using {poni_data}: {e}')
-            return
+    #     try:
+    #         poni = PoniFile(data=poni_data)
+    #     except Exception as e:
+    #         logger.error(f'Poni instance could not be created using {poni_data}: {e}')
+    #         return
 
-        self._update_poni(poni=poni)
-        self._update_poni_widgets()
-        # self._update_graphs(graph_1D=True, graph_2D_q=True, graph_2D_reshape=True)
+    #     self._update_poni(poni=poni)
+    #     self._update_poni_widgets()
 
     @log_info
     def _update_poni(self, poni):
-        self._active_poni = poni
+        self._poni = poni
 
     @log_info
     def _update_poni_widgets(self):
@@ -352,22 +404,22 @@ class Browser(BrowserLayout):
         widget = self.lineedit_detector
 
         try:
-            detector_name = self._active_poni.detector.name
+            detector_name = self._poni.detector.name
         except Exception as e:
-            logger.error(f"{e}: Detector name could not be retrieved from {self._active_poni}.")
+            logger.error(f"{e}: Detector name could not be retrieved from {self._poni}.")
             detector_name = ''
 
         try:
-            detector_bin = self._active_poni.detector.binning
+            detector_bin = self._poni.detector.binning
         except Exception as e:
-            logger.error(f"{e}: Detector binning could not be retrieved from {self._active_poni}.")
+            logger.error(f"{e}: Detector binning could not be retrieved from {self._poni}.")
             detector_bin = ('x','x')
 
         try:
-            shape = self._active_poni.detector.shape
+            shape = self._poni.detector.shape
             shape = (shape[0], shape[1])
         except Exception as e:
-            logger.error(f"{e}: Shape could not be retrieved from {self._active_poni}.")
+            logger.error(f"{e}: Shape could not be retrieved from {self._poni}.")
             shape = (0,0)         
 
         detector_info = f'{str(detector_name)} / {str(detector_bin)} / {str(shape)}'
@@ -388,9 +440,9 @@ class Browser(BrowserLayout):
         widget = self.lineedit_wavelength
 
         try:
-            wave = self._active_poni.wavelength
+            wave = self._poni.wavelength
         except Exception as e:
-            logger.error(f"{e}: Wavelength could not be retrieved from {self._active_poni}.")
+            logger.error(f"{e}: Wavelength could not be retrieved from {self._poni}.")
             wave = 0.0
 
         le.substitute(
@@ -409,9 +461,9 @@ class Browser(BrowserLayout):
         widget = self.lineedit_distance
 
         try:
-            dist = self._active_poni.dist
+            dist = self._poni.dist
         except Exception as e:
-            logger.error(f"{e}: Distance could not be retrieved from {self._active_poni}.")
+            logger.error(f"{e}: Distance could not be retrieved from {self._poni}.")
             dist = 0.0
 
         le.substitute(
@@ -430,9 +482,9 @@ class Browser(BrowserLayout):
         widget = self.lineedit_poni1
 
         try:
-            poni1 = self._active_poni.poni1
+            poni1 = self._poni.poni1
         except Exception as e:
-            logger.error(f"{e}: PONI1 could not be retrieved from {self._active_poni}.")
+            logger.error(f"{e}: PONI1 could not be retrieved from {self._poni}.")
             poni1 = 0.0
 
         le.substitute(
@@ -451,9 +503,9 @@ class Browser(BrowserLayout):
         widget = self.lineedit_poni2
 
         try:
-            poni2 = self._active_poni.poni2
+            poni2 = self._poni.poni2
         except Exception as e:
-            logger.error(f"{e}: PONI2 could not be retrieved from {self._active_poni}.")
+            logger.error(f"{e}: PONI2 could not be retrieved from {self._poni}.")
             poni2 = 0.0
 
         le.substitute(
@@ -472,9 +524,9 @@ class Browser(BrowserLayout):
         widget = self.lineedit_rot1
 
         try:
-            rot1 = self._active_poni.rot1
+            rot1 = self._poni.rot1
         except Exception as e:
-            logger.error(f"{e}: ROT1 could not be retrieved from {self._active_poni}.")
+            logger.error(f"{e}: ROT1 could not be retrieved from {self._poni}.")
             rot1 = 0.0
 
         le.substitute(
@@ -493,9 +545,9 @@ class Browser(BrowserLayout):
         widget = self.lineedit_rot2
 
         try:
-            rot2 = self._active_poni.rot2
+            rot2 = self._poni.rot2
         except Exception as e:
-            logger.error(f"{e}: ROT2 could not be retrieved from {self._active_poni}.")
+            logger.error(f"{e}: ROT2 could not be retrieved from {self._poni}.")
             rot2 = 0.0
 
         le.substitute(
@@ -514,9 +566,9 @@ class Browser(BrowserLayout):
         widget = self.lineedit_rot3
 
         try:
-            rot3 = self._active_poni.rot3
+            rot3 = self._poni.rot3
         except Exception as e:
-            logger.error(f"{e}: ROT3 could not be retrieved from {self._active_poni}.")
+            logger.error(f"{e}: ROT3 could not be retrieved from {self._poni}.")
             rot3 = 0.0
 
         le.substitute(
@@ -524,6 +576,137 @@ class Browser(BrowserLayout):
                 new_text=rot3,
             )
 
+    @log_info
+    def update_active_entry(self, new_entry):
+        self._update_active_entry(new_entry=new_entry)
+
+
+    @log_info
+    def _update_active_entry(self, new_entry: str):
+        self._active_entry =new_entry
+
+    @log_info
+    def _active_entry_changed(self):
+        if not self._active_entry:
+            return
+        self.update_cbs_metadata()
+        self.update_table()        
+
+    @log_info
+    def _active_index_changed(self):
+        if not self._active_index:
+            return
+        self.browser_index.emit()
+
+
+    @log_info
+    def _poni_instance_changed(self):
+        if not self._poni:
+            return
+        self._update_poni_widgets()
+
+
+
+
+
+
+
+
+    @log_info
+    def get_active_filenames(self):
+        if not self.meta:
+            return []
+        return self.meta.get_filenames(
+            entry_name=self._active_entry,
+            index=self._active_index,
+            relative_path=False,
+        )
+
+    @log_info
+    def update_cbs_metadata(self):
+        if not self._active_entry:
+            return
+        
+        metadata_keys = self.meta.get_all_metadata_in_entry(
+            entry_name=self._active_entry,
+        )
+        self._update_cbs_metadata(
+            metadata_keys=metadata_keys,
+        )
+
+    @log_info
+    def _update_cbs_metadata(self, metadata_keys:list):
+        self.combobox_metadata.addItems(texts=metadata_keys)
+        self.combobox_angle.addItems(texts=metadata_keys)
+        self.combobox_tilt_angle.addItems(texts=metadata_keys)
+        self.combobox_normfactor.addItems(texts=metadata_keys)
+        self.combobox_acquisition.addItems(texts=metadata_keys)
+
+    @log_info
+    def update_table(self):
+        if not self._active_entry:
+            return
+        
+        keys_to_display = self.combobox_metadata.currentData()
+        dataframe = self.meta.get_dataframe_metadata(
+            entry_name=self.active_entry,
+            list_keys=keys_to_display,
+            relative_path=True,
+        )
+        self._update_table(
+            dataframe=dataframe,
+        )
+
+    @log_info
+    def _update_table(self, dataframe, reset=True):
+        table = self.table_files
+
+        # Clean table if required
+        if reset:
+            tm.reset(table=self.table_files)
+        if dataframe is None:
+            return
+
+        # Add columns for the displayed metadata keys
+        n_columns = len(dataframe.columns)
+        labels_columns = list(dataframe.columns)
+        tm.insert_columns(
+            table=table,
+            num=n_columns,
+            labels=labels_columns,
+        )
+
+        # Add the rows for all the displayed files
+        n_rows = len(dataframe)
+        tm.insert_rows(
+            table=table,
+            num=n_rows,
+        )
+
+        # Add the new key values for every file
+        for ind_row, _ in enumerate(dataframe["filenames"]):
+            for ind_column, key in enumerate(dataframe):
+                try:
+                    tm.update_cell(
+                        table=table,
+                        row_ind=ind_row,
+                        column_ind=ind_column,
+                        st=dataframe[key][ind_row],
+                    )
+                except Exception as e:
+                    logger.error(f'{e}. The key {key} could not be displayed in table.')
+
+
+
+
+
+
+
+
+
+
+    # DIALOG METHODS
+    
     @log_info
     def _pick_root_directory(self) -> Path:
         """
@@ -571,55 +754,6 @@ class Browser(BrowserLayout):
 
 
 
-
-
-
-
-    @log_info
-    def update_active_entry(self, new_entry):
-        self._update_active_entry(new_entry=new_entry)
-
-
-    @log_info
-    def _update_active_entry(self, new_entry: str):
-        self._active_entry =new_entry
-
-
-
-    @log_info
-    def listsamples_clicked(self, clicked_sample_name):
-        """
-        Chain of events after cliking on one of the item from the listwidget
-
-        Arguments:
-            clicked_sample_name -- current clicked item on the listwidget
-        """        
-
-        if not self._active_h5:
-            return
-        
-        # Fetch the name of the integration
-        clicked_sample_name = clicked_sample_name.text()
-        if clicked_sample_name:
-            self.active_entry = clicked_sample_name
-
-        # Update the metadata combobox if needed
-        self.check_and_update_cb_metadata(
-            sample_name=clicked_sample_name,
-        )
-
-        # Get a Pandas.DataFrame to upload the table
-        keys_to_display = self.combobox_metadata.currentData()
-        dataframe = self._active_h5.get_metadata_dataframe(
-            sample_name=clicked_sample_name,
-            list_keys=keys_to_display,
-        )
-
-        # Reset and feed the table widget with default metadata keys if needed
-        self.update_table(
-            dataframe=dataframe,
-            reset=True,
-        )
 
 
 def main():

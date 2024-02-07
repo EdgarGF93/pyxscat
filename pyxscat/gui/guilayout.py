@@ -1,13 +1,15 @@
 
 
 from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, QFrame, QVBoxLayout, QSplitter
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 
 from pyxscat.gui.browser import Browser
 from pyxscat.gui.graph import Graph
 from pyxscat.gui.terminal import Terminal
 
 class GUILayout(QWidget):
+    
+
     def __init__(self, *args):
         QMainWindow.__init__(self, *args)
         self._build()
@@ -36,7 +38,7 @@ class GUILayout(QWidget):
         self.graphs =  Graph()
         self.terminal = Terminal()
         splitter_right.addWidget(self.graphs)
-        splitter_right.addWidget(self.terminal)
+        # splitter_right.addWidget(self.terminal)
 
         splitter_main.addWidget(frame_browser)
         splitter_main.addWidget(frame_right)

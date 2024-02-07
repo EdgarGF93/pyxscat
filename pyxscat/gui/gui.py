@@ -8,6 +8,8 @@ from pyxscat.logger_config import setup_logger
 
 from pathlib import Path
 import sys
+import fabio
+import numpy as np
 
 ICON_SPLASH = str(Path(ICON_DIRECTORY).joinpath('pyxscat_new_logo.png'))
 
@@ -32,7 +34,7 @@ class GUI(GUILayout):
         logger.debug("GUIPyX_Widget was created.")
 
         self._splash()
-        self._init_attributes()
+        self._init_connections()
 
     def _splash(self):
         pixmap = QPixmap(ICON_SPLASH)
@@ -40,13 +42,39 @@ class GUI(GUILayout):
         splash.show()
         splash.finish(self)
 
-    def _init_attributes(self):
-        self._meta = pyqtSignal()
-        self.meta = None
-        self._active_entry = pyqtSignal()
-        self.active_entry = ''
-        self._active_index = pyqtSignal()
-        self.active_index = []        
+    def _init_connections(self):
+        self.browser.browser_index.connect(self._update_graphs)
+        self.browser.poni_changed.connect(self._update_graphs)
+    
+    def _update_graphs(self, raw=True, reshape=True, q=True, integration=True):
+        list_filenames = self.browser.get_active_filenames()
+        if not list_filenames:
+            return
+        data = self._open_data(list_filenames=list_filenames)
+
+        if raw:
+            z_lims = self.weak_lims(data=data)
+            self.graphs._update_raw_graph(data=data, z_lims=z_lims)
+        
+        if integration:
+            res = self.browser.ai.integrate1d(data=data, npt=1000)
+            self.graphs._update_integration_graph(result=res)
+
+    def _open_data(self, list_filenames:list):
+        if len(list_filenames) > 1:
+            data = self._average_data(list_filenames=list_filenames)
+        else:
+            data = fabio.open(list_filenames[0]).data
+        return data
+
+    def _average_data(self, list_filenames:list):
+        return np.mean([fabio.open(file).data for file in list_filenames], axis=2)
+
+    def weak_lims(self, data):
+        mn = np.nanmean(data)
+        sd = np.nanstd(data)
+        return (mn+0*sd, mn+3*sd)
+
 
 
 def main():

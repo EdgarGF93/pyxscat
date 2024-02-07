@@ -363,15 +363,15 @@ class BrowserLayout(QWidget):
 
         label_json_files = QLabel(LABEL_JSON_FILES)
         self.combobox_h5_files = QComboBox()
-        self.lineedit_json_files = QLineEdit()
-        self.lineedit_json_files.setReadOnly(True)
+        self.lineedit_jsonfile = QLineEdit()
+        self.lineedit_jsonfile.setReadOnly(True)
         self.button_pick_jsonfile = QPushButton()
         self.button_pick_jsonfile.setIcon(QIcon(ICON_FILE_PATH))
         self.button_pick_jsonfile.setToolTip(LABEL_PICK_H5)
         self.button_pick_jsonfile.setStyleSheet(BUTTON_STYLE_ENABLE)
         
         hbox_json_files.addWidget(label_json_files, Qt.AlignLeft)
-        hbox_json_files.addWidget(self.lineedit_json_files, Qt.AlignLeft)
+        hbox_json_files.addWidget(self.lineedit_jsonfile, Qt.AlignLeft)
         hbox_json_files.addWidget(self.button_pick_jsonfile, Qt.AlignLeft)
 
         hbox_json_files.setStretch(0,2)

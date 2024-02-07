@@ -8,6 +8,7 @@ import fabio
 import json
 from pyxscat.edf import FullHeader
 import os
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -34,11 +35,13 @@ class MetadataBase:
             self._init_attributes(
                 directory=os.path.commonprefix(self.get_entries()),
                 pattern=pattern,
+                json_file=json_file,
             )
         elif directory:
             self._init_attributes(
                 directory=directory,
                 pattern=pattern,
+                json_file="",
             )
         else:
             return
@@ -69,9 +72,16 @@ class MetadataBase:
             metadatabase = json.load(f)
         self._container_metadata = defaultdict(lambda : defaultdict(list), metadatabase)     
     
-    def _init_attributes(self, directory="", pattern=""):
+    def _init_attributes(self, directory="", pattern="", json_file=""):
         self._directory = Path(directory)
         self._pattern = pattern
+        if not json_file:
+            self._json_file = self._get_json_file()
+        else:
+            self._json_file = json_file
+
+    def _get_json_file(self):
+        return Path(__file__).parent.joinpath("metadatabases", f'{self._directory.name}_pyxscat_mdb.json')
 
     @property
     def nbentries(self):
@@ -127,6 +137,12 @@ class MetadataBase:
         if not entry:
             return
         return self.container[entry][metadata_key]
+
+    def _get_all_metadata_in_entry(self, entry: str):
+        entry = self._validate_entry(entry_name=entry)
+        if not entry:
+            return
+        return self.container[entry].keys()
 
     def _append(self, entry_name: str, metadata_key: str, metadata_value: Any):
         self._container_metadata[entry_name][metadata_key].append(metadata_value)
@@ -320,9 +336,44 @@ class MetadataBase:
     def get_files_in_entry(self, entry_name:str, relative_path=False):
         return [filename for filename in self._generate_files_in_entry(entry_name=entry_name, relative_path=relative_path)]        
 
+    def get_filenames(self, entry_name:str, index:list, relative_path=False):
+        list_filenames = []
+        for ind, filename in enumerate(self._generate_files_in_entry(entry_name=entry_name, relative_path=relative_path)):
+            if ind in index:
+                list_filenames.append(filename)
+        return list_filenames        
+
     def get_metadata_in_entry(self, entry_name:str, metadata_key: str):
         return self._get_metadata_values_from_entry(entry=entry_name, metadata_key=metadata_key)
     
+    def get_all_metadata_in_entry(self, entry_name:str):
+        return self._get_all_metadata_in_entry(entry=entry_name)
+
+    def get_dataframe_metadata(self, entry_name:str, list_keys:list, relative_path=False):
+        list_files = self.get_files_in_entry(
+            entry_name=entry_name,
+            relative_path=relative_path,
+        )
+        if not list_files:
+            return
+        
+        short_metadata = defaultdict(list)
+
+        for filename in list_files:
+            short_metadata[FILENAMES].append(filename)
+
+            for metadata_key in list_keys:
+                try:
+                    dataset = self.get_metadata_in_entry(
+                        entry_name=entry_name,
+                        metadata_key=metadata_key,
+                    )
+                    short_metadata[metadata_key] = dataset
+                except:
+                    logger.warning(f"Error during acceeding to Metadata dataset with key: {key}")
+        dataframe = pd.DataFrame(short_metadata)
+        return dataframe
+
     def get_ponifiles(self, relative_path=False):
         if relative_path:
             return [str(Path(ponifile).relative_to(self._directory)) for ponifile in self._container_ponifiles]
@@ -343,7 +394,6 @@ class MetadataBase:
             out_folder = Path(__file__).parent.joinpath("metadatabases")
             out_folder.mkdir(exist_ok=True)            
             output_filename = out_folder.joinpath(f'{self._directory.name}_pyxscat_mdb.json')
-            print(output_filename)
         else:
             output_directory = Path(output_directory)
             output_filename = output_directory.joinpath(f'{self._directory.name}_pyxscat_mdb.json')
@@ -372,7 +422,7 @@ class PoniMetadata(MetadataBase):
 
     def save(self, output_filename: str = ''):
         if not output_filename:
-            output_filename = self._directory.joinpath(f'{self._directory.name}_pyxscat_poni.json')
+            output_filename = self._get_json_file()
         else:
             output_filename = Path(output_filename).with_suffix('.json')
 
