@@ -26,4 +26,3 @@ ninja
 pytest
 pydantic
 watchdog
-gevent

@@ -39,42 +39,24 @@ class GUI(GUILayout):
         splash.finish(self)
 
     def _init_connections(self):
-        self.browser.browser_index.connect(self._update_graphs)
-        self.browser.poni_changed.connect(self._update_graphs)
+        self.browser.ai_changed.connect(lambda : (
+            self.update_graph_raw(),
+            self.update_graph_integration(),
+        ))
         self.browser.new_files_detected.connect(self._update_new_files)
+        self.browser.data_cache_changed.connect(self.update_graph_raw)
+        self.browser.results1d_updated.connect(self.update_graph_integration)
     
-    def _update_graphs(self, raw=True, reshape=True, q=True, integration=True):
-        list_filenames = self.browser.get_active_filenames()
-        if not list_filenames:
-            return
-        data = self._open_data(list_filenames=list_filenames)
+    def update_graph_raw(self):
+        data = self.browser._data_cache
+        self.graphs._update_raw_graph(data=data)
 
-        if raw:
-            z_lims = self.weak_lims(data=data)
-            self.graphs._update_raw_graph(data=data, z_lims=z_lims)
-        
-        if integration:
-            res = self.browser.ai.integrate1d(data=data, npt=1000)
-            self.graphs._update_integration_graph(result=res)
-            
+    def update_graph_integration(self):
+        results = self.browser.results
+        self.graphs._update_integration_graph(results=results)
+
     def _update_new_files(self):
-        print(f"new file: {self.browser._event_handler.new_files}")
-
-    def _open_data(self, list_filenames:list):
-        if len(list_filenames) > 1:
-            data = self._average_data(list_filenames=list_filenames)
-        else:
-            data = fabio.open(list_filenames[0]).data
-        return data
-
-    def _average_data(self, list_filenames:list):
-        return np.mean([fabio.open(file).data for file in list_filenames], axis=2)
-
-    def weak_lims(self, data):
-        mn = np.nanmean(data)
-        sd = np.nanstd(data)
-        return (mn+0*sd, mn+3*sd)
-
+        pass
 
 
 def main():

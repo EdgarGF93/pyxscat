@@ -14,15 +14,20 @@ from pyxscat.observer import RootDirObserver
 
 from watchdog.observers import Observer
 from watchdog.events import LoggingEventHandler, FileSystemEventHandler
-import gevent
 from pathlib import Path
 from pyFAI.io.ponifile import PoniFile
 from pyFAI import load
+import numpy as np
+import fabio
+from collections import defaultdict
 import os
+import json
 import sys
 
 JSON_DIR = Path(SRC_PATH).joinpath('METADATA_FILES')
 JSON_DIR.mkdir(exist_ok=True)
+
+INTEGRATIONS_DIRECTORY = Path(__file__).parent.parent.joinpath("integration_dicts")
 
 logger = setup_logger()
 def log_info(func):
@@ -33,57 +38,80 @@ def log_info(func):
 
 
 class Browser(BrowserLayout):
-    browser_index = pyqtSignal()
-    poni_changed = pyqtSignal()
+    # browser_index = pyqtSignal()
+    ai_changed = pyqtSignal()
     new_files_detected = pyqtSignal()
+    data_cache_changed = pyqtSignal()
+    results1d_updated = pyqtSignal()
+    meta_updated = pyqtSignal()
 
     def __init__(self):
         super(Browser, self).__init__()
         self._init_attributes()
         self._init_callbacks()
-        
+        self.update_integration_cb()
 
     def _init_attributes(self):
         self.active_entry = ''
         self.active_index = []
+        self.data_cache = None
+        self.results = []
         self.poni = None
         self.ai = None
+        self.gi = None
         self.meta = None
+        self.new_file = ""
+
+        self.acquisition_key = ""
+        self.normalization_key = ""
+        self.incidentangle_key = ""
+        self.tiltangle_key = ""
+
+        self.reference_folder = ""
+        self.reference_data = None
+        self.reference_acqtime = None
+        
+
     
     def _init_callbacks(self):
         self.button_pick_jsonfile.clicked.connect(self._slot_jsonfile_clicked)
         self.button_pick_rootdir.clicked.connect(self._slot_rootdirectory_clicked)
         self.combobox_ponifile.currentTextChanged.connect(self._slot_poni_changed)
+        self.combobox_reffolder.currentTextChanged.connect(self._slot_reffolder_changed)
+        self.spinbox_sub.valueChanged.connect(self._slot_spinboxsub_changed)
+
+        self.button_pyfaicalib.clicked.connect(self._slot_pyfai_calib)
+
+
+
         self.listwidget_samples.itemClicked.connect(self._slot_active_entry_changed)
         self.table_files.itemSelectionChanged.connect(self._slot_active_index_changed)
 
-        #########################
-        # Setup dictionary callback
-        #########################
-        # self.combobox_setup.currentTextChanged.connect(self.cb_setup_changed)
-        # self.combobox_angle.currentTextChanged.connect(self.cb_iangle_changed)
-        # self.combobox_tilt_angle.currentTextChanged.connect(self.cb_tangle_changed)
-        # self.combobox_normfactor.currentTextChanged.connect(self.cb_normfactor_changed)
-        # self.combobox_acquisition.currentTextChanged.connect(self.cb_acquisition_changed)
-        # self.button_pick_json.clicked.connect(self.pick_json_clicked)
-        # self.button_metadata_update.clicked.connect(self.metadata_update_clicked)
-        # self.button_metadata_save.clicked.connect(self.metadata_save_clicked)
+
+
+        self.new_files_detected.connect(self._update_new_files)
+
+        self.lineedit_acquisition.textEdited.connect(self._slot_le_acquisition_changed)
+        self.lineedit_normfactor.textEdited.connect(self._slot_le_normalization_changed)
+        self.lineedit_iangle.textEdited.connect(self._slot_le_iangle_changed)
+        self.lineedit_tilt_angle.textEdited.connect(self._slot_le_tangle_changed)
+
+
 
     def _init_watchdog(self):
         class NewFileHandler(FileSystemEventHandler):
             def __init__(self, parent, pattern="*.edf"):
                 self._pattern = pattern
                 self.parent = parent
-                self.new_files = []
+                
                 
             def on_any_event(self, event):
                 if event.event_type == "created" and event.is_directory == False:
                     filename = event.src_path
                     if Path(filename).match(self._pattern):
+                        self.parent.new_file = filename
                         self.parent.new_files_detected.emit()
-                        self.new_files.append(filename)
-                        # Change GUI#####
-                        
+                                                
         self._observer = Observer()
         self._event_handler = NewFileHandler(
             parent=self,
@@ -96,12 +124,52 @@ class Browser(BrowserLayout):
         )
         self._observer.start()
 
-
+    def update_integration_cb(self):
+        combobox = self.combobox_integration
+        combobox.clear()
+        json_files = [file.stem for file in INTEGRATIONS_DIRECTORY.glob("*.json")]
+        combobox.addItems(texts=json_files)
 
     ######################
     ##### SETTERS ########
     ######################
+        
+    @property
+    def acquisition_key(self):
+        return self._acquisition_key
     
+    @acquisition_key.setter
+    def acquisition_key(self, value):
+        self._acquisition_key = value
+        self.updated_acquisition_key()
+    
+    @property
+    def normalization_key(self):
+        return self._normalization_key
+    
+    @normalization_key.setter
+    def normalization_key(self, value):
+        self._normalization_key = value
+        self.updated_normalization_key()
+
+    @property
+    def incidentangle_key(self):
+        return self._incidentangle_key
+    
+    @incidentangle_key.setter
+    def incidentangle_key(self, value):
+        self._incidentangle_key = value
+        self.updated_incidentangle_key()
+
+    @property
+    def tiltangle_key(self):
+        return self._tiltangle_key
+    
+    @tiltangle_key.setter
+    def tiltangle_key(self, value):
+        self._tiltangle_key = value
+        self.updated_tiltangle_key()
+
     @property
     def active_entry(self):
         return self._active_entry
@@ -128,6 +196,54 @@ class Browser(BrowserLayout):
     def poni(self, value):
         self._poni = value
         self._poni_instance_changed()
+
+    @property
+    def ai(self):
+        return self._ai
+    
+    @ai.setter
+    def ai(self, value):
+        self._ai = value
+        self._ai_changed()
+
+    @property
+    def data_cache(self):
+        return self._data_cache
+    
+    @data_cache.setter
+    def data_cache(self, value):
+        self._data_cache = value
+        self._data_cache_changed()
+
+    # @property
+    # def results(self):
+    #     return self._results
+    
+    # @results.setter
+    # def results(self, value):
+    #     self._results = value
+    #     self._integration_complete()
+
+    @property
+    def reference_folder(self):
+        return self._reference_folder
+    
+    @reference_folder.setter
+    def reference_folder(self, value):
+        self._reference_folder = value
+        self._reference_folder_changed()
+
+    # @property
+    # def reference_data(self):
+    #     return self._reference_data
+    
+    # @reference_data.setter
+    # def reference_data(self, value):
+    #     self._reference_data = value
+    #     self._reference_data_changed()
+
+
+
 
     ######################
     ####### SLOTS ########
@@ -157,7 +273,38 @@ class Browser(BrowserLayout):
         """
         poni_filename = self.meta._get_absolute_path(relative_path=poni_name)
         self.poni = PoniFile(data=poni_filename)
-        self.ai = load(self.poni)
+
+    @log_info
+    def _slot_reffolder_changed(self, reference_folder):
+        reference_folder = self.meta._get_absolute_path(relative_path=reference_folder)
+        self.reference_folder = reference_folder
+
+    @log_info
+    def _slot_spinboxsub_changed(self, value):
+        self.update_data_cache()
+
+    def _slot_pyfai_calib(self, _):
+        os.system("pyFAI-calib2")
+        self.meta.update()
+
+    def _slot_le_acquisition_changed(self, new_key):
+        self.acquisition_key = new_key
+
+    def _slot_le_normalization_changed(self, new_key):
+        self.normalization_key = new_key
+
+    def _slot_le_iangle_changed(self, new_key):
+        self.incidentangle_key = new_key
+
+    def _slot_le_tangle_changed(self, new_key):
+        self.tiltangle_key = new_key
+
+
+
+
+
+
+
 
     @log_info
     def _slot_active_entry_changed(self, new_entry):
@@ -389,7 +536,31 @@ class Browser(BrowserLayout):
         self._poni = poni
 
     @log_info
-    def _update_poni_widgets(self):
+    def updated_acquisition_key(self):
+        self.lineedit_acquisition.clear()
+        self.lineedit_acquisition.setText(str(self.acquisition_key))
+
+
+    @log_info
+    def updated_normalization_key(self):
+        self.lineedit_normfactor.clear()
+        self.lineedit_normfactor.setText(str(self.normalization_key))
+
+    @log_info
+    def updated_incidentangle_key(self):
+        self.lineedit_iangle.clear()
+        self.lineedit_iangle.setText(str(self.incidentangle_key))
+
+
+    @log_info
+    def updated_tiltangle_key(self):
+        self.lineedit_tilt_angle.clear()
+        self.lineedit_tilt_angle.setText(str(self.tiltangle_key))
+
+        
+
+    @log_info
+    def update_poni_widgets(self):
         """
         Update the ponifile widgets from a valid PoniFile instance
 
@@ -611,20 +782,26 @@ class Browser(BrowserLayout):
     def _active_index_changed(self):
         if not self._active_index:
             return
-        self.browser_index.emit()
-
+        self.update_data_cache()
 
     @log_info
     def _poni_instance_changed(self):
         if not self._poni:
             return
-        self._update_poni_widgets()
+        self.update_poni_widgets()
+        self.ai = load(self.poni)
 
+    @log_info
+    def _ai_changed(self):
+        self.update_integration()
 
+    @log_info
+    def _reference_folder_changed(self):
+        self.update_reference_file()
 
-
-
-
+    @log_info
+    def _reference_data_changed(self):
+        self.update_data_cache()
 
 
     @log_info
@@ -652,7 +829,7 @@ class Browser(BrowserLayout):
     @log_info
     def _update_cbs_metadata(self, metadata_keys:list):
         self.combobox_metadata.addItems(texts=metadata_keys)
-        self.combobox_angle.addItems(texts=metadata_keys)
+        self.combobox_iangle.addItems(texts=metadata_keys)
         self.combobox_tilt_angle.addItems(texts=metadata_keys)
         self.combobox_normfactor.addItems(texts=metadata_keys)
         self.combobox_acquisition.addItems(texts=metadata_keys)
@@ -712,8 +889,150 @@ class Browser(BrowserLayout):
                     logger.error(f'{e}. The key {key} could not be displayed in table.')
 
 
-    # DIALOG METHODS
+    # INTEGRATION METHOD
+    @log_info
+    def update_data_cache(self):
+        list_filenames = self.get_active_filenames()
+        if not list_filenames:
+            return
+        self._update_data_cache(
+            list_filenames=list_filenames,
+        )
+        
+    @log_info
+    def _update_data_cache(self, list_filenames):
+        data = self._open_data(list_filenames=list_filenames)
+        if self.spinbox_sub.value() != 0.0:
+            self.update_reference_file()
+            if self.reference_data is not None:
+                data = data - self.spinbox_sub.value() * self.reference_data
+        self.data_cache = self._clean_data(data=data)        
+
+    @log_info
+    def _open_data(self, list_filenames:list):
+        if len(list_filenames) > 1:
+            data = self._average_data(list_filenames=list_filenames)
+        else:
+            data = fabio.open(list_filenames[0]).data
+        return data
     
+    @log_info
+    def _average_data(self, list_filenames:list):
+        return np.average([fabio.open(file).data for file in list_filenames], axis=0)
+    
+    @log_info
+    def _clean_data(self, data):
+        data[data < 0.0] = 0.0
+        return data
+    
+    @log_info
+    def _data_cache_changed(self):
+        self.data_cache_changed.emit()
+        self.update_integration()
+
+    @log_info
+    def update_integration(self):
+        if self.data_cache is None:
+            return
+        
+        list_integrations = self.combobox_integration.currentData()
+        self.results = []
+
+        if not list_integrations:
+            res1d = self._do_azimuthal_integration(config=None)
+            self.results.append(res1d)
+
+        for integration_name in list_integrations:
+            config = self._get_json_config(integration_name=integration_name)
+            if config["integration"] == "cake":
+                res1d = self._do_azimuthal_integration(config=config)
+                self.results.append(res1d)
+
+        self.results1d_updated.emit()
+                
+
+    @log_info
+    def _get_json_config(self, integration_name:str):
+        full_filename = INTEGRATIONS_DIRECTORY.joinpath(f"{integration_name}.json")
+        with open(full_filename) as f:
+            config = json.load(f)
+        return config
+    
+    @log_info
+    def _do_azimuthal_integration(self, config:dict={}):
+        try:
+            if not config:
+                return self.ai.integrate1d(data=self._data_cache, npt=1000)
+
+            npt = 2000 if config["azim_bins"] == 0 else config["azim_bins"]
+            res1d = self.ai.integrate1d(
+                data=self._data_cache, 
+                npt=npt,
+                radial_range=config["radial_range"],
+                azimuth_range=config["azimuth_range"],
+                unit=config["unit"],
+            )
+            return res1d
+        except Exception as e:
+            logger.error(f"AzimuthalIntegration did not work, check poni file?")
+
+    @log_info
+    def _integration_complete(self):
+        self.results1d_updated.emit()
+
+
+
+
+
+    #####################
+    # REFERENCE METHODS #
+    #####################
+        
+    def update_reference_file(self):
+        acquisition_key = self.acquisition_key
+        if not acquisition_key:
+            return
+        
+        if not self.active_entry:
+            return
+        
+        if not self.active_index:
+            return
+                
+        acquisition_time = self.meta.get_metadata(
+            entry_name=self.active_entry, 
+            index=self.active_index[0],
+            metadata_key=acquisition_key,
+        )
+
+        self._search_reference_file(
+            acquisition_time=acquisition_time,
+            reference_folder=self.reference_folder,
+        )
+        
+    def _search_reference_file(self, acquisition_time, reference_folder):
+        if acquisition_time == self.reference_acqtime:
+            return
+        
+        for ind, metadata in enumerate(self.meta._generate_metadata_in_entry(entry_name=reference_folder, metadata_key=self.acquisition_key)):
+            if metadata == acquisition_time:
+                reference_filename = self.meta.get_filenames(entry_name=reference_folder, index=[ind])[0]
+                self.reference_data = fabio.open(reference_filename).data
+                self.reference_acqtime = acquisition_time
+                return
+        self.reference_data = None
+        self.reference_acqtime = None
+            
+
+        
+
+
+
+
+    ##################
+    # DIALOG METHODS #
+    ##################
+        
     @log_info
     def _pick_root_directory(self) -> Path:
         """
@@ -759,6 +1078,20 @@ class Browser(BrowserLayout):
 
 
 
+    # METHODS NEW FILES
+    def _update_new_files(self):
+        new_file = self.new_file
+        entry_name = Path(new_file).parent
+        self.meta._update_entry(
+            entry_name=entry_name,
+            file_iterator=[new_file],
+        )
+
+        if str(entry_name) == str(self.meta._get_absolute_path(relative_path=self.active_entry)):
+            self.update_table()
+            self._update_data_cache(
+                list_filenames=[new_file],
+            )
 
 
 

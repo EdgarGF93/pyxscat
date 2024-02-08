@@ -6,7 +6,6 @@ from watchdog.events import LoggingEventHandler, FileSystemEventHandler
 from pathlib import Path
 import numpy as np
 import random
-import gevent
 import fabio
 from datetime import datetime
 import os

@@ -62,10 +62,11 @@ QPushButton:pressed  {
 """
 
 # TABS
-LABEL_TAB_FILES = "Setup"
-LABEL_TAB_SETUP = "Metadata"
-LABEL_TAB_CAKE = "Cake Int."
-LABEL_TAB_BOX = "Box Int."
+LABEL_TAB_FILES = "Init"
+LABEL_TAB_INTEGRATION = "Integration"
+LABEL_TAB_SETUP = "Metadata keys"
+LABEL_TAB_CAKE = "Cake"
+LABEL_TAB_BOX = "Box"
 LABEL_TAB_PONIFILE = "Ponifile"
 LABEL_TAB_H5 = "HDF5 File"
 
@@ -81,7 +82,9 @@ LABEL_REFERENCE_FOLDER = "Reference folder:"
 LABEL_REFERENCE_FILE = "Reference file:"
 LABEL_AUTO_REFERENCE = "Auto"
 LABEL_SAMPLE_ORIENTATION = "Sample orientation:"
-
+LABEL_INTEGRATIONS = "Integrations:"
+LABEL_SAVE_FOLDER = "Save folder:"
+LABEL_MASK_MAP = "Mask"
 QZ_BUTTON_LABEL = "qz"
 QZ_DEFAULT_STATE = True
 QR_BUTTON_LABEL = "qr"
@@ -89,6 +92,9 @@ QR_DEFAULT_STATE = True
 MIRROR_BUTTON_LABEL = "mirror"
 MIRROR_DEFAULT_STATE = False
 WRONG_LABEL = ""
+BUTTON_SAVE_INTEGRATIONS = "Save"
+BUTTON_BATCH = "Batch"
+BUTTON_FITTING = "OPEN FITTING FORM"
 
 BUTTON_ORIENTATIONS_LAYOUT = {
     QZ_BUTTON_LABEL : {
@@ -162,6 +168,10 @@ BUTTON_JSON_FILE = "Save .json"
 ICON_SAVE = "save.png"
 ICON_SAVE_PATH = str(ICON_DIRECTORY.joinpath(ICON_SAVE))
 BUTTON_UPDATE_KEYS = "UPDATE METADATA KEYS TO .H5 FILE"
+
+LABEL_SUB_FACTOR = "Scale:"
+STEP_SUB_SPINBOX = 0.01
+
 
 # CAKE TAB
 LABEL_CAKE_NAME = "Name:"
@@ -261,6 +271,9 @@ class BrowserLayout(QWidget):
         vbox_input = QVBoxLayout()
         widget_tabs = QTabWidget()
         widget_tabs.setLayout(vbox_input)
+        vbox_integration = QVBoxLayout()
+        widget_integration_tab = QTabWidget()
+        widget_integration_tab.setLayout(vbox_integration)
         vbox_list_folder = QVBoxLayout()
         widget_folder_tab = QTabWidget()
         widget_folder_tab.setLayout(vbox_list_folder)
@@ -277,6 +290,7 @@ class BrowserLayout(QWidget):
         #######################################
 
         vbox_input = QVBoxLayout()
+        vbox_integration = QVBoxLayout()
         vbox_metadata = QVBoxLayout()
         vbox_metadata.setSpacing(0)
         hbox_cake = QHBoxLayout()
@@ -297,7 +311,7 @@ class BrowserLayout(QWidget):
         widget_vbox_poni = QWidget()
         widget_vbox_h5 = QWidget()
 
-        widget_vbox_input.setLayout(vbox_input)        
+        widget_vbox_input.setLayout(vbox_input)
         widget_vbox_metadata.setLayout(vbox_metadata)
         widget_cake.setLayout(hbox_cake)
         widget_box.setLayout(hbox_box)
@@ -307,9 +321,8 @@ class BrowserLayout(QWidget):
         widget_tabs.addTab(widget_vbox_input, LABEL_TAB_FILES)
         widget_tabs.addTab(widget_vbox_metadata, LABEL_TAB_SETUP)
         widget_tabs.addTab(widget_cake, LABEL_TAB_CAKE)
-        widget_tabs.addTab(widget_box, LABEL_TAB_BOX)
+        widget_tabs.addTab(widget_box, LABEL_TAB_BOX)                
         widget_tabs.addTab(widget_vbox_poni, LABEL_TAB_PONIFILE)
-        # widget_tabs.addTab(widget_vbox_h5, LABEL_TAB_H5)
 
         ### INPUT TAB ###
 
@@ -323,43 +336,39 @@ class BrowserLayout(QWidget):
         hbox_poni.setContentsMargins(1, 0, 1, 0)
         hbox_reffolder = QHBoxLayout()
         hbox_reffolder.setContentsMargins(1, 0, 1, 0)
-        hbox_reffile = QHBoxLayout()
-        hbox_reffile.setContentsMargins(1, 0, 1, 0)
-
+        hbox_integration = QHBoxLayout()
+        hbox_integration.setContentsMargins(1, 0, 1, 0)
+        hbox_savefolder = QHBoxLayout()
+        hbox_savefolder.setContentsMargins(1, 0, 1, 0)
         hbox_sample_orientation = QHBoxLayout()
         hbox_sample_orientation.setContentsMargins(1, 0, 1, 0)
-        hbox_pyfai = QHBoxLayout()
-        hbox_pyfai.setContentsMargins(1, 0, 1, 0)
 
-        widget_recent_h5 = QWidget()
         widget_json_file = QWidget()
         widget_maindir = QWidget()
         widget_pattern = QWidget()
         widget_poni = QWidget()
         widget_reffolder = QWidget()
-        widget_reffile = QWidget()
-
+        widget_integration = QWidget()
+        widget_savefolder = QWidget()
         widget_sample_orientation = QWidget()
-        widget_pyfai = QWidget()
 
         widget_json_file.setLayout(hbox_json_files)
         widget_maindir.setLayout(hbox_rootdir)
         widget_pattern.setLayout(hbox_pattern)
         widget_poni.setLayout(hbox_poni)
         widget_reffolder.setLayout(hbox_reffolder)
-        widget_reffile.setLayout(hbox_reffile)
+        widget_integration.setLayout(hbox_integration)  
+        widget_savefolder.setLayout(hbox_savefolder)      
         widget_sample_orientation.setLayout(hbox_sample_orientation)
-        widget_pyfai.setLayout(hbox_pyfai)
 
         vbox_input.addWidget(widget_json_file)
         vbox_input.addWidget(widget_maindir)
         vbox_input.addWidget(widget_pattern)
         vbox_input.addWidget(widget_poni)
         vbox_input.addWidget(widget_reffolder)
-        vbox_input.addWidget(widget_reffile)
-        # vbox_input.addWidget(widget_savefolder)
+        vbox_input.addWidget(widget_integration)
+        vbox_input.addWidget(widget_savefolder)
         vbox_input.addWidget(widget_sample_orientation)
-        vbox_input.addWidget(widget_pyfai)
 
         label_json_files = QLabel(LABEL_JSON_FILES)
         self.combobox_h5_files = QComboBox()
@@ -394,113 +403,73 @@ class BrowserLayout(QWidget):
         hbox_rootdir.setStretch(1,10)
         hbox_rootdir.setStretch(2,2)
 
-        # label_extension = QLabel(LABEL_EXTENSION)
-        # self.combobox_extension = QComboBox()
-        # for ext in LIST_EXTENSION:
-        #     self.combobox_extension.addItem(ext)
-        # label_wildcard = QLabel(LABEL_WILDCARDS)
-        # self.lineedit_wildcards = QLineEdit(WILDCARDS_DEFAULT)
-
-        # hbox_pattern.addWidget(label_extension)
-        # hbox_pattern.addWidget(self.combobox_extension)
-        # hbox_pattern.addWidget(label_wildcard)
-        # hbox_pattern.addWidget(self.lineedit_wildcards)
-
         label_pattern = QLabel(LABEL_PATTERN)
         self.lineedit_pattern = QLineEdit(DEFAULT_PATTERN)
-        self.button_start = QPushButton(BUTTON_UPDATE_DATA)
-        self.button_start.setIcon(QIcon(ICON_REFRESH_PATH))
-        self.button_start.setStyleSheet(BUTTON_STYLE_ENABLE)
+        self.button_update = QPushButton(BUTTON_UPDATE_DATA)
+        self.button_update.setIcon(QIcon(ICON_REFRESH_PATH))
+        self.button_update.setStyleSheet(BUTTON_STYLE_ENABLE)
         self.button_save = QPushButton(BUTTON_SAVE_DATA)
-        self.button_save.setIcon(QIcon(ICON_REFRESH_PATH))
+        self.button_save.setIcon(QIcon(ICON_SAVE_PATH))
         self.button_save.setStyleSheet(BUTTON_STYLE_ENABLE)
 
         hbox_pattern.addWidget(label_pattern)
         hbox_pattern.addWidget(self.lineedit_pattern)
-        hbox_pattern.addWidget(self.button_start)
+        hbox_pattern.addWidget(self.button_update)
         hbox_pattern.addWidget(self.button_save)
 
         label_ponifile = QLabel(LABEL_PONIFILE)
         self.combobox_ponifile = QComboBox()
-        self.button_add_ponifile = QPushButton(BUTTON_PONIFILE)
-        self.button_add_ponifile.setIcon(QIcon(ICON_FILE_PATH))
-        self.button_add_ponifile.setStyleSheet(BUTTON_STYLE_ENABLE)
-        self.button_update_ponifile = QPushButton()
-        self.button_update_ponifile.setIcon(QIcon(ICON_REFRESH_PATH))
-        self.button_update_ponifile.setStyleSheet(BUTTON_STYLE_ENABLE)
+        self.button_pyfaicalib = QPushButton(BUTTON_PYFAI_GUI)
+        self.button_pyfaicalib.setIcon(QIcon(ICON_PYFAI_PATH))
+        self.button_pyfaicalib.setStyleSheet(BUTTON_STYLE_ENABLE)
 
         hbox_poni.addWidget(label_ponifile, Qt.AlignLeft)
         hbox_poni.addWidget(self.combobox_ponifile, Qt.AlignLeft)
-
+        hbox_poni.addWidget(self.button_pyfaicalib, Qt.AlignLeft)
         hbox_poni.setStretch(0,1)
         hbox_poni.setStretch(1,10)
 
         label_reffolder = QLabel(LABEL_REFERENCE_FOLDER)
         self.combobox_reffolder = QComboBox()
+        label_sub = QLabel(LABEL_SUB_FACTOR)
+        self.spinbox_sub = QDoubleSpinBox()
+        self.spinbox_sub.setSingleStep(STEP_SUB_SPINBOX)
 
         hbox_reffolder.addWidget(label_reffolder, Qt.AlignLeft)
         hbox_reffolder.addWidget(self.combobox_reffolder, Qt.AlignLeft)
+        hbox_reffolder.addWidget(label_sub, Qt.AlignLeft)
+        hbox_reffolder.addWidget(self.spinbox_sub, Qt.AlignLeft)
 
         hbox_reffolder.setStretch(0,1)
         hbox_reffolder.setStretch(1,10)
 
-        label_reffile = QLabel(LABEL_REFERENCE_FILE)
-        self.combobox_reffile = QComboBox()
-        self.combobox_reffile.setEnabled(False)
-        self.checkbox_auto_reffile = QCheckBox(LABEL_AUTO_REFERENCE)
-        self.checkbox_auto_reffile.setChecked(True)
+        label_integrations = QLabel(LABEL_INTEGRATIONS)
+        self.combobox_integration = CheckableComboBox()
+        self.checkbox_mask_integration = QCheckBox(LABEL_MASK_MAP)
 
-        hbox_reffile.addWidget(label_reffile, Qt.AlignLeft)
-        hbox_reffile.addWidget(self.combobox_reffile, Qt.AlignLeft)
-        hbox_reffile.addWidget(self.checkbox_auto_reffile, Qt.AlignLeft)
+        hbox_integration.addWidget(label_integrations)
+        hbox_integration.addWidget(self.combobox_integration)
+        hbox_integration.addWidget(self.checkbox_mask_integration)
+        hbox_integration.setStretch(0,1)
+        hbox_integration.setStretch(1,10)
 
-        hbox_reffile.setStretch(0,1)
-        hbox_reffile.setStretch(1,10)
-        hbox_reffile.setStretch(2,1)
+        label_savefolder = QLabel(LABEL_SAVE_FOLDER)
+        self.lineedit_savefolder = QLineEdit()
+        self.button_saveplot = QPushButton(BUTTON_SAVE_INTEGRATIONS)
+        self.button_saveplot.setStyleSheet(BUTTON_STYLE_ENABLE)  
+        self.button_saveplot.setIcon(QIcon(ICON_SAVE_PATH))      
+        self.button_batch = QPushButton(BUTTON_BATCH)
+        self.button_batch.setStyleSheet(BUTTON_STYLE_ENABLE) 
 
-        label_sample_orientation = QLabel(LABEL_SAMPLE_ORIENTATION)
-        self.button_mirror = QPushButton(BUTTON_ORIENTATIONS_LAYOUT[MIRROR_BUTTON_LABEL][MIRROR_DEFAULT_STATE]["label"])
-        self.button_mirror.setStyleSheet(BUTTON_ORIENTATIONS_LAYOUT[MIRROR_BUTTON_LABEL][MIRROR_DEFAULT_STATE]["style"])        
-        BUTTON_ORIENTATIONS_LAYOUT[MIRROR_BUTTON_LABEL]["widget"] = self.button_mirror
-        self.button_mirror.setIcon(QIcon(ICON_MIRROR_PATH))
-        self.button_mirror.setCheckable(True)
-        self.button_mirror.setChecked(MIRROR_DEFAULT_STATE)
-
-        self.button_qz = QPushButton(BUTTON_ORIENTATIONS_LAYOUT[QZ_BUTTON_LABEL][QZ_DEFAULT_STATE]["label"])
-        self.button_qz.setStyleSheet(BUTTON_ORIENTATIONS_LAYOUT[QZ_BUTTON_LABEL][QZ_DEFAULT_STATE]["style"])    
-        BUTTON_ORIENTATIONS_LAYOUT[QZ_BUTTON_LABEL]["widget"] = self.button_qz
-        self.button_qz.setCheckable(True)
-        self.button_qz.setChecked(QZ_DEFAULT_STATE)
-
-        self.button_qr = QPushButton(BUTTON_ORIENTATIONS_LAYOUT[QR_BUTTON_LABEL][QR_DEFAULT_STATE]["label"])
-        self.button_qr.setStyleSheet(BUTTON_ORIENTATIONS_LAYOUT[QR_BUTTON_LABEL][QR_DEFAULT_STATE]["style"])   
-        BUTTON_ORIENTATIONS_LAYOUT[QR_BUTTON_LABEL]["widget"] = self.button_qr
-        self.button_qr.setCheckable(True)
-        self.button_qr.setChecked(QR_DEFAULT_STATE)
-        self.button_qr.setStyleSheet(BUTTON_STYLE_ENABLE)
-
-        hbox_sample_orientation.addWidget(label_sample_orientation)
-        hbox_sample_orientation.addWidget(self.button_mirror)
-        hbox_sample_orientation.addWidget(self.button_qz)
-        hbox_sample_orientation.addWidget(self.button_qr)
-
-        self.button_pyfaicalib = QPushButton(BUTTON_PYFAI_GUI)
-        self.button_pyfaicalib.setIcon(QIcon(ICON_PYFAI_PATH))
-        self.button_pyfaicalib.setStyleSheet(BUTTON_STYLE_ENABLE)
-
-        self.button_live = QPushButton(BUTTON_LIVE)
-        self.button_live.setStyleSheet(BUTTON_STYLE_ENABLE)
-        self.button_live.setCheckable(True)
-        self.button_live.setChecked(False)
-
-        hbox_pyfai.addWidget(self.button_pyfaicalib)
-        # hbox_pyfai.addWidget(self.button_start)
-        hbox_pyfai.addWidget(self.button_live)
+        hbox_savefolder.addWidget(label_savefolder)
+        hbox_savefolder.addWidget(self.lineedit_savefolder)
+        hbox_savefolder.addWidget(self.button_saveplot)
+        hbox_savefolder.addWidget(self.button_batch)
 
         ### METADATA TAB ###
 
-        hbox_metadata_choose = QHBoxLayout()
-        hbox_metadata_choose.setContentsMargins(1, 0, 1, 0)
+        # hbox_metadata_choose = QHBoxLayout()
+        # hbox_metadata_choose.setContentsMargins(1, 0, 1, 0)
 
         hbox_metadata_iangle = QHBoxLayout()
         hbox_metadata_iangle.setContentsMargins(1, 0, 1, 0)
@@ -517,43 +486,40 @@ class BrowserLayout(QWidget):
         hbox_metadata_name = QHBoxLayout()
         hbox_metadata_name.setContentsMargins(1, 0, 1, 0)
 
-        widget_metadata_choose = QWidget()
+        # widget_metadata_choose = QWidget()
         widget_metadata_iangle = QWidget()
         widget_metadata_tangle = QWidget()
         widget_metadata_norm = QWidget()
         widget_metadata_acq = QWidget()
-        widget_metadata_name = QWidget()
+        # widget_metadata_name = QWidget()
 
-        widget_metadata_choose.setLayout(hbox_metadata_choose)
+        # widget_metadata_choose.setLayout(hbox_metadata_choose)
         widget_metadata_iangle.setLayout(hbox_metadata_iangle)
         widget_metadata_tangle.setLayout(hbox_metadata_tangle)
         widget_metadata_norm.setLayout(hbox_metadata_norm)
         widget_metadata_acq.setLayout(hbox_metadata_acq)
-        widget_metadata_name.setLayout(hbox_metadata_name)
+        # widget_metadata_name.setLayout(hbox_metadata_name)
 
-        label_setup = QLabel(LABEL_DICT_SETUP)
+        # label_setup = QLabel(LABEL_DICT_SETUP)
         self.combobox_setup = QComboBox()
         self.button_pick_json = QPushButton(BUTTON_PICK_JSON)
         self.button_pick_json.setStyleSheet(BUTTON_STYLE_ENABLE)
 
-        hbox_metadata_choose.addWidget(label_setup, Qt.AlignLeft)
-        hbox_metadata_choose.addWidget(self.combobox_setup, Qt.AlignLeft)
-        hbox_metadata_choose.addWidget(self.button_pick_json, Qt.AlignLeft)
+        # hbox_metadata_choose.addWidget(label_setup, Qt.AlignLeft)
+        # hbox_metadata_choose.addWidget(self.combobox_setup, Qt.AlignLeft)
+        # hbox_metadata_choose.addWidget(self.button_pick_json, Qt.AlignLeft)
 
-        hbox_metadata_choose.setStretch(1,10)
+        # hbox_metadata_choose.setStretch(1,10)
 
         label_angle = QLabel(LABEL_IANGLE)
-        self.lineedit_angle = QLineEdit()
-        self.combobox_angle = CheckableComboBox()
+        self.lineedit_iangle = QLineEdit()
+        self.combobox_iangle = CheckableComboBox()
 
         hbox_metadata_iangle.addWidget(label_angle)
-        hbox_metadata_iangle.addWidget(self.lineedit_angle)
-        hbox_metadata_iangle.addWidget(self.combobox_angle)
+        hbox_metadata_iangle.addWidget(self.lineedit_iangle)
+        # hbox_metadata_iangle.addWidget(self.combobox_iangle)
 
         hbox_metadata_iangle.setStretch(2,5)
-
-
-
 
         label_tilt_angle = QLabel(LABEL_TILTANGLE)
         self.lineedit_tilt_angle = QLineEdit()
@@ -561,7 +527,7 @@ class BrowserLayout(QWidget):
 
         hbox_metadata_tangle.addWidget(label_tilt_angle)
         hbox_metadata_tangle.addWidget(self.lineedit_tilt_angle)
-        hbox_metadata_tangle.addWidget(self.combobox_tilt_angle)
+        # hbox_metadata_tangle.addWidget(self.combobox_tilt_angle)
 
         hbox_metadata_tangle.setStretch(2,5)        
 
@@ -571,38 +537,38 @@ class BrowserLayout(QWidget):
 
         hbox_metadata_norm.addWidget(label_normfactor)
         hbox_metadata_norm.addWidget(self.lineedit_normfactor)
-        hbox_metadata_norm.addWidget(self.combobox_normfactor)
+        # hbox_metadata_norm.addWidget(self.combobox_normfactor)
         hbox_metadata_norm.setStretch(2,5)
 
         label_exposure = QLabel(LABEL_EXPOSURE)
-        self.lineedit_exposure = QLineEdit()
+        self.lineedit_acquisition = QLineEdit()
         self.combobox_acquisition = CheckableComboBox()
 
         hbox_metadata_acq.addWidget(label_exposure)
-        hbox_metadata_acq.addWidget(self.lineedit_exposure)
-        hbox_metadata_acq.addWidget(self.combobox_acquisition)
+        hbox_metadata_acq.addWidget(self.lineedit_acquisition)
+        # hbox_metadata_acq.addWidget(self.combobox_acquisition)
         hbox_metadata_acq.setStretch(2,5)
         
-        label_setup_name = QLabel(LABEL_SETUP_NAME)
+        # label_setup_name = QLabel(LABEL_SETUP_NAME)
         self.lineedit_setup_name = QLineEdit()   
         self.button_metadata_save = QPushButton(BUTTON_JSON_FILE)
         self.button_metadata_save.setStyleSheet(BUTTON_STYLE_ENABLE)
         self.button_metadata_save.setIcon(QIcon(ICON_SAVE_PATH))
 
-        hbox_metadata_name.addWidget(label_setup_name)
-        hbox_metadata_name.addWidget(self.lineedit_setup_name)
-        hbox_metadata_name.addWidget(self.button_metadata_save)
+        # hbox_metadata_name.addWidget(label_setup_name)
+        # hbox_metadata_name.addWidget(self.lineedit_setup_name)
+        # hbox_metadata_name.addWidget(self.button_metadata_save)
 
-        self.button_metadata_update = QPushButton(BUTTON_UPDATE_KEYS)
-        self.button_metadata_update.setStyleSheet(BUTTON_STYLE_ENABLE)
+        # self.button_metadata_update = QPushButton(BUTTON_UPDATE_KEYS)
+        # self.button_metadata_update.setStyleSheet(BUTTON_STYLE_ENABLE)
 
-        vbox_metadata.addWidget(widget_metadata_choose)
+        # vbox_metadata.addWidget(widget_metadata_choose)
         vbox_metadata.addWidget(widget_metadata_iangle)
         vbox_metadata.addWidget(widget_metadata_tangle)
         vbox_metadata.addWidget(widget_metadata_norm)
         vbox_metadata.addWidget(widget_metadata_acq)
-        vbox_metadata.addWidget(widget_metadata_name)
-        vbox_metadata.addWidget(self.button_metadata_update)
+        # vbox_metadata.addWidget(widget_metadata_name)
+        # vbox_metadata.addWidget(self.button_metadata_update)
 
         ## CAKE INTEGRATION TAB
 
@@ -1014,12 +980,39 @@ class BrowserLayout(QWidget):
         vbox_h5.addWidget(widget_h5_attrs)
 
 
+        label_sample_orientation = QLabel(LABEL_SAMPLE_ORIENTATION)
+        self.button_mirror = QPushButton(BUTTON_ORIENTATIONS_LAYOUT[MIRROR_BUTTON_LABEL][MIRROR_DEFAULT_STATE]["label"])
+        self.button_mirror.setStyleSheet(BUTTON_ORIENTATIONS_LAYOUT[MIRROR_BUTTON_LABEL][MIRROR_DEFAULT_STATE]["style"])        
+        BUTTON_ORIENTATIONS_LAYOUT[MIRROR_BUTTON_LABEL]["widget"] = self.button_mirror
+        self.button_mirror.setIcon(QIcon(ICON_MIRROR_PATH))
+        self.button_mirror.setCheckable(True)
+        self.button_mirror.setChecked(MIRROR_DEFAULT_STATE)
+
+        self.button_qz = QPushButton(BUTTON_ORIENTATIONS_LAYOUT[QZ_BUTTON_LABEL][QZ_DEFAULT_STATE]["label"])
+        self.button_qz.setStyleSheet(BUTTON_ORIENTATIONS_LAYOUT[QZ_BUTTON_LABEL][QZ_DEFAULT_STATE]["style"])    
+        BUTTON_ORIENTATIONS_LAYOUT[QZ_BUTTON_LABEL]["widget"] = self.button_qz
+        self.button_qz.setCheckable(True)
+        self.button_qz.setChecked(QZ_DEFAULT_STATE)
+
+        self.button_qr = QPushButton(BUTTON_ORIENTATIONS_LAYOUT[QR_BUTTON_LABEL][QR_DEFAULT_STATE]["label"])
+        self.button_qr.setStyleSheet(BUTTON_ORIENTATIONS_LAYOUT[QR_BUTTON_LABEL][QR_DEFAULT_STATE]["style"])   
+        BUTTON_ORIENTATIONS_LAYOUT[QR_BUTTON_LABEL]["widget"] = self.button_qr
+        self.button_qr.setCheckable(True)
+        self.button_qr.setChecked(QR_DEFAULT_STATE)
+        self.button_qr.setStyleSheet(BUTTON_STYLE_ENABLE)
+
+        hbox_sample_orientation.addWidget(label_sample_orientation)
+        hbox_sample_orientation.addWidget(self.button_mirror)
+        hbox_sample_orientation.addWidget(self.button_qz)
+        hbox_sample_orientation.addWidget(self.button_qr)
+
+
         #######################################
         ####### SPLITTER FOLDER-FILES##########
         #######################################
 
-        self.listwidget_samples = QListWidget()
 
+        self.listwidget_samples = QListWidget()
         widget_folder_tab.addTab(self.listwidget_samples, LABEL_LIST_FOLDERS)
 
         vbox_files = QVBoxLayout()
@@ -1051,9 +1044,5 @@ class BrowserLayout(QWidget):
 
 
     def get_pattern(self):
-        # wildcards = str(self.lineedit_wildcards.text()).strip()
-        # extension = self.combobox_extension.currentText()
-        # pattern = wildcards + extension
-        # pattern = pattern.replace('**', '*')
         pattern = str(self.lineedit_pattern.text()).strip()
         return pattern

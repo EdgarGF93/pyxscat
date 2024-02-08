@@ -9,6 +9,7 @@ import json
 from pyxscat.edf import FullHeader
 import os
 import pandas as pd
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -188,7 +189,7 @@ class MetadataBase:
 
     def _update_entry(self, entry_name, file_iterator, threading=False):
         iter_empty = True
-        for filename in file_iterator:
+        for filename in sorted(file_iterator):
             iter_empty = False
             if threading:
                 self._update_entry_single_thread(entry_name=entry_name, filename=filename)
@@ -242,6 +243,17 @@ class MetadataBase:
         for metadata_key in self._container_metadata[entry_name]:
             del self._container_metadata[entry_name][metadata_key][index]
 
+    def _get_element(self, entry_name:str, index:int, metadata_key:str):
+        try:
+            return self._container_metadata[entry_name][metadata_key][index]
+        except Exception as e:
+            return
+
+    def _get_metadata_container(self, entry_name:str, metadata_key: str):
+        try:
+            return self._container_metadata[entry_name][metadata_key]
+        except Exception as e:
+            return
 
     def _generate_files(self, relative_path=False):
         for filename in self.__iter__():
@@ -271,6 +283,18 @@ class MetadataBase:
                 yield self._get_relative_path(absolute_path=entry)
             else:
                 yield entry
+
+    def _generate_metadata_in_entry(self, entry_name:str, metadata_key=False):
+        entry_name = self._validate_entry(entry_name=entry_name)
+        if not entry_name:
+            return
+    
+        metadata_dataset = self._get_metadata_container(entry_name=entry_name, metadata_key=metadata_key)
+        if not metadata_dataset:
+            return
+        
+        for metadata in metadata_dataset:
+            yield metadata
 
     def _generate_files_in_entry(self, entry_name:str, relative_path=False):
         entry_name = self._validate_entry(entry_name=entry_name)
@@ -342,6 +366,12 @@ class MetadataBase:
             if ind in index:
                 list_filenames.append(filename)
         return list_filenames        
+    
+    def get_metadata(self, entry_name:str, index:int, metadata_key: str):
+        for ind, metadata in enumerate(self._generate_metadata_in_entry(entry_name=entry_name, metadata_key=metadata_key)):
+            if ind == index:
+                return metadata
+
 
     def get_metadata_in_entry(self, entry_name:str, metadata_key: str):
         return self._get_metadata_values_from_entry(entry=entry_name, metadata_key=metadata_key)
@@ -370,7 +400,7 @@ class MetadataBase:
                     )
                     short_metadata[metadata_key] = dataset
                 except:
-                    logger.warning(f"Error during acceeding to Metadata dataset with key: {key}")
+                    logger.warning(f"Error during acceeding to Metadata dataset with key: {metadata_key}")
         dataframe = pd.DataFrame(short_metadata)
         return dataframe
 

@@ -9,7 +9,7 @@ from pyxscat.other.units import DICT_UNIT_ALIAS
 from .multi_combobox import CheckableComboBox
 
 LABEL_FILENAME = "Current displayed file:"
-LABEL_SAVE_FOLDER = "Save folder:"
+
 
 INDEX_TAB_1D_INTEGRATION = 0
 INDEX_TAB_RAW_MAP = 0
@@ -48,14 +48,11 @@ LABEL_Q_MAP = "Q-map"
 LABEL_RAW_MAP = "Raw Map"
 LABEL_RESHAPE_MAP = "Reshape"
 LABEL_TAB_1D_INT = "1D Integration"
-LABEL_SUB_FACTOR = "Sub. factor:"
+# LABEL_SUB_FACTOR = "Sub. factor:"
 BUTTON_CLEAR_PLOT = "CLEAR"
-BUTTON_SAVE_INTEGRATIONS = "SAVE"
-BUTTON_BATCH = "BATCH"
-BUTTON_FITTING = "OPEN FITTING FORM"
-LABEL_INTEGRATIONS = "Integrations:"
-LABEL_MASK_MAP = "Mask"
-STEP_SUB_SPINBOX = 0.01
+
+
+# STEP_SUB_SPINBOX = 0.01
 
 button_on = """
 
@@ -194,15 +191,15 @@ class GraphLayout(QWidget):
 
         self.tab_graph_widget.addTab(widget_graph_q, LABEL_Q_MAP)
 
-        hbox_graph_toolbar_1 = QHBoxLayout()
+        
         hbox_graph_toolbar_2 = QHBoxLayout()
         hbox_graph_toolbar_3 = QHBoxLayout()
 
-        widget_graph_toolbar_1 = QWidget()
+        
         widget_graph_toolbar_2 = QWidget()
         widget_graph_toolbar_3 = QWidget()
 
-        widget_graph_toolbar_1.setLayout(hbox_graph_toolbar_1)
+        
         widget_graph_toolbar_2.setLayout(hbox_graph_toolbar_2)
         widget_graph_toolbar_3.setLayout(hbox_graph_toolbar_3)
 
@@ -222,7 +219,7 @@ class GraphLayout(QWidget):
         self.lineedit_headeritems_title = QLineEdit()
         self.button_reshape_map = QPushButton(BUTTON_SHOW_RESHAPE)
         self.button_reshape_map.setStyleSheet(button_style_thin)
-
+        hbox_graph_toolbar_1 = QHBoxLayout()
         hbox_graph_toolbar_1.addWidget(label_units)
         hbox_graph_toolbar_1.addWidget(self.combobox_units)
         hbox_graph_toolbar_1.addWidget(label_title)
@@ -289,7 +286,7 @@ class GraphLayout(QWidget):
         self.canvas_2d_q = MplCanvas(self, width=4, height=3, dpi=50)
         toolbar_q_matplotlib = NavigationToolbar2QT(self.canvas_2d_q, self)
 
-        vbox_graph_q.addWidget(widget_graph_toolbar_1)
+        # vbox_graph_q.addWidget(widget_graph_toolbar_1)
         vbox_graph_q.addWidget(widget_graph_toolbar_3)
         vbox_graph_q.addWidget(widget_graph_toolbar_2)
         vbox_graph_q.addWidget(toolbar_q_matplotlib)
@@ -310,65 +307,7 @@ class GraphLayout(QWidget):
 
         self.tab_chart_widget.addTab(widget_chart, LABEL_TAB_1D_INT)
 
-        hbox_chart_toolbar_1 = QHBoxLayout()
-        hbox_chart_toolbar_2 = QHBoxLayout()
-        hbox_chart_toolbar_3 = QHBoxLayout()
-        hbox_savefolder = QHBoxLayout()
-
-        widget_chart_toolbar_1 = QWidget()
-        widget_chart_toolbar_2 = QWidget()
-        widget_chart_toolbar_3 = QWidget()
-        widget_savefolder = QWidget()
-
-        widget_chart_toolbar_1.setLayout(hbox_chart_toolbar_1)
-        widget_chart_toolbar_2.setLayout(hbox_chart_toolbar_2)
-        widget_savefolder.setLayout(hbox_savefolder)        
-        widget_chart_toolbar_3.setLayout(hbox_chart_toolbar_3)
-
-        label_integrations = QLabel(LABEL_INTEGRATIONS)
-        # self.combobox_integration = QComboBox()
-        self.combobox_integration = CheckableComboBox()
-        self.lineedit_integrations = QLineEdit()
-        self.checkbox_mask_integration = QCheckBox(LABEL_MASK_MAP)
-
-        hbox_chart_toolbar_1.addWidget(label_integrations)
-        hbox_chart_toolbar_1.addWidget(self.combobox_integration)
-        # hbox_chart_toolbar_1.addWidget(self.lineedit_integrations)
-        hbox_chart_toolbar_1.addWidget(self.checkbox_mask_integration)
-
-        label_sub = QLabel(LABEL_SUB_FACTOR)
-        self.spinbox_sub = QDoubleSpinBox()
-        self.spinbox_sub.setSingleStep(STEP_SUB_SPINBOX)
-        self.button_clearplot = QPushButton(BUTTON_CLEAR_PLOT)
-        self.button_clearplot.setStyleSheet(button_style_thin)
-        self.button_saveplot = QPushButton(BUTTON_SAVE_INTEGRATIONS)
-        self.button_saveplot.setStyleSheet(button_style_thin)        
-        self.button_batch = QPushButton(BUTTON_BATCH)
-        self.button_batch.setStyleSheet(button_style_thin) 
-
-        hbox_chart_toolbar_2.addWidget(label_sub)
-        hbox_chart_toolbar_2.addWidget(self.spinbox_sub)
-        hbox_chart_toolbar_2.addWidget(self.button_clearplot)
-        hbox_chart_toolbar_2.addWidget(self.button_saveplot)
-        hbox_chart_toolbar_2.addWidget(self.button_batch)
-
-        label_savefolder = QLabel(LABEL_SAVE_FOLDER)
-        self.lineedit_savefolder = QLineEdit()
-
-        hbox_savefolder.addWidget(label_savefolder)
-        hbox_savefolder.addWidget(self.lineedit_savefolder)
-
         self.graph_1D_widget = Plot1D()
-
-        vbox_chart.addWidget(widget_chart_toolbar_1)
-        vbox_chart.addWidget(widget_savefolder)        
-        vbox_chart.addWidget(widget_chart_toolbar_2)
         vbox_chart.addWidget(self.graph_1D_widget)
 
-        vbox_chart.setStretch(3,20)
-
-        hbox_chart_toolbar_1.setContentsMargins(1,1,1,0)
-        hbox_chart_toolbar_2.setContentsMargins(1,0,1,0)
-        hbox_savefolder.setContentsMargins(1, 0, 1, 0)
         self.graph_1D_widget.setContentsMargins(1,0,1,0)
-        hbox_chart_toolbar_1.setStretch(1,20)
