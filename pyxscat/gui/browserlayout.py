@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QMainWindow, QSplitter, QVBoxLayout, QHBoxLayout, QTabWidget, QBoxLayout
-from PyQt5.QtWidgets import QLabel, QComboBox, QListWidget, QCheckBox, QLineEdit, QPushButton, QDoubleSpinBox, QPlainTextEdit, QTableWidget
+from PyQt5.QtWidgets import QFrame, QLabel, QComboBox, QListWidget, QCheckBox, QLineEdit, QPushButton, QDoubleSpinBox, QPlainTextEdit, QTableWidget
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 
@@ -64,11 +64,11 @@ QPushButton:pressed  {
 # TABS
 LABEL_TAB_FILES = "Init"
 LABEL_TAB_INTEGRATION = "Integration"
-LABEL_TAB_SETUP = "Metadata keys"
+LABEL_TAB_SETUP = "Metatada"
 LABEL_TAB_CAKE = "Cake"
 LABEL_TAB_BOX = "Box"
 LABEL_TAB_PONIFILE = "Ponifile"
-LABEL_TAB_H5 = "HDF5 File"
+# LABEL_TAB_H5 = "HDF5 File"
 
 # INPUT FILE PARAMETERS
 LABEL_INPUT_PARAMETERS = "====== Input File Parameters ======"
@@ -78,13 +78,24 @@ LABEL_EXTENSION = "File extension:"
 LABEL_WILDCARDS = "Wildcards(*):"
 LABEL_PATTERN = "Pattern:"
 LABEL_PONIFILE = "Ponifile:"
-LABEL_REFERENCE_FOLDER = "Reference folder:"
-LABEL_REFERENCE_FILE = "Reference file:"
-LABEL_AUTO_REFERENCE = "Auto"
+LABEL_REFERENCE_FOLDER = "Ref. directory:"
+LABEL_REFERENCE_FILE = "Ref. file:"
+LABEL_AUTO_REFERENCE = "Auto-file"
+
+LABEL_MEDFILT = "Med-filter"
+LABEL_PERCENTILE = "Percentile:"
+STEP_SPINBOX_PERCENTILE = 1
+LABEL_SIGMACLIP = "Sigma-clip"
+LABEL_SIGMACLIP_NPT = "Points:"
+LABEL_SIGMACLIP_THRESHOLD = "Threshold:"
+STEP_SPINBOX_SIGMACLIP = 1.0
+
 LABEL_SAMPLE_ORIENTATION = "Sample orientation:"
 LABEL_INTEGRATIONS = "Integrations:"
 LABEL_SAVE_FOLDER = "Save folder:"
 LABEL_MASK_MAP = "Mask"
+LABEL_REFERENCE_TAB_1 = "Reference"
+LABEL_REFERENCE_TAB_2 = "Filters"
 QZ_BUTTON_LABEL = "qz"
 QZ_DEFAULT_STATE = True
 QR_BUTTON_LABEL = "qr"
@@ -169,8 +180,10 @@ ICON_SAVE = "save.png"
 ICON_SAVE_PATH = str(ICON_DIRECTORY.joinpath(ICON_SAVE))
 BUTTON_UPDATE_KEYS = "UPDATE METADATA KEYS TO .H5 FILE"
 
-LABEL_SUB_FACTOR = "Scale:"
-STEP_SUB_SPINBOX = 0.01
+LABEL_SUBTRACTION_SCALE = "Scale:"
+STEP_SPINBOX_SUB = 0.01
+LABEL_MASK_FILE = "Mask file: "
+LABEL_REFERENCE_AUTO = "Median filter"
 
 
 # CAKE TAB
@@ -304,71 +317,50 @@ class BrowserLayout(QWidget):
         vbox_metadata.setStretch(4,1)
 
         widget_vbox_input = QWidget()
+        widget_vbox_integration = QWidget()
         widget_vbox_metadata = QWidget()
         widget_cake = QWidget()
         widget_box = QWidget()
         widget_vbox_poni = QWidget()
 
         widget_vbox_input.setLayout(vbox_input)
+        widget_vbox_integration.setLayout(vbox_integration)
         widget_vbox_metadata.setLayout(vbox_metadata)
         widget_cake.setLayout(hbox_cake)
         widget_box.setLayout(hbox_box)
         widget_vbox_poni.setLayout(vbox_poni)
 
         widget_tabs.addTab(widget_vbox_input, LABEL_TAB_FILES)
+        widget_tabs.addTab(widget_vbox_integration, LABEL_TAB_INTEGRATION)
         widget_tabs.addTab(widget_vbox_metadata, LABEL_TAB_SETUP)
         widget_tabs.addTab(widget_cake, LABEL_TAB_CAKE)
         widget_tabs.addTab(widget_box, LABEL_TAB_BOX)                
         widget_tabs.addTab(widget_vbox_poni, LABEL_TAB_PONIFILE)
 
+        #################
         ### INPUT TAB ###
-
+        #################
+        
         hbox_json_files = QHBoxLayout()
         hbox_json_files.setContentsMargins(1, 0, 1, 0)
         hbox_rootdir = QHBoxLayout()
         hbox_rootdir.setContentsMargins(1, 0, 1, 0)
         hbox_pattern = QHBoxLayout()
         hbox_pattern.setContentsMargins(1, 0, 1, 0)
-        hbox_poni = QHBoxLayout()
-        hbox_poni.setContentsMargins(1, 0, 1, 0)
-        hbox_reffolder = QHBoxLayout()
-        hbox_reffolder.setContentsMargins(1, 0, 1, 0)
-        hbox_integration = QHBoxLayout()
-        hbox_integration.setContentsMargins(1, 0, 1, 0)
-        hbox_savefolder = QHBoxLayout()
-        hbox_savefolder.setContentsMargins(1, 0, 1, 0)
-        hbox_sample_orientation = QHBoxLayout()
-        hbox_sample_orientation.setContentsMargins(1, 0, 1, 0)
-
+        
         widget_json_file = QWidget()
         widget_maindir = QWidget()
         widget_pattern = QWidget()
-        widget_poni = QWidget()
-        widget_reffolder = QWidget()
-        widget_integration = QWidget()
-        widget_savefolder = QWidget()
-        widget_sample_orientation = QWidget()
 
         widget_json_file.setLayout(hbox_json_files)
         widget_maindir.setLayout(hbox_rootdir)
         widget_pattern.setLayout(hbox_pattern)
-        widget_poni.setLayout(hbox_poni)
-        widget_reffolder.setLayout(hbox_reffolder)
-        widget_integration.setLayout(hbox_integration)  
-        widget_savefolder.setLayout(hbox_savefolder)      
-        widget_sample_orientation.setLayout(hbox_sample_orientation)
 
         vbox_input.addWidget(widget_json_file)
         vbox_input.addWidget(widget_maindir)
         vbox_input.addWidget(widget_pattern)
-        vbox_input.addWidget(widget_poni)
-        vbox_input.addWidget(widget_reffolder)
-        vbox_input.addWidget(widget_integration)
-        vbox_input.addWidget(widget_savefolder)
-        vbox_input.addWidget(widget_sample_orientation)
 
         label_json_files = QLabel(LABEL_JSON_FILES)
-        self.combobox_h5_files = QComboBox()
         self.lineedit_jsonfile = QLineEdit()
         self.lineedit_jsonfile.setReadOnly(True)
         self.button_pick_jsonfile = QPushButton()
@@ -414,6 +406,48 @@ class BrowserLayout(QWidget):
         hbox_pattern.addWidget(self.button_update)
         hbox_pattern.addWidget(self.button_save)
 
+        #######################
+        ### INTEGRATION TAB ###
+        #######################
+        
+        hbox_poni = QHBoxLayout()
+        hbox_poni.setContentsMargins(1, 0, 1, 0)
+        hbox_integration = QHBoxLayout()
+        hbox_integration.setContentsMargins(1, 0, 1, 0)
+        hbox_reference = QHBoxLayout()
+        hbox_reference.setContentsMargins(1, 0, 1, 0)
+        frame_reference = QFrame()
+        frame_reference.setFrameShape(QFrame.StyledPanel)
+        frame_reference.setLayout(hbox_reference)
+        hbox_mask_file = QHBoxLayout()
+        hbox_mask_file.setContentsMargins(1, 0, 1, 0)
+        hbox_savefolder = QHBoxLayout()
+        hbox_savefolder.setContentsMargins(1, 0, 1, 0)
+        hbox_sample_orientation = QHBoxLayout()
+        hbox_sample_orientation.setContentsMargins(1, 0, 1, 0)
+        
+        widget_poni = QWidget()
+        widget_integration = QWidget()        
+        widget_reference_tab = QTabWidget()
+        widget_mask_file = QWidget()
+        widget_savefolder = QWidget()
+        widget_sample_orientation = QWidget()
+
+        widget_poni.setLayout(hbox_poni)
+        widget_integration.setLayout(hbox_integration)  
+        widget_reference_tab.setLayout(hbox_reference)
+        widget_mask_file.setLayout(hbox_mask_file)
+        widget_savefolder.setLayout(hbox_savefolder)      
+        widget_sample_orientation.setLayout(hbox_sample_orientation)
+        
+        vbox_integration.addWidget(widget_poni)
+        vbox_integration.addWidget(widget_integration)
+        vbox_integration.addWidget(widget_reference_tab)
+        vbox_integration.addWidget(widget_mask_file)
+        vbox_integration.addWidget(widget_savefolder)
+        vbox_integration.addWidget(widget_sample_orientation)
+
+        # PONIFILE #
         label_ponifile = QLabel(LABEL_PONIFILE)
         self.combobox_ponifile = QComboBox()
         self.button_pyfaicalib = QPushButton(BUTTON_PYFAI_GUI)
@@ -426,29 +460,110 @@ class BrowserLayout(QWidget):
         hbox_poni.setStretch(0,1)
         hbox_poni.setStretch(1,10)
 
-        label_reffolder = QLabel(LABEL_REFERENCE_FOLDER)
-        self.combobox_reffolder = QComboBox()
-        label_sub = QLabel(LABEL_SUB_FACTOR)
-        self.spinbox_sub = QDoubleSpinBox()
-        self.spinbox_sub.setSingleStep(STEP_SUB_SPINBOX)
-
-        hbox_reffolder.addWidget(label_reffolder, Qt.AlignLeft)
-        hbox_reffolder.addWidget(self.combobox_reffolder, Qt.AlignLeft)
-        hbox_reffolder.addWidget(label_sub, Qt.AlignLeft)
-        hbox_reffolder.addWidget(self.spinbox_sub, Qt.AlignLeft)
-
-        hbox_reffolder.setStretch(0,1)
-        hbox_reffolder.setStretch(1,10)
-
+        # INTEGRATIONS #
         label_integrations = QLabel(LABEL_INTEGRATIONS)
         self.combobox_integration = CheckableComboBox()
-        self.checkbox_mask_integration = QCheckBox(LABEL_MASK_MAP)
-
+        self.checkbox_mask_integration = QCheckBox(LABEL_MASK_MAP)        
+        
         hbox_integration.addWidget(label_integrations)
         hbox_integration.addWidget(self.combobox_integration)
         hbox_integration.addWidget(self.checkbox_mask_integration)
         hbox_integration.setStretch(0,1)
         hbox_integration.setStretch(1,10)
+        
+        # REFERENCE TAB #
+        widget_reference_tab_1 = QWidget()
+        widget_reference_tab_2 = QWidget()
+        widget_reference_tab.addTab(widget_reference_tab_1, LABEL_REFERENCE_TAB_1)
+        widget_reference_tab.addTab(widget_reference_tab_2, LABEL_REFERENCE_TAB_2)
+        
+        vbox_reference_tab_1 = QVBoxLayout()
+        vbox_reference_tab_2 = QVBoxLayout()
+        widget_reference_tab_1.setLayout(vbox_reference_tab_1)
+        widget_reference_tab_2.setLayout(vbox_reference_tab_2)
+        
+        hbox_reference_folder = QHBoxLayout()
+        hbox_reference_folder.setContentsMargins(1, 0, 1, 0)
+        hbox_reference_file = QHBoxLayout()
+        hbox_reference_file.setContentsMargins(1, 0, 1, 0)
+        hbox_median_filter = QHBoxLayout()
+        hbox_median_filter.setContentsMargins(1, 0, 1, 0)
+        hbox_sigmaclip = QHBoxLayout()
+        hbox_sigmaclip.setContentsMargins(1, 0, 1, 0)
+        
+        widget_reference_folder = QWidget()
+        widget_reference_file = QWidget()
+        widget_median_filter = QWidget()
+        widget_sigmaclip = QWidget()
+        
+        widget_reference_folder.setLayout(hbox_reference_folder)
+        widget_reference_file.setLayout(hbox_reference_file)
+        widget_median_filter.setLayout(hbox_median_filter)
+        widget_sigmaclip.setLayout(hbox_sigmaclip)
+        
+        vbox_reference_tab_1.addWidget(widget_reference_folder)
+        vbox_reference_tab_1.addWidget(widget_reference_file)
+        vbox_reference_tab_2.addWidget(widget_median_filter)
+        vbox_reference_tab_2.addWidget(widget_sigmaclip)
+        
+        label_reference_folder = QLabel(LABEL_REFERENCE_FOLDER)
+        self.combobox_reference_folder = QComboBox()
+        label_subtraction_scale = QLabel(LABEL_SUBTRACTION_SCALE)
+        self.spinbox_subtraction_scale = QDoubleSpinBox()
+        self.spinbox_subtraction_scale.setSingleStep(STEP_SPINBOX_SUB)
+        
+        hbox_reference_folder.addWidget(label_reference_folder)
+        hbox_reference_folder.addWidget(self.combobox_reference_folder)
+        hbox_reference_folder.addWidget(label_subtraction_scale)
+        hbox_reference_folder.addWidget(self.spinbox_subtraction_scale)
+        hbox_reference_folder.setStretch(1,10)
+        
+        self.checkbox_auto_reference_file = QCheckBox(LABEL_AUTO_REFERENCE)
+        self.checkbox_auto_reference_file.setChecked(True)
+        self.combobox_reference_file = QComboBox()
+        self.combobox_reference_file.setEnabled(False)
+        
+        hbox_reference_file.addWidget(self.checkbox_auto_reference_file)
+        hbox_reference_file.addWidget(self.combobox_reference_file)
+        
+        hbox_reference_file.setStretch(0,1)
+        hbox_reference_file.setStretch(1,10)
+        
+        self.checkbox_medfilt = QCheckBox(LABEL_MEDFILT)
+        label_percentile = QLabel(LABEL_PERCENTILE)
+        self.spinbox_percentile = QDoubleSpinBox()
+        self.spinbox_percentile.setSingleStep(STEP_SPINBOX_PERCENTILE)
+        self.spinbox_percentile.setValue(50)
+        self.spinbox_percentile.setEnabled(False)
+        self.checkbox_sigmaclip = QCheckBox(LABEL_SIGMACLIP)
+        label_sigmaclip_npt = QLabel(LABEL_SIGMACLIP_NPT)
+        self.lineedit_sigmaclip_npt = QLineEdit("1000")
+        self.lineedit_sigmaclip_npt.setEnabled(False)
+        label_sigmaclip_threshold = QLabel(LABEL_SIGMACLIP_THRESHOLD)
+        self.spinbox_sigmaclip_threshold = QDoubleSpinBox()
+        self.spinbox_sigmaclip_threshold.setValue(5.0)
+        self.spinbox_sigmaclip_threshold.setSingleStep(STEP_SPINBOX_SIGMACLIP)
+        self.spinbox_sigmaclip_threshold.setEnabled(False)
+        
+        hbox_median_filter.addWidget(self.checkbox_medfilt, Qt.AlignLeft)
+        hbox_median_filter.addWidget(label_percentile, Qt.AlignLeft)
+        hbox_median_filter.addWidget(self.spinbox_percentile, Qt.AlignLeft)
+        hbox_sigmaclip.addWidget(self.checkbox_sigmaclip, Qt.AlignLeft)
+        hbox_sigmaclip.addWidget(label_sigmaclip_npt, Qt.AlignLeft)
+        hbox_sigmaclip.addWidget(self.lineedit_sigmaclip_npt, Qt.AlignLeft)
+        hbox_sigmaclip.addWidget(label_sigmaclip_threshold, Qt.AlignLeft)
+        hbox_sigmaclip.addWidget(self.spinbox_sigmaclip_threshold, Qt.AlignLeft)
+        
+        hbox_median_filter.setStretch(2,10)
+        
+        label_mask_file = QLabel(LABEL_MASK_FILE)
+        self.lineedit_mask_file = QLineEdit()
+        self.button_mask_file = QPushButton("...")
+        
+        hbox_mask_file.addWidget(label_mask_file)
+        hbox_mask_file.addWidget(self.lineedit_mask_file)
+        hbox_mask_file.addWidget(self.button_mask_file)
+        hbox_mask_file.setStretch(1,20)
 
         label_savefolder = QLabel(LABEL_SAVE_FOLDER)
         self.lineedit_savefolder = QLineEdit()
@@ -462,11 +577,8 @@ class BrowserLayout(QWidget):
         hbox_savefolder.addWidget(self.lineedit_savefolder)
         hbox_savefolder.addWidget(self.button_saveplot)
         hbox_savefolder.addWidget(self.button_batch)
-
+        
         ### METADATA TAB ###
-
-        # hbox_metadata_choose = QHBoxLayout()
-        # hbox_metadata_choose.setContentsMargins(1, 0, 1, 0)
 
         hbox_metadata_iangle = QHBoxLayout()
         hbox_metadata_iangle.setContentsMargins(1, 0, 1, 0)
@@ -810,10 +922,12 @@ class BrowserLayout(QWidget):
 
         hbox_box_unit_output.setStretch(1,10)
 
-        # PONI PARAMETERS TAB
+        #######################
+        # PONI PARAMETERS TAB #
+        #######################
 
-        hbox_poni_mod = QHBoxLayout()
-        hbox_poni_mod.setContentsMargins(1,0,1,0)
+        # hbox_poni_mod = QHBoxLayout()
+        # hbox_poni_mod.setContentsMargins(1,0,1,0)
         hbox_poni_wave = QHBoxLayout()
         hbox_poni_wave.setContentsMargins(1,0,1,0)
         hbox_poni_dist = QHBoxLayout()
@@ -828,12 +942,12 @@ class BrowserLayout(QWidget):
         hbox_poni_rot_1.setContentsMargins(1,0,1,0)
         hbox_poni_rot_2 = QHBoxLayout()
         hbox_poni_rot_2.setContentsMargins(1,0,1,0)
-        hbox_poni_rot_3 = QHBoxLayout()
-        hbox_poni_rot_3.setContentsMargins(1,0,1,0)
+        # hbox_poni_rot_3 = QHBoxLayout()
+        # hbox_poni_rot_3.setContentsMargins(1,0,1,0)
         hbox_poni_buttons = QHBoxLayout()
         hbox_poni_buttons.setContentsMargins(1,0,1,0)
 
-        widget_poni_mod = QWidget()
+        # widget_poni_mod = QWidget()
         widget_poni_wave = QWidget()
         widget_poni_dist = QWidget()
         widget_poni_detector = QWidget()
@@ -841,10 +955,10 @@ class BrowserLayout(QWidget):
         widget_poni_poni_2 = QWidget()
         widget_poni_rot_1 = QWidget()
         widget_poni_rot_2 = QWidget()
-        widget_poni_rot_3 = QWidget()
+        # widget_poni_rot_3 = QWidget()
         widget_poni_buttons = QWidget()
 
-        widget_poni_mod.setLayout(hbox_poni_mod)
+        # widget_poni_mod.setLayout(hbox_poni_mod)
         widget_poni_wave.setLayout(hbox_poni_wave)
         widget_poni_dist.setLayout(hbox_poni_dist)
         widget_poni_detector.setLayout(hbox_poni_detector)
@@ -852,12 +966,12 @@ class BrowserLayout(QWidget):
         widget_poni_poni_2.setLayout(hbox_poni_poni_2)
         widget_poni_rot_1.setLayout(hbox_poni_rot_1)
         widget_poni_rot_2.setLayout(hbox_poni_rot_2)
-        widget_poni_rot_3.setLayout(hbox_poni_rot_3)
+        # widget_poni_rot_3.setLayout(hbox_poni_rot_3)
         widget_poni_buttons.setLayout(hbox_poni_buttons)
 
-        self.checkbox_poni_mod = QCheckBox(LABEL_PONI_MOD)
+        # self.checkbox_poni_mod = QCheckBox(LABEL_PONI_MOD)
 
-        hbox_poni_mod.addWidget(self.checkbox_poni_mod)
+        # hbox_poni_mod.addWidget(self.checkbox_poni_mod)
 
         label_wavelength = QLabel(LABEL_PONI_WAVELENGTH)
         self.lineedit_wavelength = QLineEdit()
@@ -896,18 +1010,18 @@ class BrowserLayout(QWidget):
         self.lineedit_rot1 = QLineEdit()
         label_rot_2 = QLabel(LABEL_PONI_ROT_2)
         self.lineedit_rot2 = QLineEdit()
-        label_rot_3 = QLabel(LABEL_PONI_ROT_3)
+        # label_rot_3 = QLabel(LABEL_PONI_ROT_3)
         self.lineedit_rot3 = QLineEdit()
         self.lineedit_rot1.setEnabled(False)
         self.lineedit_rot2.setEnabled(False)
-        self.lineedit_rot3.setEnabled(False)
+        # self.lineedit_rot3.setEnabled(False)
 
         hbox_poni_rot_1.addWidget(label_rot_1)
         hbox_poni_rot_1.addWidget(self.lineedit_rot1)
         hbox_poni_rot_2.addWidget(label_rot_2)
         hbox_poni_rot_2.addWidget(self.lineedit_rot2)
-        hbox_poni_rot_3.addWidget(label_rot_3)
-        hbox_poni_rot_3.addWidget(self.lineedit_rot3)
+        # hbox_poni_rot_3.addWidget(label_rot_3)
+        # hbox_poni_rot_3.addWidget(self.lineedit_rot3)
 
         self.button_update_old_poni_parameters = QPushButton(BUTTON_UPDATE_OLD_PONI_PARAMETERS)
         self.button_update_old_poni_parameters.setStyleSheet(BUTTON_STYLE_ENABLE)
@@ -920,7 +1034,7 @@ class BrowserLayout(QWidget):
         hbox_poni_buttons.addWidget(self.button_update_poni_parameters)
         hbox_poni_buttons.addWidget(self.button_save_poni_parameters)
 
-        vbox_poni.addWidget(widget_poni_mod)
+        # vbox_poni.addWidget(widget_poni_mod)
         vbox_poni.addWidget(widget_poni_wave)
         vbox_poni.addWidget(widget_poni_dist)
         vbox_poni.addWidget(widget_poni_detector)
@@ -928,7 +1042,7 @@ class BrowserLayout(QWidget):
         vbox_poni.addWidget(widget_poni_poni_2)
         vbox_poni.addWidget(widget_poni_rot_1)
         vbox_poni.addWidget(widget_poni_rot_2)
-        vbox_poni.addWidget(widget_poni_rot_3)
+        # vbox_poni.addWidget(widget_poni_rot_3)
         vbox_poni.addWidget(widget_poni_buttons)
       
       
@@ -946,8 +1060,8 @@ class BrowserLayout(QWidget):
         hbox_poni_rot_1.setStretchFactor(self.lineedit_rot1,5)
         hbox_poni_rot_2.setStretchFactor(label_rot_2,1)
         hbox_poni_rot_2.setStretchFactor(self.lineedit_rot2,5)
-        hbox_poni_rot_3.setStretchFactor(label_rot_3,1)
-        hbox_poni_rot_3.setStretchFactor(self.lineedit_rot3,5)
+        # hbox_poni_rot_3.setStretchFactor(label_rot_3,1)
+        # hbox_poni_rot_3.setStretchFactor(self.lineedit_rot3,5)
 
         label_sample_orientation = QLabel(LABEL_SAMPLE_ORIENTATION)
         self.button_mirror = QPushButton(BUTTON_ORIENTATIONS_LAYOUT[MIRROR_BUTTON_LABEL][MIRROR_DEFAULT_STATE]["label"])

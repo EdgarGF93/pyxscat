@@ -77,8 +77,8 @@ class Browser(BrowserLayout):
         self.button_pick_jsonfile.clicked.connect(self._slot_jsonfile_clicked)
         self.button_pick_rootdir.clicked.connect(self._slot_rootdirectory_clicked)
         self.combobox_ponifile.currentTextChanged.connect(self._slot_poni_changed)
-        self.combobox_reffolder.currentTextChanged.connect(self._slot_reffolder_changed)
-        self.spinbox_sub.valueChanged.connect(self._slot_spinboxsub_changed)
+        self.combobox_reference_folder.currentTextChanged.connect(self._slot_reffolder_changed)
+        self.spinbox_subtraction_scale.valueChanged.connect(self._slot_spinboxsub_changed)
 
         self.button_pyfaicalib.clicked.connect(self._slot_pyfai_calib)
 
@@ -489,7 +489,7 @@ class Browser(BrowserLayout):
 
     @log_info
     def _init_referencecb(self):
-        combobox = self.combobox_reffolder
+        combobox = self.combobox_reference_folder
         cb.clear(combobox=combobox)
         for entry in self.meta._generate_entries(relative_path=True):
             cb.insert(
@@ -499,7 +499,7 @@ class Browser(BrowserLayout):
 
     @log_info
     def _update_referencecb(self):
-        combobox = self.combobox_reffolder
+        combobox = self.combobox_reference_folder
         for entry in self.meta._generate_new_entries(relative_path=True):
             cb.insert(
                 combobox=combobox,
@@ -902,10 +902,10 @@ class Browser(BrowserLayout):
     @log_info
     def _update_data_cache(self, list_filenames):
         data = self._open_data(list_filenames=list_filenames)
-        if self.spinbox_sub.value() != 0.0:
+        if self.spinbox_subtraction_scale.value() != 0.0:
             self.update_reference_file()
             if self.reference_data is not None:
-                data = data - self.spinbox_sub.value() * self.reference_data
+                data = data - self.spinbox_subtraction_scale.value() * self.reference_data
         self.data_cache = self._clean_data(data=data)        
 
     @log_info
