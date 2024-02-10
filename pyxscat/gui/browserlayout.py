@@ -296,7 +296,6 @@ class BrowserLayout(QWidget):
         hbox_cake = QHBoxLayout()
         hbox_box = QHBoxLayout()
         vbox_poni = QVBoxLayout()
-        vbox_h5 = QVBoxLayout()
 
         vbox_metadata.setStretch(0,1)
         vbox_metadata.setStretch(1,1)
@@ -309,14 +308,12 @@ class BrowserLayout(QWidget):
         widget_cake = QWidget()
         widget_box = QWidget()
         widget_vbox_poni = QWidget()
-        widget_vbox_h5 = QWidget()
 
         widget_vbox_input.setLayout(vbox_input)
         widget_vbox_metadata.setLayout(vbox_metadata)
         widget_cake.setLayout(hbox_cake)
         widget_box.setLayout(hbox_box)
         widget_vbox_poni.setLayout(vbox_poni)
-        widget_vbox_h5.setLayout(vbox_h5)
 
         widget_tabs.addTab(widget_vbox_input, LABEL_TAB_FILES)
         widget_tabs.addTab(widget_vbox_metadata, LABEL_TAB_SETUP)
@@ -951,34 +948,6 @@ class BrowserLayout(QWidget):
         hbox_poni_rot_2.setStretchFactor(self.lineedit_rot2,5)
         hbox_poni_rot_3.setStretchFactor(label_rot_3,1)
         hbox_poni_rot_3.setStretchFactor(self.lineedit_rot3,5)
-
-
-        # H5 PARAMETERS TAB
-        hbox_h5_h5file = QHBoxLayout()
-        hbox_h5_h5file.setContentsMargins(1,0,1,0)
-        hbox_h5_attrs = QHBoxLayout()
-        hbox_h5_attrs.setContentsMargins(1,0,1,0)
-
-        widget_h5_h5file = QWidget()
-        widget_h5_attrs = QWidget()
-        widget_h5_h5file.setLayout(hbox_h5_h5file)
-        widget_h5_attrs.setLayout(hbox_h5_attrs)
-
-        label_h5_h5file = QLabel(LABEL_H5_H5FILE)
-        self.lineedit_h5file = QLineEdit()
-        self.lineedit_h5file.setEnabled(False)
-
-        hbox_h5_h5file.addWidget(label_h5_h5file)
-        hbox_h5_h5file.addWidget(self.lineedit_h5file)
-
-        self.h5_plaintext = QPlainTextEdit()
-        self.h5_plaintext.setReadOnly(True)
-
-        hbox_h5_attrs.addWidget(self.h5_plaintext)
-
-        vbox_h5.addWidget(widget_h5_h5file)
-        vbox_h5.addWidget(widget_h5_attrs)
-
 
         label_sample_orientation = QLabel(LABEL_SAMPLE_ORIENTATION)
         self.button_mirror = QPushButton(BUTTON_ORIENTATIONS_LAYOUT[MIRROR_BUTTON_LABEL][MIRROR_DEFAULT_STATE]["label"])

@@ -8,8 +8,6 @@ from pyxscat.logger_config import setup_logger
 
 from pathlib import Path
 import sys
-import fabio
-import numpy as np
 
 ICON_SPLASH = str(Path(ICON_DIRECTORY).joinpath('pyxscat_new_logo.png'))
 
