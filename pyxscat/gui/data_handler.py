@@ -2,6 +2,7 @@ from pathlib import  Path
 from pyFAI import load
 from pyFAI.azimuthalIntegrator import AzimuthalIntegrator
 from pygix.transform import Transform
+from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
 from pyFAI.io.ponifile import PoniFile
 import logging
 import numpy as np
@@ -11,28 +12,51 @@ from pyxscat.edf import FullHeader
 
 logger = logging.getLogger(__name__)
 
-
-
-
+POLARIZATION_FACTOR = 0.99
+DICT_BOX_ORIENTATION = {
+    'horizontal' : 'ipbox',
+    'vertical' : 'opbox',
+}
+QNM_ALIAS = ('q_nm^-1', 'q_nm^-1', 'nm', 'nm-1', 'qnm', 'q_nm')
+QA_ALIAS = ('q_A^-1', 'q_A', 'q_a^-1', 'q_a^-1', 'a', 'a-1', 'qa', 'q_a')
+Q_ALIAS = QNM_ALIAS + QA_ALIAS
+RAD_ALIAS = ('2th_rad', 'rad', '2thrad', 'thrad', 'tth_rad', 'tthrad')
+DEG_ALIAS = ('2th_deg', 'deg', '2thdeg', 'thdeg', 'tth_deg', 'tthdeg')
+UNIT_GI = {
+    'q_nm^-1' : Q_NM,
+    'q_A^-1' : Q_A,
+    '2th_deg' : TTH_DEG,
+    '2th_rad' : TTH_RAD,
+}
 # Define a Pydantic model
-class ConfigIntegration(BaseModel):
+class ConfigIntegrationCake(BaseModel):
     name: str
-    suffix: str
     unit : str
     radial_range: list
     azimuth_range : list
-    azim_bins : int
-    integration : str
+    npt_azim : int
+    npt_rad : int
+    integration_type : str
 
+class ConfigIntegrationBox(BaseModel):
+    name: str
+    input_unit : str
+    output_unit : str
+    ip_range: list
+    oop_range : list
+    npt : int
+    integration_type : str
+    direction : str
 
 
 class DataHandler(Transform):
     def __init__(
         self, 
-        filename_list:list=[], 
+        filename_list:list=[],
         ai:AzimuthalIntegrator=None, 
         poni:PoniFile=None, 
         config:dict=None,
+        pattern:str="*.edf",
         ):
         super().__init__()
         
@@ -41,7 +65,6 @@ class DataHandler(Transform):
         self.ai = ai
         self.poni = poni
         self.config = config
-        self.geo = None
         
         self.acquisitiontime_key = ""
         self.normalizationfactor_key = ""
@@ -52,11 +75,12 @@ class DataHandler(Transform):
         self.normalization_factor = 0.0
         self.incident_angle = 0.0
         self.tilt_angle = 0.0
+        self.sample_orientation = 1
         
         self.reference_directory = ""
         self.reference_file = ""
         self.reference_acquisition_time = None
-        self.pattern = "*.edf"
+        self.pattern = pattern
         
         self.data = None
         self.data_reference = None
@@ -126,6 +150,7 @@ class DataHandler(Transform):
             
         if self._poni:
             self.ai = load(self._poni)
+            self._init_from_poni(poni=self._poni)
         else:
             logger.warning(f"{value} is not valid for a Poni instance (ai was not changed).")
             
@@ -139,12 +164,6 @@ class DataHandler(Transform):
     @data.setter
     def data(self, value):
         if isinstance(value, np.ndarray):
-            if self._ai:
-                if self._ai.detector.shape == value:
-                    self._data = value
-                else:
-                    logger.warning(f"shape of value is {value.shape}, different from detector shape: {self._ai.detector.shape}!")
-            else:
                 self._data = value
         else:
             logger.warning(f"{value} is not a np.array but {type(value)}")
@@ -159,20 +178,6 @@ class DataHandler(Transform):
         if self._list_headers:
             self.update_metadata_values()
             
-    @property
-    def config(self):
-        return self._config
-    
-    @config.setter
-    def config(self, value):
-        if not isinstance(value, dict):
-            return
-        try:
-            validated_config = ConfigIntegration.parse_obj(value)
-            self._config = validated_config
-        except ValidationError as e:
-            logger.warning(f"{e}. Not valid config dictionary.")
-
     @property
     def acquisitiontime_key(self):
         return self._acquisitiontime_key
@@ -197,7 +202,7 @@ class DataHandler(Transform):
             self.update_normalization_factor()
         
     def set_normalizationfactor_key(self, key):
-        self.normalization_factor = key
+        self.normalizationfactor_key = key
 
     @property
     def incidentangle_key(self):
@@ -233,6 +238,7 @@ class DataHandler(Transform):
     def acquisition_time(self, value):
         if isinstance(value, float):
             self._acquisition_time = value
+            self.set_automatic_reference_file()
             
     @property
     def normalization_factor(self):
@@ -263,6 +269,18 @@ class DataHandler(Transform):
         if isinstance(value, float):
             self._tilt_angle = value
             self.change_incident_angle()
+            
+    @property
+    def sample_orientation(self):
+        return self._sample_orientation
+    
+    @sample_orientation.setter
+    def sample_orientation(self, value):
+        if isinstance(value, int):
+            if value in (1,2,3,4):
+                self._sample_orientation = value
+                self.change_sample_orientation(sample_orientation=self._sample_orientation)
+                
 
     @property
     def reference_directory(self):
@@ -297,8 +315,9 @@ class DataHandler(Transform):
             if self._data is not None:
                 if self._data.shape == value.shape:
                     self._data_reference = value
+                    self.update_data()
                     return
-        self._data_reference = ""
+        self._data_reference = None
                     
     @property
     def reference_factor(self):
@@ -460,36 +479,207 @@ class DataHandler(Transform):
             except Exception as e:
                 logger.warning(f"Tilt angle could not be updated.")
             
+    def change_sample_orientation(self, sample_orientation:int):
+        self.set_sample_orientation(sample_orientation)
             
             
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-    def do_integration(self, config:dict):
-        self.config = config
-        
-        if self._config:
-            self._do_integrate1d()
-    
-    def _do_integrate1d(self):
+    def validate_config_cake(self, config):
+        if not isinstance(config, dict):
+            return
         try:
-            res1d = self._ai.integrate1d(
-                data=self._data,
-                npt=self._config["azim_bins"],
-                
-            )
-            self.res1d = res1d
-        except:
-            pass
+            validated_config = ConfigIntegrationCake.parse_obj(config)
+            return validated_config
+        except ValidationError as e:
+            logger.warning(f"{e}. Not valid config dictionary for cake integration.")
+            return
             
+    def validate_config_box(self, config):
+        if not isinstance(config, dict):
+            return
+        try:
+            validated_config = ConfigIntegrationBox.parse_obj(config)
+            return validated_config
+        except ValidationError as e:
+            logger.warning(f"{e}. Not valid config dictionary for box integration.")
+            return
+          
+    def do_integration(self, config:dict, dim=1):
+        if not self._data:
+            return
+        if self._ai:
+            if self._poni:
+                if dim == 1:
+                    if config.get("integration_type") in ("azimuthal", "radial"):
+                        res1d = self._do_integrate1d_cake(config=config)
+                    elif config.get("integration_type") == "box":
+                        res1d = self._do_integrate1d_box(config=config)
+                    else:
+                        res1d = None
+                    return res1d
+                elif dim == 2:
+                    return self._do_integration2d(config=config)
+                else:
+                    return  
+            else:
+                logger.warning(f"Poni {self._poni} is not valid to integrate.")
+        else:
+            logger.warning(f"AI {self._ai} is not valid to integrate.")
+    
+    def _do_integrate1d_cake(self, config:dict):
+        config_validated = self.validate_config_cake(config=config)
+        if config_validated:
+            if config_validated.get("integration_type") == "azimuthal":
+                res1d = self._do_integrate1d_azimuthal(config=config_validated)
+            elif config_validated.get("integration_type") == "radial":
+                res1d = self._do_integrate1d_radial(config=config_validated)
+            else:
+                res1d = None
+            return res1d
+        else:
+            return
         
+    def _do_integrate1d_azimuthal(self, config:dict):
+        try:
+            res1d = self.integrate_1d(
+                process='sector',
+                data=self._data,
+                npt=config.get("npt_rad"),
+                p0_range=config.get("radial_range"),
+                p1_range=config.get("azimuth_range"),
+                unit=config.get("unit"),
+                # method=("bbox", "csr", "cython"),
+                normalization_factor=self._normalization_factor,
+                polarization_factor=POLARIZATION_FACTOR,
+            )
+            return res1d
+        except Exception as e:
+            logger.warning(f"{e}: Azimuthal integration failed with config: {config}")
+                
+    def _do_integrate1d_radial(self, config:dict):
+        try:
+            res1d = self.integrate_1d(
+                process='chi',
+                data=self._data,
+                npt=config.get("npt_rad"),
+                p0_range=config.get("azimuth_range"),
+                p1_range=config.get("radial_range"),
+                unit=config.get("unit"),
+                # method=("bbox", "csr", "cython"),
+                normalization_factor=self._normalization_factor,
+                polarization_factor=POLARIZATION_FACTOR,
+            )
+            return res1d
+        except Exception as e:
+            logger.warning(f"{e}: Radial integration failed with config: {config}")
+    
+    def _do_integrate1d_box(self, config:dict):
+        config_box = self.prepare_config_box(config=config)
+        try:
+            res1d = self.integrate_1d(
+                process=config_box.get("process"),
+                data=self._data,
+                npt=config_box.get("npt_rad"),
+                p0_range=config_box.get("p0_range"),
+                p1_range=config_box.get("p1_range"),
+                unit=UNIT_GI[config_box.get("output_unit"),],
+                normalization_factor=self._normalization_factor,
+                polarization_factor=POLARIZATION_FACTOR,
+                # method=("bbox", "csr", "cython"),
+            )
+            return res1d
+        except Exception as e:
+            logger.warning(f"{e}: Radial integration failed with config: {config_box}")
+                
+    def prepare_config_box(self, config:dict):
+        process = DICT_BOX_ORIENTATION[config.get("direction")]
+        unit=config.get("input_unit")
+        if process == 'opbox':
+            p0_range = config.get("oop_range")
+            p1_range = config.get("ip_range")
+        elif process == 'ipbox':
+            p0_range = config.get("ip_range")
+            p1_range = config.get("oop_range")    
+                
+        p0_range = [self.get_q_nm(
+            value=position,
+            input_unit=unit,
+            direction=config.get("direction"),
+        ) for position in p0_range]
+
+        p1_range = [self.get_q_nm(
+            value=position,
+            input_unit=unit,
+            direction=config.get("direction"),
+        ) for position in p1_range]
         
+        config["p0_range"] = p0_range
+        config["p1_range"] = p1_range
+        config["process"] = process
+        return config
+                  
+                
+    def _do_integration2d(self, config:dict):
+        pass
+            
+
+    
+    def get_q_nm(self, value=0.0, direction='vertical', input_unit='q_nm^-1') -> float:
+        """
+            Return a q(nm-1) value from another unit
+        """
+        if input_unit in QNM_ALIAS:
+            return value
+        elif input_unit in Q_ALIAS:
+            return value
+        elif input_unit in DEG_ALIAS:
+            return self.twotheta_to_q(twotheta=value, direction=direction, degree_input=True)
+        elif input_unit in RAD_ALIAS:
+            return self.twotheta_to_q(twotheta=value, degree_input=False)
+        else:
+            return None
+        
+    def twotheta_to_q(self, twotheta=0.0, degree_input=True, direction='vertical', output_unit='q_nm^-1',) -> float:
+        """
+        Transforms 2theta into q
+
+        Keyword Arguments:
+            twotheta -- exit angle (default: {0.0})
+            degree_input -- if True, the input twotheta is degrees, if not, radians (default: {True})
+            direction -- if vertical, q is taken as qz, if horizontal, is taken as qxy (default: {'vertical'})
+            output_unit -- 'q_nm^-1' or 'q_A^-1' (default: {'q_nm^-1'})
+
+        Returns:
+            modulus of q, scattering vector
+        """        
+        try:
+            wavelength = self._ai._wavelength
+            wavelength_nm = wavelength * 1e9
+        except Exception as e:
+            logger.error(f'{e} There is no wavelength to transform 2theta into q.')
+            return
+
+        if degree_input:
+            twotheta = np.radians(twotheta)
+        
+        try:
+            alpha_inc = np.radians(self._incident_angle)
+        except:
+            alpha_inc = 0.0
+        
+        q_horz = 2 * np.pi / wavelength_nm * (np.cos(alpha_inc) * np.sin(twotheta))
+        q_vert = 2 * np.pi / wavelength_nm * (np.sin(twotheta) + np.sin(alpha_inc))
+
+        if output_unit in QNM_ALIAS:
+            pass
+        elif output_unit in QA_ALIAS:
+            q_horz /= 10
+            q_vert /= 10
+
+        if direction == "vertical":
+            return q_horz
+        elif direction == "horizontal":
+            return q_vert
+        else:
+            return

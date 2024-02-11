@@ -1,1 +1,0 @@
-{"name": "vertical_rod", "suffix": "vertical_rod", "direction": "vertical", "ip_range": [3.0, 4.0], "oop_range": [0.0, 30.0], "output_unit": "q_nm^-1", "input_unit": "q_nm^-1", "integration": "box"}

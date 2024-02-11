@@ -1,1 +1,0 @@
-{"name": "ewout_ip", "suffix": "ewout_ip", "type": "azimuthal", "unit": "q_nm^-1", "radial_range": [25.0, 35.0], "azimuth_range": [-180.0, 180.0], "azim_bins": 0, "integration": "cake"}

@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QMainWindow, QSplitter, QVBoxLayout, QHBoxLayout, QTabWidget, QBoxLayout
+from PyQt5.QtWidgets import QWidget, QMainWindow, QSplitter, QVBoxLayout, QHBoxLayout, QTabWidget, QBoxLayout, QSpinBox
 from PyQt5.QtWidgets import QFrame, QLabel, QComboBox, QListWidget, QCheckBox, QLineEdit, QPushButton, QDoubleSpinBox, QPlainTextEdit, QTableWidget
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
@@ -193,8 +193,8 @@ LABEL_CAKE_TYPE = "Type:"
 LABEL_CAKE_UNITS = "Units:"
 LABEL_CAKE_RADIAL = "Radial range:"
 LABEL_CAKE_AZIM = "Azimuthal range:"
-LABEL_CAKE_BINS_OPT = "Azimuthal bins (optional):"
-LABEL_CAKE_BINS_MAND = "Azimuthal bins (mandatory):"
+LABEL_CAKE_AZIMUTHAL_BINS = "Azimuthal bins:"
+LABEL_CAKE_RADIAL_BINS = "Radial bins:"
 LABEL_MIN = "Min:"
 LABEL_MAX = "Max."
 
@@ -202,6 +202,7 @@ LABEL_MAX = "Max."
 LABEL_BOX_NAME = "Name:"
 LABEL_BOX_SUFFIX = "Suffix:"
 LABEL_BOX_DIRECTION = "Direction:"
+LABEL_BOX_BINS = "Number of bins:"
 LABEL_BOX_INPUT_UNITS = "Input units:"
 LABEL_BOX_IP_RANGE = "In-plane range:"
 LABEL_BOX_OOP_RANGE = "Out-of-plane range:"
@@ -658,26 +659,16 @@ class BrowserLayout(QWidget):
         # hbox_metadata_acq.addWidget(self.combobox_acquisition)
         hbox_metadata_acq.setStretch(2,5)
         
-        # label_setup_name = QLabel(LABEL_SETUP_NAME)
         self.lineedit_setup_name = QLineEdit()   
         self.button_metadata_save = QPushButton(BUTTON_JSON_FILE)
         self.button_metadata_save.setStyleSheet(BUTTON_STYLE_ENABLE)
         self.button_metadata_save.setIcon(QIcon(ICON_SAVE_PATH))
 
-        # hbox_metadata_name.addWidget(label_setup_name)
-        # hbox_metadata_name.addWidget(self.lineedit_setup_name)
-        # hbox_metadata_name.addWidget(self.button_metadata_save)
-
-        # self.button_metadata_update = QPushButton(BUTTON_UPDATE_KEYS)
-        # self.button_metadata_update.setStyleSheet(BUTTON_STYLE_ENABLE)
-
-        # vbox_metadata.addWidget(widget_metadata_choose)
         vbox_metadata.addWidget(widget_metadata_iangle)
         vbox_metadata.addWidget(widget_metadata_tangle)
         vbox_metadata.addWidget(widget_metadata_norm)
         vbox_metadata.addWidget(widget_metadata_acq)
-        # vbox_metadata.addWidget(widget_metadata_name)
-        # vbox_metadata.addWidget(self.button_metadata_update)
+
 
         ## CAKE INTEGRATION TAB
 
@@ -694,54 +685,48 @@ class BrowserLayout(QWidget):
     
         hbox_cake_name = QHBoxLayout()
         hbox_cake_name.setContentsMargins(1, 0, 1, 0)
-        hbox_cake_suffix = QHBoxLayout()
-        hbox_cake_suffix.setContentsMargins(1, 0, 1, 0)
         hbox_cake_type = QHBoxLayout()
         hbox_cake_type.setContentsMargins(1, 0, 1, 0)
-        hbox_cake_unit = QHBoxLayout()
-        hbox_cake_unit.setContentsMargins(1, 0, 1, 0)
+        hbox_cake_azimuthal_bins = QHBoxLayout()
+        hbox_cake_azimuthal_bins.setContentsMargins(1, 0, 1, 0)
+        hbox_cake_radial_bins = QHBoxLayout()
+        hbox_cake_radial_bins.setContentsMargins(1, 0, 1, 0)
         hbox_cake_radial = QHBoxLayout()
         hbox_cake_radial.setContentsMargins(1, 0, 1, 0)
         hbox_cake_azimut = QHBoxLayout()
         hbox_cake_azimut.setContentsMargins(1, 0, 1, 0)
-        hbox_cake_bins = QHBoxLayout()
-        hbox_cake_bins.setContentsMargins(1, 0, 1, 0)
+        hbox_cake_unit = QHBoxLayout()
+        hbox_cake_unit.setContentsMargins(1, 0, 1, 0)        
 
         widget_cake_name = QWidget()
-        widget_cake_suffix = QWidget()
         widget_cake_type = QWidget()
-        widget_cake_unit = QWidget()
+        widget_cake_azimuthal_bins = QWidget()
+        widget_cake_radial_bins = QWidget()
         widget_cake_radial = QWidget()
         widget_cake_azimut = QWidget()
-        widget_cake_bins = QWidget()
+        widget_cake_unit = QWidget()
 
         widget_cake_name.setLayout(hbox_cake_name)
-        widget_cake_suffix.setLayout(hbox_cake_suffix)
         widget_cake_type.setLayout(hbox_cake_type)
-        widget_cake_unit.setLayout(hbox_cake_unit)
+        widget_cake_azimuthal_bins.setLayout(hbox_cake_azimuthal_bins)
+        widget_cake_radial_bins.setLayout(hbox_cake_radial_bins)
         widget_cake_radial.setLayout(hbox_cake_radial)
         widget_cake_azimut.setLayout(hbox_cake_azimut)
-        widget_cake_bins.setLayout(hbox_cake_bins)
+        widget_cake_unit.setLayout(hbox_cake_unit)
 
         vbox_cake_parameters.addWidget(widget_cake_name)
-        vbox_cake_parameters.addWidget(widget_cake_suffix)
         vbox_cake_parameters.addWidget(widget_cake_type)
-        vbox_cake_parameters.addWidget(widget_cake_unit)
+        vbox_cake_parameters.addWidget(widget_cake_azimuthal_bins)        
+        vbox_cake_parameters.addWidget(widget_cake_radial_bins)  
         vbox_cake_parameters.addWidget(widget_cake_radial)
         vbox_cake_parameters.addWidget(widget_cake_azimut)
-        vbox_cake_parameters.addWidget(widget_cake_bins)
+        vbox_cake_parameters.addWidget(widget_cake_unit)
 
         label_name_cake = QLabel(LABEL_CAKE_NAME)
         self.lineedit_name_cake = QLineEdit()
 
         hbox_cake_name.addWidget(label_name_cake)
         hbox_cake_name.addWidget(self.lineedit_name_cake)
-
-        label_suffix_cake = QLabel(LABEL_CAKE_SUFFIX)
-        self.lineedit_suffix_cake = QLineEdit()
-
-        hbox_cake_suffix.addWidget(label_suffix_cake)
-        hbox_cake_suffix.addWidget(self.lineedit_suffix_cake)
 
         label_type_cake = QLabel(LABEL_CAKE_TYPE)
         self.combobox_type_cake = QComboBox()
@@ -750,18 +735,23 @@ class BrowserLayout(QWidget):
 
         hbox_cake_type.addWidget(label_type_cake, Qt.AlignLeft)
         hbox_cake_type.addWidget(self.combobox_type_cake, Qt.AlignLeft)
-
         hbox_cake_type.setStretch(1,10)
 
-        label_units_cake = QLabel(LABEL_CAKE_UNITS)
-        self.combobox_units_cake = QComboBox()
-        for unit in DICT_UNIT_ALIAS.values():
-            self.combobox_units_cake.addItem(unit)
+        self.label_azimbins_cake = QLabel(LABEL_CAKE_AZIMUTHAL_BINS)
+        self.spinbox_azimbins_cake = QSpinBox()
+        self.spinbox_azimbins_cake.setSingleStep(1)
+        self.spinbox_azimbins_cake.setRange(0, 10000)
 
-        hbox_cake_unit.addWidget(label_units_cake, Qt.AlignLeft)
-        hbox_cake_unit.addWidget(self.combobox_units_cake, Qt.AlignLeft)
+        hbox_cake_azimuthal_bins.addWidget(self.label_azimbins_cake)
+        hbox_cake_azimuthal_bins.addWidget(self.spinbox_azimbins_cake)
 
-        hbox_cake_unit.setStretch(1,10)
+        self.label_radialbins_cake = QLabel(LABEL_CAKE_RADIAL_BINS)
+        self.spinbox_radialbins_cake = QSpinBox()
+        self.spinbox_radialbins_cake.setSingleStep(1)
+        self.spinbox_radialbins_cake.setRange(0, 10000)
+
+        hbox_cake_radial_bins.addWidget(self.label_radialbins_cake)
+        hbox_cake_radial_bins.addWidget(self.spinbox_radialbins_cake)
 
         label_radialrange_cake = QLabel(LABEL_CAKE_RADIAL)
         self.spinbox_radialmin_cake = QDoubleSpinBox()
@@ -793,13 +783,14 @@ class BrowserLayout(QWidget):
         self.spinbox_azimmin_cake.setMaximumWidth(WIDTH_SPINBOX_MAX)
         self.spinbox_azimmax_cake.setMaximumWidth(WIDTH_SPINBOX_MAX)
         
-        self.label_azimbins_cake = QLabel(LABEL_CAKE_BINS_OPT)
-        self.spinbox_azimbins_cake = QDoubleSpinBox()
-        self.spinbox_azimbins_cake.setSingleStep(1)
-        self.spinbox_azimbins_cake.setRange(0, 1e9)
+        label_units_cake = QLabel(LABEL_CAKE_UNITS)
+        self.combobox_units_cake = QComboBox()
+        for unit in DICT_UNIT_ALIAS.values():
+            self.combobox_units_cake.addItem(unit)
 
-        hbox_cake_bins.addWidget(self.label_azimbins_cake)
-        hbox_cake_bins.addWidget(self.spinbox_azimbins_cake)
+        hbox_cake_unit.addWidget(label_units_cake, Qt.AlignLeft)
+        hbox_cake_unit.addWidget(self.combobox_units_cake, Qt.AlignLeft)
+        hbox_cake_unit.setStretch(1,10)
 
         # BOX INTEGRATION TAB
 
@@ -813,10 +804,10 @@ class BrowserLayout(QWidget):
 
         hbox_box_name = QHBoxLayout()
         hbox_box_name.setContentsMargins(1, 0, 1, 0)
-        hbox_box_suffix = QHBoxLayout()
-        hbox_box_suffix.setContentsMargins(1, 0, 1, 0)
         hbox_box_direction = QHBoxLayout()
         hbox_box_direction.setContentsMargins(1, 0, 1, 0)
+        hbox_box_bins = QHBoxLayout()
+        hbox_box_bins.setContentsMargins(1, 0, 1, 0)
         hbox_box_unit_input = QHBoxLayout()
         hbox_box_unit_input.setContentsMargins(1, 0, 1, 0)
         hbox_box_ip = QHBoxLayout()
@@ -827,24 +818,24 @@ class BrowserLayout(QWidget):
         hbox_box_unit_output.setContentsMargins(1, 0, 1, 0)
 
         widget_box_name = QWidget()
-        widget_box_suffix = QWidget()
         widget_box_direction = QWidget()
+        widget_box_bins = QWidget()
         widget_box_unit_input = QWidget()
         widget_box_ip = QWidget()
         widget_box_oop = QWidget()
         widget_box_unit_output = QWidget()
 
         widget_box_name.setLayout(hbox_box_name)
-        widget_box_suffix.setLayout(hbox_box_suffix)
         widget_box_direction.setLayout(hbox_box_direction)
+        widget_box_bins.setLayout(hbox_box_bins)
         widget_box_unit_input.setLayout(hbox_box_unit_input)
         widget_box_ip.setLayout(hbox_box_ip)
         widget_box_oop.setLayout(hbox_box_oop)
         widget_box_unit_output.setLayout(hbox_box_unit_output)
 
         vbox_box_parameters.addWidget(widget_box_name)
-        vbox_box_parameters.addWidget(widget_box_suffix)
         vbox_box_parameters.addWidget(widget_box_direction)
+        vbox_box_parameters.addWidget(widget_box_bins)
         vbox_box_parameters.addWidget(widget_box_unit_input)
         vbox_box_parameters.addWidget(widget_box_ip)
         vbox_box_parameters.addWidget(widget_box_oop)
@@ -856,12 +847,6 @@ class BrowserLayout(QWidget):
         hbox_box_name.addWidget(label_name_box)
         hbox_box_name.addWidget(self.lineedit_name_box)
 
-        label_suffix_box = QLabel(LABEL_BOX_SUFFIX)
-        self.lineedit_suffix_box = QLineEdit()
-
-        hbox_box_suffix.addWidget(label_suffix_box)
-        hbox_box_suffix.addWidget(self.lineedit_suffix_box)
-
         label_direction_box = QLabel(LABEL_BOX_DIRECTION)
         self.combobox_direction_box = QComboBox()
         for box in BOX_INTEGRATIONS:
@@ -869,8 +854,16 @@ class BrowserLayout(QWidget):
 
         hbox_box_direction.addWidget(label_direction_box, Qt.AlignLeft)
         hbox_box_direction.addWidget(self.combobox_direction_box, Qt.AlignLeft)
-
         hbox_box_direction.setStretch(1,10)
+        
+        label_box_bins = QLabel(LABEL_BOX_BINS)
+        self.spinbox_box_bins = QSpinBox()
+        self.spinbox_box_bins.setSingleStep(1)
+        self.spinbox_box_bins.setRange(0, 10000)
+        
+        hbox_box_bins.addWidget(label_box_bins, Qt.AlignLeft)
+        hbox_box_bins.addWidget(self.spinbox_box_bins, Qt.AlignLeft)
+        hbox_box_bins.setStretch(1,10)
 
         label_input_units_box = QLabel(LABEL_BOX_INPUT_UNITS)
         self.combobox_units_box = QComboBox()
@@ -879,7 +872,6 @@ class BrowserLayout(QWidget):
 
         hbox_box_unit_input.addWidget(label_input_units_box, Qt.AlignLeft)
         hbox_box_unit_input.addWidget(self.combobox_units_box, Qt.AlignLeft)
-
         hbox_box_unit_input.setStretch(1,10)
 
         label_iprange_box = QLabel(LABEL_BOX_IP_RANGE)
