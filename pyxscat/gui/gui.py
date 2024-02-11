@@ -5,6 +5,7 @@ from PyQt5.QtCore import QTimer, pyqtSignal
 from . import ICON_DIRECTORY
 from pyxscat.gui.guilayout import GUILayout
 from pyxscat.logger_config import setup_logger
+from pyxscat.gui.data_handler import DataHandler
 
 from pathlib import Path
 import sys
@@ -29,6 +30,8 @@ class GUI(GUILayout):
 
         self._splash()
         self._init_connections()
+        
+        
 
     def _splash(self):
         pixmap = QPixmap(ICON_SPLASH)
@@ -37,17 +40,36 @@ class GUI(GUILayout):
         splash.finish(self)
 
     def _init_connections(self):
-        self.browser.ai_changed.connect(lambda : (
-            self.update_graph_raw(),
-            self.update_graph_integration(),
-        ))
+        self.browser.active_files_changed.connect(self.update_all_graphs)
         self.browser.new_files_detected.connect(self._update_new_files)
-        self.browser.data_cache_changed.connect(self.update_graph_raw)
-        self.browser.results1d_updated.connect(self.update_graph_integration)
+        self.browser.data_changed.connect(self.update_all_graphs)
+        self.browser.data_changed.connect(self.update_cb_reference_file)
     
+    
+    
+    
+    def update_cb_reference_file(self):
+        reference_file = self.browser.data_handler._reference_file
+        reference_file = str(Path(reference_file).name)
+        self.browser.combobox_reference_file.setCurrentText(reference_file)
+    
+    def update_data(self, raw=False, reshape=False, qmap=False, integration=False):
+        if self.browser.data_handler._data is None:
+            return
+        if raw:
+            self.update_graph_raw()
+            
+    def update_all_graphs(self):
+        self.update_data(
+            raw=True,
+            reshape=True,
+            qmap=True,
+            integration=True,
+        )
+
     def update_graph_raw(self):
-        data = self.browser._data_cache
-        self.graphs._update_raw_graph(data=data)
+        data = self.browser.data_handler._data
+        self.graphs._update_raw_graph(data=data)    
 
     def update_graph_integration(self):
         results = self.browser.results
@@ -55,6 +77,8 @@ class GUI(GUILayout):
 
     def _update_new_files(self):
         pass
+    
+
 
 
 def main():

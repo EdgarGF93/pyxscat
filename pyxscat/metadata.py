@@ -121,8 +121,13 @@ class MetadataBase:
             return str(Path(absolute_path).relative_to(entry_name)) 
         return str(Path(absolute_path).relative_to(self._directory))
     
-    def _get_absolute_path(self, relative_path : str = ''):
+    def _get_absolute_path_of_entry(self, relative_path : str = ''):
         return str(self._directory.joinpath(relative_path))
+    
+    def _get_absolute_path_of_file(self, relative_path:str, entry_name:str):
+        if entry_name and relative_path:
+            entry = self._validate_entry(entry_name=entry_name)
+            return str(Path(entry).joinpath(relative_path))
 
     def _validate_entry(self, entry_name:str):
         if Path(self.directory) in Path(entry_name).parents:
@@ -198,7 +203,7 @@ class MetadataBase:
         return iter_empty
     
     def _search_files(self) -> dict:
-        return {str(subdir) : subdir.glob(self._pattern) for subdir in self._directory.rglob(DIR_PATTERN)}
+        return {str(subdir) : sorted(subdir.glob(self._pattern)) for subdir in sorted(self._directory.rglob(DIR_PATTERN))}
 
     def _search_new_files(self) -> dict:
         dict_new_files = defaultdict(list)

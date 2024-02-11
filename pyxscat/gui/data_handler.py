@@ -5,10 +5,14 @@ from pygix.transform import Transform
 from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
 from pyFAI.io.ponifile import PoniFile
 import logging
+from pyxscat.edf import FullHeader
 import numpy as np
 import fabio
-from pydantic import BaseModel, ValidationError, confloat, constr, conlist
-from pyxscat.edf import FullHeader
+from pydantic import BaseModel, ValidationError
+import json
+from typing import Optional
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -28,26 +32,32 @@ UNIT_GI = {
     '2th_deg' : TTH_DEG,
     '2th_rad' : TTH_RAD,
 }
-# Define a Pydantic model
-class ConfigIntegrationCake(BaseModel):
-    name: str
-    unit : str
-    radial_range: list
-    azimuth_range : list
-    npt_azim : int
-    npt_rad : int
-    integration_type : str
+INTEGRATIONS_DIRECTORY = Path(__file__).parent.parent.joinpath("integration_dicts")
 
+
+
+
+
+# Define a Pydantic model
+
+class ConfigIntegrationAzimuthal(BaseModel):
+    name: str
+    integration_type : str
+    npt_rad : int
+    npt_azim : Optional[int] = 512
+    radial_range : Optional[list] = None
+    azimuth_range : Optional[list] = None
+    unit : Optional[str] = "q_nm^-1"
+    
 class ConfigIntegrationBox(BaseModel):
     name: str
-    input_unit : str
-    output_unit : str
-    ip_range: list
-    oop_range : list
-    npt : int
     integration_type : str
     direction : str
-
+    input_unit : Optional[str] = "q_nm^-1"
+    output_unit : Optional[str] = "q_nm^-1"
+    ip_range: Optional[list] = None
+    oop_range : Optional[list] = None
+    npt_rad : int
 
 class DataHandler(Transform):
     def __init__(
@@ -59,13 +69,16 @@ class DataHandler(Transform):
         pattern:str="*.edf",
         ):
         super().__init__()
-        
+                
         self.list_filenames = filename_list
         self.list_headers = []
         self.ai = ai
         self.poni = poni
         self.config = config
         
+        self.data = None
+        self.data_reference = None
+            
         self.acquisitiontime_key = ""
         self.normalizationfactor_key = ""
         self.incidentangle_key = ""
@@ -82,9 +95,7 @@ class DataHandler(Transform):
         self.reference_acquisition_time = None
         self.pattern = pattern
         
-        self.data = None
-        self.data_reference = None
-        self.reference_factor = 0.0
+        self.reference_factor = 0.0    
         
     def __repr__(self):
         return f"PyXScat Data Handler\n{super().__repr__()}"
@@ -109,6 +120,7 @@ class DataHandler(Transform):
         self._list_filenames = value
         
         if self._list_filenames:
+            self.update_metadata_values()
             self.update_data()
             self.update_header()
             
@@ -166,6 +178,7 @@ class DataHandler(Transform):
         if isinstance(value, np.ndarray):
                 self._data = value
         else:
+            self._data = None
             logger.warning(f"{value} is not a np.array but {type(value)}")
             
     @property
@@ -238,7 +251,10 @@ class DataHandler(Transform):
     def acquisition_time(self, value):
         if isinstance(value, float):
             self._acquisition_time = value
-            self.set_automatic_reference_file()
+        else:
+            self._acquisition_time = None
+        if self._acquisition_time:
+            self.update_reference()
             
     @property
     def normalization_factor(self):
@@ -248,7 +264,8 @@ class DataHandler(Transform):
     def normalization_factor(self, value):
         if isinstance(value, float):
             self._normalization_factor = value
-            self.update_data()
+        else:
+            self._normalization_factor = 1.0
             
     @property
     def incident_angle(self):
@@ -281,7 +298,6 @@ class DataHandler(Transform):
                 self._sample_orientation = value
                 self.change_sample_orientation(sample_orientation=self._sample_orientation)
                 
-
     @property
     def reference_directory(self):
         return self._reference_directory
@@ -291,6 +307,8 @@ class DataHandler(Transform):
         if Path(value).exists():
             self._reference_directory = value
             self.set_automatic_reference_file()
+        else:
+            self._reference_directory = ""
             
     def set_reference_directory(self, reference_directory:str):
         self.reference_directory = reference_directory
@@ -301,10 +319,15 @@ class DataHandler(Transform):
     
     @reference_file.setter
     def reference_file(self, value):
-        if Path(value).is_file():
-            self._reference_file = value
-            self.update_reference_data()
-            
+        if value:
+            if Path(value).is_file():
+                self._reference_file = value
+                self.update_data_reference()
+            else:
+                self._reference_file = ""
+        else:
+            self._reference_file  =""
+                
     @property
     def data_reference(self):
         return self._data_reference
@@ -315,9 +338,13 @@ class DataHandler(Transform):
             if self._data is not None:
                 if self._data.shape == value.shape:
                     self._data_reference = value
-                    self.update_data()
                     return
-        self._data_reference = None
+                else:
+                    self._data_reference = None
+            else:
+                self._data_reference = None
+        else:
+            self._data_reference = None
                     
     @property
     def reference_factor(self):
@@ -327,6 +354,7 @@ class DataHandler(Transform):
     def reference_factor(self, value):
         if isinstance(value, float):
             self._reference_factor = value
+            self.update_data_reference()
             self.update_data()
     
     def set_reference_factor(self, reference_factor:float):
@@ -336,15 +364,25 @@ class DataHandler(Transform):
         if self._acquisitiontime_key and self._acquisition_time:
             reference_directory = self._reference_directory
             if reference_directory:
-                reference_files = Path(reference_directory).glob(self.pattern)
+                reference_files = Path(reference_directory).glob(self.pattern)     
+                _reference_file = ""           
                 for reference_file in reference_files:
                     acq_time_reference = self._get_acquisitiontime_from_file(filename=reference_file)
-                    if acq_time_reference == self._acquisition_time:
-                        self.reference_acquisition_time = acq_time_reference
-                        self.reference_file = str(reference_file)
+                    
+                    if not acq_time_reference:
                         return
-        self.reference_file = ""
-        
+                    
+                    if float(acq_time_reference) == float(self._acquisition_time):
+                        self.reference_acquisition_time = float(acq_time_reference)
+                        _reference_file = str(reference_file)
+                        break
+                    
+                self.set_reference_file(reference_file=_reference_file)
+            else:
+                self.set_reference_file(reference_file="")
+        else:
+            self.set_reference_file(reference_file="")
+
     def set_reference_file(self, reference_file:str):
         self.reference_file = reference_file
         
@@ -352,10 +390,17 @@ class DataHandler(Transform):
         filename_list = self._list_filenames
         if filename_list:
             data = self._open_data(list_filenames=filename_list)
-            if (self.data_reference is not None) and self._reference_factor != 0.0:
-                self._data = data - self._reference_factor * self._data_reference
-            else:
-                self._data = data
+        else:
+            data = None
+        if (self._data_reference is not None) and self._reference_factor != 0.0:
+            data = data - self._data_reference
+        else:
+            data = data
+            
+        if data is not None:
+            self._data = self._clean_data(data=data)
+        else:
+            self._data = None
 
     def _open_data(self, list_filenames:list):
         if isinstance(list_filenames, str):
@@ -370,10 +415,49 @@ class DataHandler(Transform):
     def _average_data(self, list_filenames:list):
         return np.average([fabio.open(file).data for file in list_filenames], axis=0)
     
-    def update_reference_data(self):
+    def _clean_data(self, data):
+        data[data < 0.0] = 0.0
+        return data
+    
+    def update_reference(self, reference_file=""):
+        # This method sets the reference_file only
+        if reference_file:
+            if self._reference_file == reference_file:
+                return
+            else:
+                self.set_reference_file(reference_file=reference_file)
+        else:
+            # Auto
+            # If there is already data reference stored and the act time is the same, its valid
+            if self._data_reference is not None and self.reference_acquisition_time == self._acquisition_time:
+                return
+            
+            if self._acquisitiontime_key and self._acquisition_time:
+                self.set_automatic_reference_file()
+                
+            #     if self._reference_file and self._reference_factor != 0.0:
+            #         data = self._open_data(list_filenames=self._reference_file)
+            #         if data is not None:
+            #             print(8888)
+            #             self.data_reference = data * self._reference_factor
+            #         else:
+            #             self.data_reference = None
+            #     else:
+            #         self.data_reference = None
+            # else:
+            #     self.data_reference
+    def update_data_reference(self):
+        # if self._reference_file and self._reference_factor != 0.0:
         if self._reference_file:
-            data = self._open_data(list_filenames=self._reference_file)
-            self.data_reference = data
+            data_reference = self._open_data(list_filenames=self._reference_file)
+            if data_reference is not None:
+                self.data_reference = data_reference * self._reference_factor
+            else:
+                self.data_reference = None
+        else:
+            self.data_reference = None
+            
+            
     
     def update_header(self):
         filename_list = self._list_filenames
@@ -425,15 +509,14 @@ class DataHandler(Transform):
             return value_list
         
     def update_metadata_values(self):
-        self.update_acquisition_time()
         self.update_normalization_factor()
         self.update_incident_angle()
-        self.update_tilt_angle()
-    
+        self.update_tilt_angle()        
+        self.update_acquisition_time()
+
     def update_acquisition_time(self):
         if self._acquisitiontime_key:
             acq_time = self._get_metadata_value(key=self._acquisitiontime_key)
-            self.acquisition_time = acq_time
             try:
                 self.acquisition_time = float(acq_time)
             except:
@@ -482,14 +565,11 @@ class DataHandler(Transform):
     def change_sample_orientation(self, sample_orientation:int):
         self.set_sample_orientation(sample_orientation)
             
-            
-            
-            
     def validate_config_cake(self, config):
         if not isinstance(config, dict):
             return
         try:
-            validated_config = ConfigIntegrationCake.parse_obj(config)
+            validated_config= ConfigIntegrationAzimuthal.parse_obj(config).dict()
             return validated_config
         except ValidationError as e:
             logger.warning(f"{e}. Not valid config dictionary for cake integration.")
@@ -499,14 +579,14 @@ class DataHandler(Transform):
         if not isinstance(config, dict):
             return
         try:
-            validated_config = ConfigIntegrationBox.parse_obj(config)
+            validated_config = ConfigIntegrationBox.parse_obj(config).dict() 
             return validated_config
         except ValidationError as e:
             logger.warning(f"{e}. Not valid config dictionary for box integration.")
             return
           
-    def do_integration(self, config:dict, dim=1):
-        if not self._data:
+    def do_integration(self, config:dict, dim:int=1):
+        if self._data is None:
             return
         if self._ai:
             if self._poni:
@@ -519,7 +599,7 @@ class DataHandler(Transform):
                         res1d = None
                     return res1d
                 elif dim == 2:
-                    return self._do_integration2d(config=config)
+                    return self.do_integration2d(config=config)
                 else:
                     return  
             else:
@@ -549,7 +629,6 @@ class DataHandler(Transform):
                 p0_range=config.get("radial_range"),
                 p1_range=config.get("azimuth_range"),
                 unit=config.get("unit"),
-                # method=("bbox", "csr", "cython"),
                 normalization_factor=self._normalization_factor,
                 polarization_factor=POLARIZATION_FACTOR,
             )
@@ -566,7 +645,6 @@ class DataHandler(Transform):
                 p0_range=config.get("azimuth_range"),
                 p1_range=config.get("radial_range"),
                 unit=config.get("unit"),
-                # method=("bbox", "csr", "cython"),
                 normalization_factor=self._normalization_factor,
                 polarization_factor=POLARIZATION_FACTOR,
             )
@@ -583,14 +661,13 @@ class DataHandler(Transform):
                 npt=config_box.get("npt_rad"),
                 p0_range=config_box.get("p0_range"),
                 p1_range=config_box.get("p1_range"),
-                unit=UNIT_GI[config_box.get("output_unit"),],
+                unit=UNIT_GI[config_box.get("output_unit")],
                 normalization_factor=self._normalization_factor,
                 polarization_factor=POLARIZATION_FACTOR,
-                # method=("bbox", "csr", "cython"),
             )
             return res1d
         except Exception as e:
-            logger.warning(f"{e}: Radial integration failed with config: {config_box}")
+            logger.warning(f"{e}: Box integration failed with config: {config_box}")
                 
     def prepare_config_box(self, config:dict):
         process = DICT_BOX_ORIENTATION[config.get("direction")]
@@ -620,11 +697,50 @@ class DataHandler(Transform):
         return config
                   
                 
+    def do_integration2d(self, config:dict):
+        if self._data is None:
+            return
+        
+        config_validated = self.validate_config_cake(config=config)
+        if config_validated:
+            if self._ai and self._poni:
+                res2d = self._do_integration2d(config=config_validated)
+                return res2d
+        return
+        
     def _do_integration2d(self, config:dict):
-        pass
-            
-
-    
+        try:
+            res2d = self._ai.integrate2d(
+                data=self._data,
+                npt_rad=config.get("npt_rad"),
+                npt_azim=config.get("npt_azim"),
+                radial_range=config.get("radial_range"),
+                azimuth_range=config.get("azimuth_range"),
+                normalization_factor=self._normalization_factor,
+            )
+            return res2d
+        except Exception as e:
+            logger.warning(f"{e}: Integrate2d failed with config: {config}")
+            return
+        
+    def _get_json_config(self, integration_name:str):
+        full_filename = INTEGRATIONS_DIRECTORY.joinpath(f"{integration_name}.json")
+        with open(full_filename) as f:
+            config = json.load(f)
+        return config
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     def get_q_nm(self, value=0.0, direction='vertical', input_unit='q_nm^-1') -> float:
         """
             Return a q(nm-1) value from another unit

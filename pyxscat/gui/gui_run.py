@@ -76,10 +76,10 @@ def _main(options):
         pattern=options.pattern,
         json_file=options.file,
     )
-    main_window._guiwidget.browser.normalization_key = options.normalization
-    main_window._guiwidget.browser.acquisition_key = options.acquisition
-    main_window._guiwidget.browser.incidentangle_key = options.incident
-    main_window._guiwidget.browser.tiltangle_key = options.tilt
+    main_window._guiwidget.browser.set_normalizationfactor_key(key=options.normalization)
+    main_window._guiwidget.browser.set_acquisitiontime_key(key=options.acquisition)
+    main_window._guiwidget.browser.set_incidentangle_key(key=options.incident)
+    main_window._guiwidget.browser.set_tiltangle_key(key=options.tilt)
 
 
     app.exec_()    

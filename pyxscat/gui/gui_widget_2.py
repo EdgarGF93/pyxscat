@@ -1246,7 +1246,7 @@ class GUIPyXMWidget(GUIPyXMWidgetLayout):
         if isinstance(poni_data, (str, Path)):
             poni_data = Path(poni_data)
             if not poni_data.absolute() == poni_data:
-                poni_data = self.meta._get_absolute_path(relative_path=poni_data)
+                poni_data = self.meta._get_absolute_path_of_entry(relative_path=poni_data)
             if not Path(poni_data).is_file():
                 self.log_explorer_error(f'Ponifile {poni_data} does not exists??')
                 return
