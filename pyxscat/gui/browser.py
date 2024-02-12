@@ -25,10 +25,18 @@ import os
 import json
 import sys
 
+QZ_BUTTON_LABEL = "qz"
+QR_BUTTON_LABEL = "qr"
+
 JSON_DIR = Path(SRC_PATH).joinpath('METADATA_FILES')
 JSON_DIR.mkdir(exist_ok=True)
 INTEGRATIONS_DIRECTORY = Path(__file__).parent.parent.joinpath("integration_dicts")
-
+DICT_SAMPLE_ORIENTATIONS = {
+    (True,True) : 1,
+    (True,False) : 2,
+    (False,True) : 3,
+    (False,False) : 4,
+}
 
 logger = setup_logger()
 def log_info(func):
@@ -53,6 +61,8 @@ class Browser(BrowserLayout):
         self._init_attributes()
         self._init_callbacks()
         self.update_integration_cb()
+        self.update_cake_list()
+        self.update_box_list()
 
     def _init_attributes(self):
         self.active_entry = ''
@@ -85,7 +95,6 @@ class Browser(BrowserLayout):
 
         self.button_mask_file.clicked.connect(self._slot_button_mask)
         
-        self.lineedit_savefolder.textEdited.connect(self._slot_lineedit_savefolder)
         self.button_saveplot.clicked.connect(self._slot_button_saveplot)
         self.button_batch.clicked.connect(self._slot_button_batch)
         
@@ -98,27 +107,27 @@ class Browser(BrowserLayout):
         self.lineedit_iangle.textEdited.connect(self._slot_le_iangle_changed)
         self.lineedit_tilt_angle.textEdited.connect(self._slot_le_tangle_changed)
         
-        # self.lineedit_name_cake.textEdited.connect(self._slot_cake)
-        # self.combobox_type_cake.textEdited.connect(self._slot_cake)
-        # self.spinbox_azimbins_cake.textEdited.connect(self._slot_cake)
-        # self.spinbox_radialbins_cake.textEdited.connect(self._slot_cake)
-        # self.spinbox_radialmin_cake.textEdited.connect(self._slot_cake)
-        # self.spinbox_radialmax_cake.textEdited.connect(self._slot_cake)
-        # self.spinbox_azimmin_cake.textEdited.connect(self._slot_cake)
-        # self.spinbox_azimmax_cake.textEdited.connect(self._slot_cake)
-        # self.combobox_units_cake.textEdited.connect(self._slot_cake)
-        # self.list_cakes.itemClicked.connect(self._slot_list_cakes)
+        self.lineedit_name_cake.editingFinished.connect(self._slot_cake)
+        self.combobox_type_cake.currentTextChanged.connect(self._slot_cake)
+        self.spinbox_azimbins_cake.valueChanged.connect(self._slot_cake)
+        self.spinbox_radialbins_cake.valueChanged.connect(self._slot_cake)
+        self.spinbox_radialmin_cake.valueChanged.connect(self._slot_cake)
+        self.spinbox_radialmax_cake.valueChanged.connect(self._slot_cake)
+        self.spinbox_azimmin_cake.valueChanged.connect(self._slot_cake)
+        self.spinbox_azimmax_cake.valueChanged.connect(self._slot_cake)
+        self.combobox_units_cake.currentTextChanged.connect(self._slot_cake)
+        self.list_cakes.itemClicked.connect(self._slot_list_cakes)
 
-        # self.lineedit_name_box.textEdited.connect(self._slot_box)
-        # self.combobox_direction_box.textEdited.connect(self._slot_box)
-        # self.spinbox_box_bins.textEdited.connect(self._slot_box)
-        # self.combobox_units_box.textEdited.connect(self._slot_box)
-        # self.spinbox_ipmin_box.textEdited.connect(self._slot_box)
-        # self.spinbox_ipmax_box.textEdited.connect(self._slot_box)
-        # self.spinbox_oopmin_box.textEdited.connect(self._slot_box)
-        # self.spinbox_oopmax_box.textEdited.connect(self._slot_box)
-        # self.combobox_outputunits_box.textEdited.connect(self._slot_box)
-        # self.list_box.itemClicked.connect(self._slot_list_boxes)
+        self.lineedit_name_box.editingFinished.connect(self._slot_box)
+        self.combobox_direction_box.currentTextChanged.connect(self._slot_box)
+        self.spinbox_box_bins.valueChanged.connect(self._slot_box)
+        self.combobox_units_box.currentTextChanged.connect(self._slot_box)
+        self.spinbox_ipmin_box.valueChanged.connect(self._slot_box)
+        self.spinbox_ipmax_box.valueChanged.connect(self._slot_box)
+        self.spinbox_oopmin_box.valueChanged.connect(self._slot_box)
+        self.spinbox_oopmax_box.valueChanged.connect(self._slot_box)
+        self.combobox_outputunits_box.currentTextChanged.connect(self._slot_box)
+        self.list_box.itemClicked.connect(self._slot_list_boxes)
         
         # self.button_update_old_poni_parameters.clicked.connect(self._slot_retrieve_poni)
         # self.button_update_poni_parameters.clicked.connect(self._slot_update_poni)
@@ -357,7 +366,7 @@ class Browser(BrowserLayout):
         
     def _slot_mask_integration(self, _):
         pass
-        
+
     @log_info
     def _slot_reffolder_changed(self, reference_folder):
         reference_folder = self.meta._get_absolute_path_of_entry(relative_path=reference_folder)
@@ -386,10 +395,10 @@ class Browser(BrowserLayout):
             self.data_handler.set_reference_file(reference_file=reference_file)
 
     def _slot_button_mask(self, _):
-        pass
-    
-    def _slot_lineedit_savefolder(self, save_path):
-        pass
+        mask_file = self._pick_mask_file()
+        if mask_file:
+            self.lineedit_mask_file.setText(str(mask_file))
+            self.data_handler.set_mask_file(mask_file=mask_file)
     
     def _slot_button_saveplot(self, _):
         pass
@@ -400,11 +409,23 @@ class Browser(BrowserLayout):
     def _slot_button_mirror(self, _):
         pass
     
-    def _slot_button_qz(self, _):
-        pass
-    
-    def _slot_button_qr(self, _):
-        pass
+    def _slot_button_qz(self, state):
+        self.update_button_orientation(
+            button_label=QZ_BUTTON_LABEL,
+            new_state=state,
+        )
+        self.data_handler.sample_orientation = DICT_SAMPLE_ORIENTATIONS[
+            (state, self.button_qr.isChecked())
+        ]
+        
+    def _slot_button_qr(self, state):
+        self.update_button_orientation(
+            button_label=QR_BUTTON_LABEL,
+            new_state=state,
+        )
+        self.data_handler.sample_orientation = DICT_SAMPLE_ORIENTATIONS[
+            (self.button_qz.isChecked(), state)
+        ]
     
     def _slot_le_acquisition_changed(self, new_key):
         self.acquisition_key = new_key
@@ -418,15 +439,102 @@ class Browser(BrowserLayout):
     def _slot_le_tangle_changed(self, new_key):
         self.tiltangle_key = new_key
 
-
-
-
-
-
-
-
-
-
+    def _slot_cake(self):
+        name = str(self.lineedit_name_cake.text())
+        type_cake = str(self.combobox_type_cake.currentText())
+        try:
+            npt_azim = int(self.spinbox_azimbins_cake.value())
+        except:
+            npt_azim = 512
+        try:
+            npt_rad = int(self.spinbox_radialbins_cake.value())
+        except:
+            npt_rad = 0
+        rmin = float(self.spinbox_radialmin_cake.value())
+        rmax = self.spinbox_radialmax_cake.value()
+        try:
+            radial_range = [float(rmin), float(rmax)]
+        except:
+            radial_range = []
+        azmin = self.spinbox_azimmin_cake.value()
+        azmax = self.spinbox_azimmax_cake.value()
+        try:
+            azimuth_range = [float(azmin), float(azmax)]
+        except:
+            azimuth_range = []
+        unit = self.combobox_units_cake.currentText()
+        config = {
+            "name" : name,
+            "type" : type_cake,
+            "npt_azim" : npt_azim,
+            "npt_rad" : npt_rad,
+            "radial_range" : radial_range,
+            "azimuth_range" : azimuth_range,
+            "unit" : unit,
+        }
+        output_file = INTEGRATIONS_DIRECTORY.joinpath(f"{name}.json")
+        with open(output_file, "w") as fp:
+            json.dump(config, fp)
+        self.update_cake_list()
+    
+    def _slot_list_cakes(self, name_integration):
+        name_integration = str(name_integration.text())
+        json_file = INTEGRATIONS_DIRECTORY.joinpath(f"{name_integration}.json")
+        try:
+            with open(json_file) as fp:
+                config = json.load(fp)
+        except:
+            config = None
+        if config:
+            self.load_cake_integration(config=config)
+            
+    def _slot_box(self):
+        name = str(self.lineedit_name_box.text())
+        direction = str(self.combobox_direction_box.currentText())
+        try:
+            npt = int(self.spinbox_box_bins.value())
+        except:
+            npt = 0
+        input_unit = str(self.combobox_units_box.currentText() )
+        ipmin = self.spinbox_ipmin_box.value()
+        ipmax = self.spinbox_ipmax_box.value()
+        try:
+            ip_range = [float(ipmin), float(ipmax)]
+        except:
+            ip_range = []
+        oopmin = self.spinbox_oopmin_box.value()
+        oopmax = self.spinbox_oopmax_box.value()
+        try:
+            oop_range = [float(oopmin), float(oopmax)]
+        except:
+            oop_range = []
+        output_unit = self.combobox_outputunits_box.currentText()
+        config = {
+            "name" : name,
+            "type" : "box",
+            "direction" : direction,
+            "npt_rad" : npt,
+            "input_unit" : input_unit,
+            "ip_range" : ip_range,
+            "oop_range" : oop_range,
+            "output_unit" : output_unit,
+        }
+        output_file = INTEGRATIONS_DIRECTORY.joinpath(f"{name}.json")
+        with open(output_file, "w") as fp:
+            json.dump(config, fp)
+        self.update_box_list()
+    
+    def _slot_list_boxes(self, name_integration):
+        name_integration = str(name_integration.text())
+        json_file = INTEGRATIONS_DIRECTORY.joinpath(f"{name_integration}.json")
+        try:
+            with open(json_file) as fp:
+                config = json.load(fp)
+        except:
+            config = None
+        if config:
+            self.load_box_integration(config=config)
+    
     @log_info
     def _slot_active_entry_changed(self, new_entry):
         self.active_entry = new_entry.text()
@@ -1128,9 +1236,49 @@ class Browser(BrowserLayout):
     #     self.reference_acqtime = None
             
 
+    def update_cake_list(self):
+        list_json = INTEGRATIONS_DIRECTORY.glob("*json")
+        list_cake_integration = []
+        for file_json in list_json:
+            with open(file_json) as f:
+                config = json.load(f)
+            if config["type"] in ("azimuthal", "radial"):
+                list_cake_integration.append(config["name"])
+        lt.clear(self.list_cakes)
+        lt.insert_list(self.list_cakes, list_cake_integration)
+                
+    def update_box_list(self):
+        list_json = INTEGRATIONS_DIRECTORY.glob("*json")
+        list_box_integration = []
+        for file_json in list_json:
+            with open(file_json) as f:
+                config = json.load(f)
+            if config["type"] == "box":
+                list_box_integration.append(config["name"])
+        lt.clear(self.list_box)
+        lt.insert_list(self.list_box, list_box_integration)
+
+    def load_cake_integration(self, config:dict):
+        self.lineedit_name_cake.setText(config["name"])
+        self.combobox_type_cake.setCurrentText(config["type"])
+        self.spinbox_azimbins_cake.setValue(int(config["npt_azim"]))
+        self.spinbox_radialbins_cake.setValue(int(config["npt_rad"]))
+        self.spinbox_radialmin_cake.setValue(float(config["radial_range"][0]))
+        self.spinbox_radialmax_cake.setValue(float(config["radial_range"][1]))
+        self.spinbox_azimmin_cake.setValue(float(config["azimuth_range"][0]))
+        self.spinbox_azimmax_cake.setValue(float(config["azimuth_range"][1]))
+        self.combobox_units_cake.setCurrentText(config["unit"])
         
-
-
+    def load_box_integration(self, config:dict):
+        self.lineedit_name_box.setText(config["name"])
+        self.combobox_direction_box.setCurrentText(config["direction"])
+        self.spinbox_box_bins.setValue(int(config["npt_rad"]))
+        self.combobox_units_box.setCurrentText(config["input_unit"])
+        self.spinbox_ipmin_box.setValue(float(config["ip_range"][0]))
+        self.spinbox_ipmax_box.setValue(float(config["ip_range"][1]))
+        self.spinbox_oopmin_box.setValue(float(config["oop_range"][0]))
+        self.spinbox_oopmax_box.setValue(float(config["oop_range"][1]))
+        self.combobox_outputunits_box.setCurrentText(config["output_unit"])
 
 
     ##################
@@ -1146,8 +1294,8 @@ class Browser(BrowserLayout):
             Path instance with the root directory
         """        
         # Pick the folder after pop-up browser window
-        self.dialog_json = QFileDialog()
-        get_directory = self.dialog_json.getExistingDirectory(self, 'Choose main directory', os.getcwd())
+        self.dialog_mask = QFileDialog()
+        get_directory = self.dialog_mask.getExistingDirectory(self, 'Choose main directory', os.getcwd())
 
         # Returns if is not valid, or the dialog was cancelled
         if not get_directory:
@@ -1164,8 +1312,8 @@ class Browser(BrowserLayout):
 
     @log_info
     def _pick_json_file(self) -> Path:
-        self.dialog_json = QFileDialog()
-        get_json = self.dialog_json.getOpenFileNames(self, 'Pick .json file', '.', "*.json")
+        self.dialog_mask = QFileDialog()
+        get_json = self.dialog_mask.getOpenFileNames(self, 'Pick .json file', '.', "*.json")
 
         # Returns if is not valid, or the dialog was cancelled
         if not get_json:
@@ -1180,7 +1328,21 @@ class Browser(BrowserLayout):
                 json_file = ""
         return json_file
 
-
+    @log_info
+    def _pick_mask_file(self):
+        self.dialog_mask = QFileDialog()
+        get_mask = self.dialog_mask.getOpenFileNames(self, 'Pick .mask file', '.', "*.edf")[0]
+        if not get_mask:
+            mask_file = ""
+            logger.info("No file was picked.")
+        else:
+            try:
+                mask_file = Path(get_mask[0])
+                logger.info(f'New mask file: {mask_file}')
+            except NotImplementedError as e:
+                logger.error(f'({mask_file}) is not valid for Path instance: {e}')
+                mask_file = ""
+        return mask_file
 
     # METHODS NEW FILES
     def _update_new_files(self):

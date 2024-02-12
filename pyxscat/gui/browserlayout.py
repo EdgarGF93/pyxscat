@@ -559,6 +559,7 @@ class BrowserLayout(QWidget):
         
         label_mask_file = QLabel(LABEL_MASK_FILE)
         self.lineedit_mask_file = QLineEdit()
+        self.lineedit_mask_file.setReadOnly(True)
         self.button_mask_file = QPushButton("...")
         
         hbox_mask_file.addWidget(label_mask_file)
@@ -1117,6 +1118,26 @@ class BrowserLayout(QWidget):
         vbox_files.addWidget(widget_metadata_items)
         vbox_files.addWidget(self.table_files)
 
+    def update_button_orientation(self, button_label=str(), new_state=True):
+            dict_button = BUTTON_ORIENTATIONS_LAYOUT.get(button_label, WRONG_LABEL)
+
+            if isinstance(dict_button, dict):
+                button_widget = dict_button["widget"]
+                new_label = dict_button[new_state]["label"]
+                new_style = dict_button[new_state]["style"]
+
+                button_widget.setText(new_label)
+                button_widget.setStyleSheet(new_style)
+
+    @property
+    def state_qz(self):
+        state = self.button_qz.isChecked()
+        return state
+
+    @property
+    def state_qr(self):
+        state = self.button_qr.isChecked()
+        return state
 
     def get_pattern(self):
         pattern = str(self.lineedit_pattern.text()).strip()

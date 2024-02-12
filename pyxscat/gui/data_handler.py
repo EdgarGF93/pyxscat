@@ -38,6 +38,7 @@ INTEGRATIONS_DIRECTORY = Path(__file__).parent.parent.joinpath("integration_dict
 
 
 
+
 # Define a Pydantic model
 
 class ConfigIntegrationAzimuthal(BaseModel):
@@ -78,6 +79,7 @@ class DataHandler(Transform):
         
         self.data = None
         self.data_reference = None
+        self.mask_data = None
             
         self.acquisitiontime_key = ""
         self.normalizationfactor_key = ""
@@ -94,6 +96,7 @@ class DataHandler(Transform):
         self.reference_file = ""
         self.reference_acquisition_time = None
         self.pattern = pattern
+        self.mask_file = ""
         
         self.reference_factor = 0.0    
         
@@ -356,6 +359,36 @@ class DataHandler(Transform):
             self._reference_factor = value
             self.update_data_reference()
             self.update_data()
+            
+    @property
+    def mask_file(self):
+        return self._mask_file
+    
+    @mask_file.setter
+    def mask_file(self, value):
+        if value:
+            if Path(value).is_file():
+                self._mask_file = value
+            else:
+                self._mask_file = ""
+        else:
+            self._mask_file = ""
+            
+        if self._mask_file:
+            self.update_data_mask()
+            
+    def set_mask_file(self, mask_file=""):
+        self.mask_file = mask_file
+        
+    @property
+    def mask_data(self):
+        return self.mask_data
+    
+    @mask_data.setter
+    def mask_data(self, value):
+        self._mask_data = value
+        if self._mask_data is not None:
+            self.update_data()
     
     def set_reference_factor(self, reference_factor:float):
         self.reference_factor = reference_factor
@@ -392,10 +425,18 @@ class DataHandler(Transform):
             data = self._open_data(list_filenames=filename_list)
         else:
             data = None
+            
+        if self._mask_data is not None:
+            try:
+                data = data - self._mask_data
+            except Exception as e:
+                logger.warning(f"Shapes of data and mask do not match!")
+            
         if (self._data_reference is not None) and self._reference_factor != 0.0:
-            data = data - self._data_reference
-        else:
-            data = data
+            try:
+                data = data - self._data_reference
+            except Exception as e:
+                logger.warning(f"Shapes of data and mask do not match!")
             
         if data is not None:
             self._data = self._clean_data(data=data)
@@ -409,11 +450,20 @@ class DataHandler(Transform):
         if len(list_filenames) > 1:
             data = self._average_data(list_filenames=list_filenames)
         else:
-            data = fabio.open(list_filenames[0]).data
+            try:
+                data = fabio.open(list_filenames[0]).data
+            except Exception as e:
+                logger.warning(f"{list_filenames[0]} could not be opened")
+                data = None
         return data
             
     def _average_data(self, list_filenames:list):
-        return np.average([fabio.open(file).data for file in list_filenames], axis=0)
+        try:
+            data_avg = np.average([fabio.open(file).data for file in list_filenames], axis=0)
+        except:
+            logger.warning(f"{list_filenames} not valid for data average")
+            data_avg = None
+        return data_avg
     
     def _clean_data(self, data):
         data[data < 0.0] = 0.0
@@ -457,7 +507,11 @@ class DataHandler(Transform):
         else:
             self.data_reference = None
             
-            
+    def update_data_mask(self):
+        if self._mask_file:
+            mask_data = self._open_data(list_filenames=[self._mask_file])
+            if mask_data is not None:
+                self.mask_data = mask_data
     
     def update_header(self):
         filename_list = self._list_filenames
