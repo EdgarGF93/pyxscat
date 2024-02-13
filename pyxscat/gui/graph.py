@@ -40,12 +40,14 @@ class Graph(GraphLayout):
         graph_1D_widget = self.graph_1D_widget
         for ind, result in enumerate(results):
             graph_1D_widget.addCurve(
-                x=result.radial,
-                y=result.intensity,
+                # x=result.radial,
+                # y=result.intensity,
+                x=result[0],
+                y=result[1],
                 resetzoom=True,
                 legend=f"{ind}",
             )
-            graph_1D_widget.setGraphXLabel(label=result.unit)
+            # graph_1D_widget.setGraphXLabel(label=result.unit)
             graph_1D_widget.setGraphYLabel(label="Intensity")
 
 

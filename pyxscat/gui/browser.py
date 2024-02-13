@@ -55,6 +55,7 @@ class Browser(BrowserLayout):
     poni_changed = pyqtSignal()
     integration_requested = pyqtSignal()
     data_changed = pyqtSignal()
+    update_integrations = pyqtSignal()
 
     def __init__(self):
         super(Browser, self).__init__()
@@ -130,9 +131,9 @@ class Browser(BrowserLayout):
         self.combobox_outputunits_box.currentTextChanged.connect(self._slot_box)
         self.list_box.itemClicked.connect(self._slot_list_boxes)
         
-        # self.button_update_old_poni_parameters.clicked.connect(self._slot_retrieve_poni)
-        # self.button_update_poni_parameters.clicked.connect(self._slot_update_poni)
-        # self.button_save_poni_parameters.clicked.connect(self._slot_save_poni)
+        self.button_update_old_poni_parameters.clicked.connect(self._slot_retrieve_poni)
+        self.button_update_poni_parameters.clicked.connect(self._slot_update_poni)
+        self.button_save_poni_parameters.clicked.connect(self._slot_save_poni)
 
         self.listwidget_samples.itemClicked.connect(self._slot_active_entry_changed)
         self.table_files.itemSelectionChanged.connect(self._slot_active_index_changed)
@@ -363,7 +364,15 @@ class Browser(BrowserLayout):
         self.meta.update()
         
     def _slot_combobox_integration(self, list_integrations):
-        print(list_integrations)
+        if list_integrations:
+            list_integrations = list_integrations.split(', ')
+        list_configs = []
+        for name in list_integrations:
+            config = self.get_integration_config(name_integration=name)
+            if config:
+                list_configs.append(config)
+        self.data_handler.update_integrations(list_configs=list_configs)
+        self.update_integrations.emit()
         
     def _slot_mask_integration(self, _):
         pass
@@ -480,12 +489,7 @@ class Browser(BrowserLayout):
     
     def _slot_list_cakes(self, name_integration):
         name_integration = str(name_integration.text())
-        json_file = INTEGRATIONS_DIRECTORY.joinpath(f"{name_integration}.json")
-        try:
-            with open(json_file) as fp:
-                config = json.load(fp)
-        except:
-            config = None
+        config = self.get_integration_config(name_integration=name_integration)
         if config:
             self.load_cake_integration(config=config)
             
@@ -527,14 +531,30 @@ class Browser(BrowserLayout):
     
     def _slot_list_boxes(self, name_integration):
         name_integration = str(name_integration.text())
+        config = self.get_integration_config(name_integration=name_integration)
+        if config:
+            self.load_box_integration(config=config)
+    
+    def get_integration_config(self, name_integration:str):
         json_file = INTEGRATIONS_DIRECTORY.joinpath(f"{name_integration}.json")
         try:
             with open(json_file) as fp:
                 config = json.load(fp)
-        except:
+        except Exception as e:
+            logger.warning(f"No .json file at {json_file}")
             config = None
-        if config:
-            self.load_box_integration(config=config)
+        return config
+    
+    def _slot_retrieve_poni(self):
+        pass
+        
+    def _slot_update_poni(self):
+        pass
+    
+    def _slot_save_poni(self):
+        pass
+    
+    
     
     @log_info
     def _slot_active_entry_changed(self, new_entry):

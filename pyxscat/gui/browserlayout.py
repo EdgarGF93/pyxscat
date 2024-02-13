@@ -919,8 +919,6 @@ class BrowserLayout(QWidget):
         # PONI PARAMETERS TAB #
         #######################
 
-        # hbox_poni_mod = QHBoxLayout()
-        # hbox_poni_mod.setContentsMargins(1,0,1,0)
         hbox_poni_wave = QHBoxLayout()
         hbox_poni_wave.setContentsMargins(1,0,1,0)
         hbox_poni_dist = QHBoxLayout()
@@ -940,7 +938,6 @@ class BrowserLayout(QWidget):
         hbox_poni_buttons = QHBoxLayout()
         hbox_poni_buttons.setContentsMargins(1,0,1,0)
 
-        # widget_poni_mod = QWidget()
         widget_poni_wave = QWidget()
         widget_poni_dist = QWidget()
         widget_poni_detector = QWidget()
@@ -949,9 +946,8 @@ class BrowserLayout(QWidget):
         widget_poni_rot_1 = QWidget()
         widget_poni_rot_2 = QWidget()
         # widget_poni_rot_3 = QWidget()
-        widget_poni_buttons = QWidget()
+        # widget_poni_buttons = QWidget()
 
-        # widget_poni_mod.setLayout(hbox_poni_mod)
         widget_poni_wave.setLayout(hbox_poni_wave)
         widget_poni_dist.setLayout(hbox_poni_dist)
         widget_poni_detector.setLayout(hbox_poni_detector)
@@ -960,18 +956,14 @@ class BrowserLayout(QWidget):
         widget_poni_rot_1.setLayout(hbox_poni_rot_1)
         widget_poni_rot_2.setLayout(hbox_poni_rot_2)
         # widget_poni_rot_3.setLayout(hbox_poni_rot_3)
-        widget_poni_buttons.setLayout(hbox_poni_buttons)
-
-        # self.checkbox_poni_mod = QCheckBox(LABEL_PONI_MOD)
-
-        # hbox_poni_mod.addWidget(self.checkbox_poni_mod)
+        # widget_poni_buttons.setLayout(hbox_poni_buttons)
 
         label_wavelength = QLabel(LABEL_PONI_WAVELENGTH)
         self.lineedit_wavelength = QLineEdit()
-        self.lineedit_wavelength.setEnabled(False)
+        self.lineedit_wavelength.setReadOnly(True)
         label_distance = QLabel(LABEL_DISTANCE)
         self.lineedit_distance = QLineEdit()
-        self.lineedit_distance.setEnabled(False)
+        self.lineedit_distance.setReadOnly(True)
 
         hbox_poni_wave.addWidget(label_wavelength)
         hbox_poni_wave.addWidget(self.lineedit_wavelength)
@@ -980,7 +972,7 @@ class BrowserLayout(QWidget):
 
         label_detector = QLabel(LABEL_DETECTOR)
         self.lineedit_detector = QLineEdit()
-        self.lineedit_detector.setEnabled(False)
+        self.lineedit_detector.setReadOnly(True)
 
         hbox_poni_detector.addWidget(label_detector)
         hbox_poni_detector.addWidget(self.lineedit_detector)
@@ -990,8 +982,8 @@ class BrowserLayout(QWidget):
 
         label_poni_2 = QLabel(LABEL_PONI_PONI_2)
         self.lineedit_poni2 = QLineEdit()
-        self.lineedit_poni1.setEnabled(False)
-        self.lineedit_poni2.setEnabled(False)
+        self.lineedit_poni1.setReadOnly(True)
+        self.lineedit_poni2.setReadOnly(True)
 
         hbox_poni_poni_1.addWidget(label_poni_1)
         hbox_poni_poni_1.addWidget(self.lineedit_poni1)
@@ -1005,9 +997,9 @@ class BrowserLayout(QWidget):
         self.lineedit_rot2 = QLineEdit()
         # label_rot_3 = QLabel(LABEL_PONI_ROT_3)
         self.lineedit_rot3 = QLineEdit()
-        self.lineedit_rot1.setEnabled(False)
-        self.lineedit_rot2.setEnabled(False)
-        # self.lineedit_rot3.setEnabled(False)
+        self.lineedit_rot1.setReadOnly(True)
+        self.lineedit_rot2.setReadOnly(True)
+        # self.lineedit_rot3.setReadOnly(True)
 
         hbox_poni_rot_1.addWidget(label_rot_1)
         hbox_poni_rot_1.addWidget(self.lineedit_rot1)
@@ -1036,7 +1028,7 @@ class BrowserLayout(QWidget):
         vbox_poni.addWidget(widget_poni_rot_1)
         vbox_poni.addWidget(widget_poni_rot_2)
         # vbox_poni.addWidget(widget_poni_rot_3)
-        vbox_poni.addWidget(widget_poni_buttons)
+        # vbox_poni.addWidget(widget_poni_buttons)
       
       
         hbox_poni_wave.setStretchFactor(label_wavelength,1)

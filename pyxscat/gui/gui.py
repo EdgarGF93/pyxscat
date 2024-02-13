@@ -44,9 +44,7 @@ class GUI(GUILayout):
         self.browser.new_files_detected.connect(self._update_new_files)
         self.browser.data_changed.connect(self.update_all_graphs)
         self.browser.data_changed.connect(self.update_cb_reference_file)
-    
-    
-    
+        self.browser.update_integrations.connect(self.update_graph_integration)
     
     def update_cb_reference_file(self):
         reference_file = self.browser.data_handler._reference_file
@@ -58,6 +56,8 @@ class GUI(GUILayout):
             return
         if raw:
             self.update_graph_raw()
+        if integration:
+            self.update_graph_integration()
             
     def update_all_graphs(self):
         self.update_data(
@@ -72,7 +72,7 @@ class GUI(GUILayout):
         self.graphs._update_raw_graph(data=data)    
 
     def update_graph_integration(self):
-        results = self.browser.results
+        results = self.browser.data_handler._results1d
         self.graphs._update_integration_graph(results=results)
 
     def _update_new_files(self):

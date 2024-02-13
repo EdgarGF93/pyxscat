@@ -43,7 +43,7 @@ INTEGRATIONS_DIRECTORY = Path(__file__).parent.parent.joinpath("integration_dict
 
 class ConfigIntegrationAzimuthal(BaseModel):
     name: str
-    integration_type : str
+    type : str
     npt_rad : int
     npt_azim : Optional[int] = 512
     radial_range : Optional[list] = None
@@ -52,7 +52,7 @@ class ConfigIntegrationAzimuthal(BaseModel):
     
 class ConfigIntegrationBox(BaseModel):
     name: str
-    integration_type : str
+    type : str
     direction : str
     input_unit : Optional[str] = "q_nm^-1"
     output_unit : Optional[str] = "q_nm^-1"
@@ -80,6 +80,7 @@ class DataHandler(Transform):
         self.data = None
         self.data_reference = None
         self.mask_data = None
+        self.results1d = []
             
         self.acquisitiontime_key = ""
         self.normalizationfactor_key = ""
@@ -183,6 +184,8 @@ class DataHandler(Transform):
         else:
             self._data = None
             logger.warning(f"{value} is not a np.array but {type(value)}")
+        if self._data is not None:
+            self.update_integrations()
             
     @property
     def list_headers(self):
@@ -389,6 +392,14 @@ class DataHandler(Transform):
         self._mask_data = value
         if self._mask_data is not None:
             self.update_data()
+            
+    @property
+    def results1d(self):
+        return self._results1d
+    
+    @results1d.setter
+    def results1d(self, value):
+        self._results1d = value
     
     def set_reference_factor(self, reference_factor:float):
         self.reference_factor = reference_factor
@@ -425,12 +436,6 @@ class DataHandler(Transform):
             data = self._open_data(list_filenames=filename_list)
         else:
             data = None
-            
-        if self._mask_data is not None:
-            try:
-                data = data - self._mask_data
-            except Exception as e:
-                logger.warning(f"Shapes of data and mask do not match!")
             
         if (self._data_reference is not None) and self._reference_factor != 0.0:
             try:
@@ -645,9 +650,9 @@ class DataHandler(Transform):
         if self._ai:
             if self._poni:
                 if dim == 1:
-                    if config.get("integration_type") in ("azimuthal", "radial"):
+                    if config.get("type") in ("azimuthal", "radial"):
                         res1d = self._do_integrate1d_cake(config=config)
-                    elif config.get("integration_type") == "box":
+                    elif config.get("type") == "box":
                         res1d = self._do_integrate1d_box(config=config)
                     else:
                         res1d = None
@@ -664,9 +669,9 @@ class DataHandler(Transform):
     def _do_integrate1d_cake(self, config:dict):
         config_validated = self.validate_config_cake(config=config)
         if config_validated:
-            if config_validated.get("integration_type") == "azimuthal":
+            if config_validated.get("type") == "azimuthal":
                 res1d = self._do_integrate1d_azimuthal(config=config_validated)
-            elif config_validated.get("integration_type") == "radial":
+            elif config_validated.get("type") == "radial":
                 res1d = self._do_integrate1d_radial(config=config_validated)
             else:
                 res1d = None
@@ -679,6 +684,7 @@ class DataHandler(Transform):
             res1d = self.integrate_1d(
                 process='sector',
                 data=self._data,
+                mask=self._mask_data,
                 npt=config.get("npt_rad"),
                 p0_range=config.get("radial_range"),
                 p1_range=config.get("azimuth_range"),
@@ -695,6 +701,7 @@ class DataHandler(Transform):
             res1d = self.integrate_1d(
                 process='chi',
                 data=self._data,
+                mask=self._mask_data,
                 npt=config.get("npt_rad"),
                 p0_range=config.get("azimuth_range"),
                 p1_range=config.get("radial_range"),
@@ -712,6 +719,7 @@ class DataHandler(Transform):
             res1d = self.integrate_1d(
                 process=config_box.get("process"),
                 data=self._data,
+                mask=self._mask_data,
                 npt=config_box.get("npt_rad"),
                 p0_range=config_box.get("p0_range"),
                 p1_range=config_box.get("p1_range"),
@@ -783,18 +791,19 @@ class DataHandler(Transform):
             config = json.load(f)
         return config
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    def update_integrations(self, list_configs:list):
+        if self._data is None:
+            return
+        list_results = []
+        for config in list_configs:
+            res1d = self.do_integration(
+                config=config,
+                dim=1,
+            )
+            if res1d:
+                list_results.append(res1d)
+        self.results1d = list_results
+                
     def get_q_nm(self, value=0.0, direction='vertical', input_unit='q_nm^-1') -> float:
         """
             Return a q(nm-1) value from another unit
