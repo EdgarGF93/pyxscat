@@ -31,6 +31,7 @@ QR_BUTTON_LABEL = "qr"
 JSON_DIR = Path(SRC_PATH).joinpath('METADATA_FILES')
 JSON_DIR.mkdir(exist_ok=True)
 INTEGRATIONS_DIRECTORY = Path(__file__).parent.parent.joinpath("integration_dicts")
+Path(INTEGRATIONS_DIRECTORY).mkdir(exist_ok=True)
 DICT_SAMPLE_ORIENTATIONS = {
     (True,True) : 1,
     (True,False) : 2,
