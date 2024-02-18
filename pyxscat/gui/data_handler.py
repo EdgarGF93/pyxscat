@@ -66,7 +66,7 @@ class DataHandler(Transform):
         filename_list:list=[],
         ai:AzimuthalIntegrator=None, 
         poni:PoniFile=None, 
-        config:dict=None,
+        configs:list=[],
         pattern:str="*.edf",
         ):
         super().__init__()
@@ -75,9 +75,10 @@ class DataHandler(Transform):
         self.list_headers = []
         self.ai = ai
         self.poni = poni
-        self.config = config
+        self.configs = configs
         
         self.data = None
+        self.data_cache = None
         self.data_reference = None
         self.mask_data = None
         self.results1d = []
@@ -124,9 +125,10 @@ class DataHandler(Transform):
         self._list_filenames = value
         
         if self._list_filenames:
-            self.update_metadata_values()
-            self.update_data()
+            # self.update_metadata_values()
             self.update_header()
+            self.update_new_data()
+            
             
     def set_filenames(self, list_filenames:list):
         self.list_filenames = list_filenames
@@ -141,6 +143,7 @@ class DataHandler(Transform):
             self._ai = None
         else:
             self._ai = value
+            self.update_integrations()
             
         if not self._ai:
             logger.warning(f"Azimuthal integrator is set to None")
@@ -172,7 +175,27 @@ class DataHandler(Transform):
             
     def set_poni(self, poni:PoniFile):
         self.poni = poni
+        
+    @property
+    def configs(self):
+        return self._configs
     
+    @configs.setter
+    def configs(self, value):
+        if isinstance(value, str):
+            value = [value]
+            
+        if not isinstance(value, list):
+            self._configs = []
+        else:
+            self._configs = value
+            
+        # if self._configs:
+        #     self.update_integrations()
+            
+    def set_configs(self, configs):
+        self.configs = configs
+            
     @property
     def data(self):
         return self._data
@@ -180,12 +203,16 @@ class DataHandler(Transform):
     @data.setter
     def data(self, value):
         if isinstance(value, np.ndarray):
-                self._data = value
+            self._data = value
         else:
             self._data = None
             logger.warning(f"{value} is not a np.array but {type(value)}")
+            
         if self._data is not None:
             self.update_integrations()
+            
+    def set_data(self, data):
+        self.data = data
             
     @property
     def list_headers(self):
@@ -194,6 +221,7 @@ class DataHandler(Transform):
     @list_headers.setter
     def list_headers(self, value):
         self._list_headers = value
+        
         if self._list_headers:
             self.update_metadata_values()
             
@@ -204,6 +232,7 @@ class DataHandler(Transform):
     @acquisitiontime_key.setter
     def acquisitiontime_key(self, value):
         self._acquisitiontime_key = str(value)
+        
         if self._acquisitiontime_key:
             self.update_acquisition_time()
     
@@ -259,6 +288,7 @@ class DataHandler(Transform):
             self._acquisition_time = value
         else:
             self._acquisition_time = None
+            
         if self._acquisition_time:
             self.update_reference()
             
@@ -329,6 +359,7 @@ class DataHandler(Transform):
             if Path(value).is_file():
                 self._reference_file = value
                 self.update_data_reference()
+                
             else:
                 self._reference_file = ""
         else:
@@ -344,13 +375,15 @@ class DataHandler(Transform):
             if self._data is not None:
                 if self._data.shape == value.shape:
                     self._data_reference = value
-                    return
                 else:
                     self._data_reference = None
             else:
                 self._data_reference = None
         else:
             self._data_reference = None
+            
+        if self._data_reference is not None:
+            self.update_data()
                     
     @property
     def reference_factor(self):
@@ -430,23 +463,39 @@ class DataHandler(Transform):
     def set_reference_file(self, reference_file:str):
         self.reference_file = reference_file
         
-    def update_data(self):
+    def update_data(self, data=None):
+        if data is None:
+            data = self._data
+        
+        if data is None:
+            self.set_data(data=None)
+            return
+            
+        if (self._data_reference is not None) and self._reference_factor != 0.0:
+            try:
+                data = self.data_cache - self._data_reference
+            except Exception as e:
+                logger.warning(f"Shapes of data and mask do not match!")
+                data = self.data_cache
+        else:
+            data = self.data_cache
+            
+        if data is not None:
+            data_clean = self._clean_data(data=data)
+            self.set_data(data=data_clean)
+        else:
+            self.set_data(data=None)
+            
+    def update_new_data(self):
         filename_list = self._list_filenames
+        
         if filename_list:
             data = self._open_data(list_filenames=filename_list)
         else:
             data = None
             
-        if (self._data_reference is not None) and self._reference_factor != 0.0:
-            try:
-                data = data - self._data_reference
-            except Exception as e:
-                logger.warning(f"Shapes of data and mask do not match!")
-            
-        if data is not None:
-            self._data = self._clean_data(data=data)
-        else:
-            self._data = None
+        self.data_cache = data
+        self.update_data(data=data)
 
     def _open_data(self, list_filenames:list):
         if isinstance(list_filenames, str):
@@ -528,7 +577,7 @@ class DataHandler(Transform):
                     list_headers.append(header)
                 except:
                     pass
-        self._list_headers = list_headers
+        self.list_headers = list_headers
             
     def _get_metadata_value(self, key):
         if len(self._list_headers):
@@ -574,6 +623,9 @@ class DataHandler(Transform):
         self.update_acquisition_time()
 
     def update_acquisition_time(self):
+        if not self._list_filenames:
+            return
+        
         if self._acquisitiontime_key:
             acq_time = self._get_metadata_value(key=self._acquisitiontime_key)
             try:
@@ -582,15 +634,22 @@ class DataHandler(Transform):
                 self.acquisition_time = None
             
     def update_normalization_factor(self):
+        if not self._list_filenames:
+            return
+        
         if self._normalizationfactor_key:
             norm_factor = self._get_metadata_value(key=self._normalizationfactor_key)
             self.normalization_factor = norm_factor
+            
             try:
                 self.normalization_factor = float(norm_factor)
             except:
                 self.normalization_factor = 1.0
             
     def update_incident_angle(self):
+        if not self._list_filenames:
+            return
+        
         if self._incidentangle_key:
             iangle = self._get_metadata_value(key=self._incidentangle_key)
             self.incident_angle = iangle
@@ -600,6 +659,9 @@ class DataHandler(Transform):
                 self.incident_angle = 0.0
             
     def update_tilt_angle(self):
+        if not self._list_filenames:
+            return
+        
         if self._tiltangle_key:
             tangle = self._get_metadata_value(key=self._tiltangle_key)
             try:
@@ -791,9 +853,17 @@ class DataHandler(Transform):
             config = json.load(f)
         return config
         
-    def update_integrations(self, list_configs:list):
+    def update_integrations(self):
         if self._data is None:
             return
+        
+        if self._ai is None:
+            return
+        
+        if self._configs:
+            self._update_integrations(list_configs=self._configs)
+        
+    def _update_integrations(self, list_configs:list):
         list_results = []
         for config in list_configs:
             res1d = self.do_integration(

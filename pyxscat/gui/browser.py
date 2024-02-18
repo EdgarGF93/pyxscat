@@ -48,12 +48,17 @@ def log_info(func):
 
 
 class Browser(BrowserLayout):
-    new_files_detected = pyqtSignal()
-    active_files_changed = pyqtSignal()
-    reference_folder_changed = pyqtSignal()
-    reference_file_changed = pyqtSignal()
-    poni_changed = pyqtSignal()
-    integration_requested = pyqtSignal()
+    # new_files_detected = pyqtSignal()
+    # active_files_changed = pyqtSignal()
+    
+    # reference_folder_changed = pyqtSignal()
+    # reference_file_changed = pyqtSignal()
+    
+    # poni_changed = pyqtSignal()
+    # integration_requested = pyqtSignal()
+    
+    
+    
     data_changed = pyqtSignal()
     update_integrations = pyqtSignal()
 
@@ -86,7 +91,7 @@ class Browser(BrowserLayout):
         self.combobox_ponifile.currentTextChanged.connect(self._slot_poni_changed)
         self.button_pyfaicalib.clicked.connect(self._slot_pyfai_calib)
          
-        self.combobox_integration.currentTextChanged.connect(self._slot_combobox_integration)
+        # self.combobox_integration.currentTextChanged.connect(self._slot_combobox_integration)
         self.checkbox_mask_integration.stateChanged.connect(self._slot_mask_integration)
           
         self.combobox_reference_folder.currentTextChanged.connect(self._slot_reffolder_changed)
@@ -138,7 +143,7 @@ class Browser(BrowserLayout):
         self.listwidget_samples.itemClicked.connect(self._slot_active_entry_changed)
         self.table_files.itemSelectionChanged.connect(self._slot_active_index_changed)
 
-        self.new_files_detected.connect(self._update_new_files)
+        # self.new_files_detected.connect(self._update_new_files)
 
 
 
@@ -194,6 +199,7 @@ class Browser(BrowserLayout):
             self._acquisitiontime_key = ""
         if self._acquisitiontime_key != self.lineedit_acquisition.text():
             self.lineedit_acquisition.setText(self._acquisitiontime_key)
+            
         self.data_handler.set_acquisitiontime_key(key=self._acquisitiontime_key)
         
     def set_acquisitiontime_key(self, key=""):
@@ -371,8 +377,13 @@ class Browser(BrowserLayout):
             config = self.get_integration_config(name_integration=name)
             if config:
                 list_configs.append(config)
-        self.data_handler.update_integrations(list_configs=list_configs)
-        self.update_integrations.emit()
+            
+        print(f"hola es {list_integrations}")
+                
+        self.data_handler.set_configs(configs=list_configs)
+                
+        # self.data_handler.update_integrations(list_configs=list_configs)
+        # self.update_integrations.emit()
         
     def _slot_mask_integration(self, _):
         pass
@@ -438,10 +449,10 @@ class Browser(BrowserLayout):
         ]
     
     def _slot_le_acquisition_changed(self, new_key):
-        self.acquisition_key = new_key
+        self.acquisitiontime_key = new_key
 
     def _slot_le_normalization_changed(self, new_key):
-        self.normalization_key = new_key
+        self.normalizationfactor_key = new_key
 
     def _slot_le_iangle_changed(self, new_key):
         self.incidentangle_key = new_key
@@ -485,7 +496,9 @@ class Browser(BrowserLayout):
         output_file = INTEGRATIONS_DIRECTORY.joinpath(f"{name}.json")
         with open(output_file, "w") as fp:
             json.dump(config, fp)
+            
         self.update_cake_list()
+        self.update_config_integrations()
     
     def _slot_list_cakes(self, name_integration):
         name_integration = str(name_integration.text())
@@ -1035,8 +1048,10 @@ class Browser(BrowserLayout):
 
     @log_info
     def _active_files_changed(self):
+        self.update_config_integrations()
         self.data_handler.set_filenames(list_filenames=self._active_files)
-        self.active_files_changed.emit()
+        self.data_changed.emit()
+        # self.active_files_changed.emit()
 
     @log_info
     def _poni_instance_changed(self):
@@ -1128,6 +1143,15 @@ class Browser(BrowserLayout):
                     )
                 except Exception as e:
                     logger.error(f'{e}. The key {key} could not be displayed in table.')
+
+    def update_config_integrations(self):
+        names_integrations = self.combobox_integration.currentData()
+        list_configs = []
+        for name in names_integrations:
+            config = self.get_integration_config(name_integration=name)
+            if config:
+                list_configs.append(config)
+        self.data_handler.set_configs(configs=list_configs)
 
 
     # # INTEGRATION METHOD

@@ -40,10 +40,11 @@ class GUI(GUILayout):
         splash.finish(self)
 
     def _init_connections(self):
-        self.browser.active_files_changed.connect(self.update_all_graphs)
-        self.browser.new_files_detected.connect(self._update_new_files)
+        # self.browser.active_files_changed.connect(self.update_all_graphs)
+        # self.browser.new_files_detected.connect(self._update_new_files)
+        
         self.browser.data_changed.connect(self.update_all_graphs)
-        self.browser.data_changed.connect(self.update_cb_reference_file)
+        # self.browser.data_changed.connect(self.update_cb_reference_file)
         self.browser.update_integrations.connect(self.update_graph_integration)
     
     def update_cb_reference_file(self):

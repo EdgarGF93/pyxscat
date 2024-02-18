@@ -42,8 +42,8 @@ class Graph(GraphLayout):
             graph_1D_widget.addCurve(
                 # x=result.radial,
                 # y=result.intensity,
-                x=result[0],
-                y=result[1],
+                x=result[1],
+                y=result[0],
                 resetzoom=True,
                 legend=f"{ind}",
             )
