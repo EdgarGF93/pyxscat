@@ -48,23 +48,13 @@ def log_info(func):
 
 
 class Browser(BrowserLayout):
-    # new_files_detected = pyqtSignal()
-    # active_files_changed = pyqtSignal()
-    
-    # reference_folder_changed = pyqtSignal()
-    # reference_file_changed = pyqtSignal()
-    
-    # poni_changed = pyqtSignal()
-    # integration_requested = pyqtSignal()
-    
-    
-    
+   
     data_changed = pyqtSignal()
     update_integrations = pyqtSignal()
 
     def __init__(self):
         super(Browser, self).__init__()
-        self.data_handler = DataHandler(pattern=self.get_pattern())
+        self.data_handler = DataHandler(pattern=self.get_pattern(), parent=self)
         self._init_attributes()
         self._init_callbacks()
         self.update_integration_cb()
@@ -369,21 +359,16 @@ class Browser(BrowserLayout):
         os.system("pyFAI-calib2")
         self.meta.update()
         
-    def _slot_combobox_integration(self, list_integrations):
-        if list_integrations:
-            list_integrations = list_integrations.split(', ')
-        list_configs = []
-        for name in list_integrations:
-            config = self.get_integration_config(name_integration=name)
-            if config:
-                list_configs.append(config)
+    # def _slot_combobox_integration(self, list_integrations):
+    #     if list_integrations:
+    #         list_integrations = list_integrations.split(', ')
             
-        print(f"hola es {list_integrations}")
-                
-        self.data_handler.set_configs(configs=list_configs)
-                
-        # self.data_handler.update_integrations(list_configs=list_configs)
-        # self.update_integrations.emit()
+    #     list_configs = []
+    #     for name in list_integrations:
+    #         config = self.get_integration_config(name_integration=name)
+    #         if config:
+    #             list_configs.append(config)                
+    #     self.data_handler.set_configs(configs=list_configs)
         
     def _slot_mask_integration(self, state):
         if state:
@@ -396,11 +381,10 @@ class Browser(BrowserLayout):
         reference_folder = self.meta._get_absolute_path_of_entry(relative_path=reference_folder)
         self.reference_directory = reference_folder
         
-
     @log_info
     def _slot_spinboxsub_changed(self, value):
         self.data_handler.set_reference_factor(reference_factor=value)
-        self.data_changed.emit()
+        # self.data_changed.emit()
     
     def _slot_checkbox_auto(self, state):
         if state:
@@ -501,7 +485,7 @@ class Browser(BrowserLayout):
             json.dump(config, fp)
             
         self.update_cake_list()
-        self.update_config_integrations()
+        self.get_config_integrations()
     
     def _slot_list_cakes(self, name_integration):
         name_integration = str(name_integration.text())
@@ -1048,13 +1032,14 @@ class Browser(BrowserLayout):
     def _active_index_changed(self):
         if not self._active_index:
             return
+        
         self.active_files = self.get_active_filenames()
 
     @log_info
     def _active_files_changed(self):
-        self.update_config_integrations()
+        # self.update_config_integrations()
         self.data_handler.set_filenames(list_filenames=self._active_files)
-        self.data_changed.emit()
+        # self.data_changed.emit()
         # self.active_files_changed.emit()
 
     @log_info
@@ -1148,14 +1133,15 @@ class Browser(BrowserLayout):
                 except Exception as e:
                     logger.error(f'{e}. The key {key} could not be displayed in table.')
 
-    def update_config_integrations(self):
+    def get_config_integrations(self):
         names_integrations = self.combobox_integration.currentData()
         list_configs = []
         for name in names_integrations:
             config = self.get_integration_config(name_integration=name)
             if config:
                 list_configs.append(config)
-        self.data_handler.set_configs(configs=list_configs)
+        return list_configs
+        # self.data_handler.set_configs(configs=list_configs)
 
 
     # # INTEGRATION METHOD

@@ -110,9 +110,11 @@ class DataHandler(Transform):
         poni:PoniFile=None, 
         configs:list=[],
         pattern:str="*.edf",
+        parent=None,
         ):
         super().__init__()
-        
+        self.parent = parent
+
         # Main params
         self.list_filenames = filename_list
         self.list_headers = []
@@ -143,8 +145,7 @@ class DataHandler(Transform):
         self.reference_acquisition_time = None
         self.pattern = pattern
         self.mask_file = ""
-        
-        self.reference_factor = 0.0    
+        self.reference_factor = 0.0
         
     def __repr__(self):
         return f"PyXScat Data Handler\n{super().__repr__()}"
@@ -169,10 +170,8 @@ class DataHandler(Transform):
         self._list_filenames = value
         
         if self._list_filenames:
-            # self.update_metadata_values()
             self.update_header()
             self.update_new_data()
-            
             
     def set_filenames(self, list_filenames:list):
         self.list_filenames = list_filenames
@@ -187,7 +186,7 @@ class DataHandler(Transform):
             self._ai = None
         else:
             self._ai = value
-            self.update_integrations()
+            self.update_integrated_data()
             
         if not self._ai:
             logger.warning(f"Azimuthal integrator is set to None")
@@ -233,7 +232,7 @@ class DataHandler(Transform):
             self._configs = []
         else:
             self._configs = value
-            
+                        
         # if self._configs:
         #     self.update_integrations()
             
@@ -253,7 +252,8 @@ class DataHandler(Transform):
             logger.warning(f"{value} is not a np.array but {type(value)}")
             
         if self._data is not None:
-            self.update_integrations()
+            self.parent.data_changed.emit()
+            self.update_integrated_data()
             
     def set_data(self, data):
         self.data = data
@@ -468,7 +468,7 @@ class DataHandler(Transform):
     def data_mask(self, value):
         self._data_mask = value
         if self._data_mask is not None:
-            self.update_integrations()
+            self.update_integrated_data()
             
     @property
     def results1d(self):
@@ -477,6 +477,7 @@ class DataHandler(Transform):
     @results1d.setter
     def results1d(self, value):
         self._results1d = value
+        self.parent.update_integrations.emit()
     
     @property
     def masking_array(self):
@@ -909,17 +910,17 @@ class DataHandler(Transform):
             config = json.load(f)
         return config
         
-    def update_integrations(self):
+    def update_integrated_data(self):
         if self._data is None:
             return
         
         if self._ai is None:
             return
         
-        if self._configs:
-            self._update_integrations(list_configs=self._configs)
+        self._update_integrated_data()
         
-    def _update_integrations(self, list_configs:list):
+    def _update_integrated_data(self):
+        list_configs = self.parent.get_config_integrations()
         list_results = []
         for config in list_configs:
             res1d = self.do_integration(
