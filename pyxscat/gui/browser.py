@@ -385,8 +385,11 @@ class Browser(BrowserLayout):
         # self.data_handler.update_integrations(list_configs=list_configs)
         # self.update_integrations.emit()
         
-    def _slot_mask_integration(self, _):
-        pass
+    def _slot_mask_integration(self, state):
+        if state:
+            self.data_handler.masking_array = True
+        else:
+            self.data_handler.masking_array = False
 
     @log_info
     def _slot_reffolder_changed(self, reference_folder):
@@ -571,6 +574,7 @@ class Browser(BrowserLayout):
     
     @log_info
     def _slot_active_entry_changed(self, new_entry):
+        print("hola")
         self.active_entry = new_entry.text()
         
     @log_info

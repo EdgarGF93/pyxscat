@@ -11,7 +11,7 @@ import fabio
 from pydantic import BaseModel, ValidationError
 import json
 from typing import Optional
-
+from numpy import pi
 
 
 logger = logging.getLogger(__name__)
@@ -32,6 +32,48 @@ UNIT_GI = {
     '2th_deg' : TTH_DEG,
     '2th_rad' : TTH_RAD,
 }
+DICT_UNIT_PLOTS = {
+    'q_nm^-1' : {
+        'X_LABEL' : r'$q_{r}$ $(nm^{-1})$',
+        'Y_LABEL' : r'$q_{z}$ $(nm^{-1})$',
+        'X_LIMS' : [-20,20],
+        'Y_LIMS' : [-20,20],
+        'X_TICKS' : [-20,-10,0,10,20],
+        'Y_TICKS' : [-20,-10,0,10,20],
+        'SCALE' : 100,
+    },
+
+    'q_A^-1' : {
+        'X_LABEL' : '$q_{r}$ $(\u212b^{-1})$',
+        'Y_LABEL' : '$q_{z}$ $(\u212b^{-1})$',
+        'X_LIMS' : [-2,2],
+        'Y_LIMS' : [-2,2],
+        'X_TICKS' : [-2,-1,0,1,2],
+        'Y_TICKS' : [-2,-1,0,1,2],
+        'SCALE' : 10,
+    },
+
+    '2th_deg' : {
+        'X_LABEL' : '2\u03b8 (\u00b0)',
+        'Y_LABEL' : '\u03b1 (\u00b0)',
+        'X_LIMS' : [-20,20],
+        'Y_LIMS' : [-20,20],
+        'X_TICKS' : [-20,-10,0,10,20],
+        'Y_TICKS' : [-20,-10,0,10,20],
+        'SCALE' : 180/pi,
+    },
+
+    '2th_rad' : {
+        'X_LABEL' : '2\u03b8 (rad)',
+        'Y_LABEL' : '\u03b1 (rad)',
+        'X_LIMS' : [round(-pi / 10, 2), round(pi / 10, 2)],
+        'Y_LIMS' : [round(-pi / 10, 2), round(pi / 10, 2)],
+        'X_TICKS' : [round(-2*pi / 10, 2), round(-pi / 2, 2) , 0 , round(pi / 10, 2) , round(2*pi / 10, 2)],
+        'Y_TICKS' : [round(-2*pi / 10, 2), round(-pi / 2, 2) , 0 , round(pi / 10, 2) , round(2*pi / 10, 2)],
+        'SCALE' : 1,
+    },
+}
+DICT_PLOT_DEFAULT = DICT_UNIT_PLOTS['q_nm^-1']
 INTEGRATIONS_DIRECTORY = Path(__file__).parent.parent.joinpath("integration_dicts")
 
 
@@ -70,7 +112,8 @@ class DataHandler(Transform):
         pattern:str="*.edf",
         ):
         super().__init__()
-                
+        
+        # Main params
         self.list_filenames = filename_list
         self.list_headers = []
         self.ai = ai
@@ -80,8 +123,9 @@ class DataHandler(Transform):
         self.data = None
         self.data_cache = None
         self.data_reference = None
-        self.mask_data = None
+        self.data_mask = None
         self.results1d = []
+        self.masking_array = False
             
         self.acquisitiontime_key = ""
         self.normalizationfactor_key = ""
@@ -417,14 +461,14 @@ class DataHandler(Transform):
         self.mask_file = mask_file
         
     @property
-    def mask_data(self):
-        return self.mask_data
+    def data_mask(self):
+        return self._data_mask
     
-    @mask_data.setter
-    def mask_data(self, value):
-        self._mask_data = value
-        if self._mask_data is not None:
-            self.update_data()
+    @data_mask.setter
+    def data_mask(self, value):
+        self._data_mask = value
+        if self._data_mask is not None:
+            self.update_integrations()
             
     @property
     def results1d(self):
@@ -433,6 +477,15 @@ class DataHandler(Transform):
     @results1d.setter
     def results1d(self, value):
         self._results1d = value
+    
+    @property
+    def masking_array(self):
+        return self._masking_array
+    
+    @masking_array.setter
+    def masking_array(self, value):
+        self._masking_array = value
+        self.update_data()
     
     def set_reference_factor(self, reference_factor:float):
         self.reference_factor = reference_factor
@@ -466,25 +519,28 @@ class DataHandler(Transform):
     def update_data(self, data=None):
         if data is None:
             data = self._data
-        
-        if data is None:
-            self.set_data(data=None)
-            return
-            
-        if (self._data_reference is not None) and self._reference_factor != 0.0:
-            try:
-                data = self.data_cache - self._data_reference
-            except Exception as e:
-                logger.warning(f"Shapes of data and mask do not match!")
-                data = self.data_cache
-        else:
-            data = self.data_cache
             
         if data is not None:
-            data_clean = self._clean_data(data=data)
-            self.set_data(data=data_clean)
-        else:
-            self.set_data(data=None)
+            
+            # Subtract the background
+            if (self._data_reference is not None) and self._reference_factor != 0.0:
+                try:
+                    data = self.data_cache - self._data_reference
+                except Exception as e:
+                    logger.warning(f"Shapes of data and mask do not match!")
+                    data = self.data_cache
+            else:
+                data = self.data_cache
+            
+            # Mask the data if asked
+            if self._masking_array and self._configs:
+                config0 = self._configs[0]
+                data = self._mask_array(config=config0)
+
+            # Clean negative values
+            data = self._clean_data(data=data)
+            
+        self.set_data(data=data)
             
     def update_new_data(self):
         filename_list = self._list_filenames
@@ -563,9 +619,9 @@ class DataHandler(Transform):
             
     def update_data_mask(self):
         if self._mask_file:
-            mask_data = self._open_data(list_filenames=[self._mask_file])
-            if mask_data is not None:
-                self.mask_data = mask_data
+            data_mask = self._open_data(list_filenames=[self._mask_file])
+            if data_mask is not None:
+                self.data_mask = data_mask
     
     def update_header(self):
         filename_list = self._list_filenames
@@ -746,7 +802,7 @@ class DataHandler(Transform):
             res1d = self.integrate_1d(
                 process='sector',
                 data=self._data,
-                mask=self._mask_data,
+                mask=self._data_mask,
                 npt=config.get("npt_rad"),
                 p0_range=config.get("radial_range"),
                 p1_range=config.get("azimuth_range"),
@@ -763,7 +819,7 @@ class DataHandler(Transform):
             res1d = self.integrate_1d(
                 process='chi',
                 data=self._data,
-                mask=self._mask_data,
+                mask=self._data_mask,
                 npt=config.get("npt_rad"),
                 p0_range=config.get("azimuth_range"),
                 p1_range=config.get("radial_range"),
@@ -781,7 +837,7 @@ class DataHandler(Transform):
             res1d = self.integrate_1d(
                 process=config_box.get("process"),
                 data=self._data,
-                mask=self._mask_data,
+                mask=self._data_mask,
                 npt=config_box.get("npt_rad"),
                 p0_range=config_box.get("p0_range"),
                 p1_range=config_box.get("p1_range"),
@@ -932,3 +988,39 @@ class DataHandler(Transform):
             return q_vert
         else:
             return
+        
+    def _mask_array(self, config:dict):
+        if config.get("type") in ("azimuthal", "radial"):
+            masked_array = self._mask_array_cake(config=config)
+        elif config.get("type") == "box":
+            masked_array = self._mask_array_box(config=config)
+        return masked_array
+    
+    def _mask_array_cake(self, config:dict):
+        config_validated = self.validate_config_cake(config=config)
+        if config_validated:
+            unit = config.get("unit")
+            dict_plot = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
+            p0_range = config.get("radial_range")
+            p1_range = config.get("azimuth_range")
+            pos0_scale = dict_plot['SCALE']
+            p0_range = tuple([i / pos0_scale for i in p0_range])
+            p1_range = tuple([np.deg2rad(i) + np.pi for i in p1_range]) 
+            
+            chi, pos0 = self.giarray_from_unit(self._data.shape, "sector", "center", unit)
+            
+            pos0 = np.where(((pos0 > p0_range[0]) & (pos0 < p0_range[1])), pos0, 0)
+            pos0 = np.where(pos0 == 0, pos0, 1.0)
+            pos0 = np.where(pos0 != 0, pos0, np.nan)
+
+            chi = np.where(((chi > p1_range[0]) & (chi < p1_range[1])), chi, 0)
+            chi = np.where(chi == 0, chi, 1.0)
+            chi = np.where(chi != 0, chi, np.nan)
+
+            mask = chi * pos0
+            return self._data * mask
+            
+    def _mask_array_box(self, config:dict):
+        config_validated = self.validate_config_box(config=config)
+        if config_validated:
+            horz_q, vert_q = self.giarray_from_unit(self._data.shape, "opbox", "center", UNIT_GI[config.get("unit")])
