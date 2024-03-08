@@ -1,1 +1,0 @@
-{"name": "azim_oop", "suffix": "oop", "type": "azimuthal", "unit": "q_nm^-1", "radial_range": [0.0, 30.0], "azimuth_range": [-10.0, 10.0], "azim_bins": 0, "integration": "cake"}

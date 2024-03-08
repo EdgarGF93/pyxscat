@@ -30,12 +30,23 @@ conda activate my_env
 conda install python=3.10
 ```
 
+## 0) From scratch using virtual environment
+```
+cd /users/.../python
+mkdir my_env
+cd my_env
+python -m venv .
+cd Scripts
+activate.bat
+```
+
+
 # Install using clone
 ## 1) Clone the project into your directory (e.g. /user/Python/)
 
 ```
 cd /user/Python
-git clone -b main_matplotlit_3 https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat.git
+git clone https://gitlab.esrf.fr/xmas-bm28/data_analysis/pyxscat.git
 ```
 
 ## 2) Install locally the package, including all its sub-packages

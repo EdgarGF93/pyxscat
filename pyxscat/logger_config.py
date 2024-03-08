@@ -6,6 +6,7 @@ from pyxscat.other.other_functions import date_prefix
 import datetime
 
 def setup_logger():
+    LEVEL = logging.INFO
 
     if not LOGGER_PATH.exists():
         LOGGER_PATH.mkdir()
@@ -13,58 +14,16 @@ def setup_logger():
     cleanup_old_logs()
 
     logger = logging.getLogger('PyXScatLogger')
-    logger.setLevel(logging.WARNING)
+    logger.setLevel(LEVEL)
     log_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     log_filename = LOGGER_PATH.joinpath(f'pyxscat_logger_{date_prefix()}.log')
 
     if not logger.handlers:
 
-
-
-        # logging_config = {
-        #     "version": 1,
-        #     'disable_existing_loggers': False,
-        #     "formatters": {
-        #         'standard': {
-        #             'format': log_formatter
-        #         }
-        #     },
-        #     "handlers": {
-        #         'default': {
-        #             'class': 'logging.StreamHandler',
-        #             'formatter': 'standard',
-        #             'level': logging.INFO,
-        #             'stream': 'ext://sys.stdout'
-        #         },
-        #         'file': {
-        #             'class': 'logging.handlers.TimedRotatingFileHandler',
-        #             'when': 'midnight',
-        #             'utc': True,
-        #             'backupCount': 5,
-        #             'level': logging.DEBUG,
-        #             'filename': log_filename,
-        #             'formatter': 'standard',
-        #         },
-        #     },
-        #     "loggers": {
-        #         "": {
-        #             'handlers': ['default', 'file'],
-        #             'level': logging.DEBUG,
-        #         },
-        #     }
-        # }
-
-        # logging.config.dictConfig(logging_config)
-
-
-
-
-
-
         # Console Handler
         stream_handler = logging.StreamHandler()
         stream_handler.setFormatter(log_formatter)        
-        stream_handler.setLevel(logging.WARNING)
+        stream_handler.setLevel(LEVEL)
 
         # File Handler
 
@@ -74,7 +33,7 @@ def setup_logger():
            backupCount=10,
         )
         file_handler.setFormatter(log_formatter)        
-        file_handler.setLevel(logging.WARNING)
+        file_handler.setLevel(LEVEL)
 
         logger.addHandler(stream_handler)        
         logger.addHandler(file_handler)

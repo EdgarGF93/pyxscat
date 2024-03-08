@@ -4,6 +4,7 @@ UNITS_Q = ('q_nm^-1', 'q_A^-1')
 UNITS_THETA = ('2th_deg', '2th_rad')
 QNM_ALIAS = ('q_nm^-1', 'q_nm^-1', 'nm', 'nm-1', 'qnm', 'q_nm')
 QA_ALIAS = ('q_A^-1', 'q_A', 'q_a^-1', 'q_a^-1', 'a', 'a-1', 'qa', 'q_a')
+Q_ALIAS = QNM_ALIAS + QA_ALIAS
 RAD_ALIAS = ('2th_rad', 'rad', '2thrad', 'thrad', 'tth_rad', 'tthrad')
 DEG_ALIAS = ('2th_deg', 'deg', '2thdeg', 'thdeg', 'tth_deg', 'tthdeg')
 

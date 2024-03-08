@@ -50,6 +50,140 @@ DICT_SAMPLE_ORIENTATIONS = {
 MNE_NAME = ['mne']
 POS_NAME = ['pos']
 
+
+
+
+class FullHeader():
+    def __init__(self, filename) -> None:
+        self._filename = filename
+    
+    def get_raw_header(self):
+        """
+        Returns the raw header using the FabIO header
+        """
+        try:
+            header = fabio.open(self._filename).header
+            return header
+        except:
+            return
+
+    def get_header(self, search_nmemonics=True) -> dict:
+        """
+            Return the header read with Fabio and modified if necessary
+        """
+
+        # First, take the original header using fabio
+        header = self.get_raw_header()
+
+        # Check for nemonic values (list/strings inside keys)
+        if search_nmemonics:
+            nemonic_keys = self.search_keys_in_header(header, MNE_NAME)
+            position_keys = self.search_keys_in_header(header, POS_NAME)
+            if nemonic_keys:
+                header = self.get_header_with_nmemonics(header, nemonic_keys, position_keys, remove=True)
+        else:
+            pass
+
+        # Convert the values to float if possible
+        for key, value in header.items():
+            float_value = self.header_value_to_float(
+                header_value=value,
+            )
+            header[key] = float_value
+
+        return header
+
+    def header_value_to_float(self, header_value):
+        """
+        Try to transform the original header value into a float value
+        """
+        if isinstance(header_value, float):
+            return header_value
+        elif isinstance(header_value, str):
+
+            # Try to float the first element before empty space
+            try:
+                header_value_mod = header_value.split()[0]
+                header_value_mod = float(header_value_mod)
+                return header_value_mod
+            except:
+                return header_value
+        else:
+            return header_value
+                
+    def get_header_keys(self, search_nmemonics=True, to_float=True) -> list:
+        """
+            Return a list with the keys of the header
+        """
+        header = self.get_header(
+            search_nmemonics=search_nmemonics,
+            to_float=to_float,
+        )
+
+        header_keys = list(header.keys())
+        header_keys.sort()
+        header_keys.insert(0,'')
+
+        return header_keys
+
+    def search_keys_in_header(self, header={}, key_list=[]) -> list:
+        """
+            Returns a list with the keys of the header that matches some string in key_list
+        """
+        return [k for k in header.keys() if any(name in k for name in key_list)]
+
+    def get_header_with_nmemonics(self, header={}, nemonic_keys=[], position_keys=[], remove=True) -> dict:
+        """
+            Returns a dictionary with the values inside nemonic counters
+        """
+        # Get the dictionary with the extracted values and keys
+        header_nmenomics = self.header_extract_nemonics(header, nemonic_keys, position_keys)
+
+        # Add the new dictionary to the original one
+        header = {**header, **header_nmenomics}
+
+        # Remove the nemonic items
+        if remove:
+            for nme_key, pos_key in zip(nemonic_keys, position_keys):
+                del header[nme_key]
+                del header[pos_key]
+        else:
+            pass
+        return header
+
+    def header_extract_nemonics(self, header={}, nemonic_keys=[], position_keys=[]) -> dict:
+        """
+            Returns a dictionary with the extracted nemonic counters
+        """
+        assert len(nemonic_keys) == len(position_keys), ERROR_NEMONIC_MSG
+
+        new_dict = {}
+        for nm_key, pos_key in zip(nemonic_keys, position_keys):
+            for nm_key_name, pos_key_value in zip(header[nm_key].split(' '), header[pos_key].split(' ')):
+                try:
+                    new_dict[nm_key_name] = float(pos_key_value)
+                except:
+                    new_dict[nm_key_name] = str(pos_key_value)
+
+        return new_dict
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class EdfClass(Transform):
     
     def __init__(

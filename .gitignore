@@ -5,9 +5,16 @@
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
 # website: http://jupyter.org/
-
+*egg-info**
+*/metadatabases/*
+*.js
 # kk files
 **kk**
+*.edf
+*.json
+
+# cache files
+*.pyc
 
 # Logger files
 .logger

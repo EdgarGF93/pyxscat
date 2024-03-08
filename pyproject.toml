@@ -20,4 +20,9 @@ dependencies = [
 where = ["."]
 
 [project.scripts]
-pyxscat = "pyxscat.gui.run:run"
+pyxscat = "pyxscat.gui.run:main"
+pyxscat-browser = "pyxscat.gui.browser:main"
+pyxscat-screen = "pyxscat.gui.screen:main"
+pyxscat-terminal = "pyxscat.gui.terminal:main"
+pyxscat-gui = "pyxscat.gui.gui:main"
+pyxscat-run = "pyxscat.gui.gui_run:main"

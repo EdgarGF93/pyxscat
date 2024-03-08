@@ -1,24 +1,23 @@
 from collections import defaultdict
 from pathlib import Path
-from pyFAI import load
-from pyFAI.io.ponifile import PoniFile
-from pygix.transform import Transform
-from pygix.grazing_units import TTH_DEG, TTH_RAD, Q_A, Q_NM
+from pyxscat.gi_integrator import GIIntegrator
 from os.path import getctime
 
+from pyFAI.io.ponifile import PoniFile
 from pyxscat.edf import EdfClass
 from pyxscat.other.other_functions import date_prefix, get_dict_files, get_dict_difference
-from pyxscat.gui import LOGGER_PATH
 from pyxscat.other.units import *
 
 import h5py
-import logging
 import numpy as np
 import pandas as pd
 from silx.io.h5py_utils import File
+# from silx.io.nxdata import save_NXdata
 from pyxscat.other.integrator_methods import *
 from pyxscat.other.setup_methods import *
 import os
+from typing import List, Any
+from multiprocessing import Pool
 
 ENCODING_FORMAT = "UTF-8"
 FORMAT_STRING = h5py.string_dtype(ENCODING_FORMAT)
@@ -28,12 +27,7 @@ DEFAULT_SHAPE_1D = (0,)
 MAXSHAPE_1D_RESIZE = (None,)
 DEFAULT_H5_PATH = '.'
 
-UNIT_GI = {
-    'q_nm^-1' : Q_NM,
-    'q_A^-1' : Q_A,
-    '2th_deg' : TTH_DEG,
-    '2th_rad' : TTH_RAD,
-}
+
 
 DESCRIPTION_HDF5 = "HDF5 file with Scattering methods."
 BEAMLINE = "BM28-XMaS"
@@ -51,8 +45,15 @@ METADATA_KEY = "metadata"
 FILENAME_KEY = "filename"
 SAMPLE_GROUP_KEY = "samples"
 PONI_GROUP_KEY = "ponifiles"
-ABS_ADDRESS_KEY = "abs_address"
-REL_ADDRESS_KEY = "rel_address"
+ABS_ADDRESS_KEY = "absolute_address"
+REL_ADDRESS_KEY = "relative_address"
+
+DATAFILE_KEY = "data_filename"
+DATANAME_KEY = "data_name"
+SAMPLEPATH_KEY = "sample_address"
+
+ENTRY_PONIFILE_KEY = 'entry_ponifiles'
+
 
 ADDRESS_METADATA_KEYS = '.'
 ADDRESS_PONIFILE = '.'
@@ -63,6 +64,7 @@ MODE_WRITE = "r+"
 
 PONIFILE_DATASET_KEY = "ponifiles"
 PONIFILE_ACTIVE_KEY = "active_ponifile"
+WILDCARDS_PONI = '*.poni'
 
 DEFAULT_INCIDENT_ANGLE = 0.0
 DEFAULT_TILT_ANGLE = 0.0
@@ -70,43 +72,7 @@ DEFAULT_TILT_ANGLE = 0.0
 DIGITS_SAMPLE = 4
 DIGITS_FILE = 4
 
-POLARIZATION_FACTOR = 0.99
-NPT_RADIAL = int(100)
-
-DICT_SAMPLE_ORIENTATIONS = {
-    (True,True) : 1,
-    (True,False) : 2,
-    (False,True) : 3,
-    (False,False) : 4,
-}
-
-PONI_KEY_VERSION = "poni_version"
-PONI_KEY_BINNING = "binning"
-PONI_KEY_DISTANCE = "dist"
-PONI_KEY_WAVELENGTH = "wavelength"
-PONI_KEY_SHAPE1 = "shape1"
-PONI_KEY_SHAPE2 = "shape2"
-PONI_KEY_DETECTOR = "detector"
-PONI_KEY_DETECTOR_CONFIG = "detector_config"
-PONI_KEY_PIXEL1 = "pixelsize1"
-PONI_KEY_PIXEL2 = "pixelsize2"
-PONI_KEY_PONI1 = "poni1"
-PONI_KEY_PONI2 = "poni2"
-PONI_KEY_ROT1 = "rot1"
-PONI_KEY_ROT2 = "rot2"
-PONI_KEY_ROT3 = "rot3"
-
-DICT_BOX_ORIENTATION = {
-    'horizontal' : 'ipbox',
-    'vertical' : 'opbox',
-}
-
-AZIMUTH_NAME = 'azimuthal'
-RADIAL_NAME = 'radial'
-HORIZONTAL_NAME = 'horizontal'
-VERTICAL_NAME = 'vertical'
-
-ERROR_RAW_INTEGRATION = "Failed at detect integration type."
+ENTRY_ZEROS = 4
 MSG_LOGGER_INIT = "Logger was initialized."
 
 
@@ -124,9 +90,10 @@ ROOT_DIR_NOT_ACCESIBLE = 'The access to root directory is not available.'
 INPUT_ROOT_DIR_NOT_VALID = 'There is no valid root directory nor input file.'
 H5_FILENAME_NOT_VALID = 'No valid path for the .h5 file'
 
+EXTENSION_H5 = '.h5'
+
 from pyxscat.logger_config import setup_logger
 logger = setup_logger()
-
 
 def logger_info(func):
     def wrapper(*args, **kwargs):
@@ -134,19 +101,37 @@ def logger_info(func):
         return func(*args, **kwargs)
     return wrapper
 
+
+def get_dict_entry(pattern, entry):
+    d_entry = defaultdict(list)
+
+    for file in entry.glob(pattern):
+        d_entry['filenames'].append(str(file))
+        d_entry['names'].append(str(file.name))
+
+        header = EdfClass(filename=str(file)).get_header()
+        for metadata_key,metadata_value in header.items():
+            try:
+                metadata_value = float(metadata_value)
+            except:
+                metadata_value = str(metadata_value)
+            d_entry[metadata_key].append(metadata_value)
+    
+    return d_entry
+
+
+
+
+
 class H5GIIntegrator():
 # class H5GIIntegrator(Transform):
     """
     Creates an HDF5 file and provides methods to read/write the file following the hierarchy of XMaS-BM28
     """
-    def __init__(
-        self,
-        input_h5_filename='',        
-        root_directory='',
-        output_filename_h5='',
-        ) -> None:
+    def __init__(self, input_h5_filename='', root_directory='', output_filename_h5='', init_data=False):
 
         logger.info("H5GIIntegrator instance was created.")
+        self.dict_data = defaultdict(lambda : defaultdict(list))  
 
         if input_h5_filename:
 
@@ -189,18 +174,14 @@ class H5GIIntegrator():
                 root_directory=root_directory,
                 h5_filename=output_filename_h5,
             )     
-
-            self.init_h5_groups()
-
         else:
-            raise Exception(INPUT_ROOT_DIR_NOT_VALID) 
+            raise Exception(INPUT_ROOT_DIR_NOT_VALID)
+        
+        if init_data:
+            self.update_ponifiles()
+            self.update_datafiles(search=True)
 
-    def init_root_h5_attributes(
-        self,
-        input_h5_filename='',
-        root_directory='',
-        output_filename_h5='',
-    ):
+    def init_root_h5_attributes(self, input_h5_filename='', root_directory='', output_filename_h5=''):
         if input_h5_filename:
 
             self.set_h5_filename(
@@ -234,8 +215,7 @@ class H5GIIntegrator():
         else:
             raise Exception(INPUT_ROOT_DIR_NOT_VALID)
         
-        self._transform = Transform()
-                    
+        self.gi = GIIntegrator()                    
 
     def set_root_directory(self, root_directory=''):
         self._root_dir = Path(root_directory)
@@ -279,7 +259,7 @@ class H5GIIntegrator():
         
         if root_directory:
             name = Path(root_directory).name
-            h5_output_file = Path(root_directory).joinpath(name).with_suffix(".h5")
+            h5_output_file = Path(root_directory).joinpath(name).with_suffix(EXTENSION_H5)
             if self.filename_valid(filename=h5_output_file):
                 return h5_output_file
             else:
@@ -304,16 +284,7 @@ class H5GIIntegrator():
             logger.error(f"{e}: The file {h5_filename} could not be created.")
 
     @logger_info
-    def init_h5_groups(self, h5_filename=''):
-        self.create_group_samples(h5_filename=h5_filename)
-        self.create_group_ponifiles(h5_filename=h5_filename)
-
-    @logger_info
-    def write_root_attributes(
-        self,
-        root_directory='',
-        h5_filename='',
-        ):
+    def write_root_attributes(self, root_directory='', h5_filename=''):
         # Write the attributes into the .h5 file
         dict_attrs = {
             NAME_H5_KEY : Path(h5_filename).name,
@@ -325,61 +296,6 @@ class H5GIIntegrator():
         with File(h5_filename, 'r+') as f:
             for k, v in dict_attrs.items():
                 f.attrs[k] = v
-
-    @property
-    def _open_r(self):
-        """
-        Opens the h5 file with reading permises
-        """   
-        # self._file = File(str(self._h5_filename), MODE_READ)
-        self._open_w
-
-    @property
-    def _open(self):
-        self._open_w
-        
-    @property
-    def _open_w(self):
-        """
-        Opens the h5 file with reading/writing permises
-        """        
-        self._file = File(str(self._h5_filename), MODE_WRITE)
-        logger.info("H5 OPEN TO READ/WRITE")
-
-    @property
-    def _close(self):
-        """
-        Closes the h5 file
-        """
-        self._file.close()
-        logger.info("H5 CLOSED")
-
-    @property
-    def is_open(self):
-        return bool(self._file)
-
-    @property
-    def get_mode(self):
-        if self.is_open:
-            return self._file.mode
-        else:
-            return False
-
-    @logger_info
-    def h5_write_attrs_in_group(self, dict_attrs=dict(), group_address='.'):
-        """
-        Write the key-values from a dictionary as attributes at the root level of h5 file
-
-        Keyword Arguments:
-            dict_attrs -- dictionary with root attribute information (default: {dict()})
-            address -- path of the Group inside the h5 File (default: {'.'})
-        """
-        for k, v in dict_attrs.items():
-            self.h5_write_attr_in_group(
-                key=k,
-                value=v,
-                group_address=group_address,
-            )
 
     @logger_info
     def init_metadata_attrs(self) -> None:
@@ -514,15 +430,6 @@ class H5GIIntegrator():
 
     @logger_info
     def get_metadata_dict(self) -> dict:
-        """
-        Returns a dictionary with the key-value metadata information
-
-        Keyword Arguments:
-            group_address -- address of the Group inside the H5 File (default: {'.'})
-
-        Returns:
-            dictionary with the metadata key-values
-        """
         dict_metadata = dict()
         dict_metadata[INCIDENT_ANGLE_KEY] = self._iangle_key
         dict_metadata[TILT_ANGLE_KEY] = self._tangle_key
@@ -534,7 +441,6 @@ class H5GIIntegrator():
     def get_dataset_acquisition_time(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         ) -> np.array:
         """
         Returns the numpy array which is the dataset of acquistion times associated with the files of a folder (Group)
@@ -550,7 +456,6 @@ class H5GIIntegrator():
             dataset = self.get_metadata_dataset(
                 sample_name=sample_name,
                 key_metadata=key_acq,
-                sample_relative_address=sample_relative_address,
             )
         except:
             dataset = None
@@ -560,7 +465,6 @@ class H5GIIntegrator():
     def get_dataset_incident_angle(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         ) -> np.array:
         """
         Returns the numpy array which is the dataset of incident angles associated with the files of a folder (Group)
@@ -575,7 +479,6 @@ class H5GIIntegrator():
         try:
             dataset = self.get_metadata_dataset(
                 sample_name=sample_name,
-                sample_relative_address=sample_relative_address,
                 key_metadata=key_iangle,
             )
         except:
@@ -586,7 +489,6 @@ class H5GIIntegrator():
     def get_dataset_tilt_angle(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         ) -> np.array:
         """
         Returns the numpy array which is the dataset of tilt angles associated with the files of a folder (Group)
@@ -601,7 +503,6 @@ class H5GIIntegrator():
         try:
             dataset = self.get_metadata_dataset(
                 sample_name=sample_name,
-                sample_relative_address=sample_relative_address,
                 key_metadata=key_tangle,
             )
         except:
@@ -612,7 +513,6 @@ class H5GIIntegrator():
     def get_dataset_norm_factor(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         ) -> np.array:
         """
         Returns the numpy array which is the dataset of normalization factors associated with the files of a folder (Group)
@@ -627,7 +527,6 @@ class H5GIIntegrator():
         try:
             dataset = self.get_metadata_dataset(
                 sample_name=sample_name,
-                sample_relative_address=sample_relative_address,
                 key_metadata=key_norm,
             )
         except:
@@ -639,7 +538,6 @@ class H5GIIntegrator():
         self, 
         folder_name=str(), 
         index_list=int(),
-        sample_relative_address=True,
         ) -> float:
         """
         Returns the acquisition time of a file or the average from a list of files (index)
@@ -653,7 +551,6 @@ class H5GIIntegrator():
         """
         dataset = self.get_dataset_acquisition_time(
             sample_name=folder_name,
-            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -674,7 +571,6 @@ class H5GIIntegrator():
     def get_incident_angle(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         index_list=int(),
         ) -> float:
         """
@@ -689,7 +585,6 @@ class H5GIIntegrator():
         """
         dataset = self.get_dataset_incident_angle(
             sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -710,7 +605,6 @@ class H5GIIntegrator():
     def get_tilt_angle(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         index_list=int(),
         ) -> float:
         """
@@ -725,7 +619,6 @@ class H5GIIntegrator():
         """
         dataset = self.get_dataset_tilt_angle(
             sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -747,7 +640,6 @@ class H5GIIntegrator():
     def get_norm_factor(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         index_list=int()) -> float:
         """
         Returns the normalization factor of a file or the average from a list of files (index)
@@ -761,7 +653,6 @@ class H5GIIntegrator():
         """
         dataset = self.get_dataset_norm_factor(
             sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
         )
 
         if dataset is not None:
@@ -792,927 +683,352 @@ class H5GIIntegrator():
 
     @logger_info
     def search_ponifiles(self, new_files=True) -> list:
-        """
-        Searches for .poni files in the root directory
+        """Searches for .poni files in the root directory
 
         Returns:
-            list of .poni files recursively in the root directory
-        """                
+            list with sorted strings of poni filename
+        """                    
         if not self._root_dir:
+            logger.error('No root directory to search .poni files.')
             return
+        
         try:
-            searched_ponifiles = [file.as_posix() for file in self._root_dir.rglob("*.poni")]
-
+            # Absolute paths of .poni files in the root folder
+            searched_ponifiles = sorted(file.as_posix() for file in self._root_dir.rglob(WILDCARDS_PONI))
             if new_files:
-                stored_ponifiles = self.get_all_ponifiles(get_relative_address=False)
-                searched_ponifiles = [file for file in searched_ponifiles if file not in stored_ponifiles]
-
+                # Filter only the new files
+                ponifiles_in_h5 = self.get_all_ponifiles(get_relative_address=False)
+                searched_ponifiles = [file for file in searched_ponifiles if file not in ponifiles_in_h5]  
+            
             logger.info(f"Found {len(searched_ponifiles)} .poni files in {self._root_dir}")
+            return searched_ponifiles
+        
         except Exception as e:
             logger.error(f"{e}: there was an error during searching ponifiles in {self._root_dir}.")
             return
 
-        return searched_ponifiles
-
-    # @log_info
-    # def update_ponifiles(
-    #     self,
-    #     group_address=PONI_GROUP_KEY,
-    #     ponifile_list=list(), 
-    #     search=False,
-    #     relative_to_root=True,
-    #     ):
-    #     self._open
-    #     self._update_ponifiles(
-    #         group_address=group_address,
-    #         ponifile_list=ponifile_list,
-    #         search=search,
-    #         relative_to_root=relative_to_root,
-    #     )
-    #     self._close
-
-
-
-
-    def create_data_dset(self, sample_name=str()):
-        self.create_dataset_path(
-            group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
-            dset_name=DATA_KEY,
-        )
-
-    def create_metadata_group(self, sample_name=str()):
-        self.create_group(
-            root_group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
-            group_name=METADATA_KEY,
-        )
-
-    def create_metadata_dset_str(self, sample_name=str(), metadata_key=str()):
-        self.create_dataset_path(
-            group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}/{METADATA_KEY}",
-            dset_name=metadata_key,
-        )
-
-    def create_metadata_dset_float(self, sample_name=str(), metadata_key=str()):
-        self.create_dataset_float(
-            group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}/{METADATA_KEY}",
-            dset_name=metadata_key,
-        )
-
     @logger_info
     def update_ponifiles(self):
+        """
+        Searches .poni files in the root directory and updates
+        the entry_ponifiles
+        """        
+        searched_ponifiles = self.search_ponifiles()
 
-        # Creates the dataset for ponifiles if needed
-        self.create_ponifile_dset()
-
-        # Search new files if requested
-        ponifile_list = self.search_ponifiles(new_files=True)
-
-        if not ponifile_list:
-            logger.info("No ponifiles to be updated. Return.")
+        if not searched_ponifiles:
+            logger.info('No ponifiles to be updated.')
             return
-
-        # Return if no new ponifiles
-        if not ponifile_list:
-            logger.info(f"No ponifiles to update.")
-            return
-
-        self.append_ponifile_list(
-            ponifile_list=ponifile_list,
-        )
-
-    @logger_info
-    def append_metadata_values(self, sample_name=str(), metadata_key=str(), value_list=list()):
-    
         
-        
-        self.append_stringlist_to_dataset(
-            group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}/{METADATA_KEY}",
-            dataset_name=metadata_key,
-            list_to_append=value_list,
-        )
-
-
-    @logger_info
-    def append_datafile_list(self, sample_name=str(), datafile_list=list()):
-
-        self.append_stringlist_to_dataset(
-            group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
-            dataset_name=DATA_KEY,
-            list_to_append=datafile_list,
-        )
-
-
-    @logger_info
-    def append_ponifile_list(self, ponifile_list=list()):
-        self.append_stringlist_to_dataset(
-            group_address=PONI_GROUP_KEY,
-            dataset_name=PONIFILE_DATASET_KEY,
-            list_to_append=ponifile_list,
-        )
-
-    @logger_info
-    def append_stringlist_to_dataset(self, group_address='.', dataset_name=str(), list_to_append=list()):
-        if isinstance(list_to_append, str):
-            list_to_append = [list_to_append]
-
-        with File(self._h5_filename, 'r+') as f:
-            if not f[group_address].__contains__(dataset_name):
-                logger.info(f"{dataset_name} does not exist in {group_address}. Create it before appending.")
+        else:
+            if not self.check_ponifile_entry():
+                # Create ponifile entry and dataset
+                self.create_entry_ponifile(
+                    ponifile_list=searched_ponifiles,
+                )                   
+                # self.delete_nx_group(entry=ENTRY_PONIFILE_KEY)
             else:
                 try:
-                    dataset = f[group_address][dataset_name]
-                    dataset.resize((dataset.shape[0] + len(list_to_append),))
-                    dataset[-len(list_to_append):] = list_to_append
-                    logger.debug(f"{str(list_to_append)} was appended to {group_address}/{dataset}")
+                    # Resize and append
+                    self.append_ponifiles(
+                        ponifile_list=searched_ponifiles,
+                    )
+
+                    # save_NXdata(
+                    #     filename=self._h5_filename,
+                    #     signal_name=PONI_GROUP_KEY,
+                    #     signal=searched_ponifiles,
+                    #     interpretation='spectrum',
+                    #     nxentry_name=ENTRY_PONIFILE_KEY,
+                    #     nxdata_name=PONI_GROUP_KEY,
+                    # )
+                    logger.info(f'Saved NXdata: {ENTRY_PONIFILE_KEY}')
                 except Exception as e:
-                    logger.error(f"{str(list_to_append)} could not be appended to {group_address}/{dataset}")
-
-
-
-    # @log_info
-    # def get_active_ponifile(self) -> Path:
-    #     """
-    #     Returns the active ponifile string from the dataset at the first level of hierarchy
-
-    #     Returns:
-    #         Path of the active ponifile
-    #     """        
-    #     try:
-    #         ponifile_active = self._file[PONI_GROUP_KEY][PONIFILE_ACTIVE_KEY][()][0]
-    #     except Exception as e:
-    #         logger.info(f"{e}: active ponifile could not be retrieved. Trying to open the file...")
-    #         ponifile_active =None
-        
-    #     # Try after opening the h5 File
-    #     if ponifile_active is None:
-    #         try:
-    #             self._open_r
-    #             ponifile_active = self._file[PONI_GROUP_KEY][PONIFILE_ACTIVE_KEY][()][0]
-    #             self._close
-    #         except Exception as e:
-    #             logger.info(f"{e}: active ponifile could not be retrieved anyway.")
-    #             return
-        
-    #     # Decode if necessary
-    #     if isinstance(ponifile_active, bytes):
-    #         ponifile_active = bytes.decode(ponifile_active, encoding=ENCODING_FORMAT)
-        
-    #     # Use Path instance
-    #     ponifile_active = Path(ponifile_active)
-    #     return ponifile_active
-
-    @logger_info
-    def update_ponifile_parameters(self, dict_poni=dict()) -> None:
-        """
-        Changes manually the functional poni parameters of pygix
-        """
-        if not self._transform:
-            return
-        
-        try:
-            new_poni = PoniFile(data=dict_poni)
-            self._transform._init_from_poni(new_poni)
-        except Exception as e:
-            logger.error(e)
+                    logger.error(f'{e}: Error during saving NXdata {ENTRY_PONIFILE_KEY}')
 
     @logger_info
     def generate_ponifiles(self, get_relative_address=True) -> str:
+        """Yields a string with the relative or absolute address of .poni files
+
+        Keyword Arguments:
+            get_relative_address -- if True, yields the basename of .poni file
+
+        Yields:
+            string of .poni file
+        """
+        if not self.check_ponifile_entry():
+            logger.info('There is no entry_ponifiles.')
+            return []
+        
         with File(self._h5_filename, 'r+') as f:
-            dataset = f[PONI_GROUP_KEY][PONIFILE_DATASET_KEY]
+            dataset = f[ENTRY_PONIFILE_KEY][PONI_GROUP_KEY][PONI_GROUP_KEY]
+
             for ponifile in dataset:
                 ponifile = ponifile.decode(ENCODING_FORMAT)
                 ponifile = Path(ponifile).as_posix()
+
                 if get_relative_address:
                     ponifile = Path(ponifile).relative_to(self._root_dir).as_posix()
+
                 yield ponifile
         
     @logger_info
     def get_all_ponifiles(self, get_relative_address=True) -> list:
-        ponifile_list = list(self.generate_ponifiles(get_relative_address=get_relative_address))
+        """Gets a sorted list with the stored .poni files
+
+        Keyword Arguments:
+            get_relative_address -- if True, returns a list of .poni file basenames
+
+        Returns:
+            list with strings of .poni files
+        """        
+        ponifile_list = sorted(self.generate_ponifiles(get_relative_address=get_relative_address))
         return ponifile_list
 
     @logger_info
-    def activate_ponifile(self, poni_filename=str()) -> None:    
-        if not poni_filename:
-            self.active_ponifile = None
-            return
-        
-        poni_filename = Path(poni_filename)
+    def get_ponifile(self, poni_name='') -> str:
+        poni_name = Path(poni_name)
 
-        try:
-            if poni_filename.is_absolute():
-                poni_filename = poni_filename.as_posix()            
-            else:
-                poni_filename = self._root_dir.joinpath(poni_filename).as_posix()
-        except Exception as e:
-            self.active_ponifile = None
-            return    
-
-        # Proceed only if the requested ponifiles is already stored
-        stored_ponifiles = self.get_all_ponifiles(get_relative_address=False)
-
-        if poni_filename in stored_ponifiles:
-
-            self.active_ponifile = poni_filename
-
-            self.update_grazinggeometry()
-
-
+        if poni_name.is_absolute():
+            poni_name = poni_name.as_posix()
         else:
-            logger.info(f"Ponifile {poni_filename} is not stored in the .h5")
-            self.active_ponifile = None
-            return           
-
-        # Update the GrazingGeometry instance
-        # self.update_grazinggeometry()
+            poni_name = self._root_dir.joinpath(poni_name).as_posix()
+        
+        return poni_name
 
     @logger_info
-    def get_poni_dict(self):
-        try:
-            detector = self._transform.detector
-        except Exception as e:
-            logger.error(f"{e}: Detector could not be retrieved.")
-            return
-        try:
-            detector_config = self._transform.detector.get_config()
-        except Exception as e:
-            logger.error(f"{e}: Detector could not be retrieved.")
-            return
-        try:
-            wave = self._transform._wavelength
-        except Exception as e:
-            logger.error(f"{e}: Wavelength could not be retrieved.")
-            return
-        try:
-            dist = self._transform._dist
-        except Exception as e:
-            logger.error(f"{e}: Distance could not be retrieved.")
-            return
-        
-        # Pixel 1
-        try:
-            pixel1 = self._transform.pixel1
-        except Exception as e:
-            pixel1 = None
-            logger.error(f"{e}: Pixel 1 could not be retrieved.")
-            return
-        if not pixel1:
-            try:
-                pixel1 = detector_config.pixel1
-            except Exception as e:
-                logger.error(f"{e}: Pixel 1 could not be retrieved.")
-                return
-        # Pixel 2
-        try:
-            pixel2 = self._transform.pixel2
-        except Exception as e:
-            pixel2 = None
-            logger.error(f"{e}: Pixel 2 could not be retrieved.")
-            return
-        if not pixel2:
-            try:
-                pixel2 = detector_config.pixel2
-            except Exception as e:
-                logger.error(f"{e}: Pixel 2 could not be retrieved.")
-                return
+    def update_poni(self, poni=None) -> None:
 
-        # Shape
-        try:
-            shape = self._transform.detector.max_shape
-        except Exception as e:
-            shape = None
-            logger.error(f"{e}: Shape could not be retrieved from detector.")
-        if not shape:
-            try:
-                shape = detector_config.max_shape
-            except Exception as e:
-                logger.error(f"{e}: Shape could not be retrieved from detector-config.")
-                return
+        if isinstance(poni, str) or isinstance(poni, Path):
+            poni = self.get_ponifile(poni_name=poni)
 
-        try:
-            poni1 = self._transform._poni1
-        except Exception as e:
-            logger.error(f"{e}: PONI 1 could not be retrieved from h5.")
-            return
-        try:
-            poni2 = self._transform._poni2
-        except Exception as e:
-            logger.error(f"{e}: PONI 2 could not be retrieved from h5.")
-            return
-        try:
-            rot1 = self._transform._rot1
-        except Exception as e:
-            logger.error(f"{e}: Rotation 1 could not be retrieved from h5.")
-            return
-        try:
-            rot2 = self._transform._rot2
-        except Exception as e:
-            logger.error(f"{e}: Rotation 2 could not be retrieved from h5.")
-            return
-        try:
-            rot3 = self._transform._rot3
-        except Exception as e:
-            logger.error(f"{e}: Rotation 3 could not be retrieved from h5.")
-            return
-        
-        poni_dict = {
-            PONI_KEY_VERSION : 2,
-            PONI_KEY_DETECTOR : detector.name,
-            PONI_KEY_BINNING : detector._binning,
-            PONI_KEY_DETECTOR_CONFIG : detector_config,
-            PONI_KEY_WAVELENGTH : wave,
-            PONI_KEY_DISTANCE : dist,
-            PONI_KEY_PIXEL1 : pixel1,
-            PONI_KEY_PIXEL2 : pixel2,
-            PONI_KEY_SHAPE1 : shape[0],
-            PONI_KEY_SHAPE2 : shape[1],
-            PONI_KEY_PONI1 : poni1,
-            PONI_KEY_PONI2 : poni2,
-            PONI_KEY_ROT1 : rot1,
-            PONI_KEY_ROT2 : rot2,
-            PONI_KEY_ROT3 : rot3,
-        }
-        return poni_dict
+        self.gi.update_poni(poni=poni)
+    
+    @logger_info
+    def get_poni(self):
+        poni = self.gi._poni
+        return poni
 
-    #########################################################
-    ######### PYGIX CONNECTIONS ######################
-    #########################################################
 
     @logger_info
-    def update_grazinggeometry(self, poni_filename='') -> None:
-        """
-        If there is an active ponifile, inherits the methods from Transform class (pygix module)
-        """        
-        if not poni_filename:
-            poni_filename = self.active_ponifile
+    def update_orientation(self, qz_parallel=True, qr_parallel=True):
+        self.gi.update_orientation(
+            qz_parallel=qz_parallel,
+            qr_parallel=qr_parallel,
+        )
 
-        if not poni_filename:
-            logger.info(f"No active ponifile. GrazingGeometry was not updated")            
-            return
-        if not Path(poni_filename).is_file():
-            logger.info(f"The .poni file {poni_filename} does not exist.")
-            return
-
-        # Load the ponifile
-        try:
-            self._transform.load(poni_filename)
-            self.load(poni_filename)
-            logger.info(f"Loaded poni file: {poni_filename}")
-        except Exception as e:
-            logger.error(f"{e}: Ponifile could not be loaded to GrazingGeometry")
-        
-        # Update default incident and tilt angles
-        try:
-            self.update_incident_tilt_angle()
-        except Exception as e:
-            logger.error(f"{e}: angles could not be updated.")
 
     @logger_info
-    def update_angles(self, sample_name=str(), list_index=list()):
+    def update_angles(self, sample_name='', list_index=0):
         iangle = self.get_incident_angle(
             sample_name=sample_name,
-            sample_relative_address=True,
             index_list=list_index,
         )
         tangle = self.get_tilt_angle(
             sample_name=sample_name,
-            sample_relative_address=True,
             index_list=list_index,
         )
-        self.update_incident_tilt_angle(
+
+        self.gi.update_incident_angle(
             incident_angle=iangle,
+        )
+        self.gi.update_tilt_angle(
             tilt_angle=tangle,
         )
 
-    @logger_info
-    def update_incident_tilt_angle(self, incident_angle=0.0, tilt_angle=0.0):
-        """
-        Update the incident and tilt angles inherited from GrazingGeometry
 
-        Keyword Arguments:
-            incident_angle -- (default: {0.0})
-            tilt_angle --  (default: {0.0})
-        """        
-        # Incident angle
-        try:
-            self._transform.set_incident_angle(
-                incident_angle=incident_angle,
-            )
-            logger.info(f"Incident angle set at {incident_angle}")
-        except Exception as e:
-            logger.error(f"{e}: Incident angle could not be updated.")
+    # @logger_info
+    # def append_stringlist_to_dataset(self, group_address='.', dataset_name=str(), list_to_append=list()):
+    #     if isinstance(list_to_append, str):
+    #         list_to_append = [list_to_append]
 
-        # Tilt angle
-        try:
-            self._transform.set_tilt_angle(
-                tilt_angle=tilt_angle,
-            )
-            logger.info(f"Tilt angle set at {tilt_angle}")
-        except Exception as e:
-            logger.error(f"{e}: Tilt angle could not be updated.")
+    #     with File(self._h5_filename, 'r+') as f:
+    #         if not f[group_address].__contains__(dataset_name):
+    #             logger.info(f"{dataset_name} does not exist in {group_address}. Create it before appending.")
+    #         else:
+    #             try:
+    #                 dataset = f[group_address][dataset_name]
+    #                 dataset.resize((dataset.shape[0] + len(list_to_append),))
+    #                 dataset[-len(list_to_append):] = list_to_append
+    #                 logger.debug(f"{str(list_to_append)} was appended to {group_address}/{dataset}")
+    #             except Exception as e:
+    #                 logger.error(f"{str(list_to_append)} could not be appended to {group_address}/{dataset}")
 
-    @logger_info
-    def update_orientation(self, qz_parallel=True, qr_parallel=True) -> None:
-        """
-        Updates two parameters to define the rotation of the detector and the orientation of the sample axis
-        Pygix defined a sample orientation upon 1-4 values
 
-        Keyword Arguments:
-            qz_parallel -- inversion of the qz axis (default: {True})
-            qr_parallel -- inversion of the qr axis (default: {True})
-        """
-        try:
-            sample_orientation = DICT_SAMPLE_ORIENTATIONS[(qz_parallel, qr_parallel)]
-            self._transform.set_sample_orientation(
-                sample_orientation=sample_orientation,
-            )
-            logger.info(f"The sample orientation (pygix) is set at {sample_orientation}.")
-        except Exception as e:
-            logger.error(f"The sample orientation (pygix) could not be updated.")
 
     #####################################
     ###### HDF5 METHODS #################
     #####################################
 
     @logger_info
-    def create_group(
-        self,
-        h5_filename='',
-        root_group_address='.', 
-        group_name=str(),
-        ):
-        if not h5_filename:
-            h5_filename = self._h5_filename
-
-        print(000000)
-        print(group_name)
+    def create_entry_ponifile(self, ponifile_list=[]):
+        with File(self._h5_filename, 'r+') as f:
+            f.create_group(name='entry_ponifiles')
+            f['entry_ponifiles'].attrs['NX_class'] ='NXentry'
+            f['entry_ponifiles'].create_group(name='ponifiles')     
+            f['entry_ponifiles']['ponifiles'].attrs['NX_class'] ='NXdata'
+            	
+            f['entry_ponifiles']['ponifiles'].create_dataset(
+                name='ponifiles',
+                data=ponifile_list,
+                maxshape=(None,),
+                dtype=FORMAT_STRING,
+            )
         
-
+    @logger_info
+    def append_ponifiles(self, ponifile_list=[]):
         with File(self._h5_filename, 'r+') as f:
-            # Returns if it contains the dataset already
-            if f[root_group_address].__contains__(group_name):
-                logger.debug(f"{group_name} exists already in {root_group_address}.")
-                return
-            else:
-                try:
-                    f[root_group_address].create_group(
-                        name=str(group_name),
-                    )
-                    logger.debug(f"{group_name} was created in {root_group_address}.")
-                except Exception as e:
-                    logger.error(f"{e}: {group_name} could not be created in {root_group_address}.")
+            # Resize dataset
+            initial_size = f['entry_ponifiles']['ponifiles']['ponifiles'].shape[0]
+            future_size = (initial_size + len(ponifile_list),)
+            f['entry_ponifiles']['ponifiles']['ponifiles'].resize(future_size)
+            # Add new data
+            f['entry_ponifiles']['ponifiles']['ponifiles'][initial_size:] = ponifile_list
+
 
     @logger_info
-    def create_dataset_path(self, group_address='.', dset_name=str(), dtype=FORMAT_STRING, shape=DEFAULT_SHAPE_1D, maxshape=MAXSHAPE_1D_RESIZE,):
+    def create_group_metadata(self, entry_name='', metadata_key='', data_values=[]):
         with File(self._h5_filename, 'r+') as f:
-            # Returns if it contains the dataset already
-            if f[group_address].__contains__(dset_name):
-                logger.debug(f"{dset_name} exists already in {group_address}.")
-                return
-            else:
-                try:
-                    f[group_address].create_dataset(
-                        name=dset_name,
-                        shape=shape,
-                        maxshape=maxshape,
-                        dtype=dtype,
-                    )
-                    logger.debug(f"{dset_name} was created in {group_address}")
-                except Exception as e:
-                    logger.error(f"{e}: {dset_name} could not be created in {group_address}")
-
-
+            f[entry_name].create_group(name=metadata_key)
+            f[entry_name][metadata_key].attrs['NX_class'] ='NXdata'
+            f[entry_name][metadata_key].create_dataset(
+                name=metadata_key,
+                data=data_values,
+                maxshape=(None,),
+                # dtype=FORMAT_STRING,
+            )
+            
     @logger_info
-    def create_dataset_float(self, group_address='.', dset_name=str(), dtype=FORMAT_FLOAT, shape=DEFAULT_SHAPE_1D, maxshape=MAXSHAPE_1D_RESIZE,):
+    def append_metadata_value(self, entry_name='', metadata_key='', data_values=[]):
         with File(self._h5_filename, 'r+') as f:
-            # Returns if it contains the dataset already
-            if f[group_address].__contains__(dset_name):
-                logger.debug(f"{dset_name} exists already in {group_address}.")
-                return
-            else:
-                try:
-                    f[group_address].create_dataset(
-                        name=dset_name,
-                        shape=shape,
-                        maxshape=maxshape,
-                        dtype=dtype,
-                    )
-                    logger.debug(f"{dset_name} was created in {group_address}")
-                except Exception as e:
-                    logger.error(f"{e}: {dset_name} could not be created in {group_address}")
+            # Resize dataset
+            initial_size = f[entry_name][metadata_key][metadata_key].shape[0]
+            future_size = (initial_size + len(data_values),)
+            f[entry_name][metadata_key][metadata_key].resize(future_size)
+            # Add new data
+            f[entry_name][metadata_key][metadata_key][initial_size:] = data_values
+            
+        
+    # @logger_info
+    # def create_group(
+    #     self,
+    #     h5_filename='',
+    #     root_group_address='.', 
+    #     group_name=str(),
+    #     ):
+    #     if not h5_filename:
+    #         h5_filename = self._h5_filename
+        
+    #     with File(self._h5_filename, 'r+') as f:
+    #         # Returns if it contains the dataset already
+    #         if f[root_group_address].__contains__(group_name):
+    #             logger.debug(f"{group_name} exists already in {root_group_address}.")
+    #             return
+    #         else:
+    #             try:
+    #                 f[root_group_address].create_group(
+    #                     name=str(group_name),
+    #                 )
+
+    #                 logger.debug(f"{group_name} was created in {root_group_address}.")
+    #             except Exception as e:
+    #                 logger.error(f"{e}: {group_name} could not be created in {root_group_address}.")
 
     @logger_info
-    def create_group_samples(self, h5_filename=''):
-        self.create_group(
-            h5_filename=h5_filename,
-            group_name=SAMPLE_GROUP_KEY,
-        )
+    def get_new_nx_entry_name(self):
+        entry_name = f'entry_{str(self.get_nx_entries()).zfill(ENTRY_ZEROS)}'
+        return entry_name
 
-    @logger_info
-    def create_group_ponifiles(self, h5_filename):
-        self.create_group(
-            h5_filename=h5_filename,
-            group_name=PONI_GROUP_KEY,
-        )
-        self.create_ponifile_dset()
-
-
-    @logger_info
-    def create_ponifile_dset(self):
-        self.create_dataset_path(
-            group_address=PONI_GROUP_KEY,
-            dset_name=PONIFILE_DATASET_KEY,
-        )
-
-
-    @logger_info
-    def create_sample(self, sample_name=str()):
-
-        # Define the name, absolute and relative
-        sample_name = Path(sample_name)
-
-        if sample_name.is_absolute():
-            abs_address = sample_name.as_posix()
-            rel_address = sample_name.relative_to(self._root_dir).as_posix()
-        else:
-            abs_address = self._root_dir.joinpath(sample_name).as_posix()
-            rel_address = sample_name.as_posix()
-
-        # Write some attributes
-        dict_init_sample = {
-            CLASS_KEY : SAMPLE_KEY,
-            DATETIME_KEY : date_prefix(),
-            ABS_ADDRESS_KEY : abs_address,
-            REL_ADDRESS_KEY : rel_address,
-        }
-
-        sample_name = sample_name.as_posix().replace('/', '\\')
-        self.create_group(
-            root_group_address=SAMPLE_GROUP_KEY,
-            group_name=sample_name,
-        )
-        self.h5_write_attrs_in_group(
-            dict_attrs=dict_init_sample,
-            group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
-        )
-
-        self.create_data_dset(sample_name=sample_name)
-        self.create_metadata_group(sample_name=sample_name)
-
-
+    # @logger_info
+    # def create_dataset_path(self, group_address='.', dset_name=str(), dtype=FORMAT_STRING, shape=DEFAULT_SHAPE_1D, maxshape=MAXSHAPE_1D_RESIZE,):
+    #     with File(self._h5_filename, 'r+') as f:
+    #         # Returns if it contains the dataset already
+    #         if f[group_address].__contains__(dset_name):
+    #             logger.debug(f"{dset_name} exists already in {group_address}.")
+    #             return
+    #         else:
+    #             try:
+    #                 f[group_address].create_dataset(
+    #                     name=dset_name,
+    #                     shape=shape,
+    #                     maxshape=maxshape,
+    #                     dtype=dtype,
+    #                 )
+    #                 logger.debug(f"{dset_name} was created in {group_address}")
+    #             except Exception as e:
+    #                 logger.error(f"{e}: {dset_name} could not be created in {group_address}")
 
 
     # @logger_info
-    # def new_sample(self, sample_name=str()):
-    #     # sample_name = sample_name.replace('/', '_')
-    #     sample_name = Path(sample_name)     
-
-
-    #     if sample_name.is_absolute():
-    #         abs_address = sample_name.as_posix()
-    #         rel_address = sample_name.relative_to(self._root_dir).as_posix()
-    #     else:
-    #         abs_address = self._root_dir.joinpath(sample_name).as_posix()
-    #         rel_address = sample_name.as_posix()
-
-    #     # Write some attributes
-    #     dict_init_sample = {
-    #         CLASS_KEY : SAMPLE_KEY,
-    #         DATETIME_KEY : date_prefix(),
-    #         ABS_ADDRESS_KEY : abs_address,
-    #         REL_ADDRESS_KEY : rel_address,
-    #     }
-
-    #     # Define relative and absolute addresses
-    #     # 
-    #     sample_name = sample_name.as_posix().replace('/', '\\')
-
-    #     # Check if the sample does exist
-    #     self.create_sample(
-    #         sample_name=sample_name,
-    #     )
-
-    #     self.h5_write_attrs_in_group(
-    #         dict_attrs=dict_init_sample,
-    #         group_address=f"{SAMPLE_GROUP_KEY}/{sample_name}",
-    #     )
-
-    #     self.create_data_dset(sample_name=sample_name)
-    #     self.create_metadata_group(sample_name=sample_name)
-
-
-    # @debug_info
-    # def contains_group(self, sample_name=str(), group_address='.') -> bool:
-    #     """
-    #     Checks if the folder already exist in a specific address
-
-    #     Keyword Arguments:
-    #         folder_name -- name of the new folder (Group) (default: {str()})
-    #         group_address -- address of the Group inside the H5 file (default: {str()})
-
-    #     Returns:
-    #         exists (True) or not (False)
-    #     """
-    #     try:
-    #         is_inside = self._file[group_address].__contains__(str(sample_name))
-    #         return is_inside
-    #     except Exception as e:
-    #         logger.error(f"{e}Error while opening Group {group_address} to check {sample_name} Group. Trying to opening the file")
-    #     try:
-    #         self._open
-    #         is_inside = self._file[group_address].__contains__(str(sample_name))
-    #         self._close
-    #         return is_inside
-    #     except Exception as e:
-    #         logger.error(f"{e}Error while opening Group {group_address} to check {sample_name} Group again.")
-
-    # @debug_info
-    # def append_to_dataset(self, group_address='.', sample_name=str(), dataset_name='Data', new_data=np.array([])) -> None:
-    #     """
-    #     Append new data to 'Data' dataset, inside a specific folder
-
-    #     Keyword Arguments:
-    #         folder_name -- name of the new folder (Group) (default: {str()})
-    #         dataset_name -- 'Data' is the name of the dataset where the 2D maps or just the addresses of the files are stored (default: {'Data'})
-    #         new_data -- list of data to be iterated and appended in the dataset (default: {np.array([])})
-    #     """      
-    #     self._open
-
-    #     # Get the current shape of the dataset
-    #     initial_shape = np.array(self._file[group_address][sample_name][dataset_name].shape)
-    #     expanded_shape = np.copy(initial_shape)
-    #     num_files = initial_shape[0]
-
-    #     # How many new layers should we add
-    #     new_layers = new_data.shape[0]
-    #     expanded_shape[0] += new_layers
-    #     expanded_shape = tuple(expanded_shape)
-        
-    #     #Resizing
-    #     try:
-    #         self._file[group_address][sample_name][dataset_name].resize((expanded_shape))
-    #         logger.info(f"Shape of dataset reseted from {tuple(initial_shape)} to {expanded_shape}")
-    #     except Exception as e:
-    #         logger.error(f"{e} Error during reshaping the dataset {dataset_name} from {tuple(initial_shape)} to {expanded_shape}")
-
-    #     # Appending
-    #     for ind in range(new_layers):
-    #         try:
-    #             self._file[group_address][sample_name][dataset_name][num_files + ind] = new_data[ind]
-    #             logger.info(f"Appended data with index {ind} successfully.")
-    #         except Exception as e:
-    #             logger.error(f"{e}: Error while appending {new_data[ind]}.")
-
-    # @log_info
-    # def update_sample(self, sample_name=str(), data_filenames=list(), get_2D_array=False, relative_to_root=True) -> None:
-    #     """
-    #     Creates or updates a folder (Group) with data and metadata from a list of files
-
-    #     Keyword Arguments:
-    #         folder_name -- name of the folder (Group) where the data/metadata will be stored (default: {str()})
-    #         filename_list -- list of path filenames where the data/metadata will be extracted (default: {list()})
-    #         get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
-    #     """
-    #     self._open
-    #     self._update_sample(
-    #         sample_name=sample_name,
-    #         data_filenames=data_filenames,
-    #         relative_to_root=relative_to_root,
-    #         get_2D_array=get_2D_array,
-    #     )
-    #     self._close
-
-    @logger_info
-    def update_sample(self, sample_name=str(), data_filenames=list(), get_2D_array=False) -> None:
-        """
-        Creates or updates a folder (Group) with data and metadata from a list of files
-
-        Keyword Arguments:
-            folder_name -- name of the folder (Group) where the data/metadata will be stored (default: {str()})
-            filename_list -- list of path filenames where the data/metadata will be extracted (default: {list()})
-            get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
-        """
-        # Create the sample first
-        print(1111)
-        print(sample_name)
-        self.create_sample(
-            sample_name=sample_name,
-        )
-
-        sample_name = self.get_sample_address(
-            sample_name=sample_name,
-            sample_relative_address=False,
-        )
-        print(333333)
-        print(sample_name)
-
-
-        # Append Data filenames
-        if get_2D_array:
-            return
-        else:
-            self.append_datafile_list(
-                sample_name=sample_name,
-                datafile_list=data_filenames,
-            )
-        
-        # Append MetaData values
-        dict_metadata = defaultdict(list)
-
-        for header in self.generator_file_header(filenames=data_filenames):
-            for k,v in header.items():
-                try:
-                    v = float(v)
-                except Exception as e:
-                    v = str(v)
-                finally:
-                    dict_metadata[k].append(v)
-
-        # print(dict_metadata)
-        for k,v in dict_metadata.items():
-
-            if isinstance(v[0], float):
-                self.create_metadata_dset_float(
-                        sample_name=sample_name,
-                        metadata_key=k,
-                    )
-            elif isinstance(v[0], str):
-                self.create_metadata_dset_str(
-                        sample_name=sample_name,
-                        metadata_key=k,
-                    )
-            else:
-                continue
-
-            self.append_metadata_values(
-                    sample_name=sample_name,
-                    metadata_key=k,
-                    value_list=v,
-                )                
-
-
-        # First, get the packed data and metadata for every filename
-        # merged_data, merged_metadata = self.get_merged_data_and_metadata(
-        #     filename_list=data_filenames, 
-        #     get_2D_array=get_2D_array,
-        #     # relative_to_root=relative_to_root,
-        # )
-
-        # # Get the names of samples and files to write in the .h5 file
-        # if relative_to_root:
-        #     sample_name = Path(sample_name)
-        #     data_filenames = [str(Path(file).relative_to(sample_name)) for file in data_filenames]            
-        #     sample_name = str(sample_name.relative_to(self._root_dir))
-
-
-
-        # Create the DataSet 'data'
-        # self.h5_create_data_dset(sample_name=sample_name)
-        # # if not self._file[SAMPLE_GROUP_KEY][sample_name].__contains__(DATA_KEY):
-        # #     self._file[SAMPLE_GROUP_KEY][sample_name].create_dataset(
-        # #         DATA_KEY, 
-        # #         data=merged_data, 
-        # #         chunks=True, 
-        # #         maxshape=(None, None, None,),
-        # #         # dtype=h5py.string_dtype(encoding='utf-8'),
-        # #     )
-        # #     logger.info(f"Data dataset in {sample_name} group created.")
-        # #     logger.info(f"Added in {sample_name}-Data shape: {merged_data.shape}")
-        # # else:
-        # #     logger.info(f"Data dataset in {sample_name} group already existed. Go to append.")
-        # #     self.append_to_dataset(
-        # #         group_address=SAMPLE_GROUP_KEY,
-        # #         sample_name=sample_name,
-        # #         new_data=merged_data,
-        # #         dataset_name=DATA_KEY,
-        # #     )
-
-        # # Create or update METADATA group with datasets
-        # self.h5_create_metadata_dset()
-
-        # if not self._file[SAMPLE_GROUP_KEY][sample_name].__contains__(METADATA_KEY):
-        #     self._file[SAMPLE_GROUP_KEY][sample_name].create_group(METADATA_KEY)
-        #     logger.info(f"Metadata group in {sample_name} group created.")
-        # else:
-        #     logger.info(f"Metadata group in {sample_name} group already existed. Continue.")
-
-        # for key,value in merged_metadata.items():
-        #     # Value is a list here! Convert to np.array
-        #     value = np.array(value)
-
-        #     # Creates dataset for the key
-        #     if not self._file[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY].__contains__(key):
-
-        #         # Try to create dataset with the standard format (floats)
-        #         try:
-        #             self._file[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY].create_dataset(key, data=np.array(value), chunks=True, maxshape=(None,))
-        #             logger.info(f"Dataset {key} in {sample_name}-Metadata was created.")
-        #             continue
-        #         except:
-        #             logger.info(f"Dataset could not be created with the standard format for the key {key}, value {value}.")
-
-        #         # If it did not work, try to create dataset encoding the dataset as bytes format
-        #         try:
-        #             logger.info("Trying to create dataset with encoded data.")
-        #             bytes_array = np.array([str(item).encode() for item in value])
-        #             self._file[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY].create_dataset(key, data=bytes_array, chunks=True, maxshape=(None,))
-        #             logger.info(f"Dataset {key} in {sample_name}-Metadata was created. Encoding worked.")
-        #             continue
-        #         except:
-        #             logger.info(f"Dataset could not be created with the encoded format for the key {key}, value {value}.")
-
-        #     # Appends dataset for the key if the dataset already existed
-        #     else:
-        #         subfolder = f"{sample_name}/{METADATA_KEY}"
-        #         # Try to append dataset with the standard format (floats)
-
-        #         try:
-        #             self.append_to_dataset(
-        #                 group_address=SAMPLE_GROUP_KEY,
-        #                 sample_name=subfolder,
-        #                 new_data=value, 
-        #                 dataset_name=key,
-        #             )
-        #             logger.info(f"Dataset {key} in {subfolder} was appended.")
-        #             continue
-        #         except:
-        #             logger.info(f"Dataset could not be appended with the standard format for the key {key}, value {value}.")
-
-        #         # If it did not work, try to append dataset encoding the dataset as bytes format
-        #         try:
-        #             logger.info("Trying to append dataset with encoded data.")
-        #             bytes_array = np.array([str(item).encode() for item in value])
-        #             self.append_to_dataset(
-        #                 group_address=SAMPLE_GROUP_KEY,
-        #                 sample_name=subfolder, 
-        #                 new_data=bytes_array, 
-        #                 dataset_name=key,
-        #             )
-        #             logger.info(f"Dataset {key} in {sample_name}-Metadata was appended. Encoding worked.")
-        #             continue
-        #         except:
-        #             logger.info(f"Dataset could not be appended with the encoded format for the key {key}, value {value}.")
-
-
-
-
-
-
-
-
-
-
-
-
-    # @debug_info
-    # def get_merged_data_and_metadata(
-    #     self, 
-    #     filename_list=list(), 
-    #     get_2D_array=True, 
-    #     absolute_address=True,
-    #     ):
-    #     """
-    #     Use FabIO module to get the data (arrays) and metadata from 2D detector patterns
-    #     If not get_2D_array, it yields the encoded name of the file, not the real 2D array
-
-    #     Keyword Arguments:
-    #         filenames -- list of strings with the full address of the data files (default: {list()})
-    #         get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
-
-    #     Returns:
-    #         _description_
-    #     """
-    #     # Init dataset and header
-    #     merged_dataset = np.array([])
-    #     merged_header = defaultdict(list)            
-        
-    #     for index_file, (data, header) in enumerate(
-    #         self.generator_fabio_data_header(
-    #             filename_list=filename_list,
-    #             get_2D_array=get_2D_array,
-    #             relative_to_root=absolute_address,
-    #         )):
-    #         # Pack data
-    #         try:
-    #             if index_file == 0:
-    #                 merged_dataset = np.array([data])
-    #             else:
-    #                 merged_dataset = np.concatenate((merged_dataset, [data]), axis=0)
-    #             logger.info(f"Merged Data dataset was extracted.")
-    #         except Exception as e:
-    #             logger.error(f"{e}: Error while packing data at {index_file}")
-            
-    #         # Pack metadata
-    #         for key,value in header.items():
+    # def create_dataset_float(self, group_address='.', dset_name=str(), dtype=FORMAT_FLOAT, shape=DEFAULT_SHAPE_1D, maxshape=MAXSHAPE_1D_RESIZE,):
+    #     with File(self._h5_filename, 'r+') as f:
+    #         # Returns if it contains the dataset already
+    #         if f[group_address].__contains__(dset_name):
+    #             logger.debug(f"{dset_name} exists already in {group_address}.")
+    #             return
+    #         else:
     #             try:
-    #                 value = float_str(value)
-    #                 merged_header[key].append(value)
+    #                 f[group_address].create_dataset(
+    #                     name=dset_name,
+    #                     shape=shape,
+    #                     maxshape=maxshape,
+    #                     dtype=dtype,
+    #                 )
+    #                 logger.debug(f"{dset_name} was created in {group_address}")
     #             except Exception as e:
-    #                 logger.error(f"{e}: Error while packing metadata at key: {key}, value {value}")
-    #         logger.info(f"Merged all Metadata datasets.")
-    #     return merged_dataset, merged_header
+    #                 logger.error(f"{e}: {dset_name} could not be created in {group_address}")
+
+    # @logger_info
+    # def create_group_samples(self, h5_filename=''):
+    #     self.create_group(
+    #         h5_filename=h5_filename,
+    #         group_name=SAMPLE_GROUP_KEY,
+    #     )
+
+    # @logger_info
+    # def create_group_ponifiles(self, h5_filename):
+    #     self.create_group(
+    #         h5_filename=h5_filename,
+    #         group_name=PONI_GROUP_KEY,
+    #     )
+    #     self.create_ponifile_dset()
 
 
+    # @logger_info
+    # def create_ponifile_dset(self):
+    #     self.create_dataset_path(
+    #         group_address=PONI_GROUP_KEY,
+    #         dset_name=PONIFILE_DATASET_KEY,
+    #     )
+
+
+    # @logger_info
+    # def create_sample(self, sample_name=str()):
+
+    #     # Define the name, absolute and relative
+    #     sample_name = Path(sample_name)
+
+    #     self.create_group(
+    #         root_group_address=SAMPLE_GROUP_KEY,
+    #         group_name=sample_name,
+    #     )
+
+    def get_full_dict_metadata(self, list_filenames=[]):
+        header_dict = defaultdict(list)
+        list_filenames = list(list_filenames)
+        list_filenames.sort()
+        for file in list_filenames:
+            header = self.get_Edf_instance(
+                full_filename=file,
+            ).get_header()
+            for key, value in header.items():
+                try:
+                    value = float(value)
+                except:
+                    value = str(value).encode()
+                header_dict[key].append(value)
+            header_dict[DATAFILE_KEY].append(file.encode())
+            header_dict[DATANAME_KEY].append(Path(file).name)
+        return header_dict
 
     @logger_info
     def generator_file_header(self, filenames=list()):
@@ -1736,75 +1052,34 @@ class H5GIIntegrator():
                 header = None, None
             yield header
 
-
-    # @debug_info
-    # def generator_fabio_data_header(self, filename_list=[], get_2D_array=True, relative_to_root=True):
-    #     """
-    #     Use FabIO module to generate the data and metadata from a list of files
-    #     If not get_2D_array, it yields the encoded name of the file, not the real 2D array
-
-    #     Keyword Arguments:
-    #         filenames -- list of strings with the full address of the data files (default: {[]})
-    #         get_2D_array -- yields a packed array with the 2D maps if True, yields a packed array with the encoded filenames if False (default: {True})
-
-    #     Yields:
-    #         np.array : 2D map or encoded filename
-    #         dict : header dictionary from FabIO
-    #     """
-    #     for file in filename_list:
-    #         # Open a EdfClass instance
-    #         try:
-    #             edf = EdfClass(
-    #                 filename=file,
-    #             )
-    #             logger.info(f"EdfClass with filename {file} was created.")
-    #         except Exception as e:
-    #             logger.error(f"{e}: EdfClass instance with filename {file} could not be created.")
-    #             continue
-
-    #         # Yield data or data addresses and header
-    #         try:
-    #             if get_2D_array:
-    #                 data, header = edf.get_data(), edf.get_header()
-    #             else:
-    #                 if relative_to_root:
-    #                     filename = Path(file)
-    #                     sample_name = filename.parent
-    #                     filename = filename.relative_to(sample_name)
-    #                 else:
-    #                     filename = file
-    #                 data, header = np.array(([[str(filename).encode()]])), edf.get_header()
-    #             logger.info(f"Data and header extracted successfully.")
-    #         except Exception as e:
-    #             logger.error(f"{e}: Error while fabio handling at {filename}")
-    #             data, header = None, None
-    #         yield data, header
-
     @logger_info
     def generator_samples(self, get_group_name=True, get_relative_address=False) -> str:
         with File(self._h5_filename, 'r+') as f:
-            for sample in  f[SAMPLE_GROUP_KEY].keys():
+            for entry in  f.keys():
+                if entry == ENTRY_PONIFILE_KEY:
+                    continue
+
                 if get_group_name:
-                    yield sample
+                    yield entry
                 else:
                     if get_relative_address:
-                        sample_name = f[SAMPLE_GROUP_KEY][sample].attrs[REL_ADDRESS_KEY]
+                        sample_name = f[entry].attrs[REL_ADDRESS_KEY]
                     else:
-                        sample_name = f[SAMPLE_GROUP_KEY][sample].attrs[ABS_ADDRESS_KEY]        
+                        sample_name = f[entry].attrs[ABS_ADDRESS_KEY]        
                     yield sample_name
 
     @logger_info
-    def get_all_samples(self, get_relative_address=True) -> list:
-        list_samples = sorted(
+    def get_all_entries(self, get_relative_address=True) -> list:
+        list_entries = sorted(
             self.generator_samples(
                 get_group_name=False,
                 get_relative_address=get_relative_address,
             ),
         )
-        return list_samples
+        return list_entries
 
     @logger_info
-    def generator_all_files(self) -> str:
+    def generator_all_filenames(self) -> str:
         """
         Yields the names of every file stored in the .h5 file
 
@@ -1815,30 +1090,22 @@ class H5GIIntegrator():
         str : fullpath of stored filenames
         """
         for sample in self.generator_samples(get_group_name=True):
-            for file in self.generator_files_in_sample(
-                sample_name=sample,
-                is_group_name=True,
-                get_relative_address=False,
+            for file in self.generator_filenames_in_sample(
+                sample_address=sample,
                 ):
                 yield file
 
     @logger_info
-    def get_dict_files(self, relative_address=True):
+    def get_dict_files(self):
         dict_files = defaultdict(set)
-        for file in self.generator_all_files():
-            sample_name = Path(file).parent
-            if relative_address:
-                file = Path(file).relative_to(sample_name).as_posix()
-                sample_name = sample_name.relative_to(self._root_dir).as_posix()
-            else:
-                file = Path(file).as_posix()
-                sample_name = sample_name.as_posix()
-
-            dict_files[sample_name].add(file)
+        for filename in self.generator_all_filenames():
+            sample_name = Path(filename).parent.as_posix()
+            file = Path(filename).as_posix()
+            dict_files[sample_name].add(filename)
         return dict_files
 
     @logger_info
-    def get_all_files(self) -> list:
+    def get_all_filenames(self) -> list:
         """
         Returns a list with all the stored files in the h5 File
 
@@ -1848,157 +1115,477 @@ class H5GIIntegrator():
         Returns:
             _description_
         """
-        list_files = sorted(self.generator_all_files())
+        list_files = list(self.generator_all_filenames())
         return list_files
 
     ##################################################
-    ############# SAMPLES/FILES METHODS ##############
+    ############# DATAFILE METHODS ##############
     ##################################################
 
-    @logger_info
-    def set_pattern(self, pattern=".edf"):
-        self._pattern = pattern
+
+
+    def update_new_data_fast(
+        self,
+        pattern: str = '*.edf',
+        ) -> dict:
+
+        attrs = [
+            (
+                pattern, 
+                subdir,
+            ) 
+            for subdir in self._root_dir.rglob('**/')
+        ]
+
+        with Pool(processes=4) as pool:  # creating a pool with 4 worker processes
+            results = pool.starmap(get_dict_entry, attrs)
+
+        for result, entry in zip(results, self._root_dir.rglob('**/')):
+            self.dict_data[str(entry)] = result
+
+        #works extremely fast but needs a filter 
+            
+
+            
+
+
+
 
     @logger_info
-    def search_new_datafiles(
+    def update_new_data(
+        self,
+        pattern: str = '*.edf',
+        ) -> dict:
+        """Updates the database with data files in the root directory that match with a pattern
+
+        Keyword arguments:
+        pattern -- filename string pattern (default: {'*.edf'})
+
+        Returns:
+        dict: all metadata collected from files
+        """   
+        dict_new_data = defaultdict(lambda : defaultdict(list))
+
+        # If there is no stored data so far, append directly without checking
+        if not self.dict_data:
+
+            for file in self._root_dir.rglob(pattern):
+                dict_new_data[str(file.parent)]['filenames'].append(str(file))
+                dict_new_data[str(file.parent)]['names'].append(str(file.name))
+                header = EdfClass(filename=str(file)).get_header()
+                for metadata_key,metadata_value in header.items():
+                    try:
+                        metadata_value = float(metadata_value)
+                    except:
+                        metadata_value = str(metadata_value)
+                    dict_new_data[str(file.parent)][metadata_key].append(metadata_value)
+
+            # Search also for .poni files
+            for file in self._root_dir.rglob('*.poni'):
+                dict_new_data['ponifiles']['files'].append(str(file))
+
+            self.dict_data = dict_new_data
+
+        # If there are stored data, check if it is redundant
+        else:
+            for file in self._root_dir.rglob(pattern):
+                if str(file) not in self.dict_data[str(file.parent)]['filenames']:
+
+                    dict_new_data[str(file.parent)]['filenames'].append(str(file))
+                    dict_new_data[str(file.parent)]['names'].append(str(file.name))
+                    self.dict_data[str(file.parent)]['filenames'].append(str(file))
+                    self.dict_data[str(file.parent)]['names'].append(str(file.name))
+
+                    header = EdfClass(filename=str(file)).get_header()
+                    for metadata_key,metadata_value in header.items():
+                        try:
+                            metadata_value = float(metadata_value)
+                        except:
+                            metadata_value = str(metadata_value)
+
+                        dict_new_data[str(file.parent)][metadata_key].append(metadata_value)
+                        self.dict_data[str(file.parent)][metadata_key].append(metadata_value)
+
+            # Search also for .poni files
+            for file in self._root_dir.rglob('*.poni'):
+                if str(file) not in self.dict_data['ponifiles']['files']:
+                    dict_new_data['ponifiles']['files'].append(str(file))
+                    self.dict_data['ponifiles']['files'].append(str(file))
+
+        return dict_new_data
+
+    @logger_info
+    def get_metadata(
         self, 
-        pattern="*.edf",
-        ):
-        # searched_files = [file.as_posix() for file in self._root_dir.rglob(pattern) if file.parent != self._root_dir]
-        searched_files = self._root_dir.rglob(pattern)
-        dict_files = get_dict_files(
-            list_files=searched_files,
-        )
+        entry_name: str = '', 
+        metadata_key: str = '',
+        index: List[int] = [],
+        ) -> list:
+        """Retrieves metadata from database (self.dict_data)
 
-        # Filter only the new data
-        dict_files_in_h5 = self.get_dict_files(relative_address=False)
+        Keyword arguments:
+        entry_name -- name of the subdirectory (default '')
+        metadata_key -- name of the metadata key (default '')
+        index - list of integers, associated with the files inside the directory (default [])
 
-        dict_new_files = get_dict_difference(
-            large_dict=dict_files,
-            small_dict=dict_files_in_h5,
-        )
-
-        return dict_new_files
+        Returns:
+        list: metadata stored in database
+        """   
+        if isinstance(index, int):
+            index = [index, index + 1]
+        elif isinstance(index, list) and len(index) == 1:
+            index = [index[0], index[0] + 1]
+        elif index == []:
+            index = [0, 999999]
+        
+        metadata = self.dict_data[entry_name][metadata_key][index[0]:index[1]]
+        if metadata == []:
+            logger.error(f'No metadata could be retrieved with name ({metadata_key}) in entry ({entry_name}) through index ({index})')
+        return metadata
 
     @logger_info
-    def update_datafiles(
+    def get_ponifiles(
         self, 
-        dict_new_files=dict(), 
-        pattern='*.edf', 
-        search=False,
-        ):
+        ) -> list:
+        """Retrieves .poni filenames from database (self.dict_data)
+
+        Returns:
+        list: metadata stored in database
+        """   
+        metadata = self.get_metadata(
+            entry_name='ponifiles',
+            metadata_key='files'
+        )
+        if metadata == []:
+            logger.error(f'No .poni files to retrieve.')
+        return metadata
+
+    @logger_info
+    def save_database(self):
+        json_out = f'kk.json'
+        with open(json_out, '+w') as fp:
+            json.dump(self.dict_data, fp)
+
+    @logger_info
+    def save_h5_file(self):
+        with h5py.File('kk.h5', 'w') as f:
+            for ind_entry, entry in enumerate(self.dict_data.keys()):
+                name_entry = f'entry_{ind_entry:04}'
+                f.create_group(name=name_entry)
+                for metadata_key, metadata_list in self.dict_data[entry].items():
+                    try:
+                        f[name_entry].create_dataset(
+                            name=metadata_key,
+                            data=np.array(metadata_list),
+                        )
+                    except:
+                        f[name_entry].create_dataset(
+                            name=metadata_key,
+                            data=np.array(metadata_list),
+                            dtype=FORMAT_STRING,
+                        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @logger_info
+    def update_datafiles(self, pattern='*.edf'):
+
+        """Updates the data filenames as NXentries
+
+        Keyword Arguments:
+            dict_files -- input dictionary of folder-filenames (default: {dict()})
+            search -- if True, searches in the root dictionary (default: {False})
+            pattern -- filename string pattern (default: {'*.edf'})
+            new_files -- if True, update only the new files (default: {True})
+        """     
+
+        # Write the new files
+        for sample_address in dict_files.keys():
+
+            # Rewrite group if it exists
+            existing_entry = self.get_entry_name(sample_address=sample_address)
+            if not existing_entry:
+                group_name = self.get_new_nx_entry_name()
+                self.create_entry(entry_name=group_name)
+            else:
+                group_name = existing_entry
+
+            data_files = dict_files.get(sample_address)
+            dict_metadata = self.get_full_dict_metadata(
+                list_filenames=data_files,
+            )
+
+            for key, value in dict_metadata.items():
+                if not self.check_metadata_group(entry_name=group_name, metadata_key=key):
+                    # Create group/dataset
+                    self.create_group_metadata(
+                        entry_name=group_name,
+                        metadata_key=key,
+                        data_values=value,
+                    )              
+                else:
+                    self.append_metadata_value(
+                        entry_name=group_name,
+                        metadata_key=key,
+                        data_values=value,
+                    )
+
+                self.write_sample_address(
+                    group_name=group_name,
+                    sample_address=sample_address,
+                )
+
+
+    @logger_info
+    def update_datafiles_todict(self, pattern='*.edf'):
+
+        """Updates the data filenames as NXentries
+
+        Keyword Arguments:
+            dict_files -- input dictionary of folder-filenames (default: {dict()})
+            search -- if True, searches in the root dictionary (default: {False})
+            pattern -- filename string pattern (default: {'*.edf'})
+            new_files -- if True, update only the new files (default: {True})
+        """        
 
         # Search for new files
-        if dict_new_files:
-            dict_new_files = dict_new_files
-        elif search:
-            dict_new_files = self.search_new_datafiles(
-                pattern=pattern,
-            )
-        logger.info(f"{INFO_H5_NEW_DICTIONARY_FILES}: {str(dict_new_files)}")
+        dict_datafiles = self.get_dict_data(
+            pattern=pattern,
+        )
+        
 
-        # Store in the .h5 file by folder and its own list of files
-        for sample_name, file_list in dict_new_files.items():
-            data_filenames = sorted(file_list)
 
-            self.update_sample(
-                sample_name=sample_name,
-                data_filenames=data_filenames,
-                get_2D_array=False,
-            )
 
-            logger.info(f"Finished with folder: {sample_name}.")
-        logger.info(INFO_H5_FILES_UPDATED)
+
+        return dict_datafiles
+
+        # # Write the new files
+        # for sample_address in dict_files.keys():
+
+        #     # Rewrite group if it exists
+        #     existing_entry = self.get_entry_name(sample_address=sample_address)
+        #     if not existing_entry:
+        #         group_name = self.get_new_nx_entry_name()
+        #         self.create_entry(entry_name=group_name)
+        #     else:
+        #         group_name = existing_entry
+
+        #     data_files = dict_files.get(sample_address)
+        #     dict_metadata = self.get_full_dict_metadata(
+        #         list_filenames=data_files,
+        #     )
+
+        #     for key, value in dict_metadata.items():
+        #         if not self.check_metadata_group(entry_name=group_name, metadata_key=key):
+        #             # Create group/dataset
+        #             self.create_group_metadata(
+        #                 entry_name=group_name,
+        #                 metadata_key=key,
+        #                 data_values=value,
+        #             )              
+        #         else:
+        #             self.append_metadata_value(
+        #                 entry_name=group_name,
+        #                 metadata_key=key,
+        #                 data_values=value,
+        #             )
+
+        #         self.write_sample_address(
+        #             group_name=group_name,
+        #             sample_address=sample_address,
+        #         )
+
+
+
+
+
+
 
     @logger_info
-    def get_all_files_from_sample(
+    def get_entry_name(self, sample_address=''):
+
+        # Check if its an entry name
+        with File(self._h5_filename, 'r+') as f:
+            for entry in f.keys():
+                if sample_address == entry:
+                    return sample_address
+
+        # Check if its an absolute or relative path address
+        sample_address = Path(sample_address)
+
+        if sample_address.is_absolute():
+            absolute_address = sample_address
+            relative_address = ''
+        else:
+            relative_address = sample_address
+            absolute_address = ''
+
+        if absolute_address:
+            absolute_address = Path(absolute_address).as_posix()
+
+            with File(self._h5_filename, 'r+') as f:
+                for entry in f.keys():
+                    if entry == ENTRY_PONIFILE_KEY:
+                        continue
+
+                    if absolute_address == f[entry].attrs[ABS_ADDRESS_KEY]:
+                        return entry
+
+        elif relative_address:
+            relative_address = Path(relative_address).as_posix()
+
+            with File(self._h5_filename, 'r+') as f:
+                for entry in f.keys():
+                    if entry == ENTRY_PONIFILE_KEY:
+                        continue
+
+                    if relative_address == f[entry].attrs[REL_ADDRESS_KEY]:
+                        return entry
+
+        return None
+
+
+    @logger_info
+    def create_entry(self, entry_name=''):
+        with File(self._h5_filename, 'r+') as f:
+            f.create_group(name=entry_name)
+            f[entry_name].attrs['NX_class'] ='NXentry'
+            
+    @logger_info
+    def check_entry(self, entry_name=''):
+        with File(self._h5_filename, 'r+') as f:
+            if entry_name in f.keys():
+                return True
+            else:
+                return False        
+            
+    @logger_info
+    def check_ponifile_entry(self):
+        return self.check_entry(entry_name=ENTRY_PONIFILE_KEY)
+            
+    @logger_info
+    def check_metadata_group(self, entry_name, metadata_key):
+        h5_path = f'{entry_name}/{metadata_key}'
+        return self.check_entry(entry_name=h5_path)
+        
+    @logger_info
+    def delete_nx_group(self, entry=''):
+        with File(self._h5_filename, 'r+') as f:
+            del f[entry]
+            logger.info(f'Deleted {entry}.')
+
+    @logger_info
+    def write_sample_address(self, group_name='', sample_address=''):
+        absolute_address = Path(sample_address).as_posix()
+        relative_address = Path(sample_address).relative_to(self._root_dir).as_posix()
+
+        with File(self._h5_filename, 'r+') as f:
+            f[group_name].attrs[ABS_ADDRESS_KEY] = absolute_address
+            f[group_name].attrs[REL_ADDRESS_KEY] = relative_address
+
+    @logger_info
+    def get_nx_entries(self):
+        with File(self._h5_filename, 'r+') as f:
+            return f.__len__()
+
+    @logger_info
+    def get_all_filenames_from_sample(
         self, 
         sample_name=str(),
-        is_group_name=True,
-        sample_relative_address=True, 
-        get_relative_address=True,
         ):
-        list_files = sorted(
-            self.generator_files_in_sample(
-                sample_name=sample_name,
-                is_group_name=is_group_name,
-                sample_relative_address=sample_relative_address,
-                get_relative_address=get_relative_address,
+        list_files = list(
+            self.generator_filenames_in_sample(
+                sample_address=sample_name,
+            ))
+        return list_files
+
+    @logger_info
+    def get_all_names_from_sample(
+        self, 
+        sample_name=str(),
+        ):
+        list_files = list(
+            self.generator_names_in_sample(
+                sample_address=sample_name,
             ))
         return list_files
 
     @logger_info
     def get_sample_address(
         self, 
-        sample_name='', 
-        sample_relative_address=True,
+        entry_name='',
+        get_relative_address=False,
         ):
         with File(self._h5_filename, 'r+') as f:
-            if sample_relative_address:
-                for sample in f[SAMPLE_GROUP_KEY].keys():
-                    if f[SAMPLE_GROUP_KEY][sample].attrs[REL_ADDRESS_KEY] == sample_name:
-                        return sample
-                logger.info(f"There is no sample with rel. address {sample_name}.")
-                return
-            else:
-                for sample in f[SAMPLE_GROUP_KEY].keys():
-                    if f[SAMPLE_GROUP_KEY][sample].attrs[ABS_ADDRESS_KEY] == sample_name:
-                        return sample
-                logger.info(f"There is no sample with abs. address {sample_name}.")
-                return
+            for entry in f.keys():
+                if entry_name == entry:
+                    if get_relative_address:
+                        address = f[entry].attrs[REL_ADDRESS_KEY]
+                    else:
+                        address = f[entry].attrs[ABS_ADDRESS_KEY]
+                    return address
+            return ''
 
     @logger_info
-    def generator_files_in_sample(
+    def generator_filenames_in_sample(
         self, 
-        sample_name=str(),
-        is_group_name=True,
-        sample_relative_address=True, 
-        get_relative_address=True,
+        sample_address=str(),
         ):
 
-        if is_group_name:
-            sample_name=sample_name
-        else:
-            sample_name = self.get_sample_address(
-                sample_name=sample_name,
-                sample_relative_address=sample_relative_address,
-            )
+        data_filenames = self.get_metadata_dataset(
+            sample_name=sample_address,
+            key_metadata=DATAFILE_KEY,
+        )
 
-        if not sample_name:
-            return
+        for filename in data_filenames:
+            filename = bytes.decode(filename)
+            yield filename
 
-        with File(self._h5_filename, 'r+') as f:
-            dataset = f[SAMPLE_GROUP_KEY][sample_name][DATA_KEY]
-            for filename in dataset:
-                filename = filename.decode(ENCODING_FORMAT)
-                if get_relative_address:
-                    # sample_name = f[SAMPLE_GROUP_KEY][sample_name].attrs[ABS_ADDRESS_KEY]
-                    # print(5555)
-                    # print(filename)
-                    # print(sample_name)
-                    # filename = Path(filename).relative_to(Path(sample_name).as_posix()).as_posix()
-                    filename = Path(filename).name
-                yield filename
+    @logger_info
+    def generator_names_in_sample(
+        self, 
+        sample_address=str(),
+        ):
+
+        data_filenames = self.get_metadata_dataset(
+            sample_name=sample_address,
+            key_metadata=DATANAME_KEY,
+        )
+
+        for name in data_filenames:
+            name = bytes.decode(name)
+            yield name
 
     @logger_info
     def get_metadata_dataset(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         key_metadata=str(),
         ) -> np.array:
 
-        sample_name = self.get_sample_address(
-            sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
+        entry_name = self.get_entry_name(
+            sample_address=sample_name,
         )
 
-        if not sample_name:
+        if not entry_name:
             return
 
         with File(self._h5_filename, 'r+') as f:
             try:
-                dataset = f[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY][key_metadata][()]
+                dataset = f[entry_name][key_metadata][key_metadata][()]
             except Exception as e:
                 logger.error(f"{e}: dataset {key_metadata} could not be accessed.")
                 return
@@ -2008,7 +1595,6 @@ class H5GIIntegrator():
     def get_metadata_value(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         key_metadata=str(), 
         index_list=list(),
         ) -> float:
@@ -2025,7 +1611,6 @@ class H5GIIntegrator():
         """
         dataset = self.get_metadata_dataset(
             sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
             key_metadata=key_metadata,
         )
 
@@ -2049,14 +1634,11 @@ class H5GIIntegrator():
     def get_metadata_dataframe(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         list_keys=list(),
         ) -> pd.DataFrame:
 
-        list_files_in_sample = self.get_all_files_from_sample(
+        list_files_in_sample = self.get_all_filenames_from_sample(
             sample_name=sample_name,
-            is_group_name=False,
-            sample_relative_address=sample_relative_address,
         )
 
         if not list_files_in_sample:
@@ -2073,7 +1655,6 @@ class H5GIIntegrator():
                 try:
                     dataset_key = self.get_metadata_dataset(
                         sample_name=sample_name,
-                        sample_relative_address=sample_relative_address,
                         key_metadata=key,
                     )
                     short_metadata[key] = list(dataset_key)
@@ -2087,12 +1668,10 @@ class H5GIIntegrator():
     def get_all_metadata_keys_from_sample(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         ):
         list_keys = sorted(
             self.generator_metadata_keys_from_sample(
                 sample_name=sample_name,
-                sample_relative_address=sample_relative_address,
                 ))
         return list_keys
 
@@ -2100,97 +1679,94 @@ class H5GIIntegrator():
     def generator_metadata_keys_from_sample(
         self, 
         sample_name=str(), 
-        sample_relative_address=True,
         ):
-        sample_name = self.get_sample_address(
-            sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
-        )
 
-        if not sample_name:
+        entry_name = self.get_entry_name(sample_address=sample_name)
+
+
+        if not entry_name:
             return
         
         with File(self._h5_filename, 'r+') as f:
-            list_keys = f[SAMPLE_GROUP_KEY][sample_name][METADATA_KEY].keys()
-            for key in list_keys:
+            for key in f[entry_name].keys():
                 yield key
 
     @logger_info
     def get_filename_from_index(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
         index_list=list(),
         ):
-        print(sample_name)
-        print(sample_relative_address)
-        print(index_list)
-        sample_name = self.get_sample_address(
-            sample_name=sample_name,
-            sample_relative_address=sample_relative_address,
-        )
 
-        if not sample_name:
+        entry_name = self.get_entry_name(sample_address=sample_name)
+
+        if not entry_name:
             return
 
         with File(self._h5_filename, 'r+') as f:
+
             if isinstance(index_list, int):
                 index_list = [index_list]
-            if len(index_list) == 1:
-                filename = bytes.decode(f[SAMPLE_GROUP_KEY][sample_name][DATA_KEY][index_list[0]])
-            else:
-                filename = bytes.decode(f[SAMPLE_GROUP_KEY][sample_name][DATA_KEY][index_list[-1]])
+
+            filename = f[entry_name][DATAFILE_KEY][DATAFILE_KEY][index_list[0]]
+            filename = bytes.decode(filename)
+
+            if len(index_list) > 1:
                 filename = filename.replace(".edf", "_average.edf")
+
         return filename
 
     @logger_info
-    def get_sample_index_from_filename(self, filename=str()):
-        """
-        Searches the filename in the .h5 Groups and returns the name of the folder and the index of the file in the Group
+    def get_name_from_index(
+        self, 
+        sample_name=str(),
+        index_list=list(),
+        ):
 
-        Parameters:
-        filename(str) : string of the filename to be searched
+        entry_name = self.get_entry_name(sample_address=sample_name)
 
-        Returns:
-        str : string with the name of the folder in the .h5 file
-        int : index of the filename inside the folder
-        """
-        # sample_name = str(Path(filename).parent.relative_to(self._root_dir))
-        sample_name_abs = Path(filename).parent.as_posix()
-
-        sample_address = self.get_sample_address(
-            sample_name=sample_name_abs,
-            sample_relative_address=False,
-        )
-
-        if not sample_address:
+        if not entry_name:
             return
 
-        # if not self.contains_group(sample_name=sample_name, group_address=SAMPLE_GROUP_KEY):
-        #     logger.info(f"There is no Group with the name {sample_name}. Returns.")
-        #     return
+        with File(self._h5_filename, 'r+') as f:
 
-        for index, file in enumerate(
-            self.generator_files_in_sample(
-                sample_name=sample_address,
-                is_group_name=True,
-            )):
-            if file == filename:
-                logger.info(f"Found match with the filename at index {index}")
-                return sample_name, index
-        logger.info(f"No matches were found with the filename {filename}")
-        return None, None
+            if isinstance(index_list, int):
+                index_list = [index_list]
 
-    #####################################
-    ###### EDF METHODS ##########
-    #####################################
+            filename = f[entry_name][DATANAME_KEY][DATANAME_KEY][index_list[0]]
+            filename = bytes.decode(filename)
+
+            if len(index_list) > 1:
+                filename = filename.replace(".edf", "_average.edf")
+
+        return filename
+
+    @logger_info
+    def get_last_file(self, list_files=list()) -> str:
+        """
+        Returns the file with the highest epoch, time of creation
+
+        Parameters:
+        list_files(list) : list of files among the the last created will be found, if not, all the files in the .h5 file
+
+        Returns:
+        str : string with the full path of the file with the highest time of creation
+        """
+        if not list_files:
+            list_files = [getctime(file) for file in self.generator_all_filenames()]
+        try:
+            last_file = list_files[np.argmax(list_files)]
+            logger.info(f"Found last file: {last_file}")
+        except:
+            logger.info("The last file could not be found.")
+        return last_file
+            
 
     @logger_info
     def get_Edf_instance(
         self, 
         full_filename=str(),
         sample_name=str(),
-        sample_relative_address=True,
         index_file=int(),
         ):
 
@@ -2201,7 +1777,6 @@ class H5GIIntegrator():
             try:
                 filename = self.get_filename_from_index(
                     sample_name=sample_name,
-                    sample_relative_address=sample_relative_address,
                     index_list=index_file,
                 )
 
@@ -2223,12 +1798,8 @@ class H5GIIntegrator():
     def get_Edf_data(
         self, 
         sample_name=str(),
-        sample_relative_address=True,
-        index_list=list(), 
+        index=(), 
         full_filename=str(),
-        folder_reference_name=str(),
-        file_reference_name=str(),
-        reference_factor=0.0,
         normalized=False,
         ) -> np.array:
         """
@@ -2244,8 +1815,8 @@ class H5GIIntegrator():
         Returns:
         np.array : data of the file (subtracted or not)
         """
-        if isinstance(index_list, int):
-            index_list = [index_list]
+        if isinstance(index, int):
+            index = (index,)
 
         # Get the sample data
         try:
@@ -2254,11 +1825,10 @@ class H5GIIntegrator():
                     self.get_Edf_instance(
                         full_filename=full_filename,
                         sample_name=sample_name,
-                        sample_relative_address=sample_relative_address,
                         index_file=index,
-                    ).get_data() for index in index_list
+                    ).get_data() for index in index
                 ]
-            ) / len(index_list)
+            ) / len(index)
             logger.info(f"New data sample with shape: {data_sample.shape}")
         except Exception as e:
             data_sample = None
@@ -2268,575 +1838,32 @@ class H5GIIntegrator():
         if normalized:
             norm_factor = self.get_norm_factor(
                 sample_name=sample_name,
-                index_list=index_list,
+                index_list=index,
             )
             data_sample = data_sample.astype('float32') / norm_factor
 
         return data_sample
-
-    #####################################
-    ###### INTEGRATION METHODS ##########
-    #####################################
+    
+    @logger_info
+    def generate_integration(self, data=None, norm_factor=1.0, list_dict_integration=[]):
+        for res in self.gi.generate_integration(
+            data=data,
+            norm_factor=norm_factor,
+            list_dict_integration=list_dict_integration,
+            ):
+            yield res
 
     @logger_info
-    def map_reshaping(
-        self,
-        data=None,
-    ):
-        # ponifile = self.get_active_ponifile()
-        try:
-            ai = load(self.active_ponifile)
-            data_reshape, q, chi = ai.integrate2d(
-                data=data,
-                npt_rad=1000,
-                unit="q_nm^-1",
-            )
-            logger.info(f"Reshaped map.")
-        except Exception as e:
-            logger.error(f"Impossible to reshape map with shapes: data {data.shape}.")
+    def map_reshaping(self, data=None):
+        if data is None:
             return
-
+        data_reshape, q, chi = self.gi.map_reshaping(data=data)
         return data_reshape, q, chi
 
     @logger_info
-    def raw_integration(
-        self,
-        sample_name=str(),
-        sample_relative_address=True,
-        index_list=list(),
-        data=None,
-        norm_factor=1.0,
-        list_dict_integration=list(),
-    ) -> list:
-        """
-        Chooses which integration is going to be performed: azimuthal (pyFAI), radial (pyFAI) or box (self method)
-
-        Parameters:
-        folder_name(str) : name of the folder(Group) in the first level of hierarchy
-        index_list(list or int) : integer of list of integers for the files inside the folder
-        data(np.array) : data can be uploaded directly
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        list_dict_integration(list) : list of dictionaries with key-values that will be read by the pygix-pyFAI integration engine
-        
-        Returns:
-        list : list of numpy arrays with the result of the integration
-        """
-        # Get the data
-        if data is None:
-            data = self.get_Edf_data(
-                sample_name=sample_name,
-                sample_relative_address=sample_relative_address,
-                index_list=index_list,
-            )
-
-        # # Updates the incident and tilt angle
-        # incident_angle = self.get_incident_angle(
-        #     folder_name=folder_name,
-        #     index_list=index_list,
-        # )
-        # tilt_angle = self.get_tilt_angle(
-        #     folder_name=folder_name,
-        #     index_list=index_list,
-        # )
-        # self.update_incident_tilt_angle(
-        #     incident_angle=incident_angle,
-        #     tilt_angle=tilt_angle,
-        # )
-
-        # Get the normalization factor
-        if norm_factor == 1.0:
-            norm_factor = self.get_norm_factor(
-                sample_name=sample_name,
-                index_list=index_list,
-            )
-
-        array_compiled = []
-
-        for dict_integration in list_dict_integration:
-            if dict_integration[KEY_INTEGRATION] == CAKE_LABEL:
-                if dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_AZIM:
-                    res = self.raw_integration_azimuthal(
-                        data=data,
-                        norm_factor=norm_factor,
-                        dict_integration=dict_integration,
-                    )
-
-                elif dict_integration[CAKE_KEY_TYPE] == CAKE_KEY_TYPE_RADIAL:
-                    res = self.raw_integration_radial(
-                        data=data,
-                        norm_factor=norm_factor,
-                        dict_integration=dict_integration,
-                    )
-            elif dict_integration[KEY_INTEGRATION] == BOX_LABEL:
-                res = self.raw_integration_box(
-                    data=data,
-                    norm_factor=norm_factor,
-                    dict_integration=dict_integration,
-                )
-            else:
-                print(ERROR_RAW_INTEGRATION)
-                res = None
-
-            array_compiled.append(res)
-        return array_compiled
-
-    @logger_info
-    def raw_integration_azimuthal(
-        self, 
-        data=None,
-        norm_factor=1.0,
-        dict_integration=dict(),
-    ) -> np.array:
-        """
-        Performs an azimuthal integration using the pygix-pyFAI engine
-
-        Parameters:
-        data(np.array) : data to be integrated
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        dict_integration(dict) : dictionary with key-values that will be read by the pygix-pyFAI integration engine
-        
-        Returns:
-        np.array : result of the integration
-        """
-        # Take the array of intensity
-        if (data is None) or (not dict_integration):
-            return
-        
-        p0_range=dict_integration[CAKE_KEY_RRANGE]
-        p1_range=dict_integration[CAKE_KEY_ARANGE]
-        unit=dict_integration[CAKE_KEY_UNIT]
-        npt = dict_integration[CAKE_KEY_ABINS]
-
-        if npt == 0:
-            npt=self.calculate_bins(
-                radial_range=p0_range,
-                unit=unit,
-            )
-
-        # Do the integration with pygix/pyFAI
-        try:
-            logger.info(f"Trying azimuthal integration with: data-shape={data.shape} bins={npt}, p0_range={p0_range}, p1_range={p1_range}, unit={unit}")
-            y_vector, x_vector = self._transform.integrate_1d(
-                process='sector',
-                data=data,
-                npt=npt,
-                p0_range=p0_range,
-                p1_range=p1_range,
-                unit=UNIT_GI[unit],
-                normalization_factor=float(norm_factor),
-                polarization_factor=POLARIZATION_FACTOR,
-            )
-            logger.info("Integration performed.")
-        except Exception as e:
-            logger.error(f"{e}: Error during azimuthal integration.")
-            return
-
-        return np.array([x_vector, y_vector])
-
-    @logger_info
-    def raw_integration_radial(
-        self, 
-        data=None,
-        norm_factor=1.0,
-        dict_integration=dict(),
-    ) -> np.array:
-        """
-        Performs a radial integration using the pygix-pyFAI engine
-
-        Parameters:
-        data(np.array) : data to be integrated
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        dict_integration(dict) : dictionary with key-values that will be read by the pygix-pyFAI integration engine
-        
-        Returns:
-        np.array : result of the integration
-        """
-        # Take the array of intensity
-        if (data is None) or (not dict_integration):
-            return
-
-        # Do the integration with pygix/pyFAI
-        npt  = int(dict_integration[CAKE_KEY_ABINS])
-        p0_range = dict_integration[CAKE_KEY_RRANGE]
-        p1_range = dict_integration[CAKE_KEY_ARANGE]
-
-        
-        unit = UNIT_GI[dict_integration[CAKE_KEY_UNIT]]
-        
-        try:
-            logger.info(f"Trying radial integration with: npt={npt}, p0_range={p0_range}, p1_range={p1_range}, unit={unit}")
-            y_vector, x_vector = self._transform.integrate_1d(
-                process='chi',
-                data=data,
-                npt=npt,
-                p0_range=p1_range,
-                p1_range=p0_range,
-                unit=unit,
-                normalization_factor=float(norm_factor),
-                polarization_factor=POLARIZATION_FACTOR,
-            )
-            logger.info("Integration performed.")
-        except:
-            logger.info("Error during radial integration.")
-            return
-        return np.array([x_vector, y_vector])
-
-    @logger_info
-    def raw_integration_box(
-        self, 
-        data=None,
-        norm_factor=1.0,
-        dict_integration=dict(),
-    ) -> pd.DataFrame:
-        """
-        Performs a box integration using the pygix-pyFAI engine
-
-        Parameters:
-        data(np.array) : data to be integrated
-        norm_factor(float) : this value will be used by the pygix-pyFAI integration engine
-        dict_integration(dict) : dictionary with key-values that will be read by the pygix-pyFAI integration engine
-        
-        Returns:
-        np.array : result of the integration
-        """
-        # Take the array of intensity
-        if (data is None) or (not dict_integration):
-            return
-
-        # Get the direction of the box
-        process = DICT_BOX_ORIENTATION[dict_integration[BOX_KEY_DIRECTION]]
-        unit=dict_integration[BOX_KEY_INPUT_UNIT]
-        try:
-            if process == 'opbox':
-                p0_range, p1_range = dict_integration[BOX_KEY_OOPRANGE], dict_integration[BOX_KEY_IPRANGE]
-                npt = self.calculate_bins(
-                    radial_range=dict_integration[BOX_KEY_OOPRANGE],
-                    unit=unit,
-                )
-            elif process == 'ipbox':
-                p0_range, p1_range = dict_integration[BOX_KEY_IPRANGE], dict_integration[BOX_KEY_OOPRANGE]
-                npt = self.calculate_bins(
-                    radial_range=dict_integration[BOX_KEY_IPRANGE],
-                    unit=unit,
-                )
-            else:
-                return
-        except:
-            p0_range, p1_range, npt = None, None, NPT_RADIAL
-
-        # Transform input units if necessary
-        p0_range = [self.get_q_nm(
-            value=position,
-            input_unit=unit,
-            direction=dict_integration[BOX_KEY_DIRECTION],
-        ) for position in p0_range]
-
-        p1_range = [self.get_q_nm(
-            value=position,
-            input_unit=unit,
-            direction=dict_integration[BOX_KEY_DIRECTION],
-        ) for position in p1_range]
-
-        # Do the integration with pygix/pyFAI
-        try:
-            logger.info(f"Trying box integration with: process={process}, npt={npt}, p0_range={p0_range}, p1_range={p1_range}, unit={unit}")
-            y_vector, x_vector = self._transform.integrate_1d(
-                process=process,
-                data=data,
-                npt=npt,
-                p0_range=p0_range,
-                p1_range=p1_range,
-                unit=UNIT_GI[unit],
-                normalization_factor=float(norm_factor),
-                polarization_factor=POLARIZATION_FACTOR,
-                # method='bbox',
-            )
-            x_vector = self.transform_q_units(
-                x_vector=x_vector,
-                input_unit=dict_integration[BOX_KEY_INPUT_UNIT],
-                output_unit=dict_integration[BOX_KEY_OUTPUT_UNIT],
-                direction=dict_integration[BOX_KEY_DIRECTION],
-            )
-
-            logger.info("Integration performed.")
-        except:
-            logger.info("Error during box integration.")
-            return
-
-        return np.array([x_vector, y_vector])
-
-    @logger_info
-    def calculate_bins(self, radial_range=[], unit='q_nm^-1') -> int:
-        """
-        Calculates the bins between two q values
-
-        Parameters:
-        radial_range(list, tuple) : two components with the minimum and maximum radial position to be integrated
-        unit(str) : 'q_nm^-1', 'q_A^-1', '2th_deg' or '2th_rad'
-
-        Returns:
-        int : number of counts to be generated
-        """
-        if unit in ('q_nm^-1', 'q_A^-1'):
-            twotheta1 = self.q_to_twotheta(
-                q=radial_range[0],
-                unit=unit,
-            )
-
-            twotheta2 = self.q_to_twotheta(
-                q=radial_range[1],
-                unit=unit,
-            )
-        elif unit == '2th_deg':
-            twotheta1, twotheta2 = np.radians(radial_range[0]), np.radians(radial_range[1])
-        elif unit == '2th_rad':
-            twotheta1, twotheta2 = radial_range[0], radial_range[1]
-        else:
-            return
-        return int(round(self._transform._dist / self._transform.get_pixel1() * (np.tan(twotheta2) - np.tan(twotheta1))))
-
-    @logger_info
-    def q_to_twotheta(self, q=0.0, unit='q_nm^-1', degree=False) -> float:
-        """
-        Transforms from q to 2theta (rad)
-
-        Parameters:
-        q(float) : modulus of q, scattering vector
-        unit(str) : 'q_nm^-1' or 'q_A^-1'
-        degree(bool) : the result will be in degrees (True) or radians (False)
-
-        Returns:
-        float : twotheta value
-        """
-        if unit == 'q_nm^-1':
-            twotheta = 2 * np.arcsin((q*self._transform._wavelength * 1e9)/(4*np.pi))
-        elif unit == 'q_A^-1':
-            twotheta = 2 * np.arcsin((q*self._transform._wavelength * 1e10)/(4*np.pi))
-        else:
-            return
-        return np.rad2deg(twotheta) if degree else twotheta
-
-    @logger_info
-    def get_q_nm(self, value=0.0, direction='Vertical', input_unit='q_nm^-1') -> float:
-        """
-            Return a q(nm-1) value from another unit
-        """
-        if input_unit == 'q_nm^-1':
-            return value
-        elif input_unit == 'q_A^-1':
-            return value
-        elif input_unit == '2th_deg':
-            return self.twotheta_to_q(twotheta=value, direction=direction, deg=True)
-        elif input_unit == '2th_rad':
-            return self.twotheta_to_q(twotheta=value, deg=False)
-        else:
-            return None
-
-    @logger_info
-    def twotheta_to_q(self, twotheta=0.0, direction='vertical', deg=True) -> float:
-        """
-            Returns the q(nm-1) from the 2theta value
-        """
-        if deg:
-            twotheta = np.radians(twotheta)
-        try:
-            wavelength_nm = self._transform._wavelength * 1e9
-        except:
-            return
-        
-        try:
-            alpha_inc = np.radians(self._transform._incident_angle)
-        except:
-            alpha_inc = 0.0
-        
-        q_horz = 2 * np.pi / wavelength_nm * (np.cos(alpha_inc) * np.sin(twotheta))
-        q_vert = 2 * np.pi / wavelength_nm * (np.sin(twotheta) + np.sin(alpha_inc))
-
-        if direction == BOX_KEY_TYPE_VERT:
-            return q_horz
-        elif direction == BOX_KEY_TYPE_HORZ:
-            return q_vert
-        else:
-            return
-
-
-    @logger_info
-    def transform_q_units(
-        self, 
-        x_vector=None, 
-        input_unit=None, 
-        output_unit=None, 
-        direction='vertical',
-        ):
-
-        if x_vector is None:
-            return
-
-        if input_unit == output_unit:
-            return x_vector
-        
-        # From Q
-        if input_unit in UNITS_Q:
-            if output_unit in UNITS_Q:
-                if output_unit in QNM_ALIAS:
-                    x_vector *= 10
-                elif output_unit in QA_ALIAS:
-                    x_vector /= 10
-                return x_vector
-
-            elif output_unit in UNITS_THETA:
-                if output_unit in DEG_ALIAS:
-                    x_vector = self.q_to_twotheta(
-                        q=x_vector,
-                        unit=input_unit,
-                        degree=True,
-                    )
-                    return x_vector
-                elif output_unit in RAD_ALIAS:
-                    x_vector = self.q_to_twotheta(
-                        q=x_vector,
-                        unit=input_unit,
-                        degree=False,
-                    )
-                    return x_vector
-        # From TTH
-        elif input_unit in UNITS_THETA:
-            if output_unit in UNITS_THETA:
-                if output_unit in DEG_ALIAS:
-                    return x_vector*180/np.pi
-                elif output_unit in RAD_ALIAS:
-                    return x_vector*np.pi/180
-            elif output_unit in UNITS_Q:
-                if input_unit in DEG_ALIAS:
-                    vector_nm = self.twotheta_to_q(
-                        twotheta=x_vector,
-                        direction=direction,
-                        deg=True,
-                    )
-                elif input_unit in RAD_ALIAS:
-                    vector_nm = self.twotheta_to_q(
-                        twotheta=x_vector,
-                        direction=direction,
-                        deg=False,
-                    )
-
-                if output_unit in QNM_ALIAS:
-                    return vector_nm
-                elif output_unit in QA_ALIAS:
-                    return vector_nm/10
-
-
-
-
-
-
-
-
-
-
-    @logger_info
-    def get_detector_array(self, shape=()) -> np.array:
-        """
-        Returns an array with detector shape and rotated, according to sample orientation (pygix-pyFAI)
-
-        Parameters:
-        None
-
-        Returns:
-        np.array : 2D array with the shape of the detector registered in the active ponifile
-        """
-        try:
-            # This method does not work with ALBA_NCD_Nov2022
-            if not shape:
-                shape = self._transform.get_shape()
-
-            logger.info(f"Shape of the detector: {shape}")
-            d2,d1 = np.meshgrid(
-                np.linspace(1,shape[1],shape[1]),
-                np.linspace(1,shape[0],shape[0]),
-            )
-            out = np.array([d1,d2])
-            return out
-        except:
-            return None
-
-    @logger_info
     def get_mesh_matrix(self, unit='q_nm^-1', shape=()):
-        """
-        Returns both horizontal and vertical mesh matrix for Grazing-Incidence geometry, returns also the corrected data without the missing wedge
-        
-        Parameters:
-        unit(str) : 'q_nm^-1', 'q_A^-1', '2th_deg' or '2th_rad'
-        data(np.array) : 2D map data
-
-        Returns:
-        np.array(QX)
-        np.array(QZ)
-        np.array(data)
-        """
-        if not shape:
-            logger.info(f"Shape is None. Returns.")
-            return
-
-        # Get the detector array, it is always the same shape (RAW MATRIX SHAPE!), no rotations yet
-        # shape = data.shape
-        det_array = self.get_detector_array(shape=shape)
-
-        # Get the mesh matrix
-        if unit in UNITS_Q:
-            try:
-                # calc_q will take into account the sample_orientation in GrazingGeometry instance
-                scat_z, scat_xy = self._transform.calc_q(
-                    d1=det_array[0,:,:],
-                    d2=det_array[1,:,:],
-                )
-                logger.info(f"Shape of the scat_z matrix: {scat_z.shape}")
-                logger.info(f"Shape of the scat_x matrix: {scat_xy.shape}")
-            except:
-                scat_z, scat_xy = None, None
-                logger.info(f"Scat_z matrix could not be generated.")
-                logger.info(f"Scat_x matrix could not be generated.")
-        elif unit in UNITS_THETA:
-            try:
-                scat_z, scat_xy = self._transform.calc_angles(
-                    d1=det_array[0,:,:],
-                    d2=det_array[1,:,:],
-                )
-                logger.info(f"Shape of the scat_z matrix: {scat_z.shape}")
-                logger.info(f"Shape of the scat_x matrix: {scat_xy.shape}")
-            except:
-                scat_z, scat_xy = None, None
-                logger.info(f"Scat_z matrix could not be generated.")
-                logger.info(f"Scat_x matrix could not be generated.")
-
-        # Transform units
-        if (scat_z is not None) and (scat_xy is not None):
-            DICT_PLOT = DICT_UNIT_PLOTS.get(unit, DICT_PLOT_DEFAULT)
-            scat_z *= DICT_PLOT['SCALE']
-            scat_xy *= DICT_PLOT['SCALE']
-            logger.info(f"Changing the scale of the matriz q units. Scale: {DICT_PLOT['SCALE']}")
-        else:
-            return
-        return scat_xy, scat_z
-
-
-    @logger_info
-    def get_last_file(self, list_files=list()) -> str:
-        """
-        Returns the file with the highest epoch, time of creation
-
-        Parameters:
-        list_files(list) : list of files among the the last created will be found, if not, all the files in the .h5 file
-
-        Returns:
-        str : string with the full path of the file with the highest time of creation
-        """
-        if not list_files:
-            list_files = [getctime(file) for file in self.generator_all_files()]
-        try:
-            last_file = list_files[np.argmax(list_files)]
-            logger.info(f"Found last file: {last_file}")
-        except:
-            logger.info("The last file could not be found.")
-        return last_file
-            
+        scat_horz, scat_vert = self.gi.get_mesh_matrix(
+                unit=unit,
+                shape=shape,
+        )
+        return scat_horz, scat_vert

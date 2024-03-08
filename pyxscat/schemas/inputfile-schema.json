@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http:-----",
+    "title": "inputfile",
+    "properties": {
+        "number" : {
+            "type" : "integer",
+            "minimum": 0
+        },
+        "format" : {
+            "type" : "string"
+        },
+        "paths" : {
+            "type" : "array"
+        }
+    },
+    "required": ["number", "format", "paths"]
+
+}

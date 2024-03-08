@@ -6,8 +6,71 @@ from PyQt5.QtWidgets import QCheckBox, QLineEdit, QDoubleSpinBox, QPlainTextEdit
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import Qt
 from silx.gui.plot.PlotWindow import Plot1D, Plot2D
+from pyxscat.gui import lineedit_methods as le
+from pyxscat.gui import combobox_methods as cb
+
+from pyxscat.edf import DICT_SAMPLE_ORIENTATIONS
 from pyxscat.other.units import DICT_UNIT_ALIAS, CAKE_INTEGRATIONS, BOX_INTEGRATIONS
 from . import ICON_DIRECTORY
+
+from .multi_combobox import CheckableComboBox
+
+
+BUTTON_STYLE_ENABLE = """
+QPushButton {
+    font-weight: bold;
+    color : black;
+    background-color: #bfe6ff;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+QPushButton:hover  {
+    font-weight: bold;
+    color : black;
+    background-color: #BFCFCC;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+QPushButton:pressed  {
+    font-weight: bold;
+    color : black;
+    background-color: #D6E4E1;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+"""
+
+BUTTON_STYLE_DISABLE = """
+QPushButton {
+    font-weight: bold;
+    color : black;
+    background-color: #fbe5d6;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+QPushButton:hover  {
+    font-weight: bold;
+    color : black;
+    background-color: #BFCFCC;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+QPushButton:pressed  {
+    font-weight: bold;
+    color : black;
+    background-color: #D6E4E1;
+    border-width: 2px;
+    border-radius: 3px;
+    padding : 5px;
+    }
+"""
+
+
 
 # TABS
 LABEL_TAB_FILES = "Setup"
@@ -15,6 +78,7 @@ LABEL_TAB_SETUP = "Metadata"
 LABEL_TAB_CAKE = "Cake Int."
 LABEL_TAB_BOX = "Box Int."
 LABEL_TAB_PONIFILE = "Ponifile"
+LABEL_TAB_H5 = "HDF5 File"
 
 # INPUT FILE PARAMETERS
 LABEL_INPUT_PARAMETERS = "====== Input File Parameters ======"
@@ -29,12 +93,51 @@ LABEL_AUTO_REFERENCE = "Auto"
 LABEL_MASK_FOLDER = "Mask folder:"
 LABEL_MASK_CHECK = "Use Mask"
 LABEL_SAMPLE_ORIENTATION = "Sample orientation:"
-BUTTON_MIRROR_DISABLE = ""
-BUTTON_MIRROR_ENABLE = ""
-BUTTON_QZ_PAR = "qz \u2191\u2191"
-BUTTON_QZ_ANTIPAR = "qz \u2191\u2193"
-BUTTON_QR_PAR = "qr \u2191\u2191"
-BUTTON_QR_ANTIPAR = "qr \u2191\u2193"
+
+QZ_BUTTON_LABEL = "qz"
+QZ_DEFAULT_STATE = True
+QR_BUTTON_LABEL = "qr"
+QR_DEFAULT_STATE = True
+MIRROR_BUTTON_LABEL = "mirror"
+MIRROR_DEFAULT_STATE = False
+WRONG_LABEL = ""
+
+BUTTON_ORIENTATIONS_LAYOUT = {
+    QZ_BUTTON_LABEL : {
+        True : {
+            "label" : "qz \u2191\u2191",
+            "style" : BUTTON_STYLE_ENABLE,
+        },
+        False : {
+            "label" : "qz \u2191\u2193",
+            "style" : BUTTON_STYLE_DISABLE,
+        },  
+    },
+    QR_BUTTON_LABEL : {
+        True : {
+            "label" : "qr \u2191\u2191",
+            "style" : BUTTON_STYLE_ENABLE,
+        },
+        False : {
+            "label" : "qr \u2191\u2193",
+            "style" : BUTTON_STYLE_DISABLE,
+        },  
+    },
+    MIRROR_BUTTON_LABEL : {
+        True : {
+            "label" : f"\u2713",
+            "style" : BUTTON_STYLE_ENABLE,
+        },
+        False : {
+            "label" : f"\u2716",
+            "style" : BUTTON_STYLE_DISABLE,
+        },  
+    },
+}
+
+
+
+
 BUTTON_PONIFILE = ""
 BUTTON_PYFAI_GUI = " pyFAI "
 BUTTON_UPDATE_DATA = " Update"
@@ -96,9 +199,9 @@ LABEL_YLIMS = "y-lims:"
 LABEL_XTICKS = "x-ticks:"
 LABEL_YTICKS = "y-ticks:"
 
-DEFAULT_BINNING = int(4)
+DEFAULT_BINNING = int(2)
 BINNING_STEP = int(1)
-BINNING_RANGE_MIN = int(0)
+BINNING_RANGE_MIN = int(1)
 BINNING_RANGE_MAX = int(100)
 
 BUTTON_LABEL_MINUS = "a"
@@ -192,6 +295,20 @@ BUTTON_UPDATE_PONI_PARAMETERS = "UPDATE"
 BUTTON_UPDATE_OLD_PONI_PARAMETERS = "RETRIEVE"
 BUTTON_SAVE_PONI_PARAMETERS = "SAVE"
 
+LABEL_H5_H5FILE = "H5 file:"
+LABEL_H5_MAINDIR = "Root Directory:"
+LABEL_H5_IANGLE_KEY = "Inc. angle (key):"
+LABEL_H5_TANGLE_KEY = "Tilt angle (key)"
+LABEL_H5_NORM_KEY = "Norm. factor (key)"
+LABEL_H5_ACQ_KEY = "Acq. time (key)"
+LABEL_H5_NFILES = "Number of files:"
+
+MSG_QZ_DIRECTION_UPDATED = "The qz direction was updated."
+MSG_QR_DIRECTION_UPDATED = "The qr direction was updated."
+INFO_MIRROR_DISABLE = "Mirror transformation disable."
+INFO_MIRROR_ENABLE = "Mirror transformation enable. 2D map has been flipped left-right."
+
+
 button_on = """
 
 QPushButton {
@@ -273,59 +390,6 @@ QPushButton:pressed  {
     }
 """
 
-button_style_input = """
-QPushButton {
-    font-weight: bold;
-    color : black;
-    background-color: #bfe6ff;
-    border-width: 2px;
-    border-radius: 3px;
-    padding : 5px;
-    }
-QPushButton:hover  {
-    font-weight: bold;
-    color : black;
-    background-color: #BFCFCC;
-    border-width: 2px;
-    border-radius: 3px;
-    padding : 5px;
-    }
-QPushButton:pressed  {
-    font-weight: bold;
-    color : black;
-    background-color: #D6E4E1;
-    border-width: 2px;
-    border-radius: 3px;
-    padding : 5px;
-    }
-"""
-
-button_style_input_disable = """
-QPushButton {
-    font-weight: bold;
-    color : black;
-    background-color: #fbe5d6;
-    border-width: 2px;
-    border-radius: 3px;
-    padding : 5px;
-    }
-QPushButton:hover  {
-    font-weight: bold;
-    color : black;
-    background-color: #BFCFCC;
-    border-width: 2px;
-    border-radius: 3px;
-    padding : 5px;
-    }
-QPushButton:pressed  {
-    font-weight: bold;
-    color : black;
-    background-color: #D6E4E1;
-    border-width: 2px;
-    border-radius: 3px;
-    padding : 5px;
-    }
-"""
 
 def set_bstyle(qlabels=[]):
     myFont=QFont("avenir.otf")
@@ -341,7 +405,7 @@ class MplCanvas(FigureCanvasQTAgg):
         super(MplCanvas, self).__init__(self.fig)
 
 
-class GUIPyX_Widget_layout(QWidget):
+class GUIPyXMWidgetLayout(QWidget):
 
     def __init__(self, *args):
         QMainWindow.__init__(self, *args)
@@ -355,765 +419,817 @@ class GUIPyX_Widget_layout(QWidget):
 
     def _build(self):
         self.setGeometry(300, 300, 300, 200)
-        self.hbox_main = QHBoxLayout()
-        self.setLayout(self.hbox_main)
+        hbox_main = QHBoxLayout()
+        self.setLayout(hbox_main)
 
-        self.vbox_left = QVBoxLayout()
-        self.vbox_right = QVBoxLayout()
+        vbox_left = QVBoxLayout()
+        vbox_right = QVBoxLayout()
 
-        self.frame_left = QFrame(self)       
-        self.frame_left.setFrameShape(QFrame.StyledPanel)
-        self.frame_left.setLayout(self.vbox_left)
+        frame_left = QFrame(self)       
+        frame_left.setFrameShape(QFrame.StyledPanel)
+        frame_left.setLayout(vbox_left)
 
-        self.frame_right = QFrame(self)       
-        self.frame_right.setFrameShape(QFrame.StyledPanel)
-        self.frame_right.setLayout(self.vbox_right)
+        frame_right = QFrame(self)       
+        frame_right.setFrameShape(QFrame.StyledPanel)
+        frame_right.setLayout(vbox_right)
 
         # Main splitter and two vertical boxes with frames
-        self.splitter_main = QSplitter(orientation=Qt.Horizontal)
+        splitter_main = QSplitter(orientation=Qt.Horizontal)
 
-        self.hbox_main.addWidget(self.splitter_main)        
+        hbox_main.addWidget(splitter_main)        
 
-        self.splitter_vbox_left = QSplitter(orientation=Qt.Vertical)
-        self.splitter_vbox_right = QSplitter(orientation=Qt.Vertical)
+        splitter_vbox_left = QSplitter(orientation=Qt.Vertical)
+        splitter_vbox_right = QSplitter(orientation=Qt.Vertical)
 
-        self.vbox_left.addWidget(self.splitter_vbox_left)
-        self.vbox_right.addWidget(self.splitter_vbox_right)
+        vbox_left.addWidget(splitter_vbox_left)
+        vbox_right.addWidget(splitter_vbox_right)
 
-        self.splitter_main.addWidget(self.frame_left)
-        self.splitter_main.addWidget(self.frame_right)
+        splitter_main.addWidget(frame_left)
+        splitter_main.addWidget(frame_right)
 
-        self.splitter_main.setStretchFactor(0, 1)
-        self.splitter_main.setStretchFactor(1, 3)
+        splitter_main.setStretchFactor(0, 1)
+        splitter_main.setStretchFactor(1, 3)
 
-        self.vbox_input = QVBoxLayout()
-        self.widget_tabs = QTabWidget()
-        self.widget_tabs.setLayout(self.vbox_input)
-        self.vbox_list_folder = QVBoxLayout()
-        self.widget_folder_tab = QTabWidget()
-        self.widget_folder_tab.setLayout(self.vbox_list_folder)
-        self.vbox_table_files = QVBoxLayout()        
-        self.widget_file_tab = QTabWidget()
-        self.widget_file_tab.setLayout(self.vbox_table_files)
+        vbox_input = QVBoxLayout()
+        widget_tabs = QTabWidget()
+        widget_tabs.setLayout(vbox_input)
+        vbox_list_folder = QVBoxLayout()
+        widget_folder_tab = QTabWidget()
+        widget_folder_tab.setLayout(vbox_list_folder)
+        vbox_table_files = QVBoxLayout()        
+        widget_file_tab = QTabWidget()
+        widget_file_tab.setLayout(vbox_table_files)
 
-        self.splitter_vbox_left.addWidget(self.widget_tabs)
-        self.splitter_vbox_left.addWidget(self.widget_folder_tab)
-        self.splitter_vbox_left.addWidget(self.widget_file_tab)
+        splitter_vbox_left.addWidget(widget_tabs)
+        splitter_vbox_left.addWidget(widget_folder_tab)
+        splitter_vbox_left.addWidget(widget_file_tab)
 
-        self.hbox_top_label = QHBoxLayout()
-        self.hbox_top_label.setContentsMargins(1,0,1,0)
-        self.widget_top_label = QWidget()
-        self.widget_top_label.setLayout(self.hbox_top_label)
-        self.splitter_graphs = QSplitter()
-        self.vbox_terminal = QVBoxLayout()
-        self.vbox_terminal.setContentsMargins(1,0,1,0)
-        self.widget_terminal_tab = QTabWidget()
-        self.widget_terminal_tab.setLayout(self.vbox_terminal)
+        hbox_top_label = QHBoxLayout()
+        hbox_top_label.setContentsMargins(1,0,1,0)
+        widget_top_label = QWidget()
+        widget_top_label.setLayout(hbox_top_label)
+        splitter_graphs = QSplitter()
+        vbox_terminal = QVBoxLayout()
+        vbox_terminal.setContentsMargins(1,0,1,0)
+        widget_terminal_tab = QTabWidget()
+        widget_terminal_tab.setLayout(vbox_terminal)
 
-        self.splitter_vbox_right.addWidget(self.widget_top_label)
-        self.splitter_vbox_right.addWidget(self.splitter_graphs)
-        self.splitter_vbox_right.addWidget(self.widget_terminal_tab)
+        splitter_vbox_right.addWidget(widget_top_label)
+        splitter_vbox_right.addWidget(splitter_graphs)
+        splitter_vbox_right.addWidget(widget_terminal_tab)
 
-        self.splitter_vbox_right.setStretchFactor(0,1)
-        self.splitter_vbox_right.setStretchFactor(1,20)
-        self.splitter_vbox_right.setStretchFactor(2,2)
+        splitter_vbox_right.setStretchFactor(0,1)
+        splitter_vbox_right.setStretchFactor(1,20)
+        splitter_vbox_right.setStretchFactor(2,2)
 
         #######################################
         ########## WIDGET_TABS ################
         #######################################
 
-        self.vbox_input = QVBoxLayout()
-        self.vbox_metadata = QVBoxLayout()
-        self.vbox_metadata.setSpacing(0)
-        self.hbox_cake = QHBoxLayout()
-        self.hbox_box = QHBoxLayout()
-        self.vbox_poni = QVBoxLayout()
+        vbox_input = QVBoxLayout()
+        vbox_metadata = QVBoxLayout()
+        vbox_metadata.setSpacing(0)
+        hbox_cake = QHBoxLayout()
+        hbox_box = QHBoxLayout()
+        vbox_poni = QVBoxLayout()
+        vbox_h5 = QVBoxLayout()
 
-        self.vbox_metadata.setStretch(0,1)
-        self.vbox_metadata.setStretch(1,1)
-        self.vbox_metadata.setStretch(2,1)
-        self.vbox_metadata.setStretch(3,1)
-        self.vbox_metadata.setStretch(4,1)
+        vbox_metadata.setStretch(0,1)
+        vbox_metadata.setStretch(1,1)
+        vbox_metadata.setStretch(2,1)
+        vbox_metadata.setStretch(3,1)
+        vbox_metadata.setStretch(4,1)
 
-        self.widget_vbox_input = QWidget()
-        self.widget_vbox_metadata = QWidget()
-        self.widget_cake = QWidget()
-        self.widget_box = QWidget()
-        self.widget_vbox_poni = QWidget()
+        widget_vbox_input = QWidget()
+        widget_vbox_metadata = QWidget()
+        widget_cake = QWidget()
+        widget_box = QWidget()
+        widget_vbox_poni = QWidget()
+        widget_vbox_h5 = QWidget()
 
-        self.widget_vbox_input.setLayout(self.vbox_input)        
-        self.widget_vbox_metadata.setLayout(self.vbox_metadata)
-        self.widget_cake.setLayout(self.hbox_cake)
-        self.widget_box.setLayout(self.hbox_box)
-        self.widget_vbox_poni.setLayout(self.vbox_poni)
+        widget_vbox_input.setLayout(vbox_input)        
+        widget_vbox_metadata.setLayout(vbox_metadata)
+        widget_cake.setLayout(hbox_cake)
+        widget_box.setLayout(hbox_box)
+        widget_vbox_poni.setLayout(vbox_poni)
+        widget_vbox_h5.setLayout(vbox_h5)
 
-        self.widget_tabs.addTab(self.widget_vbox_input, LABEL_TAB_FILES)
-        self.widget_tabs.addTab(self.widget_vbox_metadata, LABEL_TAB_SETUP)
-        self.widget_tabs.addTab(self.widget_cake, LABEL_TAB_CAKE)
-        self.widget_tabs.addTab(self.widget_box, LABEL_TAB_BOX)
-        self.widget_tabs.addTab(self.widget_vbox_poni, LABEL_TAB_PONIFILE)
+        widget_tabs.addTab(widget_vbox_input, LABEL_TAB_FILES)
+        widget_tabs.addTab(widget_vbox_metadata, LABEL_TAB_SETUP)
+        widget_tabs.addTab(widget_cake, LABEL_TAB_CAKE)
+        widget_tabs.addTab(widget_box, LABEL_TAB_BOX)
+        widget_tabs.addTab(widget_vbox_poni, LABEL_TAB_PONIFILE)
+        widget_tabs.addTab(widget_vbox_h5, LABEL_TAB_H5)
 
         ### INPUT TAB ###
 
-        self.hbox_recent_h5 = QHBoxLayout()
-        self.hbox_recent_h5.setContentsMargins(1, 0, 1, 0)
-        self.hbox_maindir = QHBoxLayout()
-        self.hbox_maindir.setContentsMargins(1, 0, 1, 0)
-        self.hbox_pattern = QHBoxLayout()
-        self.hbox_pattern.setContentsMargins(1, 0, 1, 0)
-        self.hbox_poni = QHBoxLayout()
-        self.hbox_poni.setContentsMargins(1, 0, 1, 0)
-        self.hbox_reffolder = QHBoxLayout()
-        self.hbox_reffolder.setContentsMargins(1, 0, 1, 0)
-        self.hbox_reffile = QHBoxLayout()
-        self.hbox_reffile.setContentsMargins(1, 0, 1, 0)
+        hbox_recent_h5 = QHBoxLayout()
+        hbox_recent_h5.setContentsMargins(1, 0, 1, 0)
+        hbox_maindir = QHBoxLayout()
+        hbox_maindir.setContentsMargins(1, 0, 1, 0)
+        hbox_pattern = QHBoxLayout()
+        hbox_pattern.setContentsMargins(1, 0, 1, 0)
+        hbox_poni = QHBoxLayout()
+        hbox_poni.setContentsMargins(1, 0, 1, 0)
+        hbox_reffolder = QHBoxLayout()
+        hbox_reffolder.setContentsMargins(1, 0, 1, 0)
+        hbox_reffile = QHBoxLayout()
+        hbox_reffile.setContentsMargins(1, 0, 1, 0)
 
-        self.hbox_sample_orientation = QHBoxLayout()
-        self.hbox_sample_orientation.setContentsMargins(1, 0, 1, 0)
-        self.hbox_pyfai = QHBoxLayout()
-        self.hbox_pyfai.setContentsMargins(1, 0, 1, 0)
+        hbox_sample_orientation = QHBoxLayout()
+        hbox_sample_orientation.setContentsMargins(1, 0, 1, 0)
+        hbox_pyfai = QHBoxLayout()
+        hbox_pyfai.setContentsMargins(1, 0, 1, 0)
 
-        self.widget_recent_h5 = QWidget()
-        self.widget_maindir = QWidget()
-        self.widget_pattern = QWidget()
-        self.widget_poni = QWidget()
-        self.widget_reffolder = QWidget()
-        self.widget_reffile = QWidget()
+        widget_recent_h5 = QWidget()
+        widget_maindir = QWidget()
+        widget_pattern = QWidget()
+        widget_poni = QWidget()
+        widget_reffolder = QWidget()
+        widget_reffile = QWidget()
 
-        self.widget_sample_orientation = QWidget()
-        self.widget_pyfai = QWidget()
+        widget_sample_orientation = QWidget()
+        widget_pyfai = QWidget()
 
-        self.widget_recent_h5.setLayout(self.hbox_recent_h5)
-        self.widget_maindir.setLayout(self.hbox_maindir)
-        self.widget_pattern.setLayout(self.hbox_pattern)
-        self.widget_poni.setLayout(self.hbox_poni)
-        self.widget_reffolder.setLayout(self.hbox_reffolder)
-        self.widget_reffile.setLayout(self.hbox_reffile)
-        self.widget_sample_orientation.setLayout(self.hbox_sample_orientation)
-        self.widget_pyfai.setLayout(self.hbox_pyfai)
+        widget_recent_h5.setLayout(hbox_recent_h5)
+        widget_maindir.setLayout(hbox_maindir)
+        widget_pattern.setLayout(hbox_pattern)
+        widget_poni.setLayout(hbox_poni)
+        widget_reffolder.setLayout(hbox_reffolder)
+        widget_reffile.setLayout(hbox_reffile)
+        widget_sample_orientation.setLayout(hbox_sample_orientation)
+        widget_pyfai.setLayout(hbox_pyfai)
 
-        self.vbox_input.addWidget(self.widget_recent_h5)
-        self.vbox_input.addWidget(self.widget_maindir)
-        self.vbox_input.addWidget(self.widget_pattern)
-        self.vbox_input.addWidget(self.widget_poni)
-        self.vbox_input.addWidget(self.widget_reffolder)
-        self.vbox_input.addWidget(self.widget_reffile)
-        # self.vbox_input.addWidget(self.widget_savefolder)
-        self.vbox_input.addWidget(self.widget_sample_orientation)
-        self.vbox_input.addWidget(self.widget_pyfai)
+        vbox_input.addWidget(widget_recent_h5)
+        vbox_input.addWidget(widget_maindir)
+        vbox_input.addWidget(widget_pattern)
+        vbox_input.addWidget(widget_poni)
+        vbox_input.addWidget(widget_reffolder)
+        vbox_input.addWidget(widget_reffile)
+        # vbox_input.addWidget(widget_savefolder)
+        vbox_input.addWidget(widget_sample_orientation)
+        vbox_input.addWidget(widget_pyfai)
 
-        self.label_recent_h5 = QLabel(LABEL_RECENT_H5)
+        label_recent_h5 = QLabel(LABEL_RECENT_H5)
         self.combobox_h5_files = QComboBox()
 
-        self.hbox_recent_h5.addWidget(self.label_recent_h5, Qt.AlignLeft)
-        self.hbox_recent_h5.addWidget(self.combobox_h5_files, Qt.AlignLeft)
+        hbox_recent_h5.addWidget(label_recent_h5, Qt.AlignLeft)
+        hbox_recent_h5.addWidget(self.combobox_h5_files, Qt.AlignLeft)
 
-        self.hbox_recent_h5.setStretch(0,1)
-        self.hbox_recent_h5.setStretch(1,10)
+        hbox_recent_h5.setStretch(0,1)
+        hbox_recent_h5.setStretch(1,10)
 
         self.label_h5file = QLabel(LABEL_H5_FILE)
-        self.lineedit_h5file = QLineEdit()
-        self.lineedit_h5file.setEnabled(False)
-        self.button_pick_maindir = QPushButton()
-        self.button_pick_maindir.setIcon(QIcon(ICON_FOLDER_PATH))
-        self.button_pick_maindir.setToolTip(LABEL_PICK_MAINDIR)    
-        self.button_pick_maindir.setStyleSheet(button_style_input)    
+        self.lineedit_h5file_1 = QLineEdit()
+        self.lineedit_h5file_1.setReadOnly(True)
+        self.button_pick_rootdir = QPushButton()
+        self.button_pick_rootdir.setIcon(QIcon(ICON_FOLDER_PATH))
+        self.button_pick_rootdir.setToolTip(LABEL_PICK_MAINDIR)    
+        self.button_pick_rootdir.setStyleSheet(BUTTON_STYLE_ENABLE)    
         self.button_pick_hdf5 = QPushButton()
         self.button_pick_hdf5.setIcon(QIcon(H5_ICON_PATH))
         self.button_pick_hdf5.setToolTip(LABEL_PICK_H5)
-        self.button_pick_hdf5.setStyleSheet(button_style_input)
+        self.button_pick_hdf5.setStyleSheet(BUTTON_STYLE_ENABLE)
 
-        self.hbox_maindir.addWidget(self.label_h5file)
-        self.hbox_maindir.addWidget(self.lineedit_h5file)
-        self.hbox_maindir.addWidget(self.button_pick_maindir)
-        self.hbox_maindir.addWidget(self.button_pick_hdf5)
+        hbox_maindir.addWidget(self.label_h5file)
+        hbox_maindir.addWidget(self.lineedit_h5file_1)
+        hbox_maindir.addWidget(self.button_pick_rootdir)
+        hbox_maindir.addWidget(self.button_pick_hdf5)
 
-        self.label_extension = QLabel(LABEL_EXTENSION)
+        label_extension = QLabel(LABEL_EXTENSION)
         self.combobox_extension = QComboBox()
         for ext in LIST_EXTENSION:
             self.combobox_extension.addItem(ext)
-        self.label_wildcard = QLabel(LABEL_WILDCARDS)
+        label_wildcard = QLabel(LABEL_WILDCARDS)
         self.lineedit_wildcards = QLineEdit(WILDCARDS_DEFAULT)
 
-        self.hbox_pattern.addWidget(self.label_extension)
-        self.hbox_pattern.addWidget(self.combobox_extension)
-        self.hbox_pattern.addWidget(self.label_wildcard)
-        self.hbox_pattern.addWidget(self.lineedit_wildcards)
+        hbox_pattern.addWidget(label_extension)
+        hbox_pattern.addWidget(self.combobox_extension)
+        hbox_pattern.addWidget(label_wildcard)
+        hbox_pattern.addWidget(self.lineedit_wildcards)
 
-        self.label_ponifile = QLabel(LABEL_PONIFILE)
+        label_ponifile = QLabel(LABEL_PONIFILE)
         self.combobox_ponifile = QComboBox()
         self.button_add_ponifile = QPushButton(BUTTON_PONIFILE)
         self.button_add_ponifile.setIcon(QIcon(ICON_FILE_PATH))
-        self.button_add_ponifile.setStyleSheet(button_style_input)
+        self.button_add_ponifile.setStyleSheet(BUTTON_STYLE_ENABLE)
         self.button_update_ponifile = QPushButton()
         self.button_update_ponifile.setIcon(QIcon(ICON_REFRESH_PATH))
-        self.button_update_ponifile.setStyleSheet(button_style_input)
+        self.button_update_ponifile.setStyleSheet(BUTTON_STYLE_ENABLE)
 
-        self.hbox_poni.addWidget(self.label_ponifile, Qt.AlignLeft)
-        self.hbox_poni.addWidget(self.combobox_ponifile, Qt.AlignLeft)
+        hbox_poni.addWidget(label_ponifile, Qt.AlignLeft)
+        hbox_poni.addWidget(self.combobox_ponifile, Qt.AlignLeft)
 
-        self.hbox_poni.setStretch(0,1)
-        self.hbox_poni.setStretch(1,10)
+        hbox_poni.setStretch(0,1)
+        hbox_poni.setStretch(1,10)
 
-        self.label_reffolder = QLabel(LABEL_REFERENCE_FOLDER)
+        label_reffolder = QLabel(LABEL_REFERENCE_FOLDER)
         self.combobox_reffolder = QComboBox()
 
-        self.hbox_reffolder.addWidget(self.label_reffolder, Qt.AlignLeft)
-        self.hbox_reffolder.addWidget(self.combobox_reffolder, Qt.AlignLeft)
+        hbox_reffolder.addWidget(label_reffolder, Qt.AlignLeft)
+        hbox_reffolder.addWidget(self.combobox_reffolder, Qt.AlignLeft)
 
-        self.hbox_reffolder.setStretch(0,1)
-        self.hbox_reffolder.setStretch(1,10)
+        hbox_reffolder.setStretch(0,1)
+        hbox_reffolder.setStretch(1,10)
 
-        self.label_reffile = QLabel(LABEL_REFERENCE_FILE)
+        label_reffile = QLabel(LABEL_REFERENCE_FILE)
         self.combobox_reffile = QComboBox()
         self.combobox_reffile.setEnabled(False)
         self.checkbox_auto_reffile = QCheckBox(LABEL_AUTO_REFERENCE)
         self.checkbox_auto_reffile.setChecked(True)
 
-        self.hbox_reffile.addWidget(self.label_reffile, Qt.AlignLeft)
-        self.hbox_reffile.addWidget(self.combobox_reffile, Qt.AlignLeft)
-        self.hbox_reffile.addWidget(self.checkbox_auto_reffile, Qt.AlignLeft)
+        hbox_reffile.addWidget(label_reffile, Qt.AlignLeft)
+        hbox_reffile.addWidget(self.combobox_reffile, Qt.AlignLeft)
+        hbox_reffile.addWidget(self.checkbox_auto_reffile, Qt.AlignLeft)
 
-        self.hbox_reffile.setStretch(0,1)
-        self.hbox_reffile.setStretch(1,10)
-        self.hbox_reffile.setStretch(2,1)
+        hbox_reffile.setStretch(0,1)
+        hbox_reffile.setStretch(1,10)
+        hbox_reffile.setStretch(2,1)
 
-        self.label_sample_orientation = QLabel(LABEL_SAMPLE_ORIENTATION)
-        self.button_mirror = QPushButton(BUTTON_MIRROR_DISABLE)
+        label_sample_orientation = QLabel(LABEL_SAMPLE_ORIENTATION)
+        self.button_mirror = QPushButton(BUTTON_ORIENTATIONS_LAYOUT[MIRROR_BUTTON_LABEL][MIRROR_DEFAULT_STATE]["label"])
+        self.button_mirror.setStyleSheet(BUTTON_ORIENTATIONS_LAYOUT[MIRROR_BUTTON_LABEL][MIRROR_DEFAULT_STATE]["style"])        
+        BUTTON_ORIENTATIONS_LAYOUT[MIRROR_BUTTON_LABEL]["widget"] = self.button_mirror
         self.button_mirror.setIcon(QIcon(ICON_MIRROR_PATH))
-        self.button_mirror.setStyleSheet(button_style_input)
-        self.button_qz = QPushButton(BUTTON_QZ_PAR)
-        self.button_qz.setStyleSheet(button_style_input)
-        self.button_qr = QPushButton(BUTTON_QR_PAR)
-        self.button_qr.setStyleSheet(button_style_input)
+        self.button_mirror.setCheckable(True)
+        self.button_mirror.setChecked(MIRROR_DEFAULT_STATE)
 
-        self.hbox_sample_orientation.addWidget(self.label_sample_orientation)
-        self.hbox_sample_orientation.addWidget(self.button_mirror)
-        self.hbox_sample_orientation.addWidget(self.button_qz)
-        self.hbox_sample_orientation.addWidget(self.button_qr)
+        self.button_qz = QPushButton(BUTTON_ORIENTATIONS_LAYOUT[QZ_BUTTON_LABEL][QZ_DEFAULT_STATE]["label"])
+        self.button_qz.setStyleSheet(BUTTON_ORIENTATIONS_LAYOUT[QZ_BUTTON_LABEL][QZ_DEFAULT_STATE]["style"])    
+        BUTTON_ORIENTATIONS_LAYOUT[QZ_BUTTON_LABEL]["widget"] = self.button_qz
+        self.button_qz.setCheckable(True)
+        self.button_qz.setChecked(QZ_DEFAULT_STATE)
+
+        self.button_qr = QPushButton(BUTTON_ORIENTATIONS_LAYOUT[QR_BUTTON_LABEL][QR_DEFAULT_STATE]["label"])
+        self.button_qr.setStyleSheet(BUTTON_ORIENTATIONS_LAYOUT[QR_BUTTON_LABEL][QR_DEFAULT_STATE]["style"])   
+        BUTTON_ORIENTATIONS_LAYOUT[QR_BUTTON_LABEL]["widget"] = self.button_qr
+        self.button_qr.setCheckable(True)
+        self.button_qr.setChecked(QR_DEFAULT_STATE)
+        self.button_qr.setStyleSheet(BUTTON_STYLE_ENABLE)
+
+        hbox_sample_orientation.addWidget(label_sample_orientation)
+        hbox_sample_orientation.addWidget(self.button_mirror)
+        hbox_sample_orientation.addWidget(self.button_qz)
+        hbox_sample_orientation.addWidget(self.button_qr)
 
         self.button_pyfaicalib = QPushButton(BUTTON_PYFAI_GUI)
         self.button_pyfaicalib.setIcon(QIcon(ICON_PYFAI_PATH))
-        self.button_pyfaicalib.setStyleSheet(button_style_input)
+        self.button_pyfaicalib.setStyleSheet(BUTTON_STYLE_ENABLE)
         self.button_start = QPushButton(BUTTON_UPDATE_DATA)
         self.button_start.setIcon(QIcon(ICON_REFRESH_PATH))
-        self.button_start.setStyleSheet(button_style_input)
+        self.button_start.setStyleSheet(BUTTON_STYLE_ENABLE)
         self.button_live = QPushButton(BUTTON_LIVE)
-        self.button_live.setStyleSheet(button_style_input)
+        self.button_live.setStyleSheet(BUTTON_STYLE_ENABLE)
+        self.button_live.setCheckable(True)
+        self.button_live.setChecked(False)
 
-        self.hbox_pyfai.addWidget(self.button_pyfaicalib)
-        self.hbox_pyfai.addWidget(self.button_start)
-        self.hbox_pyfai.addWidget(self.button_live)
+        hbox_pyfai.addWidget(self.button_pyfaicalib)
+        hbox_pyfai.addWidget(self.button_start)
+        hbox_pyfai.addWidget(self.button_live)
 
         ### METADATA TAB ###
 
-        self.hbox_metadata_choose = QHBoxLayout()
-        self.hbox_metadata_choose.setContentsMargins(1, 0, 1, 0)
+        hbox_metadata_choose = QHBoxLayout()
+        hbox_metadata_choose.setContentsMargins(1, 0, 1, 0)
 
-        self.hbox_metadata_iangle = QHBoxLayout()
-        self.hbox_metadata_iangle.setContentsMargins(1, 0, 1, 0)
+        hbox_metadata_iangle = QHBoxLayout()
+        hbox_metadata_iangle.setContentsMargins(1, 0, 1, 0)
 
-        self.hbox_metadata_tangle = QHBoxLayout()
-        self.hbox_metadata_tangle.setContentsMargins(1, 0, 1, 0)
+        hbox_metadata_tangle = QHBoxLayout()
+        hbox_metadata_tangle.setContentsMargins(1, 0, 1, 0)
 
-        self.hbox_metadata_norm = QHBoxLayout()
-        self.hbox_metadata_norm.setContentsMargins(1, 0, 1, 0)
+        hbox_metadata_norm = QHBoxLayout()
+        hbox_metadata_norm.setContentsMargins(1, 0, 1, 0)
 
-        self.hbox_metadata_acq = QHBoxLayout()
-        self.hbox_metadata_acq.setContentsMargins(1, 0, 1, 0)
+        hbox_metadata_acq = QHBoxLayout()
+        hbox_metadata_acq.setContentsMargins(1, 0, 1, 0)
 
-        self.hbox_metadata_name = QHBoxLayout()
-        self.hbox_metadata_name.setContentsMargins(1, 0, 1, 0)
+        hbox_metadata_name = QHBoxLayout()
+        hbox_metadata_name.setContentsMargins(1, 0, 1, 0)
 
-        self.widget_metadata_choose = QWidget()
-        self.widget_metadata_iangle = QWidget()
-        self.widget_metadata_tangle = QWidget()
-        self.widget_metadata_norm = QWidget()
-        self.widget_metadata_acq = QWidget()
-        self.widget_metadata_name = QWidget()
+        widget_metadata_choose = QWidget()
+        widget_metadata_iangle = QWidget()
+        widget_metadata_tangle = QWidget()
+        widget_metadata_norm = QWidget()
+        widget_metadata_acq = QWidget()
+        widget_metadata_name = QWidget()
 
-        self.widget_metadata_choose.setLayout(self.hbox_metadata_choose)
-        self.widget_metadata_iangle.setLayout(self.hbox_metadata_iangle)
-        self.widget_metadata_tangle.setLayout(self.hbox_metadata_tangle)
-        self.widget_metadata_norm.setLayout(self.hbox_metadata_norm)
-        self.widget_metadata_acq.setLayout(self.hbox_metadata_acq)
-        self.widget_metadata_name.setLayout(self.hbox_metadata_name)
+        widget_metadata_choose.setLayout(hbox_metadata_choose)
+        widget_metadata_iangle.setLayout(hbox_metadata_iangle)
+        widget_metadata_tangle.setLayout(hbox_metadata_tangle)
+        widget_metadata_norm.setLayout(hbox_metadata_norm)
+        widget_metadata_acq.setLayout(hbox_metadata_acq)
+        widget_metadata_name.setLayout(hbox_metadata_name)
 
-        self.label_setup = QLabel(LABEL_DICT_SETUP)
+        label_setup = QLabel(LABEL_DICT_SETUP)
         self.combobox_setup = QComboBox()
-        self.button_setup = QPushButton(BUTTON_PICK_JSON)
-        self.button_setup.setStyleSheet(button_style_input)
+        self.button_pick_json = QPushButton(BUTTON_PICK_JSON)
+        self.button_pick_json.setStyleSheet(BUTTON_STYLE_ENABLE)
 
-        self.hbox_metadata_choose.addWidget(self.label_setup, Qt.AlignLeft)
-        self.hbox_metadata_choose.addWidget(self.combobox_setup, Qt.AlignLeft)
-        self.hbox_metadata_choose.addWidget(self.button_setup, Qt.AlignLeft)
+        hbox_metadata_choose.addWidget(label_setup, Qt.AlignLeft)
+        hbox_metadata_choose.addWidget(self.combobox_setup, Qt.AlignLeft)
+        hbox_metadata_choose.addWidget(self.button_pick_json, Qt.AlignLeft)
 
-        self.hbox_metadata_choose.setStretch(1,10)
+        hbox_metadata_choose.setStretch(1,10)
 
-        self.label_angle = QLabel(LABEL_IANGLE)
+        label_angle = QLabel(LABEL_IANGLE)
         self.lineedit_angle = QLineEdit()
-        self.combobox_angle = QComboBox()
+        self.combobox_angle = CheckableComboBox()
 
-        self.hbox_metadata_iangle.addWidget(self.label_angle)
-        self.hbox_metadata_iangle.addWidget(self.lineedit_angle)
-        self.hbox_metadata_iangle.addWidget(self.combobox_angle)
+        hbox_metadata_iangle.addWidget(label_angle)
+        hbox_metadata_iangle.addWidget(self.lineedit_angle)
+        hbox_metadata_iangle.addWidget(self.combobox_angle)
 
-        self.label_tilt_angle = QLabel(LABEL_TILTANGLE)
+        hbox_metadata_iangle.setStretch(2,5)
+
+
+
+
+        label_tilt_angle = QLabel(LABEL_TILTANGLE)
         self.lineedit_tilt_angle = QLineEdit()
-        self.combobox_tilt_angle = QComboBox()
+        self.combobox_tilt_angle = CheckableComboBox()
 
-        self.hbox_metadata_tangle.addWidget(self.label_tilt_angle)
-        self.hbox_metadata_tangle.addWidget(self.lineedit_tilt_angle)
-        self.hbox_metadata_tangle.addWidget(self.combobox_tilt_angle)
+        hbox_metadata_tangle.addWidget(label_tilt_angle)
+        hbox_metadata_tangle.addWidget(self.lineedit_tilt_angle)
+        hbox_metadata_tangle.addWidget(self.combobox_tilt_angle)
 
-        self.label_normfactor = QLabel(LABEL_NORMFACTOR)
+        hbox_metadata_tangle.setStretch(2,5)        
+
+        label_normfactor = QLabel(LABEL_NORMFACTOR)
         self.lineedit_normfactor = QLineEdit()
-        self.combobox_normfactor = QComboBox()
+        self.combobox_normfactor = CheckableComboBox()
 
-        self.hbox_metadata_norm.addWidget(self.label_normfactor)
-        self.hbox_metadata_norm.addWidget(self.lineedit_normfactor)
-        self.hbox_metadata_norm.addWidget(self.combobox_normfactor)
+        hbox_metadata_norm.addWidget(label_normfactor)
+        hbox_metadata_norm.addWidget(self.lineedit_normfactor)
+        hbox_metadata_norm.addWidget(self.combobox_normfactor)
+        hbox_metadata_norm.setStretch(2,5)
 
-        self.label_exposure = QLabel(LABEL_EXPOSURE)
+        label_exposure = QLabel(LABEL_EXPOSURE)
         self.lineedit_exposure = QLineEdit()
-        self.combobox_exposure = QComboBox()
+        self.combobox_acquisition = CheckableComboBox()
 
-        self.hbox_metadata_acq.addWidget(self.label_exposure)
-        self.hbox_metadata_acq.addWidget(self.lineedit_exposure)
-        self.hbox_metadata_acq.addWidget(self.combobox_exposure)
-
-        self.label_setup_name = QLabel(LABEL_SETUP_NAME)
+        hbox_metadata_acq.addWidget(label_exposure)
+        hbox_metadata_acq.addWidget(self.lineedit_exposure)
+        hbox_metadata_acq.addWidget(self.combobox_acquisition)
+        hbox_metadata_acq.setStretch(2,5)
+        
+        label_setup_name = QLabel(LABEL_SETUP_NAME)
         self.lineedit_setup_name = QLineEdit()   
-        self.button_setup_save = QPushButton(BUTTON_JSON_FILE)
-        self.button_setup_save.setStyleSheet(button_style_input)
-        self.button_setup_save.setIcon(QIcon(ICON_SAVE_PATH))
+        self.button_metadata_save = QPushButton(BUTTON_JSON_FILE)
+        self.button_metadata_save.setStyleSheet(BUTTON_STYLE_ENABLE)
+        self.button_metadata_save.setIcon(QIcon(ICON_SAVE_PATH))
 
-        self.hbox_metadata_name.addWidget(self.label_setup_name)
-        self.hbox_metadata_name.addWidget(self.lineedit_setup_name)
-        self.hbox_metadata_name.addWidget(self.button_setup_save)
+        hbox_metadata_name.addWidget(label_setup_name)
+        hbox_metadata_name.addWidget(self.lineedit_setup_name)
+        hbox_metadata_name.addWidget(self.button_metadata_save)
 
-        self.button_setup_update = QPushButton(BUTTON_UPDATE_KEYS)
-        self.button_setup_update.setStyleSheet(button_style_input)
+        self.button_metadata_update = QPushButton(BUTTON_UPDATE_KEYS)
+        self.button_metadata_update.setStyleSheet(BUTTON_STYLE_ENABLE)
 
-        self.vbox_metadata.addWidget(self.widget_metadata_choose)
-        self.vbox_metadata.addWidget(self.widget_metadata_iangle)
-        self.vbox_metadata.addWidget(self.widget_metadata_tangle)
-        self.vbox_metadata.addWidget(self.widget_metadata_norm)
-        self.vbox_metadata.addWidget(self.widget_metadata_acq)
-        self.vbox_metadata.addWidget(self.widget_metadata_name)
-        self.vbox_metadata.addWidget(self.button_setup_update)
+        vbox_metadata.addWidget(widget_metadata_choose)
+        vbox_metadata.addWidget(widget_metadata_iangle)
+        vbox_metadata.addWidget(widget_metadata_tangle)
+        vbox_metadata.addWidget(widget_metadata_norm)
+        vbox_metadata.addWidget(widget_metadata_acq)
+        vbox_metadata.addWidget(widget_metadata_name)
+        vbox_metadata.addWidget(self.button_metadata_update)
 
         ## CAKE INTEGRATION TAB
 
-        self.vbox_cake_parameters = QVBoxLayout()
-        self.widget_cake_parameters = QWidget()
-        self.widget_cake_parameters.setLayout(self.vbox_cake_parameters)
+        vbox_cake_parameters = QVBoxLayout()
+        widget_cake_parameters = QWidget()
+        widget_cake_parameters.setLayout(vbox_cake_parameters)
         self.list_cakes = QListWidget()
 
-        self.hbox_cake.setStretch(0,1)
-        self.hbox_cake.setStretch(1,10)
+        hbox_cake.setStretch(0,1)
+        hbox_cake.setStretch(1,10)
 
-        self.hbox_cake.addWidget(self.widget_cake_parameters)
-        self.hbox_cake.addWidget(self.list_cakes)
+        hbox_cake.addWidget(widget_cake_parameters)
+        hbox_cake.addWidget(self.list_cakes)
     
-        self.hbox_cake_name = QHBoxLayout()
-        self.hbox_cake_name.setContentsMargins(1, 0, 1, 0)
-        self.hbox_cake_suffix = QHBoxLayout()
-        self.hbox_cake_suffix.setContentsMargins(1, 0, 1, 0)
-        self.hbox_cake_type = QHBoxLayout()
-        self.hbox_cake_type.setContentsMargins(1, 0, 1, 0)
-        self.hbox_cake_unit = QHBoxLayout()
-        self.hbox_cake_unit.setContentsMargins(1, 0, 1, 0)
-        self.hbox_cake_radial = QHBoxLayout()
-        self.hbox_cake_radial.setContentsMargins(1, 0, 1, 0)
-        self.hbox_cake_azimut = QHBoxLayout()
-        self.hbox_cake_azimut.setContentsMargins(1, 0, 1, 0)
-        self.hbox_cake_bins = QHBoxLayout()
-        self.hbox_cake_bins.setContentsMargins(1, 0, 1, 0)
+        hbox_cake_name = QHBoxLayout()
+        hbox_cake_name.setContentsMargins(1, 0, 1, 0)
+        hbox_cake_suffix = QHBoxLayout()
+        hbox_cake_suffix.setContentsMargins(1, 0, 1, 0)
+        hbox_cake_type = QHBoxLayout()
+        hbox_cake_type.setContentsMargins(1, 0, 1, 0)
+        hbox_cake_unit = QHBoxLayout()
+        hbox_cake_unit.setContentsMargins(1, 0, 1, 0)
+        hbox_cake_radial = QHBoxLayout()
+        hbox_cake_radial.setContentsMargins(1, 0, 1, 0)
+        hbox_cake_azimut = QHBoxLayout()
+        hbox_cake_azimut.setContentsMargins(1, 0, 1, 0)
+        hbox_cake_bins = QHBoxLayout()
+        hbox_cake_bins.setContentsMargins(1, 0, 1, 0)
 
-        self.widget_cake_name = QWidget()
-        self.widget_cake_suffix = QWidget()
-        self.widget_cake_type = QWidget()
-        self.widget_cake_unit = QWidget()
-        self.widget_cake_radial = QWidget()
-        self.widget_cake_azimut = QWidget()
-        self.widget_cake_bins = QWidget()
+        widget_cake_name = QWidget()
+        widget_cake_suffix = QWidget()
+        widget_cake_type = QWidget()
+        widget_cake_unit = QWidget()
+        widget_cake_radial = QWidget()
+        widget_cake_azimut = QWidget()
+        widget_cake_bins = QWidget()
 
-        self.widget_cake_name.setLayout(self.hbox_cake_name)
-        self.widget_cake_suffix.setLayout(self.hbox_cake_suffix)
-        self.widget_cake_type.setLayout(self.hbox_cake_type)
-        self.widget_cake_unit.setLayout(self.hbox_cake_unit)
-        self.widget_cake_radial.setLayout(self.hbox_cake_radial)
-        self.widget_cake_azimut.setLayout(self.hbox_cake_azimut)
-        self.widget_cake_bins.setLayout(self.hbox_cake_bins)
+        widget_cake_name.setLayout(hbox_cake_name)
+        widget_cake_suffix.setLayout(hbox_cake_suffix)
+        widget_cake_type.setLayout(hbox_cake_type)
+        widget_cake_unit.setLayout(hbox_cake_unit)
+        widget_cake_radial.setLayout(hbox_cake_radial)
+        widget_cake_azimut.setLayout(hbox_cake_azimut)
+        widget_cake_bins.setLayout(hbox_cake_bins)
 
-        self.vbox_cake_parameters.addWidget(self.widget_cake_name)
-        self.vbox_cake_parameters.addWidget(self.widget_cake_suffix)
-        self.vbox_cake_parameters.addWidget(self.widget_cake_type)
-        self.vbox_cake_parameters.addWidget(self.widget_cake_unit)
-        self.vbox_cake_parameters.addWidget(self.widget_cake_radial)
-        self.vbox_cake_parameters.addWidget(self.widget_cake_azimut)
-        self.vbox_cake_parameters.addWidget(self.widget_cake_bins)
+        vbox_cake_parameters.addWidget(widget_cake_name)
+        vbox_cake_parameters.addWidget(widget_cake_suffix)
+        vbox_cake_parameters.addWidget(widget_cake_type)
+        vbox_cake_parameters.addWidget(widget_cake_unit)
+        vbox_cake_parameters.addWidget(widget_cake_radial)
+        vbox_cake_parameters.addWidget(widget_cake_azimut)
+        vbox_cake_parameters.addWidget(widget_cake_bins)
 
-        self.label_name_cake = QLabel(LABEL_CAKE_NAME)
+        label_name_cake = QLabel(LABEL_CAKE_NAME)
         self.lineedit_name_cake = QLineEdit()
 
-        self.hbox_cake_name.addWidget(self.label_name_cake)
-        self.hbox_cake_name.addWidget(self.lineedit_name_cake)
+        hbox_cake_name.addWidget(label_name_cake)
+        hbox_cake_name.addWidget(self.lineedit_name_cake)
 
-        self.label_suffix_cake = QLabel(LABEL_CAKE_SUFFIX)
+        label_suffix_cake = QLabel(LABEL_CAKE_SUFFIX)
         self.lineedit_suffix_cake = QLineEdit()
 
-        self.hbox_cake_suffix.addWidget(self.label_suffix_cake)
-        self.hbox_cake_suffix.addWidget(self.lineedit_suffix_cake)
+        hbox_cake_suffix.addWidget(label_suffix_cake)
+        hbox_cake_suffix.addWidget(self.lineedit_suffix_cake)
 
-        self.label_type_cake = QLabel(LABEL_CAKE_TYPE)
+        label_type_cake = QLabel(LABEL_CAKE_TYPE)
         self.combobox_type_cake = QComboBox()
         for cake_int in CAKE_INTEGRATIONS:
             self.combobox_type_cake.addItem(cake_int)
 
-        self.hbox_cake_type.addWidget(self.label_type_cake, Qt.AlignLeft)
-        self.hbox_cake_type.addWidget(self.combobox_type_cake, Qt.AlignLeft)
+        hbox_cake_type.addWidget(label_type_cake, Qt.AlignLeft)
+        hbox_cake_type.addWidget(self.combobox_type_cake, Qt.AlignLeft)
 
-        self.hbox_cake_type.setStretch(1,10)
+        hbox_cake_type.setStretch(1,10)
 
-        self.label_units_cake = QLabel(LABEL_CAKE_UNITS)
+        label_units_cake = QLabel(LABEL_CAKE_UNITS)
         self.combobox_units_cake = QComboBox()
         for unit in DICT_UNIT_ALIAS.values():
             self.combobox_units_cake.addItem(unit)
 
-        self.hbox_cake_unit.addWidget(self.label_units_cake, Qt.AlignLeft)
-        self.hbox_cake_unit.addWidget(self.combobox_units_cake, Qt.AlignLeft)
+        hbox_cake_unit.addWidget(label_units_cake, Qt.AlignLeft)
+        hbox_cake_unit.addWidget(self.combobox_units_cake, Qt.AlignLeft)
 
-        self.hbox_cake_unit.setStretch(1,10)
+        hbox_cake_unit.setStretch(1,10)
 
-        self.label_radialrange_cake = QLabel(LABEL_CAKE_RADIAL)
-        self.label_radialmin_cake = QLabel(LABEL_MIN)
+        label_radialrange_cake = QLabel(LABEL_CAKE_RADIAL)
         self.spinbox_radialmin_cake = QDoubleSpinBox()
         self.spinbox_radialmin_cake.setSingleStep(STEP_INTEGRATION_SPINBOX)
         self.spinbox_radialmin_cake.setRange(SPINBOX_RADIAL_MIN, SPINBOX_RADIAL_MAX)
-        self.label_radialmax_cake = QLabel(LABEL_MAX)
         self.spinbox_radialmax_cake = QDoubleSpinBox()
         self.spinbox_radialmax_cake.setSingleStep(STEP_INTEGRATION_SPINBOX)
         self.spinbox_radialmax_cake.setRange(SPINBOX_RADIAL_MIN, SPINBOX_RADIAL_MAX)
         
-        self.hbox_cake_radial.addWidget(self.label_radialrange_cake)
-        self.hbox_cake_radial.addWidget(self.spinbox_radialmin_cake)
-        self.hbox_cake_radial.addWidget(self.spinbox_radialmax_cake)
+        hbox_cake_radial.addWidget(label_radialrange_cake)
+        hbox_cake_radial.addWidget(self.spinbox_radialmin_cake)
+        hbox_cake_radial.addWidget(self.spinbox_radialmax_cake)
         
         self.spinbox_radialmin_cake.setMaximumWidth(WIDTH_SPINBOX_MAX)
         self.spinbox_radialmax_cake.setMaximumWidth(WIDTH_SPINBOX_MAX)
 
-        self.label_azimrange_cake = QLabel(LABEL_CAKE_AZIM)
-        self.label_azimmin_cake = QLabel(LABEL_MIN)
+        label_azimrange_cake = QLabel(LABEL_CAKE_AZIM)
         self.spinbox_azimmin_cake = QDoubleSpinBox()
         self.spinbox_azimmin_cake.setSingleStep(STEP_INTEGRATION_SPINBOX)
         self.spinbox_azimmin_cake.setRange(SPINBOX_AZIM_MIN, SPINBOX_AZIM_MAX)
-        self.label_azimmax_cake = QLabel(LABEL_MAX)
         self.spinbox_azimmax_cake = QDoubleSpinBox()
         self.spinbox_azimmax_cake.setSingleStep(STEP_INTEGRATION_SPINBOX)
         self.spinbox_azimmax_cake.setRange(SPINBOX_AZIM_MIN, SPINBOX_AZIM_MAX)
         
-        self.hbox_cake_azimut.addWidget(self.label_azimrange_cake)
-        self.hbox_cake_azimut.addWidget(self.spinbox_azimmin_cake)
-        self.hbox_cake_azimut.addWidget(self.spinbox_azimmax_cake)
+        hbox_cake_azimut.addWidget(label_azimrange_cake)
+        hbox_cake_azimut.addWidget(self.spinbox_azimmin_cake)
+        hbox_cake_azimut.addWidget(self.spinbox_azimmax_cake)
 
         self.spinbox_azimmin_cake.setMaximumWidth(WIDTH_SPINBOX_MAX)
         self.spinbox_azimmax_cake.setMaximumWidth(WIDTH_SPINBOX_MAX)
         
-        self.label_azimbins_cake = QLabel(LABEL_CAKE_BINS_OPT) 
-        self.lineedit_azimbins_cake = QLineEdit()
+        self.label_azimbins_cake = QLabel(LABEL_CAKE_BINS_OPT)
+        self.spinbox_azimbins_cake = QDoubleSpinBox()
+        self.spinbox_azimbins_cake.setSingleStep(1)
+        self.spinbox_azimbins_cake.setRange(0, 1e9)
 
-        self.hbox_cake_bins.addWidget(self.label_azimbins_cake)
-        self.hbox_cake_bins.addWidget(self.lineedit_azimbins_cake)
+        hbox_cake_bins.addWidget(self.label_azimbins_cake)
+        hbox_cake_bins.addWidget(self.spinbox_azimbins_cake)
 
         # BOX INTEGRATION TAB
 
-        self.vbox_box_parameters = QVBoxLayout()
-        self.widget_box_parameters = QWidget()
-        self.widget_box_parameters.setLayout(self.vbox_box_parameters)
+        vbox_box_parameters = QVBoxLayout()
+        widget_box_parameters = QWidget()
+        widget_box_parameters.setLayout(vbox_box_parameters)
         self.list_box = QListWidget()
 
-        self.hbox_box.addWidget(self.widget_box_parameters)
-        self.hbox_box.addWidget(self.list_box)
+        hbox_box.addWidget(widget_box_parameters)
+        hbox_box.addWidget(self.list_box)
 
-        self.hbox_box_name = QHBoxLayout()
-        self.hbox_box_name.setContentsMargins(1, 0, 1, 0)
-        self.hbox_box_suffix = QHBoxLayout()
-        self.hbox_box_suffix.setContentsMargins(1, 0, 1, 0)
-        self.hbox_box_direction = QHBoxLayout()
-        self.hbox_box_direction.setContentsMargins(1, 0, 1, 0)
-        self.hbox_box_unit_input = QHBoxLayout()
-        self.hbox_box_unit_input.setContentsMargins(1, 0, 1, 0)
-        self.hbox_box_ip = QHBoxLayout()
-        self.hbox_box_ip.setContentsMargins(1, 0, 1, 0)
-        self.hbox_box_oop = QHBoxLayout()
-        self.hbox_box_oop.setContentsMargins(1, 0, 1, 0)
-        self.hbox_box_unit_output = QHBoxLayout()
-        self.hbox_box_unit_output.setContentsMargins(1, 0, 1, 0)
+        hbox_box_name = QHBoxLayout()
+        hbox_box_name.setContentsMargins(1, 0, 1, 0)
+        hbox_box_suffix = QHBoxLayout()
+        hbox_box_suffix.setContentsMargins(1, 0, 1, 0)
+        hbox_box_direction = QHBoxLayout()
+        hbox_box_direction.setContentsMargins(1, 0, 1, 0)
+        hbox_box_unit_input = QHBoxLayout()
+        hbox_box_unit_input.setContentsMargins(1, 0, 1, 0)
+        hbox_box_ip = QHBoxLayout()
+        hbox_box_ip.setContentsMargins(1, 0, 1, 0)
+        hbox_box_oop = QHBoxLayout()
+        hbox_box_oop.setContentsMargins(1, 0, 1, 0)
+        hbox_box_unit_output = QHBoxLayout()
+        hbox_box_unit_output.setContentsMargins(1, 0, 1, 0)
 
-        self.widget_box_name = QWidget()
-        self.widget_box_suffix = QWidget()
-        self.widget_box_direction = QWidget()
-        self.widget_box_unit_input = QWidget()
-        self.widget_box_ip = QWidget()
-        self.widget_box_oop = QWidget()
-        self.widget_box_unit_output = QWidget()
+        widget_box_name = QWidget()
+        widget_box_suffix = QWidget()
+        widget_box_direction = QWidget()
+        widget_box_unit_input = QWidget()
+        widget_box_ip = QWidget()
+        widget_box_oop = QWidget()
+        widget_box_unit_output = QWidget()
 
-        self.widget_box_name.setLayout(self.hbox_box_name)
-        self.widget_box_suffix.setLayout(self.hbox_box_suffix)
-        self.widget_box_direction.setLayout(self.hbox_box_direction)
-        self.widget_box_unit_input.setLayout(self.hbox_box_unit_input)
-        self.widget_box_ip.setLayout(self.hbox_box_ip)
-        self.widget_box_oop.setLayout(self.hbox_box_oop)
-        self.widget_box_unit_output.setLayout(self.hbox_box_unit_output)
+        widget_box_name.setLayout(hbox_box_name)
+        widget_box_suffix.setLayout(hbox_box_suffix)
+        widget_box_direction.setLayout(hbox_box_direction)
+        widget_box_unit_input.setLayout(hbox_box_unit_input)
+        widget_box_ip.setLayout(hbox_box_ip)
+        widget_box_oop.setLayout(hbox_box_oop)
+        widget_box_unit_output.setLayout(hbox_box_unit_output)
 
-        self.vbox_box_parameters.addWidget(self.widget_box_name)
-        self.vbox_box_parameters.addWidget(self.widget_box_suffix)
-        self.vbox_box_parameters.addWidget(self.widget_box_direction)
-        self.vbox_box_parameters.addWidget(self.widget_box_unit_input)
-        self.vbox_box_parameters.addWidget(self.widget_box_ip)
-        self.vbox_box_parameters.addWidget(self.widget_box_oop)
-        self.vbox_box_parameters.addWidget(self.widget_box_unit_output)
+        vbox_box_parameters.addWidget(widget_box_name)
+        vbox_box_parameters.addWidget(widget_box_suffix)
+        vbox_box_parameters.addWidget(widget_box_direction)
+        vbox_box_parameters.addWidget(widget_box_unit_input)
+        vbox_box_parameters.addWidget(widget_box_ip)
+        vbox_box_parameters.addWidget(widget_box_oop)
+        vbox_box_parameters.addWidget(widget_box_unit_output)
 
-        self.label_name_box = QLabel(LABEL_BOX_NAME)
+        label_name_box = QLabel(LABEL_BOX_NAME)
         self.lineedit_name_box = QLineEdit()
 
-        self.hbox_box_name.addWidget(self.label_name_box)
-        self.hbox_box_name.addWidget(self.lineedit_name_box)
+        hbox_box_name.addWidget(label_name_box)
+        hbox_box_name.addWidget(self.lineedit_name_box)
 
-        self.label_suffix_box = QLabel(LABEL_BOX_SUFFIX)
+        label_suffix_box = QLabel(LABEL_BOX_SUFFIX)
         self.lineedit_suffix_box = QLineEdit()
 
-        self.hbox_box_suffix.addWidget(self.label_suffix_box)
-        self.hbox_box_suffix.addWidget(self.lineedit_suffix_box)
+        hbox_box_suffix.addWidget(label_suffix_box)
+        hbox_box_suffix.addWidget(self.lineedit_suffix_box)
 
-        self.label_direction_box = QLabel(LABEL_BOX_DIRECTION)
+        label_direction_box = QLabel(LABEL_BOX_DIRECTION)
         self.combobox_direction_box = QComboBox()
         for box in BOX_INTEGRATIONS:
             self.combobox_direction_box.addItem(box)
 
-        self.hbox_box_direction.addWidget(self.label_direction_box, Qt.AlignLeft)
-        self.hbox_box_direction.addWidget(self.combobox_direction_box, Qt.AlignLeft)
+        hbox_box_direction.addWidget(label_direction_box, Qt.AlignLeft)
+        hbox_box_direction.addWidget(self.combobox_direction_box, Qt.AlignLeft)
 
-        self.hbox_box_direction.setStretch(1,10)
+        hbox_box_direction.setStretch(1,10)
 
-        self.label_input_units_box = QLabel(LABEL_BOX_INPUT_UNITS)
+        label_input_units_box = QLabel(LABEL_BOX_INPUT_UNITS)
         self.combobox_units_box = QComboBox()
         for unit in DICT_UNIT_ALIAS.values():
             self.combobox_units_box.addItem(unit)
 
-        self.hbox_box_unit_input.addWidget(self.label_input_units_box, Qt.AlignLeft)
-        self.hbox_box_unit_input.addWidget(self.combobox_units_box, Qt.AlignLeft)
+        hbox_box_unit_input.addWidget(label_input_units_box, Qt.AlignLeft)
+        hbox_box_unit_input.addWidget(self.combobox_units_box, Qt.AlignLeft)
 
-        self.hbox_box_unit_input.setStretch(1,10)
+        hbox_box_unit_input.setStretch(1,10)
 
-        self.label_iprange_box = QLabel(LABEL_BOX_IP_RANGE)
-        self.label_ipmin_box = QLabel(LABEL_MIN)
+        label_iprange_box = QLabel(LABEL_BOX_IP_RANGE)
         self.spinbox_ipmin_box = QDoubleSpinBox()
         self.spinbox_ipmin_box.setSingleStep(STEP_INTEGRATION_SPINBOX)
         self.spinbox_ipmin_box.setRange(SPINBOX_RANGE_MIN, SPINBOX_RANGE_MAX)
-        self.label_ipmax_box = QLabel(LABEL_MAX)
         self.spinbox_ipmax_box = QDoubleSpinBox()
         self.spinbox_ipmax_box.setSingleStep(STEP_INTEGRATION_SPINBOX)
         self.spinbox_ipmax_box.setRange(SPINBOX_RANGE_MIN, SPINBOX_RANGE_MAX)
 
-        self.hbox_box_ip.addWidget(self.label_iprange_box)
-        self.hbox_box_ip.addWidget(self.spinbox_ipmin_box)
-        self.hbox_box_ip.addWidget(self.spinbox_ipmax_box)
+        hbox_box_ip.addWidget(label_iprange_box)
+        hbox_box_ip.addWidget(self.spinbox_ipmin_box)
+        hbox_box_ip.addWidget(self.spinbox_ipmax_box)
 
         self.spinbox_ipmin_box.setMaximumWidth(WIDTH_SPINBOX_MAX)
         self.spinbox_ipmax_box.setMaximumWidth(WIDTH_SPINBOX_MAX)
 
-        self.label_ooprange_box = QLabel(LABEL_BOX_OOP_RANGE)
-        self.label_oopmin_box = QLabel(LABEL_MIN)
+        label_ooprange_box = QLabel(LABEL_BOX_OOP_RANGE)
         self.spinbox_oopmin_box = QDoubleSpinBox()
         self.spinbox_oopmin_box.setSingleStep(STEP_INTEGRATION_SPINBOX)
         self.spinbox_oopmin_box.setRange(SPINBOX_RANGE_MIN, SPINBOX_RANGE_MAX)
-        self.label_oopmax_box = QLabel(LABEL_MAX)
         self.spinbox_oopmax_box = QDoubleSpinBox()
         self.spinbox_oopmax_box.setSingleStep(STEP_INTEGRATION_SPINBOX)
         self.spinbox_oopmax_box.setRange(SPINBOX_RANGE_MIN, SPINBOX_RANGE_MAX)
 
-        self.hbox_box_oop.addWidget(self.label_ooprange_box)
-        self.hbox_box_oop.addWidget(self.spinbox_oopmin_box)
-        self.hbox_box_oop.addWidget(self.spinbox_oopmax_box)
+        hbox_box_oop.addWidget(label_ooprange_box)
+        hbox_box_oop.addWidget(self.spinbox_oopmin_box)
+        hbox_box_oop.addWidget(self.spinbox_oopmax_box)
 
         self.spinbox_oopmin_box.setMaximumWidth(WIDTH_SPINBOX_MAX)
         self.spinbox_oopmax_box.setMaximumWidth(WIDTH_SPINBOX_MAX)
 
-        self.label_outputunits_box = QLabel(LABEL_BOX_OUTPUT_UNITS)  
+        label_outputunits_box = QLabel(LABEL_BOX_OUTPUT_UNITS)  
         self.combobox_outputunits_box = QComboBox()
         for unit in DICT_UNIT_ALIAS.values():
             self.combobox_outputunits_box.addItem(unit)
         
-        self.hbox_box_unit_output.addWidget(self.label_outputunits_box, Qt.AlignLeft)
-        self.hbox_box_unit_output.addWidget(self.combobox_outputunits_box, Qt.AlignLeft)
+        hbox_box_unit_output.addWidget(label_outputunits_box, Qt.AlignLeft)
+        hbox_box_unit_output.addWidget(self.combobox_outputunits_box, Qt.AlignLeft)
 
-        self.hbox_box_unit_output.setStretch(1,10)
+        hbox_box_unit_output.setStretch(1,10)
 
         # PONI PARAMETERS TAB
 
-        self.hbox_poni_mod = QHBoxLayout()
-        self.hbox_poni_mod.setContentsMargins(1,0,1,0)
-        self.hbox_poni_wave = QHBoxLayout()
-        self.hbox_poni_wave.setContentsMargins(1,0,1,0)
-        self.hbox_poni_dist = QHBoxLayout()
-        self.hbox_poni_dist.setContentsMargins(1,0,1,0)
-        self.hbox_poni_detector = QHBoxLayout()
-        self.hbox_poni_detector.setContentsMargins(1,0,1,0)
-        self.hbox_poni_poni_1 = QHBoxLayout()
-        self.hbox_poni_poni_1.setContentsMargins(1,0,1,0)
-        self.hbox_poni_poni_2 = QHBoxLayout()
-        self.hbox_poni_poni_2.setContentsMargins(1,0,1,0)
-        self.hbox_poni_rot_1 = QHBoxLayout()
-        self.hbox_poni_rot_1.setContentsMargins(1,0,1,0)
-        self.hbox_poni_rot_2 = QHBoxLayout()
-        self.hbox_poni_rot_2.setContentsMargins(1,0,1,0)
-        self.hbox_poni_rot_3 = QHBoxLayout()
-        self.hbox_poni_rot_3.setContentsMargins(1,0,1,0)
-        self.hbox_poni_buttons = QHBoxLayout()
-        self.hbox_poni_buttons.setContentsMargins(1,0,1,0)
+        hbox_poni_mod = QHBoxLayout()
+        hbox_poni_mod.setContentsMargins(1,0,1,0)
+        hbox_poni_wave = QHBoxLayout()
+        hbox_poni_wave.setContentsMargins(1,0,1,0)
+        hbox_poni_dist = QHBoxLayout()
+        hbox_poni_dist.setContentsMargins(1,0,1,0)
+        hbox_poni_detector = QHBoxLayout()
+        hbox_poni_detector.setContentsMargins(1,0,1,0)
+        hbox_poni_poni_1 = QHBoxLayout()
+        hbox_poni_poni_1.setContentsMargins(1,0,1,0)
+        hbox_poni_poni_2 = QHBoxLayout()
+        hbox_poni_poni_2.setContentsMargins(1,0,1,0)
+        hbox_poni_rot_1 = QHBoxLayout()
+        hbox_poni_rot_1.setContentsMargins(1,0,1,0)
+        hbox_poni_rot_2 = QHBoxLayout()
+        hbox_poni_rot_2.setContentsMargins(1,0,1,0)
+        hbox_poni_rot_3 = QHBoxLayout()
+        hbox_poni_rot_3.setContentsMargins(1,0,1,0)
+        hbox_poni_buttons = QHBoxLayout()
+        hbox_poni_buttons.setContentsMargins(1,0,1,0)
 
-        self.widget_poni_mod = QWidget()
-        self.widget_poni_wave = QWidget()
-        self.widget_poni_dist = QWidget()
-        self.widget_poni_detector = QWidget()
-        self.widget_poni_poni_1 = QWidget()
-        self.widget_poni_poni_2 = QWidget()
-        self.widget_poni_rot_1 = QWidget()
-        self.widget_poni_rot_2 = QWidget()
-        self.widget_poni_rot_3 = QWidget()
-        self.widget_poni_buttons = QWidget()
+        widget_poni_mod = QWidget()
+        widget_poni_wave = QWidget()
+        widget_poni_dist = QWidget()
+        widget_poni_detector = QWidget()
+        widget_poni_poni_1 = QWidget()
+        widget_poni_poni_2 = QWidget()
+        widget_poni_rot_1 = QWidget()
+        widget_poni_rot_2 = QWidget()
+        widget_poni_rot_3 = QWidget()
+        widget_poni_buttons = QWidget()
 
-        self.widget_poni_mod.setLayout(self.hbox_poni_mod)
-        self.widget_poni_wave.setLayout(self.hbox_poni_wave)
-        self.widget_poni_dist.setLayout(self.hbox_poni_dist)
-        self.widget_poni_detector.setLayout(self.hbox_poni_detector)
-        self.widget_poni_poni_1.setLayout(self.hbox_poni_poni_1)
-        self.widget_poni_poni_2.setLayout(self.hbox_poni_poni_2)
-        self.widget_poni_rot_1.setLayout(self.hbox_poni_rot_1)
-        self.widget_poni_rot_2.setLayout(self.hbox_poni_rot_2)
-        self.widget_poni_rot_3.setLayout(self.hbox_poni_rot_3)
-        self.widget_poni_buttons.setLayout(self.hbox_poni_buttons)
+        widget_poni_mod.setLayout(hbox_poni_mod)
+        widget_poni_wave.setLayout(hbox_poni_wave)
+        widget_poni_dist.setLayout(hbox_poni_dist)
+        widget_poni_detector.setLayout(hbox_poni_detector)
+        widget_poni_poni_1.setLayout(hbox_poni_poni_1)
+        widget_poni_poni_2.setLayout(hbox_poni_poni_2)
+        widget_poni_rot_1.setLayout(hbox_poni_rot_1)
+        widget_poni_rot_2.setLayout(hbox_poni_rot_2)
+        widget_poni_rot_3.setLayout(hbox_poni_rot_3)
+        widget_poni_buttons.setLayout(hbox_poni_buttons)
 
         self.checkbox_poni_mod = QCheckBox(LABEL_PONI_MOD)
 
-        self.hbox_poni_mod.addWidget(self.checkbox_poni_mod)
+        hbox_poni_mod.addWidget(self.checkbox_poni_mod)
 
-        self.label_wavelength = QLabel(LABEL_PONI_WAVELENGTH)
+        label_wavelength = QLabel(LABEL_PONI_WAVELENGTH)
         self.lineedit_wavelength = QLineEdit()
         self.lineedit_wavelength.setEnabled(False)
-        self.label_distance = QLabel(LABEL_DISTANCE)
+        label_distance = QLabel(LABEL_DISTANCE)
         self.lineedit_distance = QLineEdit()
         self.lineedit_distance.setEnabled(False)
 
-        self.hbox_poni_wave.addWidget(self.label_wavelength)
-        self.hbox_poni_wave.addWidget(self.lineedit_wavelength)
-        self.hbox_poni_dist.addWidget(self.label_distance)
-        self.hbox_poni_dist.addWidget(self.lineedit_distance)
+        hbox_poni_wave.addWidget(label_wavelength)
+        hbox_poni_wave.addWidget(self.lineedit_wavelength)
+        hbox_poni_dist.addWidget(label_distance)
+        hbox_poni_dist.addWidget(self.lineedit_distance)
 
-        self.label_detector = QLabel(LABEL_DETECTOR)
+        label_detector = QLabel(LABEL_DETECTOR)
         self.lineedit_detector = QLineEdit()
         self.lineedit_detector.setEnabled(False)
 
-        self.hbox_poni_detector.addWidget(self.label_detector)
-        self.hbox_poni_detector.addWidget(self.lineedit_detector)
+        hbox_poni_detector.addWidget(label_detector)
+        hbox_poni_detector.addWidget(self.lineedit_detector)
 
-        self.label_poni_1 = QLabel(LABEL_PONI_PONI_1)
+        label_poni_1 = QLabel(LABEL_PONI_PONI_1)
         self.lineedit_poni1 = QLineEdit()   
 
-        self.label_poni_2 = QLabel(LABEL_PONI_PONI_2)
+        label_poni_2 = QLabel(LABEL_PONI_PONI_2)
         self.lineedit_poni2 = QLineEdit()
         self.lineedit_poni1.setEnabled(False)
         self.lineedit_poni2.setEnabled(False)
 
-        self.hbox_poni_poni_1.addWidget(self.label_poni_1)
-        self.hbox_poni_poni_1.addWidget(self.lineedit_poni1)
+        hbox_poni_poni_1.addWidget(label_poni_1)
+        hbox_poni_poni_1.addWidget(self.lineedit_poni1)
 
-        self.hbox_poni_poni_2.addWidget(self.label_poni_2)
-        self.hbox_poni_poni_2.addWidget(self.lineedit_poni2)
+        hbox_poni_poni_2.addWidget(label_poni_2)
+        hbox_poni_poni_2.addWidget(self.lineedit_poni2)
 
-        self.label_rot_1 = QLabel(LABEL_PONI_ROT_1)
+        label_rot_1 = QLabel(LABEL_PONI_ROT_1)
         self.lineedit_rot1 = QLineEdit()
-        self.label_rot_2 = QLabel(LABEL_PONI_ROT_2)
+        label_rot_2 = QLabel(LABEL_PONI_ROT_2)
         self.lineedit_rot2 = QLineEdit()
-        self.label_rot_3 = QLabel(LABEL_PONI_ROT_3)
+        label_rot_3 = QLabel(LABEL_PONI_ROT_3)
         self.lineedit_rot3 = QLineEdit()
         self.lineedit_rot1.setEnabled(False)
         self.lineedit_rot2.setEnabled(False)
         self.lineedit_rot3.setEnabled(False)
 
-        self.hbox_poni_rot_1.addWidget(self.label_rot_1)
-        self.hbox_poni_rot_1.addWidget(self.lineedit_rot1)
-        self.hbox_poni_rot_2.addWidget(self.label_rot_2)
-        self.hbox_poni_rot_2.addWidget(self.lineedit_rot2)
-        self.hbox_poni_rot_3.addWidget(self.label_rot_3)
-        self.hbox_poni_rot_3.addWidget(self.lineedit_rot3)
+        hbox_poni_rot_1.addWidget(label_rot_1)
+        hbox_poni_rot_1.addWidget(self.lineedit_rot1)
+        hbox_poni_rot_2.addWidget(label_rot_2)
+        hbox_poni_rot_2.addWidget(self.lineedit_rot2)
+        hbox_poni_rot_3.addWidget(label_rot_3)
+        hbox_poni_rot_3.addWidget(self.lineedit_rot3)
 
         self.button_update_old_poni_parameters = QPushButton(BUTTON_UPDATE_OLD_PONI_PARAMETERS)
-        self.button_update_old_poni_parameters.setStyleSheet(button_style_input)
+        self.button_update_old_poni_parameters.setStyleSheet(BUTTON_STYLE_ENABLE)
         self.button_update_poni_parameters = QPushButton(BUTTON_UPDATE_PONI_PARAMETERS)
-        self.button_update_poni_parameters.setStyleSheet(button_style_input)
+        self.button_update_poni_parameters.setStyleSheet(BUTTON_STYLE_ENABLE)
         self.button_save_poni_parameters = QPushButton(BUTTON_SAVE_PONI_PARAMETERS)
-        self.button_save_poni_parameters.setStyleSheet(button_style_input)
+        self.button_save_poni_parameters.setStyleSheet(BUTTON_STYLE_ENABLE)
 
-        self.hbox_poni_buttons.addWidget(self.button_update_old_poni_parameters)
-        self.hbox_poni_buttons.addWidget(self.button_update_poni_parameters)
-        self.hbox_poni_buttons.addWidget(self.button_save_poni_parameters)
+        hbox_poni_buttons.addWidget(self.button_update_old_poni_parameters)
+        hbox_poni_buttons.addWidget(self.button_update_poni_parameters)
+        hbox_poni_buttons.addWidget(self.button_save_poni_parameters)
 
-        self.vbox_poni.addWidget(self.widget_poni_mod)
-        self.vbox_poni.addWidget(self.widget_poni_wave)
-        self.vbox_poni.addWidget(self.widget_poni_dist)
-        self.vbox_poni.addWidget(self.widget_poni_detector)
-        self.vbox_poni.addWidget(self.widget_poni_poni_1)
-        self.vbox_poni.addWidget(self.widget_poni_poni_2)
-        self.vbox_poni.addWidget(self.widget_poni_rot_1)
-        self.vbox_poni.addWidget(self.widget_poni_rot_2)
-        self.vbox_poni.addWidget(self.widget_poni_rot_3)
-        self.vbox_poni.addWidget(self.widget_poni_buttons)
+        vbox_poni.addWidget(widget_poni_mod)
+        vbox_poni.addWidget(widget_poni_wave)
+        vbox_poni.addWidget(widget_poni_dist)
+        vbox_poni.addWidget(widget_poni_detector)
+        vbox_poni.addWidget(widget_poni_poni_1)
+        vbox_poni.addWidget(widget_poni_poni_2)
+        vbox_poni.addWidget(widget_poni_rot_1)
+        vbox_poni.addWidget(widget_poni_rot_2)
+        vbox_poni.addWidget(widget_poni_rot_3)
+        vbox_poni.addWidget(widget_poni_buttons)
+
+        # H5 PARAMETERS TAB
+        hbox_h5_h5file = QHBoxLayout()
+        hbox_h5_h5file.setContentsMargins(1,0,1,0)
+        hbox_h5_attrs = QHBoxLayout()
+        hbox_h5_attrs.setContentsMargins(1,0,1,0)
+
+        widget_h5_h5file = QWidget()
+        widget_h5_attrs = QWidget()
+        widget_h5_h5file.setLayout(hbox_h5_h5file)
+        widget_h5_attrs.setLayout(hbox_h5_attrs)
+
+        label_h5_h5file = QLabel(LABEL_H5_H5FILE)
+        self.lineedit_h5file = QLineEdit()
+        self.lineedit_h5file.setEnabled(False)
+
+        hbox_h5_h5file.addWidget(label_h5_h5file)
+        hbox_h5_h5file.addWidget(self.lineedit_h5file)
+
+        self.h5_plaintext = QPlainTextEdit()
+        self.h5_plaintext.setReadOnly(True)
+
+        hbox_h5_attrs.addWidget(self.h5_plaintext)
+
+        vbox_h5.addWidget(widget_h5_h5file)
+        vbox_h5.addWidget(widget_h5_attrs)
+
 
         #######################################
         ####### SPLITTER FOLDER-FILES##########
         #######################################
 
-        self.listwidget_folders = QListWidget()
+        self.listwidget_samples = QListWidget()
 
-        self.widget_folder_tab.addTab(self.listwidget_folders, LABEL_LIST_FOLDERS)
+        widget_folder_tab.addTab(self.listwidget_samples, LABEL_LIST_FOLDERS)
 
-        self.vbox_files = QVBoxLayout()
-        self.widget_files = QWidget()
-        self.widget_files.setLayout(self.vbox_files)
+        vbox_files = QVBoxLayout()
+        widget_files = QWidget()
+        widget_files.setLayout(vbox_files)
 
-        self.widget_file_tab.addTab(self.widget_files, LABEL_LIST_FILES)
+        widget_file_tab.addTab(widget_files, LABEL_LIST_FILES)
 
-        self.hbox_metadata_items = QHBoxLayout()
-        self.widget_metadata_items = QWidget()
-        self.widget_metadata_items.setLayout(self.hbox_metadata_items)
+        hbox_metadata_items = QHBoxLayout()
+        widget_metadata_items = QWidget()
+        widget_metadata_items.setLayout(hbox_metadata_items)
 
-        self.label_headeritems = QLabel(LABEL_METADATA)
-        self.combobox_headeritems = QComboBox()
+        label_headeritems = QLabel(LABEL_METADATA)
+        # self.combobox_headeritems = QComboBox()
         self.lineedit_headeritems = QLineEdit()
 
-        self.hbox_metadata_items.addWidget(self.label_headeritems)
-        self.hbox_metadata_items.addWidget(self.combobox_headeritems)
-        self.hbox_metadata_items.addWidget(self.lineedit_headeritems)
+        self.combobox_metadata = CheckableComboBox()
+
+        hbox_metadata_items.addWidget(label_headeritems)
+        # hbox_metadata_items.addWidget(self.combobox_headeritems)
+        # hbox_metadata_items.addWidget(self.lineedit_headeritems)
+        hbox_metadata_items.addWidget(self.combobox_metadata)
+        hbox_metadata_items.setStretch(1,15)
 
         self.table_files = QTableWidget()
 
-        self.vbox_files.addWidget(self.widget_metadata_items)
-        self.vbox_files.addWidget(self.table_files)
+        vbox_files.addWidget(widget_metadata_items)
+        vbox_files.addWidget(self.table_files)
 
         #######################################
         ########## LABEL TITLE      ###########
         #######################################
 
-        self.label_filename = QLabel(LABEL_FILENAME)
+        label_filename = QLabel(LABEL_FILENAME)
         self.lineedit_filename = QLineEdit()
         self.lineedit_filename.setEnabled(False)
 
-        self.hbox_top_label.addWidget(self.label_filename)
-        self.hbox_top_label.addWidget(self.lineedit_filename)
+        hbox_top_label.addWidget(label_filename)
+        hbox_top_label.addWidget(self.lineedit_filename)
 
         #######################################
         ########## SPLITTER GRAPHS  ###########
@@ -1122,44 +1238,44 @@ class GUIPyX_Widget_layout(QWidget):
         self.tab_graph_widget = QTabWidget()
         self.tab_chart_widget = QTabWidget()
 
-        self.splitter_graphs.addWidget(self.tab_graph_widget)
-        self.splitter_graphs.addWidget(self.tab_chart_widget)
+        splitter_graphs.addWidget(self.tab_graph_widget)
+        splitter_graphs.addWidget(self.tab_chart_widget)
 
         # 2D GRAPHS
         self.graph_raw_widget = Plot2D()
         self.tab_graph_widget.addTab(self.graph_raw_widget, LABEL_RAW_MAP)
 
-        self.vbox_reshape = QVBoxLayout()
-        self.widget_reshape = QWidget()
-        self.widget_reshape.setLayout(self.vbox_reshape)
+        vbox_reshape = QVBoxLayout()
+        widget_reshape = QWidget()
+        widget_reshape.setLayout(vbox_reshape)
 
         self.canvas_reshape_widget = MplCanvas(self, width=4, height=3, dpi=50)
-        self.toolbar_reshape_matplotlib = NavigationToolbar2QT(self.canvas_reshape_widget, self)
+        toolbar_reshape_matplotlib = NavigationToolbar2QT(self.canvas_reshape_widget, self)
 
-        self.vbox_reshape.addWidget(self.toolbar_reshape_matplotlib)
-        self.vbox_reshape.addWidget(self.canvas_reshape_widget)
+        vbox_reshape.addWidget(toolbar_reshape_matplotlib)
+        vbox_reshape.addWidget(self.canvas_reshape_widget)
 
-        self.tab_graph_widget.addTab(self.widget_reshape, LABEL_RESHAPE_MAP)
+        self.tab_graph_widget.addTab(widget_reshape, LABEL_RESHAPE_MAP)
 
-        self.vbox_graph_q = QVBoxLayout()
-        self.widget_graph_q = QWidget()
-        self.widget_graph_q.setLayout(self.vbox_graph_q)
+        vbox_graph_q = QVBoxLayout()
+        widget_graph_q = QWidget()
+        widget_graph_q.setLayout(vbox_graph_q)
 
-        self.tab_graph_widget.addTab(self.widget_graph_q, LABEL_Q_MAP)
+        self.tab_graph_widget.addTab(widget_graph_q, LABEL_Q_MAP)
 
-        self.hbox_graph_toolbar_1 = QHBoxLayout()
-        self.hbox_graph_toolbar_2 = QHBoxLayout()
-        self.hbox_graph_toolbar_3 = QHBoxLayout()
+        hbox_graph_toolbar_1 = QHBoxLayout()
+        hbox_graph_toolbar_2 = QHBoxLayout()
+        hbox_graph_toolbar_3 = QHBoxLayout()
 
-        self.widget_graph_toolbar_1 = QWidget()
-        self.widget_graph_toolbar_2 = QWidget()
-        self.widget_graph_toolbar_3 = QWidget()
+        widget_graph_toolbar_1 = QWidget()
+        widget_graph_toolbar_2 = QWidget()
+        widget_graph_toolbar_3 = QWidget()
 
-        self.widget_graph_toolbar_1.setLayout(self.hbox_graph_toolbar_1)
-        self.widget_graph_toolbar_2.setLayout(self.hbox_graph_toolbar_2)
-        self.widget_graph_toolbar_3.setLayout(self.hbox_graph_toolbar_3)
+        widget_graph_toolbar_1.setLayout(hbox_graph_toolbar_1)
+        widget_graph_toolbar_2.setLayout(hbox_graph_toolbar_2)
+        widget_graph_toolbar_3.setLayout(hbox_graph_toolbar_3)
 
-        self.label_units = QLabel(LABEL_MAP_UNITS)
+        label_units = QLabel(LABEL_MAP_UNITS)
         self.combobox_units = QComboBox()
         for unit in DICT_UNIT_ALIAS.values():
             self.combobox_units.addItem(unit)
@@ -1169,17 +1285,19 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_colorbar.setStyleSheet(button_on)
         self.button_default_graph = QPushButton(BUTTON_AUTO)
         self.button_default_graph.setStyleSheet(button_on)
-        self.label_title = QLabel(LABEL_MAP_TITLES)
-        self.combobox_headeritems_title = QComboBox()
+        label_title = QLabel(LABEL_MAP_TITLES)
+        # self.combobox_headeritems_title = QComboBox()
+        self.combobox_headeritems_title = CheckableComboBox()
         self.lineedit_headeritems_title = QLineEdit()
         self.button_reshape_map = QPushButton(BUTTON_SHOW_RESHAPE)
         self.button_reshape_map.setStyleSheet(button_style_thin)
 
-        self.hbox_graph_toolbar_1.addWidget(self.label_units)
-        self.hbox_graph_toolbar_1.addWidget(self.combobox_units)
-        self.hbox_graph_toolbar_1.addWidget(self.label_title)
-        self.hbox_graph_toolbar_1.addWidget(self.combobox_headeritems_title)
-        self.hbox_graph_toolbar_1.addWidget(self.lineedit_headeritems_title)
+        hbox_graph_toolbar_1.addWidget(label_units)
+        hbox_graph_toolbar_1.addWidget(self.combobox_units)
+        hbox_graph_toolbar_1.addWidget(label_title)
+        hbox_graph_toolbar_1.addWidget(self.combobox_headeritems_title)
+        hbox_graph_toolbar_1.setStretch(3,15)
+        # hbox_graph_toolbar_1.addWidget(self.lineedit_headeritems_title)
 
         # self.xlims = QLabel(LABEL_XLIMS)
         # self.lineedit_xmin = QLineEdit()
@@ -1202,7 +1320,7 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_enhance_comma.setStyleSheet(button_style_thin)
         self.button_log = QPushButton(BUTTON_LOG)
         self.button_log.setStyleSheet(button_style_thin)
-        self.label_binning_data = QLabel(LABEL_BINNING_DATA)
+        label_binning_data = QLabel(LABEL_BINNING_DATA)
         self.spinbox_binnning_data = QSpinBox()
         self.spinbox_binnning_data.setValue(DEFAULT_BINNING)
         self.spinbox_binnning_data.setSingleStep(BINNING_STEP)
@@ -1210,75 +1328,84 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_savemap = QPushButton(BUTTON_SAVE_QMAP)
         self.button_savemap.setStyleSheet(button_style_thin)
 
-        self.hbox_graph_toolbar_2.addWidget(self.button_font_m)
-        self.hbox_graph_toolbar_2.addWidget(self.button_font_M)
-        self.hbox_graph_toolbar_2.addWidget(self.button_reduce_comma)
-        self.hbox_graph_toolbar_2.addWidget(self.button_enhance_comma)
-        self.hbox_graph_toolbar_2.addWidget(self.button_log)
-        self.hbox_graph_toolbar_2.addWidget(self.label_binning_data)
-        self.hbox_graph_toolbar_2.addWidget(self.spinbox_binnning_data)
-        # self.hbox_graph_toolbar_2.addWidget(self.button_savemap)
+        hbox_graph_toolbar_2.addWidget(self.button_font_m)
+        hbox_graph_toolbar_2.addWidget(self.button_font_M)
+        hbox_graph_toolbar_2.addWidget(self.button_reduce_comma)
+        hbox_graph_toolbar_2.addWidget(self.button_enhance_comma)
+        hbox_graph_toolbar_2.addWidget(self.button_log)
+        hbox_graph_toolbar_2.addWidget(label_binning_data)
+        hbox_graph_toolbar_2.addWidget(self.spinbox_binnning_data)
+        # hbox_graph_toolbar_2.addWidget(self.button_savemap)
 
-        self.label_xticks = QLabel(LABEL_XTICKS)
+        label_xticks = QLabel(LABEL_XTICKS)
         self.lineedit_xticks = QLineEdit()
-        self.label_yticks = QLabel(LABEL_YTICKS)
+        label_yticks = QLabel(LABEL_YTICKS)
         self.lineedit_yticks = QLineEdit()
+        label_xlims = QLabel(LABEL_XLIMS)
+        self.lineedit_xlims = QLineEdit()
+        label_ylims = QLabel(LABEL_YLIMS)
+        self.lineedit_ylims = QLineEdit()
 
-        self.hbox_graph_toolbar_3.addWidget(self.label_xticks)
-        self.hbox_graph_toolbar_3.addWidget(self.lineedit_xticks)
-        self.hbox_graph_toolbar_3.addWidget(self.label_yticks)
-        self.hbox_graph_toolbar_3.addWidget(self.lineedit_yticks)
+        hbox_graph_toolbar_3.addWidget(label_xticks)
+        hbox_graph_toolbar_3.addWidget(self.lineedit_xticks)
+        hbox_graph_toolbar_3.addWidget(label_yticks)
+        hbox_graph_toolbar_3.addWidget(self.lineedit_yticks)
+        hbox_graph_toolbar_3.addWidget(label_xlims)
+        hbox_graph_toolbar_3.addWidget(self.lineedit_xlims)
+        hbox_graph_toolbar_3.addWidget(label_ylims)
+        hbox_graph_toolbar_3.addWidget(self.lineedit_ylims)
 
         self.canvas_2d_q = MplCanvas(self, width=4, height=3, dpi=50)
-        self.toolbar_q_matplotlib = NavigationToolbar2QT(self.canvas_2d_q, self)
+        toolbar_q_matplotlib = NavigationToolbar2QT(self.canvas_2d_q, self)
 
-        self.vbox_graph_q.addWidget(self.widget_graph_toolbar_1)
-        self.vbox_graph_q.addWidget(self.widget_graph_toolbar_3)
-        self.vbox_graph_q.addWidget(self.widget_graph_toolbar_2)
-        self.vbox_graph_q.addWidget(self.toolbar_q_matplotlib)
-        self.vbox_graph_q.addWidget(self.canvas_2d_q)
+        vbox_graph_q.addWidget(widget_graph_toolbar_1)
+        vbox_graph_q.addWidget(widget_graph_toolbar_3)
+        vbox_graph_q.addWidget(widget_graph_toolbar_2)
+        vbox_graph_q.addWidget(toolbar_q_matplotlib)
+        vbox_graph_q.addWidget(self.canvas_2d_q)
 
-        self.vbox_graph_q.setStretch(4,20)
+        vbox_graph_q.setStretch(4,20)
 
-        self.hbox_graph_toolbar_1.setContentsMargins(1,1,1,0)
-        self.hbox_graph_toolbar_2.setContentsMargins(1,0,1,0)
-        self.hbox_graph_toolbar_3.setContentsMargins(1,0,1,0)
-        self.toolbar_q_matplotlib.setContentsMargins(1,0,1,0)
+        hbox_graph_toolbar_1.setContentsMargins(1,1,1,0)
+        hbox_graph_toolbar_2.setContentsMargins(1,0,1,0)
+        hbox_graph_toolbar_3.setContentsMargins(1,0,1,0)
+        toolbar_q_matplotlib.setContentsMargins(1,0,1,0)
         self.canvas_2d_q.setContentsMargins(1,0,1,0)
 
         # 1D CHART
-        self.vbox_chart = QVBoxLayout()
-        self.widget_chart = QWidget()
-        self.widget_chart.setLayout(self.vbox_chart)
+        vbox_chart = QVBoxLayout()
+        widget_chart = QWidget()
+        widget_chart.setLayout(vbox_chart)
 
-        self.tab_chart_widget.addTab(self.widget_chart, LABEL_TAB_1D_INT)
+        self.tab_chart_widget.addTab(widget_chart, LABEL_TAB_1D_INT)
 
-        self.hbox_chart_toolbar_1 = QHBoxLayout()
-        self.hbox_chart_toolbar_2 = QHBoxLayout()
-        self.hbox_chart_toolbar_3 = QHBoxLayout()
-        self.hbox_savefolder = QHBoxLayout()
+        hbox_chart_toolbar_1 = QHBoxLayout()
+        hbox_chart_toolbar_2 = QHBoxLayout()
+        hbox_chart_toolbar_3 = QHBoxLayout()
+        hbox_savefolder = QHBoxLayout()
 
-        self.widget_chart_toolbar_1 = QWidget()
-        self.widget_chart_toolbar_2 = QWidget()
-        self.widget_chart_toolbar_3 = QWidget()
-        self.widget_savefolder = QWidget()
+        widget_chart_toolbar_1 = QWidget()
+        widget_chart_toolbar_2 = QWidget()
+        widget_chart_toolbar_3 = QWidget()
+        widget_savefolder = QWidget()
 
-        self.widget_chart_toolbar_1.setLayout(self.hbox_chart_toolbar_1)
-        self.widget_chart_toolbar_2.setLayout(self.hbox_chart_toolbar_2)
-        self.widget_savefolder.setLayout(self.hbox_savefolder)        
-        self.widget_chart_toolbar_3.setLayout(self.hbox_chart_toolbar_3)
+        widget_chart_toolbar_1.setLayout(hbox_chart_toolbar_1)
+        widget_chart_toolbar_2.setLayout(hbox_chart_toolbar_2)
+        widget_savefolder.setLayout(hbox_savefolder)        
+        widget_chart_toolbar_3.setLayout(hbox_chart_toolbar_3)
 
-        self.label_integrations = QLabel(LABEL_INTEGRATIONS)
-        self.combobox_integration = QComboBox()
+        label_integrations = QLabel(LABEL_INTEGRATIONS)
+        # self.combobox_integration = QComboBox()
+        self.combobox_integration = CheckableComboBox()
         self.lineedit_integrations = QLineEdit()
         self.checkbox_mask_integration = QCheckBox(LABEL_MASK_MAP)
 
-        self.hbox_chart_toolbar_1.addWidget(self.label_integrations)
-        self.hbox_chart_toolbar_1.addWidget(self.combobox_integration)
-        self.hbox_chart_toolbar_1.addWidget(self.lineedit_integrations)
-        self.hbox_chart_toolbar_1.addWidget(self.checkbox_mask_integration)
+        hbox_chart_toolbar_1.addWidget(label_integrations)
+        hbox_chart_toolbar_1.addWidget(self.combobox_integration)
+        # hbox_chart_toolbar_1.addWidget(self.lineedit_integrations)
+        hbox_chart_toolbar_1.addWidget(self.checkbox_mask_integration)
 
-        self.label_sub = QLabel(LABEL_SUB_FACTOR)
+        label_sub = QLabel(LABEL_SUB_FACTOR)
         self.spinbox_sub = QDoubleSpinBox()
         self.spinbox_sub.setSingleStep(STEP_SUB_SPINBOX)
         self.button_clearplot = QPushButton(BUTTON_CLEAR_PLOT)
@@ -1288,31 +1415,33 @@ class GUIPyX_Widget_layout(QWidget):
         self.button_batch = QPushButton(BUTTON_BATCH)
         self.button_batch.setStyleSheet(button_style_thin) 
 
-        self.hbox_chart_toolbar_2.addWidget(self.label_sub)
-        self.hbox_chart_toolbar_2.addWidget(self.spinbox_sub)
-        self.hbox_chart_toolbar_2.addWidget(self.button_clearplot)
-        self.hbox_chart_toolbar_2.addWidget(self.button_saveplot)
-        self.hbox_chart_toolbar_2.addWidget(self.button_batch)
+        hbox_chart_toolbar_2.addWidget(label_sub)
+        hbox_chart_toolbar_2.addWidget(self.spinbox_sub)
+        hbox_chart_toolbar_2.addWidget(self.button_clearplot)
+        hbox_chart_toolbar_2.addWidget(self.button_saveplot)
+        hbox_chart_toolbar_2.addWidget(self.button_batch)
 
-        self.label_savefolder = QLabel(LABEL_SAVE_FOLDER)
+        label_savefolder = QLabel(LABEL_SAVE_FOLDER)
         self.lineedit_savefolder = QLineEdit()
 
-        self.hbox_savefolder.addWidget(self.label_savefolder)
-        self.hbox_savefolder.addWidget(self.lineedit_savefolder)
+        hbox_savefolder.addWidget(label_savefolder)
+        hbox_savefolder.addWidget(self.lineedit_savefolder)
 
         self.graph_1D_widget = Plot1D()
 
-        self.vbox_chart.addWidget(self.widget_chart_toolbar_1)
-        self.vbox_chart.addWidget(self.widget_savefolder)        
-        self.vbox_chart.addWidget(self.widget_chart_toolbar_2)
-        self.vbox_chart.addWidget(self.graph_1D_widget)
+        vbox_chart.addWidget(widget_chart_toolbar_1)
+        vbox_chart.addWidget(widget_savefolder)        
+        vbox_chart.addWidget(widget_chart_toolbar_2)
+        vbox_chart.addWidget(self.graph_1D_widget)
 
-        self.vbox_chart.setStretch(3,20)
+        vbox_chart.setStretch(3,20)
 
-        self.hbox_chart_toolbar_1.setContentsMargins(1,1,1,0)
-        self.hbox_chart_toolbar_2.setContentsMargins(1,0,1,0)
-        self.hbox_savefolder.setContentsMargins(1, 0, 1, 0)
+        hbox_chart_toolbar_1.setContentsMargins(1,1,1,0)
+        hbox_chart_toolbar_2.setContentsMargins(1,0,1,0)
+        hbox_savefolder.setContentsMargins(1, 0, 1, 0)
         self.graph_1D_widget.setContentsMargins(1,0,1,0)
+        hbox_chart_toolbar_1.setStretch(1,20)
+
 
         #######################################
         ########## TERMINAL OUTPUT  ###########
@@ -1320,23 +1449,80 @@ class GUIPyX_Widget_layout(QWidget):
 
         self.plaintext_output = QPlainTextEdit()
         self.plaintext_output.setReadOnly(True)
-        self.widget_terminal_tab.addTab(self.plaintext_output, LABEL_TERMINAL)
+        widget_terminal_tab.addTab(self.plaintext_output, LABEL_TERMINAL)
 
-        self.hbox_terminal_top = QHBoxLayout()
-        self.widget_terminal_top = QWidget()
-        self.widget_terminal_top.setLayout(self.hbox_terminal_top)
+        hbox_terminal_top = QHBoxLayout()
+        widget_terminal_top = QWidget()
+        widget_terminal_top.setLayout(hbox_terminal_top)
 
-        self.label_plaintext = QLabel(LABEL_TERMINAL)
-        self.label_plaintext.setStyleSheet("background-color: white;border: 1px solid black;")
-        self.label_plaintext.setAlignment(Qt.AlignCenter)
+        label_plaintext = QLabel(LABEL_TERMINAL)
+        label_plaintext.setStyleSheet("background-color: white;border: 1px solid black;")
+        label_plaintext.setAlignment(Qt.AlignCenter)
         self.button_hide_terminal = QPushButton(BUTTON_HIDE_TERMINAL)
         self.button_hide_terminal.setStyleSheet(button_on)
 
-       
+    # METHODS AND CALLBACKS WITHIN THE LAYOUT
+    def callbacks_layout(self):
+        self.checkbox_poni_mod.stateChanged.connect(
+            lambda : (
+                self.disable_ponifile_mod(),
+            )
+        )
 
+    def disable_ponifile_mod(self, state) -> None:
+        """
+        Enable or disable the lineedits to modify ponifile parameters
+        """       
+        self.lineedit_wavelength.setEnabled(state)
+        self.lineedit_distance.setEnabled(state)
+        self.lineedit_poni1.setEnabled(state)
+        self.lineedit_poni2.setEnabled(state)
+        self.lineedit_rot1.setEnabled(state)
+        self.lineedit_rot2.setEnabled(state)
+        self.lineedit_rot3.setEnabled(state)
 
-        # set_bstyle([self.label_poni_warning, self.label_headeritems, self.label_plaintext, self.xlims, self.ylims, self.label_units, self.xticks, self.yticks, self.label_savefolder, self.label_integrations, self.label_sub, self.label_title,self.label_input_graph,self.label_input_chart])
-        # set_bstyle([self.label_setup, self.label_angle, self.label_tilt_angle, self.label_normfactor, self.label_exposure, self.label_setup_name])
-        # set_bstyle([self.label_name_cake, self.label_suffix_cake, self.label_type_cake, self.label_units_cake, self.label_radialrange_cake, self.label_azimrange_cake, self.label_azimbins_cake])
-        # set_bstyle([self.label_name_box, self.label_suffix_box, self.label_direction_box, self.label_input_units_box, self.label_iprange_box, self.label_ooprange_box, self.label_outputunits_box])
-        # set_bstyle([self.label_binning_data])
+    def update_button_orientation(self, button_label=str(), new_state=True):
+            dict_button = BUTTON_ORIENTATIONS_LAYOUT.get(button_label, WRONG_LABEL)
+
+            if isinstance(dict_button, dict):
+                button_widget = dict_button["widget"]
+                new_label = dict_button[new_state]["label"]
+                new_style = dict_button[new_state]["style"]
+
+                button_widget.setText(new_label)
+                button_widget.setStyleSheet(new_style)
+
+    @property
+    def state_qz(self):
+        state = self.button_qz.isChecked()
+        return state
+
+    @property
+    def state_qr(self):
+        state = self.button_qr.isChecked()
+        return state
+
+    @property
+    def state_orientation(self):
+        qz = self.state_qz()
+        qr = self.state_qr()
+        so = DICT_SAMPLE_ORIENTATIONS[(qz, qr)]
+        return so
+
+    @property
+    def state_mirror(self):
+        state = self.button_mirror.isChecked()
+        return state
+
+    def update_button_live(self, new_state=True):
+        if new_state:
+            self.button_live.setText(BUTTON_LIVE_ON)
+        else:
+            self.button_live.setText(BUTTON_LIVE)
+
+    def get_pattern(self):
+        wildcards = le.text(self.lineedit_wildcards).strip()
+        extension = cb.value(self.combobox_extension)
+        pattern = wildcards + extension
+        pattern = pattern.replace('**', '*')
+        return pattern

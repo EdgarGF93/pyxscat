@@ -1,0 +1,7 @@
+{
+    "number" : 1,
+    "format" : "edf",
+    "paths" : [
+        "aaa.edf"
+    ]
+}
